@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  <entry>
+    <title>OpenCV简明教程</title>
+    <url>/2019/10/28/OpenCV-Tutorial/</url>
+    <content><![CDATA[<p>无论我们想要学习如何将面部识别应用于视频流，还是用深度学习构建图像分类器，或者做其他一些有关图像识别的有趣项目，可能都会需要学一些OpenCV的知识，本文将做简单介绍。</p><h4 id="加载和显示图像"><a href="#加载和显示图像" class="headerlink" title="加载和显示图像"></a>加载和显示图像</h4><p><img src="/images/201910281/1.jpg" alt></p><p>保存上面的图片，打开你最爱的编辑器，输入以下代码：</p><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> cv2</span><br><span class="line"></span><br><span class="line">image = cv2.imread(<span class="string">'demo.jpg'</span>)</span><br><span class="line">cv2.imshow(<span class="string">'Image'</span>, image)</span><br><span class="line">cv2.waitKey()</span><br></pre></td></tr></table></figure><a id="more"></a>
+
+
+
+
+<p>第3行，使用<code>cv2.imread()</code>导入图像。</p>
+<p>第4行，使用<code>cv2.imshow()</code>显示图像。窗口会自动调整为图像大小。第一个参数是窗口的名字，然后是我们的图像。</p>
+<p>第5行，使用<code>cv2.waitKey()</code>等待键盘输入。</p>
+<p>运行一下，结果如下所示：</p>
+<p><img src="/images/201910281/2.png" alt></p>
+<h4 id="获取并修改像素值"><a href="#获取并修改像素值" class="headerlink" title="获取并修改像素值"></a>获取并修改像素值</h4><p>我们可以先查看一下图像的形状，</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">print(image.shape)</span><br><span class="line"></span><br><span class="line"><span class="comment">## (600,400,3)</span></span><br></pre></td></tr></table></figure>
+
+<p><code>image.shape</code>可以获取图像的形状。返回的是一个包含行数（高），列数（宽），通道数的元组。</p>
+<p>可以根据像素的行、列坐标获取其像素值。对于BGR图像来说，返回值为B，G，R的值。对灰度图像来说，返回值为其灰度值。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">B,G,R = image[<span class="number">320</span>,<span class="number">15</span>]</span><br><span class="line">print(<span class="string">'B=&#123;&#125;, G=&#123;&#125;, R=&#123;&#125;'</span>.format(B,G,R))</span><br><span class="line"></span><br><span class="line"><span class="comment">## B=150, G=172, R=197</span></span><br></pre></td></tr></table></figure>
+
+<p>可以用类似的方式修改像素值，</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">image[<span class="number">320</span>,<span class="number">15</span>] = [<span class="number">52</span>,<span class="number">26</span>,<span class="number">16</span>]</span><br><span class="line">B,G,R = image[<span class="number">320</span>,<span class="number">15</span>]</span><br><span class="line">print(<span class="string">'B=&#123;&#125;, G=&#123;&#125;, R=&#123;&#125;'</span>.format(B,G,R))</span><br><span class="line"></span><br><span class="line"><span class="comment">## B=52, G=26, R=16</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="图像ROI"><a href="#图像ROI" class="headerlink" title="图像ROI"></a>图像ROI</h4><p>有时我们需要对一幅图像的感兴趣的区域（Regions of Interest，ROI）进行操作。比如，我们要检测一幅图像中眼睛的位置，我们首先应该在图像中找到脸，再在脸的区域中找眼睛，而不是直接在一幅图像中搜素。ROI也是通过索引获得，其实就相当于数组切片。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> cv2</span><br><span class="line"></span><br><span class="line">image = cv2.imread(<span class="string">'demo.jpg'</span>)</span><br><span class="line">head = image[<span class="number">27</span>:<span class="number">124</span>,<span class="number">159</span>:<span class="number">260</span>]</span><br><span class="line">image[<span class="number">200</span>:<span class="number">297</span>,<span class="number">299</span>:<span class="number">400</span>] = head</span><br><span class="line">cv2.imshow(<span class="string">'New'</span>, image)</span><br><span class="line">cv2.waitKey()</span><br></pre></td></tr></table></figure>
+
+<p>结果如下：</p>
+<p><img src="/images/201910281/3.png" alt></p>
+<h4 id="图像缩放"><a href="#图像缩放" class="headerlink" title="图像缩放"></a>图像缩放</h4><p>OpenCV提供的函数<code>cv2.resize()</code>可以改变图像的尺寸大小。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">import cv2</span><br><span class="line"></span><br><span class="line">image = cv2.imread(&apos;demo.jpg&apos;)</span><br><span class="line">resized = cv2.resize(image, (200,400))</span><br><span class="line">cv2.imshow(&apos;Image&apos;, resized)</span><br><span class="line">cv2.waitKey()</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/201910281/4.png" alt></p>
+<h4 id="旋转图像"><a href="#旋转图像" class="headerlink" title="旋转图像"></a>旋转图像</h4><p><img src="/images/201910281/5.jpg" alt></p>
+<p>对一个图像旋转角度 $\theta$，需要用到下面形式的旋转矩阵。</p>
+<p><img src="/images/201910281/6.png" alt></p>
+<p>OpenCV允许我们在任意地方进行旋转，于是旋转矩阵的形式应该改为：</p>
+<p><img src="/images/201910281/7.png" alt></p>
+<p>其中：</p>
+<p><img src="/images/201910281/8.png" alt></p>
+<p>为了构建这个旋转矩阵，OpenCV提供了一个函数：<code>cv2.getRotationMatrix2D()</code>。<br>以下便是在不缩放的情况下将图像旋转90度。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> cv2</span><br><span class="line"></span><br><span class="line">image = cv2.imread(<span class="string">'demo1.jpg'</span>)</span><br><span class="line">rows,cols,depth = image.shape</span><br><span class="line">M = cv2.getRotationMatrix2D((rows // <span class="number">2</span>, cols // <span class="number">2</span>), <span class="number">90</span>, <span class="number">1</span>)</span><br><span class="line">dst = cv2.warpAffine(image,M,(cols,rows))</span><br><span class="line">cv2.imshow(<span class="string">'Image'</span>, dst)</span><br><span class="line">cv2.waitKey()</span><br></pre></td></tr></table></figure>
+
+<p>第5行，第一个参数为旋转中心，第二个参数为旋转角度，第三个为旋转后的缩放因子。</p>
+<p>第6行，第三个参数是输出图像的尺寸。</p>
+<p><img src="/images/201910281/9.png" alt></p>
+<h4 id="图像模糊"><a href="#图像模糊" class="headerlink" title="图像模糊"></a>图像模糊</h4><p>在许多的图像处理过程中，我们必须模糊图像以减少高频噪声，使算法更容易检测和理解图像的实际内容。在OpenCV中模糊图像非常容易，有很多方法可以用。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> cv2</span><br><span class="line"></span><br><span class="line">image = cv2.imread(<span class="string">'demo1.jpg'</span>)</span><br><span class="line">blurred = cv2.GaussianBlur(image, (<span class="number">11</span>, <span class="number">11</span>), <span class="number">0</span>)</span><br><span class="line">cv2.imshow(<span class="string">'Blurred'</span>, blurred)</span><br><span class="line">cv2.waitKey()</span><br></pre></td></tr></table></figure>
+
+<p>第4行，我们使用了高斯模糊，用了<code>11 x 11</code>的核。</p>
+<p><img src="/images/201910281/10.png" alt></p>
+<p>较大的核会产生更模糊的图像，较小的核将产生没那么的模糊图像。</p>
+<h4 id="绘图函数"><a href="#绘图函数" class="headerlink" title="绘图函数"></a>绘图函数</h4><p>本节我们将在导入的图像上画矩形，圆，线以及添加文字。但值得注意的是，这些操作会影响到原始导入的<code>image</code>，为了避免这样，我们可以用<code>image</code>的副本进行操作。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> cv2</span><br><span class="line"></span><br><span class="line">image = cv2.imread(<span class="string">'demo.jpg'</span>)</span><br><span class="line">output = image.copy()</span><br><span class="line">cv2.rectangle(output, (<span class="number">163</span>, <span class="number">30</span>), (<span class="number">244</span>, <span class="number">124</span>), (<span class="number">0</span>, <span class="number">0</span>, <span class="number">255</span>), <span class="number">2</span>)</span><br><span class="line">cv2.imshow(<span class="string">'Rectangle'</span>, output)</span><br><span class="line">cv2.waitKey()</span><br></pre></td></tr></table></figure>
+
+<p>第5行，设置的参数如下：</p>
+<ul>
+<li><code>img</code>：想要绘制图像的那幅图像，这里是<code>output</code>。</li>
+<li><code>pt1</code>：矩形左上角坐标，这里是<code>(163, 30)</code>。</li>
+<li><code>pt2</code>：矩形右下角坐标，这里是<code>(244, 124)</code>。</li>
+<li><code>color</code>：BGR元组，这里是红色<code>(0,0,255)</code>。</li>
+<li><code>thickness</code>：线条粗细（如果一个闭合图形设置为负数，那么这个图形就会被填充），这里是<code>2</code>。</li>
+</ul>
+<p>结果如下：</p>
+<p><img src="/images/201910281/11.png" alt></p>
+<p>接下来，我们在猫咪的图像上画一个圆。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> cv2</span><br><span class="line"></span><br><span class="line">image = cv2.imread(<span class="string">'demo1.jpg'</span>)</span><br><span class="line">output = image.copy()</span><br><span class="line">cv2.circle(output, (<span class="number">32</span>, <span class="number">25</span>), <span class="number">20</span>, (<span class="number">255</span>,<span class="number">0</span>,<span class="number">0</span>),<span class="number">-1</span>)</span><br><span class="line">cv2.imshow(<span class="string">'Circle'</span>, output)</span><br><span class="line">cv2.waitKey()</span><br></pre></td></tr></table></figure>
+
+<p>要画圆的话，需要指定圆形的圆心坐标和半径大小。</p>
+<p>第5行，我们指定圆心为<code>(35,25)</code>，半径大小为<code>20</code>。其他参数含义，和画矩形时一样。</p>
+<p><img src="/images/201910281/12.png" alt></p>
+<p>画线的话，我们只需要指定起点和终点即可。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> cv2</span><br><span class="line"></span><br><span class="line">image = cv2.imread(<span class="string">'demo1.jpg'</span>)</span><br><span class="line">output = image.copy()</span><br><span class="line">cv2.line(output, (<span class="number">35</span>,<span class="number">25</span>),(<span class="number">125</span>,<span class="number">69</span>),(<span class="number">255</span>,<span class="number">0</span>,<span class="number">0</span>),<span class="number">5</span>)</span><br><span class="line">cv2.imshow(<span class="string">'Line'</span>, output)</span><br><span class="line">cv2.waitKey()</span><br></pre></td></tr></table></figure>
+
+<p>第5行，我们指定起点为<code>(35,25)</code>，终点为<code>(125,69)</code>。</p>
+<p>结果如下：</p>
+<p><img src="/images/201910281/13.png" alt></p>
+<p>我们可能经常需要在图像上添加文字，比如在进行人脸识别的时候，需要在人的脸上绘制出他们的名字。可以使用OpenCV的<code>cv2.putText()</code>函数在图像上添加文字。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> cv2</span><br><span class="line"></span><br><span class="line">image = cv2.imread(<span class="string">'demo.jpg'</span>)</span><br><span class="line">output = image.copy()</span><br><span class="line">cv2.putText(output, <span class="string">'Sasaki Nozomi'</span>, (<span class="number">10</span>, <span class="number">25</span>), </span><br><span class="line">    cv2.FONT_HERSHEY_SIMPLEX, <span class="number">0.7</span>, (<span class="number">0</span>, <span class="number">0</span>, <span class="number">255</span>), <span class="number">2</span>)</span><br><span class="line">cv2.imshow(<span class="string">'Text'</span>, output)</span><br><span class="line">cv2.waitKey()</span><br></pre></td></tr></table></figure>
+
+<p>第5~6行，设置的参数如下：</p>
+<ul>
+<li><code>img</code>：想要绘制图像的那幅图像，这里是<code>output</code>。</li>
+<li><code>text</code>：要绘制的文字内容，这里是<code>Sasaki Nozomi</code>。</li>
+<li><code>pt</code>：绘制的位置，这里是<code>(10,25)</code>。</li>
+<li><code>font</code>：字体类型，这里是<code>cv2.FONT_HERSHEY_SIMPLEX</code>。</li>
+<li><code>scale</code>：字体大小乘数，这里是<code>0.7</code>。</li>
+<li><code>color</code>：字体颜色，这里是红色<code>(0,0,255)</code>。</li>
+<li><code>thickness</code>：字体粗细，这里是<code>2</code>。</li>
+</ul>
+<p>如下图所示，“Sasaki Nozomi”绘制在图像上，</p>
+<p><img src="/images/201910281/14.png" alt></p>
+<h4 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h4><ul>
+<li><a href="https://opencv-python-tutroals.readthedocs.io/en/latest/" target="_blank" rel="noopener">https://opencv-python-tutroals.readthedocs.io/en/latest/</a></li>
+<li><a href="https://www.pyimagesearch.com/2018/07/19/opencv-tutorial-a-guide-to-learn-opencv/" target="_blank" rel="noopener">https://www.pyimagesearch.com/2018/07/19/opencv-tutorial-a-guide-to-learn-opencv/</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>日常学习</category>
+      </categories>
+      <tags>
+        <tag>OpenCV</tag>
+        <tag>Python</tag>
+      </tags>
+  </entry>
+</search>
