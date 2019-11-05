@@ -1,6 +1,296 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>李宏毅机器学习(二)学习导图</title>
+    <url>/2019/11/05/%E6%9D%8E%E5%AE%8F%E6%AF%85%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0-%E4%BA%8C-%E5%AD%A6%E4%B9%A0%E5%AF%BC%E5%9B%BE/</url>
+    <content><![CDATA[<p>机器学习发展至今涵盖的内容已经非常多，本文通过对其使用情景、任务和方法分类在上文的基础上对机器学习做进一步的介绍。</p><p><img src="/images/201911/9/1.png" alt></p><h3 id="监督学习-Supervised-Learning"><a href="#监督学习-Supervised-Learning" class="headerlink" title="监督学习(Supervised Learning)"></a>监督学习(Supervised Learning)</h3><p>上文曾提到机器学习可以看成是从数据中找到一个函数。对于回归(Regression)这类任务而言，我们希望得到的函数的输出值是数值(Scalar)，而不是像之前图像识别一样输出类别。</p><a id="more"></a>
+
+
+<p>举例来说，我们需要预测PM2.5值。</p>
+<p><img src="/images/201911/9/2.png" alt></p>
+<p>对于回归这类任务而言，我们可以选择适用的模型，将训练数据丢给它，</p>
+<p><img src="/images/201911/9/3.png" alt></p>
+<p>用以得到最优的函数。</p>
+<p>监督学习中还有一种叫做分类(Classification)的任务，与回归不同，分类任务希望得到函数的输出是类别。它可以分为二分类问题和多分类问题。</p>
+<p><img src="/images/201911/9/4.png" alt></p>
+<p>比如，垃圾邮件过滤(Spam Filtering)，即判断一封邮件是否为垃圾邮件就是一个二分类问题。</p>
+<p><img src="/images/201911/9/5.png" alt></p>
+<p>而文档分类(Document Classification)，根据文档内容将其归类为政治、经济、体育等类别就是一个多分类问题。</p>
+<p><img src="/images/201911/9/6.png" alt></p>
+<p>还有很多分类任务的例子，比如：</p>
+<p><img src="/images/201911/9/7.png" alt></p>
+<p><img src="/images/201911/9/8.png" alt></p>
+<p>在每种任务中，我们都可以采用各种适用于该任务的模型。比如，线性模型(Linear Model)和非线性模型(Non-linear Model)。</p>
+<ul>
+<li>线性模型能力有限，一些简单的任务可以用它来做，遇到复杂的任务时它就有点力不从心了。</li>
+<li>非线性模型比较强。现在大火的深度学习就是一种非线性模型，能够完成一些异常复杂的任务，比如语音识别、图像分类等等。</li>
+</ul>
+<p>回归任务和分类任务都属于监督学习。它们都要大量带有标记的数据(即指明了函数输出应该是什么的数据)。可是收集到大量带有标记的数据可能并不是那么容易。有什么办法可以减少数据量吗？答案就是半监督学习(Semi-supervised Learning)。</p>
+<p><img src="/images/201911/9/9.png" alt></p>
+<h3 id="半监督学习-Semi-supervised-Learning"><a href="#半监督学习-Semi-supervised-Learning" class="headerlink" title="半监督学习(Semi-supervised Learning)"></a>半监督学习(Semi-supervised Learning)</h3><p>假如我们搭建一个识别猫和狗的系统，现在手头上有一些标记数据(Labelled Data)和一些未标记数据(Unlabelled Data)。半监督学习会利用这些未标记数据进行学习用以得到最好的函数。</p>
+<p><img src="/images/201911/9/10.png" alt></p>
+<h3 id="迁移学习-Transfer-Learning"><a href="#迁移学习-Transfer-Learning" class="headerlink" title="迁移学习(Transfer Learning)"></a>迁移学习(Transfer Learning)</h3><p>还是搭建一个识别猫和狗的系统，手头上有一部分标记数据，一部分与猫狗没有关系的数据(比如式子老虎，标未标记都可)，迁移学习会利用这部分进行学习用以得到最好的函数。</p>
+<h3 id="无监督学习-Unsupervised-Learning"><a href="#无监督学习-Unsupervised-Learning" class="headerlink" title="无监督学习(Unsupervised Learning)"></a>无监督学习(Unsupervised Learning)</h3><p>我们希望机器能够“无师自通”。</p>
+<p>比如，要让机器学会阅读。我们没有告诉它每个词汇是什么意思，而是让它“看”大量文本。通过这大量的文本，它心中若有所感，逐渐有了自己的理解。</p>
+<p><img src="/images/201911/9/11.png" alt></p>
+<p>再比如，要让机器学会绘画。我们只给机器看大量的画作，机器需要自己从中学到一些东西。然后，自己开始动手作画。</p>
+<p><img src="/images/201911/9/12.png" alt></p>
+<h3 id="强化学习-Reinforcement-Learning"><a href="#强化学习-Reinforcement-Learning" class="headerlink" title="强化学习(Reinforcement Learning)"></a>强化学习(Reinforcement Learning)</h3><p>在监督学习中，我们会告诉机器正确答案是什么。假如要用监督学习的技术来训练一个聊天机器人，我们的训练方式可能是这样：</p>
+<p><img src="/images/201911/9/13.png" alt></p>
+<p>相当于有一个老师，告诉它该怎么回答。而在强化学习中，我们并没有告诉机器正确答案是什么，它只能得到一个分数，可以从中知道它做的好或不好。同样是训练聊天机器人，过程可能是这样：</p>
+<p><img src="/images/201911/9/14.png" alt></p>
+<p>一开始，机器可能是在胡说八道，最后导致对方勃然大怒挂了电话，于是它知道自己做错事了，喀什反思。通过这样不断地尝试与反思，它慢慢提高了聊天水平。</p>
+<p>让我们再回到一开始的图片</p>
+<p><img src="/images/201911/9/15.png" alt></p>
+<p>蓝色框表示的是学习的情景。通常学习的情景是没有办法控制的(取决于我们手头上有什么样的数据)，比如为什么我们要做强化学习呢？就是因为我们没有数据做监督学习才做强化学习。</p>
+<p>橙色框表示的是要进行的任务。任务根据输出不同，有回归，分类，结构化学习(输出的东西是有结构的，比如说语言翻译，语音识别等等)等。不同的情景下都可能要进行这些任务。</p>
+<p>绿色框表示的是任务可选择的方法。</p>
+<p>总结如下：</p>
+<blockquote>
+<p>蓝色框代表情景，取决于有什么样的训练数据。</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>机器学习情景</th>
+<th>训练数据类型</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>监督学习</td>
+<td>带有标签的数据</td>
+</tr>
+<tr>
+<td>半监督学习</td>
+<td>有部分带有标签的数据</td>
+</tr>
+<tr>
+<td>无监督学习</td>
+<td>无标签的数据</td>
+</tr>
+<tr>
+<td>迁移学习</td>
+<td>有一些不相干的数据</td>
+</tr>
+<tr>
+<td>强化学习</td>
+<td>只有评价</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>红色框代表任务，却决于函数输出是什么，可以放在以上五种学习情景的任一种内。</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>机器学习任务</th>
+<th>函数输出</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>回归</td>
+<td>数值</td>
+</tr>
+<tr>
+<td>分类</td>
+<td>类别</td>
+</tr>
+<tr>
+<td>结构化学习</td>
+<td>有结构的内容</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>绿色框代表方法，可以放在任一学习任务中。</p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>机器学习</category>
+      </categories>
+      <tags>
+        <tag>公开课</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>李宏毅机器学习(一)引言</title>
+    <url>/2019/11/05/%E6%9D%8E%E5%AE%8F%E6%AF%85%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0-%E4%B8%80-%E5%BC%95%E8%A8%80/</url>
+    <content><![CDATA[<p>最近几年人工智能这个词总是时不时地出现在我们视野里，确切来说它也并不是什么新词儿，它在1950年代就被提出来了。它代表着我们人类的一个长期目标，那便是<strong>希望机器可以和人一样聪明。</strong></p><p><img src="/images/201911/8/1.png" alt></p><p>可是人们却不太清楚如何做这件事，不太清楚如何让机器拥有智能，变得和人一样聪明。直到1980年代，有了<strong>机器学习。</strong> 顾名思义，机器学习就是让机器拥有学习的能力。那么，它和人工智能有什么关系呢？<strong>人工智能是我们想要达成的目标，而机器学习是为了达成目标使用的手段。深度学习是机器学习中的一种方法。</strong></p><a id="more"></a>
+
+
+<p><img src="/images/201911/8/2.png" alt></p>
+<p>那么在有机器学习，深度学习之前，我们是如何做人工智能呢？</p>
+<p>生物学的知识告诉我们，生物的行为取决于先天的本能或后天学习的结果。</p>
+<p>举例来说，河狸筑坝的能力是天生的。</p>
+<p><img src="/images/201911/8/3.png" alt></p>
+<p>它的筑坝行为是这样的：</p>
+<ul>
+<li>如果听到流水声，就会筑堤直到听不到流水声。</li>
+</ul>
+<p>我们之前做人工智能就是这样的，设定好机器的先天本能，通常是一些由人类确定的规则。</p>
+<p><img src="/images/201911/8/4.png" alt></p>
+<p>看起来也不错，似乎也能完成不少任务。但也存在很大的问题，我们很难考虑到所有的规则。对于上述的聊天机器人，我们不太可能想到所有的响应规则。这就导致了机器永远无法超过它的创造者。它的所有行为都在我们定义的规则之下，也就是说它没有<code>freestyle</code>。</p>
+<p>我们的目的是研究真正的机器学习。那么，什么是真正的机器学习呢？</p>
+<p>简单来说就是写程序让机器有学习的能力。接下来，我们就给它提供数据以供其学习。比如在语音识别中，</p>
+<p><img src="/images/201911/8/5.png" alt></p>
+<p>告诉机器这段语音是“Hi”。</p>
+<p><img src="/images/201911/8/6.png" alt></p>
+<p>这段语音是“How are you”。</p>
+<p>我们可以机器提供大量的语音数据，并告诉它每段语音的内容。通过不断地学习，它逐渐若有所得。于是，当我们给它一段语音（之前可能从来没有听过），它会告诉我们内容是什么。</p>
+<p><img src="/images/201911/8/7.png" alt></p>
+<p>过程如下所示：</p>
+<p><img src="/images/201911/8/8.png" alt></p>
+<p>图像识别也是类似的过程：</p>
+<p><img src="/images/201911/8/9.png" alt></p>
+<p>机器学习可以看成是从数据中找到一个函数。</p>
+<p><img src="/images/201911/8/10.png" alt></p>
+<p>举个例子，我们要进行图像识别，通过给机器的数据，机器学习算法可以得到一个函数。当将图像输入给该函数时，它能输出该图像对应的类别。</p>
+<p><img src="/images/201911/8/11.png" alt></p>
+<p>那么如何得到这个函数呢？我们有很多可以选择的模型，比如神经网络，SVM，决策树等等。每个模型内都包含了很多函数（模型可能有很多参数，参数是可以变化的）。</p>
+<p><img src="/images/201911/8/12.png" alt></p>
+<p>这么多函数选择哪一个呢？所以我们还得有一个评价指标，当把数据丢给模型后能够衡量函数的好坏。知道了函数的好坏之后，自然要选择最好的函数。</p>
+<p>如上图所示，函数<code>f1</code>自然好于<code>f2</code>。同时也可以看到，这些数据有个特点，就是每个数据都给出了函数的输入和函数期望得到的值。</p>
+<p><img src="/images/201911/8/13.png" alt></p>
+<p>在这种情景下的机器学习叫做监督学习。找到了最好的函数之后，我们就可以用它来测试，看它是否有举一反三的能力。整个流程如下：</p>
+<p><img src="/images/201911/8/14.png" alt></p>
+<p>所以总结一下，机器学习大致可以分为三步：</p>
+<p><img src="/images/201911/8/15.png" alt></p>
+]]></content>
+      <categories>
+        <category>机器学习</category>
+      </categories>
+      <tags>
+        <tag>公开课</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>用Python处理Excel表格</title>
+    <url>/2019/11/05/%E7%94%A8Python%E5%A4%84%E7%90%86Excel%E8%A1%A8%E6%A0%BC/</url>
+    <content><![CDATA[<p>Excel是Windows环境下流行而强大的电子表格程序。openpyxl模块可以让Python程序能读取和修改Excel表格文件。例如，你可能有一个无聊的任务，需要从一个表格中复制一些数据，粘贴到另一个表格中。或者可能需要从几千行中挑选出几行，并根据某个条件稍作修改。或者需要查看几百份部门预算电子表格，找到其中的赤字。这些无聊的任务都可以用Python完成。</p><a id="more"></a>
+<h3 id="Excel文档"><a href="#Excel文档" class="headerlink" title="Excel文档"></a>Excel文档</h3><p>一个Excel电子表格文件称为一个工作簿。一个工作簿保存在扩展名为.xlsx的文件中。每个工作簿可以包含多个表（也称为工作表）。用户当前查看的表（或关闭Excel前最后查看的表）称为活动表。每个表都有一些列（地址是从A开始的字母）和一些行（地址是从1开始的数字）。在特定行和列的翻个称为单元格。每个单元格都包含一个数字或文本值。单元格形成的网格和数据构成了表。</p>
+<h3 id="安装openpyxl模块"><a href="#安装openpyxl模块" class="headerlink" title="安装openpyxl模块"></a>安装openpyxl模块</h3><p>Python没有自带openpyxl，所以必须自己安装。打开命令行输入</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">pip install openpyxl</span><br></pre></td></tr></table></figure>
+
+<p>即可安装。</p>
+<h3 id="读取Excel文档"><a href="#读取Excel文档" class="headerlink" title="读取Excel文档"></a>读取Excel文档</h3><p>我们将使用名为example.xlsx的电子表格，可以在<a href="https://nostarch.com/automatestuff" target="_blank" rel="noopener">Automate the Boring Stuff with Python</a>处找到并下载。如下图所示，有3个默认的表，名为Sheet1、Sheet2和Sheet3，这是Excel自动为新工作簿提供的（不同操作系统和电子表格程序，提供的默认表个数可能会不同）。</p>
+<p><img src="/images/201911/7/1.jpeg" alt></p>
+<h4 id="用openpyxl模块打开Excel文档"><a href="#用openpyxl模块打开Excel文档" class="headerlink" title="用openpyxl模块打开Excel文档"></a>用openpyxl模块打开Excel文档</h4><p>导入openpyxl模块后，就可以用<code>openpyxl.load_workbook()</code>函数打开Excel文档。</p>
+<p><img src="/images/201911/7/2.jpeg" alt></p>
+<p><code>openpyxl.load_workbook()</code>函数接受文件名，返回一个workbook数据类型的值。这个workbook对象代表整个Excel文件（example.xlsx），类似File对象代表一个打开的文本文件。</p>
+<h4 id="从工作簿中取得工作表"><a href="#从工作簿中取得工作表" class="headerlink" title="从工作簿中取得工作表"></a>从工作簿中取得工作表</h4><p>通过workbook对象的sheetnames属性可以得到工作簿中所有表名的列表。</p>
+<p><img src="/images/201911/7/3.jpeg" alt></p>
+<p>每个表由一个Worksheet对象表示，可以通过向工作簿进行索引（用表名字符串）获得。可以通过Workbook对象的active属性取得工作簿的活动表。在取得Worksheet对象后，可以通过title属性取得它的名称。</p>
+<h4 id="从表中取得单元格"><a href="#从表中取得单元格" class="headerlink" title="从表中取得单元格"></a>从表中取得单元格</h4><p>获取到了Worksheet对象后，就可以按名字访问Cell对象。</p>
+<p><img src="/images/201911/7/4.jpeg" alt></p>
+<p>Cell对象由一个value属性，它包含这个单元格中保存的值。Cell对象也有row、column和coordinate属性，提供该单元格的位置信息。</p>
+<p>如上图所示，访问单元格B1的Cell对象的value属性，得到字符串’Apples’。row属性给出的是整数1，column属性给出的是2，coordinate属性给出的是’B1’。</p>
+<p>调用表的<code>cell()</code>方法时，可以传入整数作为row和column关键字参数，也可以得到一个单元格。</p>
+<p><img src="/images/201911/7/5.jpeg" alt></p>
+<p>可以通过Worksheet对象的max_column和max_row属性，确定表的大小。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">sheet.max_column, sheet.max_row</span><br><span class="line"><span class="comment"># (3, 7)</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="列字母和数字之间的转换"><a href="#列字母和数字之间的转换" class="headerlink" title="列字母和数字之间的转换"></a>列字母和数字之间的转换</h4><p>要从字母转换到数字，就调用<code>openpyxl.utils.column_index_from_string</code>函数。要从数字转换到字母，就调用<code>openpyxl.utils.get_column_letter()</code>函数。</p>
+<p><img src="/images/201911/7/6.jpeg" alt></p>
+<p>从openpyxl.utils模块引入这两个函数后，可以调用<code>get_column_letter()</code>，传入像27这样的整数，弄清楚第27列的字母是什么。函数<code>column_index_string</code>做的事情相反：传入一列的字母名称，它返回该列的数字是什么。</p>
+<h4 id="从表中取得行和列"><a href="#从表中取得行和列" class="headerlink" title="从表中取得行和列"></a>从表中取得行和列</h4><p>可以将Worksheet对象切片，取到电子表格中一行、一列或一个矩形区域中的所有Cell对象。然后可以循环遍历这个切片中的所有单元格。</p>
+<p><img src="/images/201911/7/7.jpeg" alt></p>
+<p>这个元组包含3个元组：每个元组代表1行，从指定区域的顶部到底部。这3个内部元组中的每一个包含指定区域中一行的Cell对象，从最左边的单元格到最右边。工作表的这个切片包含了从A1到C3区域的所有Cell对象，从左上角的单元格到右下角的单元格。</p>
+<p>可以按照如下方式获取到表格中的一行或一列</p>
+<p><img src="/images/201911/7/8.jpeg" alt></p>
+<h3 id="写入Excel文档"><a href="#写入Excel文档" class="headerlink" title="写入Excel文档"></a>写入Excel文档</h3><p>openpyxl也提供了一些方法写入数据。这意味着你的程序可以创建和编辑电子表格文件。利用Python，创建一个包含几千行数据的电子表格是非常简单的。</p>
+<h4 id="创建并保存Excel文档"><a href="#创建并保存Excel文档" class="headerlink" title="创建并保存Excel文档"></a>创建并保存Excel文档</h4><p>调用<code>openpyxl.Workbook()</code>函数，创建一个新的空Workbook对象。</p>
+<p><img src="/images/201911/7/9.jpeg" alt></p>
+<p>当修改Workbook对象或它的工作表和单元格时，电子表格文件不会保存，除非调用<code>save()</code>工作簿方法。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">wb.save(<span class="string">'demo.xlsx'</span>)</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/201911/7/10.jpeg" alt></p>
+<h4 id="创建和删除工作表"><a href="#创建和删除工作表" class="headerlink" title="创建和删除工作表"></a>创建和删除工作表</h4><p>利用<code>create_sheet()</code>和<code>remove_sheet()</code>方法，可以在工作簿中添加或删除工作表。</p>
+<p><img src="/images/201911/7/11.jpeg" alt></p>
+<p><code>create_sheet()</code>方法返回一个新的Worksheet对象，名为SheetX，它默认是工作簿的最后一个工作表。或者，可以利用index和title关键字参数，指定新工作表的索引或名称。</p>
+<p><img src="/images/201911/7/12.jpeg" alt></p>
+<p><code>remove()</code>方法接受一个Worksheet对象作为其参数，而不是工作表名称的字符串。</p>
+<h4 id="将值写入单元格"><a href="#将值写入单元格" class="headerlink" title="将值写入单元格"></a>将值写入单元格</h4><p>将值写入单元格很像将值写入字典中的键。</p>
+<p><img src="/images/201911/7/13.jpeg" alt></p>
+<p>查看demo.xlsx文件，可以看到值已被写入到文件中</p>
+<p><img src="/images/201911/7/14.jpeg" alt></p>
+<h4 id="项目：从电子表格中读取数据"><a href="#项目：从电子表格中读取数据" class="headerlink" title="项目：从电子表格中读取数据"></a>项目：从电子表格中读取数据</h4><p>假设你有一张电子表格，里面包含了2010年美国人口普查数据。你有一个比较无聊的任务，要遍历表中的几千行，计算总的人口，以及每个县的普查区数目（普查区是一个地理区域，为了人口普查而定义的）。表格中的每一行表示一个人口普查区。表格名为censupopdata.xlsx，可以在<a href="https://nostarch.com/automatestuff" target="_blank" rel="noopener">Automate the Boring Stuff with Python</a>处下载。</p>
+<p><img src="/images/201911/7/15.jpeg" alt></p>
+<p>censuspopdata.xlsx电子表格中只有一张表，名为“Population by Census Tract”。每一行都保存了一个普查区的数据。列分别是普查区的编号（A），州的简称（B），县的名称（C），普查区的人口（D）。</p>
+<p>在这个项目中，我们需要编写一个脚本，从人口普查电子表格中读取数据，并做以下几件事：</p>
+<ul>
+<li>从Excel表格中读取数据</li>
+<li>计算每个县中普查区的数目</li>
+<li>计算每个县的总人口</li>
+<li>打印结果</li>
+</ul>
+<p>这意味着代码需要完成下列任务：</p>
+<ul>
+<li>用openpyxl模块打开Excel文档并读取单元格</li>
+<li>计算所有普查区和人口数据，将它们保存到一个数据结构中</li>
+<li>利用pprint模块，将该数据结构写入一个扩展名为.py的文本文件中</li>
+</ul>
+<p>完整代码如下所示：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> openpyxl, pprint</span><br><span class="line"></span><br><span class="line"><span class="comment"># 用openpyxl模块打开Excel文档</span></span><br><span class="line">wb = openpyxl.load_workbook(<span class="string">'censuspopdata.xlsx'</span>)</span><br><span class="line">sheet = wb[<span class="string">'Population by Census Tract'</span>]</span><br><span class="line"><span class="comment"># 存储普查区数目和人口数据</span></span><br><span class="line">countryData = &#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> row <span class="keyword">in</span> range(<span class="number">2</span>,sheet.max_row+<span class="number">1</span>):</span><br><span class="line">    state = sheet[<span class="string">'B'</span>+str(row)].value</span><br><span class="line">    country = sheet[<span class="string">'C'</span>+str(row)].value</span><br><span class="line">    pop = sheet[<span class="string">'D'</span>+str(row)].value</span><br><span class="line">    </span><br><span class="line">    countryData.setdefault(state, &#123;&#125;)</span><br><span class="line">    </span><br><span class="line">    countryData[state].setdefault(country, &#123;<span class="string">'tracts'</span>:<span class="number">0</span>, <span class="string">'pop'</span>:<span class="number">0</span>&#125;)</span><br><span class="line">    </span><br><span class="line">    countryData[state][country][<span class="string">'tracts'</span>] += <span class="number">1</span></span><br><span class="line">    countryData[state][country][<span class="string">'pop'</span>] += int(pop)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 将数据存储到文件中</span></span><br><span class="line">resultFile = open(<span class="string">'census2010.py'</span>, <span class="string">'w'</span>)</span><br><span class="line">resultFile.write(<span class="string">'allData = '</span> + pprint.pformat(countryData))</span><br><span class="line">resultFile.close()</span><br></pre></td></tr></table></figure>
+
+<p>保存到census2010.py文件中的数据如下所示：</p>
+<p><img src="/images/201911/7/16.jpeg" alt></p>
+<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><ul>
+<li><a href="https://automatetheboringstuff.com/" target="_blank" rel="noopener">https://automatetheboringstuff.com/</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>数据分析</category>
+      </categories>
+      <tags>
+        <tag>Python</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>阿里云ECS配置Jupyter Notebook</title>
+    <url>/2019/11/05/%E9%98%BF%E9%87%8C%E4%BA%91ECS%E9%85%8D%E7%BD%AEJupyter-Notebook/</url>
+    <content><![CDATA[<p>访问<a href="https://www.aliyun.com" target="_blank" rel="noopener">阿里云官网</a>，购买ECS实例成功后，打开管理控制台后就可以看到实例的相关信息：</p><p><img src="/images/201911/6/1.png" alt></p><p>打开XShell，新建一个会话，输入上图所示的公网IP：</p><p><img src="/images/201911/6/2.png" alt></p><p>打开刚才新建的会话，输入用户名和密码就可以连接上之前购买的ECS实例。</p><p><img src="/images/201911/6/3.png" alt></p><h3 id="1-安装Anaconda"><a href="#1-安装Anaconda" class="headerlink" title="1. 安装Anaconda"></a>1. 安装Anaconda</h3><p>为了方便起见，我们先安装Anaconda。输入<code>mkdir anaconda</code>创建一个目录，<code>cd anaconda</code>进入<code>anaconda</code>目录，</p><a id="more"></a>
+
+
+
+
+
+
+<p>查看<code>https://repo.continuum.io/archive/</code>，选择想要安装的版本进行下载。这里，我们选择的是：</p>
+<p><img src="/images/201911/6/4.png" alt></p>
+<p>使用<code>wget https://repo.continuum.io/archive/Anaconda3-2019.03-Linux-x86_64.sh</code>对上述文件进行下载。下载成功后，输入<code>bash Anaconda3-2019.03-Linux-x86_64.sh</code>进行安装：</p>
+<p><img src="/images/201911/6/5.png" alt></p>
+<p>输入<code>vim /etc/profile</code>添加环境变量，在文件最后添加一行<code>export PATH=/root/anaconda3/bin:$PATH</code>。</p>
+<blockquote>
+<p>注意：<code>/root/anaconda3</code>是Anaconda在我的ECS实例上的路径，大家根据自己的情况进行相应的更改即可。</p>
+</blockquote>
+<p>添加完成后，保存更改并退出Vim。输入<code>source /etc/profile</code>让刚才的更改立即生效。</p>
+<h3 id="2-配置环境"><a href="#2-配置环境" class="headerlink" title="2. 配置环境"></a>2. 配置环境</h3><p>完成Anaconda的安装后，输入<code>jupyter notebook --generate-config</code>生成配置文件。</p>
+<p><img src="/images/201911/6/6.png" alt></p>
+<p>输入<code>ipython</code>，创建一个登录Jupyter的密码：</p>
+<p><img src="/images/201911/6/7.png" alt></p>
+<p>记录一下<code>Out[2]</code>里的<code>sha1:b5f39d354dc3:1704d712cfd801e84e39d22f7ff2222e3c8b275e</code></p>
+<p>输入<code>vim /root/.jupyter/jupyter_notebook_config.py</code>（即我们使用<code>jupyter notebook --generate-config</code>命令生成的配置文件），在文件末尾添加以下内容:</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">c.NotebookApp.ip=<span class="string">'*'</span></span><br><span class="line">c.NotebookApp.password = <span class="string">'sha1:b5f39d354dc3:1704d712cfd801e84e39d22f7ff2222e3c8b275e'</span></span><br><span class="line">c.NotebookApp.open_browser = <span class="literal">False</span> </span><br><span class="line">c.NotebookApp.port =<span class="number">8888</span></span><br><span class="line">c.NotebookApp.notebook_dir = <span class="string">'/root/jupyterproject/'</span></span><br></pre></td></tr></table></figure>
+
+<p>到ECS管理控制台，如下图添加安全组规则</p>
+<p><img src="/images/201911/6/8.png" alt></p>
+<p>输入命令<code>nohup jupyter notebook --ip=0.0.0.0 --no-browser --allow-root &amp;</code>运行Jupyter Notebook。</p>
+<p>此时，我们打开浏览器，在地址栏输入<code>http://公网IP:8888</code></p>
+<p><img src="/images/201911/6/9.png" alt></p>
+<p>输入之前设定的Jupyter密码就可以远端访问Jupyter Notebook啦！</p>
+<p><img src="/images/201911/6/10.png" alt></p>
+<p>当然，我们也可以通过手机访问</p>
+<p><img src="/images/201911/6/11.png" alt></p>
+<p>现在，除了用手机看剧、刷微博、聊天、逛虎扑之外，还可以写写代码呢！</p>
+]]></content>
+      <categories>
+        <category>工具使用</category>
+      </categories>
+      <tags>
+        <tag>ECS</tag>
+        <tag>Jupyter Notebook</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>TensorFlow快速入门</title>
     <url>/2019/11/04/TensorFlow-Tutorial/</url>
     <content><![CDATA[<p>TensorFlow是一个数值计算库，其中数据（Tensor，张量）在计算图中流动。数据在TensorFlow用被称为张量的n维数据表示。计算图由数据和数学操作符构成。</p><ul>
