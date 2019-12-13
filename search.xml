@@ -1,6 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>在Ubuntu上安装MySQL</title>
+    <url>/2019/12/13/%E5%9C%A8Ubuntu%E4%B8%8A%E5%AE%89%E8%A3%85MySQL/</url>
+    <content><![CDATA[<p>本文我们将学习如何在Ubuntu上一步一步安装<code>MySQL 8.0</code>。</p><h2 id="步骤一：更新包索引"><a href="#步骤一：更新包索引" class="headerlink" title="步骤一：更新包索引"></a>步骤一：更新包索引</h2><p>执行下列命令更新本地包索引：</p><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">sudo apt update</span><br></pre></td></tr></table></figure><h2 id="步骤二：升级包"><a href="#步骤二：升级包" class="headerlink" title="步骤二：升级包"></a>步骤二：升级包</h2><p>输入下列命令更新系统：</p><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">sudo apt upgrade</span><br></pre></td></tr></table></figure><h2 id="步骤三：配置MySQL-PPA"><a href="#步骤三：配置MySQL-PPA" class="headerlink" title="步骤三：配置MySQL PPA"></a>步骤三：配置MySQL PPA</h2><p>MySQL提供了一个用于安装MySQL服务器和工具的APT仓库。我们需要将这个MySQL仓库添加到系统的包源列表中。</p><a id="more"></a>
+
+
+
+
+
+
+
+
+<p>首先，使用<code>wget</code>命令下载仓库包：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">wget -c https://repo.mysql.com//mysql-apt-config_0.8.13-1_all.deb</span><br></pre></td></tr></table></figure>
+
+<p>然后，用<code>dpkg</code>命令安装MySQL仓库包：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">sudo dpkg -i mysql-apt-config_0.8.13-1_all.deb</span><br></pre></td></tr></table></figure>
+
+<h2 id="步骤四：安装MySQL"><a href="#步骤四：安装MySQL" class="headerlink" title="步骤四：安装MySQL"></a>步骤四：安装MySQL</h2><p>执行下列命令开始安装MySQL：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">sudo apt-get install mysql-server</span><br></pre></td></tr></table></figure>
+
+<h2 id="步骤五：MySQL服务器安全安装"><a href="#步骤五：MySQL服务器安全安装" class="headerlink" title="步骤五：MySQL服务器安全安装"></a>步骤五：MySQL服务器安全安装</h2><p>执行以下命令用于保障MySQL服务器的安全性：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">sudo mysql_secure_installation</span><br></pre></td></tr></table></figure>
+
+<p>将提示一些应选择的安全选项，以保障MySQL服务器的安全性：</p>
+<p><img src="/images/201912/1/1.png" alt></p>
+<h2 id="步骤六：通过Systemd管理MySQL服务器"><a href="#步骤六：通过Systemd管理MySQL服务器" class="headerlink" title="步骤六：通过Systemd管理MySQL服务器"></a>步骤六：通过Systemd管理MySQL服务器</h2><p>通常MySQL服务器一旦配置好就会启动。为了查看MySQL服务器是否启动，可以用以下命令：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">sudo systemctl status mysql</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/201912/1/2.png" alt></p>
+<p>如果发现MySQL服务器没有启动，用以下命令启动即可：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">sudo systemctl start mysql</span><br></pre></td></tr></table></figure>
+
+<p>为了让系统启动时MySQL服务器自动启动，我们可以执行：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">sudo systemctl enable mysql</span><br></pre></td></tr></table></figure>
+
+<h2 id="步骤七：连接到MySQL服务器"><a href="#步骤七：连接到MySQL服务器" class="headerlink" title="步骤七：连接到MySQL服务器"></a>步骤七：连接到MySQL服务器</h2><p>执行命令：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">sudo mysql -u root -p</span><br></pre></td></tr></table></figure>
+
+<p>可以连接到MySQL服务器。它会要求我们输入<code>root</code>账号的密码，如果输入密码正确的话就会显示：</p>
+<p><img src="/images/201912/1/3.png" alt></p>
+<p>我们可以输入：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">SHOW DATABASES;</span><br></pre></td></tr></table></figure>
+
+<p>显示当前所有的数据库，结果如下：</p>
+<p><img src="/images/201912/1/4.png" alt></p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><a href="http://www.mysqltutorial.org/install-mysql-ubuntu/" target="_blank" rel="noopener">http://www.mysqltutorial.org/install-mysql-ubuntu/</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>工具使用</category>
+      </categories>
+      <tags>
+        <tag>MySQL</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>李宏毅机器学习(二)学习导图</title>
     <url>/2019/11/05/%E6%9D%8E%E5%AE%8F%E6%AF%85%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0-%E4%BA%8C-%E5%AD%A6%E4%B9%A0%E5%AF%BC%E5%9B%BE/</url>
     <content><![CDATA[<p>机器学习发展至今涵盖的内容已经非常多，本文通过对其使用情景、任务和方法分类在上文的基础上对机器学习做进一步的介绍。</p><p><img src="/images/201911/9/1.png" alt></p><h3 id="监督学习-Supervised-Learning"><a href="#监督学习-Supervised-Learning" class="headerlink" title="监督学习(Supervised Learning)"></a>监督学习(Supervised Learning)</h3><p>上文曾提到机器学习可以看成是从数据中找到一个函数。对于回归(Regression)这类任务而言，我们希望得到的函数的输出值是数值(Scalar)，而不是像之前图像识别一样输出类别。</p><a id="more"></a>
@@ -1343,8 +1400,8 @@
         <category>Python爬虫</category>
       </categories>
       <tags>
-        <tag>BeautifulSoup</tag>
         <tag>Python</tag>
+        <tag>BeautifulSoup</tag>
       </tags>
   </entry>
   <entry>
@@ -1447,8 +1504,8 @@
         <category>机器学习</category>
       </categories>
       <tags>
-        <tag>Python</tag>
         <tag>OpenCV</tag>
+        <tag>Python</tag>
       </tags>
   </entry>
 </search>
