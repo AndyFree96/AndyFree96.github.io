@@ -1,6 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Phaser3入门</title>
+    <url>/2019/12/27/Phaser3%E5%85%A5%E9%97%A8/</url>
+    <content><![CDATA[<p>本文我们将学习搭建可以用Phaser进行游戏开发的环境，包括一个本地Web服务器，IDE，最新版本的Phaser，并确保它们能正常工作。</p><p><strong>为什么需要一个本地Web服务器？</strong></p><p>如果我们写了HTML网页，将这个文件拖到浏览器中，可以看到最终相应的效果。 还可以将整个网页“另存为”，再打开的话，可以看到没有什么很大的不同。 这两种方法都起作用，为什么不能将HTML5游戏拖动到浏览器中运行它呢？</p><a id="more"></a>
+
+
+<p>这与访问文件的协议有关。 当通过Web请求任何内容时，将使用<code>http</code>协议，并且服务器级别的安全性足以确保只能访问我们想要的文件。 但是，当将文件拖入其中时，它是通过本地文件系统(<code>file://</code>)加载的。 在<code>file://</code>下，没有域的概念，没有服务器级的安全性，只有原始文件系统。</p>
+<p>举个例子：</p>
+<p>在本地新建一个目录，并添加如下两个文件：</p>
+<p><img src="/images/201912/5/1.png" alt></p>
+<p>在该目录下启动服务器，</p>
+<p><img src="/images/201912/5/2.png" alt></p>
+<p>打开浏览器进行访问<code>http://127.0.0.1:8000/</code>，可以看到：</p>
+<p><img src="/images/201912/5/3.png" alt></p>
+<p>由于我们没有指定请求的资源，默认访问的是Web根目录下的<code>index.html</code>文件。如果这个时候，我们想要访问与A同级的目录，</p>
+<p><img src="/images/201912/5/4.png" alt></p>
+<p>比如，目录B或者目录C是不行的，因为我们是在目录A下启动服务器的，服务器把目录A作为Web根目录，它只知道Web根目录下的文件，至于目录B，目录C等等，服务器压压根就不知道。</p>
+<p>但如果我们用<code>file://</code>方式访问<code>index.html</code>文件(将文件拖动到浏览器)，</p>
+<p><img src="/images/201912/5/5.png" alt></p>
+<p>可以看到相同的内容。但如果我们将地址稍微更改一下，</p>
+<p><img src="/images/201912/5/6.png" alt></p>
+<p>整个本地的文件及目录都可以通过<code>file://</code>的方式访问到，与用本地Web服务器完全不同。</p>
+<p>那么问题就来了，你真的想Javascript可以访问到你本地的所有文件吗？</p>
+<p>如果不想的话，这就是需要本地Web服务器的原因。</p>
+<h2 id="安装Web服务器"><a href="#安装Web服务器" class="headerlink" title="安装Web服务器"></a>安装Web服务器</h2><h3 id="Windows"><a href="#Windows" class="headerlink" title="Windows"></a>Windows</h3><p>在Windows上，有很多捆绑安装包可用，它们将流行的Web技术，例如Apache，PHP和MySQL打包在一起并通过单个<code>exe</code>进行设置。</p>
+<p>建议使用<a href="http://www.wampserver.com/en/" target="_blank" rel="noopener">WAMPServer</a>或<a href="https://www.apachefriends.org/index.html" target="_blank" rel="noopener">XAMPP</a>，它们都提供设置指南。 <a href="http://www.wampserver.com/en/" target="_blank" rel="noopener">WAMP</a>专门在系统托盘中装了一个图标，可以通过它停止和重新启动服务，修改Apache设置，例如为项目创建新的目录名。</p>
+<p>除了上述的“多合一”捆绑包，还可以仅下载一个Web服务器。 <a href="http://www.iis.net/" target="_blank" rel="noopener">Microsoft IIS</a>和<a href="http://httpd.apache.org/" target="_blank" rel="noopener">Apache</a>均可免费下载。</p>
+<h3 id="OS-X"><a href="#OS-X" class="headerlink" title="OS X"></a>OS X</h3><p>作为一个Unix环境，OS X比Windows有更多的选择。如果想要一个像WAMP一样的“所有功能于一身”的工具，一个干净、易用的界面，那么强烈推荐<a href="http://www.mamp.info/en/index.html" target="_blank" rel="noopener">MAMP</a>。有两个版本:一个是免费的，一个是付费的。</p>
+<h3 id="http-server"><a href="#http-server" class="headerlink" title="http.server"></a>http.server</h3><p>如果需要一个快速运行的Web服务器，并且不希望在设置Apache或下载应用程序时遇到麻烦，那么Python可以帮到我们。Python提供了一个简单的内置HTTP服务器，这也是前面例子中展示的方法。当然，我们需要安装Python。更多关于<code>http.server</code>的内容请看<a href="https://docs.python.org/3/library/http.server.html" target="_blank" rel="noopener">http.server — HTTP servers</a>。</p>
+<h3 id="http-server-1"><a href="#http-server-1" class="headerlink" title="http-server"></a>http-server</h3><p><code>http-server</code>是<code>node.js</code>中的一个简单的、零配置的命令行http服务器。它的功能足够强大，可以用于生产环境，自然也可以用于测试、本地开发和学习。</p>
+<p><img src="/images/201912/5/7.png" alt></p>
+<p>具体安装使用可以参考<a href="https://www.npmjs.com/package/http-server" target="_blank" rel="noopener">http-server: a command-line http server</a>。</p>
+<h2 id="编辑器"><a href="#编辑器" class="headerlink" title="编辑器"></a>编辑器</h2><p>我们需要用于编写JavaScript代码的编辑器。 有很多选择，每个选择都有其优缺点。 如果您是一位经验丰富的开发人员，那么您可能已经有了自己的首选编辑器，在这种情况下，请跳过本文的这部分内容。否则的话，这里有一些选项供您选择：</p>
+<h3 id="Sublime-Text"><a href="#Sublime-Text" class="headerlink" title="Sublime Text"></a><a href="http://www.sublimetext.com/" target="_blank" rel="noopener">Sublime Text</a></h3><p><img src="/images/201912/5/8.png" alt></p>
+<h3 id="Atom"><a href="#Atom" class="headerlink" title="Atom"></a><a href="https://atom.io/" target="_blank" rel="noopener">Atom</a></h3><p><img src="/images/201912/5/9.png" alt></p>
+<h3 id="Visual-Studio-Code"><a href="#Visual-Studio-Code" class="headerlink" title="Visual Studio Code"></a><a href="https://code.visualstudio.com/" target="_blank" rel="noopener">Visual Studio Code</a></h3><p><img src="/images/201912/5/10.png" alt></p>
+<h3 id="Brackets"><a href="#Brackets" class="headerlink" title="Brackets"></a><a href="http://brackets.io/" target="_blank" rel="noopener">Brackets</a></h3><p><img src="/images/201912/5/11.png" alt></p>
+<h3 id="WebStorm"><a href="#WebStorm" class="headerlink" title="WebStorm"></a><a href="https://www.jetbrains.com/webstorm/" target="_blank" rel="noopener">WebStorm</a></h3><p><img src="/images/201912/5/12.png" alt></p>
+<p>等等。至于如何选择？取决于你自己。</p>
+<h2 id="下载Phaser"><a href="#下载Phaser" class="headerlink" title="下载Phaser"></a>下载Phaser</h2><p>Phaser是一个开源项目，可以免费下载。 使用Phaser无需支付任何费用，无论将其用于商业项目还是免费项目。</p>
+<p>项目作者使用Github来管理该项目，我们可以选择各种方式来下载它。 这些都在<a href="https://phaser.io/download/stable" target="_blank" rel="noopener">下载页面</a>上进行了说明。</p>
+<p><img src="/images/201912/5/13.png" alt></p>
+<p>这里我选择的<code>min.js</code>文件。</p>
+<h2 id="Hello-World"><a href="#Hello-World" class="headerlink" title="Hello World"></a>Hello World</h2><p>现在，本地Web服务器、编辑器、Phaser都弄好了，万事具备，是时候写点东西确保一切都可以正常工作。</p>
+<blockquote>
+<p>提示：如果您对下面代码一头雾水的话，建议您先一边写一边对照着<br><a href="https://www.liaoxuefeng.com/wiki/1022910821149312" target="_blank" rel="noopener">Javascript教程</a>学习。</p>
+</blockquote>
+<p>在Web的根目录(对于我而言就是前例中的A目录)下创建一个名为<code>index.html</code>的文件，并将以下代码粘贴保存：</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE html&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"phaser.min.js"</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="actionscript">            <span class="keyword">var</span> config = &#123;</span></span><br><span class="line">                type: Phaser.AUTO,</span><br><span class="line">                width: 800,</span><br><span class="line">                height: 600,</span><br><span class="line">                physics: &#123;</span><br><span class="line"><span class="actionscript">                    <span class="keyword">default</span>: <span class="string">'arcade'</span>,</span></span><br><span class="line">                    arcade: &#123;</span><br><span class="line">                        gravity: &#123;y:200&#125;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;,</span><br><span class="line">                scene: &#123;</span><br><span class="line">                    preload: preload,</span><br><span class="line">                    create: create</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;;</span><br><span class="line"></span><br><span class="line"><span class="actionscript">            <span class="keyword">var</span> game = <span class="keyword">new</span> Phaser.Game(config);</span></span><br><span class="line">            </span><br><span class="line"><span class="actionscript">            <span class="function"><span class="keyword">function</span> <span class="title">preload</span><span class="params">()</span></span>&#123;</span></span><br><span class="line"><span class="actionscript">                <span class="keyword">this</span>.load.setBaseURL(<span class="string">'http://labs.phaser.io'</span>);</span></span><br><span class="line"><span class="actionscript">                <span class="keyword">this</span>.load.image(<span class="string">'sky'</span>, <span class="string">'assets/skies/space3.png'</span>);</span></span><br><span class="line"><span class="actionscript">                <span class="keyword">this</span>.load.image(<span class="string">'logo'</span>, <span class="string">'assets/sprites/phaser3-logo.png'</span>);</span></span><br><span class="line"><span class="actionscript">                <span class="keyword">this</span>.load.image(<span class="string">'red'</span>, <span class="string">'assets/particles/red.png'</span>);</span></span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line"><span class="actionscript">            <span class="function"><span class="keyword">function</span> <span class="title">create</span><span class="params">()</span></span>&#123;</span></span><br><span class="line"><span class="actionscript">                <span class="keyword">this</span>.add.image(<span class="number">400</span>, <span class="number">300</span>, <span class="string">'sky'</span>);</span></span><br><span class="line"><span class="actionscript">                <span class="keyword">var</span> particles = <span class="keyword">this</span>.add.particles(<span class="string">'red'</span>);</span></span><br><span class="line"><span class="actionscript">                <span class="keyword">var</span> emitter = particles.createEmitter(&#123;</span></span><br><span class="line">                    speed: 100,</span><br><span class="line"><span class="vbscript">                    scale: &#123;start: <span class="number">1</span>, <span class="keyword">end</span>: <span class="number">0</span>&#125;,</span></span><br><span class="line"><span class="actionscript">                    blendMode: <span class="string">'ADD'</span></span></span><br><span class="line">                &#125;);</span><br><span class="line"><span class="actionscript">                <span class="keyword">var</span> logo = <span class="keyword">this</span>.physics.add.image(<span class="number">400</span>, <span class="number">100</span>, <span class="string">'logo'</span>);</span></span><br><span class="line">                logo.setVelocity(100, 200);</span><br><span class="line">                logo.setBounce(1, 1);</span><br><span class="line"><span class="actionscript">                logo.setCollideWorldBounds(<span class="literal">true</span>);</span></span><br><span class="line"></span><br><span class="line">                emitter.startFollow(logo);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">        <span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>在控制台中输入如下命令(使用的之前提到的<code>http-server</code>)：</p>
+<p><img src="/images/201912/5/14.png" alt></p>
+<p>打开浏览器，在地址栏输入<code>http://127.0.0.1:8090</code>并访问，就可以看到：</p>
+<p><img src="/images/201912/5/1.gif" alt></p>
+<p>哇哦！这只是个小例子，却足以让我们印象深刻。附上<a href="https://gist.github.com/photonstorm/46cb8fb4b19fc7717dcad514cdcec064" target="_blank" rel="noopener">完整代码</a>。</p>
+<p>是不是开始有点按耐不住躁动的好奇心？是不是想做点“大事”？</p>
+<p><img src="/images/201912/5/1.jpg" alt></p>
+<p>从<a href="https://phaser.io/tutorials/making-your-first-phaser-3-game/part1" target="_blank" rel="noopener">Making your first Phaser 3 game</a>开始吧。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><a href="https://phaser.io/tutorials/getting-started-phaser3" target="_blank" rel="noopener">https://phaser.io/tutorials/getting-started-phaser3</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>小游戏</category>
+      </categories>
+      <tags>
+        <tag>Phaser</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>搭建Mujoco环境</title>
     <url>/2019/12/16/%E6%90%AD%E5%BB%BAMujoco%E7%8E%AF%E5%A2%83/</url>
     <content><![CDATA[<p>Mujoco是一个由Roboti LLC开发的物理模拟器，在很多领域被用于模拟真实情景。本文将介绍如何在Windows 10系统下搭建Mujoco环境。</p><h2 id="下载MuJoCo-Pro"><a href="#下载MuJoCo-Pro" class="headerlink" title="下载MuJoCo Pro"></a>下载MuJoCo Pro</h2><p>访问 <a href="https://www.roboti.us/index.html" target="_blank" rel="noopener">https://www.roboti.us/index.html</a> 进行下载，由于我使用的是Windows 10 64位系统，这里选择下载<code>mjpro150 win64</code>。</p><a id="more"></a>
