@@ -1,6 +1,138 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>开发第一个Phaser3游戏</title>
+    <url>/2019/12/30/%E5%BC%80%E5%8F%91%E7%AC%AC%E4%B8%80%E4%B8%AAPhaser3%E6%B8%B8%E6%88%8F/</url>
+    <content><![CDATA[<h2 id="1-前言"><a href="#1-前言" class="headerlink" title="1. 前言"></a>1. 前言</h2><p><img src="/images/201912/6/1.png" alt></p><p>这是我们第一个用<code>Phaser3</code>开发游戏的教程。我们将学习如何创建一个小游戏，包括玩家在平台上跑和跳，收集星星并避免一些不好的行为。</p><h3 id="什么是Phaser？"><a href="#什么是Phaser？" class="headerlink" title="什么是Phaser？"></a>什么是Phaser？</h3><p><code>Phaser</code>是一个HTML5旨在帮助开发者创建强大、跨浏览器的HTML5游戏的框架。它是利用现代浏览器(桌面版和移动版)的优势而专门创建的。 对浏览器的唯一要求是对<code>Canvas</code>标签的支持。</p><a id="more"></a>
+
+
+<p>每步的完整代码和资源可以在<a href="https://phaser.io/tutorials/making-your-first-phaser-3-game/phaser3-tutorial-src.zip" target="_blank" rel="noopener">此处</a>下载。在继续之前，建议先看看<a href="https://andyfree96.github.io/2019/12/27/Phaser3%E5%85%A5%E9%97%A8/">Phaser3入门</a>。</p>
+<p>在我们的编辑器中打开<code>part1.html</code>页面，代码主要结构如下所示：</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> config = &#123;</span><br><span class="line">    type: Phaser.AUTO,</span><br><span class="line">    width: <span class="number">800</span>,</span><br><span class="line">    height: <span class="number">600</span>,</span><br><span class="line">    scene: &#123;</span><br><span class="line">        preload: preload,</span><br><span class="line">        create: create,</span><br><span class="line">        update: update</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> game = <span class="keyword">new</span> Phaser.Game(config);</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">preload</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">create</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">update</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>config</code>对象表示我们想如何配置<code>Phaser</code>游戏。可以在此对象中设置许多选项，随着我们对<code>Phaser</code>了解加深将其进一步拓展。上述代码中我们设置了渲染器，尺寸和默认Scene。</p>
+<p><code>config</code>对象被传给<code>Phaser.Game</code>对象的一个实例并赋值给<code>game</code>这个局部变量。这是<code>Phaser</code>游戏生命周期的开始。</p>
+<p><code>type</code>属性可以是<code>Phaser.CANVAS</code>，<code>Phaser.WEBGL</code>或者<code>Phaser.AUTO</code>。</p>
+<p>这是要用于游戏的渲染上下文。 推荐值为<code>Phaser.AUTO</code>，它会自动尝试使用WebGL，但是如果浏览器或设备不支持WebGL，它将使用Canvas。 Phaser创建的Canvas元素将在调用脚本时添加到HTML文档中，但也可以根据需要在游戏配置中指定一个父容器。</p>
+<p><code>width</code>和<code>height</code>属性用于设置Phaser创建的Canvas元素的尺寸。上面代码是800x600像素，可以设置成任何想要的尺寸，也代表游戏的分辨率。</p>
+<p>配置对象的<code>scene</code>属性将在之后的内容更加详细的介绍。</p>
+<h2 id="2-加载资源"><a href="#2-加载资源" class="headerlink" title="2. 加载资源"></a>2. 加载资源</h2><p>让我们加载游戏所需要的资源。这个可以通过放在称为<code>preload</code>的Scene函数中来实现。 <code>Phaser</code>将在启动时自动寻找该函数中并加载其中定义的所有内容。</p>
+<p>之前的<code>preload</code>函数是空的，我们做如下更改：</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">preload</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.load.image(<span class="string">'sky'</span>, <span class="string">'assets/sky.png'</span>);</span><br><span class="line">    <span class="keyword">this</span>.load.image(<span class="string">'ground'</span>, <span class="string">'assets/platform.png'</span>);</span><br><span class="line">    <span class="keyword">this</span>.load.image(<span class="string">'star'</span>, <span class="string">'assets/star.png'</span>);</span><br><span class="line">    <span class="keyword">this</span>.load.image(<span class="string">'bomb'</span>, <span class="string">'assets/bomb.png'</span>);</span><br><span class="line">    <span class="keyword">this</span>.load.spritesheet(<span class="string">'dude'</span>, <span class="string">'assets/dude.png'</span>,</span><br><span class="line">        &#123;<span class="attr">frameWidth</span>: <span class="number">32</span>, <span class="attr">frameHeight</span>: <span class="number">48</span>&#125;</span><br><span class="line">    );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这将加载5个资源：4张图像和1个精灵表。<code>load.image</code>函数的第一个参数是个字符串，相当于资源的键值。</p>
+<h3 id="显示图像"><a href="#显示图像" class="headerlink" title="显示图像"></a>显示图像</h3><p>为了显示一张我们已经加载过的图像资源，我们可以将下列代码放到<code>create</code>函数中：</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">this</span>.add.image(<span class="number">400</span>,<span class="number">300</span>,<span class="string">'sky'</span>);</span><br></pre></td></tr></table></figure>
+
+<p>在浏览器中访问<code>part3.html</code>文件，可以看到有个蓝色的天空背景：</p>
+<p><img src="/images/201912/6/2.png" alt></p>
+<p>400和300是图像的x和y坐标。 为什么是400和300？ 这是因为在  <code>Phaser3</code>中，默认情况下所有游戏对象都基于其中心位置。 背景图像的尺寸为800x600像素，因此，如果我们将其设置为0x0为中心，只会看到其右下角。如果我们设置为400x300，将会看到整个图像。</p>
+<blockquote>
+<p>提示：我们可以使用<code>setOrigin</code>函数改变这种设置。比如，<code>this.add.image(0,0,&#39;sky&#39;).setOrigin(0,0)</code>。</p>
+</blockquote>
+<p>游戏对象的显示顺序与创建它们的顺序一致。 因此，如果想在背景上放置一个星星，只要将创建星星的代码放在天空之后：</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">create</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.add.image(<span class="number">400</span>, <span class="number">300</span>, <span class="string">'sky'</span>);</span><br><span class="line">    <span class="keyword">this</span>.add.image(<span class="number">400</span>, <span class="number">300</span>, <span class="string">'star'</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/201912/6/3.png" alt></p>
+<h2 id="3-平台"><a href="#3-平台" class="headerlink" title="3. 平台"></a>3. 平台</h2><p>让我们给游戏添加一些平台，</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">create</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.add.image(<span class="number">0</span>, <span class="number">0</span>, <span class="string">'sky'</span>).setOrigin(<span class="number">0</span>,<span class="number">0</span>);</span><br><span class="line">    platforms = <span class="keyword">this</span>.physics.add.staticGroup();</span><br><span class="line">    platforms.create(<span class="number">400</span>, <span class="number">568</span>, <span class="string">'ground'</span>).setScale(<span class="number">2</span>).refreshBody();</span><br><span class="line">    platforms.create(<span class="number">600</span>, <span class="number">400</span>, <span class="string">'ground'</span>);</span><br><span class="line">    platforms.create(<span class="number">50</span>,<span class="number">250</span>,<span class="string">'ground'</span>);</span><br><span class="line">    platforms.create(<span class="number">750</span>,<span class="number">220</span>,<span class="string">'ground'</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上述代码用了<code>this.physics</code>，我们将使用<code>Arcade</code>物理系统，在使用之前需要通过配置对象告诉<code>Phaser</code>我们需要用它。</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> config = &#123;</span><br><span class="line">    type: Phaser.AUTO,</span><br><span class="line">    width: <span class="number">800</span>,</span><br><span class="line">    height: <span class="number">600</span>,</span><br><span class="line">    physics: &#123;</span><br><span class="line">        <span class="keyword">default</span>: <span class="string">'arcade'</span>,</span><br><span class="line">        arcade: &#123;</span><br><span class="line">            gravity: &#123;<span class="attr">y</span>: <span class="number">300</span>&#125;,</span><br><span class="line">            debug: <span class="literal">false</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    scene: &#123;</span><br><span class="line">        preload: preload,</span><br><span class="line">        create: create,</span><br><span class="line">        update: update</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>在浏览器中访问<code>part4.html</code>文件可以看到，</p>
+<p><img src="/images/201912/6/4.png" alt></p>
+<p>我们用</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">platforms = <span class="keyword">this</span>.physics.add.staticGroup();</span><br></pre></td></tr></table></figure>
+
+<p>创建了一个静态物理组，并将其赋值给<code>platforms</code>。 在Arcade物理系统中，有两种类型的物理实体：动态和静态。 动态物体是可以由于受到速度或加速度之类的力而移动的物体。它可能会由于和其它物体碰撞而弹开。</p>
+<p>而静态物体仅具有位置和大小。 它不会受到重力的影响，我们无法在其上设置速度，并且当物体与其碰撞时，它不会因此而移动。由于这个特性，它非常适合我们游戏中需要的地面和平台。</p>
+<p>那什么是组呢?顾名思义，它将类似的对象组合在一起并将它们作为一个整体加以控制。比如，我们可以检查组和其他游戏对象是否发生碰撞。</p>
+<p>创建了平台组后，我们就以用其创建平台了：</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">platforms.create(<span class="number">400</span>, <span class="number">568</span>, <span class="string">'ground'</span>).setScale(<span class="number">2</span>).refreshBody();</span><br><span class="line">platforms.create(<span class="number">600</span>, <span class="number">400</span>, <span class="string">'ground'</span>);</span><br><span class="line">platforms.create(<span class="number">50</span>,<span class="number">250</span>,<span class="string">'ground'</span>);</span><br><span class="line">platforms.create(<span class="number">750</span>,<span class="number">220</span>,<span class="string">'ground'</span>);</span><br></pre></td></tr></table></figure>
+
+<p>现在，我们可以看到上图所示的内容了。代码的第一行我们创建了地面，之后将其放大两倍。因为原始的<code>ground</code>图像是400x32像素的，而我们的游戏界面的尺寸是800x600，所以我们需要将图像放大两倍，也就是变成800x64，否则玩家就会从地面掉下去。</p>
+<h2 id="4-玩家"><a href="#4-玩家" class="headerlink" title="4. 玩家"></a>4. 玩家</h2><p>创建个名为<code>player</code>的变量，并将下列代码写在<code>create</code>函数中：</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">player = <span class="keyword">this</span>.physics.add.sprite(<span class="number">100</span>,<span class="number">450</span>,<span class="string">'dude'</span>);</span><br><span class="line">player.setBounce(<span class="number">0.2</span>);</span><br><span class="line">player.setCollideWorldBounds(<span class="literal">true</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">this</span>.anims.create(&#123;</span><br><span class="line">    key: <span class="string">'left'</span>,</span><br><span class="line">    frames: <span class="keyword">this</span>.anims.generateFrameNumbers(<span class="string">'dude'</span>, &#123;<span class="attr">start</span>:<span class="number">0</span>, <span class="attr">end</span>:<span class="number">3</span>&#125;),</span><br><span class="line">    frameRate: <span class="number">10</span>,</span><br><span class="line">    repeat: <span class="number">-1</span></span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="keyword">this</span>.anims.create(&#123;</span><br><span class="line">    key: <span class="string">'turn'</span>,</span><br><span class="line">    frames: [&#123;<span class="attr">key</span>: <span class="string">'dude'</span>, <span class="attr">frame</span>: <span class="number">4</span>&#125;],</span><br><span class="line">    frameRate: <span class="number">20</span></span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="keyword">this</span>.anims.create(&#123;</span><br><span class="line">    key: <span class="string">'right'</span>,</span><br><span class="line">    frames: <span class="keyword">this</span>.anims.generateFrameNumbers(<span class="string">'dude'</span>, &#123; <span class="attr">start</span>: <span class="number">5</span>, <span class="attr">end</span>: <span class="number">8</span>&#125;),</span><br><span class="line">    frameRate: <span class="number">10</span>,</span><br><span class="line">    repeat: <span class="number">-1</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>主要做了两件事：创建物理精灵和创建可以使用的一些动画。</p>
+<h3 id="物理精灵"><a href="#物理精灵" class="headerlink" title="物理精灵"></a>物理精灵</h3><p>代码的第一部分创建了精灵：</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">player = <span class="keyword">this</span>.physics.add.sprite(<span class="number">100</span>,<span class="number">450</span>,<span class="string">'dude'</span>);</span><br><span class="line">player.setBounce(<span class="number">0.2</span>);</span><br><span class="line">player.setCollideWorldBounds(<span class="literal">true</span>);</span><br></pre></td></tr></table></figure>
+
+<p>我们创建了一个精灵并赋值给<code>player</code>，并让其显示在游戏的底部(100x450)。精灵创建是通过<code>Physics Game Object Factory(this.physics.add)</code>，意味着它是动态物体。</p>
+<p>创建精灵后，将反弹值设为0.2。 这意味着当它跳下后着陆时，它会反弹得比较小。 然后将精灵设置会与游戏边界碰撞。 默认情况下，游戏边界在游戏尺寸的之外。 当我们将游戏尺寸设置为800x600时，玩家将无法在该区域之外活动，将避免玩家跑出屏幕边缘或跳出顶部。</p>
+<h3 id="动画"><a href="#动画" class="headerlink" title="动画"></a>动画</h3><p>回头看一下preload函数，会看到<code>dude</code>是作为精灵表而不是图像加载的。 那是因为它包含动画帧。 完整的精灵表如下所示：</p>
+<p><img src="/images/201912/6/5.png" alt></p>
+<p>总共有9帧，4帧向左跑，1帧面向镜头，4帧向右跑。我们定义了两个动画<code>left</code>和<code>right</code>。这是<code>left</code>动画：</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">this</span>.anims.create(&#123;</span><br><span class="line">    key: <span class="string">'left'</span>,</span><br><span class="line">    frames: <span class="keyword">this</span>.anims.generateFrameNumbers(<span class="string">'dude'</span>, &#123;<span class="attr">start</span>:<span class="number">0</span>, <span class="attr">end</span>:<span class="number">3</span>&#125;),</span><br><span class="line">    frameRate: <span class="number">10</span>,</span><br><span class="line">    repeat: <span class="number">-1</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p><code>left</code>动画使用帧0、1、2和3，以每秒10帧的速度运行。<code>repeat: -1</code>指的是让动画循环运行。</p>
+<p>查看一下现在游戏的运行情况，我们会发现玩家会从地面掉下来……</p>
+<p><img src="/images/201912/6/6.png" alt></p>
+<p>为了让玩家与平台碰撞，我们可以创建一个<code>Collider</code>对象。 让该对象监视两个物理对象(可以包括组)，并检测它们之间是否存在碰撞或重叠。 若发生这种情况，则可以选择调用相应的函数，仅仅为了检测与平台碰撞，我们并不需要调用什么函数：</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">this</span>.physics.add.collider(player, platforms);</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/201912/6/7.png" alt></p>
+<h2 id="5-键盘控制"><a href="#5-键盘控制" class="headerlink" title="5. 键盘控制"></a>5. 键盘控制</h2><p>现在我们开始给我们的游戏加入一些键盘控制。<code>Phaser</code>有内置的键盘管理器，一大好处就是我们可以用下面这样方便的函数：</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">cursors = <span class="keyword">this</span>.input.keyboard.createCursorKeys();</span><br></pre></td></tr></table></figure>
+
+<p><code>cursors</code>对象有四个属性：<code>up</code>，<code>down</code>，<code>left</code>，<code>right</code>，它们都是<code>Key</code>对象的实例。我们需要做的就是在<code>update</code>函数中进行处理：</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">cursors = <span class="keyword">this</span>.input.keyboard.createCursorKeys();</span><br><span class="line"><span class="keyword">if</span> (cursors.left.isDown)&#123;</span><br><span class="line">    player.setVelocityX(<span class="number">-160</span>);</span><br><span class="line">    player.anims.play(<span class="string">'left'</span>, <span class="literal">true</span>);</span><br><span class="line">&#125; <span class="keyword">else</span> <span class="keyword">if</span> (cursors.right.isDown)&#123;</span><br><span class="line">    player.setVelocityX(<span class="number">160</span>);</span><br><span class="line">    player.anims.play(<span class="string">'right'</span>, <span class="literal">true</span>);</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    player.setVelocityX(<span class="number">0</span>);</span><br><span class="line">    player.anims.play(<span class="string">'turn'</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (cursors.up.isDown &amp;&amp; player.body.touching.down)&#123;</span><br><span class="line">    player.setVelocityY(<span class="number">-330</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>当我们按下键盘<code>&lt;-</code>键时，玩家的运动速度设为-160，并播放<code>left</code>动画，其它按键也进行类似处理。值得注意的是，我们在最后的<code>if</code>语句中加入的<code>player.body.touching.down</code>这个条件，若不加的话，玩家将可以上演“纵云梯”，我们不希望这样，所以加入了这个条件。详情请看<a href="https://photonstorm.github.io/phaser3-docs/Phaser.Physics.Arcade.Body.html#touching__anchor" target="_blank" rel="noopener">Phaser.Physics.Arcade.Body</a>。</p>
+<h2 id="6-收集星星"><a href="#6-收集星星" class="headerlink" title="6. 收集星星"></a>6. 收集星星</h2><p>是时候给我们的游戏定个小目标了！我们将在游戏场景中添加一些星星，并让玩家可以去收集它们。在<code>create</code>函数中添加如下代码：</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">stars = <span class="keyword">this</span>.physics.add.group(&#123;</span><br><span class="line">    key: <span class="string">'star'</span>,</span><br><span class="line">    repeat: <span class="number">11</span>,</span><br><span class="line">    setXY: &#123;<span class="attr">x</span>: <span class="number">12</span>, <span class="attr">y</span>: <span class="number">0</span>, <span class="attr">stepX</span>: <span class="number">70</span>&#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">stars.children.iterate(<span class="function"><span class="keyword">function</span>(<span class="params">child</span>)</span>&#123;</span><br><span class="line">    child.setBounceY(Phaser.Math.FloatBetween(<span class="number">0.4</span>,<span class="number">0.8</span>));</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>与创建平台组类似，只不过这次我们创建的是动态物理组，而不是静态物理组。</p>
+<p>代码将迭代组中的所有元素，并为他们提供介于0.4和0.8之间的随机Y反弹值。 反弹范围介于0(完全没有反弹)和1(完整反弹)之间。 所有的星星都是在<code>y=0</code>处产生的，由于重力它们会掉落，直到它们与平台或地面碰撞。 反弹值表示它们将随机反弹，直到最终稳定下来。</p>
+<p>但如果我们现在运行代码，星星会掉到游戏的底部而不见了。 为此，我们需要检查它们是否与平台发生碰撞。 我们可以用另一个Collider对象来做到这点：</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">this</span>.physics.add.collider(stars, platforms);</span><br></pre></td></tr></table></figure>
+
+<p>我们游戏的目标是让玩家可以收集星星，为此，需要检测玩家是否和星星发生重叠：</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">this</span>.physics.add.overlap(player, stars, collectStar, <span class="literal">null</span>, <span class="keyword">this</span>);</span><br></pre></td></tr></table></figure>
+
+<p>以上代码告诉<code>Phaser</code>，若玩家和星星重叠了就调用<code>collectStar</code>函数。</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">collectStar</span>(<span class="params">player, star</span>)</span>&#123;</span><br><span class="line">    star.disableBody(<span class="literal">true</span>, <span class="literal">true</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>collectStar</code>函数让与玩家重叠了的星星不可见。</p>
+<p><img src="/images/201912/6/8.png" alt></p>
+<h2 id="7-计分"><a href="#7-计分" class="headerlink" title="7. 计分"></a>7. 计分</h2><p>我们可能还希望让游戏计分，并在游戏中显示。</p>
+<p>创建两个变量：</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> score = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">var</span> scoreText;</span><br></pre></td></tr></table></figure>
+
+<p><code>score</code>用来记录分数，<code>scoreText</code>将是个<code>Text</code>对象，用于在游戏中显示分数。在<code>create</code>函数中创建<code>Text</code>对象的一个实例，并将其赋值给<code>scoreText</code>。</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">scoreText = <span class="keyword">this</span>.add.text(<span class="number">16</span>, <span class="number">16</span>, <span class="string">'score: 0'</span>, &#123; <span class="attr">fontSize</span>: <span class="string">'32px'</span>, <span class="attr">fill</span>: <span class="string">'#000'</span> &#125;);</span><br></pre></td></tr></table></figure>
+
+<p>每次我们收集到星星，分数就会增加，于是我们可以将其代码加入到之前的<code>collectStar</code>函数中。</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">score += <span class="number">10</span>;</span><br><span class="line">scoreText.setText(<span class="string">'Score: '</span> + score);</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/201912/6/9.png" alt></p>
+<h2 id="8-炸弹"><a href="#8-炸弹" class="headerlink" title="8. 炸弹"></a>8. 炸弹</h2><p>为了完善我们的游戏，是时候给游戏增加一点挑战了。想法是这样的：当我们收集完所有星星时，它将放出一颗炸弹，所有星星都会重现。 炸弹只会在水平方向随机反弹，玩家触碰到炸弹就会死。而我们可以再次收集星星，收集完它将释放另一枚炸弹。 所以，要在不死的情况下获得尽可能高的分数。</p>
+<p>首先创建一个炸弹组和两个<code>Collider</code>对象：</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">bombs = <span class="keyword">this</span>.physics.add.group();</span><br><span class="line"></span><br><span class="line"><span class="keyword">this</span>.physics.add.collider(bombs, platforms);</span><br><span class="line"><span class="keyword">this</span>.physics.add.collider(player, bombs, hitBomb, <span class="literal">null</span>, <span class="keyword">this</span>);</span><br></pre></td></tr></table></figure>
+
+<p>玩家碰到炸弹，将调用<code>hitBomb</code>函数。这里我们做的是让玩家变成红色，并结束游戏。</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">hitBomb</span>(<span class="params">player, bomb</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.physics.pause();</span><br><span class="line">    player.setTint(<span class="number">0xff0000</span>);</span><br><span class="line">    player.anims.play(<span class="string">'turn'</span>);</span><br><span class="line">    gameOver = <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>然后，我们修改一下<code>hitStar</code>函数，以便释放炸弹：</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">collectStar</span>(<span class="params">player, star</span>)</span>&#123;</span><br><span class="line">    star.disableBody(<span class="literal">true</span>, <span class="literal">true</span>);</span><br><span class="line">    score += <span class="number">10</span>;</span><br><span class="line">    scoreText.setText(<span class="string">'Score: '</span> + score);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (stars.countActive(<span class="literal">true</span>) === <span class="number">0</span>)&#123;</span><br><span class="line">        stars.children.iterate(<span class="function"><span class="keyword">function</span>(<span class="params">child</span>)</span>&#123;</span><br><span class="line">            child.enableBody(<span class="literal">true</span>, child.x, <span class="number">0</span>, <span class="literal">true</span>, <span class="literal">true</span>);</span><br><span class="line">        &#125;);</span><br><span class="line">        <span class="keyword">var</span> x = (player.x &lt; <span class="number">400</span>) ? Phaser.Math.Between(<span class="number">400</span>, <span class="number">800</span>) : Phaser.Math.Between(<span class="number">0</span>, <span class="number">400</span>);</span><br><span class="line">        <span class="keyword">var</span> bomb = bombs.create(x, <span class="number">16</span>, <span class="string">'bomb'</span>);</span><br><span class="line">        bomb.setCollideWorldBounds(<span class="literal">true</span>);</span><br><span class="line">        bomb.setVelocity(Phaser.Math.Between(<span class="number">-200</span>,<span class="number">200</span>), <span class="number">20</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>我们用了<code>Group</code>的<code>countActive</code>方法来查看还剩多少星星。如果为零，表示玩家已收集了所有星星，因此我们迭代地启用所有星星，并将其y坐标置为零。这将使所有星星再次从屏幕顶部掉落。</p>
+<p>接下来的代码将创建炸弹。 首先，我们选择一个随机的x坐标，总是在玩家相对的另一侧。 然后创建炸弹，将其设置为与游戏边界碰撞，具有随机速度。</p>
+<p><img src="/images/201912/6/10.png" alt></p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>本文我们学习了如何使用<code>Phaser3</code>开发第一个游戏，主要包括加载资源、创建精灵、键盘控制、物体碰撞等等一些知识点，之后我们可以参考<a href="https://phaser.io/examples" target="_blank" rel="noopener">PHASER 3 EXAMPLES</a>将这个简单实例丰富起来。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><a href="https://phaser.io/tutorials/making-your-first-phaser-3-game" target="_blank" rel="noopener">https://phaser.io/tutorials/making-your-first-phaser-3-game</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>小游戏</category>
+      </categories>
+      <tags>
+        <tag>Phaser3</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Phaser3入门</title>
     <url>/2019/12/27/Phaser3%E5%85%A5%E9%97%A8/</url>
     <content><![CDATA[<p>本文我们将学习搭建可以用Phaser进行游戏开发的环境，包括一个本地Web服务器，IDE，最新版本的Phaser，并确保它们能正常工作。</p><p><strong>为什么需要一个本地Web服务器？</strong></p><p>如果我们写了HTML网页，将这个文件拖到浏览器中，可以看到最终相应的效果。 还可以将整个网页“另存为”，再打开的话，可以看到没有什么很大的不同。 这两种方法都起作用，为什么不能将HTML5游戏拖动到浏览器中运行它呢？</p><a id="more"></a>
@@ -1714,8 +1846,8 @@
         <category>Python爬虫</category>
       </categories>
       <tags>
-        <tag>Python</tag>
         <tag>BeautifulSoup</tag>
+        <tag>Python</tag>
       </tags>
   </entry>
   <entry>
@@ -1818,8 +1950,8 @@
         <category>机器学习</category>
       </categories>
       <tags>
-        <tag>OpenCV</tag>
         <tag>Python</tag>
+        <tag>OpenCV</tag>
       </tags>
   </entry>
 </search>
