@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.4.2',
+    exturl: false,
+    sidebar: {"position":"left","display":"always","offset":12,"onmobile":false},
+    copycode: {"enable":true,"show_result":true,"style":"mac"},
+    back2top: {"enable":false,"sidebar":false,"scrollpercent":true},
+    bookmark: {"enable":true,"color":"#222","save":"auto"},
+    fancybox: true,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: true,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":5,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    },
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="Excel是Windows环境下流行而强大的电子表格程序。openpyxl模块可以让Python程序能读取和修改Excel表格文件。例如，你可能有一个无聊的任务，需要从一个表格中复制一些数据，粘贴到另一个表格中。或者可能需要从几千行中挑选出几行，并根据某个条件稍作修改。或者需要查看几百份部门预算电子表格，找到其中的赤字。这些无聊的任务都可以用Python完成。">
+<meta name="keywords" content="Python">
+<meta property="og:type" content="article">
+<meta property="og:title" content="用Python处理Excel表格">
+<meta property="og:url" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;2019&#x2F;11&#x2F;05&#x2F;849511e1&#x2F;index.html">
+<meta property="og:site_name" content="AndyFree96&#39;s Blog">
+<meta property="og:description" content="Excel是Windows环境下流行而强大的电子表格程序。openpyxl模块可以让Python程序能读取和修改Excel表格文件。例如，你可能有一个无聊的任务，需要从一个表格中复制一些数据，粘贴到另一个表格中。或者可能需要从几千行中挑选出几行，并根据某个条件稍作修改。或者需要查看几百份部门预算电子表格，找到其中的赤字。这些无聊的任务都可以用Python完成。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;201911&#x2F;7&#x2F;1.jpeg">
+<meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;201911&#x2F;7&#x2F;2.jpeg">
+<meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;201911&#x2F;7&#x2F;3.jpeg">
+<meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;201911&#x2F;7&#x2F;4.jpeg">
+<meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;201911&#x2F;7&#x2F;5.jpeg">
+<meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;201911&#x2F;7&#x2F;6.jpeg">
+<meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;201911&#x2F;7&#x2F;7.jpeg">
+<meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;201911&#x2F;7&#x2F;8.jpeg">
+<meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;201911&#x2F;7&#x2F;9.jpeg">
+<meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;201911&#x2F;7&#x2F;10.jpeg">
+<meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;201911&#x2F;7&#x2F;11.jpeg">
+<meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;201911&#x2F;7&#x2F;12.jpeg">
+<meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;201911&#x2F;7&#x2F;13.jpeg">
+<meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;201911&#x2F;7&#x2F;14.jpeg">
+<meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;201911&#x2F;7&#x2F;15.jpeg">
+<meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;201911&#x2F;7&#x2F;16.jpeg">
+<meta property="og:updated_time" content="2020-12-21T07:46:16.091Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;201911&#x2F;7&#x2F;1.jpeg">
+
+<link rel="canonical" href="https://andyfree96.github.io/2019/11/05/849511e1/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>用Python处理Excel表格 | AndyFree96's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">AndyFree96's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="none"
+           placeholder="搜索..." spellcheck="false"
+           type="text" id="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <a href="https://github.com/andyfree96" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://andyfree96.github.io/2019/11/05/849511e1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.jpg">
+      <meta itemprop="name" content="AndyFree96">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="AndyFree96's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          用Python处理Excel表格
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-11-05 09:12:01" itemprop="dateCreated datePublished" datetime="2019-11-05T09:12:01+08:00">2019-11-05</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-12-21 15:46:16" itemprop="dateModified" datetime="2020-12-21T15:46:16+08:00">2020-12-21</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/" itemprop="url" rel="index">
+                    <span itemprop="name">数据分析</span>
+                  </a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>3.4k</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>Excel是Windows环境下流行而强大的电子表格程序。openpyxl模块可以让Python程序能读取和修改Excel表格文件。例如，你可能有一个无聊的任务，需要从一个表格中复制一些数据，粘贴到另一个表格中。或者可能需要从几千行中挑选出几行，并根据某个条件稍作修改。或者需要查看几百份部门预算电子表格，找到其中的赤字。这些无聊的任务都可以用Python完成。</p><a id="more"></a>
+<h3 id="Excel文档"><a href="#Excel文档" class="headerlink" title="Excel文档"></a>Excel文档</h3><p>一个Excel电子表格文件称为一个工作簿。一个工作簿保存在扩展名为.xlsx的文件中。每个工作簿可以包含多个表（也称为工作表）。用户当前查看的表（或关闭Excel前最后查看的表）称为活动表。每个表都有一些列（地址是从A开始的字母）和一些行（地址是从1开始的数字）。在特定行和列的翻个称为单元格。每个单元格都包含一个数字或文本值。单元格形成的网格和数据构成了表。</p>
+<h3 id="安装openpyxl模块"><a href="#安装openpyxl模块" class="headerlink" title="安装openpyxl模块"></a>安装openpyxl模块</h3><p>Python没有自带openpyxl，所以必须自己安装。打开命令行输入</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install openpyxl</span><br></pre></td></tr></table></figure>
+
+<p>即可安装。</p>
+<h3 id="读取Excel文档"><a href="#读取Excel文档" class="headerlink" title="读取Excel文档"></a>读取Excel文档</h3><p>我们将使用名为example.xlsx的电子表格，可以在<a href="https://nostarch.com/automatestuff" target="_blank" rel="noopener">Automate the Boring Stuff with Python</a>处找到并下载。如下图所示，有3个默认的表，名为Sheet1、Sheet2和Sheet3，这是Excel自动为新工作簿提供的（不同操作系统和电子表格程序，提供的默认表个数可能会不同）。</p>
+<p><img src="/images/201911/7/1.jpeg" alt></p>
+<h4 id="用openpyxl模块打开Excel文档"><a href="#用openpyxl模块打开Excel文档" class="headerlink" title="用openpyxl模块打开Excel文档"></a>用openpyxl模块打开Excel文档</h4><p>导入openpyxl模块后，就可以用<code>openpyxl.load_workbook()</code>函数打开Excel文档。</p>
+<p><img src="/images/201911/7/2.jpeg" alt></p>
+<p><code>openpyxl.load_workbook()</code>函数接受文件名，返回一个workbook数据类型的值。这个workbook对象代表整个Excel文件（example.xlsx），类似File对象代表一个打开的文本文件。</p>
+<h4 id="从工作簿中取得工作表"><a href="#从工作簿中取得工作表" class="headerlink" title="从工作簿中取得工作表"></a>从工作簿中取得工作表</h4><p>通过workbook对象的sheetnames属性可以得到工作簿中所有表名的列表。</p>
+<p><img src="/images/201911/7/3.jpeg" alt></p>
+<p>每个表由一个Worksheet对象表示，可以通过向工作簿进行索引（用表名字符串）获得。可以通过Workbook对象的active属性取得工作簿的活动表。在取得Worksheet对象后，可以通过title属性取得它的名称。</p>
+<h4 id="从表中取得单元格"><a href="#从表中取得单元格" class="headerlink" title="从表中取得单元格"></a>从表中取得单元格</h4><p>获取到了Worksheet对象后，就可以按名字访问Cell对象。</p>
+<p><img src="/images/201911/7/4.jpeg" alt></p>
+<p>Cell对象由一个value属性，它包含这个单元格中保存的值。Cell对象也有row、column和coordinate属性，提供该单元格的位置信息。</p>
+<p>如上图所示，访问单元格B1的Cell对象的value属性，得到字符串’Apples’。row属性给出的是整数1，column属性给出的是2，coordinate属性给出的是’B1’。</p>
+<p>调用表的<code>cell()</code>方法时，可以传入整数作为row和column关键字参数，也可以得到一个单元格。</p>
+<p><img src="/images/201911/7/5.jpeg" alt></p>
+<p>可以通过Worksheet对象的max_column和max_row属性，确定表的大小。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sheet.max_column, sheet.max_row</span><br><span class="line"><span class="comment"># (3, 7)</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="列字母和数字之间的转换"><a href="#列字母和数字之间的转换" class="headerlink" title="列字母和数字之间的转换"></a>列字母和数字之间的转换</h4><p>要从字母转换到数字，就调用<code>openpyxl.utils.column_index_from_string</code>函数。要从数字转换到字母，就调用<code>openpyxl.utils.get_column_letter()</code>函数。</p>
+<p><img src="/images/201911/7/6.jpeg" alt></p>
+<p>从openpyxl.utils模块引入这两个函数后，可以调用<code>get_column_letter()</code>，传入像27这样的整数，弄清楚第27列的字母是什么。函数<code>column_index_string</code>做的事情相反：传入一列的字母名称，它返回该列的数字是什么。</p>
+<h4 id="从表中取得行和列"><a href="#从表中取得行和列" class="headerlink" title="从表中取得行和列"></a>从表中取得行和列</h4><p>可以将Worksheet对象切片，取到电子表格中一行、一列或一个矩形区域中的所有Cell对象。然后可以循环遍历这个切片中的所有单元格。</p>
+<p><img src="/images/201911/7/7.jpeg" alt></p>
+<p>这个元组包含3个元组：每个元组代表1行，从指定区域的顶部到底部。这3个内部元组中的每一个包含指定区域中一行的Cell对象，从最左边的单元格到最右边。工作表的这个切片包含了从A1到C3区域的所有Cell对象，从左上角的单元格到右下角的单元格。</p>
+<p>可以按照如下方式获取到表格中的一行或一列</p>
+<p><img src="/images/201911/7/8.jpeg" alt></p>
+<h3 id="写入Excel文档"><a href="#写入Excel文档" class="headerlink" title="写入Excel文档"></a>写入Excel文档</h3><p>openpyxl也提供了一些方法写入数据。这意味着你的程序可以创建和编辑电子表格文件。利用Python，创建一个包含几千行数据的电子表格是非常简单的。</p>
+<h4 id="创建并保存Excel文档"><a href="#创建并保存Excel文档" class="headerlink" title="创建并保存Excel文档"></a>创建并保存Excel文档</h4><p>调用<code>openpyxl.Workbook()</code>函数，创建一个新的空Workbook对象。</p>
+<p><img src="/images/201911/7/9.jpeg" alt></p>
+<p>当修改Workbook对象或它的工作表和单元格时，电子表格文件不会保存，除非调用<code>save()</code>工作簿方法。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wb.save(<span class="string">'demo.xlsx'</span>)</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/201911/7/10.jpeg" alt></p>
+<h4 id="创建和删除工作表"><a href="#创建和删除工作表" class="headerlink" title="创建和删除工作表"></a>创建和删除工作表</h4><p>利用<code>create_sheet()</code>和<code>remove_sheet()</code>方法，可以在工作簿中添加或删除工作表。</p>
+<p><img src="/images/201911/7/11.jpeg" alt></p>
+<p><code>create_sheet()</code>方法返回一个新的Worksheet对象，名为SheetX，它默认是工作簿的最后一个工作表。或者，可以利用index和title关键字参数，指定新工作表的索引或名称。</p>
+<p><img src="/images/201911/7/12.jpeg" alt></p>
+<p><code>remove()</code>方法接受一个Worksheet对象作为其参数，而不是工作表名称的字符串。</p>
+<h4 id="将值写入单元格"><a href="#将值写入单元格" class="headerlink" title="将值写入单元格"></a>将值写入单元格</h4><p>将值写入单元格很像将值写入字典中的键。</p>
+<p><img src="/images/201911/7/13.jpeg" alt></p>
+<p>查看demo.xlsx文件，可以看到值已被写入到文件中</p>
+<p><img src="/images/201911/7/14.jpeg" alt></p>
+<h4 id="项目：从电子表格中读取数据"><a href="#项目：从电子表格中读取数据" class="headerlink" title="项目：从电子表格中读取数据"></a>项目：从电子表格中读取数据</h4><p>假设你有一张电子表格，里面包含了2010年美国人口普查数据。你有一个比较无聊的任务，要遍历表中的几千行，计算总的人口，以及每个县的普查区数目（普查区是一个地理区域，为了人口普查而定义的）。表格中的每一行表示一个人口普查区。表格名为censupopdata.xlsx，可以在<a href="https://nostarch.com/automatestuff" target="_blank" rel="noopener">Automate the Boring Stuff with Python</a>处下载。</p>
+<p><img src="/images/201911/7/15.jpeg" alt></p>
+<p>censuspopdata.xlsx电子表格中只有一张表，名为“Population by Census Tract”。每一行都保存了一个普查区的数据。列分别是普查区的编号（A），州的简称（B），县的名称（C），普查区的人口（D）。</p>
+<p>在这个项目中，我们需要编写一个脚本，从人口普查电子表格中读取数据，并做以下几件事：</p>
+<ul>
+<li>从Excel表格中读取数据</li>
+<li>计算每个县中普查区的数目</li>
+<li>计算每个县的总人口</li>
+<li>打印结果</li>
+</ul>
+<p>这意味着代码需要完成下列任务：</p>
+<ul>
+<li>用openpyxl模块打开Excel文档并读取单元格</li>
+<li>计算所有普查区和人口数据，将它们保存到一个数据结构中</li>
+<li>利用pprint模块，将该数据结构写入一个扩展名为.py的文本文件中</li>
+</ul>
+<p>完整代码如下所示：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> openpyxl, pprint</span><br><span class="line"></span><br><span class="line"><span class="comment"># 用openpyxl模块打开Excel文档</span></span><br><span class="line">wb = openpyxl.load_workbook(<span class="string">'censuspopdata.xlsx'</span>)</span><br><span class="line">sheet = wb[<span class="string">'Population by Census Tract'</span>]</span><br><span class="line"><span class="comment"># 存储普查区数目和人口数据</span></span><br><span class="line">countryData = &#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> row <span class="keyword">in</span> range(<span class="number">2</span>,sheet.max_row+<span class="number">1</span>):</span><br><span class="line">    state = sheet[<span class="string">'B'</span>+str(row)].value</span><br><span class="line">    country = sheet[<span class="string">'C'</span>+str(row)].value</span><br><span class="line">    pop = sheet[<span class="string">'D'</span>+str(row)].value</span><br><span class="line">    </span><br><span class="line">    countryData.setdefault(state, &#123;&#125;)</span><br><span class="line">    </span><br><span class="line">    countryData[state].setdefault(country, &#123;<span class="string">'tracts'</span>:<span class="number">0</span>, <span class="string">'pop'</span>:<span class="number">0</span>&#125;)</span><br><span class="line">    </span><br><span class="line">    countryData[state][country][<span class="string">'tracts'</span>] += <span class="number">1</span></span><br><span class="line">    countryData[state][country][<span class="string">'pop'</span>] += int(pop)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 将数据存储到文件中</span></span><br><span class="line">resultFile = open(<span class="string">'census2010.py'</span>, <span class="string">'w'</span>)</span><br><span class="line">resultFile.write(<span class="string">'allData = '</span> + pprint.pformat(countryData))</span><br><span class="line">resultFile.close()</span><br></pre></td></tr></table></figure>
+
+<p>保存到census2010.py文件中的数据如下所示：</p>
+<p><img src="/images/201911/7/16.jpeg" alt></p>
+<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><ul>
+<li><a href="https://automatetheboringstuff.com/" target="_blank" rel="noopener">https://automatetheboringstuff.com/</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+      
+  <div class="popular-posts-header">相关文章</div>
+  <ul class="popular-posts">
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\2019\10\30\e8fe77f\" rel="bookmark">BeautifulSoup袭来</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\2019\11\01\7e933fdb\" rel="bookmark">Requests库使用</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\2019\11\02\9f997735\" rel="bookmark">Tkinter简明教程</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\2019\10\28\8a7602a8\" rel="bookmark">OpenCV简明教程</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\2019\10\30\f5c80354\" rel="bookmark">利用Python进行数据分析</a></div>
+    </li>
+  </ul>
+
+      
+        <div class="reward-container">
+  <div>您的支持将鼓励我继续创作！</div>
+  <button disable="enable" onclick="var qr = document.getElementById(&quot;qr&quot;); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/uploads/wechatpay.png" alt="AndyFree96 微信支付">
+        <p>微信支付</p>
+      </div>
+      
+      <div style="display: inline-block;">
+        <img src="/uploads/alipay.png" alt="AndyFree96 支付宝">
+        <p>支付宝</p>
+      </div>
+
+  </div>
+</div>
+
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>AndyFree96
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://andyfree96.github.io/2019/11/05/849511e1/" title="用Python处理Excel表格">https://andyfree96.github.io/2019/11/05/849511e1/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/null" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Python/" rel="tag"><i class="fa fa-tag"></i>Python</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/2019/11/05/a2050e1d/" rel="next" title="阿里云ECS配置Jupyter Notebook">
+                  <i class="fa fa-chevron-left"></i> 阿里云ECS配置Jupyter Notebook
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+                <a href="/2019/11/05/a1aabbc5/" rel="prev" title="李宏毅机器学习(一)引言">
+                  李宏毅机器学习(一)引言 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    
+  <div class="comments" id="comments">
+    <div id="lv-container" data-id="city" data-uid="MTAyMC80NzkxOC8yNDQxNQ"></div>
+  </div>
+  
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Excel文档"><span class="nav-text">Excel文档</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#安装openpyxl模块"><span class="nav-text">安装openpyxl模块</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#读取Excel文档"><span class="nav-text">读取Excel文档</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#用openpyxl模块打开Excel文档"><span class="nav-text">用openpyxl模块打开Excel文档</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#从工作簿中取得工作表"><span class="nav-text">从工作簿中取得工作表</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#从表中取得单元格"><span class="nav-text">从表中取得单元格</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#列字母和数字之间的转换"><span class="nav-text">列字母和数字之间的转换</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#从表中取得行和列"><span class="nav-text">从表中取得行和列</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#写入Excel文档"><span class="nav-text">写入Excel文档</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#创建并保存Excel文档"><span class="nav-text">创建并保存Excel文档</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#创建和删除工作表"><span class="nav-text">创建和删除工作表</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#将值写入单元格"><span class="nav-text">将值写入单元格</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#项目：从电子表格中读取数据"><span class="nav-text">项目：从电子表格中读取数据</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考"><span class="nav-text">参考</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <img class="site-author-image" itemprop="image" alt="AndyFree96"
+    src="/uploads/avatar.jpg">
+  <p class="site-author-name" itemprop="name">AndyFree96</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">19</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">20</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/AndyFree96" title="GitHub &amp;rarr; https:&#x2F;&#x2F;github.com&#x2F;AndyFree96" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:leoscotthg@gmail.com" title="E-Mail &amp;rarr; mailto:leoscotthg@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/IRONAnthony" title="Weibo &amp;rarr; https:&#x2F;&#x2F;weibo.com&#x2F;IRONAnthony" rel="noopener" target="_blank"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/IRONAnthony96" title="Twitter &amp;rarr; https:&#x2F;&#x2F;twitter.com&#x2F;IRONAnthony96" rel="noopener" target="_blank"><i class="fa fa-fw fa-twitter"></i>Twitter</a>
+      </span>
+  </div>
+
+
+
+      </div>
+	  
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 2019 – 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">AndyFree96</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+      <span class="post-meta-item-text">站点总字数：</span>
+    <span title="站点总字数">107k</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.0.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.4.2
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script pjax async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/pjax/pjax.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/pangu@4/dist/browser/pangu.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+  <script>
+var pjax = new Pjax({
+  selectors: [
+    'head title',
+    '#page-configurations',
+    '.content-wrap',
+    '.post-toc-wrap',
+    '#pjax'
+  ],
+  switches: {
+    '.post-toc-wrap': Pjax.switches.innerHTML
+  },
+  analytics: false,
+  cacheBust: false,
+  scrollTo : !CONFIG.bookmark.enable
+});
+
+window.addEventListener('pjax:success', () => {
+  document.querySelectorAll('script[pjax], script#page-configurations, #pjax script').forEach(element => {
+    var code = element.text || element.textContent || element.innerHTML || '';
+    var parent = element.parentNode;
+    parent.removeChild(element);
+    var script = document.createElement('script');
+    if (element.id) {
+      script.id = element.id;
+    }
+    if (element.className) {
+      script.className = element.className;
+    }
+    if (element.type) {
+      script.type = element.type;
+    }
+    if (element.src) {
+      script.src = element.src;
+      // Force synchronous loading of peripheral JS.
+      script.async = false;
+    }
+    if (element.getAttribute('pjax') !== null) {
+      element.setAttribute('pjax', '');
+    }
+    if (code !== '') {
+      script.appendChild(document.createTextNode(code));
+    }
+    parent.appendChild(script);
+  });
+  NexT.boot.refresh();
+  // Define Motion Sequence & Bootstrap Motion.
+  if (CONFIG.motion.enable) {
+    NexT.motion.integrator
+      .init()
+      .add(NexT.motion.middleWares.postList)
+      .bootstrap();
+  }
+  NexT.utils.updateSidebarPosition();
+});
+</script>
+
+
+
+
+  
+  <script pjax>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+
+
+  <script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+    <div id="pjax">
+
+  
+
+  
+
+  
+
+<script>
+  window.livereOptions = {
+    refer: location.pathname.replace(CONFIG.root, '').replace('index.html', '')
+  };
+  (function(d, s) {
+    var j, e = d.getElementsByTagName(s)[0];
+    if (typeof LivereTower === 'function') { return; }
+    j = d.createElement(s);
+    j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+    j.async = true;
+    e.parentNode.insertBefore(j, e);
+  })(document, 'script');
+</script>
+
+    </div>
+  
+  
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":true}});</script></body>
+</html>

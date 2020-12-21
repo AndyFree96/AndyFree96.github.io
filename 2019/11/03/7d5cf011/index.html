@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.4.2',
+    exturl: false,
+    sidebar: {"position":"left","display":"always","offset":12,"onmobile":false},
+    copycode: {"enable":true,"show_result":true,"style":"mac"},
+    back2top: {"enable":false,"sidebar":false,"scrollpercent":true},
+    bookmark: {"enable":true,"color":"#222","save":"auto"},
+    fancybox: true,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: true,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":5,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    },
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="版本控制软件能够让我们拍摄处于可行状态下的项目的快照。更改项目（比如实现新功能）后，如果项目不能正常运行，可以恢复到前一个可行状态。通过版本控制软件，我们可以无顾忌地改进项目，不再需要担心项目因为自己犯了错而遭到破坏。对于大型项目而言，这显得尤为重要。对小项目来说，这也是大有益处的。安装Git要在Windows系统中安装Git，访问 https:&#x2F;&#x2F;git-scm.com&#x2F;downloads">
+<meta name="keywords" content="Git">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用Git进行版本控制">
+<meta property="og:url" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;2019&#x2F;11&#x2F;03&#x2F;7d5cf011&#x2F;index.html">
+<meta property="og:site_name" content="AndyFree96&#39;s Blog">
+<meta property="og:description" content="版本控制软件能够让我们拍摄处于可行状态下的项目的快照。更改项目（比如实现新功能）后，如果项目不能正常运行，可以恢复到前一个可行状态。通过版本控制软件，我们可以无顾忌地改进项目，不再需要担心项目因为自己犯了错而遭到破坏。对于大型项目而言，这显得尤为重要。对小项目来说，这也是大有益处的。安装Git要在Windows系统中安装Git，访问 https:&#x2F;&#x2F;git-scm.com&#x2F;downloads">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;201911&#x2F;3&#x2F;1.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;201911&#x2F;3&#x2F;2.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;201911&#x2F;3&#x2F;3.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;201911&#x2F;3&#x2F;4.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;201911&#x2F;3&#x2F;5.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;201911&#x2F;3&#x2F;6.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;201911&#x2F;3&#x2F;7.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;201911&#x2F;3&#x2F;8.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;201911&#x2F;3&#x2F;9.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;201911&#x2F;3&#x2F;10.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;201911&#x2F;3&#x2F;11.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;201911&#x2F;3&#x2F;12.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;201911&#x2F;3&#x2F;13.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;201911&#x2F;3&#x2F;14.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;201911&#x2F;3&#x2F;15.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;201911&#x2F;3&#x2F;16.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;201911&#x2F;3&#x2F;17.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;201911&#x2F;3&#x2F;18.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;201911&#x2F;3&#x2F;19.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;201911&#x2F;3&#x2F;20.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;201911&#x2F;3&#x2F;21.png">
+<meta property="og:updated_time" content="2020-12-21T07:46:16.034Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;201911&#x2F;3&#x2F;1.png">
+
+<link rel="canonical" href="https://andyfree96.github.io/2019/11/03/7d5cf011/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>使用Git进行版本控制 | AndyFree96's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">AndyFree96's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="none"
+           placeholder="搜索..." spellcheck="false"
+           type="text" id="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <a href="https://github.com/andyfree96" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://andyfree96.github.io/2019/11/03/7d5cf011/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.jpg">
+      <meta itemprop="name" content="AndyFree96">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="AndyFree96's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          使用Git进行版本控制
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-11-03 17:48:34" itemprop="dateCreated datePublished" datetime="2019-11-03T17:48:34+08:00">2019-11-03</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-12-21 15:46:16" itemprop="dateModified" datetime="2020-12-21T15:46:16+08:00">2020-12-21</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/" itemprop="url" rel="index">
+                    <span itemprop="name">工具使用</span>
+                  </a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>3.1k</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>版本控制软件能够让我们拍摄处于可行状态下的项目的快照。更改项目（比如实现新功能）后，如果项目不能正常运行，可以恢复到前一个可行状态。</p><p>通过版本控制软件，我们可以无顾忌地改进项目，不再需要担心项目因为自己犯了错而遭到破坏。对于大型项目而言，这显得尤为重要。对小项目来说，这也是大有益处的。</p><h2 id="安装Git"><a href="#安装Git" class="headerlink" title="安装Git"></a>安装Git</h2><p>要在Windows系统中安装Git，访问 <a href="https://git-scm.com/downloads" target="_blank" rel="noopener">https://git-scm.com/downloads</a> </p><a id="more"></a>
+
+
+<p><img src="/images/201911/3/1.png" alt></p>
+<p>点击下载安装包，然后双击安装即可。</p>
+<h3 id="配置Git"><a href="#配置Git" class="headerlink" title="配置Git"></a>配置Git</h3><p>Git会跟踪到底是谁修改了项目，哪怕参与项目开发的人只有一个。为此，Git需要知道你的用户名和电子邮件地址。你必须提供用户名，但可以使用虚构的电子邮件地址：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ git config --<span class="keyword">global</span> user.name <span class="string">"username"</span></span><br><span class="line">$ git config --<span class="keyword">global</span> user.email <span class="string">"username@example.com"</span></span><br></pre></td></tr></table></figure>
+
+<p>如果忘记了这一步，在你首次提交时，Git将提示你提供这些信息。</p>
+<h2 id="创建项目"><a href="#创建项目" class="headerlink" title="创建项目"></a>创建项目</h2><p>我们来创建一个要进行版本控制的项目。在你的系统中创建一个目录，并将其命名为<code>learn_git</code>。在这个目录中，创建一个简单的Python程序：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># hello_world.py</span></span><br><span class="line"></span><br><span class="line">print(<span class="string">"Hello Git World!"</span>)</span><br></pre></td></tr></table></figure>
+
+<h2 id="忽略文件"><a href="#忽略文件" class="headerlink" title="忽略文件"></a>忽略文件</h2><p>扩展名为<code>.pyc</code>的文件是根据<code>.py</code>文件自动生成的，因此我们无需让Git跟踪它们。这些文件存储在<code>__pycache__</code>目录中。为了让Git忽略这个目录，创建一个名为<code>.gitignore</code>的特殊文件，并将下面类容添加到文件中：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">__pycache__/</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/201911/3/2.png" alt></p>
+<p>这让Git忽略目录<code>__pycache__</code>中的所有文件。使用<code>.gitignore</code>文件可以避免项目混乱。</p>
+<h2 id="初始化仓库"><a href="#初始化仓库" class="headerlink" title="初始化仓库"></a>初始化仓库</h2><p>现在的<code>learn_git</code>只是一个普通的目录，包含了一个<code>Python</code>文件和一个<code>.gitignore</code>文件，为了对其进行版本控制需要使用Git进行初始化一下。打开一个终端窗口，切换到<code>learn_git</code>目录，并执行如下命令：</p>
+<p><img src="/images/201911/3/3.png" alt></p>
+<p>输出表明Git在<code>learn_git</code>中初始化了一个空仓库。仓库是程序中被Git主动跟踪的一组文件。Git用来管理仓库的文件都存储在隐藏的<code>.git/</code>中。</p>
+<p><img src="/images/201911/3/4.png" alt></p>
+<h2 id="检查状态"><a href="#检查状态" class="headerlink" title="检查状态"></a>检查状态</h2><p>在执行其他操作前，先看一下项目的状态：</p>
+<p><img src="/images/201911/3/5.png" alt></p>
+<p>在Git中，<strong>分支</strong>是项目的一个版本。从这里的输出可知，我们位于分支<code>master</code>上（见1）。Git指出了项目中未被跟踪的文件（见2），因为我们还没有告诉它要跟踪哪些文件。<strong>提交</strong>是项目在特定时间点的快照。此时，我们被告知没有将任何东西添加到当前提交中，但我们需要将未跟踪的文件加入到仓库中（见3）。</p>
+<h2 id="将文件加入到仓库中"><a href="#将文件加入到仓库中" class="headerlink" title="将文件加入到仓库中"></a>将文件加入到仓库中</h2><p>下面将之前的两个文件加入到仓库中</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git add .</span><br></pre></td></tr></table></figure>
+
+<p>再次检查状态：</p>
+<p><img src="/images/201911/3/6.png" alt></p>
+<p>命令<code>git add .</code>将项目中未被跟踪的所有文件都加入到仓库中。它不提交这些文件，而只是让Git开始关注它们。当我们检查项目的状态时，Git找出了需要提交的一些修改。标签<code>new file</code>意味着这些文件是新添加到仓库中的。</p>
+<h2 id="执行提交"><a href="#执行提交" class="headerlink" title="执行提交"></a>执行提交</h2><p>接下来，我们执行第一次提交：</p>
+<p><img src="/images/201911/3/7.png" alt></p>
+<p>我们执行命令<code>git commit -m &quot;message&quot;</code>以拍摄项目的快照。选项<code>-m</code>让Git将接下来的消息<code>&quot;Started project&quot;</code>记录到项目的历史记录中。输出表明我们在分支<code>master</code>上，且有两个文件被修改了。现在我们检查状态时，发现我们在分支<code>master</code>上，且工作目录是干净的。</p>
+<p><img src="/images/201911/3/8.png" alt></p>
+<h2 id="查看提交历史"><a href="#查看提交历史" class="headerlink" title="查看提交历史"></a>查看提交历史</h2><p>Git记录所有的项目提交。下面来看一下提交历史：</p>
+<p><img src="/images/201911/3/9.png" alt></p>
+<p>每次提交时，Git都会生成一个包含40字符的独一无二的引用ID。它记录提交是谁提交的、提交的时间以及提交时指定的消息。但是，并非在任何情况下都需要所有这些信息，Git提供了一个选项，以便能够打印提交历史条目中更简单的版本：</p>
+<p><img src="/images/201911/3/10.png" alt></p>
+<p>选项<code>--pretty=oneline</code>指定显示两项最重要的信息：提交的引用ID以及为提交记录的消息。</p>
+<h2 id="第二次提交"><a href="#第二次提交" class="headerlink" title="第二次提交"></a>第二次提交</h2><p>我们在<code>hello_world.py</code>中再添加一行代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># hello_world.py</span></span><br><span class="line"></span><br><span class="line">print(<span class="string">"Hello Git World!"</span>)</span><br><span class="line">print(<span class="string">"Hello everyone."</span>)</span><br></pre></td></tr></table></figure>
+
+<p>查看项目状态，Git注意到了这个文件发生了变化：</p>
+<p><img src="/images/201911/3/11.png" alt></p>
+<p>输出指出了我们当前所在的分支、被修改了的文件的名称，还指出了所做的修改未提交。接下来我们提交所做的修改，并再次查看状态：</p>
+<p><img src="/images/201911/3/12.png" alt></p>
+<p>我们再次执行了提交，并在执行命令<code>git commit</code>时指定了选项<code>-am</code>。选项<code>-a</code>让Git将仓库中所有修改了的文件都加入到当前提交中（如果在两次提交之间创建了新文件，可再次执行命令<code>git add .</code>将这些新文件加入到仓库中）。选项<code>-m</code>让Git在提交历史中记录一条消息。</p>
+<p>我们查看项目的状态时，发现工作目录也是干净的。最后，我们发现提交历史中包含两个提交。</p>
+<p><img src="/images/201911/3/13.png" alt></p>
+<h2 id="撤销修改"><a href="#撤销修改" class="headerlink" title="撤销修改"></a>撤销修改</h2><p>下面来看看如何放弃所做的修改，恢复到前一个可行状态。为此，首先在<code>hello_world.py</code>中再加一行代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># hello_world.py</span></span><br><span class="line"></span><br><span class="line">print(<span class="string">"Hello Git World!"</span>)</span><br><span class="line">print(<span class="string">"Hello everyone."</span>)</span><br><span class="line"></span><br><span class="line">print(<span class="string">"Oh no, I broke the project!"</span>)</span><br></pre></td></tr></table></figure>
+
+<p>保存并查看状态：</p>
+<p><img src="/images/201911/3/14.png" alt></p>
+<p>Git注意到我们修改了<code>hello_world.py</code>。我们可以提交所做的修改，但这次我们不提交所做的修改，而要恢复到最后一个提交（那次提交时项目能够正常地运行）。为此，我们不对<code>hello_world.py</code>执行任何操作——不删除刚添加的代码行，也不使用文本编辑器的撤销功能，而在终端会话中执行如下命令：</p>
+<p><img src="/images/201911/3/15.png" alt></p>
+<p>命令<code>git checkout</code>让你能够恢复到以前的任何提交。命令<code>git checkout .</code>放弃自最后一次提交后所做的所有修改，让项目恢复到最后一次提交的状态。</p>
+<p>如果我们回到文本编辑器，将发现<code>hello_world.py</code>被修改成了下面这样：</p>
+<p><img src="/images/201911/3/16.png" alt></p>
+<p>就这个项目而言，恢复到前一个状态微不足道，但如果我们开发的是大型项目，其中数十个文件都被修改了，那么恢复到前一个状态，将撤销自最后一次提交后对这些文件所有的所有修改。这个功能很有用：实现新功能时，可以根据需要做任意数量的修改，如果这些修改不可行，可以撤销它们，而不会对项目有任何影响。</p>
+<h2 id="检出以前的提交"><a href="#检出以前的提交" class="headerlink" title="检出以前的提交"></a>检出以前的提交</h2><p>我们可以检出提交历史中的任何提交，而不仅仅是最后一次提交，为此可在命令<code>git checkout</code>末尾指定该提交的引用ID的前6个字符（而不是句点）。</p>
+<p><img src="/images/201911/3/17.png" alt></p>
+<p>检出以前的提交后，将离开<code>master</code>分支，并进入分离头指针（detached HEAD）状态。HEAD表示项目的当前状态，之所以说处于分离状态，是因为我们离开了一个命名分支（这里是master）。</p>
+<p>要回到<code>master</code>分支，可以检出它：</p>
+<p><img src="/images/201911/3/18.png" alt></p>
+<p>除非你要使用Git的高级功能，否则在检出以前的提交后，最好不要对项目做任何修改。如果只有你一个人开发项目，而你又想放弃较近的所有提交，并恢复到以前的状态，也可以将项目重置到以前的提交。为此，可以在处于<code>master</code>分支上执行如下命令：</p>
+<p><img src="/images/201911/3/19.png" alt></p>
+<p><img src="/images/201911/3/20.png" alt></p>
+<p>我们首先查看了状态，确认我们在<code>master</code>分支上。查看提交历史时，我们看到了两个提交。然后，执行命令<code>git reset --hard</code>，并在其中指定了要永久地恢复到的提交的引用ID的前6个字符。再次查看状态，发现我们在<code>master</code>分支上，且没有需要提交的更改。再次查看提交历史时，发现我们处于要从它重新开始的提交中。</p>
+<h2 id="更多"><a href="#更多" class="headerlink" title="更多"></a>更多</h2><p>最后，推荐一个网站 Learn Git Branching：<a href="https://learngitbranching.js.org/" target="_blank" rel="noopener">https://learngitbranching.js.org/</a></p>
+<p><img src="/images/201911/3/21.png" alt></p>
+<p>以闯关+可视化的形式学习Git相关知识。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><a href="https://book.douban.com/subject/26829016/" target="_blank" rel="noopener">https://book.douban.com/subject/26829016/</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+      
+  <div class="popular-posts-header">相关文章</div>
+  <ul class="popular-posts">
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\2019\11\03\9f097855\" rel="bookmark">亚马逊云配置ShadowsocksR使用</a></div>
+    </li>
+  </ul>
+
+      
+        <div class="reward-container">
+  <div>您的支持将鼓励我继续创作！</div>
+  <button disable="enable" onclick="var qr = document.getElementById(&quot;qr&quot;); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/uploads/wechatpay.png" alt="AndyFree96 微信支付">
+        <p>微信支付</p>
+      </div>
+      
+      <div style="display: inline-block;">
+        <img src="/uploads/alipay.png" alt="AndyFree96 支付宝">
+        <p>支付宝</p>
+      </div>
+
+  </div>
+</div>
+
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>AndyFree96
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://andyfree96.github.io/2019/11/03/7d5cf011/" title="使用Git进行版本控制">https://andyfree96.github.io/2019/11/03/7d5cf011/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/null" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Git/" rel="tag"><i class="fa fa-tag"></i>Git</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/2019/11/02/9f997735/" rel="next" title="Tkinter简明教程">
+                  <i class="fa fa-chevron-left"></i> Tkinter简明教程
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+                <a href="/2019/11/03/9f097855/" rel="prev" title="亚马逊云配置ShadowsocksR使用">
+                  亚马逊云配置ShadowsocksR使用 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    
+  <div class="comments" id="comments">
+    <div id="lv-container" data-id="city" data-uid="MTAyMC80NzkxOC8yNDQxNQ"></div>
+  </div>
+  
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#安装Git"><span class="nav-text">安装Git</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#配置Git"><span class="nav-text">配置Git</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#创建项目"><span class="nav-text">创建项目</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#忽略文件"><span class="nav-text">忽略文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#初始化仓库"><span class="nav-text">初始化仓库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#检查状态"><span class="nav-text">检查状态</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#将文件加入到仓库中"><span class="nav-text">将文件加入到仓库中</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#执行提交"><span class="nav-text">执行提交</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查看提交历史"><span class="nav-text">查看提交历史</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#第二次提交"><span class="nav-text">第二次提交</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#撤销修改"><span class="nav-text">撤销修改</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#检出以前的提交"><span class="nav-text">检出以前的提交</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#更多"><span class="nav-text">更多</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-text">参考</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <img class="site-author-image" itemprop="image" alt="AndyFree96"
+    src="/uploads/avatar.jpg">
+  <p class="site-author-name" itemprop="name">AndyFree96</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">19</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">20</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/AndyFree96" title="GitHub &amp;rarr; https:&#x2F;&#x2F;github.com&#x2F;AndyFree96" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:leoscotthg@gmail.com" title="E-Mail &amp;rarr; mailto:leoscotthg@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/IRONAnthony" title="Weibo &amp;rarr; https:&#x2F;&#x2F;weibo.com&#x2F;IRONAnthony" rel="noopener" target="_blank"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/IRONAnthony96" title="Twitter &amp;rarr; https:&#x2F;&#x2F;twitter.com&#x2F;IRONAnthony96" rel="noopener" target="_blank"><i class="fa fa-fw fa-twitter"></i>Twitter</a>
+      </span>
+  </div>
+
+
+
+      </div>
+	  
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 2019 – 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">AndyFree96</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+      <span class="post-meta-item-text">站点总字数：</span>
+    <span title="站点总字数">107k</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.0.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.4.2
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script pjax async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/pjax/pjax.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/pangu@4/dist/browser/pangu.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+  <script>
+var pjax = new Pjax({
+  selectors: [
+    'head title',
+    '#page-configurations',
+    '.content-wrap',
+    '.post-toc-wrap',
+    '#pjax'
+  ],
+  switches: {
+    '.post-toc-wrap': Pjax.switches.innerHTML
+  },
+  analytics: false,
+  cacheBust: false,
+  scrollTo : !CONFIG.bookmark.enable
+});
+
+window.addEventListener('pjax:success', () => {
+  document.querySelectorAll('script[pjax], script#page-configurations, #pjax script').forEach(element => {
+    var code = element.text || element.textContent || element.innerHTML || '';
+    var parent = element.parentNode;
+    parent.removeChild(element);
+    var script = document.createElement('script');
+    if (element.id) {
+      script.id = element.id;
+    }
+    if (element.className) {
+      script.className = element.className;
+    }
+    if (element.type) {
+      script.type = element.type;
+    }
+    if (element.src) {
+      script.src = element.src;
+      // Force synchronous loading of peripheral JS.
+      script.async = false;
+    }
+    if (element.getAttribute('pjax') !== null) {
+      element.setAttribute('pjax', '');
+    }
+    if (code !== '') {
+      script.appendChild(document.createTextNode(code));
+    }
+    parent.appendChild(script);
+  });
+  NexT.boot.refresh();
+  // Define Motion Sequence & Bootstrap Motion.
+  if (CONFIG.motion.enable) {
+    NexT.motion.integrator
+      .init()
+      .add(NexT.motion.middleWares.postList)
+      .bootstrap();
+  }
+  NexT.utils.updateSidebarPosition();
+});
+</script>
+
+
+
+
+  
+  <script pjax>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+
+
+  <script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+    <div id="pjax">
+
+  
+
+  
+
+  
+
+<script>
+  window.livereOptions = {
+    refer: location.pathname.replace(CONFIG.root, '').replace('index.html', '')
+  };
+  (function(d, s) {
+    var j, e = d.getElementsByTagName(s)[0];
+    if (typeof LivereTower === 'function') { return; }
+    j = d.createElement(s);
+    j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+    j.async = true;
+    e.parentNode.insertBefore(j, e);
+  })(document, 'script');
+</script>
+
+    </div>
+  
+  
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":true}});</script></body>
+</html>

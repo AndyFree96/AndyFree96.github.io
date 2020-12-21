@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.4.2',
+    exturl: false,
+    sidebar: {"position":"left","display":"always","offset":12,"onmobile":false},
+    copycode: {"enable":true,"show_result":true,"style":"mac"},
+    back2top: {"enable":false,"sidebar":false,"scrollpercent":true},
+    bookmark: {"enable":true,"color":"#222","save":"auto"},
+    fancybox: true,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: true,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":5,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    },
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="我们可以使用Python内置的urllib包来请求网络资源。它用起来比较麻烦，而且缺少很多实用的高级功能。本文我们将会介绍一个更加方便的Python第三方库——Requests的使用。安装Requests要安装Requests，只要在终端中运行这个简单命令即可：1pip install -i https:&#x2F;&#x2F;pypi.douban.com&#x2F;simple requests">
+<meta name="keywords" content="Python,Requests">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Requests库使用">
+<meta property="og:url" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;2019&#x2F;11&#x2F;01&#x2F;7e933fdb&#x2F;index.html">
+<meta property="og:site_name" content="AndyFree96&#39;s Blog">
+<meta property="og:description" content="我们可以使用Python内置的urllib包来请求网络资源。它用起来比较麻烦，而且缺少很多实用的高级功能。本文我们将会介绍一个更加方便的Python第三方库——Requests的使用。安装Requests要安装Requests，只要在终端中运行这个简单命令即可：1pip install -i https:&#x2F;&#x2F;pypi.douban.com&#x2F;simple requests">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;201911&#x2F;1&#x2F;1.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;201911&#x2F;1&#x2F;2.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;201911&#x2F;1&#x2F;3.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;201911&#x2F;1&#x2F;4.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;201911&#x2F;1&#x2F;5.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;201911&#x2F;1&#x2F;6.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;201911&#x2F;1&#x2F;7.png">
+<meta property="og:updated_time" content="2020-12-21T07:46:15.963Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;201911&#x2F;1&#x2F;1.png">
+
+<link rel="canonical" href="https://andyfree96.github.io/2019/11/01/7e933fdb/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>Requests库使用 | AndyFree96's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">AndyFree96's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="none"
+           placeholder="搜索..." spellcheck="false"
+           type="text" id="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <a href="https://github.com/andyfree96" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://andyfree96.github.io/2019/11/01/7e933fdb/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.jpg">
+      <meta itemprop="name" content="AndyFree96">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="AndyFree96's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Requests库使用
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-11-01 15:07:26" itemprop="dateCreated datePublished" datetime="2019-11-01T15:07:26+08:00">2019-11-01</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-12-21 15:46:15" itemprop="dateModified" datetime="2020-12-21T15:46:15+08:00">2020-12-21</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Python%E7%88%AC%E8%99%AB/" itemprop="url" rel="index">
+                    <span itemprop="name">Python爬虫</span>
+                  </a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>5.4k</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>我们可以使用Python内置的urllib包来请求网络资源。它用起来比较麻烦，而且缺少很多实用的高级功能。本文我们将会介绍一个更加方便的Python第三方库——Requests的使用。</p><h2 id="安装Requests"><a href="#安装Requests" class="headerlink" title="安装Requests"></a>安装Requests</h2><p>要安装<code>Requests</code>，只要在终端中运行这个简单命令即可：</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install -i https://pypi.douban.com/simple requests</span><br></pre></td></tr></table></figure><a id="more"></a>
+
+
+
+<p>安装好<code>Requests</code>后，就可以开始尝试使用它啦！</p>
+<h2 id="发送请求"><a href="#发送请求" class="headerlink" title="发送请求"></a>发送请求</h2><p>使用<code>Requests</code>发送网络请求非常简单。导入<code>Requests</code>模块：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br></pre></td></tr></table></figure>
+
+<p>然后获取某个网页。我们来获取Github的公共时间线：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">r = requests.get(<span class="string">'https://api.github.com/events'</span>)</span><br></pre></td></tr></table></figure>
+
+<p>现在，有了一个名为<code>r</code>的<code>Response</code>的对象。我们可以从这个对象中获取所有我们想要的信息。</p>
+<h2 id="传递URL参数"><a href="#传递URL参数" class="headerlink" title="传递URL参数"></a>传递URL参数</h2><p>我们可能会想用URL的查询字符串传递某种数据。如果是手动构建URL，那么数据会以键值对的形式置于URL中，跟在一个问号的后面。例如，<code>http://httpbin.org/get?key=val</code>。<code>Requests</code>允许我们使用<code>params</code>关键字参数，以一个字符串字典来提供这些参数。举例来说，如果想传递<code>key1=value1</code>和<code>key2=value2</code>到<code>http://httpbin.org/get</code>，那么可以使用如下代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line">payload = &#123;<span class="string">'name'</span>:<span class="string">'viljw'</span>, <span class="string">'cat'</span>:<span class="string">'ruby'</span>&#125;</span><br><span class="line">r = requests.get(<span class="string">'http://httpbin.org/get'</span>, params=payload)</span><br></pre></td></tr></table></figure>
+
+<p>打印输出该URL，能看到URL已被正确编码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">print(r.url)</span><br><span class="line"></span><br><span class="line"><span class="comment"># http://httpbin.org/get?name=viljw&amp;cat=ruby</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="响应内容"><a href="#响应内容" class="headerlink" title="响应内容"></a>响应内容</h2><p>我们能读取服务器响应内容。举个例子：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line">r = requests.get(<span class="string">"http://httpbin.org/get"</span>)</span><br><span class="line">print(r.text)</span><br></pre></td></tr></table></figure>
+
+<p>输出内容如下：</p>
+<p><img src="/images/201911/1/1.png" alt></p>
+<p><code>Requests</code>会自动节码来自服务器的内容。大多数unicode字符集都能被无缝地解码。</p>
+<p>请求发出后，<code>Requests</code>会基于HTTP头部对响应的编码作出有根据的推测。当访问<code>r.text</code>时，<code>Requests</code>会使用其推测的文本编码。我们可以找出<code>Requests</code>使用了什么编码，并且能够使用<code>r.encoding</code>属性来改变它：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line">r = requests.get(<span class="string">"http://httpbin.org/get"</span>)</span><br><span class="line">print(r.encoding)</span><br><span class="line">r.encoding = <span class="string">'utf-8'</span></span><br><span class="line">print(r.encoding)</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/201911/1/2.png" alt></p>
+<p>如果改变了编码，每当访问<code>r.text</code>，<code>Requests</code>都将会使用<code>r.encoding</code>的新值。</p>
+<h2 id="二进制响应内容"><a href="#二进制响应内容" class="headerlink" title="二进制响应内容"></a>二进制响应内容</h2><p>对于非文本请求，也能以字节的方式访问请求响应体。例如，以请求返回的二进制数据创建一张图片，可以使用如下代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">from</span> PIL <span class="keyword">import</span> Image</span><br><span class="line"><span class="keyword">from</span> io <span class="keyword">import</span> BytesIO</span><br><span class="line"></span><br><span class="line">r = requests.get(<span class="string">"https://github.com/fluidicon.png"</span>)</span><br><span class="line">im = Image.open(BytesIO(r.content))</span><br><span class="line">im.show()</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/201911/1/3.png" alt></p>
+<h2 id="JSON响应内容"><a href="#JSON响应内容" class="headerlink" title="JSON响应内容"></a>JSON响应内容</h2><p><code>Requests</code>中有一个内置的JSON解码器，帮助我们处理JSON数据：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">from</span> pprint <span class="keyword">import</span> pprint</span><br><span class="line"></span><br><span class="line">payload = &#123;<span class="string">'name'</span>:<span class="string">"viljw"</span>, <span class="string">'cat'</span>:<span class="string">'ruby'</span>&#125;</span><br><span class="line">r = requests.get(<span class="string">"http://httpbin.org/get"</span>, params=payload)</span><br><span class="line">pprint(r.json())</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/201911/1/4.png" alt></p>
+<h2 id="定制请求头"><a href="#定制请求头" class="headerlink" title="定制请求头"></a>定制请求头</h2><p>如果想为请求添加HTTP头部，只要简单地传递一个<code>dict</code>给<code>headers</code>参数就可。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">from</span> pprint <span class="keyword">import</span> pprint</span><br><span class="line"></span><br><span class="line">headers = &#123;<span class="string">'User-Agent'</span>: <span class="string">'viljw-agent'</span>&#125;</span><br><span class="line">r = requests.get(<span class="string">"http://httpbin.org/get"</span>, headers=headers)</span><br><span class="line">pprint(r.json())</span><br></pre></td></tr></table></figure>
+
+<p>如下图所示，<code>User-Agent</code>字段的值已被更改为<code>viljw-agent</code>。</p>
+<p><img src="/images/201911/1/5.png" alt></p>
+<h2 id="POST请求"><a href="#POST请求" class="headerlink" title="POST请求"></a>POST请求</h2><p>通常，我们会想要发送一些编码为表单形式的数据——非常像一个HTML表单。要实现这个，只需要简单地传递一个字典给<code>data</code>参数。字典数据在发出请求时会自动编码为表单形式：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line">payload = &#123;<span class="string">"name"</span>:<span class="string">"viljw"</span>, <span class="string">"actor"</span>:<span class="string">"peter"</span>&#125;</span><br><span class="line">r = requests.post(<span class="string">"http://httpbin.org/post"</span>, data=payload)</span><br><span class="line">print(r.text)</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/201911/1/6.png" alt></p>
+<p>还可以给<code>data</code>参数传入一个元组列表。在表单中多个元素使用同一key的时候，这种方式很有用：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line">payload = [(<span class="string">"name"</span>,<span class="string">"viljw"</span>), (<span class="string">"actor"</span>,<span class="string">"peter"</span>),(<span class="string">"actor"</span>,<span class="string">'marry'</span>)]</span><br><span class="line">r = requests.post(<span class="string">"http://httpbin.org/post"</span>, data=payload)</span><br><span class="line">print(r.text)</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/201911/1/7.png" alt></p>
+<h2 id="响应状态码"><a href="#响应状态码" class="headerlink" title="响应状态码"></a>响应状态码</h2><p>我们可以查看响应状态码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line">r = requests.get(<span class="string">"http://httpbin.org/get"</span>)</span><br><span class="line">print(r.status_code)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 200</span></span><br></pre></td></tr></table></figure>
+
+<p>为了方便使用，<code>Requests</code>附带了也给内置的状态码查询对象：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">r.status_code == requests.codes.ok</span><br><span class="line"></span><br><span class="line"><span class="comment"># True</span></span><br></pre></td></tr></table></figure>
+
+<p>如果发送了一个错误请求(一个4XX客户端错误，或5XX服务器错误响应)，我们可以通过<code>Response.raise_for_status()</code>来抛出异常：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">1</span>]: <span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line">In [<span class="number">2</span>]: bad_r = requests.get(<span class="string">'http://httpbin.org/status/404'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">3</span>]: bad_r.status_code</span><br><span class="line">Out[<span class="number">3</span>]: <span class="number">404</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">4</span>]: bad_r.raise_for_status()</span><br><span class="line">---------------------------------------------------------------------------</span><br><span class="line">HTTPError                                 Traceback (most recent call last)</span><br><span class="line">&lt;ipython-input<span class="number">-4</span>-cdf6910f7d4c&gt; <span class="keyword">in</span> &lt;module&gt;()</span><br><span class="line">----&gt; 1 bad_r.raise_for_status()</span><br><span class="line"></span><br><span class="line">c:\python\lib\site-packages\requests\models.py <span class="keyword">in</span> raise_for_status(self)</span><br><span class="line">    <span class="number">927</span></span><br><span class="line">    <span class="number">928</span>         <span class="keyword">if</span> http_error_msg:</span><br><span class="line">--&gt; 929             raise HTTPError(http_error_msg, response=self)</span><br><span class="line">    <span class="number">930</span></span><br><span class="line">    <span class="number">931</span>     <span class="function"><span class="keyword">def</span> <span class="title">close</span><span class="params">(self)</span>:</span></span><br><span class="line"></span><br><span class="line">HTTPError: <span class="number">404</span> Client Error: NOT FOUND <span class="keyword">for</span> url: http://httpbin.org/status/<span class="number">404</span></span><br></pre></td></tr></table></figure>
+
+<p>但由于我们的例子中<code>r</code>的<code>status_code</code>是200，当我们调用<code>raise_for_status()</code>时，得到的是：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">6</span>]: r.raise_for_status()</span><br><span class="line"></span><br><span class="line"><span class="comment"># None</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="响应头"><a href="#响应头" class="headerlink" title="响应头"></a>响应头</h2><p>我们可以查看以字典形式的服务器响应头：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">7</span>]: r.headers</span><br><span class="line">Out[<span class="number">7</span>]: &#123;<span class="string">'Access-Control-Allow-Credentials'</span>: <span class="string">'true'</span>, <span class="string">'Access-Control-Allow-Origin'</span>: <span class="string">'*'</span>, <span class="string">'Content-Encoding'</span>: <span class="string">'gzip'</span>, <span class="string">'Content-Type'</span>: <span class="string">'application/json'</span>, <span class="string">'Date'</span>: <span class="string">'Thu, 03 Oct 2019 07:11:16 GMT'</span>, <span class="string">'Referrer-Policy'</span>: <span class="string">'no-referrer-when-downgrade'</span>, <span class="string">'Server'</span>: <span class="string">'nginx'</span>, <span class="string">'X-Content-Type-Options'</span>: <span class="string">'nosniff'</span>, <span class="string">'X-Frame-Options'</span>: <span class="string">'DENY'</span>, <span class="string">'X-XSS-Protection'</span>: <span class="string">'1; mode=block'</span>, <span class="string">'Content-Length'</span>: <span class="string">'184'</span>, <span class="string">'Connection'</span>: <span class="string">'keep-alive'</span>&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="Cookie"><a href="#Cookie" class="headerlink" title="Cookie"></a>Cookie</h2><p>如果某个响应中包含一些cookie，可以快速访问它们：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">19</span>]: r = requests.get(<span class="string">'https://www.baidu.com'</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">20</span>]: r.cookies</span><br><span class="line">Out[<span class="number">20</span>]: &lt;RequestsCookieJar[Cookie(version=<span class="number">0</span>, name=<span class="string">'BDORZ'</span>, value=<span class="string">'27315'</span>, port=<span class="literal">None</span>, port_specified=<span class="literal">False</span>, domain=<span class="string">'.baidu.com'</span>, domain_specified=<span class="literal">True</span>, domain_initial_dot=<span class="literal">True</span>, path=<span class="string">'/'</span>, path_specified=<span class="literal">True</span>, secure=<span class="literal">False</span>, expires=<span class="number">1570173564</span>, discard=<span class="literal">False</span>, comment=<span class="literal">None</span>, comment_url=<span class="literal">None</span>, rest=&#123;&#125;, rfc2109=<span class="literal">False</span>)]&gt;</span><br><span class="line"></span><br><span class="line">In [<span class="number">21</span>]: r.cookies[<span class="string">'BDORZ'</span>]</span><br><span class="line">Out[<span class="number">21</span>]: <span class="string">'27315'</span></span><br></pre></td></tr></table></figure>
+
+<p>要想发送cookies到服务器，可以使用<code>cookies</code>参数：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">27</span>]: url = <span class="string">'http://httpbin.org/cookies'</span></span><br><span class="line"></span><br><span class="line">In [<span class="number">28</span>]: cookies = dict(cookies_are=<span class="string">"working"</span>)</span><br><span class="line"></span><br><span class="line">In [<span class="number">29</span>]: r = requests.get(url, cookies=cookies)</span><br><span class="line"></span><br><span class="line">In [<span class="number">30</span>]: r.json()</span><br><span class="line">Out[<span class="number">30</span>]: &#123;<span class="string">'cookies'</span>: &#123;<span class="string">'cookies_are'</span>: <span class="string">'working'</span>&#125;&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="超时"><a href="#超时" class="headerlink" title="超时"></a>超时</h2><p>可以告诉<code>Requests</code>在经过以<code>timeout</code>参数设定的秒数时间之后停止等待响应。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>requests.get(<span class="string">'http://github.com'</span>, timeout=<span class="number">0.001</span>)</span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">  File <span class="string">"&lt;stdin&gt;"</span>, line <span class="number">1</span>, <span class="keyword">in</span> &lt;module&gt;</span><br><span class="line">requests.exceptions.Timeout: HTTPConnectionPool(host=<span class="string">'github.com'</span>, port=<span class="number">80</span>): Request timed out. (timeout=<span class="number">0.001</span>)</span><br></pre></td></tr></table></figure>
+
+<h2 id="错误与异常"><a href="#错误与异常" class="headerlink" title="错误与异常"></a>错误与异常</h2><p>遇到网络问题(如：DNS查询失败、拒绝连接等)时，<code>Requests</code>会抛出一个<code>ConnectionError</code>异常。</p>
+<p>如果HTTP请求返回了不成功的状态码， <code>Response.raise_for_status()</code>会抛出一个<code>HTTPError</code>异常。</p>
+<p>若请求超时，则抛出一个<code>Timeout</code>异常。</p>
+<p>若请求超过了设定的最大重定向次数，则会抛出一个<code>TooManyRedirects</code>异常。</p>
+<p>所有<code>Requests</code>显式抛出的异常都继承自 <code>requests.exceptions.RequestException</code> 。</p>
+<h2 id="代理"><a href="#代理" class="headerlink" title="代理"></a>代理</h2><p>如果需要使用代理，可以通过任意请求方法提供<code>proxies</code>参数来配置单个请求：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line">proxies = &#123;</span><br><span class="line">    <span class="string">'https'</span>: <span class="string">'https://127.0.0.1:1080'</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">r = requests.get(<span class="string">'https://www.google.com'</span>, proxies=proxies)</span><br><span class="line">print(r.status_code)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 200</span></span><br></pre></td></tr></table></figure>
+
+<p>也可以通过环境变量<code>HTTP_PROXY</code>和<code>HTTPS_PROXY</code>来配置代理。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ export HTTP_PROXY=<span class="string">"http://10.10.1.10:3128"</span></span><br><span class="line">$ export HTTPS_PROXY=<span class="string">"http://10.10.1.10:1080"</span></span><br><span class="line"></span><br><span class="line">$ python</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">import</span> requests</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>requests.get(<span class="string">"http://example.org"</span>)</span><br></pre></td></tr></table></figure>
+
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><a href="https://requests-docs-cn.readthedocs.io/zh_CN/latest/index.html" target="_blank" rel="noopener">https://requests-docs-cn.readthedocs.io/zh_CN/latest/index.html</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+      
+  <div class="popular-posts-header">相关文章</div>
+  <ul class="popular-posts">
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\2019\10\30\e8fe77f\" rel="bookmark">BeautifulSoup袭来</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\2019\11\02\9f997735\" rel="bookmark">Tkinter简明教程</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\2019\11\05\849511e1\" rel="bookmark">用Python处理Excel表格</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\2019\10\28\8a7602a8\" rel="bookmark">OpenCV简明教程</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\2019\10\30\f5c80354\" rel="bookmark">利用Python进行数据分析</a></div>
+    </li>
+  </ul>
+
+      
+        <div class="reward-container">
+  <div>您的支持将鼓励我继续创作！</div>
+  <button disable="enable" onclick="var qr = document.getElementById(&quot;qr&quot;); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/uploads/wechatpay.png" alt="AndyFree96 微信支付">
+        <p>微信支付</p>
+      </div>
+      
+      <div style="display: inline-block;">
+        <img src="/uploads/alipay.png" alt="AndyFree96 支付宝">
+        <p>支付宝</p>
+      </div>
+
+  </div>
+</div>
+
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>AndyFree96
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://andyfree96.github.io/2019/11/01/7e933fdb/" title="Requests库使用">https://andyfree96.github.io/2019/11/01/7e933fdb/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/null" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Python/" rel="tag"><i class="fa fa-tag"></i>Python</a>
+              <a href="/tags/Requests/" rel="tag"><i class="fa fa-tag"></i>Requests</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/2019/10/30/f5c80354/" rel="next" title="利用Python进行数据分析">
+                  <i class="fa fa-chevron-left"></i> 利用Python进行数据分析
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+                <a href="/2019/11/02/9f997735/" rel="prev" title="Tkinter简明教程">
+                  Tkinter简明教程 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    
+  <div class="comments" id="comments">
+    <div id="lv-container" data-id="city" data-uid="MTAyMC80NzkxOC8yNDQxNQ"></div>
+  </div>
+  
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#安装Requests"><span class="nav-text">安装Requests</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#发送请求"><span class="nav-text">发送请求</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#传递URL参数"><span class="nav-text">传递URL参数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#响应内容"><span class="nav-text">响应内容</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二进制响应内容"><span class="nav-text">二进制响应内容</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JSON响应内容"><span class="nav-text">JSON响应内容</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#定制请求头"><span class="nav-text">定制请求头</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#POST请求"><span class="nav-text">POST请求</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#响应状态码"><span class="nav-text">响应状态码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#响应头"><span class="nav-text">响应头</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Cookie"><span class="nav-text">Cookie</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#超时"><span class="nav-text">超时</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#错误与异常"><span class="nav-text">错误与异常</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#代理"><span class="nav-text">代理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-text">参考</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <img class="site-author-image" itemprop="image" alt="AndyFree96"
+    src="/uploads/avatar.jpg">
+  <p class="site-author-name" itemprop="name">AndyFree96</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">19</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">20</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/AndyFree96" title="GitHub &amp;rarr; https:&#x2F;&#x2F;github.com&#x2F;AndyFree96" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:leoscotthg@gmail.com" title="E-Mail &amp;rarr; mailto:leoscotthg@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/IRONAnthony" title="Weibo &amp;rarr; https:&#x2F;&#x2F;weibo.com&#x2F;IRONAnthony" rel="noopener" target="_blank"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/IRONAnthony96" title="Twitter &amp;rarr; https:&#x2F;&#x2F;twitter.com&#x2F;IRONAnthony96" rel="noopener" target="_blank"><i class="fa fa-fw fa-twitter"></i>Twitter</a>
+      </span>
+  </div>
+
+
+
+      </div>
+	  
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 2019 – 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">AndyFree96</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+      <span class="post-meta-item-text">站点总字数：</span>
+    <span title="站点总字数">107k</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.0.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.4.2
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script pjax async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/pjax/pjax.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/pangu@4/dist/browser/pangu.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+  <script>
+var pjax = new Pjax({
+  selectors: [
+    'head title',
+    '#page-configurations',
+    '.content-wrap',
+    '.post-toc-wrap',
+    '#pjax'
+  ],
+  switches: {
+    '.post-toc-wrap': Pjax.switches.innerHTML
+  },
+  analytics: false,
+  cacheBust: false,
+  scrollTo : !CONFIG.bookmark.enable
+});
+
+window.addEventListener('pjax:success', () => {
+  document.querySelectorAll('script[pjax], script#page-configurations, #pjax script').forEach(element => {
+    var code = element.text || element.textContent || element.innerHTML || '';
+    var parent = element.parentNode;
+    parent.removeChild(element);
+    var script = document.createElement('script');
+    if (element.id) {
+      script.id = element.id;
+    }
+    if (element.className) {
+      script.className = element.className;
+    }
+    if (element.type) {
+      script.type = element.type;
+    }
+    if (element.src) {
+      script.src = element.src;
+      // Force synchronous loading of peripheral JS.
+      script.async = false;
+    }
+    if (element.getAttribute('pjax') !== null) {
+      element.setAttribute('pjax', '');
+    }
+    if (code !== '') {
+      script.appendChild(document.createTextNode(code));
+    }
+    parent.appendChild(script);
+  });
+  NexT.boot.refresh();
+  // Define Motion Sequence & Bootstrap Motion.
+  if (CONFIG.motion.enable) {
+    NexT.motion.integrator
+      .init()
+      .add(NexT.motion.middleWares.postList)
+      .bootstrap();
+  }
+  NexT.utils.updateSidebarPosition();
+});
+</script>
+
+
+
+
+  
+  <script pjax>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+
+
+  <script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+    <div id="pjax">
+
+  
+
+  
+
+  
+
+<script>
+  window.livereOptions = {
+    refer: location.pathname.replace(CONFIG.root, '').replace('index.html', '')
+  };
+  (function(d, s) {
+    var j, e = d.getElementsByTagName(s)[0];
+    if (typeof LivereTower === 'function') { return; }
+    j = d.createElement(s);
+    j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+    j.async = true;
+    e.parentNode.insertBefore(j, e);
+  })(document, 'script');
+</script>
+
+    </div>
+  
+  
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":true}});</script></body>
+</html>
