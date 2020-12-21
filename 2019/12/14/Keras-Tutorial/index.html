@@ -68,10 +68,10 @@
 <meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;201912&#x2F;2&#x2F;7.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;201912&#x2F;2&#x2F;8.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;201912&#x2F;2&#x2F;10.png">
-<meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;201912&#x2F;2&#x2F;CNN-example-block-diagram.jpg">
+<meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;201912&#x2F;2&#x2F;cnn-diagram.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;201912&#x2F;2&#x2F;11.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;201912&#x2F;2&#x2F;12.png">
-<meta property="og:updated_time" content="2019-12-23T11:04:36.379Z">
+<meta property="og:updated_time" content="2020-12-21T02:31:45.410Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;201912&#x2F;2&#x2F;1.png">
 
@@ -253,7 +253,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-12-23 19:04:36" itemprop="dateModified" datetime="2019-12-23T19:04:36+08:00">2019-12-23</time>
+                <time title="修改时间：2020-12-21 10:31:45" itemprop="dateModified" datetime="2020-12-21T10:31:45+08:00">2020-12-21</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -352,7 +352,7 @@
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">y_train = to_categorical(y_train, <span class="number">10</span>)</span><br><span class="line">y_test = to_categorical(y_test, <span class="number">10</span>)</span><br><span class="line">print(y_train.shape)</span><br><span class="line"><span class="comment"># (60000, 10)</span></span><br></pre></td></tr></table></figure>
 
 <h3 id="5-定义模型结构"><a href="#5-定义模型结构" class="headerlink" title="5. 定义模型结构"></a>5. 定义模型结构</h3><p>我们参照下图定义一个模型结构</p>
-<p><img src="/images/201912/2/CNN-example-block-diagram.jpg" alt></p>
+<p><img src="/images/201912/2/cnn-diagram.png" alt></p>
 <p>代码如下：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">model = Sequential()</span><br><span class="line">model.add(Conv2D(<span class="number">32</span>, kernel_size=(<span class="number">5</span>,<span class="number">5</span>), activation=<span class="string">'relu'</span>, input_shape=(img_x, img_y, <span class="number">1</span>)))</span><br><span class="line">model.add(MaxPool2D(pool_size=(<span class="number">2</span>,<span class="number">2</span>), strides=(<span class="number">2</span>,<span class="number">2</span>)))</span><br><span class="line">model.add(Conv2D(<span class="number">64</span>, kernel_size=(<span class="number">5</span>,<span class="number">5</span>), activation=<span class="string">'relu'</span>))</span><br><span class="line">model.add(MaxPool2D(pool_size=(<span class="number">2</span>,<span class="number">2</span>), strides=(<span class="number">2</span>,<span class="number">2</span>)))</span><br><span class="line">model.add(Flatten())</span><br><span class="line">model.add(Dense(<span class="number">1000</span>, activation=<span class="string">'relu'</span>))</span><br><span class="line">model.add(Dense(<span class="number">10</span>, activation=<span class="string">'softmax'</span>))</span><br></pre></td></tr></table></figure>
 
