@@ -1,6 +1,81 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>用Excel进行数据处理</title>
+    <url>/2020/12/21/%E7%94%A8Excel%E8%BF%9B%E8%A1%8C%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86/</url>
+    <content><![CDATA[<p>Excel是一款常用的办公软件，它的功能强大，本文我们将学习如何使用Excel 2019进行数据处理。</p><h2 id="导入数据"><a href="#导入数据" class="headerlink" title="导入数据"></a>导入数据</h2><p>本文使用的数据来自<a href="https://peltiertech.com/wp-content/uploads/2018/06/This%20Week' target=" _blank" rel="noopener" s%20garbage%20data%20file.xlsx">This Week’s Garbage Data File.xlsx</a>。</p><p><img src="/images/202012/1/1.png" alt></p><p>数据格式如上所示：</p><ol>
+<li>表示销售日期</li>
+<li>表示销售人员名称和ID</li>
+<li>表示销售区域</li>
+<li>表示总计</li>
+</ol><p>为了对其进行数据预处理，我们可以先打开Excel 2019，单击【数据】，选择【获取数据】下的【自文件】，点击【从工作簿】。</p><a id="more"></a>
+
+
+
+
+
+<p><img src="/images/202012/1/2.png" alt></p>
+<p>选择想要处理的文件，</p>
+<p><img src="/images/202012/1/3.png" alt></p>
+<p>点击【编辑】，即可进入Power Query界面。</p>
+<p><img src="/images/202012/1/4.png" alt></p>
+<h2 id="数据处理"><a href="#数据处理" class="headerlink" title="数据处理"></a>数据处理</h2><p>接下来，我们将导入的数据进行处理。</p>
+<h3 id="拆分列"><a href="#拆分列" class="headerlink" title="拆分列"></a>拆分列</h3><p>可以看到销售日期和”Sales for: “混合在一起了，我们可以将其拆分。</p>
+<p><img src="/images/202012/1/5.png" alt></p>
+<p>在<code>Column1</code>上单击鼠标右键，选择【拆分列】-&gt; 【按分隔符】。</p>
+<p><img src="/images/202012/1/6.png" alt></p>
+<p>在弹出的对话框中选择用冒号作为分隔符，点击【确定】。</p>
+<p><img src="/images/202012/1/7.png" alt></p>
+<p>可以看到原本的一列被拆分成了两列。</p>
+<h3 id="填充"><a href="#填充" class="headerlink" title="填充"></a>填充</h3><p>拆分得到的<code>Column1.2</code>列有很多空值，我们可以对其填充。</p>
+<p>在<code>Column1.2</code>上单击鼠标右键，选择【填充】-&gt; 【向下】。</p>
+<p><img src="/images/202012/1/8.png" alt></p>
+<p>可以看到，日期被正确填充了。</p>
+<p><img src="/images/202012/1/9.png" alt></p>
+<h3 id="修整"><a href="#修整" class="headerlink" title="修整"></a>修整</h3><p><code>Column1.1</code>列中销售人员名称前有一些空白符，我们将其清除。</p>
+<p><img src="/images/202012/1/10.png" alt></p>
+<p>在<code>Column1.1</code>上单击鼠标右键，选择【转换】-&gt; 【修整】。</p>
+<p>可以看到空白符都被清除掉啦！</p>
+<p><img src="/images/202012/1/11.png" alt></p>
+<h3 id="筛选行"><a href="#筛选行" class="headerlink" title="筛选行"></a>筛选行</h3><p>表中的有些行我们是不想要的，比如：</p>
+<p><img src="/images/202012/1/12.png" alt></p>
+<p>此时，我们可以鼠标左击<code>Column1.1</code>上的下箭头，只勾选想要的数据。</p>
+<p><img src="/images/202012/1/13.png" alt></p>
+<p>可以看到，没有勾选的数据行都被过滤掉了。</p>
+<p><img src="/images/202012/1/14.png" alt></p>
+<p>但销售人员名称和ID还是混合在了一起，我们可以对其进行拆分，具体操作大家可以自行尝试，结果如下：</p>
+<p><img src="/images/202012/1/15.png" alt></p>
+<h3 id="替换值"><a href="#替换值" class="headerlink" title="替换值"></a>替换值</h3><p>拆分得到的<code>Column1.1.2</code>列都包含了一个“)”字符，我们可以将其去掉。</p>
+<p><img src="/images/202012/1/16.png" alt></p>
+<p>在<code>Column1.1.2</code>上单击鼠标右键，选择【替换值】，在弹出的对话框中，</p>
+<p><img src="/images/202012/1/17.png" alt></p>
+<p>要查找的值为“)”，点击确定，结果如下：</p>
+<p><img src="/images/202012/1/18.png" alt></p>
+<h3 id="重命名"><a href="#重命名" class="headerlink" title="重命名"></a>重命名</h3><p>鼠标右击列名，选择【重命名】可以更改列名，最终的修改结果如下：</p>
+<p><img src="/images/202012/1/19.png" alt></p>
+<h3 id="逆透视列"><a href="#逆透视列" class="headerlink" title="逆透视列"></a>逆透视列</h3><p>选中<code>North</code>，<code>East</code>，<code>South</code>和<code>West</code>四列，在列名上单击鼠标右键，选择【逆透视列】。</p>
+<p><img src="/images/202012/1/20.png" alt></p>
+<p>结果如下所示：</p>
+<p><img src="/images/202012/1/21.png" alt></p>
+<p>将<code>属性</code>列和<code>值</code>列分别重新命名为<code>Region</code>和<code>Sale</code>。</p>
+<p><img src="/images/202012/1/22.png" alt></p>
+<p>到此，我们将数据处理好了，选择【开始】标签下的【关闭并上载至】。</p>
+<p><img src="/images/202012/1/23.png" alt></p>
+<p>在弹出的对话框中点击【确定】。</p>
+<p><img src="/images/202012/1/24.png" alt></p>
+<p>处理好的数据就可被添加到一个新的工作表中。</p>
+<p><img src="/images/202012/1/25.png" alt></p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>本文我们简要地介绍了如何使用Excel 2019进行数据处理，包括导入数据，拆分列，填充，修整，筛选行，替换值，重命名和逆透视列。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://peltiertech.com/importing-cleaning-data-power-query/" target="_blank" rel="noopener">https://peltiertech.com/importing-cleaning-data-power-query/</a></p>
+]]></content>
+      <categories>
+        <category>数据分析</category>
+      </categories>
+      <tags>
+        <tag>Excel</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>开发第一个Phaser3游戏</title>
     <url>/2019/12/30/%E5%BC%80%E5%8F%91%E7%AC%AC%E4%B8%80%E4%B8%AAPhaser3%E6%B8%B8%E6%88%8F/</url>
     <content><![CDATA[<h2 id="1-前言"><a href="#1-前言" class="headerlink" title="1. 前言"></a>1. 前言</h2><p><img src="/images/201912/6/1.png" alt></p><p>这是我们第一个用<code>Phaser3</code>开发游戏的教程。我们将学习如何创建一个小游戏，包括玩家在平台上跑和跳，收集星星并避免一些不好的行为。</p><h3 id="什么是Phaser？"><a href="#什么是Phaser？" class="headerlink" title="什么是Phaser？"></a>什么是Phaser？</h3><p><code>Phaser</code>是一个HTML5旨在帮助开发者创建强大、跨浏览器的HTML5游戏的框架。它是利用现代浏览器(桌面版和移动版)的优势而专门创建的。 对浏览器的唯一要求是对<code>Canvas</code>标签的支持。</p><a id="more"></a>
