@@ -343,19 +343,15 @@
 <p><img src="/images/201911/4/18.png" alt></p>
 <h2 id="安装ShadowsocksR"><a href="#安装ShadowsocksR" class="headerlink" title="安装ShadowsocksR"></a>安装ShadowsocksR</h2><p>打开Xshell连接上亚马逊云服务器。依次输入以下命令：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">sudo -i</span><br><span class="line"></span><br><span class="line">wget –no-check-certificate https://raw.githubusercontent.com/teddysun/shadowsocks_install/master/shadowsocks-all.sh</span><br><span class="line"></span><br><span class="line">chmod +x shadowsocks-all.sh</span><br><span class="line"></span><br><span class="line">./shadowsocks-all.sh <span class="number">2</span>&gt;&amp;<span class="number">1</span> | tee shadowsocks-all.log</span><br></pre></td></tr></table></figure>
-
 <p>选择选项2.<code>ShadowsocksR</code>，输入密码和端口，其他的选项默认就好。安装脚本运行结束后，会显示如下内容</p>
 <p><img src="/images/201911/4/19.png" alt></p>
 <p>接下来，我们更改一下配置文件。输入命令：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim /etc/shadowsocks-r/config.json</span><br></pre></td></tr></table></figure>
-
 <p>按键盘上的字母<code>i</code>进行编辑文件。进行如下更改：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">"protocol"</span>:<span class="string">"origin"</span></span><br><span class="line"><span class="comment"># 改为</span></span><br><span class="line"><span class="string">"protocol"</span>:<span class="string">"auth_sha1_v4"</span></span><br><span class="line"></span><br><span class="line"><span class="string">"obfs"</span>:<span class="string">"plain"</span></span><br><span class="line"><span class="comment"># 改为</span></span><br><span class="line"><span class="string">"obfs"</span>:<span class="string">"tls1.2_ticket_auth"</span></span><br></pre></td></tr></table></figure>
-
 <p>按键盘左上角的<code>Esc</code>键，输入<code>:wq</code>保存更改并退出编辑。</p>
 <p>重启ShadowsocksR：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/etc/init.d/shadowsocks-r restart</span><br></pre></td></tr></table></figure>
-
 <p>下载客户端：</p>
 <p><a href="https://github.com/shadowsocksrr/shadowsocksr-csharp/releases" target="_blank" rel="noopener">ShadowsocksR for Windows</a></p>
 <p><a href="https://github.com/shadowsocksrr/shadowsocksr-android/releases" target="_blank" rel="noopener">ShadowsocksR for Android</a></p>
@@ -500,7 +496,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">21</span>
+          <span class="site-state-item-count">23</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -563,7 +559,7 @@
       <i class="fa fa-area-chart"></i>
     </span>
       <span class="post-meta-item-text">站点总字数：</span>
-    <span title="站点总字数">113k</span>
+    <span title="站点总字数">119k</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.0.0
   </div>

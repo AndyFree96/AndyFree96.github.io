@@ -308,14 +308,11 @@
 <p>点击下载安装包，然后双击安装即可。</p>
 <h3 id="配置Git"><a href="#配置Git" class="headerlink" title="配置Git"></a>配置Git</h3><p>Git会跟踪到底是谁修改了项目，哪怕参与项目开发的人只有一个。为此，Git需要知道你的用户名和电子邮件地址。你必须提供用户名，但可以使用虚构的电子邮件地址：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ git config --<span class="keyword">global</span> user.name <span class="string">"username"</span></span><br><span class="line">$ git config --<span class="keyword">global</span> user.email <span class="string">"username@example.com"</span></span><br></pre></td></tr></table></figure>
-
 <p>如果忘记了这一步，在你首次提交时，Git将提示你提供这些信息。</p>
 <h2 id="创建项目"><a href="#创建项目" class="headerlink" title="创建项目"></a>创建项目</h2><p>我们来创建一个要进行版本控制的项目。在你的系统中创建一个目录，并将其命名为<code>learn_git</code>。在这个目录中，创建一个简单的Python程序：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># hello_world.py</span></span><br><span class="line"></span><br><span class="line">print(<span class="string">"Hello Git World!"</span>)</span><br></pre></td></tr></table></figure>
-
 <h2 id="忽略文件"><a href="#忽略文件" class="headerlink" title="忽略文件"></a>忽略文件</h2><p>扩展名为<code>.pyc</code>的文件是根据<code>.py</code>文件自动生成的，因此我们无需让Git跟踪它们。这些文件存储在<code>__pycache__</code>目录中。为了让Git忽略这个目录，创建一个名为<code>.gitignore</code>的特殊文件，并将下面类容添加到文件中：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">__pycache__/</span><br></pre></td></tr></table></figure>
-
 <p><img src="/images/201911/3/2.png" alt></p>
 <p>这让Git忽略目录<code>__pycache__</code>中的所有文件。使用<code>.gitignore</code>文件可以避免项目混乱。</p>
 <h2 id="初始化仓库"><a href="#初始化仓库" class="headerlink" title="初始化仓库"></a>初始化仓库</h2><p>现在的<code>learn_git</code>只是一个普通的目录，包含了一个<code>Python</code>文件和一个<code>.gitignore</code>文件，为了对其进行版本控制需要使用Git进行初始化一下。打开一个终端窗口，切换到<code>learn_git</code>目录，并执行如下命令：</p>
@@ -327,7 +324,6 @@
 <p>在Git中，<strong>分支</strong>是项目的一个版本。从这里的输出可知，我们位于分支<code>master</code>上（见1）。Git指出了项目中未被跟踪的文件（见2），因为我们还没有告诉它要跟踪哪些文件。<strong>提交</strong>是项目在特定时间点的快照。此时，我们被告知没有将任何东西添加到当前提交中，但我们需要将未跟踪的文件加入到仓库中（见3）。</p>
 <h2 id="将文件加入到仓库中"><a href="#将文件加入到仓库中" class="headerlink" title="将文件加入到仓库中"></a>将文件加入到仓库中</h2><p>下面将之前的两个文件加入到仓库中</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git add .</span><br></pre></td></tr></table></figure>
-
 <p>再次检查状态：</p>
 <p><img src="/images/201911/3/6.png" alt></p>
 <p>命令<code>git add .</code>将项目中未被跟踪的所有文件都加入到仓库中。它不提交这些文件，而只是让Git开始关注它们。当我们检查项目的状态时，Git找出了需要提交的一些修改。标签<code>new file</code>意味着这些文件是新添加到仓库中的。</p>
@@ -342,7 +338,6 @@
 <p>选项<code>--pretty=oneline</code>指定显示两项最重要的信息：提交的引用ID以及为提交记录的消息。</p>
 <h2 id="第二次提交"><a href="#第二次提交" class="headerlink" title="第二次提交"></a>第二次提交</h2><p>我们在<code>hello_world.py</code>中再添加一行代码：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># hello_world.py</span></span><br><span class="line"></span><br><span class="line">print(<span class="string">"Hello Git World!"</span>)</span><br><span class="line">print(<span class="string">"Hello everyone."</span>)</span><br></pre></td></tr></table></figure>
-
 <p>查看项目状态，Git注意到了这个文件发生了变化：</p>
 <p><img src="/images/201911/3/11.png" alt></p>
 <p>输出指出了我们当前所在的分支、被修改了的文件的名称，还指出了所做的修改未提交。接下来我们提交所做的修改，并再次查看状态：</p>
@@ -352,7 +347,6 @@
 <p><img src="/images/201911/3/13.png" alt></p>
 <h2 id="撤销修改"><a href="#撤销修改" class="headerlink" title="撤销修改"></a>撤销修改</h2><p>下面来看看如何放弃所做的修改，恢复到前一个可行状态。为此，首先在<code>hello_world.py</code>中再加一行代码：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># hello_world.py</span></span><br><span class="line"></span><br><span class="line">print(<span class="string">"Hello Git World!"</span>)</span><br><span class="line">print(<span class="string">"Hello everyone."</span>)</span><br><span class="line"></span><br><span class="line">print(<span class="string">"Oh no, I broke the project!"</span>)</span><br></pre></td></tr></table></figure>
-
 <p>保存并查看状态：</p>
 <p><img src="/images/201911/3/14.png" alt></p>
 <p>Git注意到我们修改了<code>hello_world.py</code>。我们可以提交所做的修改，但这次我们不提交所做的修改，而要恢复到最后一个提交（那次提交时项目能够正常地运行）。为此，我们不对<code>hello_world.py</code>执行任何操作——不删除刚添加的代码行，也不使用文本编辑器的撤销功能，而在终端会话中执行如下命令：</p>
@@ -508,7 +502,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">21</span>
+          <span class="site-state-item-count">23</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -571,7 +565,7 @@
       <i class="fa fa-area-chart"></i>
     </span>
       <span class="post-meta-item-text">站点总字数：</span>
-    <span title="站点总字数">113k</span>
+    <span title="站点总字数">119k</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.0.0
   </div>

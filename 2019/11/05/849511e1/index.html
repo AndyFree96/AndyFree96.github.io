@@ -300,7 +300,6 @@
 <h3 id="Excel文档"><a href="#Excel文档" class="headerlink" title="Excel文档"></a>Excel文档</h3><p>一个Excel电子表格文件称为一个工作簿。一个工作簿保存在扩展名为.xlsx的文件中。每个工作簿可以包含多个表（也称为工作表）。用户当前查看的表（或关闭Excel前最后查看的表）称为活动表。每个表都有一些列（地址是从A开始的字母）和一些行（地址是从1开始的数字）。在特定行和列的翻个称为单元格。每个单元格都包含一个数字或文本值。单元格形成的网格和数据构成了表。</p>
 <h3 id="安装openpyxl模块"><a href="#安装openpyxl模块" class="headerlink" title="安装openpyxl模块"></a>安装openpyxl模块</h3><p>Python没有自带openpyxl，所以必须自己安装。打开命令行输入</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install openpyxl</span><br></pre></td></tr></table></figure>
-
 <p>即可安装。</p>
 <h3 id="读取Excel文档"><a href="#读取Excel文档" class="headerlink" title="读取Excel文档"></a>读取Excel文档</h3><p>我们将使用名为example.xlsx的电子表格，可以在<a href="https://nostarch.com/automatestuff" target="_blank" rel="noopener">Automate the Boring Stuff with Python</a>处找到并下载。如下图所示，有3个默认的表，名为Sheet1、Sheet2和Sheet3，这是Excel自动为新工作簿提供的（不同操作系统和电子表格程序，提供的默认表个数可能会不同）。</p>
 <p><img src="/images/201911/7/1.jpeg" alt></p>
@@ -318,7 +317,6 @@
 <p><img src="/images/201911/7/5.jpeg" alt></p>
 <p>可以通过Worksheet对象的max_column和max_row属性，确定表的大小。</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sheet.max_column, sheet.max_row</span><br><span class="line"><span class="comment"># (3, 7)</span></span><br></pre></td></tr></table></figure>
-
 <h4 id="列字母和数字之间的转换"><a href="#列字母和数字之间的转换" class="headerlink" title="列字母和数字之间的转换"></a>列字母和数字之间的转换</h4><p>要从字母转换到数字，就调用<code>openpyxl.utils.column_index_from_string</code>函数。要从数字转换到字母，就调用<code>openpyxl.utils.get_column_letter()</code>函数。</p>
 <p><img src="/images/201911/7/6.jpeg" alt></p>
 <p>从openpyxl.utils模块引入这两个函数后，可以调用<code>get_column_letter()</code>，传入像27这样的整数，弄清楚第27列的字母是什么。函数<code>column_index_string</code>做的事情相反：传入一列的字母名称，它返回该列的数字是什么。</p>
@@ -332,7 +330,6 @@
 <p><img src="/images/201911/7/9.jpeg" alt></p>
 <p>当修改Workbook对象或它的工作表和单元格时，电子表格文件不会保存，除非调用<code>save()</code>工作簿方法。</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wb.save(<span class="string">'demo.xlsx'</span>)</span><br></pre></td></tr></table></figure>
-
 <p><img src="/images/201911/7/10.jpeg" alt></p>
 <h4 id="创建和删除工作表"><a href="#创建和删除工作表" class="headerlink" title="创建和删除工作表"></a>创建和删除工作表</h4><p>利用<code>create_sheet()</code>和<code>remove_sheet()</code>方法，可以在工作簿中添加或删除工作表。</p>
 <p><img src="/images/201911/7/11.jpeg" alt></p>
@@ -361,7 +358,6 @@
 </ul>
 <p>完整代码如下所示：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> openpyxl, pprint</span><br><span class="line"></span><br><span class="line"><span class="comment"># 用openpyxl模块打开Excel文档</span></span><br><span class="line">wb = openpyxl.load_workbook(<span class="string">'censuspopdata.xlsx'</span>)</span><br><span class="line">sheet = wb[<span class="string">'Population by Census Tract'</span>]</span><br><span class="line"><span class="comment"># 存储普查区数目和人口数据</span></span><br><span class="line">countryData = &#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> row <span class="keyword">in</span> range(<span class="number">2</span>,sheet.max_row+<span class="number">1</span>):</span><br><span class="line">    state = sheet[<span class="string">'B'</span>+str(row)].value</span><br><span class="line">    country = sheet[<span class="string">'C'</span>+str(row)].value</span><br><span class="line">    pop = sheet[<span class="string">'D'</span>+str(row)].value</span><br><span class="line">    </span><br><span class="line">    countryData.setdefault(state, &#123;&#125;)</span><br><span class="line">    </span><br><span class="line">    countryData[state].setdefault(country, &#123;<span class="string">'tracts'</span>:<span class="number">0</span>, <span class="string">'pop'</span>:<span class="number">0</span>&#125;)</span><br><span class="line">    </span><br><span class="line">    countryData[state][country][<span class="string">'tracts'</span>] += <span class="number">1</span></span><br><span class="line">    countryData[state][country][<span class="string">'pop'</span>] += int(pop)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 将数据存储到文件中</span></span><br><span class="line">resultFile = open(<span class="string">'census2010.py'</span>, <span class="string">'w'</span>)</span><br><span class="line">resultFile.write(<span class="string">'allData = '</span> + pprint.pformat(countryData))</span><br><span class="line">resultFile.close()</span><br></pre></td></tr></table></figure>
-
 <p>保存到census2010.py文件中的数据如下所示：</p>
 <p><img src="/images/201911/7/16.jpeg" alt></p>
 <h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><ul>
@@ -449,8 +445,8 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/2019/11/05/a1aabbc5/" rel="prev" title="李宏毅机器学习(一)引言">
-                  李宏毅机器学习(一)引言 <i class="fa fa-chevron-right"></i>
+                <a href="/2019/11/05/68d48c63/" rel="prev" title="李宏毅机器学习(二)学习导图">
+                  李宏毅机器学习(二)学习导图 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
           </div>
@@ -511,7 +507,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">21</span>
+          <span class="site-state-item-count">23</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -574,7 +570,7 @@
       <i class="fa fa-area-chart"></i>
     </span>
       <span class="post-meta-item-text">站点总字数：</span>
-    <span title="站点总字数">113k</span>
+    <span title="站点总字数">119k</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.0.0
   </div>

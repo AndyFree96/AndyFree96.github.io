@@ -309,10 +309,8 @@
 <p>再将<code>C:\Users\96233\.mujoco\mjpro150\bin</code>添加到系统环境变量<code>Path</code>中。</p>
 <p>安装以下两个包：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pip install gym</span><br><span class="line">pip install mujoco-py==<span class="number">1.50</span><span class="number">.1</span><span class="number">.56</span></span><br></pre></td></tr></table></figure>
-
 <h2 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h2><p>新建一个文件<code>mujoco_demo.py</code>，写入如下代码：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> gym</span><br><span class="line"></span><br><span class="line">env = gym.make(<span class="string">'Ant-v2'</span>)</span><br><span class="line">env.reset()</span><br><span class="line"><span class="keyword">for</span> _ <span class="keyword">in</span> range(<span class="number">1000</span>):</span><br><span class="line">    env.render()</span><br><span class="line">    <span class="comment"># take a random action</span></span><br><span class="line">    env.step(env.action_space.sample())</span><br></pre></td></tr></table></figure>
-
 <p>即可看到：</p>
 <p><img src="/images/201912/4/9.png" alt></p>
 
@@ -441,7 +439,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">21</span>
+          <span class="site-state-item-count">23</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -504,7 +502,7 @@
       <i class="fa fa-area-chart"></i>
     </span>
       <span class="post-meta-item-text">站点总字数：</span>
-    <span title="站点总字数">113k</span>
+    <span title="站点总字数">119k</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.0.0
   </div>

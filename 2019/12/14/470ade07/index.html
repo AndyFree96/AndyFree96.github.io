@@ -309,9 +309,7 @@
 <p>下载安装就好。</p>
 <p>之后，打开终端输入<code>pip install -i https://pypi.douban.com/simple keras</code></p>
 <p><img src="/images/201912/2/4.png" alt></p>
-<p>输入以下命令可以确认正常安装：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python -c <span class="string">"import keras;print(keras.__version__)"</span></span><br></pre></td></tr></table></figure>
-<p><img src="/images/201912/2/5.png" alt></p>
+<p>输入以下命令可以确认正常安装：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python -c <span class="string">"import keras;print(keras.__version__)"</span></span><br></pre></td></tr></table></figure><br><img src="/images/201912/2/5.png" alt></p>
 <p>当然，如果想直接使用<a href="https://colab.research.google.com/notebooks/welcome.ipynb#scrollTo=-Rh3-Vt9Nev9" target="_blank" rel="noopener">Colaboratory</a>的话，直接打开你的<a href="https://drive.google.com" target="_blank" rel="noopener">Google云端硬盘</a></p>
 <p><img src="/images/201912/2/6.png" alt></p>
 <p>为了方便起见，新建一个名为Keras的文件夹，进入Keras文件夹，单击鼠标右键</p>
@@ -322,48 +320,36 @@
 <p>搜索<code>Colaboratory</code>，并关联即可。</p>
 <h3 id="2-导入库和模块"><a href="#2-导入库和模块" class="headerlink" title="2. 导入库和模块"></a>2. 导入库和模块</h3><p>我们导入<code>Sequential</code>模型(相当于放积木的桌子)</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> keras.models <span class="keyword">import</span> Sequential</span><br></pre></td></tr></table></figure>
-
 <p>接下来，我们导入各种层(各种形状各异积木)</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> keras.layers <span class="keyword">import</span> Conv2D, MaxPool2D</span><br><span class="line"><span class="keyword">from</span> keras.layers <span class="keyword">import</span> Dense, Flatten</span><br></pre></td></tr></table></figure>
-
 <p>最后，我们导入<code>to_categorical</code>函数，以便之后对数据进行转换</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> keras.utils <span class="keyword">import</span> to_categorical</span><br></pre></td></tr></table></figure>
-
 <h3 id="3-加载数据"><a href="#3-加载数据" class="headerlink" title="3. 加载数据"></a>3. 加载数据</h3><p>MNIST是一个非常有名的手写数字数据集，我们可以使用Keras轻松加载它。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">from keras.datasets import mnist</span><br><span class="line"></span><br><span class="line">(x_train, y_train), (x_test, y_test) = mnist.load_data()</span><br></pre></td></tr></table></figure>
-
 <p>查看一下训练集的大小</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">print(x_train.shape)</span><br><span class="line"></span><br><span class="line"><span class="comment"># (60000, 28, 28)</span></span><br></pre></td></tr></table></figure>
-
 <p>可以看到60000个样本，它们都是28像素x28像素的。</p>
 <p>看一下这些手写数字长什么样</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">import matplotlib.pyplot as plt</span><br><span class="line">%matplotlib inline</span><br><span class="line">plt.imshow(x_train[0])</span><br></pre></td></tr></table></figure>
-
 <p><img src="/images/201912/2/10.png" alt></p>
 <h3 id="4-预处理数据"><a href="#4-预处理数据" class="headerlink" title="4. 预处理数据"></a>4. 预处理数据</h3><p>使用Keras是必须显式声明输入图像深度的尺寸。例如，具有所有3个RGB通道的全色图像的深度为3。</p>
 <p>我们的MNIST图像的深度为1，但我们必须明确声明。</p>
 <p>也就是说，我们希望将数据集从形状<code>(n,rows,cols)</code>转换为<code>(n,rows,cols,channels)</code>。</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">img_x, img_y = <span class="number">28</span>, <span class="number">28</span></span><br><span class="line"></span><br><span class="line">x_train = x_train.reshape(x_train.shape[<span class="number">0</span>], img_x, img_y, <span class="number">1</span>)</span><br><span class="line">x_test = x_test.reshape(x_test.shape[<span class="number">0</span>], img_x, img_y, <span class="number">1</span>)</span><br></pre></td></tr></table></figure>
-
 <p>除此之外，我们将数据标准化一下：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">x_train = x_train.astype(<span class="string">'float32'</span>)</span><br><span class="line">x_test = x_test.astype(<span class="string">'float32'</span>)</span><br><span class="line">x_train /= <span class="number">255</span></span><br><span class="line">x_test /= <span class="number">255</span></span><br></pre></td></tr></table></figure>
-
 <p>之后，将标记值(y_train, y_test)转换为<code>One-Hot Encode</code>的形式，至于为什么要这么做？请查看：<a href="https://machinelearningmastery.com/why-one-hot-encode-data-in-machine-learning/" target="_blank" rel="noopener">https://machinelearningmastery.com/why-one-hot-encode-data-in-machine-learning/</a></p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">y_train = to_categorical(y_train, <span class="number">10</span>)</span><br><span class="line">y_test = to_categorical(y_test, <span class="number">10</span>)</span><br><span class="line">print(y_train.shape)</span><br><span class="line"><span class="comment"># (60000, 10)</span></span><br></pre></td></tr></table></figure>
-
 <h3 id="5-定义模型结构"><a href="#5-定义模型结构" class="headerlink" title="5. 定义模型结构"></a>5. 定义模型结构</h3><p>我们参照下图定义一个模型结构</p>
 <p><img src="/images/201912/2/cnn-diagram.png" alt></p>
 <p>代码如下：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">model = Sequential()</span><br><span class="line">model.add(Conv2D(<span class="number">32</span>, kernel_size=(<span class="number">5</span>,<span class="number">5</span>), activation=<span class="string">'relu'</span>, input_shape=(img_x, img_y, <span class="number">1</span>)))</span><br><span class="line">model.add(MaxPool2D(pool_size=(<span class="number">2</span>,<span class="number">2</span>), strides=(<span class="number">2</span>,<span class="number">2</span>)))</span><br><span class="line">model.add(Conv2D(<span class="number">64</span>, kernel_size=(<span class="number">5</span>,<span class="number">5</span>), activation=<span class="string">'relu'</span>))</span><br><span class="line">model.add(MaxPool2D(pool_size=(<span class="number">2</span>,<span class="number">2</span>), strides=(<span class="number">2</span>,<span class="number">2</span>)))</span><br><span class="line">model.add(Flatten())</span><br><span class="line">model.add(Dense(<span class="number">1000</span>, activation=<span class="string">'relu'</span>))</span><br><span class="line">model.add(Dense(<span class="number">10</span>, activation=<span class="string">'softmax'</span>))</span><br></pre></td></tr></table></figure>
-
 <p>是不是有点搭积木的既视感？</p>
 <h3 id="6-编译"><a href="#6-编译" class="headerlink" title="6. 编译"></a>6. 编译</h3><p>现在，只需要编译模型，就可以开始训练了。当编译模型时，我们声明了损失函数和优化器（SGD，Adam等）。</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">model.compile(optimizer=<span class="string">'adam'</span>,</span><br><span class="line">              loss=<span class="string">'categorical_crossentropy'</span>,</span><br><span class="line">              metrics=[<span class="string">'accuracy'</span>])</span><br></pre></td></tr></table></figure>
-
 <p>Keras有很多<a href="https://keras.io/losses/" target="_blank" rel="noopener">损失函数</a>和<a href="https://keras.io/optimizers/" target="_blank" rel="noopener">优化器</a>供你选择。</p>
 <h3 id="7-训练"><a href="#7-训练" class="headerlink" title="7. 训练"></a>7. 训练</h3><p>接下来，我们传入训练集进行训练</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">model.fit(x_train, y_train, batch_size=<span class="number">128</span>, epochs=<span class="number">10</span>)</span><br></pre></td></tr></table></figure>
-
 <p>以下是在<code>Colaboratory</code>上训练的过程</p>
 <p><img src="/images/201912/2/11.png" alt></p>
 <p>以下是在个人电脑上训练的过程</p>
@@ -371,11 +357,9 @@
 <p>可以看到，花费的时间差别还是很大的！</p>
 <h3 id="8-评估模型"><a href="#8-评估模型" class="headerlink" title="8. 评估模型"></a>8. 评估模型</h3><p>最后，传入测试集对模型模型进行评估</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">score = model.evaluate(x_test, y_test)</span><br><span class="line">print(<span class="string">'acc'</span>, score[<span class="number">1</span>])</span><br><span class="line"><span class="comment"># acc 0.9926</span></span><br></pre></td></tr></table></figure>
-
 <p>准确率达到了%99以上！</p>
 <p>完整代码如下：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 2. 导入库和模块</span></span><br><span class="line"><span class="keyword">from</span> keras.models <span class="keyword">import</span> Sequential</span><br><span class="line"><span class="keyword">from</span> keras.layers <span class="keyword">import</span> Conv2D, MaxPool2D</span><br><span class="line"><span class="keyword">from</span> keras.layers <span class="keyword">import</span> Dense, Flatten</span><br><span class="line"><span class="keyword">from</span> keras.utils <span class="keyword">import</span> to_categorical</span><br><span class="line"></span><br><span class="line"><span class="comment"># 3. 加载数据</span></span><br><span class="line"><span class="keyword">from</span> keras.datasets <span class="keyword">import</span> mnist</span><br><span class="line">(x_train, y_train), (x_test, y_test) = mnist.load_data()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 4. 数据预处理</span></span><br><span class="line">img_x, img_y = <span class="number">28</span>, <span class="number">28</span></span><br><span class="line">x_train = x_train.reshape(x_train.shape[<span class="number">0</span>], img_x, img_y, <span class="number">1</span>)</span><br><span class="line">x_test = x_test.reshape(x_test.shape[<span class="number">0</span>], img_x, img_y, <span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">x_train = x_train.astype(<span class="string">'float32'</span>)</span><br><span class="line">x_test = x_test.astype(<span class="string">'float32'</span>)</span><br><span class="line">x_train /= <span class="number">255</span></span><br><span class="line">x_test /= <span class="number">255</span></span><br><span class="line"></span><br><span class="line">y_train = to_categorical(y_train, <span class="number">10</span>)</span><br><span class="line">y_test = to_categorical(y_test, <span class="number">10</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 5. 定义模型结构</span></span><br><span class="line">model = Sequential()</span><br><span class="line">model.add(Conv2D(<span class="number">32</span>, kernel_size=(<span class="number">5</span>,<span class="number">5</span>), activation=<span class="string">'relu'</span>, input_shape=(img_x, img_y, <span class="number">1</span>)))</span><br><span class="line">model.add(MaxPool2D(pool_size=(<span class="number">2</span>,<span class="number">2</span>), strides=(<span class="number">2</span>,<span class="number">2</span>)))</span><br><span class="line">model.add(Conv2D(<span class="number">64</span>, kernel_size=(<span class="number">5</span>,<span class="number">5</span>), activation=<span class="string">'relu'</span>))</span><br><span class="line">model.add(MaxPool2D(pool_size=(<span class="number">2</span>,<span class="number">2</span>), strides=(<span class="number">2</span>,<span class="number">2</span>)))</span><br><span class="line">model.add(Flatten())</span><br><span class="line">model.add(Dense(<span class="number">1000</span>, activation=<span class="string">'relu'</span>))</span><br><span class="line">model.add(Dense(<span class="number">10</span>, activation=<span class="string">'softmax'</span>))</span><br><span class="line"></span><br><span class="line"><span class="comment"># 6. 编译</span></span><br><span class="line">model.compile(optimizer=<span class="string">'adam'</span>,</span><br><span class="line">              loss=<span class="string">'categorical_crossentropy'</span>,</span><br><span class="line">              metrics=[<span class="string">'accuracy'</span>])</span><br><span class="line"></span><br><span class="line"><span class="comment"># 7. 训练</span></span><br><span class="line">model.fit(x_train, y_train, batch_size=<span class="number">128</span>, epochs=<span class="number">10</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 8. 评估模型</span></span><br><span class="line">score = model.evaluate(x_test, y_test)</span><br><span class="line">print(<span class="string">'acc'</span>, score[<span class="number">1</span>])</span><br></pre></td></tr></table></figure>
-
 <h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><ul>
 <li><a href="https://elitedatascience.com/keras-tutorial-deep-learning-in-python" target="_blank" rel="noopener">https://elitedatascience.com/keras-tutorial-deep-learning-in-python</a></li>
 <li><a href="http://adventuresinmachinelearning.com/keras-tutorial-cnn-11-lines/" target="_blank" rel="noopener">http://adventuresinmachinelearning.com/keras-tutorial-cnn-11-lines/</a></li>
@@ -506,7 +490,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">21</span>
+          <span class="site-state-item-count">23</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -569,7 +553,7 @@
       <i class="fa fa-area-chart"></i>
     </span>
       <span class="post-meta-item-text">站点总字数：</span>
-    <span title="站点总字数">113k</span>
+    <span title="站点总字数">119k</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.0.0
   </div>

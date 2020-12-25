@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.4.2',
+    exturl: false,
+    sidebar: {"position":"left","display":"always","offset":12,"onmobile":false},
+    copycode: {"enable":true,"show_result":true,"style":"mac"},
+    back2top: {"enable":false,"sidebar":false,"scrollpercent":true},
+    bookmark: {"enable":true,"color":"#222","save":"auto"},
+    fancybox: true,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: true,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":5,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    },
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="回归(Regression)任务需要输出一个数值(Scalar)。比如 预测股价  自动驾驶车   推荐系统   但我们并不想一开始就机器学习方法进行这么复杂的任务谈起，我们可以尝试做一个稍微有趣一些的任务——预测宝可梦进化后的CP(Combat Power，攻击力)值。这里用x表示宝可梦的属性值，y表示标签值。具体来说，x_{cp}表示进化前的CP值，x_w表示体重，x_h表示高度，x_s 表示">
+<meta name="keywords" content="公开课">
+<meta property="og:type" content="article">
+<meta property="og:title" content="李宏毅机器学习(三)回归">
+<meta property="og:url" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;2020&#x2F;12&#x2F;24&#x2F;d6d1d0f4&#x2F;index.html">
+<meta property="og:site_name" content="AndyFree96&#39;s Blog">
+<meta property="og:description" content="回归(Regression)任务需要输出一个数值(Scalar)。比如 预测股价  自动驾驶车   推荐系统   但我们并不想一开始就机器学习方法进行这么复杂的任务谈起，我们可以尝试做一个稍微有趣一些的任务——预测宝可梦进化后的CP(Combat Power，攻击力)值。这里用x表示宝可梦的属性值，y表示标签值。具体来说，x_{cp}表示进化前的CP值，x_w表示体重，x_h表示高度，x_s 表示">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;202012&#x2F;4&#x2F;1.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;202012&#x2F;4&#x2F;2.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;202012&#x2F;4&#x2F;3.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;202012&#x2F;4&#x2F;4.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;202012&#x2F;4&#x2F;5.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;202012&#x2F;4&#x2F;6.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;202012&#x2F;4&#x2F;7.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;202012&#x2F;4&#x2F;9.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;202012&#x2F;4&#x2F;10.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;202012&#x2F;4&#x2F;12.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;202012&#x2F;4&#x2F;13.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;202012&#x2F;4&#x2F;14.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;202012&#x2F;4&#x2F;15.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;202012&#x2F;4&#x2F;16.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;202012&#x2F;4&#x2F;19.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;202012&#x2F;4&#x2F;17.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;202012&#x2F;4&#x2F;18.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;202012&#x2F;4&#x2F;20.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;202012&#x2F;4&#x2F;21.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;202012&#x2F;4&#x2F;22.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;202012&#x2F;4&#x2F;23.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;202012&#x2F;4&#x2F;24.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;202012&#x2F;4&#x2F;25.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;202012&#x2F;4&#x2F;26.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;202012&#x2F;4&#x2F;27.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;202012&#x2F;4&#x2F;28.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;202012&#x2F;4&#x2F;29.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;202012&#x2F;4&#x2F;30.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;202012&#x2F;4&#x2F;32.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;202012&#x2F;4&#x2F;33.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;202012&#x2F;4&#x2F;34.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;202012&#x2F;4&#x2F;35.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;202012&#x2F;4&#x2F;36.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;202012&#x2F;4&#x2F;37.png">
+<meta property="og:updated_time" content="2020-12-25T01:10:06.611Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;202012&#x2F;4&#x2F;1.png">
+
+<link rel="canonical" href="https://andyfree96.github.io/2020/12/24/d6d1d0f4/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>李宏毅机器学习(三)回归 | AndyFree96's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">AndyFree96's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="none"
+           placeholder="搜索..." spellcheck="false"
+           type="text" id="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <a href="https://github.com/andyfree96" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://andyfree96.github.io/2020/12/24/d6d1d0f4/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.jpg">
+      <meta itemprop="name" content="AndyFree96">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="AndyFree96's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          李宏毅机器学习(三)回归
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-24 19:35:00" itemprop="dateCreated datePublished" datetime="2020-12-24T19:35:00+08:00">2020-12-24</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-12-25 09:10:06" itemprop="dateModified" datetime="2020-12-25T09:10:06+08:00">2020-12-25</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index">
+                    <span itemprop="name">机器学习</span>
+                  </a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>4.7k</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>回归(Regression)任务需要输出一个数值(Scalar)。比如</p><ul>
+<li>预测股价</li>
+</ul><p><img src="/images/202012/4/1.png" alt></p><ul>
+<li><p>自动驾驶车</p>
+<p><img src="/images/202012/4/2.png" alt></p>
+</li>
+<li><p>推荐系统</p>
+<p><img src="/images/202012/4/3.png" alt></p>
+</li>
+</ul><p>但我们并不想一开始就机器学习方法进行这么复杂的任务谈起，我们可以尝试做一个稍微有趣一些的任务——预测宝可梦进化后的CP(Combat Power，攻击力)值。</p><p><img src="/images/202012/4/4.png" alt></p><p>这里用<script type="math/tex">x</script>表示宝可梦的属性值，<script type="math/tex">y</script>表示标签值。具体来说，<script type="math/tex">x_{cp}</script>表示进化前的CP值，<script type="math/tex">x_w</script>表示体重，<script type="math/tex">x_h</script>表示高度，<script type="math/tex">x_s</script> 表示种类，<script type="math/tex">x_{hp}</script>表示生命值。</p><a id="more"></a>
+
+
+
+
+
+
+<h2 id="第一步：设计模型-Model"><a href="#第一步：设计模型-Model" class="headerlink" title="第一步：设计模型(Model)"></a>第一步：设计模型(Model)</h2><p>按照之前所学，机器学习第一步是定义一系列函数(设计模型)。比如我们可以将模型定为：<script type="math/tex">y=b+w·x_{cp}</script>，它蕴含着无限个函数，比如<script type="math/tex">f_1: y=10.0+9.0·x_{cp}</script>，<script type="math/tex">f_2:y=9.8+9.2·x_{cp}</script>等等。</p>
+<p><img src="/images/202012/4/5.png" alt></p>
+<p>像$y=b+\sum{w_i·x_i}$这类模型被称为线性模型(Linear model)，其中$x_i$代表属性，$w_i$代表权值，$b$称为偏置。</p>
+<h2 id="第二步：定义函数好坏-Goodness-of-Function"><a href="#第二步：定义函数好坏-Goodness-of-Function" class="headerlink" title="第二步：定义函数好坏(Goodness of Function)"></a>第二步：定义函数好坏(Goodness of Function)</h2><p>为了之后表达方便我们引进两个新符号，$x^n$表示第$n$个样例的属性值，$\hat{y}^n$表示第$n$个样例的标签值。</p>
+<p><img src="/images/202012/4/6.png" alt></p>
+<p>假设我们有10个样例数据，</p>
+<p><img src="/images/202012/4/7.png" alt></p>
+<p>对于定义的模型下的函数，我们可以构造一个损失函数$L$以表达函数预测值$y$与真实标签值$\hat{y}$之间的误差。</p>
+<p><img src="/images/202012/4/9.png" alt></p>
+<p>如上图所示，这里我们使用的损失函数为</p>
+<script type="math/tex; mode=display">
+L(f)=\sum_{n=1}^{10}{\left ( \hat{y}^n-f\left ( x_{cp}^{n} \right ) \right )^2}</script><p>即</p>
+<script type="math/tex; mode=display">
+L(f)=\sum_{n=1}^{10}{\left ( \hat{y}^n-\left ( b + w ·x_{cp}^{n} \right ) \right )^2}</script><p>对于不同的$w$和$b$，将10个样例数据代入$L$得到不同的损失值。</p>
+<p><img src="/images/202012/4/10.png" alt></p>
+<p>我们可以枚举$w$和$b$的可能取值，然后找到能使损失函数$L$取到最小取值的<script type="math/tex">w^*</script>和<script type="math/tex">b^*</script>，这样便可以确定模型中能使损失函数$L$取到最小值的最好函数<script type="math/tex">f^*</script>。但这种枚举的方法显然是很没有效率的，我们可以用更加高效的梯度下降(Gradient Descent)方法找到最好函数<script type="math/tex">f^*</script>。</p>
+<h2 id="第三步：选出最好的函数-Best-Function"><a href="#第三步：选出最好的函数-Best-Function" class="headerlink" title="第三步：选出最好的函数(Best Function)"></a>第三步：选出最好的函数(Best Function)</h2><p>在学习梯度下降方法之前，先捋一捋思路，我们的目标是找到<script type="math/tex">w^*</script>能使损失函数$L$取到最小值的最好函数<script type="math/tex">f^*</script>。</p>
+<p><img src="/images/202012/4/12.png" alt></p>
+<p>其实就是找到<script type="math/tex">f^*</script>对应的<script type="math/tex">w^*</script>和<script type="math/tex">b^*</script>。</p>
+<h3 id="梯度下降-Gradient-Descent"><a href="#梯度下降-Gradient-Descent" class="headerlink" title="梯度下降(Gradient Descent)"></a>梯度下降(Gradient Descent)</h3><p>我们先考虑模型只有一个参数$w$的情况，</p>
+<p><img src="/images/202012/4/13.png" alt></p>
+<p>首先，随机选一个$w$的初始值$w^0$，然后计算$\frac{\mathrm{d} L}{\mathrm{d} w}|_{w=w^0}$，若该值为负数，则要让$w$增大以减少$L$的值；若该值为正数，则要让$w$减小以减少$L$的值。由此，我们可以得到如下参数$w$的更新方式：</p>
+<p><img src="/images/202012/4/14.png" alt></p>
+<p>这里的<script type="math/tex">\frac{\mathrm{d} L}{\mathrm{d} w}|_{w=w^0}</script>可以这么理解：它表示损失函数$L$在<script type="math/tex">w^0</script>处的变化率，即单位$w$能让$L$的变化量。$\eta$称为学习速率(Learning Rate)。<script type="math/tex">\eta \frac{\mathrm{d} L}{\mathrm{d} w}|_{w=w^0}</script>就表示$\eta$个单位$w$让$L$的变化量，前面加一个负号就可以不用再考虑<script type="math/tex">\frac{\mathrm{d} L}{\mathrm{d} w}|_{w=w^0}</script>的正负。</p>
+<p><img src="/images/202012/4/15.png" alt></p>
+<p>经过上图所示的多次迭代，就可以得到能使$L$取到全局最小或局部最小的$w$值。多个参数的过程是类似的，</p>
+<p><img src="/images/202012/4/16.png" alt></p>
+<p>其中</p>
+<p><img src="/images/202012/4/19.png" alt></p>
+<p>梯度(Gradient)：</p>
+<p><img src="/images/202012/4/17.png" alt></p>
+<p>也就是梯度下降方法中梯度一词的由来。</p>
+<p>那么经过多次迭代，损失函数$L$一定会取到全局最小值吗？不一定，比如出现下述情况：</p>
+<p><img src="/images/202012/4/18.png" alt></p>
+<p>我们这里处理的损失函数是凸函数，它经过多次迭代后一定能取到全局最小值。</p>
+<h2 id="结果分析"><a href="#结果分析" class="headerlink" title="结果分析"></a>结果分析</h2><p>通过使用梯度下降方法，我们得到了该模型下最好的函数：</p>
+<p><img src="/images/202012/4/20.png" alt></p>
+<p>平均训练误差为31.9，但我们更加关心的是在测试集上的误差，因为它反映了模型的泛化能力。于是我们收集另外10个宝可梦作为测试集，得到的结果如下：</p>
+<p><img src="/images/202012/4/21.png" alt></p>
+<p>测试集上的平均误差比训练集上的误差大，那么问题来了，我们能做得更好吗？</p>
+<p>于是设计另一个模型——增加二次项，也用梯度下降方法得到模型下最好的函数。</p>
+<p><img src="/images/202012/4/22.png" alt></p>
+<p>效果好一些。可以做得更好吗？我们给模型再增加三次项。</p>
+<p><img src="/images/202012/4/23.png" alt></p>
+<p>稍微好一些。那么更加复杂的模型呢？</p>
+<p><img src="/images/202012/4/24.png" alt></p>
+<p>结果变糟了，但我们继续给模型增加五次项。</p>
+<p><img src="/images/202012/4/25.png" alt></p>
+<p>测试集上的平均误差“炸了”，远大于之前模型得到的测试集平均误差。</p>
+<h3 id="模型选择-Model-Selection"><a href="#模型选择-Model-Selection" class="headerlink" title="模型选择(Model Selection)"></a>模型选择(Model Selection)</h3><p>将训练集上的平均误差对比一下就可以发现，如果我们真的能找到每个模型下最好的函数，那么越复杂的模型下它的训练平均误差会越小。为什么会这样呢？下图可以给出一个解释，</p>
+<p><img src="/images/202012/4/26.png" alt></p>
+<p>复杂模型的包含简单模型的函数集，比如将二次模型的二次项权重置为0，它就等同于一次模型。如果我们真的能找到每个模型下最好的函数，复杂模型下的最好函数的训练误差不一定会比简单模型下的的最好函数的训练误差小，但一定不会更大。那么对于上述的五个模型，我们应该选择哪个呢？答案是三次模型。</p>
+<p><img src="/images/202012/4/27.png" alt></p>
+<p>复杂模型在训练集上的表现会更好一些，但在测试集上表现越不会如此。可以看到，三次之后的模型的测试集平均误差骤增，远大于训练集平均误差，这就出现所谓的过拟合(Overfitting)现象。对应了那句“你把简单问题想复杂了”。我们收集更多的数据，</p>
+<p><img src="/images/202012/4/28.png" alt></p>
+<p>似乎有别的因素影响宝可梦进化后的CP值，是什么呢？——物种。</p>
+<p><img src="/images/202012/4/29.png" alt></p>
+<p>这个属性是我们之前的模型没有考虑到的，既然它对CP值有影响，所以我们有必要重新设计模型。</p>
+<p><img src="/images/202012/4/30.png" alt></p>
+<p>设计了上述新模型后，我们可以用梯度下降方法找到最好的函数。它在训练集和测试集上的表现如下：</p>
+<p><img src="/images/202012/4/32.png" alt></p>
+<p>比之前的模型效果更好。考虑到宝可梦还有很多其它的属性，比如体重，血量，高度等等，我们可以设计更加复杂的模型：</p>
+<p><img src="/images/202012/4/33.png" alt></p>
+<p>模型过拟合了。有什么办法应对模型过拟合问题吗？当然有，比如说——正则化(Regularization)。</p>
+<h3 id="正则化-Regularization"><a href="#正则化-Regularization" class="headerlink" title="正则化(Regularization)"></a>正则化(Regularization)</h3><p>可以给之前的损失函数增加一项<script type="math/tex">\lambda\sum{(w_i)^2}</script>，称为正则项。</p>
+<p><img src="/images/202012/4/34.png" alt></p>
+<p>加入正则项是因为想让模型下的函数变得更加平滑一些，函数变得平滑的话，当从未见过的测试集上的<script type="math/tex">x</script>输入到函数中时，函数值不会应该数据集的变化而产生很大的变化，从而在测试集上的平均误差就可以有效地减少一些。其中，我们并没有将参数<script type="math/tex">b</script>加到正则项中，因为它对函数的平滑程度没有影响。</p>
+<p>那么如何让函数变得平滑呢？</p>
+<p>答案是让系数<script type="math/tex">\lambda</script>增大。当<script type="math/tex">\lambda</script>越大，就意味着我们越发需要考虑正则项对整体损失函数的影响，为了让整体损失函数值减小，权值<script type="math/tex">w</script>应该相应减小。权值<script type="math/tex">w</script>越小，函数自然变得更加平滑，从而达到目的。</p>
+<p><img src="/images/202012/4/35.png" alt></p>
+<p>$\lambda$可以控制函数的平滑程度，但我们也不希望它太大，而是要选到合适值。如果太大，函数会变得很“佛系”(比如$w$的值都为0，函数变成$y=b$)，不管$x$怎么变，我就这样了，也就是对$x$太不敏感，这就会造成损失函数在训练集和测试集上的损失值变大。</p>
+<h2 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h2><p>这里做一个简单的示例，我们将模型设计为：</p>
+<script type="math/tex; mode=display">
+y=b+w·x_{cp}</script><p>误差函数为：</p>
+<script type="math/tex; mode=display">
+L(w,b)=\frac{1}{N}\sum_{n=1}^{N}{\left ( \hat{y}^n-\left ( b + w ·x_{cp}^{n} \right ) \right )^2}</script><p>数据可以在<a href="https://www.openintro.org/book/statdata/index.php?data=pokemon" target="_blank" rel="noopener">此处下载</a>。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"></span><br><span class="line">df = pd.read_csv(<span class="string">"pokemon.csv"</span>)</span><br><span class="line">data = df[[<span class="string">'cp'</span>, <span class="string">'cp_new'</span>]].values</span><br><span class="line">test_size = <span class="number">0.33</span></span><br><span class="line">epsilon = <span class="number">0.001</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">compute_error</span><span class="params">(b, w, points)</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    计算平均损失</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    x = points[:, <span class="number">0</span>]</span><br><span class="line">    y = points[:, <span class="number">1</span>]</span><br><span class="line">    <span class="keyword">return</span> np.mean((y - (w * x + b))**<span class="number">2</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">step_gradient</span><span class="params">(b, w, points, learning_rate)</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    计算新的w和b的值</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    x = points[:, <span class="number">0</span>]</span><br><span class="line">    y = points[:, <span class="number">1</span>]</span><br><span class="line">    error = y - (w * x + b)</span><br><span class="line">    b_gradient = <span class="number">2</span> * np.mean(error)</span><br><span class="line">    w_gradient = <span class="number">2</span> * np.mean(error * (-x))</span><br><span class="line">    b_new = b - (learning_rate * b_gradient)</span><br><span class="line">    w_new = w - (learning_rate * w_gradient)</span><br><span class="line">    <span class="keyword">return</span> b_new, w_new</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></span><br><span class="line">    train_data = data[:-int(test_size * len(data))]</span><br><span class="line">    test_data = data[-int(test_size * len(data)):]</span><br><span class="line">    plt.figure(figsize=(<span class="number">20</span>, <span class="number">10</span>))</span><br><span class="line">    plt.axis([<span class="number">0</span>, <span class="number">500</span>, <span class="number">0</span>, <span class="number">780</span>])</span><br><span class="line">    plt.ylabel(<span class="string">"cp_new"</span>)</span><br><span class="line">    plt.xlabel(<span class="string">"cp"</span>)</span><br><span class="line">    plt.scatter(train_data[:, <span class="number">0</span>], train_data[:, <span class="number">1</span>], label=<span class="string">"train"</span>)</span><br><span class="line">    plt.scatter(test_data[:, <span class="number">0</span>], test_data[:, <span class="number">1</span>], label=<span class="string">'test'</span>)</span><br><span class="line">    plt.legend()</span><br><span class="line"></span><br><span class="line">    w = <span class="number">0.0</span></span><br><span class="line">    b = <span class="number">0.0</span></span><br><span class="line">    learning_rate = <span class="number">0.00001</span></span><br><span class="line">    x = np.arange(<span class="number">500</span>)</span><br><span class="line">    y = w * x + b</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">200</span>):</span><br><span class="line">        np.random.shuffle(data)</span><br><span class="line">        train_data_ = data[:-int(<span class="number">0.1</span> * len(data))]</span><br><span class="line">        test_data_ = data[-int(<span class="number">0.1</span> * len(data)):]</span><br><span class="line">        train_error = compute_error(b, w, train_data_)</span><br><span class="line">        test_error = compute_error(b, w, test_data_)</span><br><span class="line">        print(<span class="string">"&#123;&#125;. 训练平均误差:"</span>.format(i + <span class="number">1</span>), train_error, <span class="string">"测试平均误差:"</span>, test_error)</span><br><span class="line">        <span class="keyword">if</span> (train_error &gt; epsilon):</span><br><span class="line">            y = w * x + b</span><br><span class="line">            b, w = step_gradient(b, w, train_data_, learning_rate)</span><br><span class="line">            print(<span class="string">"&#123;&#125;. w:&#123;&#125; b:&#123;&#125;"</span>.format(i + <span class="number">1</span>, w, b))</span><br><span class="line">    print(<span class="string">"测试平均误差:"</span>, compute_error(b, w, test_data))</span><br><span class="line">    plt.plot(x, y)</span><br><span class="line">    plt.show()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>
+<p>训练结果如下：</p>
+<p><img src="/images/202012/4/36.png" alt></p>
+<p>误差为：</p>
+<p><img src="/images/202012/4/37.png" alt></p>
+<p>从结果上来看，模型还存在一些问题，但这个例子只是为了做个演示。</p>
+<p>当然，<a href="https://scikit-learn.org/stable/modules/classes.html#module-sklearn.linear_model" target="_blank" rel="noopener"><code>sklearn.linear_model.LinearRegression</code></a>也是方便好用的。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>本节我们进一步了解到机器的三个步骤，学习了机器学习中为解决回归这一任务的一种方法——线性模型。为了找到模型中最好的函数，我们使用了一种名为梯度下降的方法。然而设计的模型并不能万能的，它可能会出现各种问题，比如过拟合，我们可以尝试用正则化的技术解决它。</p>
+
+    </div>
+
+    
+    
+    
+      
+  <div class="popular-posts-header">相关文章</div>
+  <ul class="popular-posts">
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\2019\11\05\a1aabbc5\" rel="bookmark">李宏毅机器学习(一)引言</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\2019\11\05\68d48c63\" rel="bookmark">李宏毅机器学习(二)学习导图</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\2020\12\24\c9d935ab\" rel="bookmark">李宏毅机器学习(四)误差</a></div>
+    </li>
+  </ul>
+
+      
+        <div class="reward-container">
+  <div>您的支持将鼓励我继续创作！</div>
+  <button disable="enable" onclick="var qr = document.getElementById(&quot;qr&quot;); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/uploads/wechatpay.png" alt="AndyFree96 微信支付">
+        <p>微信支付</p>
+      </div>
+      
+      <div style="display: inline-block;">
+        <img src="/uploads/alipay.png" alt="AndyFree96 支付宝">
+        <p>支付宝</p>
+      </div>
+
+  </div>
+</div>
+
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>AndyFree96
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://andyfree96.github.io/2020/12/24/d6d1d0f4/" title="李宏毅机器学习(三)回归">https://andyfree96.github.io/2020/12/24/d6d1d0f4/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/null" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%85%AC%E5%BC%80%E8%AF%BE/" rel="tag"><i class="fa fa-tag"></i>公开课</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/2020/12/22/14fea94c/" rel="next" title="Axios教程">
+                  <i class="fa fa-chevron-left"></i> Axios教程
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+                <a href="/2020/12/24/c9d935ab/" rel="prev" title="李宏毅机器学习(四)误差">
+                  李宏毅机器学习(四)误差 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    
+  <div class="comments" id="comments">
+    <div id="lv-container" data-id="city" data-uid="MTAyMC80NzkxOC8yNDQxNQ"></div>
+  </div>
+  
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#第一步：设计模型-Model"><span class="nav-text">第一步：设计模型(Model)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#第二步：定义函数好坏-Goodness-of-Function"><span class="nav-text">第二步：定义函数好坏(Goodness of Function)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#第三步：选出最好的函数-Best-Function"><span class="nav-text">第三步：选出最好的函数(Best Function)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#梯度下降-Gradient-Descent"><span class="nav-text">梯度下降(Gradient Descent)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#结果分析"><span class="nav-text">结果分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#模型选择-Model-Selection"><span class="nav-text">模型选择(Model Selection)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#正则化-Regularization"><span class="nav-text">正则化(Regularization)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#示例"><span class="nav-text">示例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-text">总结</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <img class="site-author-image" itemprop="image" alt="AndyFree96"
+    src="/uploads/avatar.jpg">
+  <p class="site-author-name" itemprop="name">AndyFree96</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">23</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">22</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/AndyFree96" title="GitHub &amp;rarr; https:&#x2F;&#x2F;github.com&#x2F;AndyFree96" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:leoscotthg@gmail.com" title="E-Mail &amp;rarr; mailto:leoscotthg@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/IRONAnthony" title="Weibo &amp;rarr; https:&#x2F;&#x2F;weibo.com&#x2F;IRONAnthony" rel="noopener" target="_blank"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/IRONAnthony96" title="Twitter &amp;rarr; https:&#x2F;&#x2F;twitter.com&#x2F;IRONAnthony96" rel="noopener" target="_blank"><i class="fa fa-fw fa-twitter"></i>Twitter</a>
+      </span>
+  </div>
+
+
+
+      </div>
+	  
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 2019 – 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">AndyFree96</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+      <span class="post-meta-item-text">站点总字数：</span>
+    <span title="站点总字数">119k</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.0.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.4.2
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script pjax async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/pjax/pjax.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/pangu@4/dist/browser/pangu.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+  <script>
+var pjax = new Pjax({
+  selectors: [
+    'head title',
+    '#page-configurations',
+    '.content-wrap',
+    '.post-toc-wrap',
+    '#pjax'
+  ],
+  switches: {
+    '.post-toc-wrap': Pjax.switches.innerHTML
+  },
+  analytics: false,
+  cacheBust: false,
+  scrollTo : !CONFIG.bookmark.enable
+});
+
+window.addEventListener('pjax:success', () => {
+  document.querySelectorAll('script[pjax], script#page-configurations, #pjax script').forEach(element => {
+    var code = element.text || element.textContent || element.innerHTML || '';
+    var parent = element.parentNode;
+    parent.removeChild(element);
+    var script = document.createElement('script');
+    if (element.id) {
+      script.id = element.id;
+    }
+    if (element.className) {
+      script.className = element.className;
+    }
+    if (element.type) {
+      script.type = element.type;
+    }
+    if (element.src) {
+      script.src = element.src;
+      // Force synchronous loading of peripheral JS.
+      script.async = false;
+    }
+    if (element.getAttribute('pjax') !== null) {
+      element.setAttribute('pjax', '');
+    }
+    if (code !== '') {
+      script.appendChild(document.createTextNode(code));
+    }
+    parent.appendChild(script);
+  });
+  NexT.boot.refresh();
+  // Define Motion Sequence & Bootstrap Motion.
+  if (CONFIG.motion.enable) {
+    NexT.motion.integrator
+      .init()
+      .add(NexT.motion.middleWares.postList)
+      .bootstrap();
+  }
+  NexT.utils.updateSidebarPosition();
+});
+</script>
+
+
+
+
+  
+  <script pjax>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+
+
+  <script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+    <div id="pjax">
+
+  
+
+  
+      
+<script type="text/x-mathjax-config">
+    MathJax.Ajax.config.path['mhchem'] = '//cdn.jsdelivr.net/npm/mathjax-mhchem@3';
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+        extensions: ['[mhchem]/mhchem.js'],
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') {
+          next = next.nextSibling;
+        }
+        if (next && next.nodeName.toLowerCase() === 'br') {
+          next.parentNode.removeChild(next);
+        }
+      }
+    });
+  });
+
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i = 0; i < all.length; i += 1) {
+      element = document.getElementById(all[i].inputID + '-Frame').parentNode;
+      if (element.nodeName.toLowerCase() == 'li') {
+        element = element.parentNode;
+      }
+      element.classList.add('has-jax');
+    }
+  });
+</script>
+<script>
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML', () => {
+    MathJax.Hub.Typeset();
+  }, window.MathJax);
+</script>
+
+    
+
+  
+
+<script>
+  window.livereOptions = {
+    refer: location.pathname.replace(CONFIG.root, '').replace('index.html', '')
+  };
+  (function(d, s) {
+    var j, e = d.getElementsByTagName(s)[0];
+    if (typeof LivereTower === 'function') { return; }
+    j = d.createElement(s);
+    j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+    j.async = true;
+    e.parentNode.insertBefore(j, e);
+  })(document, 'script');
+</script>
+
+    </div>
+  
+  
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":true}});</script></body>
+</html>

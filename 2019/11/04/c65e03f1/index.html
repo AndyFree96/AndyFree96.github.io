@@ -299,21 +299,17 @@
 <p><img src="/images/201911/5/1.jpeg" alt></p>
 <p>计算图是TensorFlow的核心概念之一，每个计算/操作/变量都在计算图上机型。代码中发生的一切都在TensorFlow提供的默认计算图中进行。我们可以通过以下方式访问此图：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">graph = tf.get_default_graph()</span><br></pre></td></tr></table></figure>
-
 <p>可以通过用<code>graph.get_operations()</code>来查看所有的操作。</p>
 <p><img src="/images/201911/5/2.jpeg" alt></p>
 <p>输出为空，因为我们并没有在计算图上添加任何东西。</p>
 <p>或者，我们可以用</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> op <span class="keyword">in</span> graph.get_operations():</span><br><span class="line">    print(op.name)</span><br></pre></td></tr></table></figure>
-
 <p>来查看默认计算图中所有操作的名字。当然，我们也可以同时创建多个计算图。</p>
 <h4 id="会话-Session"><a href="#会话-Session" class="headerlink" title="会话(Session)"></a>会话(Session)</h4><p>一个计算图可以用来定义操作，但这些操作只能在会话中执行。计算图和会话可以分别独立创建。我们可以把计算图想成是施工图纸，而会话就是施工现场。</p>
 <p>可以按照如下方式创建会话：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">sess = tf.Session()</span><br><span class="line"><span class="meta">... </span>your code ...</span><br><span class="line"><span class="meta">... </span>your code ...</span><br><span class="line">sess.close()</span><br></pre></td></tr></table></figure>
-
 <p>每次打开一个会话时，记住要关闭它。或者使用<code>with</code>块，</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">with</span> tf.Session() <span class="keyword">as</span> sess:</span><br><span class="line">    sess.run(f)</span><br></pre></td></tr></table></figure>
-
 <p>使用<code>with</code>块的优点是：会话在<code>with</code>块结束时会自动关闭。</p>
 <h4 id="张量-Tensor"><a href="#张量-Tensor" class="headerlink" title="张量(Tensor)"></a>张量(Tensor)</h4><p>TensorFlow用张量来保存数据，有点像numpy用多维数组保存数据（还是不一样呢！）。</p>
 <h5 id="常量-Constant"><a href="#常量-Constant" class="headerlink" title="常量(Constant)"></a>常量(Constant)</h5><p>常量就意味着它的值不能变，我们可以按如下方式定义常量：</p>
@@ -322,7 +318,6 @@
 <p><img src="/images/201911/5/4.jpeg" alt></p>
 <h5 id="变量-Variable"><a href="#变量-Variable" class="headerlink" title="变量(Variable)"></a>变量(Variable)</h5><p>与常量不同，变量可以包含不同的值。但是，它需要由初始化操作进行初始化。对每个变量会很费力。TensorFlow提供了一次性初始化所有变量的机制：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">init_op = tf.global_variables_initializer()</span><br></pre></td></tr></table></figure>
-
 <p><code>init_op</code>将会加到默认的TensorFlow计算图中。如果我们要访问变量，在其之前执行<code>init_op</code>操作即可。</p>
 <p><img src="/images/201911/5/5.jpeg" alt></p>
 <p>现在，我们再次尝试输出所有操作的名字：</p>
@@ -334,13 +329,10 @@
 <p><img src="/images/201911/5/8.jpeg" alt></p>
 <p>定义两个占位符，用来feed数据（<code>trainX</code>和<code>trainY</code>）：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">X = tf.placeholder(<span class="string">'float'</span>)</span><br><span class="line">Y = tf.placeholder(<span class="string">'float'</span>)</span><br></pre></td></tr></table></figure>
-
 <p>线性回归模型是<code>y_model = w * x + b</code>，我们得通过模型计算得到<code>w</code>和<code>b</code>的值。初始化<code>w</code>和<code>b</code>的值为0。代价函数定义为<code>(Y - y_model) ^ 2</code>。TensorFlow中包含了许多优化器可以用来计算并更新梯度以最小化某个代价函数。在这里，我们可以<code>GradientDescentOptimizer</code>并设置学习速率为0.01。</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">w = tf.Variable(<span class="number">0.0</span>, name=<span class="string">'weight'</span>)</span><br><span class="line">b = tf.Variable(<span class="number">0.0</span>, name=<span class="string">'bias'</span>)</span><br><span class="line">y_model = tf.multiply(w, X) + b</span><br><span class="line"></span><br><span class="line">cost = tf.pow(Y - y_model, <span class="number">2</span>)</span><br><span class="line">train_op = tf.train.GradientDescentOptimizer(<span class="number">0.01</span>).minimize(cost)</span><br></pre></td></tr></table></figure>
-
 <p>现在已经定义好了计算图。为了进行计算，我们需要在会话中执行代码：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">with</span> tf.Session() <span class="keyword">as</span> sess:</span><br><span class="line">    sess.run(init_op)</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">100</span>):</span><br><span class="line">        <span class="keyword">for</span> (x, y) <span class="keyword">in</span> zip(trainX, trainY):</span><br><span class="line">            sess.run(train_op, feed_dict=&#123;X:x, Y:y&#125;)</span><br><span class="line">    print(sess.run(w), sess.run(b))</span><br></pre></td></tr></table></figure>
-
 <p>计算结果为：</p>
 <p><img src="/images/201911/5/9.jpeg" alt></p>
 <p>可以得到下图：</p>
@@ -474,7 +466,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">21</span>
+          <span class="site-state-item-count">23</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -537,7 +529,7 @@
       <i class="fa fa-area-chart"></i>
     </span>
       <span class="post-meta-item-text">站点总字数：</span>
-    <span title="站点总字数">113k</span>
+    <span title="站点总字数">119k</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.0.0
   </div>
