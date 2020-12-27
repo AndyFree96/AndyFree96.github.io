@@ -78,7 +78,7 @@
 <meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;202012&#x2F;6&#x2F;17.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;202012&#x2F;6&#x2F;18.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;202012&#x2F;6&#x2F;19.png">
-<meta property="og:updated_time" content="2020-12-27T05:12:37.109Z">
+<meta property="og:updated_time" content="2020-12-27T05:41:07.773Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;202012&#x2F;6&#x2F;1.png">
 
@@ -254,7 +254,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2020-12-27 13:11:00 / 修改时间：13:12:37" itemprop="dateCreated datePublished" datetime="2020-12-27T13:11:00+08:00">2020-12-27</time>
+              <time title="创建时间：2020-12-27 13:11:00 / 修改时间：13:41:07" itemprop="dateCreated datePublished" datetime="2020-12-27T13:11:00+08:00">2020-12-27</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -328,16 +328,16 @@
 <p><img src="/images/202012/6/14.png" alt></p>
 <p>这里我们删除的是逗号和句号。</p>
 <p><img src="/images/202012/6/15.png" alt></p>
-<p>为了便于之后搜索词，我们可以在Quote列的每行数据后添加一个空格。点击【KUTOOLS】下的【文本】，选择【添加文本】。</p>
+<p>为了便于之后搜索词，我们可以在Quote列的每行数据前后各添加一个空格。点击【KUTOOLS】下的【文本】，选择【添加文本】。</p>
 <p><img src="/images/202012/6/16.png" alt></p>
-<p>点击【确定】后，即在每行后添加了一个空格。</p>
+<p>点击【确定】后，即在每行后添加了一个空格。同理，可在每行前添加一个空格。</p>
 <p>在<code>D2</code>中新增公式：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">=SUMIF($A$2:$A$5,&quot;*&quot;&amp;C2&amp;&quot;*&quot;,$B$2:$B$5)</span><br></pre></td></tr></table></figure>
 <p>结果是26。但显然是错误的，明明只有两个句子中出现了The这个词😂！</p>
 <p><img src="/images/202012/6/17.png" alt></p>
-<p>为什么会这样呢？如上图所示，26是将第4个句子other这个词中的the也匹配到并相加了。这是不对的，如何避免呢？我们只想要匹配完整的词，而不是词中的一部分。一个解决方案是在公式中的第2个<code>*</code>前增加一个空格，</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">=SUMIF($A$2:$A$5,&quot;*&quot;&amp;C2&amp;&quot; *&quot;,$B$2:$B$5)</span><br></pre></td></tr></table></figure>
-<p>这样<code>C2</code>单元格与空格连接后才会是我们想要匹配的词，这也是为什么之前要在每行后添加一个空格。修改公式后的结果如下：</p>
+<p>为什么会这样呢？如上图所示，26是将第4个句子other这个词中的the也匹配到并相加了。这是不对的，如何避免呢？我们只想要匹配完整的词，而不是词中的一部分。一个解决方案是在公式中的第1个<code>*</code>后以及第2个<code>*</code>前增加一个空格，</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">=SUMIF($A$2:$A$5,&quot;* &quot;&amp;C2&amp;&quot; *&quot;,$B$2:$B$5)</span><br></pre></td></tr></table></figure>
+<p>这样<code>C2</code>单元格与空格连接后才会是我们想要匹配的词，这也是为什么之前要在每行前后添加一个空格。修改公式后的结果如下：</p>
 <p><img src="/images/202012/6/18.png" alt></p>
 <p>是正确的🤩！</p>
 <p>将鼠标箭头移动到<code>C2</code>单元格的右下角绿色方块上，但鼠标箭头变成黑色十字时，双击鼠标左键，即可看到所有的词的结果都正确计算出来了。</p>
