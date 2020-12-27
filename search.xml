@@ -1,6 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Excel的Kutools插件使用</title>
+    <url>/2020/12/27/4a3d9e1d/</url>
+    <content><![CDATA[<p>在浏览豆瓣小组时看到一个问题，假如有一张如下所示的表：</p><p><img src="/images/202012/6/1.png" alt></p><p>如何将Quote列按词切分，并将切分后词所在行的Count列值累加？</p><p>解决这个问题的方法很很多种，本文将尝试用Excel的一个插件Kutools进行处理。</p><p>如果您还没安装的话，可以到<a href="https://www.cr173.com/soft/745775.html" target="_blank" rel="noopener">西西软件园</a>进行下载安装。</p><p>安装成功后可以看到：</p><p><img src="/images/202012/6/2.png" alt></p><p>Excel多了两个选项卡——KUTOOLS和KUTOOLS PLUS。</p><a id="more"></a>
+
+
+
+
+
+
+
+<p>接下来，我们选中Quote单元格，并按快捷键<code>Ctrl+Shift+⬇</code>，即可选中Quote列所有的数据。</p>
+<p>点击【KUTOOLS】下的【合并和拆分】，选择【分割单元格】：</p>
+<p><img src="/images/202012/6/3.png" alt></p>
+<p>设置如下分割方式：</p>
+<p><img src="/images/202012/6/4.png" alt></p>
+<p>粘贴至<code>$F$1</code>：</p>
+<p><img src="/images/202012/6/5.png" alt></p>
+<p>结果如下所示：</p>
+<p><img src="/images/202012/6/6.png" alt></p>
+<p>每个句子都被正常按空格进行切分了😋。接下来我们可以点击【KUTOOLS】下的【区域】，选择【转换区域】</p>
+<p><img src="/images/202012/6/7.png" alt></p>
+<p>将区域转换成单列，</p>
+<p><img src="/images/202012/6/8.png" alt></p>
+<p>输出区域我选择的是<code>$C$1</code></p>
+<p><img src="/images/202012/6/9.png" alt></p>
+<p>输出结果如下：</p>
+<p><img src="/images/202012/6/10.png" alt></p>
+<p>可以看到包含很多空值，我们可以将其删除，按快捷键<code>Ctrl+G</code>，选择【定位条件】，在弹出的对话框中选择【空值】，</p>
+<p><img src="/images/202012/6/11.png" alt></p>
+<p>单击鼠标右键选择【删除】，</p>
+<p><img src="/images/202012/6/12.png" alt></p>
+<p>在弹出的对话框中选择【下方单元格上移】，并【确定】，可以看到之前的空值都被删除了。</p>
+<p><img src="/images/202012/6/13.png" alt></p>
+<p>可以看到，A列和C列中都包含一些标点符号，我们可以分别选中A列和C列，点击【KUTOOLS】下的【文本】，选择【删除特定字符】。</p>
+<p><img src="/images/202012/6/14.png" alt></p>
+<p>这里我们删除的是逗号和句号。</p>
+<p><img src="/images/202012/6/15.png" alt></p>
+<p>为了便于之后搜索词，我们可以在Quote列的每行数据后添加一个空格。点击【KUTOOLS】下的【文本】，选择【添加文本】。</p>
+<p><img src="/images/202012/6/16.png" alt></p>
+<p>点击【确定】后，即在每行后添加了一个空格。</p>
+<p>在<code>D2</code>中新增公式：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">=SUMIF($A$2:$A$5,&quot;*&quot;&amp;C2&amp;&quot;*&quot;,$B$2:$B$5)</span><br></pre></td></tr></table></figure>
+<p>结果是26。但显然是错误的，明明只有两个句子中出现了The这个词😂！</p>
+<p><img src="/images/202012/6/17.png" alt></p>
+<p>为什么会这样呢？如上图所示，26是将第4个句子other这个词中的the也匹配到并相加了。这是不对的，如何避免呢？我们只想要匹配完整的词，而不是词中的一部分。一个解决方案是在公式中的第2个<code>*</code>前增加一个空格，</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">=SUMIF($A$2:$A$5,&quot;*&quot;&amp;C2&amp;&quot; *&quot;,$B$2:$B$5)</span><br></pre></td></tr></table></figure>
+<p>这样<code>C2</code>单元格与空格连接后才会是我们想要匹配的词，这也是为什么之前要在每行后添加一个空格。修改公式后的结果如下：</p>
+<p><img src="/images/202012/6/18.png" alt></p>
+<p>是正确的🤩！</p>
+<p>将鼠标箭头移动到<code>C2</code>单元格的右下角绿色方块上，但鼠标箭头变成黑色十字时，双击鼠标左键，即可看到所有的词的结果都正确计算出来了。</p>
+<p><img src="/images/202012/6/19.png" alt></p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>本文我们简要地介绍了Excel中Kutools这个插件的使用，主要包括：分割单元格，区域转换，文本的删除和添加。</p>
+]]></content>
+      <categories>
+        <category>工具使用</category>
+      </categories>
+      <tags>
+        <tag>Excel</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>李宏毅机器学习(四)误差</title>
     <url>/2020/12/24/c9d935ab/</url>
     <content><![CDATA[<p>在上一节我们已经看到，更复杂的模型不一定会让其在测试集上的表现更好。</p><p><img src="/images/202012/5/1.png" alt></p><p>其实误差(Error)有两个来源，一个来自偏差(Bias)，一个来自方差(Variance)。了解这两个来源是大有裨益的，因为我们可以对得到的模型误差进行分析，看是来自偏差还是方差，然后用相应的方法解决，进而提高模型的性能。</p><p>对于宝可梦的例子而言，真实的函数$\hat{y}=\hat{f}\left ( x \right )$只有Niantic公司知道，我们通过训练数据找到的模型下的最好函数$f^*$是$\hat{f}$的一个估计值。</p><a id="more"></a>
@@ -844,57 +905,6 @@ L(w,b)=\frac{1}{N}\sum_{n=1}^{N}{\left ( \hat{y}^n-\left ( b + w ·x_{cp}^{n} \r
       </tags>
   </entry>
   <entry>
-    <title>李宏毅机器学习(一)引言</title>
-    <url>/2019/11/05/a1aabbc5/</url>
-    <content><![CDATA[<p>最近几年人工智能这个词总是时不时地出现在我们视野里，确切来说它也并不是什么新词儿，它在1950年代就被提出来了。它代表着我们人类的一个长期目标，那便是<strong>希望机器可以和人一样聪明。</strong></p><p><img src="/images/201911/8/1.png" alt></p><p>可是人们却不太清楚如何做这件事，不太清楚如何让机器拥有智能，变得和人一样聪明。直到1980年代，有了<strong>机器学习。</strong> 顾名思义，机器学习就是让机器拥有学习的能力。那么，它和人工智能有什么关系呢？<strong>人工智能是我们想要达成的目标，而机器学习是为了达成目标使用的手段。深度学习是机器学习中的一种方法。</strong></p><a id="more"></a>
-
-
-<p><img src="/images/201911/8/2.png" alt></p>
-<p>那么在有机器学习，深度学习之前，我们是如何做人工智能呢？</p>
-<p>生物学的知识告诉我们，生物的行为取决于先天的本能或后天学习的结果。</p>
-<p>举例来说，河狸筑坝的能力是天生的。</p>
-<p><img src="/images/201911/8/3.png" alt></p>
-<p>它的筑坝行为是这样的：</p>
-<ul>
-<li>如果听到流水声，就会筑堤直到听不到流水声。</li>
-</ul>
-<p>我们之前做人工智能就是这样的，设定好机器的先天本能，通常是一些由人类确定的规则。</p>
-<p><img src="/images/201911/8/4.png" alt></p>
-<p>看起来也不错，似乎也能完成不少任务。但也存在很大的问题，我们很难考虑到所有的规则。对于上述的聊天机器人，我们不太可能想到所有的响应规则。这就导致了机器永远无法超过它的创造者。它的所有行为都在我们定义的规则之下，也就是说它没有<code>freestyle</code>。</p>
-<p>我们的目的是研究真正的机器学习。那么，什么是真正的机器学习呢？</p>
-<p>简单来说就是写程序让机器有学习的能力。接下来，我们就给它提供数据以供其学习。比如在语音识别中，</p>
-<p><img src="/images/201911/8/5.png" alt></p>
-<p>告诉机器这段语音是“Hi”。</p>
-<p><img src="/images/201911/8/6.png" alt></p>
-<p>这段语音是“How are you”。</p>
-<p>我们可以机器提供大量的语音数据，并告诉它每段语音的内容。通过不断地学习，它逐渐若有所得。于是，当我们给它一段语音（之前可能从来没有听过），它会告诉我们内容是什么。</p>
-<p><img src="/images/201911/8/7.png" alt></p>
-<p>过程如下所示：</p>
-<p><img src="/images/201911/8/8.png" alt></p>
-<p>图像识别也是类似的过程：</p>
-<p><img src="/images/201911/8/9.png" alt></p>
-<p>机器学习可以看成是从数据中找到一个函数。</p>
-<p><img src="/images/201911/8/10.png" alt></p>
-<p>举个例子，我们要进行图像识别，通过给机器的数据，机器学习算法可以得到一个函数。当将图像输入给该函数时，它能输出该图像对应的类别。</p>
-<p><img src="/images/201911/8/11.png" alt></p>
-<p>那么如何得到这个函数呢？我们有很多可以选择的模型，比如神经网络，SVM，决策树等等。每个模型内都包含了很多函数（模型可能有很多参数，参数是可以变化的）。</p>
-<p><img src="/images/201911/8/12.png" alt></p>
-<p>这么多函数选择哪一个呢？所以我们还得有一个评价指标，当把数据丢给模型后能够衡量函数的好坏。知道了函数的好坏之后，自然要选择最好的函数。</p>
-<p>如上图所示，函数<code>f1</code>自然好于<code>f2</code>。同时也可以看到，这些数据有个特点，就是每个数据都给出了函数的输入和函数期望得到的值。</p>
-<p><img src="/images/201911/8/13.png" alt></p>
-<p>在这种情景下的机器学习叫做监督学习。找到了最好的函数之后，我们就可以用它来测试，看它是否有举一反三的能力。整个流程如下：</p>
-<p><img src="/images/201911/8/14.png" alt></p>
-<p>所以总结一下，机器学习大致可以分为三步：</p>
-<p><img src="/images/201911/8/15.png" alt></p>
-]]></content>
-      <categories>
-        <category>机器学习</category>
-      </categories>
-      <tags>
-        <tag>公开课</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>李宏毅机器学习(二)学习导图</title>
     <url>/2019/11/05/68d48c63/</url>
     <content><![CDATA[<p>机器学习发展至今涵盖的内容已经非常多，本文通过对其使用情景、任务和方法分类在上文的基础上对机器学习做进一步的介绍。</p><p><img src="/images/201911/9/1.png" alt></p><h3 id="监督学习-Supervised-Learning"><a href="#监督学习-Supervised-Learning" class="headerlink" title="监督学习(Supervised Learning)"></a>监督学习(Supervised Learning)</h3><p>上文曾提到机器学习可以看成是从数据中找到一个函数。对于回归(Regression)这类任务而言，我们希望得到的函数的输出值是数值(Scalar)，而不是像之前图像识别一样输出类别。</p><a id="more"></a>
@@ -1005,6 +1015,57 @@ L(w,b)=\frac{1}{N}\sum_{n=1}^{N}{\left ( \hat{y}^n-\left ( b + w ·x_{cp}^{n} \r
 <blockquote>
 <p>绿色框代表方法，可以放在任一学习任务中。</p>
 </blockquote>
+]]></content>
+      <categories>
+        <category>机器学习</category>
+      </categories>
+      <tags>
+        <tag>公开课</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>李宏毅机器学习(一)引言</title>
+    <url>/2019/11/05/a1aabbc5/</url>
+    <content><![CDATA[<p>最近几年人工智能这个词总是时不时地出现在我们视野里，确切来说它也并不是什么新词儿，它在1950年代就被提出来了。它代表着我们人类的一个长期目标，那便是<strong>希望机器可以和人一样聪明。</strong></p><p><img src="/images/201911/8/1.png" alt></p><p>可是人们却不太清楚如何做这件事，不太清楚如何让机器拥有智能，变得和人一样聪明。直到1980年代，有了<strong>机器学习。</strong> 顾名思义，机器学习就是让机器拥有学习的能力。那么，它和人工智能有什么关系呢？<strong>人工智能是我们想要达成的目标，而机器学习是为了达成目标使用的手段。深度学习是机器学习中的一种方法。</strong></p><a id="more"></a>
+
+
+<p><img src="/images/201911/8/2.png" alt></p>
+<p>那么在有机器学习，深度学习之前，我们是如何做人工智能呢？</p>
+<p>生物学的知识告诉我们，生物的行为取决于先天的本能或后天学习的结果。</p>
+<p>举例来说，河狸筑坝的能力是天生的。</p>
+<p><img src="/images/201911/8/3.png" alt></p>
+<p>它的筑坝行为是这样的：</p>
+<ul>
+<li>如果听到流水声，就会筑堤直到听不到流水声。</li>
+</ul>
+<p>我们之前做人工智能就是这样的，设定好机器的先天本能，通常是一些由人类确定的规则。</p>
+<p><img src="/images/201911/8/4.png" alt></p>
+<p>看起来也不错，似乎也能完成不少任务。但也存在很大的问题，我们很难考虑到所有的规则。对于上述的聊天机器人，我们不太可能想到所有的响应规则。这就导致了机器永远无法超过它的创造者。它的所有行为都在我们定义的规则之下，也就是说它没有<code>freestyle</code>。</p>
+<p>我们的目的是研究真正的机器学习。那么，什么是真正的机器学习呢？</p>
+<p>简单来说就是写程序让机器有学习的能力。接下来，我们就给它提供数据以供其学习。比如在语音识别中，</p>
+<p><img src="/images/201911/8/5.png" alt></p>
+<p>告诉机器这段语音是“Hi”。</p>
+<p><img src="/images/201911/8/6.png" alt></p>
+<p>这段语音是“How are you”。</p>
+<p>我们可以机器提供大量的语音数据，并告诉它每段语音的内容。通过不断地学习，它逐渐若有所得。于是，当我们给它一段语音（之前可能从来没有听过），它会告诉我们内容是什么。</p>
+<p><img src="/images/201911/8/7.png" alt></p>
+<p>过程如下所示：</p>
+<p><img src="/images/201911/8/8.png" alt></p>
+<p>图像识别也是类似的过程：</p>
+<p><img src="/images/201911/8/9.png" alt></p>
+<p>机器学习可以看成是从数据中找到一个函数。</p>
+<p><img src="/images/201911/8/10.png" alt></p>
+<p>举个例子，我们要进行图像识别，通过给机器的数据，机器学习算法可以得到一个函数。当将图像输入给该函数时，它能输出该图像对应的类别。</p>
+<p><img src="/images/201911/8/11.png" alt></p>
+<p>那么如何得到这个函数呢？我们有很多可以选择的模型，比如神经网络，SVM，决策树等等。每个模型内都包含了很多函数（模型可能有很多参数，参数是可以变化的）。</p>
+<p><img src="/images/201911/8/12.png" alt></p>
+<p>这么多函数选择哪一个呢？所以我们还得有一个评价指标，当把数据丢给模型后能够衡量函数的好坏。知道了函数的好坏之后，自然要选择最好的函数。</p>
+<p>如上图所示，函数<code>f1</code>自然好于<code>f2</code>。同时也可以看到，这些数据有个特点，就是每个数据都给出了函数的输入和函数期望得到的值。</p>
+<p><img src="/images/201911/8/13.png" alt></p>
+<p>在这种情景下的机器学习叫做监督学习。找到了最好的函数之后，我们就可以用它来测试，看它是否有举一反三的能力。整个流程如下：</p>
+<p><img src="/images/201911/8/14.png" alt></p>
+<p>所以总结一下，机器学习大致可以分为三步：</p>
+<p><img src="/images/201911/8/15.png" alt></p>
 ]]></content>
       <categories>
         <category>机器学习</category>
