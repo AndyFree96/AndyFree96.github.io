@@ -1,6 +1,156 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>用Python绘制NBA球员出手位置图</title>
+    <url>/2021/01/05/c97e713d/</url>
+    <content><![CDATA[<p>本文将介绍如何提取NBA球员投篮数据，然后用<code>matplotlib</code>和<code>seaborn</code>绘制出手位置图。</p><p>首先我们导入需要用到的包：</p><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="keyword">import</span> seaborn <span class="keyword">as</span> sns</span><br><span class="line"></span><br><span class="line">%matplotlib inline</span><br></pre></td></tr></table></figure><a id="more"></a>
+
+
+<p>NBA有一个官方统计网站<code>https://stats.nba.com/</code>，可以在该网站到查到各种统计数据。<br>为了获取到<code>James Harden</code>在<code>2018-2019</code>赛季的投篮数据，可以使用以下地址：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">player_id = <span class="string">"201935"</span></span><br><span class="line">shot_chart_url = <span class="string">"https://stats.nba.com/stats/shotchartdetail?CFID=33&amp;CFPARAMS=2018-19&amp;ContextFilter=&amp;ContextMeasure=FGA&amp;DateFrom=&amp;DateTo=&amp;GameID=&amp;GameSegment=&amp;LastNGames=0&amp;LeagueID=00&amp;Location=&amp;MeasureType=Base&amp;Month=0&amp;OpponentTeamID=0&amp;Outcome=&amp;PaceAdjust=N&amp;PerMode=PerGame&amp;Period=0&amp;PlayerID="</span>+ player_id + <span class="string">"&amp;PlusMinus=N&amp;Position=&amp;Rank=N&amp;RookieYear=&amp;Season=2018-19&amp;SeasonSegment=&amp;SeasonType=Regular+Season&amp;TeamID=0&amp;VsConference=&amp;VsDivision=&amp;mode=Advanced&amp;showDetails=0&amp;showShots=1&amp;showZones=0&amp;PlayerPosition="</span></span><br></pre></td></tr></table></figure>
+<p>其中<code>player_id</code>指的是球员的ID，比如<code>James Harden</code>的ID就是<code>201935</code>。</p>
+<p>每个球员的ID都可以在<code>https://stats.nba.com/</code>查到，比如<code>Kobe Bryant</code>, 搜索<code>Kobe Bryant</code></p>
+<p><img src="/images/202101/3/1.png" alt></p>
+<p>地址栏中的<code>977</code>就是他的球员ID</p>
+<p><img src="/images/202101/3/2.png" alt></p>
+<p>接下来，我们可以使用<a href="https://2.python-requests.org/en/master/" target="_blank" rel="noopener">Requests</a>包请求上述地址获取到数据：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">headers = &#123;&apos;User-Agent&apos;: &quot;Mozilla&quot;&#125;</span><br><span class="line">response = requests.get(shot_chart_url, headers=headers)</span><br></pre></td></tr></table></figure>
+<p>请求返回的数据是JSON格式的，可以用<code>Pandas</code>创建一个<code>DataFrame</code>对象，方便后续处理。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">column_names = response.json()[<span class="string">'resultSets'</span>][<span class="number">0</span>][<span class="string">'headers'</span>]</span><br><span class="line">shots = response.json()[<span class="string">'resultSets'</span>][<span class="number">0</span>][<span class="string">'rowSet'</span>]</span><br><span class="line"></span><br><span class="line">shot_df = pd.DataFrame(shots, columns=column_names)</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> IPython.display <span class="keyword">import</span> display</span><br><span class="line"><span class="keyword">with</span> pd.option_context(<span class="string">'display.max_columns'</span>, <span class="literal">None</span>):</span><br><span class="line">    display(shot_df.head())</span><br></pre></td></tr></table></figure>
+<p><img src="/images/202101/3/3.png" alt></p>
+<p>以上便是<code>James Harden</code>在<code>2018-2019</code>赛季常规赛的投篮数据。其中<code>LOC_X</code>,<code>LOC_Y</code>就是出手位置，可以用散点图将其绘制出来：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">sns.set_style(<span class="string">"white"</span>)</span><br><span class="line">sns.set_color_codes()</span><br><span class="line">plt.figure(figsize=(<span class="number">12</span>,<span class="number">11</span>))</span><br><span class="line">plt.scatter(shot_df.LOC_X, shot_df.LOC_Y, alpha=<span class="number">0.3</span>)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+<p><img src="/images/202101/3/4.png" alt></p>
+<p>为了更加直观，我们用以下代码把球场绘制出来：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> matplotlib.patches <span class="keyword">import</span> Circle, Rectangle, Arc</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">draw_court</span><span class="params">(ax=None, color=<span class="string">'black'</span>, lw=<span class="number">2</span>, outer_lines=False)</span>:</span></span><br><span class="line">    <span class="keyword">if</span> ax <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">        ax = plt.gca()</span><br><span class="line"></span><br><span class="line">    hoop = Circle((<span class="number">0</span>, <span class="number">0</span>), radius=<span class="number">7.5</span>, linewidth=lw, color=color, fill=<span class="literal">False</span>)</span><br><span class="line"></span><br><span class="line">    backboard = Rectangle((<span class="number">-30</span>, <span class="number">-7.5</span>), <span class="number">60</span>, <span class="number">-1</span>, linewidth=lw, color=color)</span><br><span class="line"></span><br><span class="line">    outer_box = Rectangle((<span class="number">-80</span>, <span class="number">-47.5</span>), <span class="number">160</span>, <span class="number">190</span>, linewidth=lw, color=color,</span><br><span class="line">                          fill=<span class="literal">False</span>)</span><br><span class="line"></span><br><span class="line">    inner_box = Rectangle((<span class="number">-60</span>, <span class="number">-47.5</span>), <span class="number">120</span>, <span class="number">190</span>, linewidth=lw, color=color,</span><br><span class="line">                          fill=<span class="literal">False</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    top_free_throw = Arc((<span class="number">0</span>, <span class="number">142.5</span>), <span class="number">120</span>, <span class="number">120</span>, theta1=<span class="number">0</span>, theta2=<span class="number">180</span>,</span><br><span class="line">                         linewidth=lw, color=color, fill=<span class="literal">False</span>)</span><br><span class="line"></span><br><span class="line">    bottom_free_throw = Arc((<span class="number">0</span>, <span class="number">142.5</span>), <span class="number">120</span>, <span class="number">120</span>, theta1=<span class="number">180</span>, theta2=<span class="number">0</span>,</span><br><span class="line">                            linewidth=lw, color=color, linestyle=<span class="string">'dashed'</span>)</span><br><span class="line"></span><br><span class="line">    restricted = Arc((<span class="number">0</span>, <span class="number">0</span>), <span class="number">80</span>, <span class="number">80</span>, theta1=<span class="number">0</span>, theta2=<span class="number">180</span>, linewidth=lw,</span><br><span class="line">                     color=color)</span><br><span class="line"></span><br><span class="line">    corner_three_a = Rectangle((<span class="number">-220</span>, <span class="number">-47.5</span>), <span class="number">0</span>, <span class="number">140</span>, linewidth=lw,</span><br><span class="line">                               color=color)</span><br><span class="line">    corner_three_b = Rectangle((<span class="number">220</span>, <span class="number">-47.5</span>), <span class="number">0</span>, <span class="number">140</span>, linewidth=lw, color=color)</span><br><span class="line"></span><br><span class="line">    three_arc = Arc((<span class="number">0</span>, <span class="number">0</span>), <span class="number">475</span>, <span class="number">475</span>, theta1=<span class="number">22</span>, theta2=<span class="number">158</span>, linewidth=lw,</span><br><span class="line">                    color=color)</span><br><span class="line"></span><br><span class="line">    center_outer_arc = Arc((<span class="number">0</span>, <span class="number">422.5</span>), <span class="number">120</span>, <span class="number">120</span>, theta1=<span class="number">180</span>, theta2=<span class="number">0</span>,</span><br><span class="line">                           linewidth=lw, color=color)</span><br><span class="line">    center_inner_arc = Arc((<span class="number">0</span>, <span class="number">422.5</span>), <span class="number">40</span>, <span class="number">40</span>, theta1=<span class="number">180</span>, theta2=<span class="number">0</span>,</span><br><span class="line">                           linewidth=lw, color=color)</span><br><span class="line"></span><br><span class="line">    court_elements = [hoop, backboard, outer_box, inner_box, top_free_throw,</span><br><span class="line">                      bottom_free_throw, restricted, corner_three_a,</span><br><span class="line">                      corner_three_b, three_arc, center_outer_arc,</span><br><span class="line">                      center_inner_arc]</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> outer_lines:</span><br><span class="line"></span><br><span class="line">        outer_lines = Rectangle((<span class="number">-250</span>, <span class="number">-47.5</span>), <span class="number">500</span>, <span class="number">470</span>, linewidth=lw,</span><br><span class="line">                                color=color, fill=<span class="literal">False</span>)</span><br><span class="line">        court_elements.append(outer_lines)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> element <span class="keyword">in</span> court_elements:</span><br><span class="line">        ax.add_patch(element)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> ax</span><br></pre></td></tr></table></figure>
+<p>绘制球场</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">plt.figure(figsize=(<span class="number">12</span>, <span class="number">11</span>))</span><br><span class="line">draw_court(outer_lines=<span class="literal">True</span>)</span><br><span class="line">plt.xlim(<span class="number">-300</span>, <span class="number">300</span>)</span><br><span class="line">plt.ylim(<span class="number">-100</span>, <span class="number">500</span>)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+<p><img src="/images/202101/3/5.png" alt></p>
+<p>将出手位置也加进去</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">plt.figure(figsize=(<span class="number">12</span>, <span class="number">11</span>))</span><br><span class="line">plt.scatter(shot_df.LOC_X, shot_df.LOC_Y, alpha=<span class="number">0.3</span>)</span><br><span class="line">draw_court(outer_lines=<span class="literal">True</span>)</span><br><span class="line">plt.xlim(<span class="number">300</span>,<span class="number">-300</span>)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+<p><img src="/images/202101/3/6.png" alt></p>
+<p>使用<code>Seaborn</code>的<code>jointplot</code>绘制图像</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">joint_shot_chart = sns.jointplot(shot_df.LOC_X, shot_df.LOC_Y, space=<span class="number">0</span>, alpha=<span class="number">0.5</span>)</span><br><span class="line">joint_shot_chart.fig.set_size_inches(<span class="number">12</span>,<span class="number">11</span>)</span><br><span class="line"></span><br><span class="line">ax = joint_shot_chart.ax_joint</span><br><span class="line">draw_court(ax)</span><br><span class="line"></span><br><span class="line">ax.set_xlim(<span class="number">-250</span>, <span class="number">250</span>)</span><br><span class="line">ax.set_ylim(<span class="number">422.5</span>, <span class="number">-47.5</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">ax.set_xlabel(<span class="string">""</span>)</span><br><span class="line">ax.set_ylabel(<span class="string">""</span>)</span><br><span class="line">ax.tick_params(labelbottom=<span class="string">"off"</span>, labelleft=<span class="string">"off"</span>)</span><br></pre></td></tr></table></figure>
+<p><img src="/images/202101/3/7.png" alt></p>
+<p>从中可以看到其出手位置的分布情况。</p>
+<p>值得注意的是，<code>shot_df</code>中有一列<code>SHOT_MADE_FLAG</code>代表的是是否投中（1为投中，0为未投中），我们可以查看一下投中出手位置的分布：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">made_df = shot_df[shot_df[<span class="string">'SHOT_MADE_FLAG'</span>]==<span class="number">1</span>]</span><br><span class="line"></span><br><span class="line">joint_shot_chart = sns.jointplot(made_df.LOC_X, made_df.LOC_Y, space=<span class="number">0</span>, alpha=<span class="number">0.5</span>, color=<span class="string">'r'</span>)</span><br><span class="line">joint_shot_chart.fig.set_size_inches(<span class="number">12</span>,<span class="number">11</span>)</span><br><span class="line"></span><br><span class="line">ax = joint_shot_chart.ax_joint</span><br><span class="line">draw_court(ax)</span><br><span class="line"></span><br><span class="line">ax.set_xlim(<span class="number">-250</span>, <span class="number">250</span>)</span><br><span class="line">ax.set_ylim(<span class="number">422.5</span>, <span class="number">-47.5</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">ax.set_xlabel(<span class="string">""</span>)</span><br><span class="line">ax.set_ylabel(<span class="string">""</span>)</span><br><span class="line">ax.tick_params(labelbottom=<span class="string">"off"</span>, labelleft=<span class="string">"off"</span>)</span><br></pre></td></tr></table></figure>
+<p><img src="/images/202101/3/8.png" alt></p>
+<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><p>[1] <a href="http://savvastjortjoglou.com/nba-shot-sharts.html" target="_blank" rel="noopener">http://savvastjortjoglou.com/nba-shot-sharts.html</a></p>
+]]></content>
+      <categories>
+        <category>Python</category>
+      </categories>
+      <tags>
+        <tag>Matplotlib</tag>
+        <tag>Seaborn</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>用Jsoup爬取今日头条街拍</title>
+    <url>/2021/01/05/5f254c1d/</url>
+    <content><![CDATA[<p>在<a href="https://andyfree96.github.io/2021/01/05/2f6c8b36/">Jsoup简明教程</a>一文中我们简要地学习了一下<code>jsoup</code>的用法，有一个朋友告诉我说今日头条街拍内容好像不错，于是本文秉承着学习<code>jsoup</code>的态度，爬取今日头条街拍图片。</p><p>打开今日头条官网：<a href="https://www.toutiao.com，搜索“街拍”：" target="_blank" rel="noopener">https://www.toutiao.com，搜索“街拍”：</a></p><p><img src="/images/202101/2/1.png" alt></p><p>在页面中单击鼠标右键(或者用快捷键)，选择检查元素：</p><p><img src="/images/202101/2/2.png" alt></p><p>切换到<code>Network</code>选项卡，不断向下滚动页面，即可看到如下请求：</p><a id="more"></a>
+
+
+
+
+
+<p><img src="/images/202101/2/3.png" alt></p>
+<p>该请求的响应数据中就包含我们想要的图片地址。</p>
+<p><img src="/images/202101/2/4.png" alt></p>
+<p>如上图所示，请求方法是<code>GET</code>，请求URL还包含了一些参数：</p>
+<p><img src="/images/202101/2/5.png" alt></p>
+<p>分析到这儿就差不多了，开始Coding吧！</p>
+<p>代码如下：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> com.andy;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> com.google.gson.JsonArray;</span><br><span class="line"><span class="keyword">import</span> com.google.gson.JsonElement;</span><br><span class="line"><span class="keyword">import</span> com.google.gson.JsonObject;</span><br><span class="line"><span class="keyword">import</span> com.google.gson.JsonParser;</span><br><span class="line"><span class="keyword">import</span> org.jsoup.Connection;</span><br><span class="line"><span class="keyword">import</span> org.jsoup.Jsoup;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.io.*;</span><br><span class="line"><span class="keyword">import</span> java.net.URL;</span><br><span class="line"><span class="keyword">import</span> java.util.*;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TouTiao</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> String baseUrl = <span class="string">"https://www.toutiao.com/api/search/content/?offset=%d&amp;autoload=true&amp;from=search_tab&amp;count=20&amp;format=json&amp;keyword=%s&amp;timestamp="</span>;</span><br><span class="line">    <span class="keyword">private</span> String keyword;</span><br><span class="line">    <span class="keyword">private</span> String folderPath;</span><br><span class="line">    <span class="keyword">private</span> Map&lt;String, String&gt; header = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">TouTiao</span><span class="params">(String keyword, String folderPath)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.keyword = keyword;</span><br><span class="line">        <span class="keyword">this</span>.folderPath = folderPath;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setHeader</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        header.put(<span class="string">":authority"</span>, <span class="string">"www.toutiao.com"</span>);</span><br><span class="line">        header.put(<span class="string">"referer"</span>, String.format(<span class="string">"https://www.toutiao.com/search/?keyword=%s"</span>, keyword));</span><br><span class="line">        header.put(<span class="string">"user-agent"</span>, <span class="string">"Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.129 Safari/537.36 OPR/68.0.3618.63"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">     <span class="function"><span class="keyword">private</span> List&lt;String&gt; <span class="title">parseImageUrl</span><span class="params">(<span class="keyword">int</span> offset)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">         List&lt;String&gt; list = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">         Connection connection = Jsoup.connect(String.format(baseUrl, offset, keyword) + System.currentTimeMillis()).headers(header);</span><br><span class="line">         Connection.Response response = connection.ignoreContentType(<span class="keyword">true</span>).execute();</span><br><span class="line">         String body = response.body();</span><br><span class="line">         JsonObject jsonObject = <span class="keyword">new</span> JsonParser().parse(body).getAsJsonObject();</span><br><span class="line">         <span class="keyword">if</span> (jsonObject != <span class="keyword">null</span> &amp;&amp; jsonObject.get(<span class="string">"data"</span>) != <span class="keyword">null</span>) &#123;</span><br><span class="line">             <span class="keyword">try</span> &#123;</span><br><span class="line">                 JsonArray jsonArray = jsonObject.getAsJsonArray(<span class="string">"data"</span>);</span><br><span class="line">                 <span class="keyword">for</span> (JsonElement jsonElement : jsonArray) &#123;</span><br><span class="line">                     JsonElement imageUrl = jsonElement.getAsJsonObject().get(<span class="string">"large_image_url"</span>);</span><br><span class="line">                     <span class="keyword">if</span> (imageUrl != <span class="keyword">null</span>) &#123;</span><br><span class="line">                         String src = imageUrl.getAsString();</span><br><span class="line">                         <span class="keyword">if</span> (src != <span class="keyword">null</span> &amp;&amp; src.trim().length() != <span class="number">0</span>) &#123;</span><br><span class="line">                             list.add(src);</span><br><span class="line">                         &#125;</span><br><span class="line">                     &#125;</span><br><span class="line">                 &#125;</span><br><span class="line">             &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">                 e.printStackTrace();</span><br><span class="line">             &#125;</span><br><span class="line">         &#125;</span><br><span class="line">         <span class="keyword">return</span> list;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">crawl</span><span class="params">(<span class="keyword">int</span> from, <span class="keyword">int</span> to)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = from; i &lt; to; i++) &#123;</span><br><span class="line">            List&lt;String&gt; list = parseImageUrl(i * <span class="number">20</span>);</span><br><span class="line">            <span class="keyword">for</span> (String url : list) &#123;</span><br><span class="line">                downloadImageFromURL(url);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">downloadImageFromURL</span><span class="params">(String src)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> lastIndex = src.lastIndexOf(<span class="string">"/"</span>);</span><br><span class="line">        String name = src.substring(lastIndex + <span class="number">1</span>);</span><br><span class="line">        <span class="keyword">if</span> (!name.endsWith(<span class="string">".png"</span>) || !name.endsWith(<span class="string">".jpg"</span>) || !name.endsWith(<span class="string">".gif"</span>) || !name.endsWith(<span class="string">".jpeg"</span>)) &#123;</span><br><span class="line">            name = name + <span class="string">".png"</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        System.out.println(<span class="string">"Image name : "</span> + name);</span><br><span class="line">        URL url = <span class="keyword">new</span> URL(src);</span><br><span class="line">        InputStream inputStream = url.openStream();</span><br><span class="line">        OutputStream outputStream = <span class="keyword">new</span> BufferedOutputStream(<span class="keyword">new</span> FileOutputStream(folderPath + name));</span><br><span class="line">        System.out.println(<span class="string">"Saved path: "</span> + (folderPath + name));</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> b; (b = inputStream.read()) != -<span class="number">1</span>; ) &#123;</span><br><span class="line">            outputStream.write(b);</span><br><span class="line">        &#125;</span><br><span class="line">        outputStream.close();</span><br><span class="line">        inputStream.close();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">new</span> TouTiao(<span class="string">"街拍"</span>, <span class="string">"./Images/Toutiao/"</span>).crawl(<span class="number">1</span>, <span class="number">6</span>);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>运行结果如下：</p>
+<p><img src="/images/202101/2/6.png" alt></p>
+<p>记得在项目的pom.xml文件中添加如下依赖：</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="comment">&lt;!-- https://mvnrepository.com/artifact/com.google.code.gson/gson --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.google.code.gson<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>gson<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.8.5<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!-- https://mvnrepository.com/artifact/org.jsoup/jsoup --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.jsoup<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>jsoup<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.13.1<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>Java</category>
+      </categories>
+      <tags>
+        <tag>Jsoup</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Jsoup简明教程</title>
+    <url>/2021/01/05/2f6c8b36/</url>
+    <content><![CDATA[<p>jsoup是一个操纵HTML的Java库。它提供了很多便利的API，我们可以用HTML5 DOM方法和CSS选择器来获取URL，提取和操作数据。</p><p>先看一个简单的例子，新建一个Maven项目：</p><p><img src="/images/202101/1/1.png" alt></p><p>在项目的pom.xml文件中添加如下依赖：</p><figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="comment">&lt;!-- https://mvnrepository.com/artifact/org.jsoup/jsoup --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.jsoup<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>jsoup<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.13.1<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure><a id="more"></a>
+
+
+
+
+<p>确认项目下的External Libraries中包含如下jar包</p>
+<p><img src="/images/202101/1/2.png" alt></p>
+<p>我们的例子是提取到百度首页的标题，如下图所示：</p>
+<p><img src="/images/202101/1/3.png" alt></p>
+<p>使用jsoup库可以很容易做到这事儿，</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> com.andy;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.jsoup.Jsoup;</span><br><span class="line"><span class="keyword">import</span> org.jsoup.nodes.Document;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">JsoupDemo</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">        Document document = Jsoup.connect(<span class="string">"http://www.baidu.com"</span>).get();</span><br><span class="line">        System.out.println(document.title());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>结果如下：</p>
+<p><img src="/images/202101/1/4.png" alt></p>
+<p>通过<code>Jsoup.connect(&quot;http://www.baidu.com&quot;).get()</code>我们获取到了百度首页的HTML文档并返回一个<code>Document</code>对象(它就代表了HTML文档)，使用<code>Document</code>对象的<code>title()</code>方法获取到了HTML文档的标题。</p>
+<h2 id="获取Document对象"><a href="#获取Document对象" class="headerlink" title="获取Document对象"></a>获取Document对象</h2><p>有多个方法获取到<code>Document</code>对象。</p>
+<h3 id="Jsoup-parse-String-html"><a href="#Jsoup-parse-String-html" class="headerlink" title="Jsoup.parse(String html)"></a>Jsoup.parse(String html)</h3><p>该方法从字符串解析出一个<code>Document</code>对象，</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Document document = Jsoup.parse(<span class="string">"&lt;style&gt;p &#123;font-size:10px&#125;&lt;/style&gt;"</span>);</span><br><span class="line">System.out.println(document);</span><br></pre></td></tr></table></figure>
+<p><img src="/images/202101/1/5.png" alt></p>
+<p>可以看到对于缺失的标签，jsoup库帮我们补全。</p>
+<h3 id="Jsoup-parseBodyFragment-String-html"><a href="#Jsoup-parseBodyFragment-String-html" class="headerlink" title="Jsoup.parseBodyFragment(String html)"></a>Jsoup.parseBodyFragment(String html)</h3><p>该方法从字符串解析出一个<code>Document</code>对象，与<code>Jsoup.parse(String html)</code>方法不同的是，此方法会将<code>html</code>插入到<code>body</code>标签中，</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Document document = Jsoup.parseBodyFragment(<span class="string">"&lt;style&gt;p &#123;font-size:10px&#125;&lt;/style&gt;"</span>);</span><br><span class="line">System.out.println(document);</span><br></pre></td></tr></table></figure>
+<p><img src="/images/202101/1/6.png" alt></p>
+<h3 id="Jsoup-connect-String-url-get"><a href="#Jsoup-connect-String-url-get" class="headerlink" title="Jsoup.connect(String url).get()"></a>Jsoup.connect(String url).get()</h3><p>该方法从目标URL解析出一个<code>Document</code>对象，正如样例所示。</p>
+<h3 id="Jsoup-parse-File-in-String-charset-String-baseUri"><a href="#Jsoup-parse-File-in-String-charset-String-baseUri" class="headerlink" title="Jsoup.parse(File in, String charset, String baseUri)"></a>Jsoup.parse(File in, String charset, String baseUri)</h3><p>该方法从文件中解析出一个<code>Document</code>对象，我们将百度首页的html文档保存到本地，然后用此方法得到一个<code>Document</code>对象：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">File file = <span class="keyword">new</span> File(<span class="string">"./index.html"</span>);</span><br><span class="line">Document document = Jsoup.parse(file, <span class="string">"UTF-8"</span>);</span><br><span class="line">System.out.println(document);</span><br></pre></td></tr></table></figure>
+<p><img src="/images/202101/1/7.png" alt></p>
+<h2 id="提取数据"><a href="#提取数据" class="headerlink" title="提取数据"></a>提取数据</h2><p>获取到了<code>Document</code>对象有什么用呢？我们可以通过它的很方便的方法提取数据。</p>
+<h3 id="DOM方法"><a href="#DOM方法" class="headerlink" title="DOM方法"></a>DOM方法</h3><p>在<code>Document</code>对象上我们可以使用一些类DOM方法，比如：</p>
+<ul>
+<li><code>getElementById(String id)</code></li>
+<li><code>getElementsByTag(String tag)</code></li>
+<li><code>getElementsByClass(String className)</code></li>
+<li><code>getElementsByAttribute(String key)</code></li>
+</ul>
+<p>还是用百度首页来举例：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">File file = <span class="keyword">new</span> File(<span class="string">"./index.html"</span>);</span><br><span class="line">Document document = Jsoup.parse(file, <span class="string">"UTF-8"</span>);</span><br><span class="line">Elements elements = document.getElementsByTag(<span class="string">"a"</span>);</span><br><span class="line"><span class="keyword">for</span> (Element element : elements) &#123;</span><br><span class="line">    System.out.println(element);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><img src="/images/202101/1/8.png" alt></p>
+<p>我们<code>getElementsByTag()</code>方法获取到了整个页面的<code>a</code>元素，然后打印输出每个元素。</p>
+<p>可以用下列方法提取元素的数据：</p>
+<ul>
+<li><code>attr(String key)</code>获取元素<code>key</code>属性的值</li>
+<li><code>attributes()</code>获取元素所有属性</li>
+<li><code>id()</code>获取元素id属性的值</li>
+<li><code>className</code>和<code>classNames</code>获取元素class属性的值</li>
+<li><code>text()</code>获取元素内容</li>
+</ul>
+<p>例如：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">File file = <span class="keyword">new</span> File(<span class="string">"./index.html"</span>);</span><br><span class="line">Document document = Jsoup.parse(file, <span class="string">"UTF-8"</span>);</span><br><span class="line">Elements elements = document.getElementsByTag(<span class="string">"a"</span>);</span><br><span class="line"><span class="keyword">for</span> (Element element : elements) &#123;</span><br><span class="line">    System.out.println(element.text() + <span class="string">" : "</span> + element.attr(<span class="string">"href"</span>));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><img src="/images/202101/1/9.png" alt></p>
+<h3 id="选择器方法"><a href="#选择器方法" class="headerlink" title="选择器方法"></a>选择器方法</h3><p>除了类DOM方法外，还可以使用CSS选择器语法对元素进行筛选，主要是用<code>Element.select(String selector)</code>方法。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">File file = <span class="keyword">new</span> File(<span class="string">"./index.html"</span>);</span><br><span class="line">Document document = Jsoup.parse(file, <span class="string">"UTF-8"</span>);</span><br><span class="line">Elements elements = document.select(<span class="string">"a[href]"</span>);</span><br><span class="line"><span class="keyword">for</span> (Element element : elements) &#123;</span><br><span class="line">    System.out.println(element.text() + <span class="string">" : "</span> + element.attr(<span class="string">"href"</span>));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><img src="/images/202101/1/10.png" alt></p>
+<p>如上例所示，通过<code>select()</code>方法找到了所有带有<code>href</code>属性的<code>a</code>标签。值得注意的是，<code>select()</code>方法可以在<code>Document</code>，<code>Element</code>或<code>Elements</code>对象上使用。</p>
+<p>更多选择器语法请看<a href="https://jsoup.org/cookbook/extracting-data/selector-syntax" target="_blank" rel="noopener">Use selector-syntax to find elements</a>。</p>
+<h3 id="获取绝对路径"><a href="#获取绝对路径" class="headerlink" title="获取绝对路径"></a>获取绝对路径</h3><p>有时我们需要将资源的相对路径转换为绝对路径，我们可以用如下两种方法：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Document doc = Jsoup.connect(<span class="string">"http://jsoup.org"</span>).get();</span><br><span class="line"></span><br><span class="line">Element link = doc.select(<span class="string">"a"</span>).first();</span><br><span class="line">String relHref = link.attr(<span class="string">"href"</span>); <span class="comment">// == "/"</span></span><br><span class="line">String absHref = link.attr(<span class="string">"abs:href"</span>); <span class="comment">// "http://jsoup.org/"</span></span><br><span class="line"><span class="comment">// 等价于</span></span><br><span class="line">String absLink = link.absUrl(<span class="string">"href"</span>) <span class="comment">// "http://jsoup.org/"</span></span><br></pre></td></tr></table></figure>
+<h2 id="爬取豆瓣电影TOP250"><a href="#爬取豆瓣电影TOP250" class="headerlink" title="爬取豆瓣电影TOP250"></a>爬取豆瓣电影TOP250</h2><p>了解了上述内容后，我们现在可以尝试爬取豆瓣电影TOP250啦！</p>
+<p><img src="/images/202101/1/11.png" alt></p>
+<p>观察其URL<code>https://movie.douban.com/top250?start=0&amp;filter=</code>，可以发现页数和URL是一一对应的，<code>start</code>的值会等于当前页<code>i</code>减1乘以25，即<code>start=(i-1)*25</code>，因此通过改变<code>start</code>的值就可以请求到不同的HTML页面。我们对页面上的每部电影信息做进一步分析：</p>
+<p><img src="/images/202101/1/12.png" alt></p>
+<p>可以看到每部电影都包含在一个class名为<code>item</code>的<code>div</code>标签中，作为示例我们这里只提取每部电影的标题和URL。完整代码如下所示：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> org.jsoup.Jsoup;</span><br><span class="line"><span class="keyword">import</span> org.jsoup.nodes.Document;</span><br><span class="line"><span class="keyword">import</span> org.jsoup.nodes.Element;</span><br><span class="line"><span class="keyword">import</span> org.jsoup.select.Elements;</span><br><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">JsoupDemo</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</span><br><span class="line">        String baseUrl = <span class="string">"https://movie.douban.com/top250?start=%d&amp;filter="</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++) &#123;</span><br><span class="line">            String url = String.format(baseUrl, i * <span class="number">25</span>);</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                parsePage(url);</span><br><span class="line">            &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">                System.out.println(<span class="string">"Error !!"</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">parsePage</span><span class="params">(String src)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">        Document document = Jsoup.connect(src).get();</span><br><span class="line">        Elements elements = document.select(<span class="string">"div.item"</span>);</span><br><span class="line">        <span class="keyword">for</span> (Element element : elements) &#123;</span><br><span class="line">            String title = element.select(<span class="string">"span.title"</span>).first().text();</span><br><span class="line">            String url = element.select(<span class="string">"div.hd &gt; a"</span>).first().attr(<span class="string">"href"</span>);</span><br><span class="line">            System.out.println(<span class="string">"title : "</span> + title + <span class="string">" url : "</span> + url);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>抓取结果如下：</p>
+<p><img src="/images/202101/1/13.png" alt></p>
+]]></content>
+      <categories>
+        <category>Java</category>
+      </categories>
+      <tags>
+        <tag>Jsoup</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Git教程</title>
     <url>/2020/12/31/22d36175/</url>
     <content><![CDATA[<h2 id="创建新仓库"><a href="#创建新仓库" class="headerlink" title="创建新仓库"></a>创建新仓库</h2><p>创建新目录，进入新目录执行</p><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git init</span><br></pre></td></tr></table></figure><p>用以创建新的git仓库。</p><p><img src="/images/202012/8/2.png" alt></p><h2 id="检出仓库"><a href="#检出仓库" class="headerlink" title="检出仓库"></a>检出仓库</h2><p>执行如下命令可以创建一个本地仓库的克隆版本：</p><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git clone /path/to/repository</span><br></pre></td></tr></table></figure><p><img src="/images/202012/8/3.png" alt></p><p>如果想要克隆的仓库在远端服务器上，比如Github上</p><p><img src="/images/202012/8/4.png" alt></p><p>我们可以使用如下命令克隆到本地，</p><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git clone git@github.com:AndyFree96/awesome-resources.git</span><br></pre></td></tr></table></figure><a id="more"></a>
@@ -1094,57 +1244,6 @@ L(w,b)=\frac{1}{N}\sum_{n=1}^{N}{\left ( \hat{y}^n-\left ( b + w ·x_{cp}^{n} \r
       </tags>
   </entry>
   <entry>
-    <title>李宏毅机器学习(一)引言</title>
-    <url>/2019/11/05/a1aabbc5/</url>
-    <content><![CDATA[<p>最近几年人工智能这个词总是时不时地出现在我们视野里，确切来说它也并不是什么新词儿，它在1950年代就被提出来了。它代表着我们人类的一个长期目标，那便是<strong>希望机器可以和人一样聪明。</strong></p><p><img src="/images/201911/8/1.png" alt></p><p>可是人们却不太清楚如何做这件事，不太清楚如何让机器拥有智能，变得和人一样聪明。直到1980年代，有了<strong>机器学习。</strong> 顾名思义，机器学习就是让机器拥有学习的能力。那么，它和人工智能有什么关系呢？<strong>人工智能是我们想要达成的目标，而机器学习是为了达成目标使用的手段。深度学习是机器学习中的一种方法。</strong></p><a id="more"></a>
-
-
-<p><img src="/images/201911/8/2.png" alt></p>
-<p>那么在有机器学习，深度学习之前，我们是如何做人工智能呢？</p>
-<p>生物学的知识告诉我们，生物的行为取决于先天的本能或后天学习的结果。</p>
-<p>举例来说，河狸筑坝的能力是天生的。</p>
-<p><img src="/images/201911/8/3.png" alt></p>
-<p>它的筑坝行为是这样的：</p>
-<ul>
-<li>如果听到流水声，就会筑堤直到听不到流水声。</li>
-</ul>
-<p>我们之前做人工智能就是这样的，设定好机器的先天本能，通常是一些由人类确定的规则。</p>
-<p><img src="/images/201911/8/4.png" alt></p>
-<p>看起来也不错，似乎也能完成不少任务。但也存在很大的问题，我们很难考虑到所有的规则。对于上述的聊天机器人，我们不太可能想到所有的响应规则。这就导致了机器永远无法超过它的创造者。它的所有行为都在我们定义的规则之下，也就是说它没有<code>freestyle</code>。</p>
-<p>我们的目的是研究真正的机器学习。那么，什么是真正的机器学习呢？</p>
-<p>简单来说就是写程序让机器有学习的能力。接下来，我们就给它提供数据以供其学习。比如在语音识别中，</p>
-<p><img src="/images/201911/8/5.png" alt></p>
-<p>告诉机器这段语音是“Hi”。</p>
-<p><img src="/images/201911/8/6.png" alt></p>
-<p>这段语音是“How are you”。</p>
-<p>我们可以机器提供大量的语音数据，并告诉它每段语音的内容。通过不断地学习，它逐渐若有所得。于是，当我们给它一段语音（之前可能从来没有听过），它会告诉我们内容是什么。</p>
-<p><img src="/images/201911/8/7.png" alt></p>
-<p>过程如下所示：</p>
-<p><img src="/images/201911/8/8.png" alt></p>
-<p>图像识别也是类似的过程：</p>
-<p><img src="/images/201911/8/9.png" alt></p>
-<p>机器学习可以看成是从数据中找到一个函数。</p>
-<p><img src="/images/201911/8/10.png" alt></p>
-<p>举个例子，我们要进行图像识别，通过给机器的数据，机器学习算法可以得到一个函数。当将图像输入给该函数时，它能输出该图像对应的类别。</p>
-<p><img src="/images/201911/8/11.png" alt></p>
-<p>那么如何得到这个函数呢？我们有很多可以选择的模型，比如神经网络，SVM，决策树等等。每个模型内都包含了很多函数（模型可能有很多参数，参数是可以变化的）。</p>
-<p><img src="/images/201911/8/12.png" alt></p>
-<p>这么多函数选择哪一个呢？所以我们还得有一个评价指标，当把数据丢给模型后能够衡量函数的好坏。知道了函数的好坏之后，自然要选择最好的函数。</p>
-<p>如上图所示，函数<code>f1</code>自然好于<code>f2</code>。同时也可以看到，这些数据有个特点，就是每个数据都给出了函数的输入和函数期望得到的值。</p>
-<p><img src="/images/201911/8/13.png" alt></p>
-<p>在这种情景下的机器学习叫做监督学习。找到了最好的函数之后，我们就可以用它来测试，看它是否有举一反三的能力。整个流程如下：</p>
-<p><img src="/images/201911/8/14.png" alt></p>
-<p>所以总结一下，机器学习大致可以分为三步：</p>
-<p><img src="/images/201911/8/15.png" alt></p>
-]]></content>
-      <categories>
-        <category>机器学习</category>
-      </categories>
-      <tags>
-        <tag>公开课</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>李宏毅机器学习(二)学习导图</title>
     <url>/2019/11/05/68d48c63/</url>
     <content><![CDATA[<p>机器学习发展至今涵盖的内容已经非常多，本文通过对其使用情景、任务和方法分类在上文的基础上对机器学习做进一步的介绍。</p><p><img src="/images/201911/9/1.png" alt></p><h3 id="监督学习-Supervised-Learning"><a href="#监督学习-Supervised-Learning" class="headerlink" title="监督学习(Supervised Learning)"></a>监督学习(Supervised Learning)</h3><p>上文曾提到机器学习可以看成是从数据中找到一个函数。对于回归(Regression)这类任务而言，我们希望得到的函数的输出值是数值(Scalar)，而不是像之前图像识别一样输出类别。</p><a id="more"></a>
@@ -1255,6 +1354,57 @@ L(w,b)=\frac{1}{N}\sum_{n=1}^{N}{\left ( \hat{y}^n-\left ( b + w ·x_{cp}^{n} \r
 <blockquote>
 <p>绿色框代表方法，可以放在任一学习任务中。</p>
 </blockquote>
+]]></content>
+      <categories>
+        <category>机器学习</category>
+      </categories>
+      <tags>
+        <tag>公开课</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>李宏毅机器学习(一)引言</title>
+    <url>/2019/11/05/a1aabbc5/</url>
+    <content><![CDATA[<p>最近几年人工智能这个词总是时不时地出现在我们视野里，确切来说它也并不是什么新词儿，它在1950年代就被提出来了。它代表着我们人类的一个长期目标，那便是<strong>希望机器可以和人一样聪明。</strong></p><p><img src="/images/201911/8/1.png" alt></p><p>可是人们却不太清楚如何做这件事，不太清楚如何让机器拥有智能，变得和人一样聪明。直到1980年代，有了<strong>机器学习。</strong> 顾名思义，机器学习就是让机器拥有学习的能力。那么，它和人工智能有什么关系呢？<strong>人工智能是我们想要达成的目标，而机器学习是为了达成目标使用的手段。深度学习是机器学习中的一种方法。</strong></p><a id="more"></a>
+
+
+<p><img src="/images/201911/8/2.png" alt></p>
+<p>那么在有机器学习，深度学习之前，我们是如何做人工智能呢？</p>
+<p>生物学的知识告诉我们，生物的行为取决于先天的本能或后天学习的结果。</p>
+<p>举例来说，河狸筑坝的能力是天生的。</p>
+<p><img src="/images/201911/8/3.png" alt></p>
+<p>它的筑坝行为是这样的：</p>
+<ul>
+<li>如果听到流水声，就会筑堤直到听不到流水声。</li>
+</ul>
+<p>我们之前做人工智能就是这样的，设定好机器的先天本能，通常是一些由人类确定的规则。</p>
+<p><img src="/images/201911/8/4.png" alt></p>
+<p>看起来也不错，似乎也能完成不少任务。但也存在很大的问题，我们很难考虑到所有的规则。对于上述的聊天机器人，我们不太可能想到所有的响应规则。这就导致了机器永远无法超过它的创造者。它的所有行为都在我们定义的规则之下，也就是说它没有<code>freestyle</code>。</p>
+<p>我们的目的是研究真正的机器学习。那么，什么是真正的机器学习呢？</p>
+<p>简单来说就是写程序让机器有学习的能力。接下来，我们就给它提供数据以供其学习。比如在语音识别中，</p>
+<p><img src="/images/201911/8/5.png" alt></p>
+<p>告诉机器这段语音是“Hi”。</p>
+<p><img src="/images/201911/8/6.png" alt></p>
+<p>这段语音是“How are you”。</p>
+<p>我们可以机器提供大量的语音数据，并告诉它每段语音的内容。通过不断地学习，它逐渐若有所得。于是，当我们给它一段语音（之前可能从来没有听过），它会告诉我们内容是什么。</p>
+<p><img src="/images/201911/8/7.png" alt></p>
+<p>过程如下所示：</p>
+<p><img src="/images/201911/8/8.png" alt></p>
+<p>图像识别也是类似的过程：</p>
+<p><img src="/images/201911/8/9.png" alt></p>
+<p>机器学习可以看成是从数据中找到一个函数。</p>
+<p><img src="/images/201911/8/10.png" alt></p>
+<p>举个例子，我们要进行图像识别，通过给机器的数据，机器学习算法可以得到一个函数。当将图像输入给该函数时，它能输出该图像对应的类别。</p>
+<p><img src="/images/201911/8/11.png" alt></p>
+<p>那么如何得到这个函数呢？我们有很多可以选择的模型，比如神经网络，SVM，决策树等等。每个模型内都包含了很多函数（模型可能有很多参数，参数是可以变化的）。</p>
+<p><img src="/images/201911/8/12.png" alt></p>
+<p>这么多函数选择哪一个呢？所以我们还得有一个评价指标，当把数据丢给模型后能够衡量函数的好坏。知道了函数的好坏之后，自然要选择最好的函数。</p>
+<p>如上图所示，函数<code>f1</code>自然好于<code>f2</code>。同时也可以看到，这些数据有个特点，就是每个数据都给出了函数的输入和函数期望得到的值。</p>
+<p><img src="/images/201911/8/13.png" alt></p>
+<p>在这种情景下的机器学习叫做监督学习。找到了最好的函数之后，我们就可以用它来测试，看它是否有举一反三的能力。整个流程如下：</p>
+<p><img src="/images/201911/8/14.png" alt></p>
+<p>所以总结一下，机器学习大致可以分为三步：</p>
+<p><img src="/images/201911/8/15.png" alt></p>
 ]]></content>
       <categories>
         <category>机器学习</category>
@@ -1820,10 +1970,9 @@ L(w,b)=\frac{1}{N}\sum_{n=1}^{N}{\left ( \hat{y}^n-\left ( b + w ·x_{cp}^{n} \r
 </ul>
 ]]></content>
       <categories>
-        <category>Python爬虫</category>
+        <category>Python</category>
       </categories>
       <tags>
-        <tag>Python</tag>
         <tag>Requests</tag>
       </tags>
   </entry>
@@ -2205,7 +2354,7 @@ L(w,b)=\frac{1}{N}\sum_{n=1}^{N}{\left ( \hat{y}^n-\left ( b + w ·x_{cp}^{n} \r
 </ul>
 ]]></content>
       <categories>
-        <category>Python爬虫</category>
+        <category>Python</category>
       </categories>
       <tags>
         <tag>Python</tag>
