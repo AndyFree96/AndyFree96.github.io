@@ -1,6 +1,81 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>那些好用的JavaScript数组方法</title>
+    <url>/2021/01/07/5bb0bc55/</url>
+    <content><![CDATA[<p>在使用JavaScript编程时，我们会经常用到数组对象，本文我们就来盘点一下那些好用的数组方法吧！😁</p><p>我们先创建两个数组：</p><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> a = [<span class="string">'JavaScript'</span>, <span class="string">'Php'</span>, <span class="string">'Python'</span>, <span class="string">'Ruby'</span>, <span class="string">'C++'</span>, <span class="string">'Node.js'</span>, <span class="string">'Java'</span>, <span class="string">'C++'</span>];</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> b = [<span class="number">1</span>, <span class="number">3</span>, <span class="number">8</span>, <span class="number">16</span>, <span class="number">32</span>, <span class="number">48</span>, <span class="number">5</span>];</span><br></pre></td></tr></table></figure><a id="more"></a>
+
+
+<h2 id="every"><a href="#every" class="headerlink" title="every()"></a><code>every()</code></h2><p>首先，我们想知道数组<code>a</code>中的所有元素长度都是大于4的吗？对于这个数组的而言，结果是显然的。我们可以用如下的<code>for</code>循环得到问题的答案，</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> result = <span class="literal">true</span>;</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; a.length; i++&gt;)&#123;</span><br><span class="line">    <span class="keyword">if</span> (a[i].length &lt;= <span class="number">4</span>)&#123;</span><br><span class="line">        result = <span class="literal">false</span>;</span><br><span class="line">        <span class="keyword">break</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">console</span>.log(result);</span><br></pre></td></tr></table></figure>
+<p>结果如下：</p>
+<p><img src="/images/202101/4/1.png" alt></p>
+<p>但用<code>for</code>循环的方式多少显得有些麻烦，我们可以更加简洁地得到结果，那就是使用<code>every()</code>方法。</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">a.every(<span class="function"><span class="params">word</span> =&gt;</span> word.length &gt; <span class="number">4</span>);</span><br></pre></td></tr></table></figure>
+<p><img src="/images/202101/4/2.png" alt></p>
+<p>通过传入一个箭头函数，就将问题解决啦，而且代码变得简洁清晰多了😉。</p>
+<h2 id="some"><a href="#some" class="headerlink" title="some()"></a><code>some()</code></h2><p>接下来，我们想知道数组<code>b</code>中是否有大于10的元素呢？看起来这问题似乎有点傻，但……</p>
+<p><img src="/images/202101/4/3.png" alt></p>
+<p>如果数组<code>b</code>中有1万个元素呢？</p>
+<p>我们同样可以使用<code>for</code>循环得到问题的答案：</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> result = <span class="literal">false</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; b.length; i++)&#123;</span><br><span class="line">    <span class="keyword">if</span> (b[i] &gt; <span class="number">10</span>)&#123;</span><br><span class="line">        result = <span class="literal">true</span>;</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(result);</span><br></pre></td></tr></table></figure>
+<p>我们还可以用<code>some()</code>方法，</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">b.some(<span class="function"><span class="params">elem</span> =&gt;</span> elem &gt; <span class="number">10</span>);</span><br></pre></td></tr></table></figure>
+<p><img src="/images/202101/4/4.png" alt></p>
+<p>如上所示，我们总是可以通过<code>every()</code>方法检测数组中所有元素都满足某种要求，而通过<code>some()</code>方法检测数组中是否有某个元素满足某种要求。</p>
+<h2 id="filter"><a href="#filter" class="headerlink" title="filter()"></a><code>filter()</code></h2><p>我们已经知道数组<code>a</code>中并不是所有元素的长度都是大于4的，那么具体是哪些元素的长度大于4呢？有没有什么办法可以把它们都找到呢？</p>
+<p>老规矩，我们依旧可以用<code>for</code>循环。</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> words = [];</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; a.length; i++)&#123;</span><br><span class="line">    <span class="keyword">if</span> (a[i].length &gt; <span class="number">4</span>)&#123;</span><br><span class="line">        words.push(a[i]);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">console</span>.log(words);</span><br></pre></td></tr></table></figure>
+<p><img src="/images/202101/4/5.png" alt></p>
+<p>但我们还是推荐更加简短的<code>filter()</code>方法，</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">a.filter(<span class="function"><span class="params">word</span> =&gt;</span> word.length &gt; <span class="number">4</span>);</span><br></pre></td></tr></table></figure>
+<p>结果如下：</p>
+<p><img src="/images/202101/4/6.png" alt></p>
+<h2 id="map"><a href="#map" class="headerlink" title="map()"></a><code>map()</code></h2><p>接下来，我们来做另外一件事，那就是给数组<code>a</code>中的每个元素后追加一个字符串“ is awesome!”，我们可以怎么做呢？——用<code>map()</code>方法。</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">a.map(<span class="function"><span class="params">word</span> =&gt;</span> word + <span class="string">" is awesome!"</span>);</span><br></pre></td></tr></table></figure>
+<p><img src="/images/202101/4/7.png" alt></p>
+<h2 id="forEach"><a href="#forEach" class="headerlink" title="forEach()"></a><code>forEach()</code></h2><p>如果我们想将数组<code>a</code>中长度大于4的元素每每追加一个字符串“ is awesome!”并依次打印输出怎么做？</p>
+<p>首先我们可以用<code>filter()</code>方法进行筛选，然后用<code>map()</code>方法进行追加，最后用<code>forEach()</code>方法进行迭代打印输出。</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">a.filter(<span class="function"><span class="params">word</span> =&gt;</span> word.length &gt; <span class="number">4</span>).map(<span class="function"><span class="params">word</span> =&gt;</span> word + <span class="string">" is awesome!"</span>).forEach(<span class="function"><span class="params">word</span> =&gt;</span> <span class="built_in">console</span>.log(word));</span><br></pre></td></tr></table></figure>
+<p><img src="/images/202101/4/8.png" alt></p>
+<p>现在你可能发现了<code>map()</code>和<code>filter()</code>方法返回一个数组的好处了吧！😋</p>
+<h2 id="reduce"><a href="#reduce" class="headerlink" title="reduce()"></a><code>reduce()</code></h2><p>如果想将数组<code>b</code>进行求和运算该怎么做呢？——用<code>reduce()</code>方法。</p>
+<p><code>reduce()</code>方法的原型如下：</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">array.reduce(reducer [, initialValue])</span><br></pre></td></tr></table></figure>
+<p><code>reducer</code>为一个回调函数，以及可选初始化参数<code>initialValue</code>。<code>reduce()</code>方法会在每个数组元素上调用<code>reducer()</code>函数，<code>reducer()</code>函数返回一个累积的值，这个值在下一次调用<code>reducer()</code>函数时作为参数传入。</p>
+<p><code>reducer()</code>函数的原型如下：</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">reducer</span>(<span class="params">accumulator, currentValue, currentIndex, array</span>)</span>&#123;&#125;</span><br></pre></td></tr></table></figure>
+<p>回到给数组<code>b</code>进行求和的问题，代码如下：</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">b.reduce(<span class="function">(<span class="params">accu, curr</span>) =&gt;</span> accu + curr);</span><br></pre></td></tr></table></figure>
+<p><img src="/images/202101/4/9.png" alt></p>
+<h2 id="includes"><a href="#includes" class="headerlink" title="includes()"></a><code>includes()</code></h2><p>假如我们想知道数组中是否包含某个元素怎么整？比如，数组<code>a</code>包含<code>Julia</code>吗？</p>
+<p>当然，我们可以用之前学到过的<code>some()</code>方法，</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">a.some(<span class="function"><span class="params">word</span> =&gt;</span> word === <span class="string">'Julia'</span>);</span><br></pre></td></tr></table></figure>
+<p>但还是推荐使用<code>includes()</code>方法：</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">a.includes(<span class="string">'Julia'</span>);</span><br></pre></td></tr></table></figure>
+<p><img src="/images/202101/4/10.png" alt></p>
+<p>无它，简明而已！</p>
+<h2 id="find"><a href="#find" class="headerlink" title="find()"></a><code>find()</code></h2><p><code>filter()</code>可以帮我们找到数组<code>b</code>中所有大于8的元素，但有时候我们要的不是所有，而是第一个。此时我们可以用<code>find()</code>方法。</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">b.find(<span class="function"><span class="params">elem</span> =&gt;</span> elem &gt; <span class="number">8</span>);</span><br></pre></td></tr></table></figure>
+<p><img src="/images/202101/4/11.png" alt></p>
+<h2 id="findIndex"><a href="#findIndex" class="headerlink" title="findIndex()"></a><code>findIndex()</code></h2><p>如果你对第一个元素（详见<code>find()</code>方法）不感兴趣，而是迫切想知道满足某条件的第一个元素的下标，那么可以用<code>findIndex()</code>方法。</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">b.findIndex(<span class="function"><span class="params">elem</span> =&gt;</span> elem &gt; <span class="number">8</span>);</span><br></pre></td></tr></table></figure>
+<p><img src="/images/202101/4/12.png" alt></p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>本文介绍了9个能让我们代码更加简洁的数组方法，分别是<code>every()</code>，<code>some()</code>，<code>filter()</code>，<code>map()</code>，<code>forEach()</code>，<code>reduce()</code>，<code>includes()</code>，<code>find()</code>和<code>findIndex()</code>，希望能让给你带来一点启发。</p>
+<h2 id="推荐"><a href="#推荐" class="headerlink" title="推荐"></a>推荐</h2><p>最后，推荐几个网站！</p>
+<p>JavaScript Tutorial: <a href="https://www.javascripttutorial.net/" target="_blank" rel="noopener">https://www.javascripttutorial.net/</a></p>
+<p>MDN Web Docs: <a href="https://developer.mozilla.org/en-US/" target="_blank" rel="noopener">https://developer.mozilla.org/en-US/</a></p>
+<p>感兴趣的同学可以去瞅瞅😍。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://www.w3schools.com/jsref/jsref_obj_array.asp" target="_blank" rel="noopener">https://www.w3schools.com/jsref/jsref_obj_array.asp</a></p>
+]]></content>
+      <categories>
+        <category>JavaScript</category>
+      </categories>
+      <tags>
+        <tag>JavaScript</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>用Python绘制NBA球员出手位置图</title>
     <url>/2021/01/05/c97e713d/</url>
     <content><![CDATA[<p>本文将介绍如何提取NBA球员投篮数据，然后用<code>matplotlib</code>和<code>seaborn</code>绘制出手位置图。</p><p>首先我们导入需要用到的包：</p><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="keyword">import</span> seaborn <span class="keyword">as</span> sns</span><br><span class="line"></span><br><span class="line">%matplotlib inline</span><br></pre></td></tr></table></figure><a id="more"></a>
@@ -1244,6 +1319,57 @@ L(w,b)=\frac{1}{N}\sum_{n=1}^{N}{\left ( \hat{y}^n-\left ( b + w ·x_{cp}^{n} \r
       </tags>
   </entry>
   <entry>
+    <title>李宏毅机器学习(一)引言</title>
+    <url>/2019/11/05/a1aabbc5/</url>
+    <content><![CDATA[<p>最近几年人工智能这个词总是时不时地出现在我们视野里，确切来说它也并不是什么新词儿，它在1950年代就被提出来了。它代表着我们人类的一个长期目标，那便是<strong>希望机器可以和人一样聪明。</strong></p><p><img src="/images/201911/8/1.png" alt></p><p>可是人们却不太清楚如何做这件事，不太清楚如何让机器拥有智能，变得和人一样聪明。直到1980年代，有了<strong>机器学习。</strong> 顾名思义，机器学习就是让机器拥有学习的能力。那么，它和人工智能有什么关系呢？<strong>人工智能是我们想要达成的目标，而机器学习是为了达成目标使用的手段。深度学习是机器学习中的一种方法。</strong></p><a id="more"></a>
+
+
+<p><img src="/images/201911/8/2.png" alt></p>
+<p>那么在有机器学习，深度学习之前，我们是如何做人工智能呢？</p>
+<p>生物学的知识告诉我们，生物的行为取决于先天的本能或后天学习的结果。</p>
+<p>举例来说，河狸筑坝的能力是天生的。</p>
+<p><img src="/images/201911/8/3.png" alt></p>
+<p>它的筑坝行为是这样的：</p>
+<ul>
+<li>如果听到流水声，就会筑堤直到听不到流水声。</li>
+</ul>
+<p>我们之前做人工智能就是这样的，设定好机器的先天本能，通常是一些由人类确定的规则。</p>
+<p><img src="/images/201911/8/4.png" alt></p>
+<p>看起来也不错，似乎也能完成不少任务。但也存在很大的问题，我们很难考虑到所有的规则。对于上述的聊天机器人，我们不太可能想到所有的响应规则。这就导致了机器永远无法超过它的创造者。它的所有行为都在我们定义的规则之下，也就是说它没有<code>freestyle</code>。</p>
+<p>我们的目的是研究真正的机器学习。那么，什么是真正的机器学习呢？</p>
+<p>简单来说就是写程序让机器有学习的能力。接下来，我们就给它提供数据以供其学习。比如在语音识别中，</p>
+<p><img src="/images/201911/8/5.png" alt></p>
+<p>告诉机器这段语音是“Hi”。</p>
+<p><img src="/images/201911/8/6.png" alt></p>
+<p>这段语音是“How are you”。</p>
+<p>我们可以机器提供大量的语音数据，并告诉它每段语音的内容。通过不断地学习，它逐渐若有所得。于是，当我们给它一段语音（之前可能从来没有听过），它会告诉我们内容是什么。</p>
+<p><img src="/images/201911/8/7.png" alt></p>
+<p>过程如下所示：</p>
+<p><img src="/images/201911/8/8.png" alt></p>
+<p>图像识别也是类似的过程：</p>
+<p><img src="/images/201911/8/9.png" alt></p>
+<p>机器学习可以看成是从数据中找到一个函数。</p>
+<p><img src="/images/201911/8/10.png" alt></p>
+<p>举个例子，我们要进行图像识别，通过给机器的数据，机器学习算法可以得到一个函数。当将图像输入给该函数时，它能输出该图像对应的类别。</p>
+<p><img src="/images/201911/8/11.png" alt></p>
+<p>那么如何得到这个函数呢？我们有很多可以选择的模型，比如神经网络，SVM，决策树等等。每个模型内都包含了很多函数（模型可能有很多参数，参数是可以变化的）。</p>
+<p><img src="/images/201911/8/12.png" alt></p>
+<p>这么多函数选择哪一个呢？所以我们还得有一个评价指标，当把数据丢给模型后能够衡量函数的好坏。知道了函数的好坏之后，自然要选择最好的函数。</p>
+<p>如上图所示，函数<code>f1</code>自然好于<code>f2</code>。同时也可以看到，这些数据有个特点，就是每个数据都给出了函数的输入和函数期望得到的值。</p>
+<p><img src="/images/201911/8/13.png" alt></p>
+<p>在这种情景下的机器学习叫做监督学习。找到了最好的函数之后，我们就可以用它来测试，看它是否有举一反三的能力。整个流程如下：</p>
+<p><img src="/images/201911/8/14.png" alt></p>
+<p>所以总结一下，机器学习大致可以分为三步：</p>
+<p><img src="/images/201911/8/15.png" alt></p>
+]]></content>
+      <categories>
+        <category>机器学习</category>
+      </categories>
+      <tags>
+        <tag>公开课</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>李宏毅机器学习(二)学习导图</title>
     <url>/2019/11/05/68d48c63/</url>
     <content><![CDATA[<p>机器学习发展至今涵盖的内容已经非常多，本文通过对其使用情景、任务和方法分类在上文的基础上对机器学习做进一步的介绍。</p><p><img src="/images/201911/9/1.png" alt></p><h3 id="监督学习-Supervised-Learning"><a href="#监督学习-Supervised-Learning" class="headerlink" title="监督学习(Supervised Learning)"></a>监督学习(Supervised Learning)</h3><p>上文曾提到机器学习可以看成是从数据中找到一个函数。对于回归(Regression)这类任务而言，我们希望得到的函数的输出值是数值(Scalar)，而不是像之前图像识别一样输出类别。</p><a id="more"></a>
@@ -1354,57 +1480,6 @@ L(w,b)=\frac{1}{N}\sum_{n=1}^{N}{\left ( \hat{y}^n-\left ( b + w ·x_{cp}^{n} \r
 <blockquote>
 <p>绿色框代表方法，可以放在任一学习任务中。</p>
 </blockquote>
-]]></content>
-      <categories>
-        <category>机器学习</category>
-      </categories>
-      <tags>
-        <tag>公开课</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>李宏毅机器学习(一)引言</title>
-    <url>/2019/11/05/a1aabbc5/</url>
-    <content><![CDATA[<p>最近几年人工智能这个词总是时不时地出现在我们视野里，确切来说它也并不是什么新词儿，它在1950年代就被提出来了。它代表着我们人类的一个长期目标，那便是<strong>希望机器可以和人一样聪明。</strong></p><p><img src="/images/201911/8/1.png" alt></p><p>可是人们却不太清楚如何做这件事，不太清楚如何让机器拥有智能，变得和人一样聪明。直到1980年代，有了<strong>机器学习。</strong> 顾名思义，机器学习就是让机器拥有学习的能力。那么，它和人工智能有什么关系呢？<strong>人工智能是我们想要达成的目标，而机器学习是为了达成目标使用的手段。深度学习是机器学习中的一种方法。</strong></p><a id="more"></a>
-
-
-<p><img src="/images/201911/8/2.png" alt></p>
-<p>那么在有机器学习，深度学习之前，我们是如何做人工智能呢？</p>
-<p>生物学的知识告诉我们，生物的行为取决于先天的本能或后天学习的结果。</p>
-<p>举例来说，河狸筑坝的能力是天生的。</p>
-<p><img src="/images/201911/8/3.png" alt></p>
-<p>它的筑坝行为是这样的：</p>
-<ul>
-<li>如果听到流水声，就会筑堤直到听不到流水声。</li>
-</ul>
-<p>我们之前做人工智能就是这样的，设定好机器的先天本能，通常是一些由人类确定的规则。</p>
-<p><img src="/images/201911/8/4.png" alt></p>
-<p>看起来也不错，似乎也能完成不少任务。但也存在很大的问题，我们很难考虑到所有的规则。对于上述的聊天机器人，我们不太可能想到所有的响应规则。这就导致了机器永远无法超过它的创造者。它的所有行为都在我们定义的规则之下，也就是说它没有<code>freestyle</code>。</p>
-<p>我们的目的是研究真正的机器学习。那么，什么是真正的机器学习呢？</p>
-<p>简单来说就是写程序让机器有学习的能力。接下来，我们就给它提供数据以供其学习。比如在语音识别中，</p>
-<p><img src="/images/201911/8/5.png" alt></p>
-<p>告诉机器这段语音是“Hi”。</p>
-<p><img src="/images/201911/8/6.png" alt></p>
-<p>这段语音是“How are you”。</p>
-<p>我们可以机器提供大量的语音数据，并告诉它每段语音的内容。通过不断地学习，它逐渐若有所得。于是，当我们给它一段语音（之前可能从来没有听过），它会告诉我们内容是什么。</p>
-<p><img src="/images/201911/8/7.png" alt></p>
-<p>过程如下所示：</p>
-<p><img src="/images/201911/8/8.png" alt></p>
-<p>图像识别也是类似的过程：</p>
-<p><img src="/images/201911/8/9.png" alt></p>
-<p>机器学习可以看成是从数据中找到一个函数。</p>
-<p><img src="/images/201911/8/10.png" alt></p>
-<p>举个例子，我们要进行图像识别，通过给机器的数据，机器学习算法可以得到一个函数。当将图像输入给该函数时，它能输出该图像对应的类别。</p>
-<p><img src="/images/201911/8/11.png" alt></p>
-<p>那么如何得到这个函数呢？我们有很多可以选择的模型，比如神经网络，SVM，决策树等等。每个模型内都包含了很多函数（模型可能有很多参数，参数是可以变化的）。</p>
-<p><img src="/images/201911/8/12.png" alt></p>
-<p>这么多函数选择哪一个呢？所以我们还得有一个评价指标，当把数据丢给模型后能够衡量函数的好坏。知道了函数的好坏之后，自然要选择最好的函数。</p>
-<p>如上图所示，函数<code>f1</code>自然好于<code>f2</code>。同时也可以看到，这些数据有个特点，就是每个数据都给出了函数的输入和函数期望得到的值。</p>
-<p><img src="/images/201911/8/13.png" alt></p>
-<p>在这种情景下的机器学习叫做监督学习。找到了最好的函数之后，我们就可以用它来测试，看它是否有举一反三的能力。整个流程如下：</p>
-<p><img src="/images/201911/8/14.png" alt></p>
-<p>所以总结一下，机器学习大致可以分为三步：</p>
-<p><img src="/images/201911/8/15.png" alt></p>
 ]]></content>
       <categories>
         <category>机器学习</category>
