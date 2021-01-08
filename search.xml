@@ -1,6 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Pandas备忘录</title>
+    <url>/2021/01/08/da27ff14/</url>
+    <content><![CDATA[<p><img src="/images/202101/5/relaxing-guinea-pig_01.png" alt></p><p>众所周知，Pandas是最受欢迎的Python数据科学与分析库。</p><p>Numpy用于较低级别的科学计算。Pandas构建于Numpy之上，专为实际数据分析而设计。</p><p>本文总结了这个库中一些常见、方便的功能。话不多说，让我们开始吧！</p><h3 id="数据集"><a href="#数据集" class="headerlink" title="数据集"></a>数据集</h3><p>数据是数据科学与分析的“命根子”，我们需要从数据中寻找答案，从数据中发现模式……如果没有数据的话，就无从谈起。</p><a id="more"></a>
+
+
+
+
+<p>数据获取的方式有很多种，这里分享一些提供数据的平台。</p>
+<p>pandas-videos：<a href="https://github.com/justmarkham/pandas-videos" target="_blank" rel="noopener">https://github.com/justmarkham/pandas-videos</a></p>
+<p><img src="/images/202101/5/4.png" alt="pandas-videos上的数据集"></p>
+<p>UCI Machine Learning Reposity：<a href="https://archive.ics.uci.edu/ml/datasets.html" target="_blank" rel="noopener">https://archive.ics.uci.edu/ml/datasets.html</a></p>
+<p><img src="/images/202101/5/3.png" alt="UCI Machine Learning Reposity"></p>
+<p>The 50 Best Free Datasets for Machine Learning：<a href="https://gengo.ai/datasets/the-50-best-free-datasets-for-machine-learning/" target="_blank" rel="noopener">https://gengo.ai/datasets/the-50-best-free-datasets-for-machine-learning/</a></p>
+<h3 id="导入数据"><a href="#导入数据" class="headerlink" title="导入数据"></a>导入数据</h3><p>任何的数据分析工作都是从导入数据开始，<a href="https://pandas.pydata.org/pandas-docs/stable/" target="_blank" rel="noopener">Pandas</a>提供了很多导入数据的方法。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">pd.read_csv(filename) # From a CSV file</span><br><span class="line">pd.read_table(filename) # From a delimited text file (like TSV)</span><br><span class="line">pd.read_excel(filename) # From an Excel file</span><br><span class="line">pd.read_sql(query, connection_object) # Reads from a SQL table/database</span><br><span class="line">pd.read_json(json_string) # Reads from a JSON formatted string, URL or file</span><br><span class="line">pd.read_html(url) # Parses an html URL, string or file and extract tables to a list of dataframes</span><br><span class="line">pd.read_clipboard() # Takes the contents of your clipboard and passes it to read_table()</span><br><span class="line">pd.DataFrame(dict) # From a dict, keys for columns names, values for data as lists</span><br></pre></td></tr></table></figure>
+<p>不妨举个例子，我们想分析一下IMDB高分电影，经过一番搜索，发现 <a href="https://raw.githubusercontent.com/justmarkham/pandas-videos/master/data/imdb_1000.csv" target="_blank" rel="noopener">https://raw.githubusercontent.com/justmarkham/pandas-videos/master/data/imdb_1000.csv</a> 上的数据就不错，<br>若想把它导入，使用<code>pd.read_csv</code>方法就行啦！</p>
+<p>具体来说，就是：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">dataURL = &apos;https://raw.githubusercontent.com/justmarkham/pandas-videos/master/data/imdb_1000.csv&apos;</span><br><span class="line">df = pd.read_csv(dataURL)</span><br><span class="line">df.head() # Prints first 5 rows of the DataFrame</span><br></pre></td></tr></table></figure>
+<p><img src="/images/202101/5/1.png" alt="前5行数据"></p>
+<p>关于上述导入数据方法的更多详细内容，请查看<a href="http://pandas.pydata.org/pandas-docs/stable/io.html#" target="_blank" rel="noopener">IO Tools</a>。</p>
+<h3 id="探索数据"><a href="#探索数据" class="headerlink" title="探索数据"></a>探索数据</h3><p>一旦将数据导入到DataFrame中之后，就可以用以下方法来了解数据的情况。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">df.index # Index Description</span><br><span class="line">df.columns # Columns in the DataFrame</span><br><span class="line">df.shape # Prints number of row and columns in DataFrame</span><br><span class="line">df.head(n) # Prints first n rows of the DataFrame</span><br><span class="line">df.tail(n) # Prints last n rows of the DataFrame</span><br><span class="line">df.info() # Index, DataType and Memory information</span><br><span class="line">df.describe() # Summary statistics for numerical columns</span><br><span class="line">s.value_counts(dropna=False) # Views unique values and counts</span><br><span class="line">df.apply(pd.Series.value_counts) # Unique value and counts for all columns</span><br><span class="line">df.mean() # Returns the mean of all columns</span><br><span class="line">df.corr() # Returns the correlation between columns in a DataFrame</span><br><span class="line">df.count() # Returns the number of non-null values in each DataFrame column</span><br><span class="line">df.max() # Returns the highest value in each column</span><br><span class="line">df.min() # Returns the lowest value in each column</span><br><span class="line">df.median() # Returns the median of each column</span><br><span class="line">df.std() # Returns the standard deviation of each column</span><br><span class="line">df.idxmax() # Index of the lowest value</span><br><span class="line">df.idxmin() # Index of the highest value</span><br></pre></td></tr></table></figure>
+<p>举个例子，在导入IMDB高分电影数据后统计一下每种电影类型的频数，我们就可以用:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">df[&apos;genre&apos;].value_counts()</span><br></pre></td></tr></table></figure>
+<p><img src="/images/202101/5/2.png" alt="每种电影类型的频数"></p>
+<h3 id="选择"><a href="#选择" class="headerlink" title="选择"></a>选择</h3><p>通常，我们可能需要选择单个元素或者数据的某个子集来进行深入分析。那么，这些方法就会大显身手：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">df[col] # Returns column with label col as Series</span><br><span class="line">df[[col1, col2]] # Returns columns as a new DataFrame</span><br><span class="line">s.iloc[0] # Selection by position (selects first element)</span><br><span class="line">s.loc[0] # Selection by index (selects element as index 0)</span><br><span class="line">df.iloc[0, :] # First row</span><br><span class="line">df.iloc[0, 0] # First element of first column</span><br><span class="line">df.iat[0, 0] # First element of first column. Access a single value for row/column pair by integer position</span><br><span class="line">df.at[row_label, col_label] # Access a single value for row/column label pair</span><br></pre></td></tr></table></figure>
+<p>更多内容，请查看<a href="http://pandas.pydata.org/pandas-docs/stable/indexing.html" target="_blank" rel="noopener">Indexing and Selecting Data</a>。</p>
+<h3 id="数据清理"><a href="#数据清理" class="headerlink" title="数据清理"></a>数据清理</h3><p>实际上，我们拿到数据后，往往需要清理它。以下就是一些非常有用的方法：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">df.columns = [&apos;a&apos;, &apos;b&apos;, &apos;c&apos;] # Renames columns</span><br><span class="line">pd.isnull() # Checks for null values, return Boolean Array</span><br><span class="line">pd.notnull() # Opposite of pd.isnull()</span><br><span class="line">df.dropna() # Drops all rows that contain null values</span><br><span class="line">df.dropna(axis=1) # Drops all columns that contain null values</span><br><span class="line">df.dropna(axis=1, thresh=n) # Drops all rows hava less than non null values</span><br><span class="line">df.fillna(x) # Replaces all null values with x</span><br><span class="line">s.fillna(s.mean()) # Replaces all null values with the mean </span><br><span class="line">s.astype(float) # Converts the datatype of the series to float</span><br><span class="line">s.replace(1, &apos;one&apos;) # Replaces all values equal to 1 with &apos;one&apos;</span><br><span class="line">s.replace([1, 3], [&apos;one&apos;, &apos;three&apos;]) # Replace all 1 with &apos;one&apos; and 3 with &apos;three&apos;</span><br><span class="line">df.rename(columns=lambda x: x + 1) # Mass renaming of columns</span><br><span class="line">df.rename(columns=&#123;&apos;old_name&apos;: &apos;new_name&apos;&#125;) # Selective renaming</span><br><span class="line">df.set_index(&apos;column_one&apos;) # Changes the index</span><br><span class="line">df.rename(index=lambda x: x + 1) # Mass renaming of index</span><br><span class="line">df.drop(labels) # Drop specified labels from rows or columns</span><br><span class="line">df.drop_duplicates(subset) # Return DataFrame with duplicate rows removed, optionally only considering certain columns</span><br></pre></td></tr></table></figure>
+<p>更多内容，请查看<a href="http://pandas.pydata.org/pandas-docs/stable/missing_data.html" target="_blank" rel="noopener">Working with missing data</a>。</p>
+<h3 id="过滤，排序和分组"><a href="#过滤，排序和分组" class="headerlink" title="过滤，排序和分组"></a>过滤，排序和分组</h3><p>一些对数据过滤、排序和分组的方法：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">df[df[col] &gt; 0.5] # Rows where the col column is greater than 0.5</span><br><span class="line">df[(df[col] &gt; 0.5) &amp; (df[col] &lt; 0.7)] # Rows where 0.5 &lt; col &lt; 0.7</span><br><span class="line">df.sort_values(col1) # Sorts values by col1 in ascending order</span><br><span class="line">df.sort_values(col2, ascending=False) # Sorts values by col2 in descending order</span><br><span class="line">df.sort_values([col1, col2], ascending=[True, False]) # Sorts values by col1 in ascending order then col2 in descending order</span><br><span class="line">df.groupby(col) # Returns a groupby object for values from one column</span><br><span class="line">df.groupby([col1,col2]) # Returns a groupby object values from multiple columns</span><br><span class="line">df.groupby(col1)[col2].mean() # Returns the mean of the values in col2, grouped by the values in col1 (mean can be replaced with almost any function from the statistics section)</span><br><span class="line">df.pivot_table(index=col1, values= col2,col3], aggfunc=mean) # Creates a pivot table that groups by col1 and calculates the mean of col2 and col3</span><br><span class="line">df.groupby(col1).agg(np.mean) # Finds the average across all columns for every unique column 1 group</span><br><span class="line">df.apply(np.mean) # Applies a function across each column</span><br><span class="line">df.apply(np.max, axis=1) # Applies a function across each row</span><br></pre></td></tr></table></figure>
+<p>更多内容，请查看<a href="http://pandas.pydata.org/pandas-docs/stable/groupby.html" target="_blank" rel="noopener">Group By: split-apply-combine</a>。</p>
+<h3 id="导出数据"><a href="#导出数据" class="headerlink" title="导出数据"></a>导出数据</h3><p>最后，当需要将分析结果导出时，也有几种方便的发方：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">df.to_csv(filename) # Writes to a CSV file</span><br><span class="line">df.to_excel(filename) # Writes to an Excel file</span><br><span class="line">df.to_sql(table_name, connectiion_object) # Writes to a SQL table</span><br><span class="line">df.to_json(filename) # Writes to a file in JSON format</span><br><span class="line">df.to_html(filename) # Saves as an HTML table</span><br><span class="line">df.to_clipboard() # Writes to the clipboard</span><br></pre></td></tr></table></figure>
+<p>详情请查看<a href="http://pandas.pydata.org/pandas-docs/stable/io.html#" target="_blank" rel="noopener">IO Tools</a>。</p>
+<h3 id="连接和合并"><a href="#连接和合并" class="headerlink" title="连接和合并"></a>连接和合并</h3><p>合并两个DataFrame的方法：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">pd.concat([df1, df2], axis=1) # Adds the columns in df1 to the end of df2</span><br><span class="line">pd.merge(df11, df2) # SQL-style merges</span><br><span class="line">df1.append(df2) # Adds the rows in df1 to the end of df2 (columns should be identical)</span><br><span class="line">df1.join(df2,on=col1,how=&apos;inner&apos;) # SQL-style joins</span><br></pre></td></tr></table></figure>
+<p>更多内容，请查看<a href="http://pandas.pydata.org/pandas-docs/stable/merging.html" target="_blank" rel="noopener">Merge, join, and concatenate</a>。</p>
+<h3 id="创建测试对象"><a href="#创建测试对象" class="headerlink" title="创建测试对象"></a>创建测试对象</h3><p>通用用于测试代码段。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">pd.DataFrame(np.random.rand(20,5)) # 5 columns and 20 rows of random floats</span><br><span class="line">pd.Series(my_list) # Create a series from an iterable my_list</span><br><span class="line">df.index = pd.data_range(&apos;1900/1/30&apos;, periods=df.shape[0]) # Add a date index</span><br></pre></td></tr></table></figure>
+<h3 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h3><p>或许我们可以从一个实例（来源于书籍《Python for Data Analysis》）出发，当作对上述内容的一个小练习。</p>
+<p>我们用的是<code>bitly_usagov</code>，数据可以在：<a href="https://github.com/wesm/pydata-book" target="_blank" rel="noopener">https://github.com/wesm/pydata-book</a> 处找到。</p>
+<h4 id="导入数据-1"><a href="#导入数据-1" class="headerlink" title="导入数据"></a>导入数据</h4><p>假如将数据下载到了本地，我们可以尝试将其导入并得到DataFrame对象，便于之后的分析工作。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">import pandas as pd</span><br><span class="line"></span><br><span class="line">file_path = &apos;../../Datasets/bitly_usagov/example.txt&apos; # Local file path</span><br><span class="line">df = pd.read_json(file_path, lines=True)</span><br><span class="line">df.info()</span><br></pre></td></tr></table></figure>
+<p><img src="/images/202101/5/5.png" alt="用info方法查看数据"></p>
+<h4 id="对时区计数"><a href="#对时区计数" class="headerlink" title="对时区计数"></a>对时区计数</h4><p><code>df</code>对象有一列名为<code>tz</code>，表示的是时区。我们可以对所有数据的时区进行统计，</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">tz_counts = df[&apos;tz&apos;].value_counts()</span><br><span class="line">tz_counts.head(10)</span><br></pre></td></tr></table></figure>
+<p><img src="/images/202101/5/6.png" alt></p>
+<p>我们可以将结果可视化，但在此之前，可以将未知或者缺失的时区补上一个替代值。</p>
+<p><code>fillna</code>函数可以替换缺失值（NA），而未知值（空字符串）则可以通过布尔数组索引进行替换：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">clean_tz = df[&apos;tz&apos;].fillna(&apos;Missing&apos;)</span><br><span class="line">clean_tz[clean_tz == &apos;&apos;] = &apos;Unknown&apos;</span><br><span class="line">tz_counts = clean_tz.value_counts()</span><br></pre></td></tr></table></figure>
+<p>之后，我们可以用<code>seaborn</code>包创建水平柱状图：</p>
+<p><img src="/images/202101/5/7.png" alt></p>
+<p><code>df</code>对象名为<code>a</code>的列中含有浏览器、设备、应用程序的相关信息，我们可以简单地将浏览器信息提取出来：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">df.a.str.split(&apos; &apos;).str.get(0).head(10)</span><br></pre></td></tr></table></figure>
+<p><img src="/images/202101/5/8.png" alt></p>
+<p>类似地，我们也可以将浏览器的统计信息可视化：</p>
+<p><img src="/images/202101/5/9.png" alt></p>
+<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><p>[1] <a href="https://paulovasconcellos.com.br/28-useful-pandas-functions-you-might-not-know-de42c59db085" target="_blank" rel="noopener">https://paulovasconcellos.com.br/28-useful-pandas-functions-you-might-not-know-de42c59db085</a></p>
+<p>[2] <a href="https://elitedatascience.com/python-cheat-sheet" target="_blank" rel="noopener">https://elitedatascience.com/python-cheat-sheet</a></p>
+<p>[3] <a href="https://www.dataquest.io/blog/pandas-cheat-sheet/" target="_blank" rel="noopener">https://www.dataquest.io/blog/pandas-cheat-sheet/</a></p>
+<p>[4] <a href="http://pandas.pydata.org/pandas-docs/stable/10min.html" target="_blank" rel="noopener">http://pandas.pydata.org/pandas-docs/stable/10min.html</a></p>
+]]></content>
+      <categories>
+        <category>数据分析</category>
+      </categories>
+      <tags>
+        <tag>Pandas</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>那些好用的JavaScript数组方法</title>
     <url>/2021/01/07/5bb0bc55/</url>
     <content><![CDATA[<p>在使用JavaScript编程时，我们会经常用到数组对象，本文我们就来盘点一下那些好用的数组方法吧！😁</p><p>我们先创建两个数组：</p><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> a = [<span class="string">'JavaScript'</span>, <span class="string">'Php'</span>, <span class="string">'Python'</span>, <span class="string">'Ruby'</span>, <span class="string">'C++'</span>, <span class="string">'Node.js'</span>, <span class="string">'Java'</span>, <span class="string">'C++'</span>];</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> b = [<span class="number">1</span>, <span class="number">3</span>, <span class="number">8</span>, <span class="number">16</span>, <span class="number">32</span>, <span class="number">48</span>, <span class="number">5</span>];</span><br></pre></td></tr></table></figure><a id="more"></a>
@@ -1319,57 +1392,6 @@ L(w,b)=\frac{1}{N}\sum_{n=1}^{N}{\left ( \hat{y}^n-\left ( b + w ·x_{cp}^{n} \r
       </tags>
   </entry>
   <entry>
-    <title>李宏毅机器学习(一)引言</title>
-    <url>/2019/11/05/a1aabbc5/</url>
-    <content><![CDATA[<p>最近几年人工智能这个词总是时不时地出现在我们视野里，确切来说它也并不是什么新词儿，它在1950年代就被提出来了。它代表着我们人类的一个长期目标，那便是<strong>希望机器可以和人一样聪明。</strong></p><p><img src="/images/201911/8/1.png" alt></p><p>可是人们却不太清楚如何做这件事，不太清楚如何让机器拥有智能，变得和人一样聪明。直到1980年代，有了<strong>机器学习。</strong> 顾名思义，机器学习就是让机器拥有学习的能力。那么，它和人工智能有什么关系呢？<strong>人工智能是我们想要达成的目标，而机器学习是为了达成目标使用的手段。深度学习是机器学习中的一种方法。</strong></p><a id="more"></a>
-
-
-<p><img src="/images/201911/8/2.png" alt></p>
-<p>那么在有机器学习，深度学习之前，我们是如何做人工智能呢？</p>
-<p>生物学的知识告诉我们，生物的行为取决于先天的本能或后天学习的结果。</p>
-<p>举例来说，河狸筑坝的能力是天生的。</p>
-<p><img src="/images/201911/8/3.png" alt></p>
-<p>它的筑坝行为是这样的：</p>
-<ul>
-<li>如果听到流水声，就会筑堤直到听不到流水声。</li>
-</ul>
-<p>我们之前做人工智能就是这样的，设定好机器的先天本能，通常是一些由人类确定的规则。</p>
-<p><img src="/images/201911/8/4.png" alt></p>
-<p>看起来也不错，似乎也能完成不少任务。但也存在很大的问题，我们很难考虑到所有的规则。对于上述的聊天机器人，我们不太可能想到所有的响应规则。这就导致了机器永远无法超过它的创造者。它的所有行为都在我们定义的规则之下，也就是说它没有<code>freestyle</code>。</p>
-<p>我们的目的是研究真正的机器学习。那么，什么是真正的机器学习呢？</p>
-<p>简单来说就是写程序让机器有学习的能力。接下来，我们就给它提供数据以供其学习。比如在语音识别中，</p>
-<p><img src="/images/201911/8/5.png" alt></p>
-<p>告诉机器这段语音是“Hi”。</p>
-<p><img src="/images/201911/8/6.png" alt></p>
-<p>这段语音是“How are you”。</p>
-<p>我们可以机器提供大量的语音数据，并告诉它每段语音的内容。通过不断地学习，它逐渐若有所得。于是，当我们给它一段语音（之前可能从来没有听过），它会告诉我们内容是什么。</p>
-<p><img src="/images/201911/8/7.png" alt></p>
-<p>过程如下所示：</p>
-<p><img src="/images/201911/8/8.png" alt></p>
-<p>图像识别也是类似的过程：</p>
-<p><img src="/images/201911/8/9.png" alt></p>
-<p>机器学习可以看成是从数据中找到一个函数。</p>
-<p><img src="/images/201911/8/10.png" alt></p>
-<p>举个例子，我们要进行图像识别，通过给机器的数据，机器学习算法可以得到一个函数。当将图像输入给该函数时，它能输出该图像对应的类别。</p>
-<p><img src="/images/201911/8/11.png" alt></p>
-<p>那么如何得到这个函数呢？我们有很多可以选择的模型，比如神经网络，SVM，决策树等等。每个模型内都包含了很多函数（模型可能有很多参数，参数是可以变化的）。</p>
-<p><img src="/images/201911/8/12.png" alt></p>
-<p>这么多函数选择哪一个呢？所以我们还得有一个评价指标，当把数据丢给模型后能够衡量函数的好坏。知道了函数的好坏之后，自然要选择最好的函数。</p>
-<p>如上图所示，函数<code>f1</code>自然好于<code>f2</code>。同时也可以看到，这些数据有个特点，就是每个数据都给出了函数的输入和函数期望得到的值。</p>
-<p><img src="/images/201911/8/13.png" alt></p>
-<p>在这种情景下的机器学习叫做监督学习。找到了最好的函数之后，我们就可以用它来测试，看它是否有举一反三的能力。整个流程如下：</p>
-<p><img src="/images/201911/8/14.png" alt></p>
-<p>所以总结一下，机器学习大致可以分为三步：</p>
-<p><img src="/images/201911/8/15.png" alt></p>
-]]></content>
-      <categories>
-        <category>机器学习</category>
-      </categories>
-      <tags>
-        <tag>公开课</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>李宏毅机器学习(二)学习导图</title>
     <url>/2019/11/05/68d48c63/</url>
     <content><![CDATA[<p>机器学习发展至今涵盖的内容已经非常多，本文通过对其使用情景、任务和方法分类在上文的基础上对机器学习做进一步的介绍。</p><p><img src="/images/201911/9/1.png" alt></p><h3 id="监督学习-Supervised-Learning"><a href="#监督学习-Supervised-Learning" class="headerlink" title="监督学习(Supervised Learning)"></a>监督学习(Supervised Learning)</h3><p>上文曾提到机器学习可以看成是从数据中找到一个函数。对于回归(Regression)这类任务而言，我们希望得到的函数的输出值是数值(Scalar)，而不是像之前图像识别一样输出类别。</p><a id="more"></a>
@@ -1480,6 +1502,57 @@ L(w,b)=\frac{1}{N}\sum_{n=1}^{N}{\left ( \hat{y}^n-\left ( b + w ·x_{cp}^{n} \r
 <blockquote>
 <p>绿色框代表方法，可以放在任一学习任务中。</p>
 </blockquote>
+]]></content>
+      <categories>
+        <category>机器学习</category>
+      </categories>
+      <tags>
+        <tag>公开课</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>李宏毅机器学习(一)引言</title>
+    <url>/2019/11/05/a1aabbc5/</url>
+    <content><![CDATA[<p>最近几年人工智能这个词总是时不时地出现在我们视野里，确切来说它也并不是什么新词儿，它在1950年代就被提出来了。它代表着我们人类的一个长期目标，那便是<strong>希望机器可以和人一样聪明。</strong></p><p><img src="/images/201911/8/1.png" alt></p><p>可是人们却不太清楚如何做这件事，不太清楚如何让机器拥有智能，变得和人一样聪明。直到1980年代，有了<strong>机器学习。</strong> 顾名思义，机器学习就是让机器拥有学习的能力。那么，它和人工智能有什么关系呢？<strong>人工智能是我们想要达成的目标，而机器学习是为了达成目标使用的手段。深度学习是机器学习中的一种方法。</strong></p><a id="more"></a>
+
+
+<p><img src="/images/201911/8/2.png" alt></p>
+<p>那么在有机器学习，深度学习之前，我们是如何做人工智能呢？</p>
+<p>生物学的知识告诉我们，生物的行为取决于先天的本能或后天学习的结果。</p>
+<p>举例来说，河狸筑坝的能力是天生的。</p>
+<p><img src="/images/201911/8/3.png" alt></p>
+<p>它的筑坝行为是这样的：</p>
+<ul>
+<li>如果听到流水声，就会筑堤直到听不到流水声。</li>
+</ul>
+<p>我们之前做人工智能就是这样的，设定好机器的先天本能，通常是一些由人类确定的规则。</p>
+<p><img src="/images/201911/8/4.png" alt></p>
+<p>看起来也不错，似乎也能完成不少任务。但也存在很大的问题，我们很难考虑到所有的规则。对于上述的聊天机器人，我们不太可能想到所有的响应规则。这就导致了机器永远无法超过它的创造者。它的所有行为都在我们定义的规则之下，也就是说它没有<code>freestyle</code>。</p>
+<p>我们的目的是研究真正的机器学习。那么，什么是真正的机器学习呢？</p>
+<p>简单来说就是写程序让机器有学习的能力。接下来，我们就给它提供数据以供其学习。比如在语音识别中，</p>
+<p><img src="/images/201911/8/5.png" alt></p>
+<p>告诉机器这段语音是“Hi”。</p>
+<p><img src="/images/201911/8/6.png" alt></p>
+<p>这段语音是“How are you”。</p>
+<p>我们可以机器提供大量的语音数据，并告诉它每段语音的内容。通过不断地学习，它逐渐若有所得。于是，当我们给它一段语音（之前可能从来没有听过），它会告诉我们内容是什么。</p>
+<p><img src="/images/201911/8/7.png" alt></p>
+<p>过程如下所示：</p>
+<p><img src="/images/201911/8/8.png" alt></p>
+<p>图像识别也是类似的过程：</p>
+<p><img src="/images/201911/8/9.png" alt></p>
+<p>机器学习可以看成是从数据中找到一个函数。</p>
+<p><img src="/images/201911/8/10.png" alt></p>
+<p>举个例子，我们要进行图像识别，通过给机器的数据，机器学习算法可以得到一个函数。当将图像输入给该函数时，它能输出该图像对应的类别。</p>
+<p><img src="/images/201911/8/11.png" alt></p>
+<p>那么如何得到这个函数呢？我们有很多可以选择的模型，比如神经网络，SVM，决策树等等。每个模型内都包含了很多函数（模型可能有很多参数，参数是可以变化的）。</p>
+<p><img src="/images/201911/8/12.png" alt></p>
+<p>这么多函数选择哪一个呢？所以我们还得有一个评价指标，当把数据丢给模型后能够衡量函数的好坏。知道了函数的好坏之后，自然要选择最好的函数。</p>
+<p>如上图所示，函数<code>f1</code>自然好于<code>f2</code>。同时也可以看到，这些数据有个特点，就是每个数据都给出了函数的输入和函数期望得到的值。</p>
+<p><img src="/images/201911/8/13.png" alt></p>
+<p>在这种情景下的机器学习叫做监督学习。找到了最好的函数之后，我们就可以用它来测试，看它是否有举一反三的能力。整个流程如下：</p>
+<p><img src="/images/201911/8/14.png" alt></p>
+<p>所以总结一下，机器学习大致可以分为三步：</p>
+<p><img src="/images/201911/8/15.png" alt></p>
 ]]></content>
       <categories>
         <category>机器学习</category>

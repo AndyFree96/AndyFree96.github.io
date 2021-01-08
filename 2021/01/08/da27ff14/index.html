@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.4.2',
+    exturl: false,
+    sidebar: {"position":"left","display":"always","offset":12,"onmobile":false},
+    copycode: {"enable":true,"show_result":true,"style":"mac"},
+    back2top: {"enable":false,"sidebar":false,"scrollpercent":true},
+    bookmark: {"enable":true,"color":"#222","save":"auto"},
+    fancybox: true,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: true,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":5,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    },
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="众所周知，Pandas是最受欢迎的Python数据科学与分析库。Numpy用于较低级别的科学计算。Pandas构建于Numpy之上，专为实际数据分析而设计。本文总结了这个库中一些常见、方便的功能。话不多说，让我们开始吧！数据集数据是数据科学与分析的“命根子”，我们需要从数据中寻找答案，从数据中发现模式……如果没有数据的话，就无从谈起。">
+<meta name="keywords" content="Pandas">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Pandas备忘录">
+<meta property="og:url" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;2021&#x2F;01&#x2F;08&#x2F;da27ff14&#x2F;index.html">
+<meta property="og:site_name" content="AndyFree96&#39;s Blog">
+<meta property="og:description" content="众所周知，Pandas是最受欢迎的Python数据科学与分析库。Numpy用于较低级别的科学计算。Pandas构建于Numpy之上，专为实际数据分析而设计。本文总结了这个库中一些常见、方便的功能。话不多说，让我们开始吧！数据集数据是数据科学与分析的“命根子”，我们需要从数据中寻找答案，从数据中发现模式……如果没有数据的话，就无从谈起。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;202101&#x2F;5&#x2F;relaxing-guinea-pig_01.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;202101&#x2F;5&#x2F;4.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;202101&#x2F;5&#x2F;3.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;202101&#x2F;5&#x2F;1.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;202101&#x2F;5&#x2F;2.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;202101&#x2F;5&#x2F;5.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;202101&#x2F;5&#x2F;6.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;202101&#x2F;5&#x2F;7.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;202101&#x2F;5&#x2F;8.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;202101&#x2F;5&#x2F;9.png">
+<meta property="og:updated_time" content="2021-01-08T09:40:25.437Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;202101&#x2F;5&#x2F;relaxing-guinea-pig_01.png">
+
+<link rel="canonical" href="https://andyfree96.github.io/2021/01/08/da27ff14/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>Pandas备忘录 | AndyFree96's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">AndyFree96's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-resource">
+
+    <a href="/resource/" rel="section"><i class="fa fa-fw fa-file"></i>资源</a>
+
+  </li>
+        <li class="menu-item menu-item-books">
+
+    <a href="/books/" rel="section"><i class="fa fa-fw fa-book"></i>书单</a>
+
+  </li>
+        <li class="menu-item menu-item-movies">
+
+    <a href="/movies/" rel="section"><i class="fa fa-fw fa-video-camera"></i>电影</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-address-book"></i>关于我</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="none"
+           placeholder="搜索..." spellcheck="false"
+           type="text" id="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <a href="https://github.com/andyfree96" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://andyfree96.github.io/2021/01/08/da27ff14/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.jpg">
+      <meta itemprop="name" content="AndyFree96">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="AndyFree96's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Pandas备忘录
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-01-08 17:37:00 / 修改时间：17:40:25" itemprop="dateCreated datePublished" datetime="2021-01-08T17:37:00+08:00">2021-01-08</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/" itemprop="url" rel="index">
+                    <span itemprop="name">数据分析</span>
+                  </a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>6.8k</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p><img src="/images/202101/5/relaxing-guinea-pig_01.png" alt></p><p>众所周知，Pandas是最受欢迎的Python数据科学与分析库。</p><p>Numpy用于较低级别的科学计算。Pandas构建于Numpy之上，专为实际数据分析而设计。</p><p>本文总结了这个库中一些常见、方便的功能。话不多说，让我们开始吧！</p><h3 id="数据集"><a href="#数据集" class="headerlink" title="数据集"></a>数据集</h3><p>数据是数据科学与分析的“命根子”，我们需要从数据中寻找答案，从数据中发现模式……如果没有数据的话，就无从谈起。</p><a id="more"></a>
+
+
+
+
+<p>数据获取的方式有很多种，这里分享一些提供数据的平台。</p>
+<p>pandas-videos：<a href="https://github.com/justmarkham/pandas-videos" target="_blank" rel="noopener">https://github.com/justmarkham/pandas-videos</a></p>
+<p><img src="/images/202101/5/4.png" alt="pandas-videos上的数据集"></p>
+<p>UCI Machine Learning Reposity：<a href="https://archive.ics.uci.edu/ml/datasets.html" target="_blank" rel="noopener">https://archive.ics.uci.edu/ml/datasets.html</a></p>
+<p><img src="/images/202101/5/3.png" alt="UCI Machine Learning Reposity"></p>
+<p>The 50 Best Free Datasets for Machine Learning：<a href="https://gengo.ai/datasets/the-50-best-free-datasets-for-machine-learning/" target="_blank" rel="noopener">https://gengo.ai/datasets/the-50-best-free-datasets-for-machine-learning/</a></p>
+<h3 id="导入数据"><a href="#导入数据" class="headerlink" title="导入数据"></a>导入数据</h3><p>任何的数据分析工作都是从导入数据开始，<a href="https://pandas.pydata.org/pandas-docs/stable/" target="_blank" rel="noopener">Pandas</a>提供了很多导入数据的方法。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">pd.read_csv(filename) # From a CSV file</span><br><span class="line">pd.read_table(filename) # From a delimited text file (like TSV)</span><br><span class="line">pd.read_excel(filename) # From an Excel file</span><br><span class="line">pd.read_sql(query, connection_object) # Reads from a SQL table/database</span><br><span class="line">pd.read_json(json_string) # Reads from a JSON formatted string, URL or file</span><br><span class="line">pd.read_html(url) # Parses an html URL, string or file and extract tables to a list of dataframes</span><br><span class="line">pd.read_clipboard() # Takes the contents of your clipboard and passes it to read_table()</span><br><span class="line">pd.DataFrame(dict) # From a dict, keys for columns names, values for data as lists</span><br></pre></td></tr></table></figure>
+<p>不妨举个例子，我们想分析一下IMDB高分电影，经过一番搜索，发现 <a href="https://raw.githubusercontent.com/justmarkham/pandas-videos/master/data/imdb_1000.csv" target="_blank" rel="noopener">https://raw.githubusercontent.com/justmarkham/pandas-videos/master/data/imdb_1000.csv</a> 上的数据就不错，<br>若想把它导入，使用<code>pd.read_csv</code>方法就行啦！</p>
+<p>具体来说，就是：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">dataURL = &apos;https://raw.githubusercontent.com/justmarkham/pandas-videos/master/data/imdb_1000.csv&apos;</span><br><span class="line">df = pd.read_csv(dataURL)</span><br><span class="line">df.head() # Prints first 5 rows of the DataFrame</span><br></pre></td></tr></table></figure>
+<p><img src="/images/202101/5/1.png" alt="前5行数据"></p>
+<p>关于上述导入数据方法的更多详细内容，请查看<a href="http://pandas.pydata.org/pandas-docs/stable/io.html#" target="_blank" rel="noopener">IO Tools</a>。</p>
+<h3 id="探索数据"><a href="#探索数据" class="headerlink" title="探索数据"></a>探索数据</h3><p>一旦将数据导入到DataFrame中之后，就可以用以下方法来了解数据的情况。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">df.index # Index Description</span><br><span class="line">df.columns # Columns in the DataFrame</span><br><span class="line">df.shape # Prints number of row and columns in DataFrame</span><br><span class="line">df.head(n) # Prints first n rows of the DataFrame</span><br><span class="line">df.tail(n) # Prints last n rows of the DataFrame</span><br><span class="line">df.info() # Index, DataType and Memory information</span><br><span class="line">df.describe() # Summary statistics for numerical columns</span><br><span class="line">s.value_counts(dropna=False) # Views unique values and counts</span><br><span class="line">df.apply(pd.Series.value_counts) # Unique value and counts for all columns</span><br><span class="line">df.mean() # Returns the mean of all columns</span><br><span class="line">df.corr() # Returns the correlation between columns in a DataFrame</span><br><span class="line">df.count() # Returns the number of non-null values in each DataFrame column</span><br><span class="line">df.max() # Returns the highest value in each column</span><br><span class="line">df.min() # Returns the lowest value in each column</span><br><span class="line">df.median() # Returns the median of each column</span><br><span class="line">df.std() # Returns the standard deviation of each column</span><br><span class="line">df.idxmax() # Index of the lowest value</span><br><span class="line">df.idxmin() # Index of the highest value</span><br></pre></td></tr></table></figure>
+<p>举个例子，在导入IMDB高分电影数据后统计一下每种电影类型的频数，我们就可以用:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df[&apos;genre&apos;].value_counts()</span><br></pre></td></tr></table></figure>
+<p><img src="/images/202101/5/2.png" alt="每种电影类型的频数"></p>
+<h3 id="选择"><a href="#选择" class="headerlink" title="选择"></a>选择</h3><p>通常，我们可能需要选择单个元素或者数据的某个子集来进行深入分析。那么，这些方法就会大显身手：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">df[col] # Returns column with label col as Series</span><br><span class="line">df[[col1, col2]] # Returns columns as a new DataFrame</span><br><span class="line">s.iloc[0] # Selection by position (selects first element)</span><br><span class="line">s.loc[0] # Selection by index (selects element as index 0)</span><br><span class="line">df.iloc[0, :] # First row</span><br><span class="line">df.iloc[0, 0] # First element of first column</span><br><span class="line">df.iat[0, 0] # First element of first column. Access a single value for row/column pair by integer position</span><br><span class="line">df.at[row_label, col_label] # Access a single value for row/column label pair</span><br></pre></td></tr></table></figure>
+<p>更多内容，请查看<a href="http://pandas.pydata.org/pandas-docs/stable/indexing.html" target="_blank" rel="noopener">Indexing and Selecting Data</a>。</p>
+<h3 id="数据清理"><a href="#数据清理" class="headerlink" title="数据清理"></a>数据清理</h3><p>实际上，我们拿到数据后，往往需要清理它。以下就是一些非常有用的方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">df.columns = [&apos;a&apos;, &apos;b&apos;, &apos;c&apos;] # Renames columns</span><br><span class="line">pd.isnull() # Checks for null values, return Boolean Array</span><br><span class="line">pd.notnull() # Opposite of pd.isnull()</span><br><span class="line">df.dropna() # Drops all rows that contain null values</span><br><span class="line">df.dropna(axis=1) # Drops all columns that contain null values</span><br><span class="line">df.dropna(axis=1, thresh=n) # Drops all rows hava less than non null values</span><br><span class="line">df.fillna(x) # Replaces all null values with x</span><br><span class="line">s.fillna(s.mean()) # Replaces all null values with the mean </span><br><span class="line">s.astype(float) # Converts the datatype of the series to float</span><br><span class="line">s.replace(1, &apos;one&apos;) # Replaces all values equal to 1 with &apos;one&apos;</span><br><span class="line">s.replace([1, 3], [&apos;one&apos;, &apos;three&apos;]) # Replace all 1 with &apos;one&apos; and 3 with &apos;three&apos;</span><br><span class="line">df.rename(columns=lambda x: x + 1) # Mass renaming of columns</span><br><span class="line">df.rename(columns=&#123;&apos;old_name&apos;: &apos;new_name&apos;&#125;) # Selective renaming</span><br><span class="line">df.set_index(&apos;column_one&apos;) # Changes the index</span><br><span class="line">df.rename(index=lambda x: x + 1) # Mass renaming of index</span><br><span class="line">df.drop(labels) # Drop specified labels from rows or columns</span><br><span class="line">df.drop_duplicates(subset) # Return DataFrame with duplicate rows removed, optionally only considering certain columns</span><br></pre></td></tr></table></figure>
+<p>更多内容，请查看<a href="http://pandas.pydata.org/pandas-docs/stable/missing_data.html" target="_blank" rel="noopener">Working with missing data</a>。</p>
+<h3 id="过滤，排序和分组"><a href="#过滤，排序和分组" class="headerlink" title="过滤，排序和分组"></a>过滤，排序和分组</h3><p>一些对数据过滤、排序和分组的方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">df[df[col] &gt; 0.5] # Rows where the col column is greater than 0.5</span><br><span class="line">df[(df[col] &gt; 0.5) &amp; (df[col] &lt; 0.7)] # Rows where 0.5 &lt; col &lt; 0.7</span><br><span class="line">df.sort_values(col1) # Sorts values by col1 in ascending order</span><br><span class="line">df.sort_values(col2, ascending=False) # Sorts values by col2 in descending order</span><br><span class="line">df.sort_values([col1, col2], ascending=[True, False]) # Sorts values by col1 in ascending order then col2 in descending order</span><br><span class="line">df.groupby(col) # Returns a groupby object for values from one column</span><br><span class="line">df.groupby([col1,col2]) # Returns a groupby object values from multiple columns</span><br><span class="line">df.groupby(col1)[col2].mean() # Returns the mean of the values in col2, grouped by the values in col1 (mean can be replaced with almost any function from the statistics section)</span><br><span class="line">df.pivot_table(index=col1, values= col2,col3], aggfunc=mean) # Creates a pivot table that groups by col1 and calculates the mean of col2 and col3</span><br><span class="line">df.groupby(col1).agg(np.mean) # Finds the average across all columns for every unique column 1 group</span><br><span class="line">df.apply(np.mean) # Applies a function across each column</span><br><span class="line">df.apply(np.max, axis=1) # Applies a function across each row</span><br></pre></td></tr></table></figure>
+<p>更多内容，请查看<a href="http://pandas.pydata.org/pandas-docs/stable/groupby.html" target="_blank" rel="noopener">Group By: split-apply-combine</a>。</p>
+<h3 id="导出数据"><a href="#导出数据" class="headerlink" title="导出数据"></a>导出数据</h3><p>最后，当需要将分析结果导出时，也有几种方便的发方：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">df.to_csv(filename) # Writes to a CSV file</span><br><span class="line">df.to_excel(filename) # Writes to an Excel file</span><br><span class="line">df.to_sql(table_name, connectiion_object) # Writes to a SQL table</span><br><span class="line">df.to_json(filename) # Writes to a file in JSON format</span><br><span class="line">df.to_html(filename) # Saves as an HTML table</span><br><span class="line">df.to_clipboard() # Writes to the clipboard</span><br></pre></td></tr></table></figure>
+<p>详情请查看<a href="http://pandas.pydata.org/pandas-docs/stable/io.html#" target="_blank" rel="noopener">IO Tools</a>。</p>
+<h3 id="连接和合并"><a href="#连接和合并" class="headerlink" title="连接和合并"></a>连接和合并</h3><p>合并两个DataFrame的方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">pd.concat([df1, df2], axis=1) # Adds the columns in df1 to the end of df2</span><br><span class="line">pd.merge(df11, df2) # SQL-style merges</span><br><span class="line">df1.append(df2) # Adds the rows in df1 to the end of df2 (columns should be identical)</span><br><span class="line">df1.join(df2,on=col1,how=&apos;inner&apos;) # SQL-style joins</span><br></pre></td></tr></table></figure>
+<p>更多内容，请查看<a href="http://pandas.pydata.org/pandas-docs/stable/merging.html" target="_blank" rel="noopener">Merge, join, and concatenate</a>。</p>
+<h3 id="创建测试对象"><a href="#创建测试对象" class="headerlink" title="创建测试对象"></a>创建测试对象</h3><p>通用用于测试代码段。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">pd.DataFrame(np.random.rand(20,5)) # 5 columns and 20 rows of random floats</span><br><span class="line">pd.Series(my_list) # Create a series from an iterable my_list</span><br><span class="line">df.index = pd.data_range(&apos;1900/1/30&apos;, periods=df.shape[0]) # Add a date index</span><br></pre></td></tr></table></figure>
+<h3 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h3><p>或许我们可以从一个实例（来源于书籍《Python for Data Analysis》）出发，当作对上述内容的一个小练习。</p>
+<p>我们用的是<code>bitly_usagov</code>，数据可以在：<a href="https://github.com/wesm/pydata-book" target="_blank" rel="noopener">https://github.com/wesm/pydata-book</a> 处找到。</p>
+<h4 id="导入数据-1"><a href="#导入数据-1" class="headerlink" title="导入数据"></a>导入数据</h4><p>假如将数据下载到了本地，我们可以尝试将其导入并得到DataFrame对象，便于之后的分析工作。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">import pandas as pd</span><br><span class="line"></span><br><span class="line">file_path = &apos;../../Datasets/bitly_usagov/example.txt&apos; # Local file path</span><br><span class="line">df = pd.read_json(file_path, lines=True)</span><br><span class="line">df.info()</span><br></pre></td></tr></table></figure>
+<p><img src="/images/202101/5/5.png" alt="用info方法查看数据"></p>
+<h4 id="对时区计数"><a href="#对时区计数" class="headerlink" title="对时区计数"></a>对时区计数</h4><p><code>df</code>对象有一列名为<code>tz</code>，表示的是时区。我们可以对所有数据的时区进行统计，</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">tz_counts = df[&apos;tz&apos;].value_counts()</span><br><span class="line">tz_counts.head(10)</span><br></pre></td></tr></table></figure>
+<p><img src="/images/202101/5/6.png" alt></p>
+<p>我们可以将结果可视化，但在此之前，可以将未知或者缺失的时区补上一个替代值。</p>
+<p><code>fillna</code>函数可以替换缺失值（NA），而未知值（空字符串）则可以通过布尔数组索引进行替换：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">clean_tz = df[&apos;tz&apos;].fillna(&apos;Missing&apos;)</span><br><span class="line">clean_tz[clean_tz == &apos;&apos;] = &apos;Unknown&apos;</span><br><span class="line">tz_counts = clean_tz.value_counts()</span><br></pre></td></tr></table></figure>
+<p>之后，我们可以用<code>seaborn</code>包创建水平柱状图：</p>
+<p><img src="/images/202101/5/7.png" alt></p>
+<p><code>df</code>对象名为<code>a</code>的列中含有浏览器、设备、应用程序的相关信息，我们可以简单地将浏览器信息提取出来：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df.a.str.split(&apos; &apos;).str.get(0).head(10)</span><br></pre></td></tr></table></figure>
+<p><img src="/images/202101/5/8.png" alt></p>
+<p>类似地，我们也可以将浏览器的统计信息可视化：</p>
+<p><img src="/images/202101/5/9.png" alt></p>
+<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><p>[1] <a href="https://paulovasconcellos.com.br/28-useful-pandas-functions-you-might-not-know-de42c59db085" target="_blank" rel="noopener">https://paulovasconcellos.com.br/28-useful-pandas-functions-you-might-not-know-de42c59db085</a></p>
+<p>[2] <a href="https://elitedatascience.com/python-cheat-sheet" target="_blank" rel="noopener">https://elitedatascience.com/python-cheat-sheet</a></p>
+<p>[3] <a href="https://www.dataquest.io/blog/pandas-cheat-sheet/" target="_blank" rel="noopener">https://www.dataquest.io/blog/pandas-cheat-sheet/</a></p>
+<p>[4] <a href="http://pandas.pydata.org/pandas-docs/stable/10min.html" target="_blank" rel="noopener">http://pandas.pydata.org/pandas-docs/stable/10min.html</a></p>
+
+    </div>
+
+    
+    
+    
+      
+  <div class="popular-posts-header">相关文章</div>
+  <ul class="popular-posts">
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\2019\10\30\f5c80354\" rel="bookmark">利用Python进行数据分析</a></div>
+    </li>
+  </ul>
+
+      
+        <div class="reward-container">
+  <div>您的支持将鼓励我继续创作！</div>
+  <button disable="enable" onclick="var qr = document.getElementById(&quot;qr&quot;); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/uploads/wechatpay.png" alt="AndyFree96 微信支付">
+        <p>微信支付</p>
+      </div>
+      
+      <div style="display: inline-block;">
+        <img src="/uploads/alipay.png" alt="AndyFree96 支付宝">
+        <p>支付宝</p>
+      </div>
+
+  </div>
+</div>
+
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>AndyFree96
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://andyfree96.github.io/2021/01/08/da27ff14/" title="Pandas备忘录">https://andyfree96.github.io/2021/01/08/da27ff14/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/null" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Pandas/" rel="tag"><i class="fa fa-tag"></i>Pandas</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/2021/01/07/5bb0bc55/" rel="next" title="那些好用的JavaScript数组方法">
+                  <i class="fa fa-chevron-left"></i> 那些好用的JavaScript数组方法
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    
+  <div class="comments" id="comments">
+    <div id="lv-container" data-id="city" data-uid="MTAyMC80NzkxOC8yNDQxNQ"></div>
+  </div>
+  
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#数据集"><span class="nav-text">数据集</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#导入数据"><span class="nav-text">导入数据</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#探索数据"><span class="nav-text">探索数据</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#选择"><span class="nav-text">选择</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数据清理"><span class="nav-text">数据清理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#过滤，排序和分组"><span class="nav-text">过滤，排序和分组</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#导出数据"><span class="nav-text">导出数据</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#连接和合并"><span class="nav-text">连接和合并</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#创建测试对象"><span class="nav-text">创建测试对象</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实例"><span class="nav-text">实例</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#导入数据-1"><span class="nav-text">导入数据</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#对时区计数"><span class="nav-text">对时区计数</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考"><span class="nav-text">参考</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <img class="site-author-image" itemprop="image" alt="AndyFree96"
+    src="/uploads/avatar.jpg">
+  <p class="site-author-name" itemprop="name">AndyFree96</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">31</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">27</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/AndyFree96" title="GitHub &amp;rarr; https:&#x2F;&#x2F;github.com&#x2F;AndyFree96" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:anthonyfree96@gmail.com" title="E-Mail &amp;rarr; mailto:anthonyfree96@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/IRONAnthony" title="Weibo &amp;rarr; https:&#x2F;&#x2F;weibo.com&#x2F;IRONAnthony" rel="noopener" target="_blank"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/IRONAnthony96" title="Twitter &amp;rarr; https:&#x2F;&#x2F;twitter.com&#x2F;IRONAnthony96" rel="noopener" target="_blank"><i class="fa fa-fw fa-twitter"></i>Twitter</a>
+      </span>
+  </div>
+
+
+
+      </div>
+	  
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 2019 – 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">AndyFree96</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+      <span class="post-meta-item-text">站点总字数：</span>
+    <span title="站点总字数">147k</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.0.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.4.2
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script pjax async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/pjax/pjax.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/pangu@4/dist/browser/pangu.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+  <script>
+var pjax = new Pjax({
+  selectors: [
+    'head title',
+    '#page-configurations',
+    '.content-wrap',
+    '.post-toc-wrap',
+    '#pjax'
+  ],
+  switches: {
+    '.post-toc-wrap': Pjax.switches.innerHTML
+  },
+  analytics: false,
+  cacheBust: false,
+  scrollTo : !CONFIG.bookmark.enable
+});
+
+window.addEventListener('pjax:success', () => {
+  document.querySelectorAll('script[pjax], script#page-configurations, #pjax script').forEach(element => {
+    var code = element.text || element.textContent || element.innerHTML || '';
+    var parent = element.parentNode;
+    parent.removeChild(element);
+    var script = document.createElement('script');
+    if (element.id) {
+      script.id = element.id;
+    }
+    if (element.className) {
+      script.className = element.className;
+    }
+    if (element.type) {
+      script.type = element.type;
+    }
+    if (element.src) {
+      script.src = element.src;
+      // Force synchronous loading of peripheral JS.
+      script.async = false;
+    }
+    if (element.getAttribute('pjax') !== null) {
+      element.setAttribute('pjax', '');
+    }
+    if (code !== '') {
+      script.appendChild(document.createTextNode(code));
+    }
+    parent.appendChild(script);
+  });
+  NexT.boot.refresh();
+  // Define Motion Sequence & Bootstrap Motion.
+  if (CONFIG.motion.enable) {
+    NexT.motion.integrator
+      .init()
+      .add(NexT.motion.middleWares.postList)
+      .bootstrap();
+  }
+  NexT.utils.updateSidebarPosition();
+});
+</script>
+
+
+
+
+  
+  <script pjax>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+
+
+  <script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+    <div id="pjax">
+
+  
+
+  
+
+  
+
+<script>
+  window.livereOptions = {
+    refer: location.pathname.replace(CONFIG.root, '').replace('index.html', '')
+  };
+  (function(d, s) {
+    var j, e = d.getElementsByTagName(s)[0];
+    if (typeof LivereTower === 'function') { return; }
+    j = d.createElement(s);
+    j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+    j.async = true;
+    e.parentNode.insertBefore(j, e);
+  })(document, 'script');
+</script>
+
+    </div>
+  
+  
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":true}});</script></body>
+</html>
