@@ -1,6 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>在Visual Studio项目中使用OpenCV</title>
+    <url>/2021/01/09/8d385d9f/</url>
+    <content><![CDATA[<p>如何在Visual Studio项目中使用OpenCV？本文将作完整介绍。</p><p>本文使用的环境是：</p><ul>
+<li>Windows 10</li>
+<li>Visual Studio Community 2019</li>
+</ul><h2 id="下载并解压预构建的库"><a href="#下载并解压预构建的库" class="headerlink" title="下载并解压预构建的库"></a>下载并解压预构建的库</h2><p>截至到2021年1月9日的最新版本是4.5.1 (opencv-4.5.1-vc14_vc15.exe)，该版本的exe文件可以在<a href="https://github.com/opencv/opencv/releases/" target="_blank" rel="noopener">Github</a>下载，本文使用的是之前下载的4.5.0版本。</p><a id="more"></a>
+
+
+
+<p><img src="/images/202101/7/1.png" alt></p>
+<p>当下载完成后，运行下载的.exe文件以解压缩存档。</p>
+<p><img src="/images/202101/7/2.png" alt></p>
+<p>提取结束后可以看到F盘下新增了一个opencv目录：</p>
+<p><img src="/images/202101/7/3.png" alt></p>
+<h2 id="添加环境变量"><a href="#添加环境变量" class="headerlink" title="添加环境变量"></a>添加环境变量</h2><p>将<code>F:\opencv\build\x64\vc15\bin</code>目录添加到环境变量中，</p>
+<p><img src="/images/202101/7/4.png" alt></p>
+<h2 id="创建项目"><a href="#创建项目" class="headerlink" title="创建项目"></a>创建项目</h2><p>在Visual Studio中创建一个新项目：</p>
+<p><img src="/images/202101/7/5.png" alt></p>
+<p>这里选择的是<code>Console App</code>。</p>
+<p>然后，将平台目标设置为x64。因为预构建的二进制文件是为x64 Windows平台构建的。</p>
+<p><img src="/images/202101/7/6.png" alt></p>
+<p>之后，选择菜单栏【Project】下的【项目名 Properties】：</p>
+<p><img src="/images/202101/7/7.png" alt></p>
+<p>然后，找到【VC++ Directories】这一项，将其中的【Include Directories】和【Library Directories】两项的进行对应的添加。</p>
+<p><img src="/images/202101/7/8.png" alt></p>
+<p>具体添加操作如下：</p>
+<p><img src="/images/202101/7/9.png" alt></p>
+<p><img src="/images/202101/7/10.png" alt></p>
+<p>最后，找到【Linker】下的【Input】这一项，将其中的【Additional Dependencies】添加(具体操作如上图所示)<code>opencv_world450d.lib</code>。</p>
+<p><img src="/images/202101/7/11.png" alt></p>
+<p><code>opencv_world450d.lib</code>文件我们可以在<code>F:\opencv\build\x64\vc15\lib</code>目录找到。</p>
+<p><img src="/images/202101/7/12.png" alt></p>
+<p>预备工作到此就结束了，接下来我们可以编写代码啦！😂</p>
+<h2 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h2><p>这里我们做一个简单的示例，将一张本地的图片在窗口上显示出来，代码如下：</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;opencv2/core/core.hpp&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;opencv2/highgui/highgui.hpp&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;opencv2/imgproc.hpp&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> cv;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	Mat image = imread(<span class="string">"F:/avatar.jpeg"</span>);</span><br><span class="line">	<span class="keyword">if</span> (image.empty()) &#123;</span><br><span class="line">		<span class="built_in">cout</span> &lt;&lt; <span class="string">"Could not open or find the image"</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">		system(<span class="string">"pause"</span>);</span><br><span class="line">		<span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	String windowName = <span class="string">"My Window"</span>;</span><br><span class="line">	imshow(windowName, image);</span><br><span class="line">	waitKey(<span class="number">0</span>);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>编译运行结果如下：</p>
+<p><img src="/images/202101/7/13.png" alt></p>
+<p>想了解更多关于OpenCV的内容的话，请移步<a href="https://docs.opencv.org/4.5.0/d9/df8/tutorial_root.html" target="_blank" rel="noopener">OpenCV Tutorials</a>或者<a href="https://andyfree96.github.io/2019/10/28/8a7602a8/">OpenCV 简明教程</a>😉。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><a href="https://www.opencv-srf.com/2017/11/install-opencv-with-visual-studio.html" target="_blank" rel="noopener">https://www.opencv-srf.com/2017/11/install-opencv-with-visual-studio.html</a></li>
+<li><a href="https://medium.com/@subwaymatch/opencv-410-with-vs-2019-3d0bc0c81d96" target="_blank" rel="noopener">https://medium.com/@subwaymatch/opencv-410-with-vs-2019-3d0bc0c81d96</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>C++</category>
+      </categories>
+      <tags>
+        <tag>OpenCV</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>机器学习备忘录</title>
     <url>/2021/01/08/4775520e/</url>
     <content><![CDATA[<blockquote>
@@ -1487,6 +1538,57 @@ L(w,b)=\frac{1}{N}\sum_{n=1}^{N}{\left ( \hat{y}^n-\left ( b + w ·x_{cp}^{n} \r
       </tags>
   </entry>
   <entry>
+    <title>李宏毅机器学习(一)引言</title>
+    <url>/2019/11/05/a1aabbc5/</url>
+    <content><![CDATA[<p>最近几年人工智能这个词总是时不时地出现在我们视野里，确切来说它也并不是什么新词儿，它在1950年代就被提出来了。它代表着我们人类的一个长期目标，那便是<strong>希望机器可以和人一样聪明。</strong></p><p><img src="/images/201911/8/1.png" alt></p><p>可是人们却不太清楚如何做这件事，不太清楚如何让机器拥有智能，变得和人一样聪明。直到1980年代，有了<strong>机器学习。</strong> 顾名思义，机器学习就是让机器拥有学习的能力。那么，它和人工智能有什么关系呢？<strong>人工智能是我们想要达成的目标，而机器学习是为了达成目标使用的手段。深度学习是机器学习中的一种方法。</strong></p><a id="more"></a>
+
+
+<p><img src="/images/201911/8/2.png" alt></p>
+<p>那么在有机器学习，深度学习之前，我们是如何做人工智能呢？</p>
+<p>生物学的知识告诉我们，生物的行为取决于先天的本能或后天学习的结果。</p>
+<p>举例来说，河狸筑坝的能力是天生的。</p>
+<p><img src="/images/201911/8/3.png" alt></p>
+<p>它的筑坝行为是这样的：</p>
+<ul>
+<li>如果听到流水声，就会筑堤直到听不到流水声。</li>
+</ul>
+<p>我们之前做人工智能就是这样的，设定好机器的先天本能，通常是一些由人类确定的规则。</p>
+<p><img src="/images/201911/8/4.png" alt></p>
+<p>看起来也不错，似乎也能完成不少任务。但也存在很大的问题，我们很难考虑到所有的规则。对于上述的聊天机器人，我们不太可能想到所有的响应规则。这就导致了机器永远无法超过它的创造者。它的所有行为都在我们定义的规则之下，也就是说它没有<code>freestyle</code>。</p>
+<p>我们的目的是研究真正的机器学习。那么，什么是真正的机器学习呢？</p>
+<p>简单来说就是写程序让机器有学习的能力。接下来，我们就给它提供数据以供其学习。比如在语音识别中，</p>
+<p><img src="/images/201911/8/5.png" alt></p>
+<p>告诉机器这段语音是“Hi”。</p>
+<p><img src="/images/201911/8/6.png" alt></p>
+<p>这段语音是“How are you”。</p>
+<p>我们可以机器提供大量的语音数据，并告诉它每段语音的内容。通过不断地学习，它逐渐若有所得。于是，当我们给它一段语音（之前可能从来没有听过），它会告诉我们内容是什么。</p>
+<p><img src="/images/201911/8/7.png" alt></p>
+<p>过程如下所示：</p>
+<p><img src="/images/201911/8/8.png" alt></p>
+<p>图像识别也是类似的过程：</p>
+<p><img src="/images/201911/8/9.png" alt></p>
+<p>机器学习可以看成是从数据中找到一个函数。</p>
+<p><img src="/images/201911/8/10.png" alt></p>
+<p>举个例子，我们要进行图像识别，通过给机器的数据，机器学习算法可以得到一个函数。当将图像输入给该函数时，它能输出该图像对应的类别。</p>
+<p><img src="/images/201911/8/11.png" alt></p>
+<p>那么如何得到这个函数呢？我们有很多可以选择的模型，比如神经网络，SVM，决策树等等。每个模型内都包含了很多函数（模型可能有很多参数，参数是可以变化的）。</p>
+<p><img src="/images/201911/8/12.png" alt></p>
+<p>这么多函数选择哪一个呢？所以我们还得有一个评价指标，当把数据丢给模型后能够衡量函数的好坏。知道了函数的好坏之后，自然要选择最好的函数。</p>
+<p>如上图所示，函数<code>f1</code>自然好于<code>f2</code>。同时也可以看到，这些数据有个特点，就是每个数据都给出了函数的输入和函数期望得到的值。</p>
+<p><img src="/images/201911/8/13.png" alt></p>
+<p>在这种情景下的机器学习叫做监督学习。找到了最好的函数之后，我们就可以用它来测试，看它是否有举一反三的能力。整个流程如下：</p>
+<p><img src="/images/201911/8/14.png" alt></p>
+<p>所以总结一下，机器学习大致可以分为三步：</p>
+<p><img src="/images/201911/8/15.png" alt></p>
+]]></content>
+      <categories>
+        <category>机器学习</category>
+      </categories>
+      <tags>
+        <tag>公开课</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>李宏毅机器学习(二)学习导图</title>
     <url>/2019/11/05/68d48c63/</url>
     <content><![CDATA[<p>机器学习发展至今涵盖的内容已经非常多，本文通过对其使用情景、任务和方法分类在上文的基础上对机器学习做进一步的介绍。</p><p><img src="/images/201911/9/1.png" alt></p><h3 id="监督学习-Supervised-Learning"><a href="#监督学习-Supervised-Learning" class="headerlink" title="监督学习(Supervised Learning)"></a>监督学习(Supervised Learning)</h3><p>上文曾提到机器学习可以看成是从数据中找到一个函数。对于回归(Regression)这类任务而言，我们希望得到的函数的输出值是数值(Scalar)，而不是像之前图像识别一样输出类别。</p><a id="more"></a>
@@ -1597,57 +1699,6 @@ L(w,b)=\frac{1}{N}\sum_{n=1}^{N}{\left ( \hat{y}^n-\left ( b + w ·x_{cp}^{n} \r
 <blockquote>
 <p>绿色框代表方法，可以放在任一学习任务中。</p>
 </blockquote>
-]]></content>
-      <categories>
-        <category>机器学习</category>
-      </categories>
-      <tags>
-        <tag>公开课</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>李宏毅机器学习(一)引言</title>
-    <url>/2019/11/05/a1aabbc5/</url>
-    <content><![CDATA[<p>最近几年人工智能这个词总是时不时地出现在我们视野里，确切来说它也并不是什么新词儿，它在1950年代就被提出来了。它代表着我们人类的一个长期目标，那便是<strong>希望机器可以和人一样聪明。</strong></p><p><img src="/images/201911/8/1.png" alt></p><p>可是人们却不太清楚如何做这件事，不太清楚如何让机器拥有智能，变得和人一样聪明。直到1980年代，有了<strong>机器学习。</strong> 顾名思义，机器学习就是让机器拥有学习的能力。那么，它和人工智能有什么关系呢？<strong>人工智能是我们想要达成的目标，而机器学习是为了达成目标使用的手段。深度学习是机器学习中的一种方法。</strong></p><a id="more"></a>
-
-
-<p><img src="/images/201911/8/2.png" alt></p>
-<p>那么在有机器学习，深度学习之前，我们是如何做人工智能呢？</p>
-<p>生物学的知识告诉我们，生物的行为取决于先天的本能或后天学习的结果。</p>
-<p>举例来说，河狸筑坝的能力是天生的。</p>
-<p><img src="/images/201911/8/3.png" alt></p>
-<p>它的筑坝行为是这样的：</p>
-<ul>
-<li>如果听到流水声，就会筑堤直到听不到流水声。</li>
-</ul>
-<p>我们之前做人工智能就是这样的，设定好机器的先天本能，通常是一些由人类确定的规则。</p>
-<p><img src="/images/201911/8/4.png" alt></p>
-<p>看起来也不错，似乎也能完成不少任务。但也存在很大的问题，我们很难考虑到所有的规则。对于上述的聊天机器人，我们不太可能想到所有的响应规则。这就导致了机器永远无法超过它的创造者。它的所有行为都在我们定义的规则之下，也就是说它没有<code>freestyle</code>。</p>
-<p>我们的目的是研究真正的机器学习。那么，什么是真正的机器学习呢？</p>
-<p>简单来说就是写程序让机器有学习的能力。接下来，我们就给它提供数据以供其学习。比如在语音识别中，</p>
-<p><img src="/images/201911/8/5.png" alt></p>
-<p>告诉机器这段语音是“Hi”。</p>
-<p><img src="/images/201911/8/6.png" alt></p>
-<p>这段语音是“How are you”。</p>
-<p>我们可以机器提供大量的语音数据，并告诉它每段语音的内容。通过不断地学习，它逐渐若有所得。于是，当我们给它一段语音（之前可能从来没有听过），它会告诉我们内容是什么。</p>
-<p><img src="/images/201911/8/7.png" alt></p>
-<p>过程如下所示：</p>
-<p><img src="/images/201911/8/8.png" alt></p>
-<p>图像识别也是类似的过程：</p>
-<p><img src="/images/201911/8/9.png" alt></p>
-<p>机器学习可以看成是从数据中找到一个函数。</p>
-<p><img src="/images/201911/8/10.png" alt></p>
-<p>举个例子，我们要进行图像识别，通过给机器的数据，机器学习算法可以得到一个函数。当将图像输入给该函数时，它能输出该图像对应的类别。</p>
-<p><img src="/images/201911/8/11.png" alt></p>
-<p>那么如何得到这个函数呢？我们有很多可以选择的模型，比如神经网络，SVM，决策树等等。每个模型内都包含了很多函数（模型可能有很多参数，参数是可以变化的）。</p>
-<p><img src="/images/201911/8/12.png" alt></p>
-<p>这么多函数选择哪一个呢？所以我们还得有一个评价指标，当把数据丢给模型后能够衡量函数的好坏。知道了函数的好坏之后，自然要选择最好的函数。</p>
-<p>如上图所示，函数<code>f1</code>自然好于<code>f2</code>。同时也可以看到，这些数据有个特点，就是每个数据都给出了函数的输入和函数期望得到的值。</p>
-<p><img src="/images/201911/8/13.png" alt></p>
-<p>在这种情景下的机器学习叫做监督学习。找到了最好的函数之后，我们就可以用它来测试，看它是否有举一反三的能力。整个流程如下：</p>
-<p><img src="/images/201911/8/14.png" alt></p>
-<p>所以总结一下，机器学习大致可以分为三步：</p>
-<p><img src="/images/201911/8/15.png" alt></p>
 ]]></content>
       <categories>
         <category>机器学习</category>
@@ -2453,8 +2504,8 @@ L(w,b)=\frac{1}{N}\sum_{n=1}^{N}{\left ( \hat{y}^n-\left ( b + w ·x_{cp}^{n} \r
       </categories>
       <tags>
         <tag>Python</tag>
-        <tag>Matplotlib</tag>
         <tag>Pandas</tag>
+        <tag>Matplotlib</tag>
         <tag>Numpy</tag>
       </tags>
   </entry>
