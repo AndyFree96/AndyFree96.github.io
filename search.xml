@@ -1,6 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>OpenCV教程(一)图像编程入门</title>
+    <url>/2021/01/16/a8d84114/</url>
+    <content><![CDATA[<p>OpenCV库分为多个模块：opencv_core模块包含库的核心功能，opencv_imgproc模块包含主要的图像处理函数，opencv_highgui模块提供读写图像和视频的函数以及一些用户交互函数，等等。在使用某个模块时，需要包含该模块对应的头文件。例如：</p><figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;opencv2/core.hpp&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;opencv2/imgproc.hpp&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;opencv2/highgui.hpp&gt;</span></span></span><br></pre></td></tr></table></figure><a id="more"></a>
+
+<p>OpenCV是用来处理图像的，接下来演示一下如何从文件中加载图像、在窗口中显示图像、使用处理函数再保存输出的图像。</p>
+<h2 id="加载、显示和存储图像"><a href="#加载、显示和存储图像" class="headerlink" title="加载、显示和存储图像"></a>加载、显示和存储图像</h2><p>首先在Visual Studio中创建一个可以使用OpenCV的项目，具体可以参考<a href="./2.在Visual%20Studio项目中使用OpenCV.md">在Visual Studio项目中使用OpenCV</a>一文。</p>
+<p>加载、显示图像的示例如下：</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;opencv2/core.hpp&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;opencv2/highgui.hpp&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;opencv2/imgproc.hpp&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	cv::Mat image;</span><br><span class="line">	<span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">"Image shape is : "</span> &lt;&lt; image.rows &lt;&lt; <span class="string">" x "</span> &lt;&lt; image.cols &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line">	image = cv::imread(<span class="string">"F:/avatar.jpeg"</span>);</span><br><span class="line">	<span class="keyword">if</span> (image.empty()) &#123;</span><br><span class="line">		<span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">"Could not open or find the image"</span> &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line">		<span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">"Image shape is : "</span> &lt;&lt; image.rows &lt;&lt; <span class="string">" x "</span> &lt;&lt; image.cols &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line">	cv::namedWindow(<span class="string">"Window 1"</span>);</span><br><span class="line">	cv::imshow(<span class="string">"Window 2"</span>, image);</span><br><span class="line">	cv::waitKey(<span class="number">0</span>);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在OpenCV的C++ API中，所有类和函数都在命名空间cv内定义。我们创建了一个<code>Mat</code>对象image，其初始化尺寸为<code>cols=0, rows=0</code>，可以通过访问image对象的<code>cols</code>和<code>rows</code>属性来了解其尺寸。</p>
+<p>通过调用<code>imread()</code>函数，传入图像路径字符串，该函数会读入一个图像，解码分别配内存并返回一个<code>Mat</code>对象。</p>
+<p>现在可以使用这副图像了，但是要先检查一下图像的读取是否正确（如果找不到文件、文件被破坏或者文件格式无法识别，就会发生错误）。可以使用<code>Mat</code>对象的<code>empty()</code>方法，如果没有分配图像数据该方法会返回<code>true</code>。</p>
+<p>接下来将该图像显示出来，可以用highgui模块的函数来实现。首先定义显示图像的窗口，然后让图像在指定的窗口中显示出来。<code>namedWindow(&quot;Window 1&quot;)</code>函数会创建一个名为<code>Window 1</code>的窗口。<code>imshow(&quot;Window 2&quot;, image)</code>会创建一个名为<code>Window 2</code>的窗口，并将<code>image</code>对象在其中显示。</p>
+<p>因为是控制台程序，<code>main()</code>函数结束时会关闭，所以我们使用了一个额外的<code>highgui</code>函数，待用户按键后再结束程序。<code>waitKey(0)</code>函数传入正数表示等待的毫秒数，0表示永远地等待按键。</p>
+<p>运行结果如下：</p>
+<p><img src="/images/202101/8/1.png" alt></p>
+<p>可以使用<code>flip()</code>函数将图像翻转，我们用一个新的矩阵存放翻转输出结果。</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line">cv::Mat result;</span><br><span class="line">cv::flip(image, result, <span class="number">1</span>); <span class="comment">// 0上下翻转; 正数左右翻转; 负数上下和左右翻转</span></span><br></pre></td></tr></table></figure>
+<h2 id="绘制函数"><a href="#绘制函数" class="headerlink" title="绘制函数"></a>绘制函数</h2><p>OpenCV提供了几个用于在图像上绘制形状和写入文本的函数。基本的形状绘制函数有<code>circle</code>，<code>ellipse</code>，<code>line</code>和<code>rectangle</code>。</p>
+<p>我们来看一个绘制圆形的例子：</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line">cv::circle(image, cv::Point(image.cols / <span class="number">2</span>, image.rows / <span class="number">2</span>), <span class="number">65</span>, <span class="number">0</span>, <span class="number">3</span>);</span><br></pre></td></tr></table></figure>
+<p>该函数的原型如下：</p>
+<p><img src="/images/202101/8/2.png" alt></p>
+<p>又或者绘制一个矩形：</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line">cv::rectangle(image, cv::Rect(<span class="number">10</span>, <span class="number">10</span>, <span class="number">25</span>, <span class="number">35</span>), <span class="number">0</span>, <span class="number">3</span>);</span><br></pre></td></tr></table></figure>
+<p>该函数的原型如下：</p>
+<p><img src="/images/202101/8/3.png" alt></p>
+<h2 id="cv-Mat"><a href="#cv-Mat" class="headerlink" title="cv::Mat"></a><code>cv::Mat</code></h2><p><code>cv::Mat</code>类是用来存放图像（以及其他矩阵数据）的数据结构。在所有OpenCV类和函数中，这个数据结构占据核心地位。</p>
+<p><code>cv::Mat</code>有两个组成部分：一个头部和一个数据块。头部包含了矩阵的所有相关信息（大小、通道数、数据类型），我们可以通过如<code>cols</code>、<code>rows</code>和<code>channels</code>等属性访问头部信息。数据块包含了图像所有的像素值。头部有一个指向数据块的指针，即<code>data</code>属性。<code>cv::Mat</code>有一个很重要的属性，即只有明确要求时，内存块才会被复制。</p>
+<p>新创建的<code>cv::Mat</code>对象默认大小为0，但也可以指定初始大小，例如：</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line">cv::<span class="function">Mat <span class="title">image1</span><span class="params">(<span class="number">240</span>, <span class="number">320</span>, CV_8U, <span class="number">100</span>)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>需要指定每个矩阵元素的类型，这里用的是<code>CV_8U</code>，表示每个像素对应1字节（灰度图像），字母<code>U</code>表示无符号数；也可以用<code>S</code>表示有符号数。对于彩色图像，该用三通道类型<code>CV_8UC3</code>，也可以定义16位和32位的整数（有符号或无符号），例如<code>CV_16SC3</code>。</p>
+<p>图像（或矩阵）的每个元素都可以包含多个值（例如彩色图像中的三个通道），因此OpenCV引入了一个简单的数据结构<code>cv::Scaler</code>，用于在调用函数时传递像素值。</p>
+<p>例如创建一个彩色图像并用红色像素初始化：</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 创建一个红色图像</span></span><br><span class="line"><span class="comment">// 通道次序是BGR</span></span><br><span class="line">cv::<span class="function">Mat <span class="title">image2</span><span class="params">(<span class="number">240</span>, <span class="number">320</span>, CV_8UC3, cv::Scaler(<span class="number">0</span>, <span class="number">0</span>, <span class="number">255</span>))</span></span>;</span><br></pre></td></tr></table></figure>
+<p>更多创建方式：</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 创建灰度图像</span></span><br><span class="line">cv::<span class="function">Mat <span class="title">image3</span><span class="params">(<span class="number">240</span>, <span class="number">320</span>, CV_8U, cv::Scaler(<span class="number">100</span>))</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用cv::Size()创建图像</span></span><br><span class="line">cv::<span class="function">Mat <span class="title">image4</span><span class="params">(cv::Size(<span class="number">240</span>, <span class="number">320</span>), CV_8UC3)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>可以随时用<code>create()</code>方法分配或重新分配图像的数据块。如果图像已被分配，原来的内容会先被释放。如果新的尺寸和类型与原来相同，就不会重新分配内存：</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line">image4.create(<span class="number">200</span>, <span class="number">200</span>, CV_8U);</span><br></pre></td></tr></table></figure>
+<p><code>cv::Mat</code>实现了计数引用和浅复制。因此，当在两幅图像之间赋值时，图像数据并不会被复制，此时两幅图像都指向同一个内存块。</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line">cv::<span class="function">Mat <span class="title">image4</span><span class="params">(image4)</span></span>;</span><br><span class="line">image1 = image3;</span><br></pre></td></tr></table></figure>
+<p>如果要对图像内容做一个深复制，可以用<code>copyTo</code>方法，目标图像将会调用<code>create</code>方法。另一个生成图像副本的方法是<code>clone</code>，即创建一个完全相同的新图像：</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line">image3.copyTo(image2);</span><br><span class="line">cv::Mat image6 = image3.clone();</span><br></pre></td></tr></table></figure>
+<p>如果需要将一幅图像复制到另一幅图像中，且两者的数据类型不一定相同，那就可以使用<code>convertTo</code>方法。</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line">image1.convertTo(image2, CV_32F, <span class="number">1</span>/<span class="number">255.0</span>, <span class="number">0.0</span>);</span><br></pre></td></tr></table></figure>
+<h2 id="ROI"><a href="#ROI" class="headerlink" title="ROI"></a>ROI</h2><p>我们可以用如下方式定义一个感兴趣的区域（Region Of Interest, ROI）。</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line">cv::<span class="function">Mat <span class="title">imageROI</span><span class="params">(image, cv::Rect(image.cols - logo.cols, image.rows - logo.rows,</span></span></span><br><span class="line"><span class="function"><span class="params">    logo.cols, logo.rows))</span></span>;</span><br></pre></td></tr></table></figure>
+<p>之后，将<code>logo</code>复制到<code>imageROI</code>，完整代码如下：</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;opencv2/core.hpp&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;opencv2/highgui.hpp&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;opencv2/imgproc.hpp&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	cv::Mat image;</span><br><span class="line">	<span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">"Image shape is : "</span> &lt;&lt; image.rows &lt;&lt; <span class="string">" x "</span> &lt;&lt; image.cols &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line">	image = cv::imread(<span class="string">"F:/avatar.jpeg"</span>);</span><br><span class="line">	<span class="keyword">if</span> (image.empty()) &#123;</span><br><span class="line">		<span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">"Could not open or find the image"</span> &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line">		<span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	cv::Mat logo;</span><br><span class="line">	logo = cv::imread(<span class="string">"F:/logo.png"</span>);</span><br><span class="line">	<span class="keyword">if</span> (logo.empty()) &#123;</span><br><span class="line">		<span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">"Could not open or find the image"</span> &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line">		<span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	cv::<span class="function">Mat <span class="title">imageROI</span><span class="params">(image, cv::Rect(image.cols - logo.cols, image.rows - logo.rows,</span></span></span><br><span class="line"><span class="function"><span class="params">		logo.cols, logo.rows))</span></span>;</span><br><span class="line">	logo.copyTo(imageROI);</span><br><span class="line">	cv::imshow(<span class="string">"Window 1"</span>, image);</span><br><span class="line">	cv::waitKey(<span class="number">0</span>);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>运行结果：</p>
+<p><img src="/images/202101/8/4.png" alt></p>
+<p>或者通过如下方式选取ROI：</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line">imageROI = image(cv::Range(image.rows-logo.rows, image.rows),cv::Range(image.cols-logo.cols, image.cols));</span><br></pre></td></tr></table></figure>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p>《OpenCV计算机视觉编程攻略 第3版》 第1章</p>
+]]></content>
+      <categories>
+        <category>C++</category>
+      </categories>
+      <tags>
+        <tag>OpenCV</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>在Visual Studio项目中使用OpenCV</title>
     <url>/2021/01/09/8d385d9f/</url>
     <content><![CDATA[<p>如何在Visual Studio项目中使用OpenCV？本文将作完整介绍。</p><p>本文使用的环境是：</p><ul>
@@ -2505,8 +2567,8 @@ L(w,b)=\frac{1}{N}\sum_{n=1}^{N}{\left ( \hat{y}^n-\left ( b + w ·x_{cp}^{n} \r
       </categories>
       <tags>
         <tag>Python</tag>
-        <tag>Pandas</tag>
         <tag>Matplotlib</tag>
+        <tag>Pandas</tag>
         <tag>Numpy</tag>
       </tags>
   </entry>
