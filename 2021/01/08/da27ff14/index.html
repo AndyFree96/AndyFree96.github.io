@@ -69,7 +69,7 @@
 <meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;202101&#x2F;5&#x2F;7.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;202101&#x2F;5&#x2F;8.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;202101&#x2F;5&#x2F;9.png">
-<meta property="og:updated_time" content="2021-01-08T10:24:26.580Z">
+<meta property="og:updated_time" content="2021-01-21T07:46:43.147Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;202101&#x2F;5&#x2F;relaxing-guinea-pig_01.png">
 
@@ -278,10 +278,16 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2021-01-08 17:37:00 / 修改时间：18:24:26" itemprop="dateCreated datePublished" datetime="2021-01-08T17:37:00+08:00">2021-01-08</time>
+              <time title="创建时间：2021-01-08 17:37:00" itemprop="dateCreated datePublished" datetime="2021-01-08T17:37:00+08:00">2021-01-08</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-01-21 15:46:43" itemprop="dateModified" datetime="2021-01-21T15:46:43+08:00">2021-01-21</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
@@ -327,9 +333,10 @@
 <p>数据获取的方式有很多种，这里分享一些提供数据的平台。</p>
 <p>pandas-videos：<a href="https://github.com/justmarkham/pandas-videos" target="_blank" rel="noopener">https://github.com/justmarkham/pandas-videos</a></p>
 <p><img src="/images/202101/5/4.png" alt="pandas-videos上的数据集"></p>
-<p>UCI Machine Learning Reposity：<a href="https://archive.ics.uci.edu/ml/datasets.html" target="_blank" rel="noopener">https://archive.ics.uci.edu/ml/datasets.html</a></p>
+<p>UCI Machine Learning Reposity：<a href="https://archive.ics.uci.edu/ml/datasets.php" target="_blank" rel="noopener">https://archive.ics.uci.edu/ml/datasets.php</a></p>
 <p><img src="/images/202101/5/3.png" alt="UCI Machine Learning Reposity"></p>
 <p>The 50 Best Free Datasets for Machine Learning：<a href="https://gengo.ai/datasets/the-50-best-free-datasets-for-machine-learning/" target="_blank" rel="noopener">https://gengo.ai/datasets/the-50-best-free-datasets-for-machine-learning/</a></p>
+<p>Datasets for Machine Learning：<a href="https://lionbridge.ai/datasets/" target="_blank" rel="noopener">https://lionbridge.ai/datasets/</a></p>
 <h3 id="导入数据"><a href="#导入数据" class="headerlink" title="导入数据"></a>导入数据</h3><p>任何的数据分析工作都是从导入数据开始，<a href="https://pandas.pydata.org/pandas-docs/stable/" target="_blank" rel="noopener">Pandas</a>提供了很多导入数据的方法。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">pd.read_csv(filename) # From a CSV file</span><br><span class="line">pd.read_table(filename) # From a delimited text file (like TSV)</span><br><span class="line">pd.read_excel(filename) # From an Excel file</span><br><span class="line">pd.read_sql(query, connection_object) # Reads from a SQL table/database</span><br><span class="line">pd.read_json(json_string) # Reads from a JSON formatted string, URL or file</span><br><span class="line">pd.read_html(url) # Parses an html URL, string or file and extract tables to a list of dataframes</span><br><span class="line">pd.read_clipboard() # Takes the contents of your clipboard and passes it to read_table()</span><br><span class="line">pd.DataFrame(dict) # From a dict, keys for columns names, values for data as lists</span><br></pre></td></tr></table></figure>
 <p>不妨举个例子，我们想分析一下IMDB高分电影，经过一番搜索，发现 <a href="https://raw.githubusercontent.com/justmarkham/pandas-videos/master/data/imdb_1000.csv" target="_blank" rel="noopener">https://raw.githubusercontent.com/justmarkham/pandas-videos/master/data/imdb_1000.csv</a> 上的数据就不错，<br>若想把它导入，使用<code>pd.read_csv</code>方法就行啦！</p>
