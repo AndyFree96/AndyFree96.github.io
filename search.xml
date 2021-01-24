@@ -1,6 +1,127 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>R语言探索性数据分析</title>
+    <url>/2021/01/24/69c85c90/</url>
+    <content><![CDATA[<p>统计学家将<strong>使用可视化方法和数据转换来系统化地探索数据称为探索性数据分析（exploratory data analysis, EDA）</strong>。</p><p>EDA期间的目标是获取对数据的理解。将问题作为指导调查研究的工具是进行EDA的最简单方式。</p><p>该提出什么样的问题来指导我们对数据的研究并没有确定的规则。但总有两类问题总是有助于我们理解数据，这两类问题大致如下：</p><a id="more"></a>
+
+
+<ol>
+<li>变量本身会发生哪种变化？</li>
+<li>不同变量之间会发生哪种相关变化？</li>
+</ol>
+<p><img src="/images/202101/9/1.png" alt></p>
+<p>本文中用到的数据集为如上所示的表格结构，每列是每个变量的值，每行称为一个观测或者样本，一个观测会包含多个值，每个值关联到不同变量，有时也将观测称为数据点。</p>
+<p>上图为<code>Diamonds</code>数据集，其中：</p>
+<ul>
+<li><code>carat</code>表示克拉重量</li>
+<li><code>cut</code>表示切割（<code>Levels: Fair &lt; Good &lt; Very Good &lt; Premium &lt; Ideal</code>）</li>
+<li><code>color</code>表示成色（<code>Levels: D &lt; E &lt; F &lt; G &lt; H &lt; I &lt; J</code>）</li>
+<li><code>clarity</code>表示净度（<code>Levels: I1 &lt; SI2 &lt; SI1 &lt; VS2 &lt; VS1 &lt; VVS2 &lt; VVS1 &lt; IF</code>）</li>
+<li><code>depth</code>表示深度</li>
+<li><code>table</code>表示台面</li>
+<li><code>price</code>表示价格</li>
+</ul>
+<p><code>x</code>，<code>y</code>和<code>z</code>和含义如下图所示：</p>
+<p><img src="/images/202101/9/2.png" alt></p>
+<p>更多关于钻石的知识请参考：<a href="https://www.bluenile.com/cn/education/diamonds" target="_blank" rel="noopener">https://www.bluenile.com/cn/education/diamonds</a></p>
+<p>每个变量的值都会有各自的变化模式，可以揭示一些有趣的信息。理解这种模式的最好方法就是对变量值的分布进行可视化分表示。</p>
+<h2 id="单个变量"><a href="#单个变量" class="headerlink" title="单个变量"></a>单个变量</h2><h3 id="分类变量"><a href="#分类变量" class="headerlink" title="分类变量"></a>分类变量</h3><p>对变量值的分布进行可视化表示取决于变量是分类变量还是连续变量。如果一个变量的值仅在较小的集合内取值，那么这个变量就是分类变量。要想表示分类变量的分布，我们可以使用条形图：</p>
+<figure class="highlight r"><table><tr><td class="code"><pre><span class="line"><span class="keyword">library</span>(ggplot2)</span><br><span class="line">ggplot(data = diamonds) +</span><br><span class="line">  geom_bar(mapping = aes(x = cut))</span><br></pre></td></tr></table></figure>
+<p>结果如下：</p>
+<p><img src="/images/202101/9/3.png" alt></p>
+<p>条形的高度表示每个<code>x</code>值观测的数量，可以用<code>dplyr::count()</code>手动计算出这些值：</p>
+<p><img src="/images/202101/9/4.png" alt></p>
+<h3 id="连续变量"><a href="#连续变量" class="headerlink" title="连续变量"></a>连续变量</h3><p>如果一个变量可以在无限大的有序集合中任意取值，那么这个变量就是连续变量。数值型和日期时间型变量就是连续变量的两个例子。要想表示连续变量的分布，可以使用直方图：</p>
+<figure class="highlight r"><table><tr><td class="code"><pre><span class="line">ggplot(data = diamonds) + </span><br><span class="line">  geom_histogram(mapping = aes(x = carat), binwidth = <span class="number">0.5</span>)</span><br></pre></td></tr></table></figure>
+<p><img src="/images/202101/9/5.png" alt></p>
+<p>我们也可以使用<code>dplyr::count()</code>和<code>ggplot2::cut_width()</code>函数的组合来手动计算结果：</p>
+<p><img src="/images/202101/9/6.png" alt></p>
+<p>直方图对x轴进行等宽分箱，然后使用条形的高度表示落入每个分箱的观测的数量。我们可以用<code>binwidth</code>参数来设定直方图中间隔的宽度，该参数用x轴变量的单位来度量的。不同的分箱宽度可以揭示不同的模式。比如，如果只考虑重量小于3克拉的钻石，并选择一个更小的分箱宽度，结果如下：</p>
+<figure class="highlight r"><table><tr><td class="code"><pre><span class="line">diamonds %&gt;% filter(carat &lt; <span class="number">3</span>) %&gt;%</span><br><span class="line">  ggplot(mapping = aes(x = carat)) +</span><br><span class="line">  geom_histogram(binwidth = <span class="number">0.1</span>)</span><br></pre></td></tr></table></figure>
+<p><img src="/images/202101/9/7.png" alt></p>
+<p>若想在一张图中叠加多个直方图，那么我们可以用<code>geom_freqploy()</code>函数来代替<code>geom_histogram()</code>函数，该函数使用的是折线图，相比一下更加容易理解：</p>
+<figure class="highlight r"><table><tr><td class="code"><pre><span class="line">diamonds %&gt;% filter(carat &lt; <span class="number">3</span>) %&gt;%</span><br><span class="line">  ggplot(mapping = aes(x = carat, color = cut)) +</span><br><span class="line">  geom_freqpoly(binwidth = <span class="number">0.1</span>)</span><br></pre></td></tr></table></figure>
+<p><img src="/images/202101/9/8.png" alt></p>
+<h3 id="典型值"><a href="#典型值" class="headerlink" title="典型值"></a>典型值</h3><p>条形图和直方图都用比较高的条形表示变量中的常见值，而用比较矮的条形表示变量中不常见的值，没有条形的位置表示数据中没有这样的值。</p>
+<p>针对这些信息，我们提出一些问题，比如：</p>
+<ul>
+<li>哪些值是最常见的？为什么？</li>
+<li>哪些值是很罕见的？为什么？符合预期吗？</li>
+<li>有什么异常的模式吗？如何解释？</li>
+</ul>
+<figure class="highlight r"><table><tr><td class="code"><pre><span class="line">diamonds %&gt;% filter(carat &lt; <span class="number">3</span>) %&gt;%</span><br><span class="line">  ggplot(mapping = aes(x = carat)) +</span><br><span class="line">  geom_histogram(binwidth = <span class="number">0.01</span>)</span><br></pre></td></tr></table></figure>
+<p><img src="/images/202101/9/9.png" alt></p>
+<h3 id="异常值"><a href="#异常值" class="headerlink" title="异常值"></a>异常值</h3><p>异常值是与众不同的观测或是模式之外的数据点。有时异常值是由于数据录入错误而产生的。若数据量比较大，有时很难在直方图上发现异常值。查看<code>Diamonds</code>数据集中y轴变量的分布，唯一能表示存在异常值的证据是y轴的取值范围出奇的宽：</p>
+<figure class="highlight r"><table><tr><td class="code"><pre><span class="line">ggplot(data = diamonds) + </span><br><span class="line">  geom_histogram(mapping = aes(x = y), binwidth = <span class="number">0.5</span>)</span><br></pre></td></tr></table></figure>
+<p><img src="/images/202101/9/10.png" alt></p>
+<p>由于正常值分箱中的观测值太多，以至于包括异常值的分箱高度太低，导致我们根本看不见。为了更容易发现异常值，我们可以使用<code>coord_cartesian()</code>函数将y轴靠近0的部分放大：</p>
+<figure class="highlight r"><table><tr><td class="code"><pre><span class="line">ggplot(data = diamonds) + </span><br><span class="line">  geom_histogram(mapping = aes(x = y), binwidth = <span class="number">0.5</span>) + </span><br><span class="line">  coord_cartesian(ylim = c(<span class="number">0</span>, <span class="number">50</span>))</span><br></pre></td></tr></table></figure>
+<p><img src="/images/202101/9/11.png" alt></p>
+<p>从上图可以看到有3个异常值，分别位于0，30左右和60左右。我们可以将其找出来：</p>
+<p><img src="/images/202101/9/12.png" alt></p>
+<p><code>y</code>变量的单位为毫米。钻石的宽度不可能为0毫米，因此这些值肯定是错误的，而32毫米和59毫米是难以置信的。</p>
+<p>使用带有异常值和不带异常值的数据分别进行分析，是一种良好的做法。如果两次分析的结果差别不大，而又无法说明为什么会有异常值，那么完全可以用缺失值代替异常值，然后继续进行分析。但如果两次分析的结果有显著差别，那么就不能在没有正当理由下丢弃它们。需要弄清出现异常值的原因（如数据输入错误），并在文章中说明丢弃它们的理由。</p>
+<h2 id="缺失值"><a href="#缺失值" class="headerlink" title="缺失值"></a>缺失值</h2><p>如果在数据集中发现异常值，但想继续分析工作，那么有两种选择。</p>
+<ul>
+<li>将带有可疑值的行全部丢弃</li>
+</ul>
+<figure class="highlight r"><table><tr><td class="code"><pre><span class="line">diamonds2 &lt;- diamonds %&gt;%</span><br><span class="line">  filter(between(y, <span class="number">3</span>, <span class="number">20</span>))</span><br></pre></td></tr></table></figure>
+<ul>
+<li>使用缺失值代替异常值</li>
+</ul>
+<figure class="highlight r"><table><tr><td class="code"><pre><span class="line">diamonds2 &lt;- diamonds %&gt;%</span><br><span class="line">  mutate(y = ifelse(y &lt; <span class="number">3</span> | y &gt; <span class="number">20</span>, <span class="literal">NA</span>, y))</span><br></pre></td></tr></table></figure>
+<p>有时会想弄清楚造成有缺失值的观测和没有缺失值的观测的原因。例如，在<code>nycflights::flights</code>中，<code>dep_time</code>变量中的缺失值表示航班取消了。我们比较一下已取消航班和未取消航班的计划出发时间。可以使用<code>is.na()</code>函数创建一个新变量来完成此操作：</p>
+<figure class="highlight r"><table><tr><td class="code"><pre><span class="line">nycflights13::flights %&gt;%</span><br><span class="line">  mutate(cancelled = is.na(dep_time),</span><br><span class="line">         sched_hour = sched_dep_time %/% <span class="number">100</span>,</span><br><span class="line">         sched_min = sched_dep_time %% <span class="number">100</span>,</span><br><span class="line">         sched_dep_time = sched_hour + sched_min / <span class="number">60</span></span><br><span class="line">         ) %&gt;%</span><br><span class="line">  ggplot(mapping = aes(x = sched_dep_time)) + </span><br><span class="line">  geom_freqpoly(mapping = aes(color = cancelled),</span><br><span class="line">                binwidth = <span class="number">1</span> / <span class="number">4</span>)</span><br></pre></td></tr></table></figure>
+<p><img src="/images/202101/9/13.png" alt></p>
+<h2 id="多个变量"><a href="#多个变量" class="headerlink" title="多个变量"></a>多个变量</h2><p>之前涉及到的主要是单个变量的变化模式，现在我们将主要集中于两个或多个变量间的关系。</p>
+<h3 id="分类变量与连续变量"><a href="#分类变量与连续变量" class="headerlink" title="分类变量与连续变量"></a>分类变量与连续变量</h3><p>我们经常需要探索连续变量的分布，如果一组观测的数量明显少于其他组的话，就很难看出形状上的差别。例如，我们探索一下钻石价格是如何随着切割而变化的：</p>
+<figure class="highlight r"><table><tr><td class="code"><pre><span class="line">ggplot(data = diamonds, mapping = aes(x = price)) + </span><br><span class="line">  geom_freqpoly(mapping = aes(color = cut), binwidth = <span class="number">500</span>)</span><br></pre></td></tr></table></figure>
+<p><img src="/images/202101/9/17.png" alt></p>
+<p>很难看出分布上的区别，因为总体看来各组数量的差别太大了。为了让比较变得容易，需要改变y轴的显示内容，不再显示计数，而是显示密度。密度是对计数的标准化，这样每个频率多边形下边的面积都是1：</p>
+<figure class="highlight r"><table><tr><td class="code"><pre><span class="line">ggplot(data = diamonds) + </span><br><span class="line">  geom_freqpoly(mapping = aes(x = price, y = ..density.., color = cut), </span><br><span class="line">                binwidth = <span class="number">500</span>)</span><br></pre></td></tr></table></figure>
+<p><img src="/images/202101/9/18.png" alt></p>
+<p>按分类变量的分组显示连续变量分布的另一种方式是使用箱线图。箱线图是对变量值分布的一种简单可视化表示。我们可以使用<code>geom_boxplot()</code>函数查看按切割分类的价格分布：</p>
+<figure class="highlight r"><table><tr><td class="code"><pre><span class="line">ggplot(data = diamonds) + </span><br><span class="line">  geom_boxplot(mapping = aes(x = cut, y = price))</span><br></pre></td></tr></table></figure>
+<p><img src="/images/202101/9/19.png" alt></p>
+<p>上图看不出太多关于分布的信息，但其更加紧凑，因此可以更加容易地比较多个类别。</p>
+<h3 id="两个分类变量"><a href="#两个分类变量" class="headerlink" title="两个分类变量"></a>两个分类变量</h3><p>要想对两个分类变量间的相关变动进行可视化表示，需要计算出每个变量组合中的的观测数量，我们可以使用<code>geom_count()</code>函数完成这个任务：</p>
+<figure class="highlight r"><table><tr><td class="code"><pre><span class="line">ggplot(data = diamonds) + </span><br><span class="line">  geom_count(mapping = aes(x = cut, y = color))</span><br></pre></td></tr></table></figure>
+<p><img src="/images/202101/9/14.png" alt></p>
+<p>每个圆点的大小表示每个变量组合的观测数量。</p>
+<p>另一种方法是使用<code>dplyr</code>：</p>
+<p><img src="/images/202101/9/15.png" alt></p>
+<p>接着使用<code>geom_tile()</code>函数和填充图形属性进行可视化表示：</p>
+<figure class="highlight r"><table><tr><td class="code"><pre><span class="line">diamonds %&gt;%</span><br><span class="line">  count(color, cut) %&gt;%</span><br><span class="line">  ggplot(mapping = aes(x = color, y = cut)) +</span><br><span class="line">  geom_tile(mapping = aes(fill = n))</span><br></pre></td></tr></table></figure>
+<p><img src="/images/202101/9/16.png" alt></p>
+<h3 id="两个连续变量"><a href="#两个连续变量" class="headerlink" title="两个连续变量"></a>两个连续变量</h3><p>对于两个连续变量间的相关关系的可视化表示，我们可以使用<code>geom_point()</code>函数绘制散点图。例如，可以看到钻石的克拉重量和价格之间存在着指数关系：</p>
+<figure class="highlight r"><table><tr><td class="code"><pre><span class="line">ggplot(data = diamonds) +</span><br><span class="line">  geom_point(mapping = aes(x = carat, y = price))</span><br></pre></td></tr></table></figure>
+<p><img src="/images/202101/9/20.png" alt></p>
+<p>当数据量不断增加时，数据点会堆积在一片黑色区域中，我们可以使用<code>alpha</code>图形属性添加透明度：</p>
+<figure class="highlight r"><table><tr><td class="code"><pre><span class="line">ggplot(data = diamonds) +</span><br><span class="line">  geom_point(mapping = aes(x = carat, y = price), alpha = <span class="number">1</span> / <span class="number">100</span>)</span><br></pre></td></tr></table></figure>
+<p><img src="/images/202101/9/21.png" alt></p>
+<p>但很难对特别大的数据集使用透明度。另一种解决办法是使用分箱。之前使用了<code>geom_histogram()</code>和<code>geom_freqpoly()</code>函数在一个维度上进行分箱，我们可以使用<code>geom_bin2d()</code>和<code>geom_hex()</code>函数在两个维度上进行分箱。</p>
+<p><code>geom_bin2d()</code>和<code>geom_hex()</code>函数将坐标平面分为二维分箱，并使用一种填充颜色表示落入每个分箱的数据点。<code>geom_bin2d()</code>创建长方形分箱。<code>geom_hex()</code>创建六边形分箱。</p>
+<figure class="highlight r"><table><tr><td class="code"><pre><span class="line">ggplot(data = diamonds) + </span><br><span class="line">  geom_bin2d(mapping = aes(x = carat, y = price))</span><br></pre></td></tr></table></figure>
+<p><img src="/images/202101/9/22.png" alt></p>
+<figure class="highlight r"><table><tr><td class="code"><pre><span class="line">install.packages(<span class="string">"hexbin"</span>)</span><br><span class="line"><span class="keyword">library</span>(hexbin)</span><br><span class="line">ggplot(data = diamonds) +</span><br><span class="line">  geom_hex(mapping = aes(x = carat, y = price))</span><br></pre></td></tr></table></figure>
+<p><img src="/images/202101/9/23.png" alt></p>
+<p>另一种方式是对一个连续变量进行分箱，因此该连续变量的作用就相当于分类变量。之后就可以使用前面学过的对分类变量和连续变量的组合进行可视化的技术了。例如，可以对<code>carat</code>进行分箱，然后为每个组生成一个箱线图：</p>
+<figure class="highlight r"><table><tr><td class="code"><pre><span class="line">diamonds %&gt;% filter(carat &lt; <span class="number">3</span>) %&gt;%</span><br><span class="line">ggplot(mapping = aes(x = carat, y = price)) + </span><br><span class="line">  geom_boxplot(mapping = aes(group = cut_width(carat, <span class="number">0.1</span>)))</span><br></pre></td></tr></table></figure>
+<p><img src="/images/202101/9/24.png" alt></p>
+<p>另一种方法是近似地显示每个分箱中数据点的数量，此时可以使用<code>cut_number()</code>函数：</p>
+<figure class="highlight r"><table><tr><td class="code"><pre><span class="line">diamonds %&gt;% filter(carat &lt; <span class="number">3</span>) %&gt;%</span><br><span class="line">  ggplot(mapping = aes(x = carat, y = price)) + </span><br><span class="line">  geom_boxplot(mapping = aes(group = cut_number(carat, <span class="number">20</span>)))</span><br></pre></td></tr></table></figure>
+<p><img src="/images/202101/9/25.png" alt></p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p>《R数据科学》 第5章</p>
+]]></content>
+      <categories>
+        <category>数据分析</category>
+      </categories>
+      <tags>
+        <tag>R</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>OpenCV教程(一)图像编程入门</title>
     <url>/2021/01/16/a8d84114/</url>
     <content><![CDATA[<p>OpenCV库分为多个模块：opencv_core模块包含库的核心功能，opencv_imgproc模块包含主要的图像处理函数，opencv_highgui模块提供读写图像和视频的函数以及一些用户交互函数，等等。在使用某个模块时，需要包含该模块对应的头文件。例如：</p><figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;opencv2/core.hpp&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;opencv2/imgproc.hpp&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;opencv2/highgui.hpp&gt;</span></span></span><br></pre></td></tr></table></figure><a id="more"></a>
@@ -1602,57 +1723,6 @@ L(w,b)=\frac{1}{N}\sum_{n=1}^{N}{\left ( \hat{y}^n-\left ( b + w ·x_{cp}^{n} \r
       </tags>
   </entry>
   <entry>
-    <title>李宏毅机器学习(一)引言</title>
-    <url>/2019/11/05/a1aabbc5/</url>
-    <content><![CDATA[<p>最近几年人工智能这个词总是时不时地出现在我们视野里，确切来说它也并不是什么新词儿，它在1950年代就被提出来了。它代表着我们人类的一个长期目标，那便是<strong>希望机器可以和人一样聪明。</strong></p><p><img src="/images/201911/8/1.png" alt></p><p>可是人们却不太清楚如何做这件事，不太清楚如何让机器拥有智能，变得和人一样聪明。直到1980年代，有了<strong>机器学习。</strong> 顾名思义，机器学习就是让机器拥有学习的能力。那么，它和人工智能有什么关系呢？<strong>人工智能是我们想要达成的目标，而机器学习是为了达成目标使用的手段。深度学习是机器学习中的一种方法。</strong></p><a id="more"></a>
-
-
-<p><img src="/images/201911/8/2.png" alt></p>
-<p>那么在有机器学习，深度学习之前，我们是如何做人工智能呢？</p>
-<p>生物学的知识告诉我们，生物的行为取决于先天的本能或后天学习的结果。</p>
-<p>举例来说，河狸筑坝的能力是天生的。</p>
-<p><img src="/images/201911/8/3.png" alt></p>
-<p>它的筑坝行为是这样的：</p>
-<ul>
-<li>如果听到流水声，就会筑堤直到听不到流水声。</li>
-</ul>
-<p>我们之前做人工智能就是这样的，设定好机器的先天本能，通常是一些由人类确定的规则。</p>
-<p><img src="/images/201911/8/4.png" alt></p>
-<p>看起来也不错，似乎也能完成不少任务。但也存在很大的问题，我们很难考虑到所有的规则。对于上述的聊天机器人，我们不太可能想到所有的响应规则。这就导致了机器永远无法超过它的创造者。它的所有行为都在我们定义的规则之下，也就是说它没有<code>freestyle</code>。</p>
-<p>我们的目的是研究真正的机器学习。那么，什么是真正的机器学习呢？</p>
-<p>简单来说就是写程序让机器有学习的能力。接下来，我们就给它提供数据以供其学习。比如在语音识别中，</p>
-<p><img src="/images/201911/8/5.png" alt></p>
-<p>告诉机器这段语音是“Hi”。</p>
-<p><img src="/images/201911/8/6.png" alt></p>
-<p>这段语音是“How are you”。</p>
-<p>我们可以机器提供大量的语音数据，并告诉它每段语音的内容。通过不断地学习，它逐渐若有所得。于是，当我们给它一段语音（之前可能从来没有听过），它会告诉我们内容是什么。</p>
-<p><img src="/images/201911/8/7.png" alt></p>
-<p>过程如下所示：</p>
-<p><img src="/images/201911/8/8.png" alt></p>
-<p>图像识别也是类似的过程：</p>
-<p><img src="/images/201911/8/9.png" alt></p>
-<p>机器学习可以看成是从数据中找到一个函数。</p>
-<p><img src="/images/201911/8/10.png" alt></p>
-<p>举个例子，我们要进行图像识别，通过给机器的数据，机器学习算法可以得到一个函数。当将图像输入给该函数时，它能输出该图像对应的类别。</p>
-<p><img src="/images/201911/8/11.png" alt></p>
-<p>那么如何得到这个函数呢？我们有很多可以选择的模型，比如神经网络，SVM，决策树等等。每个模型内都包含了很多函数（模型可能有很多参数，参数是可以变化的）。</p>
-<p><img src="/images/201911/8/12.png" alt></p>
-<p>这么多函数选择哪一个呢？所以我们还得有一个评价指标，当把数据丢给模型后能够衡量函数的好坏。知道了函数的好坏之后，自然要选择最好的函数。</p>
-<p>如上图所示，函数<code>f1</code>自然好于<code>f2</code>。同时也可以看到，这些数据有个特点，就是每个数据都给出了函数的输入和函数期望得到的值。</p>
-<p><img src="/images/201911/8/13.png" alt></p>
-<p>在这种情景下的机器学习叫做监督学习。找到了最好的函数之后，我们就可以用它来测试，看它是否有举一反三的能力。整个流程如下：</p>
-<p><img src="/images/201911/8/14.png" alt></p>
-<p>所以总结一下，机器学习大致可以分为三步：</p>
-<p><img src="/images/201911/8/15.png" alt></p>
-]]></content>
-      <categories>
-        <category>机器学习</category>
-      </categories>
-      <tags>
-        <tag>公开课</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>李宏毅机器学习(二)学习导图</title>
     <url>/2019/11/05/68d48c63/</url>
     <content><![CDATA[<p>机器学习发展至今涵盖的内容已经非常多，本文通过对其使用情景、任务和方法分类在上文的基础上对机器学习做进一步的介绍。</p><p><img src="/images/201911/9/1.png" alt></p><h3 id="监督学习-Supervised-Learning"><a href="#监督学习-Supervised-Learning" class="headerlink" title="监督学习(Supervised Learning)"></a>监督学习(Supervised Learning)</h3><p>上文曾提到机器学习可以看成是从数据中找到一个函数。对于回归(Regression)这类任务而言，我们希望得到的函数的输出值是数值(Scalar)，而不是像之前图像识别一样输出类别。</p><a id="more"></a>
@@ -1763,6 +1833,57 @@ L(w,b)=\frac{1}{N}\sum_{n=1}^{N}{\left ( \hat{y}^n-\left ( b + w ·x_{cp}^{n} \r
 <blockquote>
 <p>绿色框代表方法，可以放在任一学习任务中。</p>
 </blockquote>
+]]></content>
+      <categories>
+        <category>机器学习</category>
+      </categories>
+      <tags>
+        <tag>公开课</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>李宏毅机器学习(一)引言</title>
+    <url>/2019/11/05/a1aabbc5/</url>
+    <content><![CDATA[<p>最近几年人工智能这个词总是时不时地出现在我们视野里，确切来说它也并不是什么新词儿，它在1950年代就被提出来了。它代表着我们人类的一个长期目标，那便是<strong>希望机器可以和人一样聪明。</strong></p><p><img src="/images/201911/8/1.png" alt></p><p>可是人们却不太清楚如何做这件事，不太清楚如何让机器拥有智能，变得和人一样聪明。直到1980年代，有了<strong>机器学习。</strong> 顾名思义，机器学习就是让机器拥有学习的能力。那么，它和人工智能有什么关系呢？<strong>人工智能是我们想要达成的目标，而机器学习是为了达成目标使用的手段。深度学习是机器学习中的一种方法。</strong></p><a id="more"></a>
+
+
+<p><img src="/images/201911/8/2.png" alt></p>
+<p>那么在有机器学习，深度学习之前，我们是如何做人工智能呢？</p>
+<p>生物学的知识告诉我们，生物的行为取决于先天的本能或后天学习的结果。</p>
+<p>举例来说，河狸筑坝的能力是天生的。</p>
+<p><img src="/images/201911/8/3.png" alt></p>
+<p>它的筑坝行为是这样的：</p>
+<ul>
+<li>如果听到流水声，就会筑堤直到听不到流水声。</li>
+</ul>
+<p>我们之前做人工智能就是这样的，设定好机器的先天本能，通常是一些由人类确定的规则。</p>
+<p><img src="/images/201911/8/4.png" alt></p>
+<p>看起来也不错，似乎也能完成不少任务。但也存在很大的问题，我们很难考虑到所有的规则。对于上述的聊天机器人，我们不太可能想到所有的响应规则。这就导致了机器永远无法超过它的创造者。它的所有行为都在我们定义的规则之下，也就是说它没有<code>freestyle</code>。</p>
+<p>我们的目的是研究真正的机器学习。那么，什么是真正的机器学习呢？</p>
+<p>简单来说就是写程序让机器有学习的能力。接下来，我们就给它提供数据以供其学习。比如在语音识别中，</p>
+<p><img src="/images/201911/8/5.png" alt></p>
+<p>告诉机器这段语音是“Hi”。</p>
+<p><img src="/images/201911/8/6.png" alt></p>
+<p>这段语音是“How are you”。</p>
+<p>我们可以机器提供大量的语音数据，并告诉它每段语音的内容。通过不断地学习，它逐渐若有所得。于是，当我们给它一段语音（之前可能从来没有听过），它会告诉我们内容是什么。</p>
+<p><img src="/images/201911/8/7.png" alt></p>
+<p>过程如下所示：</p>
+<p><img src="/images/201911/8/8.png" alt></p>
+<p>图像识别也是类似的过程：</p>
+<p><img src="/images/201911/8/9.png" alt></p>
+<p>机器学习可以看成是从数据中找到一个函数。</p>
+<p><img src="/images/201911/8/10.png" alt></p>
+<p>举个例子，我们要进行图像识别，通过给机器的数据，机器学习算法可以得到一个函数。当将图像输入给该函数时，它能输出该图像对应的类别。</p>
+<p><img src="/images/201911/8/11.png" alt></p>
+<p>那么如何得到这个函数呢？我们有很多可以选择的模型，比如神经网络，SVM，决策树等等。每个模型内都包含了很多函数（模型可能有很多参数，参数是可以变化的）。</p>
+<p><img src="/images/201911/8/12.png" alt></p>
+<p>这么多函数选择哪一个呢？所以我们还得有一个评价指标，当把数据丢给模型后能够衡量函数的好坏。知道了函数的好坏之后，自然要选择最好的函数。</p>
+<p>如上图所示，函数<code>f1</code>自然好于<code>f2</code>。同时也可以看到，这些数据有个特点，就是每个数据都给出了函数的输入和函数期望得到的值。</p>
+<p><img src="/images/201911/8/13.png" alt></p>
+<p>在这种情景下的机器学习叫做监督学习。找到了最好的函数之后，我们就可以用它来测试，看它是否有举一反三的能力。整个流程如下：</p>
+<p><img src="/images/201911/8/14.png" alt></p>
+<p>所以总结一下，机器学习大致可以分为三步：</p>
+<p><img src="/images/201911/8/15.png" alt></p>
 ]]></content>
       <categories>
         <category>机器学习</category>

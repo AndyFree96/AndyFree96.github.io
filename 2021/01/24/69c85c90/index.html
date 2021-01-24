@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.4.2',
+    exturl: false,
+    sidebar: {"position":"left","display":"always","offset":12,"onmobile":false},
+    copycode: {"enable":true,"show_result":true,"style":"mac"},
+    back2top: {"enable":false,"sidebar":false,"scrollpercent":true},
+    bookmark: {"enable":true,"color":"#222","save":"auto"},
+    fancybox: true,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: true,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":5,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    },
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="统计学家将使用可视化方法和数据转换来系统化地探索数据称为探索性数据分析（exploratory data analysis, EDA）。EDA期间的目标是获取对数据的理解。将问题作为指导调查研究的工具是进行EDA的最简单方式。该提出什么样的问题来指导我们对数据的研究并没有确定的规则。但总有两类问题总是有助于我们理解数据，这两类问题大致如下：">
+<meta name="keywords" content="R">
+<meta property="og:type" content="article">
+<meta property="og:title" content="R语言探索性数据分析">
+<meta property="og:url" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;2021&#x2F;01&#x2F;24&#x2F;69c85c90&#x2F;index.html">
+<meta property="og:site_name" content="AndyFree96&#39;s Blog">
+<meta property="og:description" content="统计学家将使用可视化方法和数据转换来系统化地探索数据称为探索性数据分析（exploratory data analysis, EDA）。EDA期间的目标是获取对数据的理解。将问题作为指导调查研究的工具是进行EDA的最简单方式。该提出什么样的问题来指导我们对数据的研究并没有确定的规则。但总有两类问题总是有助于我们理解数据，这两类问题大致如下：">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;202101&#x2F;9&#x2F;1.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;202101&#x2F;9&#x2F;2.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;202101&#x2F;9&#x2F;3.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;202101&#x2F;9&#x2F;4.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;202101&#x2F;9&#x2F;5.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;202101&#x2F;9&#x2F;6.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;202101&#x2F;9&#x2F;7.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;202101&#x2F;9&#x2F;8.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;202101&#x2F;9&#x2F;9.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;202101&#x2F;9&#x2F;10.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;202101&#x2F;9&#x2F;11.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;202101&#x2F;9&#x2F;12.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;202101&#x2F;9&#x2F;13.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;202101&#x2F;9&#x2F;17.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;202101&#x2F;9&#x2F;18.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;202101&#x2F;9&#x2F;19.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;202101&#x2F;9&#x2F;14.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;202101&#x2F;9&#x2F;15.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;202101&#x2F;9&#x2F;16.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;202101&#x2F;9&#x2F;20.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;202101&#x2F;9&#x2F;21.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;202101&#x2F;9&#x2F;22.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;202101&#x2F;9&#x2F;23.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;202101&#x2F;9&#x2F;24.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;202101&#x2F;9&#x2F;25.png">
+<meta property="og:updated_time" content="2021-01-24T14:10:25.548Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;202101&#x2F;9&#x2F;1.png">
+
+<link rel="canonical" href="https://andyfree96.github.io/2021/01/24/69c85c90/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>R语言探索性数据分析 | AndyFree96's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">AndyFree96's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-resource">
+
+    <a href="/resource/" rel="section"><i class="fa fa-fw fa-file"></i>资源</a>
+
+  </li>
+        <li class="menu-item menu-item-books">
+
+    <a href="/books/" rel="section"><i class="fa fa-fw fa-book"></i>书单</a>
+
+  </li>
+        <li class="menu-item menu-item-movies">
+
+    <a href="/movies/" rel="section"><i class="fa fa-fw fa-video-camera"></i>电影</a>
+
+  </li>
+        <li class="menu-item menu-item-papers">
+
+    <a href="/papers/" rel="section"><i class="fa fa-fw fa-hacker-news"></i>论文</a>
+
+  </li>
+        <li class="menu-item menu-item-projects">
+
+    <a href="/projects/" rel="section"><i class="fa fa-fw fa-github"></i>项目</a>
+
+  </li>
+        <li class="menu-item menu-item-courses">
+
+    <a href="/courses/" rel="section"><i class="fa fa-fw fa-play-circle"></i>公开课</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于我</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="none"
+           placeholder="搜索..." spellcheck="false"
+           type="text" id="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <a href="https://github.com/andyfree96" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://andyfree96.github.io/2021/01/24/69c85c90/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.jpg">
+      <meta itemprop="name" content="AndyFree96">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="AndyFree96's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          R语言探索性数据分析
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-01-24 22:08:00 / 修改时间：22:10:25" itemprop="dateCreated datePublished" datetime="2021-01-24T22:08:00+08:00">2021-01-24</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/" itemprop="url" rel="index">
+                    <span itemprop="name">数据分析</span>
+                  </a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>4.9k</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>统计学家将<strong>使用可视化方法和数据转换来系统化地探索数据称为探索性数据分析（exploratory data analysis, EDA）</strong>。</p><p>EDA期间的目标是获取对数据的理解。将问题作为指导调查研究的工具是进行EDA的最简单方式。</p><p>该提出什么样的问题来指导我们对数据的研究并没有确定的规则。但总有两类问题总是有助于我们理解数据，这两类问题大致如下：</p><a id="more"></a>
+
+
+<ol>
+<li>变量本身会发生哪种变化？</li>
+<li>不同变量之间会发生哪种相关变化？</li>
+</ol>
+<p><img src="/images/202101/9/1.png" alt></p>
+<p>本文中用到的数据集为如上所示的表格结构，每列是每个变量的值，每行称为一个观测或者样本，一个观测会包含多个值，每个值关联到不同变量，有时也将观测称为数据点。</p>
+<p>上图为<code>Diamonds</code>数据集，其中：</p>
+<ul>
+<li><code>carat</code>表示克拉重量</li>
+<li><code>cut</code>表示切割（<code>Levels: Fair &lt; Good &lt; Very Good &lt; Premium &lt; Ideal</code>）</li>
+<li><code>color</code>表示成色（<code>Levels: D &lt; E &lt; F &lt; G &lt; H &lt; I &lt; J</code>）</li>
+<li><code>clarity</code>表示净度（<code>Levels: I1 &lt; SI2 &lt; SI1 &lt; VS2 &lt; VS1 &lt; VVS2 &lt; VVS1 &lt; IF</code>）</li>
+<li><code>depth</code>表示深度</li>
+<li><code>table</code>表示台面</li>
+<li><code>price</code>表示价格</li>
+</ul>
+<p><code>x</code>，<code>y</code>和<code>z</code>和含义如下图所示：</p>
+<p><img src="/images/202101/9/2.png" alt></p>
+<p>更多关于钻石的知识请参考：<a href="https://www.bluenile.com/cn/education/diamonds" target="_blank" rel="noopener">https://www.bluenile.com/cn/education/diamonds</a></p>
+<p>每个变量的值都会有各自的变化模式，可以揭示一些有趣的信息。理解这种模式的最好方法就是对变量值的分布进行可视化分表示。</p>
+<h2 id="单个变量"><a href="#单个变量" class="headerlink" title="单个变量"></a>单个变量</h2><h3 id="分类变量"><a href="#分类变量" class="headerlink" title="分类变量"></a>分类变量</h3><p>对变量值的分布进行可视化表示取决于变量是分类变量还是连续变量。如果一个变量的值仅在较小的集合内取值，那么这个变量就是分类变量。要想表示分类变量的分布，我们可以使用条形图：</p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">library</span>(ggplot2)</span><br><span class="line">ggplot(data = diamonds) +</span><br><span class="line">  geom_bar(mapping = aes(x = cut))</span><br></pre></td></tr></table></figure>
+<p>结果如下：</p>
+<p><img src="/images/202101/9/3.png" alt></p>
+<p>条形的高度表示每个<code>x</code>值观测的数量，可以用<code>dplyr::count()</code>手动计算出这些值：</p>
+<p><img src="/images/202101/9/4.png" alt></p>
+<h3 id="连续变量"><a href="#连续变量" class="headerlink" title="连续变量"></a>连续变量</h3><p>如果一个变量可以在无限大的有序集合中任意取值，那么这个变量就是连续变量。数值型和日期时间型变量就是连续变量的两个例子。要想表示连续变量的分布，可以使用直方图：</p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ggplot(data = diamonds) + </span><br><span class="line">  geom_histogram(mapping = aes(x = carat), binwidth = <span class="number">0.5</span>)</span><br></pre></td></tr></table></figure>
+<p><img src="/images/202101/9/5.png" alt></p>
+<p>我们也可以使用<code>dplyr::count()</code>和<code>ggplot2::cut_width()</code>函数的组合来手动计算结果：</p>
+<p><img src="/images/202101/9/6.png" alt></p>
+<p>直方图对x轴进行等宽分箱，然后使用条形的高度表示落入每个分箱的观测的数量。我们可以用<code>binwidth</code>参数来设定直方图中间隔的宽度，该参数用x轴变量的单位来度量的。不同的分箱宽度可以揭示不同的模式。比如，如果只考虑重量小于3克拉的钻石，并选择一个更小的分箱宽度，结果如下：</p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">diamonds %&gt;% filter(carat &lt; <span class="number">3</span>) %&gt;%</span><br><span class="line">  ggplot(mapping = aes(x = carat)) +</span><br><span class="line">  geom_histogram(binwidth = <span class="number">0.1</span>)</span><br></pre></td></tr></table></figure>
+<p><img src="/images/202101/9/7.png" alt></p>
+<p>若想在一张图中叠加多个直方图，那么我们可以用<code>geom_freqploy()</code>函数来代替<code>geom_histogram()</code>函数，该函数使用的是折线图，相比一下更加容易理解：</p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">diamonds %&gt;% filter(carat &lt; <span class="number">3</span>) %&gt;%</span><br><span class="line">  ggplot(mapping = aes(x = carat, color = cut)) +</span><br><span class="line">  geom_freqpoly(binwidth = <span class="number">0.1</span>)</span><br></pre></td></tr></table></figure>
+<p><img src="/images/202101/9/8.png" alt></p>
+<h3 id="典型值"><a href="#典型值" class="headerlink" title="典型值"></a>典型值</h3><p>条形图和直方图都用比较高的条形表示变量中的常见值，而用比较矮的条形表示变量中不常见的值，没有条形的位置表示数据中没有这样的值。</p>
+<p>针对这些信息，我们提出一些问题，比如：</p>
+<ul>
+<li>哪些值是最常见的？为什么？</li>
+<li>哪些值是很罕见的？为什么？符合预期吗？</li>
+<li>有什么异常的模式吗？如何解释？</li>
+</ul>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">diamonds %&gt;% filter(carat &lt; <span class="number">3</span>) %&gt;%</span><br><span class="line">  ggplot(mapping = aes(x = carat)) +</span><br><span class="line">  geom_histogram(binwidth = <span class="number">0.01</span>)</span><br></pre></td></tr></table></figure>
+<p><img src="/images/202101/9/9.png" alt></p>
+<h3 id="异常值"><a href="#异常值" class="headerlink" title="异常值"></a>异常值</h3><p>异常值是与众不同的观测或是模式之外的数据点。有时异常值是由于数据录入错误而产生的。若数据量比较大，有时很难在直方图上发现异常值。查看<code>Diamonds</code>数据集中y轴变量的分布，唯一能表示存在异常值的证据是y轴的取值范围出奇的宽：</p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ggplot(data = diamonds) + </span><br><span class="line">  geom_histogram(mapping = aes(x = y), binwidth = <span class="number">0.5</span>)</span><br></pre></td></tr></table></figure>
+<p><img src="/images/202101/9/10.png" alt></p>
+<p>由于正常值分箱中的观测值太多，以至于包括异常值的分箱高度太低，导致我们根本看不见。为了更容易发现异常值，我们可以使用<code>coord_cartesian()</code>函数将y轴靠近0的部分放大：</p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ggplot(data = diamonds) + </span><br><span class="line">  geom_histogram(mapping = aes(x = y), binwidth = <span class="number">0.5</span>) + </span><br><span class="line">  coord_cartesian(ylim = c(<span class="number">0</span>, <span class="number">50</span>))</span><br></pre></td></tr></table></figure>
+<p><img src="/images/202101/9/11.png" alt></p>
+<p>从上图可以看到有3个异常值，分别位于0，30左右和60左右。我们可以将其找出来：</p>
+<p><img src="/images/202101/9/12.png" alt></p>
+<p><code>y</code>变量的单位为毫米。钻石的宽度不可能为0毫米，因此这些值肯定是错误的，而32毫米和59毫米是难以置信的。</p>
+<p>使用带有异常值和不带异常值的数据分别进行分析，是一种良好的做法。如果两次分析的结果差别不大，而又无法说明为什么会有异常值，那么完全可以用缺失值代替异常值，然后继续进行分析。但如果两次分析的结果有显著差别，那么就不能在没有正当理由下丢弃它们。需要弄清出现异常值的原因（如数据输入错误），并在文章中说明丢弃它们的理由。</p>
+<h2 id="缺失值"><a href="#缺失值" class="headerlink" title="缺失值"></a>缺失值</h2><p>如果在数据集中发现异常值，但想继续分析工作，那么有两种选择。</p>
+<ul>
+<li>将带有可疑值的行全部丢弃</li>
+</ul>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">diamonds2 &lt;- diamonds %&gt;%</span><br><span class="line">  filter(between(y, <span class="number">3</span>, <span class="number">20</span>))</span><br></pre></td></tr></table></figure>
+<ul>
+<li>使用缺失值代替异常值</li>
+</ul>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">diamonds2 &lt;- diamonds %&gt;%</span><br><span class="line">  mutate(y = ifelse(y &lt; <span class="number">3</span> | y &gt; <span class="number">20</span>, <span class="literal">NA</span>, y))</span><br></pre></td></tr></table></figure>
+<p>有时会想弄清楚造成有缺失值的观测和没有缺失值的观测的原因。例如，在<code>nycflights::flights</code>中，<code>dep_time</code>变量中的缺失值表示航班取消了。我们比较一下已取消航班和未取消航班的计划出发时间。可以使用<code>is.na()</code>函数创建一个新变量来完成此操作：</p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">nycflights13::flights %&gt;%</span><br><span class="line">  mutate(cancelled = is.na(dep_time),</span><br><span class="line">         sched_hour = sched_dep_time %/% <span class="number">100</span>,</span><br><span class="line">         sched_min = sched_dep_time %% <span class="number">100</span>,</span><br><span class="line">         sched_dep_time = sched_hour + sched_min / <span class="number">60</span></span><br><span class="line">         ) %&gt;%</span><br><span class="line">  ggplot(mapping = aes(x = sched_dep_time)) + </span><br><span class="line">  geom_freqpoly(mapping = aes(color = cancelled),</span><br><span class="line">                binwidth = <span class="number">1</span> / <span class="number">4</span>)</span><br></pre></td></tr></table></figure>
+<p><img src="/images/202101/9/13.png" alt></p>
+<h2 id="多个变量"><a href="#多个变量" class="headerlink" title="多个变量"></a>多个变量</h2><p>之前涉及到的主要是单个变量的变化模式，现在我们将主要集中于两个或多个变量间的关系。</p>
+<h3 id="分类变量与连续变量"><a href="#分类变量与连续变量" class="headerlink" title="分类变量与连续变量"></a>分类变量与连续变量</h3><p>我们经常需要探索连续变量的分布，如果一组观测的数量明显少于其他组的话，就很难看出形状上的差别。例如，我们探索一下钻石价格是如何随着切割而变化的：</p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ggplot(data = diamonds, mapping = aes(x = price)) + </span><br><span class="line">  geom_freqpoly(mapping = aes(color = cut), binwidth = <span class="number">500</span>)</span><br></pre></td></tr></table></figure>
+<p><img src="/images/202101/9/17.png" alt></p>
+<p>很难看出分布上的区别，因为总体看来各组数量的差别太大了。为了让比较变得容易，需要改变y轴的显示内容，不再显示计数，而是显示密度。密度是对计数的标准化，这样每个频率多边形下边的面积都是1：</p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ggplot(data = diamonds) + </span><br><span class="line">  geom_freqpoly(mapping = aes(x = price, y = ..density.., color = cut), </span><br><span class="line">                binwidth = <span class="number">500</span>)</span><br></pre></td></tr></table></figure>
+<p><img src="/images/202101/9/18.png" alt></p>
+<p>按分类变量的分组显示连续变量分布的另一种方式是使用箱线图。箱线图是对变量值分布的一种简单可视化表示。我们可以使用<code>geom_boxplot()</code>函数查看按切割分类的价格分布：</p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ggplot(data = diamonds) + </span><br><span class="line">  geom_boxplot(mapping = aes(x = cut, y = price))</span><br></pre></td></tr></table></figure>
+<p><img src="/images/202101/9/19.png" alt></p>
+<p>上图看不出太多关于分布的信息，但其更加紧凑，因此可以更加容易地比较多个类别。</p>
+<h3 id="两个分类变量"><a href="#两个分类变量" class="headerlink" title="两个分类变量"></a>两个分类变量</h3><p>要想对两个分类变量间的相关变动进行可视化表示，需要计算出每个变量组合中的的观测数量，我们可以使用<code>geom_count()</code>函数完成这个任务：</p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ggplot(data = diamonds) + </span><br><span class="line">  geom_count(mapping = aes(x = cut, y = color))</span><br></pre></td></tr></table></figure>
+<p><img src="/images/202101/9/14.png" alt></p>
+<p>每个圆点的大小表示每个变量组合的观测数量。</p>
+<p>另一种方法是使用<code>dplyr</code>：</p>
+<p><img src="/images/202101/9/15.png" alt></p>
+<p>接着使用<code>geom_tile()</code>函数和填充图形属性进行可视化表示：</p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">diamonds %&gt;%</span><br><span class="line">  count(color, cut) %&gt;%</span><br><span class="line">  ggplot(mapping = aes(x = color, y = cut)) +</span><br><span class="line">  geom_tile(mapping = aes(fill = n))</span><br></pre></td></tr></table></figure>
+<p><img src="/images/202101/9/16.png" alt></p>
+<h3 id="两个连续变量"><a href="#两个连续变量" class="headerlink" title="两个连续变量"></a>两个连续变量</h3><p>对于两个连续变量间的相关关系的可视化表示，我们可以使用<code>geom_point()</code>函数绘制散点图。例如，可以看到钻石的克拉重量和价格之间存在着指数关系：</p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ggplot(data = diamonds) +</span><br><span class="line">  geom_point(mapping = aes(x = carat, y = price))</span><br></pre></td></tr></table></figure>
+<p><img src="/images/202101/9/20.png" alt></p>
+<p>当数据量不断增加时，数据点会堆积在一片黑色区域中，我们可以使用<code>alpha</code>图形属性添加透明度：</p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ggplot(data = diamonds) +</span><br><span class="line">  geom_point(mapping = aes(x = carat, y = price), alpha = <span class="number">1</span> / <span class="number">100</span>)</span><br></pre></td></tr></table></figure>
+<p><img src="/images/202101/9/21.png" alt></p>
+<p>但很难对特别大的数据集使用透明度。另一种解决办法是使用分箱。之前使用了<code>geom_histogram()</code>和<code>geom_freqpoly()</code>函数在一个维度上进行分箱，我们可以使用<code>geom_bin2d()</code>和<code>geom_hex()</code>函数在两个维度上进行分箱。</p>
+<p><code>geom_bin2d()</code>和<code>geom_hex()</code>函数将坐标平面分为二维分箱，并使用一种填充颜色表示落入每个分箱的数据点。<code>geom_bin2d()</code>创建长方形分箱。<code>geom_hex()</code>创建六边形分箱。</p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ggplot(data = diamonds) + </span><br><span class="line">  geom_bin2d(mapping = aes(x = carat, y = price))</span><br></pre></td></tr></table></figure>
+<p><img src="/images/202101/9/22.png" alt></p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">install.packages(<span class="string">"hexbin"</span>)</span><br><span class="line"><span class="keyword">library</span>(hexbin)</span><br><span class="line">ggplot(data = diamonds) +</span><br><span class="line">  geom_hex(mapping = aes(x = carat, y = price))</span><br></pre></td></tr></table></figure>
+<p><img src="/images/202101/9/23.png" alt></p>
+<p>另一种方式是对一个连续变量进行分箱，因此该连续变量的作用就相当于分类变量。之后就可以使用前面学过的对分类变量和连续变量的组合进行可视化的技术了。例如，可以对<code>carat</code>进行分箱，然后为每个组生成一个箱线图：</p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">diamonds %&gt;% filter(carat &lt; <span class="number">3</span>) %&gt;%</span><br><span class="line">ggplot(mapping = aes(x = carat, y = price)) + </span><br><span class="line">  geom_boxplot(mapping = aes(group = cut_width(carat, <span class="number">0.1</span>)))</span><br></pre></td></tr></table></figure>
+<p><img src="/images/202101/9/24.png" alt></p>
+<p>另一种方法是近似地显示每个分箱中数据点的数量，此时可以使用<code>cut_number()</code>函数：</p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">diamonds %&gt;% filter(carat &lt; <span class="number">3</span>) %&gt;%</span><br><span class="line">  ggplot(mapping = aes(x = carat, y = price)) + </span><br><span class="line">  geom_boxplot(mapping = aes(group = cut_number(carat, <span class="number">20</span>)))</span><br></pre></td></tr></table></figure>
+<p><img src="/images/202101/9/25.png" alt></p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p>《R数据科学》 第5章</p>
+
+    </div>
+
+    
+    
+    
+      
+
+      
+        <div class="reward-container">
+  <div>您的支持将鼓励我继续创作！</div>
+  <button disable="enable" onclick="var qr = document.getElementById(&quot;qr&quot;); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/uploads/wechatpay.png" alt="AndyFree96 微信支付">
+        <p>微信支付</p>
+      </div>
+      
+      <div style="display: inline-block;">
+        <img src="/uploads/alipay.png" alt="AndyFree96 支付宝">
+        <p>支付宝</p>
+      </div>
+
+  </div>
+</div>
+
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>AndyFree96
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://andyfree96.github.io/2021/01/24/69c85c90/" title="R语言探索性数据分析">https://andyfree96.github.io/2021/01/24/69c85c90/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/null" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/R/" rel="tag"><i class="fa fa-tag"></i>R</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/2021/01/16/a8d84114/" rel="next" title="OpenCV教程(一)图像编程入门">
+                  <i class="fa fa-chevron-left"></i> OpenCV教程(一)图像编程入门
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    
+  <div class="comments" id="comments">
+    <div id="lv-container" data-id="city" data-uid="MTAyMC80NzkxOC8yNDQxNQ"></div>
+  </div>
+  
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#单个变量"><span class="nav-text">单个变量</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#分类变量"><span class="nav-text">分类变量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#连续变量"><span class="nav-text">连续变量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#典型值"><span class="nav-text">典型值</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#异常值"><span class="nav-text">异常值</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#缺失值"><span class="nav-text">缺失值</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#多个变量"><span class="nav-text">多个变量</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#分类变量与连续变量"><span class="nav-text">分类变量与连续变量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#两个分类变量"><span class="nav-text">两个分类变量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#两个连续变量"><span class="nav-text">两个连续变量</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-text">参考</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <img class="site-author-image" itemprop="image" alt="AndyFree96"
+    src="/uploads/avatar.jpg">
+  <p class="site-author-name" itemprop="name">AndyFree96</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">35</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">30</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/AndyFree96" title="GitHub &amp;rarr; https:&#x2F;&#x2F;github.com&#x2F;AndyFree96" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:anthonyfree96@gmail.com" title="E-Mail &amp;rarr; mailto:anthonyfree96@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/IRONAnthony" title="Weibo &amp;rarr; https:&#x2F;&#x2F;weibo.com&#x2F;IRONAnthony" rel="noopener" target="_blank"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/IRONAnthony96" title="Twitter &amp;rarr; https:&#x2F;&#x2F;twitter.com&#x2F;IRONAnthony96" rel="noopener" target="_blank"><i class="fa fa-fw fa-twitter"></i>Twitter</a>
+      </span>
+  </div>
+
+
+
+      </div>
+	  
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 2019 – 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">AndyFree96</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+      <span class="post-meta-item-text">站点总字数：</span>
+    <span title="站点总字数">158k</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.0.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.4.2
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script pjax async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/pjax/pjax.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/pangu@4/dist/browser/pangu.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+  <script>
+var pjax = new Pjax({
+  selectors: [
+    'head title',
+    '#page-configurations',
+    '.content-wrap',
+    '.post-toc-wrap',
+    '#pjax'
+  ],
+  switches: {
+    '.post-toc-wrap': Pjax.switches.innerHTML
+  },
+  analytics: false,
+  cacheBust: false,
+  scrollTo : !CONFIG.bookmark.enable
+});
+
+window.addEventListener('pjax:success', () => {
+  document.querySelectorAll('script[pjax], script#page-configurations, #pjax script').forEach(element => {
+    var code = element.text || element.textContent || element.innerHTML || '';
+    var parent = element.parentNode;
+    parent.removeChild(element);
+    var script = document.createElement('script');
+    if (element.id) {
+      script.id = element.id;
+    }
+    if (element.className) {
+      script.className = element.className;
+    }
+    if (element.type) {
+      script.type = element.type;
+    }
+    if (element.src) {
+      script.src = element.src;
+      // Force synchronous loading of peripheral JS.
+      script.async = false;
+    }
+    if (element.getAttribute('pjax') !== null) {
+      element.setAttribute('pjax', '');
+    }
+    if (code !== '') {
+      script.appendChild(document.createTextNode(code));
+    }
+    parent.appendChild(script);
+  });
+  NexT.boot.refresh();
+  // Define Motion Sequence & Bootstrap Motion.
+  if (CONFIG.motion.enable) {
+    NexT.motion.integrator
+      .init()
+      .add(NexT.motion.middleWares.postList)
+      .bootstrap();
+  }
+  NexT.utils.updateSidebarPosition();
+});
+</script>
+
+
+
+
+  
+  <script pjax>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+
+
+  <script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+    <div id="pjax">
+
+  
+
+  
+
+  
+
+<script>
+  window.livereOptions = {
+    refer: location.pathname.replace(CONFIG.root, '').replace('index.html', '')
+  };
+  (function(d, s) {
+    var j, e = d.getElementsByTagName(s)[0];
+    if (typeof LivereTower === 'function') { return; }
+    j = d.createElement(s);
+    j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+    j.async = true;
+    e.parentNode.insertBefore(j, e);
+  })(document, 'script');
+</script>
+
+    </div>
+  
+  
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":true}});</script></body>
+</html>
