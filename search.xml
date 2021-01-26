@@ -1,6 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>R语言数据框和Tibble</title>
+    <url>/2021/01/26/d61ac7cf/</url>
+    <content><![CDATA[<h2 id="数据框"><a href="#数据框" class="headerlink" title="数据框"></a>数据框</h2><p>在R语言中，对于不同的列可以包含不同数据类型的数据，我们可以用<code>data.frame()</code>函数创建数据框：</p><figure class="highlight r"><table><tr><td class="code"><pre><span class="line">data &lt;- data.frame(col1, col2, col3,<span class="keyword">...</span>)</span><br></pre></td></tr></table></figure><p>其中的列向量<code>col1</code>、<code>col2</code>、<code>col3</code>等可为任何类型，比如字符型，数值型或逻辑型。每一列的名称可由函数<code>names()</code>指定。</p><a id="more"></a>
+
+
+<p>我们来看一个例子：</p>
+<figure class="highlight r"><table><tr><td class="code"><pre><span class="line">patientID &lt;- c(<span class="number">1</span>:<span class="number">4</span>)</span><br><span class="line">age &lt;- c(<span class="number">25</span>, <span class="number">34</span>, <span class="number">28</span>, <span class="number">52</span>)</span><br><span class="line">status &lt;- c(<span class="string">"Poor"</span>, <span class="string">"Improved"</span>, <span class="string">"Excellent"</span>, <span class="string">"Poor"</span>)</span><br><span class="line">diabetes &lt;- c(<span class="string">"Type1"</span>, <span class="string">"Type2"</span>, <span class="string">"Type1"</span>, <span class="string">"Type1"</span>)</span><br><span class="line">patientData &lt;- data.frame(patientID, age, diabetes, status)</span><br></pre></td></tr></table></figure>
+<p><img src="/images/202101/10/1.png" alt></p>
+<p>如果要选取某些列数据，我们可以如下几种方式：</p>
+<figure class="highlight r"><table><tr><td class="code"><pre><span class="line">patientData[<span class="number">1</span>] <span class="comment"># 选取第1列数据</span></span><br><span class="line">patientData[<span class="number">1</span>:<span class="number">3</span>] <span class="comment"># 选取第1,2,3列数据</span></span><br><span class="line">patientData[c(<span class="number">1</span>,<span class="number">3</span>)] <span class="comment"># 选取第1,3列数据</span></span><br><span class="line">patientData[<span class="string">"age"</span>] <span class="comment"># 选取age列数据</span></span><br><span class="line">patientData[c(<span class="string">"age"</span>, <span class="string">"patientID"</span>)] <span class="comment"># 选取age列和patientID列数据</span></span><br><span class="line">patientData$age <span class="comment"># 选取age列数据</span></span><br></pre></td></tr></table></figure>
+<h2 id="创建tibble"><a href="#创建tibble" class="headerlink" title="创建tibble"></a>创建tibble</h2><p>tibble是一种简单数据框，它对传统的数据框的功能进行了修改，以便让其更易于使用。tibble是tidyverse的标准功能之一，由于多数其他R包使用的是标准数据框，因此可能需要将数据框转换为tibble，为此我们可以使用<code>as_tibble()</code>函数来进行转换：</p>
+<figure class="highlight r"><table><tr><td class="code"><pre><span class="line">as_tibble(patientData)</span><br></pre></td></tr></table></figure>
+<p><img src="/images/202101/10/2.png" alt></p>
+<p>可以通过<code>tibble()</code>函数使用一个向量来创建新tibble。<code>tibble()</code>会自动重复长度为1的输入，并且可以使用刚创建的变量，如下所示：</p>
+<figure class="highlight r"><table><tr><td class="code"><pre><span class="line">tibble(</span><br><span class="line">    x = <span class="number">1</span>:<span class="number">5</span>,</span><br><span class="line">    y = <span class="number">1</span>,</span><br><span class="line">    z = x ^ <span class="number">2</span> + y <span class="comment"># 使用刚创建的变量x</span></span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p><img src="/images/202101/10/3.png" alt></p>
+<p>创建tibble的另一种方法是使用<code>tribble()</code>函数，tribble是transposed tibble的缩写，其对数据按行进行编码，列标题由公式（以<code>~</code>开头）定义，数据条目以逗号分隔。</p>
+<figure class="highlight r"><table><tr><td class="code"><pre><span class="line">tribble(~x, ~y, ~z,</span><br><span class="line">        <span class="string">"a"</span>, <span class="number">1</span>, <span class="number">7</span>,</span><br><span class="line">        <span class="string">"b"</span>, <span class="number">2</span>, <span class="number">3</span></span><br><span class="line">        )</span><br></pre></td></tr></table></figure>
+<p><img src="/images/202101/10/4.png" alt></p>
+<h2 id="tibble和数据框对比"><a href="#tibble和数据框对比" class="headerlink" title="tibble和数据框对比"></a>tibble和数据框对比</h2><p>tibble和传统的数据框的使用方法主要有两处不同：打印和取子集。</p>
+<h3 id="打印"><a href="#打印" class="headerlink" title="打印"></a>打印</h3><p>tibble的打印方法进行了优化，只显示前10行结果，并且列也是适合屏幕的，这种方式非常适合大数据集。除了打印列命，tibble还会打印出列的数据类型。</p>
+<p>在打印大数据框时，tibble的这种设计避免了输出占满整个控制台。但有时需要比默认显示更多的输出，这时可以设置几个选项。</p>
+<p>可以明确使用<code>print()</code>函数来打印数据框，并控制打印的行数（n）和显示的宽度（width）。<code>width = Inf</code>可以显示出所有列：</p>
+<figure class="highlight r"><table><tr><td class="code"><pre><span class="line">nycflights13::flights %&gt;%</span><br><span class="line">  print(n = <span class="number">10</span>, width = <span class="literal">Inf</span>)</span><br></pre></td></tr></table></figure>
+<p><img src="/images/202101/10/5.png" alt></p>
+<p>还可以设置以下选项来控制默认的打印方式。</p>
+<ul>
+<li><code>options(tibble.print_min = Inf)</code>总是打印所有行。</li>
+<li><code>options(tibble.width = Inf)</code>总是打印所有列。</li>
+</ul>
+<h3 id="取子集"><a href="#取子集" class="headerlink" title="取子集"></a>取子集</h3><p>如果我们想提取单个变量，我们可以使用<script type="math/tex">`和`[[]]`，`[[]]`可以按名称或位置提取变量，而`</script>只能按名称提取。</p>
+<figure class="highlight r"><table><tr><td class="code"><pre><span class="line">df &lt;- tibble(</span><br><span class="line">    x = runif(<span class="number">5</span>),</span><br><span class="line">    y = rnorm(<span class="number">5</span>)</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 按名称提取</span></span><br><span class="line">df$x</span><br><span class="line"></span><br><span class="line">df[[<span class="string">"x"</span>]]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 按位置提取</span></span><br><span class="line">df[[<span class="number">1</span>]]</span><br></pre></td></tr></table></figure>
+<p>要想在管道中使用这些提取操作，需要使用特殊的占位符<code>.</code>：</p>
+<figure class="highlight r"><table><tr><td class="code"><pre><span class="line">df %&gt;% .$x</span><br><span class="line"></span><br><span class="line">df %&gt;% .[[<span class="string">"x"</span>]]</span><br></pre></td></tr></table></figure>
+<p>与<code>data.frame</code>相比，tibble更严格：它不能进行部分匹配，如果想要访问的列不存在，会产生一条警告信息。</p>
+<p>有些比较旧的函数不支持tibble，此时我们可以使用<code>as.data.frame()</code>函数将tibble转换为<code>data.frame</code>。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p>《R数据科学》第7章<br>《R语言实战 第2版》第2章</p>
+]]></content>
+      <categories>
+        <category>数据分析</category>
+        <category>R</category>
+      </categories>
+      <tags>
+        <tag>Tibble</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>R语言探索性数据分析</title>
     <url>/2021/01/24/69c85c90/</url>
     <content><![CDATA[<p>统计学家将<strong>使用可视化方法和数据转换来系统化地探索数据称为探索性数据分析（exploratory data analysis, EDA）</strong>。</p><p>EDA期间的目标是获取对数据的理解。将问题作为指导调查研究的工具是进行EDA的最简单方式。</p><p>该提出什么样的问题来指导我们对数据的研究并没有确定的规则。但总有两类问题总是有助于我们理解数据，这两类问题大致如下：</p><a id="more"></a>
@@ -116,6 +163,7 @@
 ]]></content>
       <categories>
         <category>数据分析</category>
+        <category>R</category>
       </categories>
       <tags>
         <tag>R</tag>
@@ -355,8 +403,8 @@
         <category>数据分析</category>
       </categories>
       <tags>
-        <tag>Pandas</tag>
         <tag>备忘录</tag>
+        <tag>Pandas</tag>
       </tags>
   </entry>
   <entry>
@@ -2689,8 +2737,8 @@ L(w,b)=\frac{1}{N}\sum_{n=1}^{N}{\left ( \hat{y}^n-\left ( b + w ·x_{cp}^{n} \r
       </categories>
       <tags>
         <tag>Python</tag>
-        <tag>Pandas</tag>
         <tag>Matplotlib</tag>
+        <tag>Pandas</tag>
         <tag>Numpy</tag>
       </tags>
   </entry>
