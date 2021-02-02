@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.4.2',
+    exturl: false,
+    sidebar: {"position":"left","display":"always","offset":12,"onmobile":false},
+    copycode: {"enable":true,"show_result":true,"style":"mac"},
+    back2top: {"enable":false,"sidebar":false,"scrollpercent":true},
+    bookmark: {"enable":true,"color":"#222","save":"auto"},
+    fancybox: true,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: true,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":5,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    },
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="示例完成了上文一个操作系统的实现(一)环境搭建环境搭建.md)的环境搭建后，我们可以从引导扇区开始。代码如下：1234567891011121314151617181920	org 07c00h	; 程序加载到7c00处	mov ax, cs	mov ds, ax	mov es, ax	call DispStr	; 调用显示字符串例程	jmp $		; 无限循环DispStr:	mov ax, B">
+<meta name="keywords" content="引导扇区,汇编语言">
+<meta property="og:type" content="article">
+<meta property="og:title" content="一个操作系统的实现(二)初探">
+<meta property="og:url" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;2021&#x2F;02&#x2F;02&#x2F;69144060&#x2F;index.html">
+<meta property="og:site_name" content="AndyFree96&#39;s Blog">
+<meta property="og:description" content="示例完成了上文一个操作系统的实现(一)环境搭建环境搭建.md)的环境搭建后，我们可以从引导扇区开始。代码如下：1234567891011121314151617181920	org 07c00h	; 程序加载到7c00处	mov ax, cs	mov ds, ax	mov es, ax	call DispStr	; 调用显示字符串例程	jmp $		; 无限循环DispStr:	mov ax, B">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;202102&#x2F;1&#x2F;1.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;202102&#x2F;1&#x2F;2.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;202102&#x2F;1&#x2F;3.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;202102&#x2F;1&#x2F;4.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;202102&#x2F;1&#x2F;7.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;202102&#x2F;1&#x2F;5.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;202102&#x2F;1&#x2F;6.png">
+<meta property="og:updated_time" content="2021-02-02T14:19:57.253Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;202102&#x2F;1&#x2F;1.png">
+
+<link rel="canonical" href="https://andyfree96.github.io/2021/02/02/69144060/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>一个操作系统的实现(二)初探 | AndyFree96's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">AndyFree96's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-resource">
+
+    <a href="/resource/" rel="section"><i class="fa fa-fw fa-file"></i>资源</a>
+
+  </li>
+        <li class="menu-item menu-item-books">
+
+    <a href="/books/" rel="section"><i class="fa fa-fw fa-book"></i>书单</a>
+
+  </li>
+        <li class="menu-item menu-item-movies">
+
+    <a href="/movies/" rel="section"><i class="fa fa-fw fa-video-camera"></i>电影</a>
+
+  </li>
+        <li class="menu-item menu-item-papers">
+
+    <a href="/papers/" rel="section"><i class="fa fa-fw fa-hacker-news"></i>论文</a>
+
+  </li>
+        <li class="menu-item menu-item-projects">
+
+    <a href="/projects/" rel="section"><i class="fa fa-fw fa-github"></i>项目</a>
+
+  </li>
+        <li class="menu-item menu-item-courses">
+
+    <a href="/courses/" rel="section"><i class="fa fa-fw fa-play-circle"></i>公开课</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于我</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="none"
+           placeholder="搜索..." spellcheck="false"
+           type="text" id="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <a href="https://github.com/andyfree96" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://andyfree96.github.io/2021/02/02/69144060/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.jpg">
+      <meta itemprop="name" content="AndyFree96">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="AndyFree96's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          一个操作系统的实现(二)初探
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-02-02 22:02:00 / 修改时间：22:19:57" itemprop="dateCreated datePublished" datetime="2021-02-02T22:02:00+08:00">2021-02-02</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" itemprop="url" rel="index">
+                    <span itemprop="name">操作系统</span>
+                  </a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>2.7k</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h2><p>完成了上文<a href="../202101/7.一个操作系统的实现(一">一个操作系统的实现(一)环境搭建</a>环境搭建.md)的环境搭建后，我们可以从引导扇区开始。</p><p>代码如下：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">	org 07c00h	; 程序加载到7c00处</span><br><span class="line">	mov ax, cs</span><br><span class="line">	mov ds, ax</span><br><span class="line">	mov es, ax</span><br><span class="line">	call DispStr	; 调用显示字符串例程</span><br><span class="line">	jmp $		; 无限循环</span><br><span class="line"></span><br><span class="line">DispStr:</span><br><span class="line">	mov ax, BootMessage</span><br><span class="line">	mov bp, ax	; ES:BP = 串地址</span><br><span class="line">	mov cx, 16	; CX = 串长度</span><br><span class="line">	mov ax, 1301h	; AH = 13, AL = 01</span><br><span class="line">	mov bx, 000ch	; 页号为0(BH = 0), 黑底红字(BL = 0c, 高亮)</span><br><span class="line">	mov dl, 0</span><br><span class="line">	int 10h	; 10h号中断</span><br><span class="line">	ret</span><br><span class="line">	</span><br><span class="line">BootMessage:	db &quot;Hello, OS world!&quot;</span><br><span class="line">times 510-($-$$) db 0	; 用0填充剩余空间, 使生成的二进制代码恰好为512字节</span><br><span class="line">dw 0xaa55		; 结束标志</span><br></pre></td></tr></table></figure><a id="more"></a>
+
+
+<p>把这段代码应用NASM编译一下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nasm boot.asm -o boot.bin</span><br></pre></td></tr></table></figure>
+<p>接下来，我们bximage工具生成一个磁盘映像，它既可以生成虚拟软盘，也可以生成虚拟硬盘。这里，我们创建一个软盘映像：</p>
+<p><img src="/images/202102/1/1.png" alt></p>
+<p>如果想用默认值，直接回车就行。这里，我们只有一个地方没有使用默认值，那就是被问到创建硬盘还是软盘映像的时候，输入了“fd”。</p>
+<p>完成之后，当前目录下就会多了一个a.img文件，</p>
+<p><img src="/images/202102/1/2.png" alt></p>
+<p>便是软盘映像。所谓的映像，可以理解为原始设备的逐字节复制，也就是说，软盘的第M个字节对应映像文件的第M个字节。</p>
+<p>接下来，我们可以把boot.bin文件的内容写入软盘映像，使用<code>dd</code>命令即可：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dd if=boot.bin of=a.img bs=512 count=1 conv=notrunc</span><br></pre></td></tr></table></figure>
+<p><img src="/images/202102/1/3.png" alt></p>
+<p>接下来，我们需要编写一下Bochs的配置文件。为什么需要配置文件？因为需要告诉Bochs，我们希望的虚拟机是什么样的。例如，内存多大、软盘映像和硬盘映像都是哪些文件等内容。下面就是一个配置文件的例子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"># how much memory the emulated machine will have</span><br><span class="line">megs: 32</span><br><span class="line"></span><br><span class="line"># filename of ROM images</span><br><span class="line">romimage: file=/usr/share/bochs/BIOS-bochs-latest</span><br><span class="line">vgaromimage: file=/usr/share/vgabios/vgabios.bin</span><br><span class="line"></span><br><span class="line"># what disk images will be used</span><br><span class="line">floppya: 1_44=a.img, status=inserted</span><br><span class="line"></span><br><span class="line"># choose the boot disk</span><br><span class="line">boot: floppy</span><br><span class="line"></span><br><span class="line"># where do we send long messages?</span><br><span class="line">log: bochsout.txt</span><br><span class="line"></span><br><span class="line"># disable the mouse</span><br><span class="line">mouse: enabled=0</span><br><span class="line"></span><br><span class="line"># enable key mapping, using US layout as default</span><br><span class="line">keyboard_mapping: enabled=1, map=/usr/share/bochs/keymaps/x11-pc-us.map</span><br></pre></td></tr></table></figure>
+<p>将以上内容保存至名为<code>a.config</code>的文件中。之后，执行命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bochs -f a.config</span><br></pre></td></tr></table></figure>
+<p>如果输入一个不带任何参数的bochs命令并执行，那么Bochs将在当前目录顺序寻找以下文件作为默认配置文件：</p>
+<ul>
+<li>.bochsrc</li>
+<li>bochsrc</li>
+<li>bochsrc.txt</li>
+</ul>
+<p>所以若我们将文件命名为bochsrc时，<code>-f a.config</code>是可以省略的。</p>
+<p>假如你正在运行一个有调试功能的Bochs，那么启动后会看到终端出现若干选项，默认选项为“6. Begin simulation”，直接回车即可启动。由于是可调试的，Bochs并没有急于进入运转状态，而是出现一个提示符，等待你的输入，我们可以输入<code>c</code>：</p>
+<p><img src="/images/202102/1/4.png" alt></p>
+<p>可以看到Bochs模拟器中显示了红色的“Hello, OS world!”。</p>
+<p>除了<code>c</code>指令，还可以尝试其他调试指令：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>行为</th>
+<th>指令</th>
+<th>举例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>在某物理地址设置断点</td>
+<td><code>b addr</code></td>
+<td><code>b 0x30400</code></td>
+</tr>
+<tr>
+<td>显示当前所有断点信息</td>
+<td><code>info break</code></td>
+<td><code>info break</code></td>
+</tr>
+<tr>
+<td>继续执行,直到遇上断点</td>
+<td><code>c</code></td>
+<td><code>c</code></td>
+</tr>
+<tr>
+<td>单步执行</td>
+<td><code>s</code></td>
+<td><code>s</code></td>
+</tr>
+<tr>
+<td>单步执行(遇到函数则跳过)</td>
+<td><code>n</code></td>
+<td><code>n</code></td>
+</tr>
+<tr>
+<td>查看寄存器信息</td>
+<td><code>info cpu</code></td>
+<td><code>info cpu</code></td>
+</tr>
+<tr>
+<td>查看寄存器信息</td>
+<td><code>r</code></td>
+<td><code>r</code></td>
+</tr>
+<tr>
+<td>查看寄存器信息</td>
+<td><code>fp</code></td>
+<td><code>fp</code></td>
+</tr>
+<tr>
+<td>查看寄存器信息</td>
+<td><code>sreg</code></td>
+<td><code>sreg</code></td>
+</tr>
+<tr>
+<td>查看寄存器信息</td>
+<td><code>creg</code></td>
+<td><code>creg</code></td>
+</tr>
+<tr>
+<td>查看堆栈</td>
+<td><code>print-stack</code></td>
+<td><code>print-stack</code></td>
+</tr>
+<tr>
+<td>查看内存物理地址内容</td>
+<td><code>xp /nuf addr</code></td>
+<td><code>xp /40bx 0x9013e</code></td>
+</tr>
+<tr>
+<td>查看线性地址内容</td>
+<td><code>xp /nuf addr</code></td>
+<td><code>xp /40bx 0x13e</code></td>
+</tr>
+<tr>
+<td>反汇编一段内存</td>
+<td><code>u start end</code></td>
+<td><code>u 0x30400 0x3040D</code></td>
+</tr>
+<tr>
+<td>反汇编执行的每一条指令</td>
+<td><code>trace-on</code></td>
+<td><code>trace-on</code></td>
+</tr>
+<tr>
+<td>每执行一条指令就打印CPU信息</td>
+<td><code>trace-reg</code></td>
+<td><code>trace-reg</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id="引导扇区"><a href="#引导扇区" class="headerlink" title="引导扇区"></a>引导扇区</h2><p>当计算机电源被按下后，它会先进行加电自检（POST），然后寻找启动盘，如果选择的是从软盘启动，计算机就会检查软盘的0面0磁道1扇区。若该扇区以<code>0xAA55</code>结束，则BIOS会认为它是一个引导扇区。当然，一个正确的引导扇区除了以<code>0xAA55</code>结束之外，还应该包含一段少于512字节的执行码。</p>
+<p><img src="/images/202102/1/7.png" alt="图来自https://www.ionos.com/digitalguide/server/configuration/what-is-mbr/"></p>
+<p>一旦BIOS发现了引导扇区，就会将这512字节的内容装载到内存地址<code>0000:7c00</code>处，然后跳转到<code>0000:7c00</code>处将控制权交给这段引导代码。到此为止，计算机不再由BIOS中固有的程序来控制，而变成由操作系统的一部分来控制。</p>
+<p>这也就是为什么代码的第一行是<code>org 07c00</code>。这行代码就是告诉编译器，将来我们的这段代码要被加载到内存偏移地址<code>0x7c00</code>处。</p>
+<h2 id="和"><a href="#和" class="headerlink" title="$和$$"></a>$和$$</h2><p>代码中的<code>$</code>表示当前行被汇编后的地址。我们可以把生成的二进制代码文件反汇编看看：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ndisasm -o 0x7c00 boot.bin &gt;&gt; disboot.asm</span><br></pre></td></tr></table></figure>
+<p>打开disboot.asm可以看到：</p>
+<p><img src="/images/202102/1/5.png" alt></p>
+<p><img src="/images/202102/1/6.png" alt></p>
+<p>其中有一行：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">00007C09 EBFE   jmp short 0x7c09</span><br></pre></td></tr></table></figure>
+<p><code>$</code>在这里的意思就是<code>0x7c09</code>。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$$</span><br></pre></td></tr></table></figure>
+<p>表示什么呢？它表示一个节（section）的开始处被汇编后的地址。这里，我们的程序只有1个节。故$$实际上就表示程序被编译后的开始地址，也就是<code>0x7c00</code>。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$-$$</span><br></pre></td></tr></table></figure>
+<p>表示本行距离程序开始处的相对距离。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">times 510-($-$$) db 0</span><br></pre></td></tr></table></figure>
+<p>表示将0这个字节重复<code>510-($-$$)</code>遍，也就是在剩下的空间中不停地填充0，直到程序有510个字节。加上结束标志<code>0xAA55</code>占用的2个字节，恰好是512字节。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p>《ORANGE’S: 一个操作系统的实现》 第1、2章</p>
+
+    </div>
+
+    
+    
+    
+      
+
+      
+        <div class="reward-container">
+  <div>您的支持将鼓励我继续创作！</div>
+  <button disable="enable" onclick="var qr = document.getElementById(&quot;qr&quot;); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/uploads/wechatpay.png" alt="AndyFree96 微信支付">
+        <p>微信支付</p>
+      </div>
+      
+      <div style="display: inline-block;">
+        <img src="/uploads/alipay.png" alt="AndyFree96 支付宝">
+        <p>支付宝</p>
+      </div>
+
+  </div>
+</div>
+
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>AndyFree96
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://andyfree96.github.io/2021/02/02/69144060/" title="一个操作系统的实现(二)初探">https://andyfree96.github.io/2021/02/02/69144060/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/null" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%BC%95%E5%AF%BC%E6%89%87%E5%8C%BA/" rel="tag"><i class="fa fa-tag"></i>引导扇区</a>
+              <a href="/tags/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80/" rel="tag"><i class="fa fa-tag"></i>汇编语言</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/2021/01/30/7341278/" rel="next" title="一个操作系统的实现(一)搭建环境">
+                  <i class="fa fa-chevron-left"></i> 一个操作系统的实现(一)搭建环境
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    
+  <div class="comments" id="comments">
+    <div id="lv-container" data-id="city" data-uid="MTAyMC80NzkxOC8yNDQxNQ"></div>
+  </div>
+  
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#示例"><span class="nav-text">示例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#引导扇区"><span class="nav-text">引导扇区</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#和"><span class="nav-text">$和$$</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-text">参考</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <img class="site-author-image" itemprop="image" alt="AndyFree96"
+    src="/uploads/avatar.jpg">
+  <p class="site-author-name" itemprop="name">AndyFree96</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">38</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">34</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/AndyFree96" title="GitHub &amp;rarr; https:&#x2F;&#x2F;github.com&#x2F;AndyFree96" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:anthonyfree96@gmail.com" title="E-Mail &amp;rarr; mailto:anthonyfree96@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/IRONAnthony" title="Weibo &amp;rarr; https:&#x2F;&#x2F;weibo.com&#x2F;IRONAnthony" rel="noopener" target="_blank"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/IRONAnthony96" title="Twitter &amp;rarr; https:&#x2F;&#x2F;twitter.com&#x2F;IRONAnthony96" rel="noopener" target="_blank"><i class="fa fa-fw fa-twitter"></i>Twitter</a>
+      </span>
+  </div>
+
+
+
+      </div>
+	  
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 2019 – 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">AndyFree96</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+      <span class="post-meta-item-text">站点总字数：</span>
+    <span title="站点总字数">163k</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.0.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.4.2
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script pjax async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/pjax/pjax.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/pangu@4/dist/browser/pangu.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+  <script>
+var pjax = new Pjax({
+  selectors: [
+    'head title',
+    '#page-configurations',
+    '.content-wrap',
+    '.post-toc-wrap',
+    '#pjax'
+  ],
+  switches: {
+    '.post-toc-wrap': Pjax.switches.innerHTML
+  },
+  analytics: false,
+  cacheBust: false,
+  scrollTo : !CONFIG.bookmark.enable
+});
+
+window.addEventListener('pjax:success', () => {
+  document.querySelectorAll('script[pjax], script#page-configurations, #pjax script').forEach(element => {
+    var code = element.text || element.textContent || element.innerHTML || '';
+    var parent = element.parentNode;
+    parent.removeChild(element);
+    var script = document.createElement('script');
+    if (element.id) {
+      script.id = element.id;
+    }
+    if (element.className) {
+      script.className = element.className;
+    }
+    if (element.type) {
+      script.type = element.type;
+    }
+    if (element.src) {
+      script.src = element.src;
+      // Force synchronous loading of peripheral JS.
+      script.async = false;
+    }
+    if (element.getAttribute('pjax') !== null) {
+      element.setAttribute('pjax', '');
+    }
+    if (code !== '') {
+      script.appendChild(document.createTextNode(code));
+    }
+    parent.appendChild(script);
+  });
+  NexT.boot.refresh();
+  // Define Motion Sequence & Bootstrap Motion.
+  if (CONFIG.motion.enable) {
+    NexT.motion.integrator
+      .init()
+      .add(NexT.motion.middleWares.postList)
+      .bootstrap();
+  }
+  NexT.utils.updateSidebarPosition();
+});
+</script>
+
+
+
+
+  
+  <script pjax>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+
+
+  <script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+    <div id="pjax">
+
+  
+
+  
+
+  
+
+<script>
+  window.livereOptions = {
+    refer: location.pathname.replace(CONFIG.root, '').replace('index.html', '')
+  };
+  (function(d, s) {
+    var j, e = d.getElementsByTagName(s)[0];
+    if (typeof LivereTower === 'function') { return; }
+    j = d.createElement(s);
+    j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+    j.async = true;
+    e.parentNode.insertBefore(j, e);
+  })(document, 'script');
+</script>
+
+    </div>
+  
+  
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":true}});</script></body>
+</html>

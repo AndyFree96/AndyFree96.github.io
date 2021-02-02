@@ -1,6 +1,159 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>一个操作系统的实现(二)初探</title>
+    <url>/2021/02/02/69144060/</url>
+    <content><![CDATA[<h2 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h2><p>完成了上文<a href="../202101/7.一个操作系统的实现(一">一个操作系统的实现(一)环境搭建</a>环境搭建.md)的环境搭建后，我们可以从引导扇区开始。</p><p>代码如下：</p><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">	org 07c00h	; 程序加载到7c00处</span><br><span class="line">	mov ax, cs</span><br><span class="line">	mov ds, ax</span><br><span class="line">	mov es, ax</span><br><span class="line">	call DispStr	; 调用显示字符串例程</span><br><span class="line">	jmp $		; 无限循环</span><br><span class="line"></span><br><span class="line">DispStr:</span><br><span class="line">	mov ax, BootMessage</span><br><span class="line">	mov bp, ax	; ES:BP = 串地址</span><br><span class="line">	mov cx, 16	; CX = 串长度</span><br><span class="line">	mov ax, 1301h	; AH = 13, AL = 01</span><br><span class="line">	mov bx, 000ch	; 页号为0(BH = 0), 黑底红字(BL = 0c, 高亮)</span><br><span class="line">	mov dl, 0</span><br><span class="line">	int 10h	; 10h号中断</span><br><span class="line">	ret</span><br><span class="line">	</span><br><span class="line">BootMessage:	db &quot;Hello, OS world!&quot;</span><br><span class="line">times 510-($-$$) db 0	; 用0填充剩余空间, 使生成的二进制代码恰好为512字节</span><br><span class="line">dw 0xaa55		; 结束标志</span><br></pre></td></tr></table></figure><a id="more"></a>
+
+
+<p>把这段代码应用NASM编译一下：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">nasm boot.asm -o boot.bin</span><br></pre></td></tr></table></figure>
+<p>接下来，我们bximage工具生成一个磁盘映像，它既可以生成虚拟软盘，也可以生成虚拟硬盘。这里，我们创建一个软盘映像：</p>
+<p><img src="/images/202102/1/1.png" alt></p>
+<p>如果想用默认值，直接回车就行。这里，我们只有一个地方没有使用默认值，那就是被问到创建硬盘还是软盘映像的时候，输入了“fd”。</p>
+<p>完成之后，当前目录下就会多了一个a.img文件，</p>
+<p><img src="/images/202102/1/2.png" alt></p>
+<p>便是软盘映像。所谓的映像，可以理解为原始设备的逐字节复制，也就是说，软盘的第M个字节对应映像文件的第M个字节。</p>
+<p>接下来，我们可以把boot.bin文件的内容写入软盘映像，使用<code>dd</code>命令即可：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">dd if=boot.bin of=a.img bs=512 count=1 conv=notrunc</span><br></pre></td></tr></table></figure>
+<p><img src="/images/202102/1/3.png" alt></p>
+<p>接下来，我们需要编写一下Bochs的配置文件。为什么需要配置文件？因为需要告诉Bochs，我们希望的虚拟机是什么样的。例如，内存多大、软盘映像和硬盘映像都是哪些文件等内容。下面就是一个配置文件的例子：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># how much memory the emulated machine will have</span><br><span class="line">megs: 32</span><br><span class="line"></span><br><span class="line"># filename of ROM images</span><br><span class="line">romimage: file=/usr/share/bochs/BIOS-bochs-latest</span><br><span class="line">vgaromimage: file=/usr/share/vgabios/vgabios.bin</span><br><span class="line"></span><br><span class="line"># what disk images will be used</span><br><span class="line">floppya: 1_44=a.img, status=inserted</span><br><span class="line"></span><br><span class="line"># choose the boot disk</span><br><span class="line">boot: floppy</span><br><span class="line"></span><br><span class="line"># where do we send long messages?</span><br><span class="line">log: bochsout.txt</span><br><span class="line"></span><br><span class="line"># disable the mouse</span><br><span class="line">mouse: enabled=0</span><br><span class="line"></span><br><span class="line"># enable key mapping, using US layout as default</span><br><span class="line">keyboard_mapping: enabled=1, map=/usr/share/bochs/keymaps/x11-pc-us.map</span><br></pre></td></tr></table></figure>
+<p>将以上内容保存至名为<code>a.config</code>的文件中。之后，执行命令：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">bochs -f a.config</span><br></pre></td></tr></table></figure>
+<p>如果输入一个不带任何参数的bochs命令并执行，那么Bochs将在当前目录顺序寻找以下文件作为默认配置文件：</p>
+<ul>
+<li>.bochsrc</li>
+<li>bochsrc</li>
+<li>bochsrc.txt</li>
+</ul>
+<p>所以若我们将文件命名为bochsrc时，<code>-f a.config</code>是可以省略的。</p>
+<p>假如你正在运行一个有调试功能的Bochs，那么启动后会看到终端出现若干选项，默认选项为“6. Begin simulation”，直接回车即可启动。由于是可调试的，Bochs并没有急于进入运转状态，而是出现一个提示符，等待你的输入，我们可以输入<code>c</code>：</p>
+<p><img src="/images/202102/1/4.png" alt></p>
+<p>可以看到Bochs模拟器中显示了红色的“Hello, OS world!”。</p>
+<p>除了<code>c</code>指令，还可以尝试其他调试指令：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>行为</th>
+<th>指令</th>
+<th>举例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>在某物理地址设置断点</td>
+<td><code>b addr</code></td>
+<td><code>b 0x30400</code></td>
+</tr>
+<tr>
+<td>显示当前所有断点信息</td>
+<td><code>info break</code></td>
+<td><code>info break</code></td>
+</tr>
+<tr>
+<td>继续执行,直到遇上断点</td>
+<td><code>c</code></td>
+<td><code>c</code></td>
+</tr>
+<tr>
+<td>单步执行</td>
+<td><code>s</code></td>
+<td><code>s</code></td>
+</tr>
+<tr>
+<td>单步执行(遇到函数则跳过)</td>
+<td><code>n</code></td>
+<td><code>n</code></td>
+</tr>
+<tr>
+<td>查看寄存器信息</td>
+<td><code>info cpu</code></td>
+<td><code>info cpu</code></td>
+</tr>
+<tr>
+<td>查看寄存器信息</td>
+<td><code>r</code></td>
+<td><code>r</code></td>
+</tr>
+<tr>
+<td>查看寄存器信息</td>
+<td><code>fp</code></td>
+<td><code>fp</code></td>
+</tr>
+<tr>
+<td>查看寄存器信息</td>
+<td><code>sreg</code></td>
+<td><code>sreg</code></td>
+</tr>
+<tr>
+<td>查看寄存器信息</td>
+<td><code>creg</code></td>
+<td><code>creg</code></td>
+</tr>
+<tr>
+<td>查看堆栈</td>
+<td><code>print-stack</code></td>
+<td><code>print-stack</code></td>
+</tr>
+<tr>
+<td>查看内存物理地址内容</td>
+<td><code>xp /nuf addr</code></td>
+<td><code>xp /40bx 0x9013e</code></td>
+</tr>
+<tr>
+<td>查看线性地址内容</td>
+<td><code>xp /nuf addr</code></td>
+<td><code>xp /40bx 0x13e</code></td>
+</tr>
+<tr>
+<td>反汇编一段内存</td>
+<td><code>u start end</code></td>
+<td><code>u 0x30400 0x3040D</code></td>
+</tr>
+<tr>
+<td>反汇编执行的每一条指令</td>
+<td><code>trace-on</code></td>
+<td><code>trace-on</code></td>
+</tr>
+<tr>
+<td>每执行一条指令就打印CPU信息</td>
+<td><code>trace-reg</code></td>
+<td><code>trace-reg</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id="引导扇区"><a href="#引导扇区" class="headerlink" title="引导扇区"></a>引导扇区</h2><p>当计算机电源被按下后，它会先进行加电自检（POST），然后寻找启动盘，如果选择的是从软盘启动，计算机就会检查软盘的0面0磁道1扇区。若该扇区以<code>0xAA55</code>结束，则BIOS会认为它是一个引导扇区。当然，一个正确的引导扇区除了以<code>0xAA55</code>结束之外，还应该包含一段少于512字节的执行码。</p>
+<p><img src="/images/202102/1/7.png" alt="图来自https://www.ionos.com/digitalguide/server/configuration/what-is-mbr/"></p>
+<p>一旦BIOS发现了引导扇区，就会将这512字节的内容装载到内存地址<code>0000:7c00</code>处，然后跳转到<code>0000:7c00</code>处将控制权交给这段引导代码。到此为止，计算机不再由BIOS中固有的程序来控制，而变成由操作系统的一部分来控制。</p>
+<p>这也就是为什么代码的第一行是<code>org 07c00</code>。这行代码就是告诉编译器，将来我们的这段代码要被加载到内存偏移地址<code>0x7c00</code>处。</p>
+<h2 id="和"><a href="#和" class="headerlink" title="$和$$"></a>$和$$</h2><p>代码中的<code>$</code>表示当前行被汇编后的地址。我们可以把生成的二进制代码文件反汇编看看：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ndisasm -o 0x7c00 boot.bin &gt;&gt; disboot.asm</span><br></pre></td></tr></table></figure>
+<p>打开disboot.asm可以看到：</p>
+<p><img src="/images/202102/1/5.png" alt></p>
+<p><img src="/images/202102/1/6.png" alt></p>
+<p>其中有一行：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">00007C09 EBFE   jmp short 0x7c09</span><br></pre></td></tr></table></figure>
+<p><code>$</code>在这里的意思就是<code>0x7c09</code>。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$$</span><br></pre></td></tr></table></figure>
+<p>表示什么呢？它表示一个节（section）的开始处被汇编后的地址。这里，我们的程序只有1个节。故$$实际上就表示程序被编译后的开始地址，也就是<code>0x7c00</code>。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$-$$</span><br></pre></td></tr></table></figure>
+<p>表示本行距离程序开始处的相对距离。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">times 510-($-$$) db 0</span><br></pre></td></tr></table></figure>
+<p>表示将0这个字节重复<code>510-($-$$)</code>遍，也就是在剩下的空间中不停地填充0，直到程序有510个字节。加上结束标志<code>0xAA55</code>占用的2个字节，恰好是512字节。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p>《ORANGE’S: 一个操作系统的实现》 第1、2章</p>
+]]></content>
+      <categories>
+        <category>操作系统</category>
+      </categories>
+      <tags>
+        <tag>引导扇区</tag>
+        <tag>汇编语言</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>一个操作系统的实现(一)搭建环境</title>
     <url>/2021/01/30/7341278/</url>
     <content><![CDATA[<p>本文主要主要介绍在Ubuntu系统下的环境搭建。</p><h2 id="VirtualBox"><a href="#VirtualBox" class="headerlink" title="VirtualBox"></a>VirtualBox</h2><p>为了使用Ubuntu系统，本文选择的是在虚拟机上进行安装，这里选用的软件是VirtualBox 6.1。</p><p><img src="/images/202101/11/1.png" alt></p><p>VirtualBox官网：<a href="https://www.virtualbox.org" target="_blank" rel="noopener">https://www.virtualbox.org</a></p><p>在官网将安装包下载安装好即可。</p><h2 id="Ubuntu"><a href="#Ubuntu" class="headerlink" title="Ubuntu"></a>Ubuntu</h2><p>为了安装Ubuntu系统，需要去官网将系统的ISO文件下载好。</p><a id="more"></a>
