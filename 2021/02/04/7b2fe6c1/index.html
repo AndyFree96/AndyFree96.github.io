@@ -64,7 +64,10 @@
 <meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;202102&#x2F;2&#x2F;3.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;202102&#x2F;2&#x2F;4.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;202102&#x2F;2&#x2F;5.png">
-<meta property="og:updated_time" content="2021-02-04T06:35:07.510Z">
+<meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;202102&#x2F;2&#x2F;6.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;202102&#x2F;2&#x2F;7.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;202102&#x2F;2&#x2F;8.png">
+<meta property="og:updated_time" content="2021-02-04T10:46:45.421Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;202102&#x2F;2&#x2F;1.png">
 
@@ -275,7 +278,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2021-02-04 14:24:00 / 修改时间：14:35:07" itemprop="dateCreated datePublished" datetime="2021-02-04T14:24:00+08:00">2021-02-04</time>
+              <time title="创建时间：2021-02-04 14:24:00 / 修改时间：18:46:45" itemprop="dateCreated datePublished" datetime="2021-02-04T14:24:00+08:00">2021-02-04</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -308,7 +311,7 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>2.1k</span>
+              <span>3.4k</span>
             </span>
 
         </div>
@@ -491,6 +494,20 @@
 <figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ggplot(data = ted) +</span><br><span class="line">  geom_histogram(mapping = aes(x = duration), binwidth = <span class="number">100</span>)</span><br></pre></td></tr></table></figure>
 <p><img src="/images/202102/2/5.png" alt></p>
 <p>可以看到，TED演讲时长主要集中在800~1100秒之间。</p>
+<h2 id="多个变量"><a href="#多个变量" class="headerlink" title="多个变量"></a>多个变量</h2><h3 id="分类变量与连续变量"><a href="#分类变量与连续变量" class="headerlink" title="分类变量与连续变量"></a>分类变量与连续变量</h3><p><code>speaker_occupation</code>是分类变量，而<code>views</code>是连续变量，现在我们探索一下10大热门职业TED演讲的观看数量。</p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">top_occupation_views &lt;- filter(ted, ted$speaker_occupation %<span class="keyword">in</span>% top_occupation_df$Occupation)</span><br><span class="line">ggplot(data = top_occupation_views, mapping = aes(x = speaker_occupation,</span><br><span class="line">                                                  y = views, </span><br><span class="line">                                                  fill = speaker_occupation)) +</span><br><span class="line">  geom_boxplot() + </span><br><span class="line">  geom_jitter(shape=<span class="number">16</span>, position=position_jitter(<span class="number">0.2</span>), alpha = <span class="number">0.1</span>) +</span><br><span class="line">  theme(axis.text.x=element_text(angle=<span class="number">45</span>, hjust=<span class="number">1</span>))</span><br></pre></td></tr></table></figure>
+<p><img src="/images/202102/2/6.png" alt></p>
+<p>可以看到，与其他职业相比，作家的TED演讲观看数量分布最广且正偏（上侧的须较下侧的须更长）。整体而言，作家的TED演讲观看数量最大。</p>
+<h3 id="两个分类变量"><a href="#两个分类变量" class="headerlink" title="两个分类变量"></a>两个分类变量</h3><p>接下来，我们探究一下<code>event</code>和<code>speaker_occupation</code>两个分类变量之间的关系。</p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">event_df &lt;- as.data.frame(table(ted$event))</span><br><span class="line">colnames(event_df) &lt;- c(<span class="string">"Event"</span>, <span class="string">"Counts"</span>)</span><br><span class="line">event_df &lt;- arrange(event_df, desc(Counts))</span><br><span class="line">top_event_df &lt;- head(event_df, <span class="number">10</span>)</span><br><span class="line"></span><br><span class="line">event_occupation_df &lt;- filter(ted, speaker_occupation %<span class="keyword">in</span>% top_occupation_df$Occupation &amp; </span><br><span class="line">                                event %<span class="keyword">in</span>% top_event_df$Event)</span><br><span class="line">ggplot(data = event_occupation_df) + </span><br><span class="line">  geom_count(mapping = aes(x = event, y = speaker_occupation)) +</span><br><span class="line">  theme(axis.text.x=element_text(angle=<span class="number">45</span>, hjust=<span class="number">1</span>))</span><br></pre></td></tr></table></figure>
+<p><img src="/images/202102/2/7.png" alt></p>
+<h3 id="两个连续变量"><a href="#两个连续变量" class="headerlink" title="两个连续变量"></a>两个连续变量</h3><p>最后，我们查看一下<code>comments</code>和<code>views</code>两个连续变量之间的关系。</p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ggplot(data = ted) + </span><br><span class="line">  geom_point(mapping = aes(x = views, y = comments))</span><br></pre></td></tr></table></figure>
+<p><img src="/images/202102/2/8.png" alt></p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cor(ted$views, ted$comments)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 0.5309387</span></span><br></pre></td></tr></table></figure>
+<p>相关系数为0.5309387表明<code>comments</code>和<code>views</code>之间有较强相关性。</p>
+<h2 id="推荐"><a href="#推荐" class="headerlink" title="推荐"></a>推荐</h2><p>Best ggplot visualization：<a href="https://nextjournal.com/jk/best-ggplot" target="_blank" rel="noopener">https://nextjournal.com/jk/best-ggplot</a></p>
+<p>TED Talk Analysis in R：<a href="https://www.kaggle.com/kratisaxena/ted-talk-analysis-in-r" target="_blank" rel="noopener">https://www.kaggle.com/kratisaxena/ted-talk-analysis-in-r</a></p>
 
     </div>
 
@@ -604,7 +621,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#加载数据集"><span class="nav-text">加载数据集</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据质量诊断"><span class="nav-text">数据质量诊断</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据转换"><span class="nav-text">数据转换</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#单个变量"><span class="nav-text">单个变量</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#分类变量"><span class="nav-text">分类变量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#连续变量"><span class="nav-text">连续变量</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#加载数据集"><span class="nav-text">加载数据集</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据质量诊断"><span class="nav-text">数据质量诊断</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据转换"><span class="nav-text">数据转换</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#单个变量"><span class="nav-text">单个变量</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#分类变量"><span class="nav-text">分类变量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#连续变量"><span class="nav-text">连续变量</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#多个变量"><span class="nav-text">多个变量</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#分类变量与连续变量"><span class="nav-text">分类变量与连续变量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#两个分类变量"><span class="nav-text">两个分类变量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#两个连续变量"><span class="nav-text">两个连续变量</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#推荐"><span class="nav-text">推荐</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -683,7 +700,7 @@
       <i class="fa fa-area-chart"></i>
     </span>
       <span class="post-meta-item-text">站点总字数：</span>
-    <span title="站点总字数">165k</span>
+    <span title="站点总字数">167k</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.0.0
   </div>
