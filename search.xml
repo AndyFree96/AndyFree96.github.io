@@ -1,6 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>在Ubuntu上安装Julia</title>
+    <url>/2021/02/20/51fe0de/</url>
+    <content><![CDATA[<p><img src="/images/202102/6/1.png" alt></p><blockquote>
+<p>Julia是一门面向科学计算的高性能动态高级程序设计语言。其语法与其他科学计算语言相似。在许多情况下拥有能与编译型语言相媲美的性能。Julia是门灵活的动态语言，适合科学与数值计算，性能可与传统静态类型语言媲美。——百度百科</p>
+</blockquote><p>本文将演示如何在Ubuntu 18.04上安装Julia。</p><p><img src="/images/202102/6/2.png" alt></p><h2 id="下载"><a href="#下载" class="headerlink" title="下载"></a>下载</h2><p>打开一个终端窗口，进入用于存储下载文件的目录，这里我们用的是<code>~/Downloads/</code>。</p><a id="more"></a>
+
+
+
+
+<p>命令如下：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">cd ~/Downloads</span><br></pre></td></tr></table></figure>
+<p>接下来用<code>wget</code>命令下载Julia的Linux安装压缩包。可以选择到<a href="https://mirrors.tuna.tsinghua.edu.cn/julia-releases/bin/" target="_blank" rel="noopener">清华大学开源软件镜像站</a>下载。</p>
+<p><img src="/images/202102/6/3.png" alt></p>
+<p>我们用<code>uname -a</code>命令查看机器的硬件信息，</p>
+<p><img src="/images/202102/6/4.png" alt></p>
+<p>当前的机器是<code>x64</code>的，我们进入对应的页面，然后自行选择想要安装的Julia版本，本文我们选择<code>julia-1.5.2-linux-x86_64.tar.gz</code>。</p>
+<p><img src="/images/202102/6/5.png" alt></p>
+<p>复制其下载地址用<code>wget</code>命令下载：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">wget https://mirrors.tuna.tsinghua.edu.cn/julia-releases/bin/linux/x64/1.5/julia-1.5.2-linux-x86_64.tar.gz</span><br></pre></td></tr></table></figure>
+<p><img src="/images/202102/6/6.png" alt></p>
+<h2 id="解压"><a href="#解压" class="headerlink" title="解压"></a>解压</h2><p><code>julia-1.5.2-linux-x86_64.tar.gz</code>文件下载完成后，使用<code>tar</code>命令对其解压：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">tar -xvzf julia-1.5.2-linux-x86_64.tar.gz</span><br></pre></td></tr></table></figure>
+<p><img src="/images/202102/6/7.png" alt></p>
+<h2 id="配置安装"><a href="#配置安装" class="headerlink" title="配置安装"></a>配置安装</h2><p>接下来，我们将解压之后的文件复制到<code>/opt</code>目录中：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">sudo cp -r julia-1.5.2 /opt/</span><br></pre></td></tr></table></figure>
+<p>最后，我们在<code>/usr/local/bin</code>目录中创建一个对<code>julia</code>的软链接。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">sudo ln -s /opt/julia-1.5.2/bin/julia /usr/local/bin/julia</span><br></pre></td></tr></table></figure>
+<p>之后，新建一个终端窗口，输入命令<code>julia</code>：</p>
+<p><img src="/images/202102/6/8.png" alt></p>
+<p>说明配置安装成功。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://ferrolho.github.io/blog/2019-01-26/how-to-install-julia-on-ubuntu" target="_blank" rel="noopener">https://ferrolho.github.io/blog/2019-01-26/how-to-install-julia-on-ubuntu</a></p>
+<h2 id="推荐"><a href="#推荐" class="headerlink" title="推荐"></a>推荐</h2><p><a href="https://julialang.org/learning/" target="_blank" rel="noopener">https://julialang.org/learning/</a></p>
+]]></content>
+      <categories>
+        <category>Julia</category>
+      </categories>
+      <tags>
+        <tag>Julia</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>如何读取多个CSV文件数据</title>
     <url>/2021/02/18/836cecb1/</url>
     <content><![CDATA[<h2 id="读取"><a href="#读取" class="headerlink" title="读取"></a>读取</h2><p>很多时候我们会遇到数据集被拆分到多个CSV文件的情况，例如<a href="https://www.kesci.com/mw/dataset/600649817ed5ab0015f06f1f" target="_blank" rel="noopener">B站美食类视频详情</a>这个数据集：</p><p><img src="/images/202102/5/1.png" alt></p><p>为了读取这4个CSV文件，我们可以使用如下代码：</p><figure class="highlight r"><table><tr><td class="code"><pre><span class="line"><span class="keyword">library</span>(readr)</span><br><span class="line"></span><br><span class="line">csv_files &lt;- list.files(path = DATA_FOLDER, pattern = <span class="string">".csv"</span>,full.names = <span class="literal">TRUE</span>)</span><br><span class="line">data &lt;- lapply(csv_files, read_csv) %&gt;% bind_rows()</span><br></pre></td></tr></table></figure><a id="more"></a>
