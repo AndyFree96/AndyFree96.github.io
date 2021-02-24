@@ -1,6 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>奥斯卡获奖演员分析</title>
+    <url>/2021/02/24/959b186/</url>
+    <content><![CDATA[<p>奥斯卡金像奖从1929年开始，每年评选、颁发一次，从未间断过。凡上一年1月1日至12月31日上演的影片均可参加评选。奥斯卡金像奖是美国电影界的最高奖项，与艾美奖（电视类奖项）、格莱美奖（音乐类奖）、托尼奖（戏剧类奖项）并称为美国演艺界四大奖。</p><p><img src="/images/202102/7/1.png" alt></p><p>本文我们将使用来自<a href="https://www.kesci.com/mw/dataset/5fd076f21a34b90030b4f430/file" target="_blank" rel="noopener">和鲸社区</a>的数据集分析自1929年以来奥斯卡金像奖的提名与获奖情况。</p><a id="more"></a>
+
+
+<p>该数据集共有CSV文件：</p>
+<ol>
+<li>Best_Actor_LR.csv：最佳男主角获得者、提名者</li>
+<li>Best_Actor_SR.csv：最佳男配角获得者、提名者</li>
+<li>Best_Actress_LR.csv：最佳女主角获得者、提名者</li>
+<li>Best_Actress_SR：最佳女配角获得者、提名者</li>
+</ol>
+<h2 id="导入数据"><a href="#导入数据" class="headerlink" title="导入数据"></a>导入数据</h2><p>我们先导入这4个CSV文件的数据，代码如下：</p>
+<figure class="highlight r"><table><tr><td class="code"><pre><span class="line"><span class="keyword">library</span>(tidyverse)</span><br><span class="line"><span class="keyword">library</span>(stringr)</span><br><span class="line"></span><br><span class="line">read_file &lt;- <span class="keyword">function</span>(file)&#123;</span><br><span class="line">  data &lt;- read_csv(file, col_names = c(<span class="string">"Year"</span>, </span><br><span class="line">                                       <span class="string">"Win"</span>,</span><br><span class="line">                                       <span class="string">"Nomination"</span>),</span><br><span class="line">                   ) %&gt;% </span><br><span class="line">    mutate(Type = str_sub(file, start = <span class="number">6</span>, end = -<span class="number">5</span>)) %&gt;%</span><br><span class="line">    distinct(Year, .keep_all = <span class="literal">TRUE</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">csv_files &lt;- list.files(path=<span class="string">"./"</span>, pattern = <span class="string">".csv"</span>)</span><br><span class="line">data &lt;- lapply(csv_files, read_file) %&gt;% </span><br><span class="line">  bind_rows()</span><br></pre></td></tr></table></figure>
+<p>以上代码编写了一个名为<code>read_file</code>的函数，用于读入CSV文件，使用了<code>mutate</code>函数给读入的数据增加<code>Type</code>列，表示数据从哪个文件读入。最后调用<code>distinct</code>函数进行去重。</p>
+<h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><p>我们可以先统计一下来自各个CSV文件的数据量：</p>
+<figure class="highlight r"><table><tr><td class="code"><pre><span class="line">data %&gt;% count(Type)</span><br></pre></td></tr></table></figure>
+<p><img src="/images/202102/7/2.png" alt></p>
+<p>可以看到该数据集中最佳男主、最佳男配、最佳女主和最佳女配数据分别有92、83、91、83条。</p>
+<p>最佳男配和最佳女配只有83条数据是因为该奖项在1937年（第9届）才设立：</p>
+<figure class="highlight r"><table><tr><td class="code"><pre><span class="line">data %&gt;% filter(Type==<span class="string">"Actress_SR"</span>) %&gt;%</span><br><span class="line">  arrange(Year)</span><br></pre></td></tr></table></figure>
+<p><img src="/images/202102/7/3.png" alt></p>
+<figure class="highlight r"><table><tr><td class="code"><pre><span class="line">data %&gt;% filter(Type==<span class="string">"Actor_SR"</span>) %&gt;%</span><br><span class="line">  arrange(Year)</span><br></pre></td></tr></table></figure>
+<p><img src="/images/202102/7/4.png" alt></p>
+<h3 id="获最佳主角奖最多的男女演员"><a href="#获最佳主角奖最多的男女演员" class="headerlink" title="获最佳主角奖最多的男女演员"></a>获最佳主角奖最多的男女演员</h3><p>接下来，我们分析一下获最佳主角奖最多的演员分别是谁。</p>
+<figure class="highlight r"><table><tr><td class="code"><pre><span class="line">data %&gt;% filter(Type == <span class="string">"Actor_LR"</span>) %&gt;%</span><br><span class="line">  count(Win) %&gt;%</span><br><span class="line">  arrange(desc(n))</span><br></pre></td></tr></table></figure>
+<p><img src="/images/202102/7/5.png" alt></p>
+<p>可以看到有8位男演员获得了2次及以上的最佳男主角奖项。其中，</p>
+<p><img src="/images/202102/7/6.png" alt></p>
+<p>丹尼尔·戴-刘易斯是史上首位三度问鼎奥斯卡影帝的男演员。</p>
+<p>至于女演员的话，</p>
+<figure class="highlight r"><table><tr><td class="code"><pre><span class="line">data %&gt;% filter(Type == <span class="string">"Actress_LR"</span>) %&gt;%</span><br><span class="line">  count(Win) %&gt;% filter(n &gt;= <span class="number">2</span>) %&gt;%</span><br><span class="line">  arrange(desc(n))</span><br></pre></td></tr></table></figure>
+<p><img src="/images/202102/7/7.png" alt></p>
+<p>有12位女演员获得2次及以上的最佳女主角奖项。其中，</p>
+<p><img src="/images/202102/7/8.png" alt></p>
+<p>凯瑟琳·赫本四度获得奥斯卡影后。</p>
+<h3 id="提名最佳主角奖最多的男女演员"><a href="#提名最佳主角奖最多的男女演员" class="headerlink" title="提名最佳主角奖最多的男女演员"></a>提名最佳主角奖最多的男女演员</h3><p>由于获奖演员得先提名，而本数据集中提名名单中没有包含获奖人员，为了统计演员的提名次数，我们可以将两列进行拼接。</p>
+<figure class="highlight r"><table><tr><td class="code"><pre><span class="line">data &lt;- data %&gt;% </span><br><span class="line">  mutate(New_Nomination = str_split(str_c(Win, Nomination, sep = <span class="string">" "</span>), <span class="string">" "</span>))</span><br></pre></td></tr></table></figure>
+<p>我们如下代码统计提名次数最多男演员：</p>
+<figure class="highlight r"><table><tr><td class="code"><pre><span class="line">data %&gt;% filter(Type == <span class="string">"Actor_LR"</span>) %&gt;% </span><br><span class="line">  select(Year, New_Nomination) %&gt;%</span><br><span class="line">  unnest(New_Nomination) %&gt;% </span><br><span class="line">  count(New_Nomination) %&gt;%</span><br><span class="line">  arrange(desc(n))</span><br></pre></td></tr></table></figure>
+<p><img src="/images/202102/7/9.png" alt></p>
+<p>其中，劳伦斯·奥利弗和斯宾塞·屈塞都被提名9次。</p>
+<p>而女演员的话，</p>
+<figure class="highlight r"><table><tr><td class="code"><pre><span class="line">data %&gt;% filter(Type == <span class="string">"Actress_LR"</span>) %&gt;% </span><br><span class="line">  select(Year, New_Nomination) %&gt;%</span><br><span class="line">  unnest(New_Nomination) %&gt;% </span><br><span class="line">  count(New_Nomination) %&gt;%</span><br><span class="line">  arrange(desc(n))</span><br></pre></td></tr></table></figure>
+<p><img src="/images/202102/7/10.png" alt></p>
+<p>梅丽尔·斯特里普以17次高居榜首。</p>
+<p>我们再查看一下陪跑次数最多的男女演员。</p>
+<figure class="highlight r"><table><tr><td class="code"><pre><span class="line">a &lt;- data %&gt;% filter(Type == <span class="string">"Actor_LR"</span>) %&gt;% </span><br><span class="line">  select(Year, New_Nomination) %&gt;%</span><br><span class="line">  unnest(New_Nomination) %&gt;% </span><br><span class="line">  count(New_Nomination)</span><br><span class="line"></span><br><span class="line">b &lt;- data %&gt;% filter(Type == <span class="string">"Actor_LR"</span>) %&gt;%</span><br><span class="line">  count(Win)</span><br><span class="line"></span><br><span class="line">merge &lt;- left_join(a, b, by = c(<span class="string">"New_Nomination"</span>=<span class="string">"Win"</span>)) %&gt;%</span><br><span class="line">  rename(<span class="string">"Actor"</span>=<span class="string">"New_Nomination"</span>, <span class="string">"Nomination"</span>=<span class="string">"n.x"</span>, <span class="string">"Win"</span>=<span class="string">"n.y"</span>) %&gt;%</span><br><span class="line">  replace_na(list(Win=<span class="number">0</span>))</span><br><span class="line"></span><br><span class="line">merge %&gt;% mutate(Diff=Nomination-Win) %&gt;%</span><br><span class="line">  arrange(desc(Diff), desc(Nomination))</span><br></pre></td></tr></table></figure>
+<p><img src="/images/202102/7/11.png" alt></p>
+<p>如上图所示，在227位男演员中，彼德·奥图被提名过8次但却没有获过奖，实在可惜！</p>
+<figure class="highlight r"><table><tr><td class="code"><pre><span class="line">a &lt;- data %&gt;% filter(Type == <span class="string">"Actress_LR"</span>) %&gt;% </span><br><span class="line">  select(Year, New_Nomination) %&gt;%</span><br><span class="line">  unnest(New_Nomination) %&gt;% </span><br><span class="line">  count(New_Nomination)</span><br><span class="line"></span><br><span class="line">b &lt;- data %&gt;% filter(Type == <span class="string">"Actress_LR"</span>) %&gt;%</span><br><span class="line">  count(Win)</span><br><span class="line"></span><br><span class="line">merge &lt;- left_join(a, b, by = c(<span class="string">"New_Nomination"</span>=<span class="string">"Win"</span>)) %&gt;%</span><br><span class="line">  rename(<span class="string">"Actor"</span>=<span class="string">"New_Nomination"</span>, <span class="string">"Nomination"</span>=<span class="string">"n.x"</span>, <span class="string">"Win"</span>=<span class="string">"n.y"</span>) %&gt;%</span><br><span class="line">  replace_na(list(Win=<span class="number">0</span>))</span><br><span class="line"></span><br><span class="line">merge %&gt;% mutate(Diff=Nomination-Win) %&gt;%</span><br><span class="line">  arrange(desc(Diff), desc(Nomination))</span><br></pre></td></tr></table></figure>
+<p><img src="/images/202102/7/12.png" alt></p>
+<p>而218位女演员中，17次提名，2度获奖的梅丽尔·斯特里普独占鳌头。</p>
+]]></content>
+      <categories>
+        <category>数据分析</category>
+        <category>R语言</category>
+      </categories>
+      <tags>
+        <tag>R</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>在Ubuntu上安装Julia</title>
     <url>/2021/02/20/51fe0de/</url>
     <content><![CDATA[<p><img src="/images/202102/6/1.png" alt></p><blockquote>
@@ -3350,8 +3413,8 @@ L(w,b)=\frac{1}{N}\sum_{n=1}^{N}{\left ( \hat{y}^n-\left ( b + w ·x_{cp}^{n} \r
       </categories>
       <tags>
         <tag>Python</tag>
-        <tag>Pandas</tag>
         <tag>Matplotlib</tag>
+        <tag>Pandas</tag>
         <tag>Numpy</tag>
       </tags>
   </entry>
