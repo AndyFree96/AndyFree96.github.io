@@ -1,6 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>pacman简明教程</title>
+    <url>/2021/03/02/ac87917c/</url>
+    <content><![CDATA[<p><img src="/images/202103/1/0.png" alt></p><p>在用R语言进行数据分析时，我们总需要用<code>library</code>函数导入很多包，比如：<code>ggplot2</code>，<code>dplyr</code>，<code>plotly</code>等等。学习Kaggle上一些优秀教程时，会遇到作者使用的包我们并没有安装的的情况，对此我们通常会先执行<code>install.packages</code>函数，再执行<code>library</code>函数将其导入到工作空间。万一出现很不幸的情况，有几十个包都没有安装，我们就麻烦了😂。</p><a id="more"></a>
+
+<p>我们当前遇到的问题有两个：一个是每次导入包都要用一次<code>library</code>函数，一个是当本地没有安装对应的包时，需要先执行<code>install.packages</code>函数安装，然后再执行<code>library</code>函数将其导入。</p>
+<p>有什么办法可以解决这个问题吗？有。本文将介绍使用<code>pacman</code>包解决上述问题。</p>
+<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><p>和其他所有R语言包安装方式类似，我们用<code>install.packages</code>函数进行安装即可。</p>
+<figure class="highlight r"><table><tr><td class="code"><pre><span class="line">install.packages(<span class="string">"pacman"</span>)</span><br></pre></td></tr></table></figure>
+<h2 id="p-load"><a href="#p-load" class="headerlink" title="p_load"></a><code>p_load</code></h2><p>对于需要导入的包，我们可以使用<code>p_load</code>函数进行导入，对于本地没有安装的包，它会先下载安装之后导入。</p>
+<p>比如：导入<code>ggplot2</code>、<code>dplyr</code>、<code>plotly</code>等包。</p>
+<figure class="highlight r"><table><tr><td class="code"><pre><span class="line">pacman::p_load(ggplot2, dplyr, plotly)</span><br></pre></td></tr></table></figure>
+<h2 id="p-loaded"><a href="#p-loaded" class="headerlink" title="p_loaded"></a><code>p_loaded</code></h2><p>之后，我们可以调用<code>p_loaded</code>函数查看当前工作空间中已导入的包：</p>
+<figure class="highlight r"><table><tr><td class="code"><pre><span class="line">pacman::p_loaded()</span><br></pre></td></tr></table></figure>
+<p><img src="/images/202103/1/1.png" alt></p>
+<p>可以看到，<code>p_load</code>函数已将包正常导入。</p>
+<h2 id="p-isinstalled"><a href="#p-isinstalled" class="headerlink" title="p_isinstalled"></a><code>p_isinstalled</code></h2><p><code>p_isintalled</code>函数帮助我们用来确定本地是否安装了某个包。</p>
+<figure class="highlight r"><table><tr><td class="code"><pre><span class="line">pacman::p_isinstalled(jiebaR)</span><br></pre></td></tr></table></figure>
+<p><img src="/images/202103/1/2.png" alt></p>
+<p>可以看到<code>jiebaR</code>这个包并没有安装，我们使用<code>p_load</code>函数对其进行安装并导入。</p>
+<figure class="highlight r"><table><tr><td class="code"><pre><span class="line">pacman::p_load(jiebaR)</span><br></pre></td></tr></table></figure>
+<p>调用<code>p_loaded</code>函数查看：</p>
+<p><img src="/images/202103/1/3.png" alt></p>
+<p><code>jiebaR</code>包被正常下载安装并导入。</p>
+<h2 id="p-install"><a href="#p-install" class="headerlink" title="p_install"></a><code>p_install</code></h2><p>当然，如果不想将包下载安装后将其导入，我们可以用<code>p_install</code>函数。</p>
+<figure class="highlight r"><table><tr><td class="code"><pre><span class="line">pacman::p_install(jiebaR)</span><br></pre></td></tr></table></figure>
+<p>更多内容，请查看<a href="https://www.rdocumentation.org/packages/pacman/versions/0.5.1" target="_blank" rel="noopener">pacman</a>官方文档。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://medium.com/r-tutorials/an-alternative-to-loading-packages-in-r-using-pacman-p-load-6037903a301a" target="_blank" rel="noopener">https://medium.com/r-tutorials/an-alternative-to-loading-packages-in-r-using-pacman-p-load-6037903a301a</a></p>
+<p><a href="http://trinker.github.io/pacman/vignettes/Introduction_to_pacman.html" target="_blank" rel="noopener">http://trinker.github.io/pacman/vignettes/Introduction_to_pacman.html</a></p>
+]]></content>
+      <categories>
+        <category>数据分析</category>
+        <category>R语言</category>
+      </categories>
+      <tags>
+        <tag>R</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>奥斯卡获奖演员分析</title>
     <url>/2021/02/24/959b186/</url>
     <content><![CDATA[<p>奥斯卡金像奖从1929年开始，每年评选、颁发一次，从未间断过。凡上一年1月1日至12月31日上演的影片均可参加评选。奥斯卡金像奖是美国电影界的最高奖项，与艾美奖（电视类奖项）、格莱美奖（音乐类奖）、托尼奖（戏剧类奖项）并称为美国演艺界四大奖。</p><p><img src="/images/202102/7/1.png" alt></p><p>本文我们将使用来自<a href="https://www.kesci.com/mw/dataset/5fd076f21a34b90030b4f430/file" target="_blank" rel="noopener">和鲸社区</a>的数据集分析自1929年以来奥斯卡金像奖的提名与获奖情况。</p><a id="more"></a>
@@ -3652,8 +3690,8 @@ L(w,b)=\frac{1}{N}\sum_{n=1}^{N}{\left ( \hat{y}^n-\left ( b + w ·x_{cp}^{n} \r
         <category>机器学习</category>
       </categories>
       <tags>
-        <tag>Python</tag>
         <tag>OpenCV</tag>
+        <tag>Python</tag>
       </tags>
   </entry>
 </search>
