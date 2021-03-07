@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.4.2',
+    exturl: false,
+    sidebar: {"position":"left","display":"always","offset":12,"onmobile":false},
+    copycode: {"enable":true,"show_result":true,"style":"mac"},
+    back2top: {"enable":false,"sidebar":false,"scrollpercent":true},
+    bookmark: {"enable":true,"color":"#222","save":"auto"},
+    fancybox: true,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: true,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":5,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    },
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="本文的COVID-19数据来自Kaggle，国家码数据来自Github。导入数据将数据下载到本地后，我们将其导入：123456library(tidyverse)ts_confirmed &amp;lt;- read_csv(file = &quot;.&#x2F;time_series_covid_19_confirmed.csv&quot;)ts_recovered &amp;lt;- read_csv(file = &quot;.&#x2F;time_se">
+<meta name="keywords" content="R">
+<meta property="og:type" content="article">
+<meta property="og:title" content="COVID-19数据集可视化分析">
+<meta property="og:url" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;2021&#x2F;03&#x2F;07&#x2F;dea6a430&#x2F;index.html">
+<meta property="og:site_name" content="AndyFree96&#39;s Blog">
+<meta property="og:description" content="本文的COVID-19数据来自Kaggle，国家码数据来自Github。导入数据将数据下载到本地后，我们将其导入：123456library(tidyverse)ts_confirmed &amp;lt;- read_csv(file = &quot;.&#x2F;time_series_covid_19_confirmed.csv&quot;)ts_recovered &amp;lt;- read_csv(file = &quot;.&#x2F;time_se">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;202103&#x2F;2&#x2F;1.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;202103&#x2F;2&#x2F;2.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;202103&#x2F;2&#x2F;3.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;202103&#x2F;2&#x2F;4.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;202103&#x2F;2&#x2F;5.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;202103&#x2F;2&#x2F;6.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;202103&#x2F;2&#x2F;7.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;202103&#x2F;2&#x2F;8.png">
+<meta property="og:updated_time" content="2021-03-07T11:56:15.258Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https:&#x2F;&#x2F;andyfree96.github.io&#x2F;images&#x2F;202103&#x2F;2&#x2F;1.png">
+
+<link rel="canonical" href="https://andyfree96.github.io/2021/03/07/dea6a430/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>COVID-19数据集可视化分析 | AndyFree96's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">AndyFree96's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-resource">
+
+    <a href="/resource/" rel="section"><i class="fa fa-fw fa-file"></i>资源</a>
+
+  </li>
+        <li class="menu-item menu-item-books">
+
+    <a href="/books/" rel="section"><i class="fa fa-fw fa-book"></i>书单</a>
+
+  </li>
+        <li class="menu-item menu-item-movies">
+
+    <a href="/movies/" rel="section"><i class="fa fa-fw fa-video-camera"></i>电影</a>
+
+  </li>
+        <li class="menu-item menu-item-papers">
+
+    <a href="/papers/" rel="section"><i class="fa fa-fw fa-hacker-news"></i>论文</a>
+
+  </li>
+        <li class="menu-item menu-item-projects">
+
+    <a href="/projects/" rel="section"><i class="fa fa-fw fa-github"></i>项目</a>
+
+  </li>
+        <li class="menu-item menu-item-courses">
+
+    <a href="/courses/" rel="section"><i class="fa fa-fw fa-play-circle"></i>公开课</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于我</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="none"
+           placeholder="搜索..." spellcheck="false"
+           type="text" id="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <a href="https://github.com/andyfree96" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://andyfree96.github.io/2021/03/07/dea6a430/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.jpg">
+      <meta itemprop="name" content="AndyFree96">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="AndyFree96's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          COVID-19数据集可视化分析
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-03-07 19:55:00 / 修改时间：19:56:15" itemprop="dateCreated datePublished" datetime="2021-03-07T19:55:00+08:00">2021-03-07</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/" itemprop="url" rel="index">
+                    <span itemprop="name">数据分析</span>
+                  </a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/R%E8%AF%AD%E8%A8%80/" itemprop="url" rel="index">
+                    <span itemprop="name">R语言</span>
+                  </a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>5.1k</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>本文的COVID-19数据来自<a href="https://www.kaggle.com/sudalairajkumar/novel-corona-virus-2019-dataset" target="_blank" rel="noopener">Kaggle</a>，国家码数据来自<a href="https://github.com/plotly/datasets/blob/master/2014_world_gdp_with_codes.csv" target="_blank" rel="noopener">Github</a>。</p><h2 id="导入数据"><a href="#导入数据" class="headerlink" title="导入数据"></a>导入数据</h2><p>将数据下载到本地后，我们将其导入：</p><figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">library</span>(tidyverse)</span><br><span class="line"></span><br><span class="line">ts_confirmed &lt;- read_csv(file = <span class="string">"./time_series_covid_19_confirmed.csv"</span>)</span><br><span class="line">ts_recovered &lt;- read_csv(file = <span class="string">"./time_series_covid_19_recovered.csv"</span>)</span><br><span class="line">ts_deaths &lt;- read_csv(file = <span class="string">"./time_series_covid_19_deaths.csv"</span>)</span><br><span class="line">codes &lt;- read_csv(file = <span class="string">"./2014_world_gdp_with_codes.txt"</span>)</span><br></pre></td></tr></table></figure><a id="more"></a>
+
+
+<h2 id="数据预处理"><a href="#数据预处理" class="headerlink" title="数据预处理"></a>数据预处理</h2><p>导入的数据是宽格式的，如下图所示：</p>
+<p><img src="/images/202103/2/1.png" alt></p>
+<p>我们可以用<code>gather()</code>函数将其转换为长格式的。</p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">ts_confirmed &lt;- ts_confirmed %&gt;%</span><br><span class="line">  gather(<span class="string">"Date"</span>,<span class="string">"Confirmed"</span>, -c(<span class="string">"Province/State"</span>,</span><br><span class="line">                                <span class="string">"Country/Region"</span>,</span><br><span class="line">                                <span class="string">"Lat"</span>,</span><br><span class="line">                                <span class="string">"Long"</span>)) %&gt;%</span><br><span class="line">  mutate(Date = as.Date(Date, <span class="string">"%m/%d/%y"</span>))</span><br><span class="line"></span><br><span class="line">ts_recovered &lt;- ts_recovered %&gt;%</span><br><span class="line">  gather(<span class="string">"Date"</span>,<span class="string">"Recovered"</span>, -c(<span class="string">"Province/State"</span>,</span><br><span class="line">                                <span class="string">"Country/Region"</span>,</span><br><span class="line">                                <span class="string">"Lat"</span>,</span><br><span class="line">                                <span class="string">"Long"</span>)) %&gt;%</span><br><span class="line">  mutate(Date = as.Date(Date, <span class="string">"%m/%d/%y"</span>))</span><br><span class="line"></span><br><span class="line">ts_deaths &lt;- ts_deaths %&gt;%</span><br><span class="line">  gather(<span class="string">"Date"</span>,<span class="string">"Deaths"</span>, -c(<span class="string">"Province/State"</span>,</span><br><span class="line">                                <span class="string">"Country/Region"</span>,</span><br><span class="line">                                <span class="string">"Lat"</span>,</span><br><span class="line">                                <span class="string">"Long"</span>)) %&gt;%</span><br><span class="line">  mutate(Date = as.Date(Date, <span class="string">"%m/%d/%y"</span>))</span><br></pre></td></tr></table></figure>
+<p><img src="/images/202103/2/2.png" alt></p>
+<p>为了便于之后分析，我们可以将上述数据集进行拼接。</p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">ts_total &lt;- ts_confirmed %&gt;% </span><br><span class="line">  left_join(ts_deaths) %&gt;%</span><br><span class="line">  left_join(ts_recovered) %&gt;%</span><br><span class="line">  replace_na(list(Recovered=<span class="number">0</span>, Deaths=<span class="number">0</span>))</span><br></pre></td></tr></table></figure>
+<p><img src="/images/202103/2/3.png" alt></p>
+<p>由于“Diamond Princess”和“MS Zaandam”是邮轮，我们可以将其从数据集中剔除。</p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ts_total &lt;- ts_total %&gt;% filter(!`Country/Region` %<span class="keyword">in</span>% c(<span class="string">"Diamond Princess"</span>,<span class="string">"MS Zaandam"</span>))</span><br></pre></td></tr></table></figure>
+<p>之后，我们创建一个变量存储最新COVID-19的情况：</p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">cases_latest &lt;- ts_total %&gt;%</span><br><span class="line">  group_by(`Country/Region`, Date) %&gt;%</span><br><span class="line">  summarise(Confirmed = sum(Confirmed),</span><br><span class="line">            Recovered = sum(Recovered),</span><br><span class="line">            Deaths = sum(Deaths)) %&gt;%</span><br><span class="line">  mutate(<span class="string">"New Cases"</span> = Confirmed - lag(Confirmed, <span class="number">1</span>)) %&gt;% </span><br><span class="line">  filter(Date == max(Date))</span><br><span class="line"></span><br><span class="line">day_latest &lt;- max(cases_latest$Date)</span><br></pre></td></tr></table></figure>
+<p><img src="/images/202103/2/4.png" alt></p>
+<p>可以看到，Kaggle上的这个数据集只包含到2021年1月19日的数据。</p>
+<h2 id="可视化"><a href="#可视化" class="headerlink" title="可视化"></a>可视化</h2><p>旋转交互式3D地图可以让我们直观看到各个地区的具体情况。</p>
+<p>在绘制3D地图之前，我们先把<code>codes</code>处理一下：</p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">codes &lt;- codes %&gt;% </span><br><span class="line">  select(COUNTRY, CODE) %&gt;%</span><br><span class="line">  rename(Region = COUNTRY,</span><br><span class="line">         Code = CODE) %&gt;% </span><br><span class="line">  rownames_to_column(<span class="string">"id"</span>)</span><br><span class="line"></span><br><span class="line">codes$id &lt;- as.integer(codes$id)</span><br><span class="line"></span><br><span class="line">codes$Region &lt;- codes$Region %&gt;%</span><br><span class="line">  str_replace(pattern = <span class="string">"United States"</span>, replacement = <span class="string">"US"</span>) %&gt;%</span><br><span class="line">  str_replace(pattern = <span class="string">"Macedonia"</span>, replacement = <span class="string">"North Macedonia"</span>) %&gt;%</span><br><span class="line">  str_replace(pattern = <span class="string">"Czech Republic"</span>, replacement = <span class="string">"Czechia"</span>) %&gt;%</span><br><span class="line">  str_replace(pattern = <span class="string">"Taiwan"</span>, replacement = <span class="string">"Taiwan*"</span>) %&gt;%</span><br><span class="line">  str_replace(pattern = <span class="string">"West Bank"</span>, replacement = <span class="string">"West Bank and Gaza"</span>) %&gt;%</span><br><span class="line">  str_replace(pattern = <span class="string">"Congo, Democratic Republic of the"</span>, replacement = <span class="string">"Congo (Kinshasa)"</span>) %&gt;%</span><br><span class="line">  str_replace(pattern = <span class="string">"Congo, Republic of the"</span>, replacement = <span class="string">"Congo (Brazzaville)"</span>) %&gt;%</span><br><span class="line">  str_replace(pattern = <span class="string">"Bahamas, The"</span>, replacement = <span class="string">"Bahamas"</span>) %&gt;%</span><br><span class="line">  str_replace(pattern = <span class="string">"Swaziland"</span>, replacement = <span class="string">"Eswatini"</span>) %&gt;%</span><br><span class="line">  str_replace(pattern = <span class="string">"Gambia, The"</span>, replacement = <span class="string">"Gambia"</span>)</span><br></pre></td></tr></table></figure>
+<p>将<code>codes</code>与<code>cases_latest</code>拼接：</p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cases_latest_codes &lt;- cases_latest %&gt;%</span><br><span class="line">  left_join(codes, by = c(<span class="string">"Country/Region"</span> = <span class="string">"Region"</span>)) %&gt;%</span><br><span class="line">  arrange(desc(Confirmed))</span><br></pre></td></tr></table></figure>
+<p>接下来绘制3D地图：</p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">library</span>(plotly)</span><br><span class="line">line &lt;- list(color = toRGB(<span class="string">"#d1d1d1"</span>), width = <span class="number">0.2</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Specifing parameters of the 3D map</span></span><br><span class="line">geo &lt;- list(</span><br><span class="line">  showframe = <span class="literal">FALSE</span>,</span><br><span class="line">  showcoastlines = <span class="literal">FALSE</span>,</span><br><span class="line">  projection = list(type = <span class="string">'orthographic'</span>),</span><br><span class="line">  resolution = <span class="string">'100'</span>,</span><br><span class="line">  showcountries = <span class="literal">TRUE</span>,</span><br><span class="line">  countrycolor = <span class="string">'#d1d1d1'</span>,</span><br><span class="line">  showocean = <span class="literal">TRUE</span>,</span><br><span class="line">  oceancolor = <span class="string">'#064273'</span>,</span><br><span class="line">  showlakes = <span class="literal">TRUE</span>,</span><br><span class="line">  lakecolor = <span class="string">'#99c0db'</span>,</span><br><span class="line">  showrivers = <span class="literal">TRUE</span>,</span><br><span class="line">  rivercolor = <span class="string">'#99c0db'</span>,</span><br><span class="line">  bgcolor = <span class="string">'#e8f7fc'</span>)</span><br><span class="line"></span><br><span class="line">plot_geo() %&gt;%</span><br><span class="line">  layout(geo = geo,</span><br><span class="line">         paper_bgcolor = <span class="string">'#e8f7fc'</span>,</span><br><span class="line">         title = paste0(<span class="string">"World COVID-19 Confirmed by Region at "</span>, day_latest)) %&gt;%</span><br><span class="line">  add_trace(data = cases_latest_codes,</span><br><span class="line">            z = ~Confirmed,</span><br><span class="line">            colors = <span class="string">"Reds"</span>,</span><br><span class="line">            text = ~<span class="string">'Country/Region'</span>,</span><br><span class="line">            locations = ~Code,</span><br><span class="line">            marker = list(line = line))</span><br></pre></td></tr></table></figure>
+<p><img src="/images/202103/2/5.png" alt></p>
+<p>我们也可以用数据表格的方式显示数据，在数据表格中，可以直接在搜索框中搜索感兴趣的数据。</p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">library</span>(DT)</span><br><span class="line">cases_latest_codes %&gt;%</span><br><span class="line">  select(<span class="string">"Country/Region"</span>, Code, Date, Confirmed,</span><br><span class="line">         <span class="string">"New Cases"</span>, Recovered, Deaths) %&gt;%</span><br><span class="line">  arrange(desc(Confirmed)) %&gt;% datatable(rownames = <span class="literal">FALSE</span>,fillContainer = <span class="literal">TRUE</span>,options = list(bPaginate = <span class="literal">FALSE</span>))</span><br></pre></td></tr></table></figure>
+<p><img src="/images/202103/2/6.png" alt></p>
+<p>接下来我们查看一下病例数随时间的变化情况：</p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">cases_total_date &lt;- ts_total %&gt;%</span><br><span class="line">  rename(Region = <span class="string">"Country/Region"</span>) %&gt;%</span><br><span class="line">  group_by(Date) %&gt;%</span><br><span class="line">  summarise(Confirmed = sum(Confirmed),</span><br><span class="line">            Deaths = sum(Deaths),</span><br><span class="line">            Recovered = sum(Recovered)) %&gt;%</span><br><span class="line">  mutate(<span class="string">"New_Cases"</span> = Confirmed - lag(Confirmed, <span class="number">1</span>))</span><br><span class="line"></span><br><span class="line">cases_all &lt;- cases_total_date %&gt;%</span><br><span class="line">  select(-Confirmed, -New_Cases) %&gt;%</span><br><span class="line">  gather(<span class="string">"Status"</span>, <span class="string">"Cases"</span>, -<span class="string">"Date"</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">library</span>(ggthemes)</span><br><span class="line"></span><br><span class="line">barchars &lt;- ggplot(data = cases_total_date,</span><br><span class="line">                   mapping = aes(x = Date)) +</span><br><span class="line">  geom_bar(aes(y = Confirmed), position=<span class="string">"stack"</span>,</span><br><span class="line">           stat = <span class="string">"identity"</span>, fill = <span class="string">"#ff5050"</span>) +</span><br><span class="line">  geom_bar(data = cases_all, mapping = aes(y = Cases, </span><br><span class="line">                                           fill = Status),</span><br><span class="line">           stat = <span class="string">"identity"</span>, position = <span class="string">"stack"</span>) + </span><br><span class="line">  scale_fill_manual(values = c(<span class="string">"#000000"</span>, <span class="string">"#009900"</span>)) + </span><br><span class="line">  scale_y_continuous(breaks = seq(<span class="number">0</span>, <span class="number">21000000</span>, by = <span class="number">1000000</span>), labels = scales::comma) +</span><br><span class="line">  theme_solarized(base_size = <span class="number">10</span>, light = <span class="literal">TRUE</span>) +</span><br><span class="line">  theme(plot.margin = margin(<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="string">"pt"</span>),</span><br><span class="line">        panel.background = element_rect(fill = <span class="string">"White"</span>),</span><br><span class="line">        legend.position = <span class="string">"bottom"</span>,</span><br><span class="line">        axis.title = element_blank(),</span><br><span class="line">        axis.text.y = element_blank(),</span><br><span class="line">        axis.ticks = element_blank()) +</span><br><span class="line">  ggtitle(<span class="string">"World COVID-19 Total Cases by Day"</span>)</span><br><span class="line">  </span><br><span class="line"></span><br><span class="line">ggplotly(barchars) %&gt;%</span><br><span class="line">  layout(legend = list(orientation = <span class="string">"h"</span>))</span><br></pre></td></tr></table></figure>
+<p><img src="/images/202103/2/7.png" alt></p>
+<p>之后，我们使用日历热图跟踪COVID-19每天增长病例：</p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">library</span>(openair)</span><br><span class="line"></span><br><span class="line">date &lt;- seq(from = as.Date(<span class="string">"2020-01-22"</span>),</span><br><span class="line">            by = <span class="number">1</span>,to = as.Date(<span class="string">"2021-01-19"</span>))</span><br><span class="line">Sys.setlocale(<span class="string">"LC_ALL"</span>, <span class="string">"English"</span>)</span><br><span class="line">new_cases &lt;- cases_total_date[,<span class="string">"New_Cases"</span>]</span><br><span class="line">new_cases &lt;- new_cases %&gt;% replace_na(list(New_Cases=<span class="number">0</span>))</span><br><span class="line">calendarPlot(data.frame(new_cases,</span><br><span class="line">                        date), pollutant = <span class="string">"New_Cases"</span>,year = <span class="number">2020</span>,main = <span class="string">"New Cases"</span>,cols = <span class="string">"RdGy"</span>)</span><br></pre></td></tr></table></figure>
+<p><img src="/images/202103/2/8.png" alt></p>
+<h2 id="推荐"><a href="#推荐" class="headerlink" title="推荐"></a>推荐</h2><p>Data Visualization with R: <a href="https://rkabacoff.github.io/datavis/" target="_blank" rel="noopener">https://rkabacoff.github.io/datavis/</a></p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://www.kaggle.com/modesty520/covid-19-detailed-visualization" target="_blank" rel="noopener">https://www.kaggle.com/modesty520/covid-19-detailed-visualization</a></p>
+
+    </div>
+
+    
+    
+    
+      
+  <div class="popular-posts-header">相关文章</div>
+  <ul class="popular-posts">
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\2021\01\24\69c85c90\" rel="bookmark">R语言探索性数据分析</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\2021\02\04\7b2fe6c1\" rel="bookmark">TED探索性数据分析</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\2021\03\02\ac87917c\" rel="bookmark">pacman简明教程</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\2021\02\24\959b186\" rel="bookmark">奥斯卡获奖演员分析</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\2021\02\18\836cecb1\" rel="bookmark">如何读取多个CSV文件数据</a></div>
+    </li>
+  </ul>
+
+      
+        <div class="reward-container">
+  <div>您的支持将鼓励我继续创作！</div>
+  <button disable="enable" onclick="var qr = document.getElementById(&quot;qr&quot;); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/uploads/wechatpay.png" alt="AndyFree96 微信支付">
+        <p>微信支付</p>
+      </div>
+      
+      <div style="display: inline-block;">
+        <img src="/uploads/alipay.png" alt="AndyFree96 支付宝">
+        <p>支付宝</p>
+      </div>
+
+  </div>
+</div>
+
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>AndyFree96
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://andyfree96.github.io/2021/03/07/dea6a430/" title="COVID-19数据集可视化分析">https://andyfree96.github.io/2021/03/07/dea6a430/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/null" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/R/" rel="tag"><i class="fa fa-tag"></i>R</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/2021/03/02/ac87917c/" rel="next" title="pacman简明教程">
+                  <i class="fa fa-chevron-left"></i> pacman简明教程
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    
+  <div class="comments" id="comments">
+    <div id="lv-container" data-id="city" data-uid="MTAyMC80NzkxOC8yNDQxNQ"></div>
+  </div>
+  
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#导入数据"><span class="nav-text">导入数据</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据预处理"><span class="nav-text">数据预处理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#可视化"><span class="nav-text">可视化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#推荐"><span class="nav-text">推荐</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-text">参考</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <img class="site-author-image" itemprop="image" alt="AndyFree96"
+    src="/uploads/avatar.jpg">
+  <p class="site-author-name" itemprop="name">AndyFree96</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">46</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">37</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/AndyFree96" title="GitHub &amp;rarr; https:&#x2F;&#x2F;github.com&#x2F;AndyFree96" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:anthonyfree96@gmail.com" title="E-Mail &amp;rarr; mailto:anthonyfree96@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/IRONAnthony" title="Weibo &amp;rarr; https:&#x2F;&#x2F;weibo.com&#x2F;IRONAnthony" rel="noopener" target="_blank"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/IRONAnthony96" title="Twitter &amp;rarr; https:&#x2F;&#x2F;twitter.com&#x2F;IRONAnthony96" rel="noopener" target="_blank"><i class="fa fa-fw fa-twitter"></i>Twitter</a>
+      </span>
+  </div>
+
+
+
+      </div>
+	  
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 2019 – 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">AndyFree96</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+      <span class="post-meta-item-text">站点总字数：</span>
+    <span title="站点总字数">202k</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.0.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.4.2
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script pjax async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/pjax/pjax.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/pangu@4/dist/browser/pangu.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+  <script>
+var pjax = new Pjax({
+  selectors: [
+    'head title',
+    '#page-configurations',
+    '.content-wrap',
+    '.post-toc-wrap',
+    '#pjax'
+  ],
+  switches: {
+    '.post-toc-wrap': Pjax.switches.innerHTML
+  },
+  analytics: false,
+  cacheBust: false,
+  scrollTo : !CONFIG.bookmark.enable
+});
+
+window.addEventListener('pjax:success', () => {
+  document.querySelectorAll('script[pjax], script#page-configurations, #pjax script').forEach(element => {
+    var code = element.text || element.textContent || element.innerHTML || '';
+    var parent = element.parentNode;
+    parent.removeChild(element);
+    var script = document.createElement('script');
+    if (element.id) {
+      script.id = element.id;
+    }
+    if (element.className) {
+      script.className = element.className;
+    }
+    if (element.type) {
+      script.type = element.type;
+    }
+    if (element.src) {
+      script.src = element.src;
+      // Force synchronous loading of peripheral JS.
+      script.async = false;
+    }
+    if (element.getAttribute('pjax') !== null) {
+      element.setAttribute('pjax', '');
+    }
+    if (code !== '') {
+      script.appendChild(document.createTextNode(code));
+    }
+    parent.appendChild(script);
+  });
+  NexT.boot.refresh();
+  // Define Motion Sequence & Bootstrap Motion.
+  if (CONFIG.motion.enable) {
+    NexT.motion.integrator
+      .init()
+      .add(NexT.motion.middleWares.postList)
+      .bootstrap();
+  }
+  NexT.utils.updateSidebarPosition();
+});
+</script>
+
+
+
+
+  
+  <script pjax>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+
+
+  <script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+    <div id="pjax">
+
+  
+
+  
+
+  
+
+<script>
+  window.livereOptions = {
+    refer: location.pathname.replace(CONFIG.root, '').replace('index.html', '')
+  };
+  (function(d, s) {
+    var j, e = d.getElementsByTagName(s)[0];
+    if (typeof LivereTower === 'function') { return; }
+    j = d.createElement(s);
+    j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+    j.async = true;
+    e.parentNode.insertBefore(j, e);
+  })(document, 'script');
+</script>
+
+    </div>
+  
+  
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":true}});</script></body>
+</html>
