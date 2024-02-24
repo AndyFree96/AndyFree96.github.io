@@ -1,15 +1,9 @@
 # Axios教程
 
 
+[Axios](https://github.com/axios/axios)是一个基于 Promise 的 HTTP 客户端，我们可以在浏览器和 Node.js 中使用它。Axios 使向 REST 端点发送异步 HTTP 请求和执行 CRUD 操作变得更加容易。它可以在纯 JavaScript 中使用，也可以在 Vue 或者 React 之类的库中使用。
+
 &lt;!--more--&gt;
-
-![图片来自: https://unsplash.com/photos/a-man-climbing-up-the-side-of-a-mountain-85ey1vFIwkc](/images/202402/1/neom-85ey1vFIwkc-unsplash.jpg)
-
-[Axios](https://github.com/axios/axios)是一个基于 Promise 的 HTTP 客户端，我们可以在浏览器和 Node.js 中使用它。
-
-Axios 使向 REST 端点发送异步 HTTP 请求和执行 CRUD 操作变得更加容易。它可以在纯 JavaScript 中使用，也可以在 Vue 或者 React
-
-之类的库中使用。
 
 先看一个在浏览器中使用 Axios 的例子，我们发送一个请求到`https://api.github.com/users/USERNAME`，以获取到用户的一些信息。
 
