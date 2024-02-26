@@ -340,6 +340,6 @@ Axios tutorial: http://zetcode.com/javascript/axios/
 
 ---
 
-> 作者: AndyFree96  
+> 作者: [AndyFree96](https://andyfree96.github.io/)  
 > URL: https://andyfree96.github.io/axios%E6%95%99%E7%A8%8B/  
 
