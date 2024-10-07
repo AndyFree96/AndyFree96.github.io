@@ -327,7 +327,7 @@ int main() {
 	std::ofstream out(&#34;info.csv&#34;);
 	csv2::Writer&lt;csv2::delimiter&lt;&#39;,&#39;&gt;, std::ofstream&gt; writer(out);
 	std::vector&lt;std::string&gt; header = { &#34;Name&#34;, &#34;Age&#34; };
-	std::vector&lt;std::vector&lt;std::string&gt;&gt; content{{ &#34;Andy&#34;, &#34;19&#34; }, { &#34;Peter&#34;, &#34;21&#34; }, { &#34;Lucas&#34;, &#34;20&#34; }};
+	std::vector&lt;std::vector&lt;std::string&gt;&gt; content{{&#34;Andy&#34;, &#34;19&#34;}, {&#34;Peter&#34;, &#34;21&#34;}, {&#34;Lucas&#34;, &#34;20&#34;}};
 	writer.write_row(header);
 	writer.write_rows(content);
 }
