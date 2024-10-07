@@ -38,7 +38,7 @@ csv2是一个轻量级 C&#43;&#43; 库，用于将 CSV 文件解析为 C&#43;&#4
 ">
   <meta itemprop="datePublished" content="2024-10-07T14:16:41+08:00">
   <meta itemprop="dateModified" content="2024-10-07T14:16:41+08:00">
-  <meta itemprop="wordCount" content="3826">
+  <meta itemprop="wordCount" content="3836">
   <meta itemprop="keywords" content="CSV,C&#43;&#43;,源码剖析"><meta property="og:url" content="https://andyfree96.github.io/csv2%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/">
   <meta property="og:site_name" content="东尼的博客">
   <meta property="og:title" content="csv2源码剖析">
@@ -77,7 +77,7 @@ csv2是一个轻量级 C&#43;&#43; 库，用于将 CSV 文件解析为 C&#43;&#4
     "mainEntityOfPage": {
       "@type": "WebPage",
       "@id": "https:\/\/andyfree96.github.io\/csv2%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90\/"
-    },"genre": "posts","keywords": "CSV, C\u002b\u002b","wordcount":  3826 ,
+    },"genre": "posts","keywords": "CSV, C\u002b\u002b","wordcount":  3836 ,
     "url": "https:\/\/andyfree96.github.io\/csv2%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90\/","datePublished": "2024-10-07T14:16:41+08:00","dateModified": "2024-10-07T14:16:41+08:00","publisher": {
       "@type": "Organization",
       "name": ""},"author": {
@@ -235,7 +235,7 @@ csv2是一个轻量级 C&#43;&#43; 库，用于将 CSV 文件解析为 C&#43;&#4
   <article class="page single">
     <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span title="转载" class="icon-repost"><i class="fa-solid fa-share fa-fw" aria-hidden="true"></i></span><span>csv2源码剖析</span>
       </h1></div><div class="post-meta">
-      <div class="post-meta-line"><span class="post-author"><a href="https://andyfree96.github.io/" title="作者"target="_blank" rel="external nofollow noopener noreferrer author" class="author"><img loading="lazy" src="/avatar/1.jpg" alt="AndyFree96" data-title="AndyFree96" class="avatar" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/>&nbsp;AndyFree96</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" class="post-category" title="分类 - 源码剖析"><i class="fa-regular fa-folder fa-fw" aria-hidden="true"></i> 源码剖析</a></span></div><div class="post-meta-line"><span title="发布于 2024-10-07 14:16:41"><i class="fa-solid fa-calendar-days fa-fw me-1" aria-hidden="true"></i><time datetime="2024-10-07">2024-10-07</time></span>&nbsp;<span title="3826 字"><i class="fa-solid fa-pencil-alt fa-fw me-1" aria-hidden="true"></i>约 3900 字</span>&nbsp;<span><i class="fa-regular fa-clock fa-fw me-1" aria-hidden="true"></i>预计阅读 8 分钟</span>&nbsp;</div>
+      <div class="post-meta-line"><span class="post-author"><a href="https://andyfree96.github.io/" title="作者"target="_blank" rel="external nofollow noopener noreferrer author" class="author"><img loading="lazy" src="/avatar/1.jpg" alt="AndyFree96" data-title="AndyFree96" class="avatar" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/>&nbsp;AndyFree96</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" class="post-category" title="分类 - 源码剖析"><i class="fa-regular fa-folder fa-fw" aria-hidden="true"></i> 源码剖析</a></span></div><div class="post-meta-line"><span title="发布于 2024-10-07 14:16:41"><i class="fa-solid fa-calendar-days fa-fw me-1" aria-hidden="true"></i><time datetime="2024-10-07">2024-10-07</time></span>&nbsp;<span title="3836 字"><i class="fa-solid fa-pencil-alt fa-fw me-1" aria-hidden="true"></i>约 3900 字</span>&nbsp;<span><i class="fa-regular fa-clock fa-fw me-1" aria-hidden="true"></i>预计阅读 8 分钟</span>&nbsp;</div>
     </div><div class="featured-image"><img loading="lazy" src="/images/202410/16/samsung-memory-dIfsOkzzSk4-unsplash.jpg" alt="/images/202410/16/samsung-memory-dIfsOkzzSk4-unsplash.jpg" data-title="/images/202410/16/samsung-memory-dIfsOkzzSk4-unsplash.jpg" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></div><div class="details toc" id="toc-static" data-kept="false">
         <div class="details-summary toc-title">
           <span>目录</span>
@@ -761,6 +761,7 @@ csv2是一个轻量级 C&#43;&#43; 库，用于将 CSV 文件解析为 C&#43;&#4
 </span><span class="lnt">17
 </span><span class="lnt">18
 </span><span class="lnt">19
+</span><span class="lnt">20
 </span></code></pre></td>
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;csv2/reader.hpp&gt;</span><span class="cp">
@@ -779,6 +780,7 @@ csv2是一个轻量级 C&#43;&#43; 库，用于将 CSV 文件解析为 C&#43;&#4
 </span></span><span class="line"><span class="cl">	<span class="n">std</span><span class="o">::</span><span class="n">ofstream</span> <span class="n">out</span><span class="p">(</span><span class="s">&#34;info.csv&#34;</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">	<span class="n">csv2</span><span class="o">::</span><span class="n">Writer</span><span class="o">&lt;</span><span class="n">csv2</span><span class="o">::</span><span class="n">delimiter</span><span class="o">&lt;</span><span class="sc">&#39;,&#39;</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">ofstream</span><span class="o">&gt;</span> <span class="n">writer</span><span class="p">(</span><span class="n">out</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">	<span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">header</span> <span class="o">=</span> <span class="p">{</span> <span class="s">&#34;Name&#34;</span><span class="p">,</span> <span class="s">&#34;Age&#34;</span> <span class="p">};</span>
+</span></span><span class="line"><span class="cl">	<span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;&gt;</span> <span class="n">content</span><span class="p">{</span> <span class="p">{</span><span class="s">&#34;Andy&#34;</span><span class="p">,</span> <span class="s">&#34;19&#34;</span><span class="p">},</span> <span class="p">{</span><span class="s">&#34;Peter&#34;</span><span class="p">,</span> <span class="s">&#34;21&#34;</span><span class="p">},</span> <span class="p">{</span><span class="s">&#34;Lucas&#34;</span><span class="p">,</span> <span class="s">&#34;20&#34;</span><span class="p">}</span> <span class="p">};</span>
 </span></span><span class="line"><span class="cl">	<span class="n">writer</span><span class="p">.</span><span class="n">write_row</span><span class="p">(</span><span class="n">header</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">	<span class="n">writer</span><span class="p">.</span><span class="n">write_rows</span><span class="p">(</span><span class="n">content</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table>
