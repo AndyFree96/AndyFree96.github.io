@@ -1,33 +1,46 @@
 <!DOCTYPE html>
-<html itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+<html
+  itemscope
+  itemtype="http://schema.org/WebPage"
+  lang="zh-CN"
+>
   <head>
     
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=2"
+    />
     <meta name="robots" content="noodp" />
+    <meta name="google-adsense-account" content="ca-pub-5868664387231059" />
     <title>TCP/IP网络编程 - 东尼的博客</title><meta name="author" content="AndyFree96">
 <meta name="author-link" content="https://andyfree96.github.io/">
 <meta name="description" content="
 2023/1/17 更新: 增加进程间通信
-" /><meta name="keywords" content='TCP, IP, 计算机网络' /><meta itemprop="name" content="TCP/IP网络编程">
-<meta itemprop="description" content="
+" /><meta name="keywords" content='TCP, IP, 计算机网络' />
+  <meta itemprop="name" content="TCP/IP网络编程">
+  <meta itemprop="description" content="
 2023/1/17 更新: 增加进程间通信
-"><meta itemprop="datePublished" content="2024-02-25T20:41:07+08:00" />
-<meta itemprop="dateModified" content="2024-02-25T20:41:07+08:00" />
-<meta itemprop="wordCount" content="14761">
-<meta itemprop="keywords" content="网络编程," /><meta property="og:title" content="TCP/IP网络编程" />
-<meta property="og:description" content="
-2023/1/17 更新: 增加进程间通信
-" />
-<meta property="og:type" content="article" />
-<meta property="og:url" content="https://andyfree96.github.io/tcp-ip%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" /><meta property="article:section" content="posts" />
-<meta property="article:published_time" content="2024-02-25T20:41:07+08:00" />
-<meta property="article:modified_time" content="2024-02-25T20:41:07+08:00" />
-<meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="TCP/IP网络编程"/>
+">
+  <meta itemprop="datePublished" content="2024-02-25T20:41:07+08:00">
+  <meta itemprop="dateModified" content="2024-02-25T20:41:07+08:00">
+  <meta itemprop="wordCount" content="14761">
+  <meta itemprop="keywords" content="TCP,IP,计算机网络"><meta property="og:url" content="https://andyfree96.github.io/tcp-ip%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/">
+  <meta property="og:site_name" content="东尼的博客">
+  <meta property="og:title" content="TCP/IP网络编程">
+  <meta property="og:description" content=" 2023/1/17 更新: 增加进程间通信 ">
+  <meta property="og:locale" content="zh-CN">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2024-02-25T20:41:07+08:00">
+    <meta property="article:modified_time" content="2024-02-25T20:41:07+08:00">
+    <meta property="article:tag" content="网络编程">
+    <meta property="article:tag" content="笔记">
+<meta name="twitter:card" content="summary"><meta name="twitter:title" content="TCP/IP网络编程">
 <meta name="twitter:description" content="
 2023/1/17 更新: 增加进程间通信
-"/>
+">
+      <meta name="twitter:site" content="@IRONAnthony96">
 <meta name="application-name" content="FixIt">
 <meta name="apple-mobile-web-app-title" content="FixIt"><meta name="theme-color" data-light="#f8f8f8" data-dark="#252627" content="#f8f8f8"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
@@ -42,7 +55,7 @@
     "mainEntityOfPage": {
       "@type": "WebPage",
       "@id": "https:\/\/andyfree96.github.io\/tcp-ip%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B\/"
-    },"genre": "posts","keywords": "网络编程","wordcount":  14761 ,
+    },"genre": "posts","keywords": "网络编程, 笔记","wordcount":  14761 ,
     "url": "https:\/\/andyfree96.github.io\/tcp-ip%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B\/","datePublished": "2024-02-25T20:41:07+08:00","dateModified": "2024-02-25T20:41:07+08:00","publisher": {
       "@type": "Organization",
       "name": ""},"author": {
@@ -51,7 +64,20 @@
       },"description": ""
   }
   </script></head>
-  <body data-header-desktop="sticky" data-header-mobile="auto"><script>(window.localStorage?.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('data-theme', 'dark');</script><div class="wrapper" data-page-style="normal"><header class="desktop animate__faster" id="header-desktop">
+  <body
+    data-header-desktop="sticky"
+    data-header-mobile="auto"
+  ><script>
+      (window.localStorage?.getItem("theme")
+        ? localStorage.getItem("theme") === "dark"
+        : "auto" === "auto"
+        ? window.matchMedia("(prefers-color-scheme: dark)").matches
+        : "auto" === "dark") &&
+        document.body.setAttribute("data-theme", "dark");
+    </script><div
+      class="wrapper"
+      data-page-style="normal"
+    ><header class="desktop animate__faster" id="header-desktop">
   <div class="header-wrapper">
     <div class="header-title">
       <a href="/" title="东尼的博客"><span class="header-title-text">东尼的博客</span></a><span class="header-subtitle"></span></div>
@@ -180,7 +206,9 @@
       </ul>
     </nav>
   </div>
-</header><main class="container"><aside class="aside-collection animate__animated animate__fadeIn animate__faster" aria-label="合集"></aside>
+</header><main
+        class="container"
+      ><aside class="aside-collection animate__animated animate__fadeIn animate__faster" aria-label="合集"></aside>
 
   <article class="page single">
     <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span title="转载" class="icon-repost"><i class="fa-solid fa-share fa-fw" aria-hidden="true"></i></span><span>TCP/IP网络编程</span>
@@ -401,7 +429,7 @@
 <p>文件描述符只不过是为了方便称呼操作系统创建的文件或套接字而赋予的数而已。文件描述符有时也称为句柄，但“句柄”主要是 Windows 中的术语。</p>
 <p>在项目中，为了给基本数据类型赋予别名，一般会添加大量的<code>typedef</code>声明。为了与程序员定义的新数据类型加以区分，操作系统定义的数据类型会添加后缀<code>_t</code>，例如<code>size_t</code>、<code>ssize_t</code>等。</p>
 <p>文件描述符从 3 开始由小到大顺序编号，因为 0、1、2 分配给标准 I/O 的描述符。</p>
-<p><a class="lightgallery" href="/images/202402/3/1.png?size=large" data-thumbnail="/images/202402/3/1.png?size=small" data-sub-html="<h2>/images/202402/3/1.png</h2>"><img loading="lazy" src="/images/202402/3/1.png" alt="/images/202402/3/1.png" srcset="/images/202402/3/1.png?size=small, /images/202402/3/1.png?size=medium 1.5x, /images/202402/3/1.png?size=large 2x" data-title="/images/202402/3/1.png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></a></p>
+<p><img loading="lazy" src="/images/202402/3/1.png" alt="/images/202402/3/1.png" srcset="/images/202402/3/1.png?size=small, /images/202402/3/1.png?size=medium 1.5x, /images/202402/3/1.png?size=large 2x" data-title="/images/202402/3/1.png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></p>
 <h3 id="基于-windows-平台的实现" class="heading-element">
   <a href="#%e5%9f%ba%e4%ba%8e-windows-%e5%b9%b3%e5%8f%b0%e7%9a%84%e5%ae%9e%e7%8e%b0" class="heading-mark"></a>基于 Windows 平台的实现</h3><p>Windows 套接字（简称 Winsock）大部分是参考 BSD 系列的 UNIX 套接字设计的。</p>
 <p>为了在 Windows 基础上开发网络程序，需要做如下准备。</p>
@@ -409,7 +437,7 @@
 <li>导入头文件<code>winsock2.h</code></li>
 <li>链接<code>ws2_32.lib</code>库</li>
 </ul>
-<p><a class="lightgallery" href="/images/202402/3/2.png?size=large" data-thumbnail="/images/202402/3/2.png?size=small" data-sub-html="<h2>/images/202402/3/2.png</h2>"><img loading="lazy" src="/images/202402/3/2.png" alt="/images/202402/3/2.png" srcset="/images/202402/3/2.png?size=small, /images/202402/3/2.png?size=medium 1.5x, /images/202402/3/2.png?size=large 2x" data-title="/images/202402/3/2.png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></a></p>
+<p><img loading="lazy" src="/images/202402/3/2.png" alt="/images/202402/3/2.png" srcset="/images/202402/3/2.png?size=small, /images/202402/3/2.png?size=medium 1.5x, /images/202402/3/2.png?size=large 2x" data-title="/images/202402/3/2.png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></p>
 <p>Winsock 编程时必须首先调用<code>WSAStartup</code>函数，设置程序中用到的 Winsock 版本，并初始化相应版本的库。</p>
 <p>注销该库使用如下函数:</p>
 <div class="highlight" id="id-1"><div class="chroma">
@@ -482,7 +510,7 @@
 <p>数据传输方式相同，但协议不同。此时需要通过第三个参数具体指定协议信息。</p>
 <p>比如，创建“IPv4 协议族面向连接的套接字”。</p>
 <p>参数<code>PF_INET</code>指 IPv4 网络协议族，<code>SOCK_STREAM</code>是面向连接的数据传输。满足这两个条的协议只有<code>IPPROTO_TCP</code>，这种套接字称为 TCP 套接字。</p>
-<div class="highlight" id="id-3"><div class="chroma">
+<div class="highlight" id="id-1"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
@@ -491,7 +519,7 @@
 </div>
 </div><p>再比如，创建“IPv4 协议族面向消息的套接字”。</p>
 <p>满足上述条件的协议只有<code>IPPROTO_UDP</code>，这种套接字称为 UDP 套接字。</p>
-<div class="highlight" id="id-4"><div class="chroma">
+<div class="highlight" id="id-2"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
@@ -523,7 +551,7 @@
 <p><strong>数据传输目标地址同时包含 IP 地址和端口号，只有这样，数据才会被传输到最终的目的应用程序（应用程序套接字）。</strong></p>
 <h3 id="地址信息的表示" class="heading-element">
   <a href="#%e5%9c%b0%e5%9d%80%e4%bf%a1%e6%81%af%e7%9a%84%e8%a1%a8%e7%a4%ba" class="heading-mark"></a>地址信息的表示</h3><h4 id="表示-ipv4-地址的结构体" class="heading-element">
-  <a href="#%e8%a1%a8%e7%a4%ba-ipv4-%e5%9c%b0%e5%9d%80%e7%9a%84%e7%bb%93%e6%9e%84%e4%bd%93" class="heading-mark"></a>表示 IPv4 地址的结构体</h4><div class="highlight" id="id-5"><div class="chroma">
+  <a href="#%e8%a1%a8%e7%a4%ba-ipv4-%e5%9c%b0%e5%9d%80%e7%9a%84%e7%bb%93%e6%9e%84%e4%bd%93" class="heading-mark"></a>表示 IPv4 地址的结构体</h4><div class="highlight" id="id-3"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -541,7 +569,7 @@
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">}</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p><code>in_addr</code>定义如下:</p>
-<div class="highlight" id="id-6"><div class="chroma">
+<div class="highlight" id="id-4"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -571,7 +599,7 @@
 <h3 id="网络地址的初始化与分配" class="heading-element">
   <a href="#%e7%bd%91%e7%bb%9c%e5%9c%b0%e5%9d%80%e7%9a%84%e5%88%9d%e5%a7%8b%e5%8c%96%e4%b8%8e%e5%88%86%e9%85%8d" class="heading-mark"></a>网络地址的初始化与分配</h3><h4 id="将字符串信息转换为网络字节序的整数型" class="heading-element">
   <a href="#%e5%b0%86%e5%ad%97%e7%ac%a6%e4%b8%b2%e4%bf%a1%e6%81%af%e8%bd%ac%e6%8d%a2%e4%b8%ba%e7%bd%91%e7%bb%9c%e5%ad%97%e8%8a%82%e5%ba%8f%e7%9a%84%e6%95%b4%e6%95%b0%e5%9e%8b" class="heading-mark"></a>将字符串信息转换为网络字节序的整数型</h4><p>使用<code>inet_addr</code>函数可以将字符串形式的 IP 地址转换为 32 为整型数据。</p>
-<div class="highlight" id="id-7"><div class="chroma">
+<div class="highlight" id="id-5"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -601,7 +629,7 @@
   <a href="#tcp-%e6%9c%8d%e5%8a%a1%e5%99%a8%e7%ab%af%e7%9a%84%e9%bb%98%e8%ae%a4%e5%87%bd%e6%95%b0%e8%b0%83%e7%94%a8%e9%a1%ba%e5%ba%8f" class="heading-mark"></a>TCP 服务器端的默认函数调用顺序</h4><p><a class="lightgallery" href="/images/202402/3/10.png?size=large" data-thumbnail="/images/202402/3/10.png?size=small" data-sub-html="<h2>/images/202402/3/10.png</h2>"><img loading="lazy" src="/images/202402/3/10.png" alt="/images/202402/3/10.png" srcset="/images/202402/3/10.png?size=small, /images/202402/3/10.png?size=medium 1.5x, /images/202402/3/10.png?size=large 2x" data-title="/images/202402/3/10.png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></a></p>
 <h4 id="进入等待连接请求状态" class="heading-element">
   <a href="#%e8%bf%9b%e5%85%a5%e7%ad%89%e5%be%85%e8%bf%9e%e6%8e%a5%e8%af%b7%e6%b1%82%e7%8a%b6%e6%80%81" class="heading-mark"></a>进入等待连接请求状态</h4><p>我们已调用<code>bind</code>函数给套接字分配了地址，接下来就要通过<code>listen</code>函数进入等待连接请求状态。只有调用了<code>listen</code>函数，客户端才能进入可发出连接请求的状态。这时客户端才能调用<code>connect</code>函数（若提前调用将发生错误）。</p>
-<div class="highlight" id="id-8"><div class="chroma">
+<div class="highlight" id="id-6"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -624,7 +652,7 @@
 </div><p><a class="lightgallery" href="/images/202402/3/11.png?size=large" data-thumbnail="/images/202402/3/11.png?size=small" data-sub-html="<h2>/images/202402/3/11.png</h2>"><img loading="lazy" src="/images/202402/3/11.png" alt="/images/202402/3/11.png" srcset="/images/202402/3/11.png?size=small, /images/202402/3/11.png?size=medium 1.5x, /images/202402/3/11.png?size=large 2x" data-title="/images/202402/3/11.png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></a></p>
 <h4 id="受理客户端连接请求" class="heading-element">
   <a href="#%e5%8f%97%e7%90%86%e5%ae%a2%e6%88%b7%e7%ab%af%e8%bf%9e%e6%8e%a5%e8%af%b7%e6%b1%82" class="heading-mark"></a>受理客户端连接请求</h4><p>服务器端套接字是做门卫的。如果与客户端的数据交换使用门卫，那谁来守门呢？因此需要另外一个套接字，但没必要亲自创建。<code>accpet</code>函数将自动创建套接字，并连接到发起请求的客户端。</p>
-<div class="highlight" id="id-9"><div class="chroma">
+<div class="highlight" id="id-7"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -650,7 +678,7 @@
 <h4 id="tcp-客户端的默认函数调用顺序" class="heading-element">
   <a href="#tcp-%e5%ae%a2%e6%88%b7%e7%ab%af%e7%9a%84%e9%bb%98%e8%ae%a4%e5%87%bd%e6%95%b0%e8%b0%83%e7%94%a8%e9%a1%ba%e5%ba%8f" class="heading-mark"></a>TCP 客户端的默认函数调用顺序</h4><p><a class="lightgallery" href="/images/202402/3/13.png?size=large" data-thumbnail="/images/202402/3/13.png?size=small" data-sub-html="<h2>/images/202402/3/13.png</h2>"><img loading="lazy" src="/images/202402/3/13.png" alt="/images/202402/3/13.png" srcset="/images/202402/3/13.png?size=small, /images/202402/3/13.png?size=medium 1.5x, /images/202402/3/13.png?size=large 2x" data-title="/images/202402/3/13.png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></a></p>
 <p>服务器调用<code>listen</code>函数后创建连接请求等待队列，之后客户端即可请求连接。通过如下函数即可发起请求连接:</p>
-<div class="highlight" id="id-10"><div class="chroma">
+<div class="highlight" id="id-8"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -694,7 +722,7 @@
   <a href="#%e8%bf%ad%e4%bb%a3%e5%9b%9e%e5%a3%b0%e6%9c%8d%e5%8a%a1%e5%99%a8%e5%ae%a2%e6%88%b7%e7%ab%af" class="heading-mark"></a>迭代回声服务器/客户端</h4><p><a class="lightgallery" href="/images/202402/3/16.png?size=large" data-thumbnail="/images/202402/3/16.png?size=small" data-sub-html="<h2>/images/202402/3/16.png</h2>"><img loading="lazy" src="/images/202402/3/16.png" alt="/images/202402/3/16.png" srcset="/images/202402/3/16.png?size=small, /images/202402/3/16.png?size=medium 1.5x, /images/202402/3/16.png?size=large 2x" data-title="/images/202402/3/16.png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></a></p>
 <h3 id="基于-windows-的实现" class="heading-element">
   <a href="#%e5%9f%ba%e4%ba%8e-windows-%e7%9a%84%e5%ae%9e%e7%8e%b0" class="heading-mark"></a>基于 Windows 的实现</h3><h4 id="基于-windows-的回声服务器端" class="heading-element">
-  <a href="#%e5%9f%ba%e4%ba%8e-windows-%e7%9a%84%e5%9b%9e%e5%a3%b0%e6%9c%8d%e5%8a%a1%e5%99%a8%e7%ab%af" class="heading-mark"></a>基于 Windows 的回声服务器端</h4><div class="highlight" id="id-11"><div class="chroma">
+  <a href="#%e5%9f%ba%e4%ba%8e-windows-%e7%9a%84%e5%9b%9e%e5%a3%b0%e6%9c%8d%e5%8a%a1%e5%99%a8%e7%ab%af" class="heading-mark"></a>基于 Windows 的回声服务器端</h4><div class="highlight" id="id-9"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
@@ -834,7 +862,7 @@
 </span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table>
 </div>
 </div><h4 id="基于-windows-的回声客户端" class="heading-element">
-  <a href="#%e5%9f%ba%e4%ba%8e-windows-%e7%9a%84%e5%9b%9e%e5%a3%b0%e5%ae%a2%e6%88%b7%e7%ab%af" class="heading-mark"></a>基于 Windows 的回声客户端</h4><div class="highlight" id="id-12"><div class="chroma">
+  <a href="#%e5%9f%ba%e4%ba%8e-windows-%e7%9a%84%e5%9b%9e%e5%a3%b0%e5%ae%a2%e6%88%b7%e7%ab%af" class="heading-mark"></a>基于 Windows 的回声客户端</h4><div class="highlight" id="id-10"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
@@ -957,7 +985,7 @@
 </div>
 </div><h2 id="基于-tcp-的服务器端客户端2" class="heading-element">
   <a href="#%e5%9f%ba%e4%ba%8e-tcp-%e7%9a%84%e6%9c%8d%e5%8a%a1%e5%99%a8%e7%ab%af%e5%ae%a2%e6%88%b7%e7%ab%af2" class="heading-mark"></a>基于 TCP 的服务器端/客户端(2)</h2><h3 id="回声客户端的完美实现" class="heading-element">
-  <a href="#%e5%9b%9e%e5%a3%b0%e5%ae%a2%e6%88%b7%e7%ab%af%e7%9a%84%e5%ae%8c%e7%be%8e%e5%ae%9e%e7%8e%b0" class="heading-mark"></a>回声客户端的完美实现</h3><div class="highlight" id="id-13"><div class="chroma">
+  <a href="#%e5%9b%9e%e5%a3%b0%e5%ae%a2%e6%88%b7%e7%ab%af%e7%9a%84%e5%ae%8c%e7%be%8e%e5%ae%9e%e7%8e%b0" class="heading-mark"></a>回声客户端的完美实现</h3><div class="highlight" id="id-11"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
@@ -1148,7 +1176,7 @@
 <p>数据包内的 FIN 表示断开连接。即双方各发送 1 次 FIN 消息后断开连接。该过程经历了 4 个阶段，因此又称四次握手（Four-way handshaking）。</p>
 <h3 id="基于-windows-实现" class="heading-element">
   <a href="#%e5%9f%ba%e4%ba%8e-windows-%e5%ae%9e%e7%8e%b0" class="heading-mark"></a>基于 Windows 实现</h3><p>服务器端<code>op_server.c</code></p>
-<div class="highlight" id="id-14"><div class="chroma">
+<div class="highlight" id="id-12"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
@@ -1328,7 +1356,7 @@
 </span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>客户端<code>op_client.c</code></p>
-<div class="highlight" id="id-15"><div class="chroma">
+<div class="highlight" id="id-13"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
@@ -1482,7 +1510,7 @@
   <a href="#udp-%e6%9c%8d%e5%8a%a1%e5%99%a8%e7%ab%af%e5%92%8c%e5%ae%a2%e6%88%b7%e7%ab%af%e5%9d%87%e5%8f%aa%e9%9c%80-1-%e4%b8%aa%e5%a5%97%e6%8e%a5%e5%ad%97" class="heading-mark"></a>UDP 服务器端和客户端均只需 1 个套接字</h4><p>TCP 中，套接字之间应该是一对一的关系。若要向 10 个客户端提供服务，则除了守门的服务器套接字外，还需要 10 个服务器端套接字。但在 UDP 中，不管是服务器端还是客户端都只需要 1 个套接字。</p>
 <p>只需 1 个 UDP 套接字就可以向任意主机传输数据（类似收发信件的邮筒）。只需 1 个 UDP 套接字就能和多台主机通信。</p>
 <h3 id="基于-windows-实现-1" class="heading-element">
-  <a href="#%e5%9f%ba%e4%ba%8e-windows-%e5%ae%9e%e7%8e%b0-1" class="heading-mark"></a>基于 Windows 实现</h3><div class="highlight" id="id-16"><div class="chroma">
+  <a href="#%e5%9f%ba%e4%ba%8e-windows-%e5%ae%9e%e7%8e%b0-1" class="heading-mark"></a>基于 Windows 实现</h3><div class="highlight" id="id-14"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -1510,7 +1538,7 @@
 <p>一旦两台主机建立了套接字连接，每个主机机会拥有单独的输入流和输出流。其中一个主机的输入流与一台主机的输出流相连，而输出流则与另一主机的输入流相连。优雅地断开连接方式指的是只断开其中一个流，而非同时断开两个流。Linux 的<code>close</code>和 Windows 的<code>closesocket</code>函数将同时断开这两个流，因此不够优雅。</p>
 <h4 id="针对优雅断开的shutdown函数" class="heading-element">
   <a href="#%e9%92%88%e5%af%b9%e4%bc%98%e9%9b%85%e6%96%ad%e5%bc%80%e7%9a%84shutdown%e5%87%bd%e6%95%b0" class="heading-mark"></a>针对优雅断开的<code>shutdown</code>函数</h4><p><code>shutdown</code>函数可以用来关闭其中 1 个流。</p>
-<div class="highlight" id="id-17"><div class="chroma">
+<div class="highlight" id="id-15"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -1534,7 +1562,7 @@
 </ul>
 <h3 id="基于-windows-的实现-1" class="heading-element">
   <a href="#%e5%9f%ba%e4%ba%8e-windows-%e7%9a%84%e5%ae%9e%e7%8e%b0-1" class="heading-mark"></a>基于 Windows 的实现</h3><p>Windows 平台调用的<code>shutdown</code>函数传递的参数略有不同。</p>
-<div class="highlight" id="id-18"><div class="chroma">
+<div class="highlight" id="id-16"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -1561,7 +1589,7 @@
 <li><code>SD_BOTH</code>: 同时断开 I/O 流</li>
 </ul>
 <p>服务器端<code>file_server_win.cpp</code>:</p>
-<div class="highlight" id="id-19"><div class="chroma">
+<div class="highlight" id="id-17"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
@@ -1693,7 +1721,7 @@
 </span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>客户端<code>file_client_win.cpp</code>:</p>
-<div class="highlight" id="id-20"><div class="chroma">
+<div class="highlight" id="id-18"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
@@ -1843,7 +1871,7 @@
 <p><a class="lightgallery" href="/images/202402/3/23.png?size=large" data-thumbnail="/images/202402/3/23.png?size=small" data-sub-html="<h2>ps命令结果</h2>"><img loading="lazy" src="/images/202402/3/23.png" alt="ps命令结果" srcset="/images/202402/3/23.png?size=small, /images/202402/3/23.png?size=medium 1.5x, /images/202402/3/23.png?size=large 2x" data-title="ps命令结果" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></a></p>
 <p>通过 ps 命令可以查看当前运行的所有进程。</p>
 <h4 id="通过调用-fork-函数创建进程" class="heading-element">
-  <a href="#%e9%80%9a%e8%bf%87%e8%b0%83%e7%94%a8-fork-%e5%87%bd%e6%95%b0%e5%88%9b%e5%bb%ba%e8%bf%9b%e7%a8%8b" class="heading-mark"></a>通过调用 fork 函数创建进程</h4><div class="highlight" id="id-21"><div class="chroma">
+  <a href="#%e9%80%9a%e8%bf%87%e8%b0%83%e7%94%a8-fork-%e5%87%bd%e6%95%b0%e5%88%9b%e5%bb%ba%e8%bf%9b%e7%a8%8b" class="heading-mark"></a>通过调用 fork 函数创建进程</h4><div class="highlight" id="id-19"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -1867,7 +1895,7 @@
 <p>这里的父进程（Parent Process）指的是原进程，即调用<code>fork</code>函数的主体，而子进程（Child Process）是通过父进程调用<code>fork</code>函数复制出的进程。</p>
 <p><a class="lightgallery" href="/images/202402/3/24.png?size=large" data-thumbnail="/images/202402/3/24.png?size=small" data-sub-html="<h2>/images/202402/3/24.png</h2>"><img loading="lazy" src="/images/202402/3/24.png" alt="/images/202402/3/24.png" srcset="/images/202402/3/24.png?size=small, /images/202402/3/24.png?size=medium 1.5x, /images/202402/3/24.png?size=large 2x" data-title="/images/202402/3/24.png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></a></p>
 <p>从上图可以看到，父进程调用<code>fork</code>函数的同时复制出子进程，并分别得到<code>fork</code>函数的返回值。在父进程和子进程中<code>gval</code>和<code>lval</code>互不影响。因此<code>fork</code>函数调用后分成了完全不同的进程，只是二者共享同一代码而已。</p>
-<div class="highlight" id="id-22"><div class="chroma">
+<div class="highlight" id="id-20"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
@@ -1926,7 +1954,7 @@
 <li><code>main</code>函数中执行<code>return</code>语句并返回值</li>
 </ul>
 <p>向<code>exit</code>函数传递的参数值和<code>main</code>函数的<code>return</code>语句返回的值都会传递给操作系统。而操作系统不会销毁子进程，直到把这些值传递给产生该子进程的父进程。处在这种状态下的进程就是僵尸进，将子进程变成僵尸进程的正是操作系统。那么如何销毁僵尸进程呢？向父进程传递<code>exit</code>函数的参数值或<code>return</code>的返回值即可。如何向父进程传递这些值呢？操作系统不会主动传递给父进程，只有父进程主动发起请求（函数调用）时，操作系统才会传递该值。换言之，如果父进程未主动要求获得子进程的结束状态值，操作系统将一直保存，并让子进程长时间处于僵尸进程状态。</p>
-<div class="highlight" id="id-23"><div class="chroma">
+<div class="highlight" id="id-21"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
@@ -1968,7 +1996,7 @@
 </div><p><a class="lightgallery" href="/images/202402/3/26.png?size=large" data-thumbnail="/images/202402/3/26.png?size=small" data-sub-html="<h2>/images/202402/3/26.png</h2>"><img loading="lazy" src="/images/202402/3/26.png" alt="/images/202402/3/26.png" srcset="/images/202402/3/26.png?size=small, /images/202402/3/26.png?size=medium 1.5x, /images/202402/3/26.png?size=large 2x" data-title="/images/202402/3/26.png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></a></p>
 <h4 id="销毁僵尸进程-1利用-wait-函数" class="heading-element">
   <a href="#%e9%94%80%e6%af%81%e5%83%b5%e5%b0%b8%e8%bf%9b%e7%a8%8b-1%e5%88%a9%e7%94%a8-wait-%e5%87%bd%e6%95%b0" class="heading-mark"></a>销毁僵尸进程 1：利用 wait 函数</h4><p>为了销毁子进程，父进程应主动请求获取子进程的返回值。发起请求的方法有两种，其中之一就是调用如下函数。</p>
-<div class="highlight" id="id-24"><div class="chroma">
+<div class="highlight" id="id-22"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -1988,7 +2016,7 @@
 <li><code>WEXITSTATUS</code>返回子进程的返回值</li>
 </ul>
 <p>向<code>wait</code>函数传递变量<code>status</code>的地址时，调用<code>wait</code>函数后应编写如下代码:</p>
-<div class="highlight" id="id-25"><div class="chroma">
+<div class="highlight" id="id-23"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -2004,7 +2032,7 @@
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">}</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>根据上述内容编写示例，此示例不会再让子进程变成僵尸进程。</p>
-<div class="highlight" id="id-26"><div class="chroma">
+<div class="highlight" id="id-24"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
@@ -2075,7 +2103,7 @@
 <p>调用<code>wait</code>函数时，如果没有已终止的子进程，那么程序将阻塞（Blocking）直到有子进程终止，因此需谨慎调用该函数。</p>
 <h4 id="销毁僵尸进程-2使用-waitpid-函数" class="heading-element">
   <a href="#%e9%94%80%e6%af%81%e5%83%b5%e5%b0%b8%e8%bf%9b%e7%a8%8b-2%e4%bd%bf%e7%94%a8-waitpid-%e5%87%bd%e6%95%b0" class="heading-mark"></a>销毁僵尸进程 2：使用 waitpid 函数</h4><p><code>wait</code>函数会引起程序阻塞，可以考虑调用<code>waitpid</code>函数。这是防止僵尸进程的第二种方法，也是防止阻塞的方法。</p>
-<div class="highlight" id="id-27"><div class="chroma">
+<div class="highlight" id="id-25"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -2096,7 +2124,7 @@
 </span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>示例如下:</p>
-<div class="highlight" id="id-28"><div class="chroma">
+<div class="highlight" id="id-26"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
@@ -2171,7 +2199,7 @@
 <p>此时父进程暂时放下工作，处理子进程终止相关事宜。为了实现该想法，引入信号处理（Signal Handling）机制。此处的“信号”是在特定时间发生时由操作系统向进程发送的消息。为了响应该消息，执行与消息相关的自定义操作的过程“处理”或“信号处理”。</p>
 <h4 id="信号与-signal-函数" class="heading-element">
   <a href="#%e4%bf%a1%e5%8f%b7%e4%b8%8e-signal-%e5%87%bd%e6%95%b0" class="heading-mark"></a>信号与 signal 函数</h4><p>信号注册函数，请求操作系统当子进程结束时调用某函数。</p>
-<div class="highlight" id="id-29"><div class="chroma">
+<div class="highlight" id="id-27"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -2189,7 +2217,7 @@
 <li><code>SIGCHLD</code>: 子进程终止</li>
 </ul>
 <p>比如，编写调用<code>signal</code>函数完成“子进程终止则调用 myChild 函数”的请求，语句如下:</p>
-<div class="highlight" id="id-30"><div class="chroma">
+<div class="highlight" id="id-28"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
@@ -2198,7 +2226,7 @@
 </div>
 </div><p>以上就是信号注册过程。注册好信号后，发生注册信号时（注册的情况发生时），操作系统将调用该信号对应的函数。</p>
 <p>先介绍<code>alarm</code>函数。</p>
-<div class="highlight" id="id-31"><div class="chroma">
+<div class="highlight" id="id-29"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -2216,7 +2244,7 @@
 </div>
 </div><p>如果调用该函数的同时向它传递一个正整型函数，相应时间后（以秒为单位）将产生 SIGALRM 信息。若向该函数传递 0，则之前对 SIGALRM 信号预约将取消。如果通过该函数预约信号后为指定该信号对应的处理函数，则（通过调用<code>signal</code>函数）终止进程，不做任何处理。</p>
 <p>示例如下:</p>
-<div class="highlight" id="id-32"><div class="chroma">
+<div class="highlight" id="id-30"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
@@ -2285,7 +2313,7 @@
 <p>发生信号时将唤醒由于调用<code>sleep</code>函数而进入阻塞状态的进程。调用函数的主体是操作系统，但进程处于睡眠状态无法调用函数。因此，产生信号时，为了调用信号处理器 ，将唤醒由于调用<code>sleep</code>函数而进入阻塞状态的进程。而且，进程一旦被唤醒，就不会再进入睡眠状态。即使还未到<code>sleep</code>函数中规定的时间也如此。所以上述示例运行不到 10 秒就会结束，连续输入<code>CTRL + C</code>可能 1 秒都不到。</p>
 <h4 id="利用-sigaction-函数进行信号处理" class="heading-element">
   <a href="#%e5%88%a9%e7%94%a8-sigaction-%e5%87%bd%e6%95%b0%e8%bf%9b%e8%a1%8c%e4%bf%a1%e5%8f%b7%e5%a4%84%e7%90%86" class="heading-mark"></a>利用 sigaction 函数进行信号处理</h4><p><code>sigaction</code>函数类似于<code>signal</code>函数，且完全可以代替它，也更稳定。稳定的原因是<code>signal</code>函数在 UNIX 系列的不同操作系统中可能存在区别，但<code>sigaction</code>函数完全相同。</p>
-<div class="highlight" id="id-33"><div class="chroma">
+<div class="highlight" id="id-31"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -2311,7 +2339,7 @@
 <p><a class="lightgallery" href="/images/202402/3/30.png?size=large" data-thumbnail="/images/202402/3/30.png?size=small" data-sub-html="<h2>/images/202402/3/30.png</h2>"><img loading="lazy" src="/images/202402/3/30.png" alt="/images/202402/3/30.png" srcset="/images/202402/3/30.png?size=small, /images/202402/3/30.png?size=medium 1.5x, /images/202402/3/30.png?size=large 2x" data-title="/images/202402/3/30.png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></a></p>
 <p>结构体的<code>sa_handler</code>成员保存信号处理函数的指针值（地址值）。</p>
 <p>示例如下:</p>
-<div class="highlight" id="id-34"><div class="chroma">
+<div class="highlight" id="id-32"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
@@ -2377,7 +2405,7 @@
 </div><p><a class="lightgallery" href="/images/202402/3/31.png?size=large" data-thumbnail="/images/202402/3/31.png?size=small" data-sub-html="<h2>/images/202402/3/31.png</h2>"><img loading="lazy" src="/images/202402/3/31.png" alt="/images/202402/3/31.png" srcset="/images/202402/3/31.png?size=small, /images/202402/3/31.png?size=medium 1.5x, /images/202402/3/31.png?size=large 2x" data-title="/images/202402/3/31.png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></a></p>
 <h4 id="利用信号处理技术消灭僵尸进程" class="heading-element">
   <a href="#%e5%88%a9%e7%94%a8%e4%bf%a1%e5%8f%b7%e5%a4%84%e7%90%86%e6%8a%80%e6%9c%af%e6%b6%88%e7%81%ad%e5%83%b5%e5%b0%b8%e8%bf%9b%e7%a8%8b" class="heading-mark"></a>利用信号处理技术消灭僵尸进程</h4><p>进程终止时将产生<code>SIGCHLD</code>信号。</p>
-<div class="highlight" id="id-35"><div class="chroma">
+<div class="highlight" id="id-33"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
@@ -2509,7 +2537,7 @@
 </ul>
 <p>子进程会复制父进程拥有的所有资源，实际上根本不哦那个另外传递文件描述符的过程。</p>
 <h4 id="实现并发服务器" class="heading-element">
-  <a href="#%e5%ae%9e%e7%8e%b0%e5%b9%b6%e5%8f%91%e6%9c%8d%e5%8a%a1%e5%99%a8" class="heading-mark"></a>实现并发服务器</h4><div class="highlight" id="id-36"><div class="chroma">
+  <a href="#%e5%ae%9e%e7%8e%b0%e5%b9%b6%e5%8f%91%e6%9c%8d%e5%8a%a1%e5%99%a8" class="heading-mark"></a>实现并发服务器</h4><div class="highlight" id="id-34"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">  1
 </span><span class="lnt">  2
@@ -2746,7 +2774,7 @@
 <p><a class="lightgallery" href="/images/202402/3/38.png?size=large" data-thumbnail="/images/202402/3/38.png?size=small" data-sub-html="<h2>/images/202402/3/38.png</h2>"><img loading="lazy" src="/images/202402/3/38.png" alt="/images/202402/3/38.png" srcset="/images/202402/3/38.png?size=small, /images/202402/3/38.png?size=medium 1.5x, /images/202402/3/38.png?size=large 2x" data-title="/images/202402/3/38.png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></a></p>
 <p>分割 I/O 后的客户端发送数据时不必考虑接收数据的情况，因此可以连续发送数据，由此提高同一时间内传输的数据量。这种差异在网络较慢时尤为明显。</p>
 <h4 id="回声客户端的-io-程序分割" class="heading-element">
-  <a href="#%e5%9b%9e%e5%a3%b0%e5%ae%a2%e6%88%b7%e7%ab%af%e7%9a%84-io-%e7%a8%8b%e5%ba%8f%e5%88%86%e5%89%b2" class="heading-mark"></a>回声客户端的 I/O 程序分割</h4><div class="highlight" id="id-37"><div class="chroma">
+  <a href="#%e5%9b%9e%e5%a3%b0%e5%ae%a2%e6%88%b7%e7%ab%af%e7%9a%84-io-%e7%a8%8b%e5%ba%8f%e5%88%86%e5%89%b2" class="heading-mark"></a>回声客户端的 I/O 程序分割</h4><div class="highlight" id="id-35"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
@@ -2947,7 +2975,7 @@
 <h4 id="通过管道实现进程间通信" class="heading-element">
   <a href="#%e9%80%9a%e8%bf%87%e7%ae%a1%e9%81%93%e5%ae%9e%e7%8e%b0%e8%bf%9b%e7%a8%8b%e9%97%b4%e9%80%9a%e4%bf%a1" class="heading-mark"></a>通过管道实现进程间通信</h4><p><a class="lightgallery" href="/images/202402/3/39.png?size=large" data-thumbnail="/images/202402/3/39.png?size=small" data-sub-html="<h2>/images/202402/3/39.png</h2>"><img loading="lazy" src="/images/202402/3/39.png" alt="/images/202402/3/39.png" srcset="/images/202402/3/39.png?size=small, /images/202402/3/39.png?size=medium 1.5x, /images/202402/3/39.png?size=large 2x" data-title="/images/202402/3/39.png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></a></p>
 <p>为了完成进程间通信，需要创建管道。管道并非属于进程的资源，而是和套接字一样，属于操作系统（也就不是<code>fork</code>函数的复制对象）。所以，两个进程通过操作系统提供的内存空间进行通信。创建管道的函数如下:</p>
-<div class="highlight" id="id-38"><div class="chroma">
+<div class="highlight" id="id-36"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -2966,7 +2994,7 @@
 </span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>以长度为 2 的 int 数组地址值作为参数调用上述函数时，数组中存有两个文件描述符，它们将被用作管道的出口和入口。父进程调用该函数时将创建管道，同时获取对应于出入口的文件描述符，此时父进程可以读写同一管道。由于父进程的目的是与子进程进行数据交换，因此需要将入口或出口中的 1 个文件描述符传递给子进程。</p>
-<div class="highlight" id="id-39"><div class="chroma">
+<div class="highlight" id="id-37"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
@@ -3031,7 +3059,7 @@
 <h4 id="通过管道进程进程间双向通信" class="heading-element">
   <a href="#%e9%80%9a%e8%bf%87%e7%ae%a1%e9%81%93%e8%bf%9b%e7%a8%8b%e8%bf%9b%e7%a8%8b%e9%97%b4%e5%8f%8c%e5%90%91%e9%80%9a%e4%bf%a1" class="heading-mark"></a>通过管道进程进程间双向通信</h4><p>创建 2 个进程通过 1 个管道进程双向数据交换，通信方式如下:</p>
 <p><a class="lightgallery" href="/images/202402/3/42.png?size=large" data-thumbnail="/images/202402/3/42.png?size=small" data-sub-html="<h2>/images/202402/3/42.png</h2>"><img loading="lazy" src="/images/202402/3/42.png" alt="/images/202402/3/42.png" srcset="/images/202402/3/42.png?size=small, /images/202402/3/42.png?size=medium 1.5x, /images/202402/3/42.png?size=large 2x" data-title="/images/202402/3/42.png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></a></p>
-<div class="highlight" id="id-40"><div class="chroma">
+<div class="highlight" id="id-38"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
@@ -3107,7 +3135,7 @@
 <p>向管道传递数据时，先读的进程会把数据取走。简而言之，数据进入管道后称为无主数据。通过<code>read</code>函数先读取数据的进程将得到数据，即使是该进程将数据传到了管道。</p>
 <p>只用 1 个管道进行双向通信并非易事。为了实现这点，程序需要预测并控制运行流程，这在每种系统中都不同，可以视为不可能完成的任务。我们可以通过创建 2 个管道进行双向通信。各自负责不同的数据流动即可。</p>
 <p><a class="lightgallery" href="/images/202402/3/44.png?size=large" data-thumbnail="/images/202402/3/44.png?size=small" data-sub-html="<h2>/images/202402/3/44.png</h2>"><img loading="lazy" src="/images/202402/3/44.png" alt="/images/202402/3/44.png" srcset="/images/202402/3/44.png?size=small, /images/202402/3/44.png?size=medium 1.5x, /images/202402/3/44.png?size=large 2x" data-title="/images/202402/3/44.png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></a></p>
-<div class="highlight" id="id-41"><div class="chroma">
+<div class="highlight" id="id-39"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
@@ -3181,7 +3209,7 @@
   <a href="#%e8%bf%90%e7%94%a8%e8%bf%9b%e7%a8%8b%e9%97%b4%e9%80%9a%e4%bf%a1" class="heading-mark"></a>运用进程间通信</h3><h4 id="保存消息的回声服务器端" class="heading-element">
   <a href="#%e4%bf%9d%e5%ad%98%e6%b6%88%e6%81%af%e7%9a%84%e5%9b%9e%e5%a3%b0%e6%9c%8d%e5%8a%a1%e5%99%a8%e7%ab%af" class="heading-mark"></a>保存消息的回声服务器端</h4><p>扩展<code>echo_mpserv.c</code>，将回声客户端传输得的字符串按序保存到文件中。</p>
 <p>我们可以将该任务委托给另外的进程。换言之，另行创建进程，从向客户端提供服务的进程读取字符串信息。当然，该过程中需要创建用于接收数据的管道。</p>
-<div class="highlight" id="id-42"><div class="chroma">
+<div class="highlight" id="id-40"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">  1
 </span><span class="lnt">  2
@@ -3453,11 +3481,11 @@
       </div></div><div class="post-info-line">
         <div class="post-info-md"></div>
         <div class="post-info-share">
-          <span><a href="javascript:void(0);" title="分享到 Twitter" data-sharer="twitter" data-url="https://andyfree96.github.io/tcp-ip%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" data-title="TCP/IP网络编程" data-via="IRONAnthony96" data-hashtags="网络编程"><i class="fa-brands fa-twitter fa-fw" aria-hidden="true"></i></a>
+          <span><a href="javascript:void(0);" title="分享到 Twitter" data-sharer="twitter" data-url="https://andyfree96.github.io/tcp-ip%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" data-title="TCP/IP网络编程" data-via="IRONAnthony96" data-hashtags="网络编程,笔记"><i class="fa-brands fa-twitter fa-fw" aria-hidden="true"></i></a>
   <a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="https://andyfree96.github.io/tcp-ip%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" data-hashtag="网络编程"><i class="fa-brands fa-facebook-square fa-fw" aria-hidden="true"></i></a>
   <a href="javascript:void(0);" title="分享到 WhatsApp" data-sharer="whatsapp" data-url="https://andyfree96.github.io/tcp-ip%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" data-title="TCP/IP网络编程" data-web><i class="fa-brands fa-whatsapp fa-fw" aria-hidden="true"></i></a>
   <a href="javascript:void(0);" title="分享到 Line" data-sharer="line" data-url="https://andyfree96.github.io/tcp-ip%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" data-title="TCP/IP网络编程"><i data-svg-src="/lib/simple-icons/icons/line.min.svg" aria-hidden="true"></i></a>
-  <a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="https://andyfree96.github.io/tcp-ip%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" data-title="TCP/IP网络编程" data-image="/images/202402/3/mos-design-VUmPf5jYPK0-unsplash.jpg" data-ralateuid="IRONAnthony"><i class="fa-brands fa-weibo fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="https://andyfree96.github.io/tcp-ip%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" data-title="TCP/IP网络编程" data-image="/images/202402/3/mos-design-VUmPf5jYPK0-unsplash.jpg"><i class="fa-brands fa-weibo fa-fw" aria-hidden="true"></i></a>
   <a href="javascript:void(0);" title="分享到 Myspace" data-sharer="myspace" data-url="https://andyfree96.github.io/tcp-ip%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" data-title="TCP/IP网络编程" data-description=""><i data-svg-src="/lib/simple-icons/icons/myspace.min.svg" aria-hidden="true"></i></a>
   <a href="javascript:void(0);" title="分享到 Blogger" data-sharer="blogger" data-url="https://andyfree96.github.io/tcp-ip%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" data-title="TCP/IP网络编程" data-description=""><i class="fa-brands fa-blogger fa-fw" aria-hidden="true"></i></a>
   <a href="javascript:void(0);" title="分享到 Evernote" data-sharer="evernote" data-url="https://andyfree96.github.io/tcp-ip%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" data-title="TCP/IP网络编程"><i class="fa-brands fa-evernote fa-fw" aria-hidden="true"></i></a>
@@ -3466,7 +3494,7 @@
       </div></div>
 
   <div class="post-info-more">
-    <section class="post-tags"><i class="fa-solid fa-tags fa-fw me-1" aria-hidden="true"></i><a href="/tags/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" class="post-tag" title="标签 - 网络编程">网络编程</a></section>
+    <section class="post-tags"><i class="fa-solid fa-tags fa-fw me-1" aria-hidden="true"></i><a href="/tags/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" class="post-tag" title="标签 - 网络编程">网络编程</a><a href="/tags/%E7%AC%94%E8%AE%B0/" class="post-tag" title="标签 - 笔记">笔记</a></section>
     <section>
       <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
     </section>
@@ -3488,7 +3516,7 @@
 
   <aside class="toc" id="toc-auto" aria-label="目录"><h2 class="toc-title">目录&nbsp;<i class="toc-icon fa-solid fa-angle-down fa-fw" aria-hidden="true"></i></h2>
       <div class="toc-content" id="toc-content-auto"></div></aside></main><footer class="footer">
-    <div class="footer-container"><div class="footer-line powered">由 <a href="https://gohugo.io/" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.119.0"><img class="hugo-icon" src="/images/hugo.min.svg" alt="Hugo logo" /> Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/hugo-fixit/FixIt" target="_blank" rel="external" title="FixIt v0.3.2"><img class="fixit-icon" src="/images/fixit.min.svg" alt="FixIt logo" /> FixIt</a>
+    <div class="footer-container"><div class="footer-line powered">由 <a href="https://gohugo.io/" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.125.4"><img class="hugo-icon" src="/images/hugo.min.svg" alt="Hugo logo" /> Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/hugo-fixit/FixIt" target="_blank" rel="external" title="FixIt v0.3.2"><img class="fixit-icon" src="/images/fixit.min.svg" alt="FixIt logo" /> FixIt</a>
         </div><div class="footer-line copyright" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright fa-fw" aria-hidden="true"></i>
             <span itemprop="copyrightYear">2024</span><span class="author" itemprop="copyrightHolder">
               <a href="https://andyfree96.github.io/"target="_blank" rel="external nofollow noopener noreferrer">AndyFree96</a></span></div></div>
