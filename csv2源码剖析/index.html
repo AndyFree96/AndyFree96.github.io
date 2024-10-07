@@ -1,0 +1,1216 @@
+<!DOCTYPE html>
+<html
+  itemscope
+  itemtype="http://schema.org/WebPage"
+  lang="zh-CN"
+>
+  <head>
+    
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=2"
+    />
+    <meta name="robots" content="noodp" />
+    <meta name="google-adsense-account" content="ca-pub-5868664387231059" />
+    <title>csv2源码剖析 - 东尼的博客</title><meta name="author" content="AndyFree96">
+<meta name="author-link" content="https://andyfree96.github.io/">
+<meta name="description" content="
+纸上得来终觉浅，绝知此事要躬行。——陆游《冬夜读书示子聿》
+
+csv2是一个轻量级 C&#43;&#43; 库，用于将 CSV 文件解析为 C&#43;&#43; 中的 STL 容器。该库的主要功能是高效地处理 CSV 数据，简化了处理 CSV 文件的代码编写过程。以下是它的主要特性：
+
+简单易用：通过使用 STL 容器（如 std::vector 和 std::tuple），使得开发者能够轻松将 CSV 文件的内容转换为标准 C&#43;&#43; 数据结构。
+依赖少：该库只有 C&#43;&#43;17 标准库的依赖，因此不需要额外的第三方库。
+高效解析：该库采用高效的解析机制，支持处理大型 CSV 文件。
+轻量级：代码库很小，适用于嵌入式或对依赖库要求较高的项目。
+" /><meta name="keywords" content='CSV, C&#43;&#43;, 源码剖析' />
+  <meta itemprop="name" content="csv2源码剖析">
+  <meta itemprop="description" content="
+纸上得来终觉浅，绝知此事要躬行。——陆游《冬夜读书示子聿》
+
+csv2是一个轻量级 C&#43;&#43; 库，用于将 CSV 文件解析为 C&#43;&#43; 中的 STL 容器。该库的主要功能是高效地处理 CSV 数据，简化了处理 CSV 文件的代码编写过程。以下是它的主要特性：
+
+简单易用：通过使用 STL 容器（如 std::vector 和 std::tuple），使得开发者能够轻松将 CSV 文件的内容转换为标准 C&#43;&#43; 数据结构。
+依赖少：该库只有 C&#43;&#43;17 标准库的依赖，因此不需要额外的第三方库。
+高效解析：该库采用高效的解析机制，支持处理大型 CSV 文件。
+轻量级：代码库很小，适用于嵌入式或对依赖库要求较高的项目。
+">
+  <meta itemprop="datePublished" content="2024-10-07T14:16:41+08:00">
+  <meta itemprop="dateModified" content="2024-10-07T14:16:41+08:00">
+  <meta itemprop="wordCount" content="3840">
+  <meta itemprop="keywords" content="CSV,C&#43;&#43;,源码剖析"><meta property="og:url" content="https://andyfree96.github.io/csv2%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/">
+  <meta property="og:site_name" content="东尼的博客">
+  <meta property="og:title" content="csv2源码剖析">
+  <meta property="og:description" content=" 纸上得来终觉浅，绝知此事要躬行。——陆游《冬夜读书示子聿》
+csv2是一个轻量级 C&#43;&#43; 库，用于将 CSV 文件解析为 C&#43;&#43; 中的 STL 容器。该库的主要功能是高效地处理 CSV 数据，简化了处理 CSV 文件的代码编写过程。以下是它的主要特性：
+简单易用：通过使用 STL 容器（如 std::vector 和 std::tuple），使得开发者能够轻松将 CSV 文件的内容转换为标准 C&#43;&#43; 数据结构。 依赖少：该库只有 C&#43;&#43;17 标准库的依赖，因此不需要额外的第三方库。 高效解析：该库采用高效的解析机制，支持处理大型 CSV 文件。 轻量级：代码库很小，适用于嵌入式或对依赖库要求较高的项目。 ">
+  <meta property="og:locale" content="zh-CN">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2024-10-07T14:16:41+08:00">
+    <meta property="article:modified_time" content="2024-10-07T14:16:41+08:00">
+    <meta property="article:tag" content="CSV">
+    <meta property="article:tag" content="C&#43;&#43;">
+<meta name="twitter:card" content="summary"><meta name="twitter:title" content="csv2源码剖析">
+<meta name="twitter:description" content="
+纸上得来终觉浅，绝知此事要躬行。——陆游《冬夜读书示子聿》
+
+csv2是一个轻量级 C&#43;&#43; 库，用于将 CSV 文件解析为 C&#43;&#43; 中的 STL 容器。该库的主要功能是高效地处理 CSV 数据，简化了处理 CSV 文件的代码编写过程。以下是它的主要特性：
+
+简单易用：通过使用 STL 容器（如 std::vector 和 std::tuple），使得开发者能够轻松将 CSV 文件的内容转换为标准 C&#43;&#43; 数据结构。
+依赖少：该库只有 C&#43;&#43;17 标准库的依赖，因此不需要额外的第三方库。
+高效解析：该库采用高效的解析机制，支持处理大型 CSV 文件。
+轻量级：代码库很小，适用于嵌入式或对依赖库要求较高的项目。
+">
+<meta name="application-name" content="FixIt">
+<meta name="apple-mobile-web-app-title" content="FixIt"><meta name="theme-color" data-light="#f8f8f8" data-dark="#252627" content="#f8f8f8"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" href="https://andyfree96.github.io/csv2%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" /><link rel="prev" href="https://andyfree96.github.io/google%E6%90%9C%E7%B4%A2%E9%82%A3%E4%BA%9B%E4%BA%8B%E5%84%BF/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "BlogPosting",
+    "headline": "csv2源码剖析",
+    "inLanguage": "zh-CN",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https:\/\/andyfree96.github.io\/csv2%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90\/"
+    },"genre": "posts","keywords": "CSV, C\u002b\u002b","wordcount":  3840 ,
+    "url": "https:\/\/andyfree96.github.io\/csv2%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90\/","datePublished": "2024-10-07T14:16:41+08:00","dateModified": "2024-10-07T14:16:41+08:00","publisher": {
+      "@type": "Organization",
+      "name": ""},"author": {
+        "@type": "Person",
+        "name": "AndyFree96"
+      },"description": ""
+  }
+  </script></head>
+  <body
+    data-header-desktop="sticky"
+    data-header-mobile="auto"
+  ><script>
+      (window.localStorage?.getItem("theme")
+        ? localStorage.getItem("theme") === "dark"
+        : "auto" === "auto"
+        ? window.matchMedia("(prefers-color-scheme: dark)").matches
+        : "auto" === "dark") &&
+        document.body.setAttribute("data-theme", "dark");
+    </script><div
+      class="wrapper"
+      data-page-style="normal"
+    ><header class="desktop animate__faster" id="header-desktop">
+  <div class="header-wrapper">
+    <div class="header-title">
+      <a href="/" title="东尼的博客"><span class="header-title-text">东尼的博客</span></a><span class="header-subtitle"></span></div>
+    <nav>
+      <ul class="menu"><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/posts/"
+                
+                
+              >📕 文章</a></li><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/categories/"
+                
+                
+              >🗂 分类</a></li><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/tags/"
+                
+                
+              >🔖 标签</a></li><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/book"
+                
+                
+              >📚 书单</a></li><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/paper"
+                
+                
+              >📝 论文</a></li><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/opencourse"
+                
+                
+              >👨🏻‍💻 公开课</a></li><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/resource"
+                
+                
+              >⚡️ 资源</a></li><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/about"
+                
+                
+              >🙋🏻‍♂️ 关于</a></li><li class="menu-item delimiter"></li><li class="menu-item theme-switch" title="切换主题">
+          <i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i>
+        </li></ul>
+    </nav>
+  </div>
+</header><header class="mobile animate__faster" id="header-mobile">
+  <div class="header-container">
+    <div class="header-wrapper">
+      <div class="header-title">
+        <a href="/" title="东尼的博客"><span class="header-title-text">东尼的博客</span></a><span class="header-subtitle"></span></div>
+      <div class="menu-toggle" id="menu-toggle-mobile">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+    <nav>
+      <ul class="menu" id="menu-mobile"><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/posts/"
+                  
+                  
+                >📕 文章</a></li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/categories/"
+                  
+                  
+                >🗂 分类</a></li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/tags/"
+                  
+                  
+                >🔖 标签</a></li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/book"
+                  
+                  
+                >📚 书单</a></li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/paper"
+                  
+                  
+                >📝 论文</a></li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/opencourse"
+                  
+                  
+                >👨🏻‍💻 公开课</a></li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/resource"
+                  
+                  
+                >⚡️ 资源</a></li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/about"
+                  
+                  
+                >🙋🏻‍♂️ 关于</a></li><li class="menu-item menu-system">
+          <span class="menu-system-item theme-switch" title="切换主题"><i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i></span></li>
+      </ul>
+    </nav>
+  </div>
+</header><main
+        class="container"
+      ><aside class="aside-collection animate__animated animate__fadeIn animate__faster" aria-label="合集"></aside>
+
+  <article class="page single">
+    <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span title="转载" class="icon-repost"><i class="fa-solid fa-share fa-fw" aria-hidden="true"></i></span><span>csv2源码剖析</span>
+      </h1></div><div class="post-meta">
+      <div class="post-meta-line"><span class="post-author"><a href="https://andyfree96.github.io/" title="作者"target="_blank" rel="external nofollow noopener noreferrer author" class="author"><img loading="lazy" src="/avatar/1.jpg" alt="AndyFree96" data-title="AndyFree96" class="avatar" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/>&nbsp;AndyFree96</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" class="post-category" title="分类 - 源码剖析"><i class="fa-regular fa-folder fa-fw" aria-hidden="true"></i> 源码剖析</a></span></div><div class="post-meta-line"><span title="发布于 2024-10-07 14:16:41"><i class="fa-solid fa-calendar-days fa-fw me-1" aria-hidden="true"></i><time datetime="2024-10-07">2024-10-07</time></span>&nbsp;<span title="3840 字"><i class="fa-solid fa-pencil-alt fa-fw me-1" aria-hidden="true"></i>约 3900 字</span>&nbsp;<span><i class="fa-regular fa-clock fa-fw me-1" aria-hidden="true"></i>预计阅读 8 分钟</span>&nbsp;</div>
+    </div><div class="featured-image"><img loading="lazy" src="/images/202410/16/samsung-memory-dIfsOkzzSk4-unsplash.jpg" alt="/images/202410/16/samsung-memory-dIfsOkzzSk4-unsplash.jpg" data-title="/images/202410/16/samsung-memory-dIfsOkzzSk4-unsplash.jpg" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></div><div class="details toc" id="toc-static" data-kept="false">
+        <div class="details-summary toc-title">
+          <span>目录</span>
+          <span><i class="details-icon fa-solid fa-angle-right" aria-hidden="true"></i></span>
+        </div>
+        <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#准备">准备</a></li>
+    <li><a href="#剖析">剖析</a>
+      <ul>
+        <li><a href="#readerhpp">reader.hpp</a>
+          <ul>
+            <li><a href="#cell">Cell</a></li>
+            <li><a href="#row">Row</a></li>
+            <li><a href="#rowiterator">RowIterator</a></li>
+          </ul>
+        </li>
+        <li><a href="#miohpp">mio.hpp</a></li>
+        <li><a href="#writerhpp">writer.hpp</a></li>
+        <li><a href="#parametershpp">parameters.hpp</a></li>
+      </ul>
+    </li>
+    <li><a href="#知识点">知识点</a>
+      <ul>
+        <li><a href="#1-cmake-项目添加第三方库">1. CMake 项目添加第三方库</a></li>
+        <li><a href="#2-static-const-使用">2. Static Const 使用</a></li>
+        <li><a href="#3-static_assert">3. static_assert</a></li>
+        <li><a href="#div-idpoint-44-mmapdiv"><div id="point-4">4. mmap</div></a>
+          <ul>
+            <li><a href="#存储映射-io">存储映射 I/O</a></li>
+          </ul>
+        </li>
+        <li><a href="#div-idpoint-55-可变参数模板div"><div id="point-5">5. 可变参数模板</div></a></li>
+        <li><a href="#6-pragma-once">6. <code>#pragma once</code></a></li>
+        <li><a href="#7-__has_include">7. <code>__has_include()</code></a></li>
+        <li><a href="#8-definedidentifier">8. <code>defined(identifier)</code></a></li>
+        <li><a href="#9-模板默认参数">9. 模板默认参数</a></li>
+        <li><a href="#div-idpoint-1010-stdforwarddiv"><div id="point-10">10. std::forward</div></a></li>
+        <li><a href="#11-stdstring">11. std::string</a></li>
+      </ul>
+    </li>
+    <li><a href="#最后">最后</a></li>
+  </ul>
+</nav></div>
+      </div><div class="content" id="content"><blockquote>
+<p>纸上得来终觉浅，绝知此事要躬行。——陆游《冬夜读书示子聿》</p>
+</blockquote>
+<p><a href="https://github.com/p-ranav/csv2"target="_blank" rel="external nofollow noopener noreferrer">csv2</a>是一个轻量级 C++ 库，用于将 CSV 文件解析为 C++ 中的 STL 容器。该库的主要功能是高效地处理 CSV 数据，简化了处理 CSV 文件的代码编写过程。以下是它的主要特性：</p>
+<ol>
+<li>简单易用：通过使用 STL 容器（如 std::vector 和 std::tuple），使得开发者能够轻松将 CSV 文件的内容转换为标准 C++ 数据结构。</li>
+<li>依赖少：该库只有 C++17 标准库的依赖，因此不需要额外的第三方库。</li>
+<li>高效解析：该库采用高效的解析机制，支持处理大型 CSV 文件。</li>
+<li>轻量级：代码库很小，适用于嵌入式或对依赖库要求较高的项目。</li>
+</ol>
+<h2 id="准备" class="heading-element">
+  <a href="#%e5%87%86%e5%a4%87" class="heading-mark"></a>准备</h2><p>项目源代码地址为<a href="https://github.com/p-ranav/csv2"target="_blank" rel="external nofollow noopener noreferrer">p-ranav/csv2</a> v1.0。</p>
+<p>阅读工具为 CLion。</p>
+<h2 id="剖析" class="heading-element">
+  <a href="#%e5%89%96%e6%9e%90" class="heading-mark"></a>剖析</h2><p>整个项目包含 4 个文件，分别是: <code>reader.hpp</code>、<code>mio.hpp</code>、<code>writer.hpp</code>和<code>parameters.hpp</code>。</p>
+<p><a href="https://stackoverflow.com/questions/5171502/c-vs-cc-vs-cpp-vs-hpp-vs-h-vs-cxx"target="_blank" rel="external nofollow noopener noreferrer">.c vs .cc vs. .cpp vs .hpp vs .h vs .cxx</a>: 由于历史渊源，造成头文件和源代码文件有些不同的命名方式，但本质而言没有什么区别。</p>
+<h3 id="readerhpp" class="heading-element">
+  <a href="#readerhpp" class="heading-mark"></a>reader.hpp</h3><p>reader.hpp 文件中主要定义了一个名为<code>Reader</code>的类。数据部分主要有:</p>
+<p><img loading="lazy" src="/images/202410/16/6.png" alt="/images/202410/16/6.png" srcset="/images/202410/16/6.png?size=small, /images/202410/16/6.png?size=medium 1.5x, /images/202410/16/6.png?size=large 2x" data-title="/images/202410/16/6.png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></p>
+<p>紧接着定义了两个方法: <code>mmap</code>和<code>parse</code>，分别从文件和字符串内容解析内容。</p>
+<p>从文件中解析内容:</p>
+<div class="highlight" id="id-1"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&#34;csv2/reader.hpp&#34;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;string&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="cl"><span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">main</span><span class="p">(){</span>
+</span></span><span class="line"><span class="cl">	<span class="n">csv2</span><span class="o">::</span><span class="n">Reader</span><span class="o">&lt;</span><span class="n">csv2</span><span class="o">::</span><span class="n">delimiter</span><span class="o">&lt;</span><span class="sc">&#39;,&#39;</span><span class="o">&gt;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="n">csv2</span><span class="o">::</span><span class="n">quote_character</span><span class="o">&lt;</span><span class="sc">&#39;&#34;&#39;</span><span class="o">&gt;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="n">csv2</span><span class="o">::</span><span class="n">first_row_is_header</span><span class="o">&lt;</span><span class="nb">true</span><span class="o">&gt;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="n">csv2</span><span class="o">::</span><span class="n">trim_policy</span><span class="o">::</span><span class="n">trim_whitespace</span><span class="o">&gt;</span> <span class="n">csv</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">content</span> <span class="o">=</span> <span class="s">&#34;Name, Age</span><span class="se">\n</span><span class="s">Peter, 12</span><span class="se">\n</span><span class="s">Lucy, 78&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span><span class="p">(</span><span class="n">csv</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span><span class="n">content</span><span class="p">)){</span>
+</span></span><span class="line"><span class="cl">        <span class="k">const</span> <span class="k">auto</span> <span class="n">header</span> <span class="o">=</span> <span class="n">csv</span><span class="p">.</span><span class="n">header</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="k">const</span> <span class="k">auto</span> <span class="nl">row</span><span class="p">:</span> <span class="n">csv</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">for</span> <span class="p">(</span><span class="k">const</span> <span class="k">auto</span> <span class="nl">cell</span><span class="p">:</span> <span class="n">row</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="c1">// Do something with cell value
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>                <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">value</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="n">cell</span><span class="p">.</span><span class="n">read_value</span><span class="p">(</span><span class="n">value</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">value</span> <span class="o">&lt;&lt;</span> <span class="s">&#34; &#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>从字符串中解析内容:</p>
+<div class="highlight" id="id-2"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&#34;csv2/reader.hpp&#34;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;string&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="cl"><span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">main</span><span class="p">(){</span>
+</span></span><span class="line"><span class="cl">	<span class="n">csv2</span><span class="o">::</span><span class="n">Reader</span><span class="o">&lt;</span><span class="n">csv2</span><span class="o">::</span><span class="n">delimiter</span><span class="o">&lt;</span><span class="sc">&#39;,&#39;</span><span class="o">&gt;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="n">csv2</span><span class="o">::</span><span class="n">quote_character</span><span class="o">&lt;</span><span class="sc">&#39;&#34;&#39;</span><span class="o">&gt;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="n">csv2</span><span class="o">::</span><span class="n">first_row_is_header</span><span class="o">&lt;</span><span class="nb">true</span><span class="o">&gt;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="n">csv2</span><span class="o">::</span><span class="n">trim_policy</span><span class="o">::</span><span class="n">trim_whitespace</span><span class="o">&gt;</span> <span class="n">csv</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">if</span><span class="p">(</span><span class="n">csv</span><span class="p">.</span><span class="n">mmap</span><span class="p">(</span><span class="s">&#34;demo.csv&#34;</span><span class="p">)){</span>
+</span></span><span class="line"><span class="cl">        <span class="k">const</span> <span class="k">auto</span> <span class="n">header</span> <span class="o">=</span> <span class="n">csv</span><span class="p">.</span><span class="n">header</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="k">const</span> <span class="k">auto</span> <span class="nl">row</span><span class="p">:</span> <span class="n">csv</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">for</span> <span class="p">(</span><span class="k">const</span> <span class="k">auto</span> <span class="nl">cell</span><span class="p">:</span> <span class="n">row</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="c1">// Do something with cell value
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>                <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">value</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="n">cell</span><span class="p">.</span><span class="n">read_value</span><span class="p">(</span><span class="n">value</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">value</span> <span class="o">&lt;&lt;</span> <span class="s">&#34; &#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p><code>parse</code>方法中使用了<a href="#point-10">知识点 10</a>。</p>
+<p>reader.hpp 中还定义了<code>Cell</code>、<code>Row</code>、<code>RowIterator</code>等类。</p>
+<p><img loading="lazy" src="/images/202410/16/7.png" alt="/images/202410/16/7.png" srcset="/images/202410/16/7.png?size=small, /images/202410/16/7.png?size=medium 1.5x, /images/202410/16/7.png?size=large 2x" data-title="/images/202410/16/7.png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></p>
+<p>为了方便在之后的类中使用 RowIterator、Row 和 CellIterator，文件中加了 forward-declaration，如上图所示。</p>
+<h4 id="cell" class="heading-element">
+  <a href="#cell" class="heading-mark"></a>Cell</h4><p>Cell 类的数据部分定义如下:</p>
+<p><img loading="lazy" src="/images/202410/16/8.png" alt="/images/202410/16/8.png" srcset="/images/202410/16/8.png?size=small, /images/202410/16/8.png?size=medium 1.5x, /images/202410/16/8.png?size=large 2x" data-title="/images/202410/16/8.png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></p>
+<p>其中的<code>buffer_</code>指向 memory-mapped buffer，可参考<a href="#point-4">知识点 4</a>，我们可以简单的将其理解为指向数据内容的一个指针。</p>
+<p>主要包括两个方法: <code>read_raw_value</code>和<code>read_value</code>，两个方法稍有区别，前者处理无转义字符，后者处理有转义字符。</p>
+<h4 id="row" class="heading-element">
+  <a href="#row" class="heading-mark"></a>Row</h4><p>Row 类的数据部分定义如下:</p>
+<p><img loading="lazy" src="/images/202410/16/9.png" alt="/images/202410/16/9.png" srcset="/images/202410/16/9.png?size=small, /images/202410/16/9.png?size=medium 1.5x, /images/202410/16/9.png?size=large 2x" data-title="/images/202410/16/9.png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></p>
+<p>和 Cell 类的定义大同小异。Row 类中还定义了另一个类 CellIterator:</p>
+<div class="highlight" id="id-3"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">CellIterator</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="k">friend</span> <span class="k">class</span> <span class="nc">Row</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">      <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">buffer_</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">      <span class="n">size_t</span> <span class="n">buffer_size_</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">      <span class="n">size_t</span> <span class="n">start_</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">      <span class="n">size_t</span> <span class="n">current_</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">      <span class="n">size_t</span> <span class="n">end_</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">      <span class="n">CellIterator</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">buffer</span><span class="p">,</span> <span class="n">size_t</span> <span class="n">buffer_size</span><span class="p">,</span> <span class="n">size_t</span> <span class="n">start</span><span class="p">,</span> <span class="n">size_t</span> <span class="n">end</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">          <span class="o">:</span> <span class="n">buffer_</span><span class="p">(</span><span class="n">buffer</span><span class="p">),</span> <span class="n">buffer_size_</span><span class="p">(</span><span class="n">buffer_size</span><span class="p">),</span> <span class="n">start_</span><span class="p">(</span><span class="n">start</span><span class="p">),</span> <span class="n">current_</span><span class="p">(</span><span class="n">start_</span><span class="p">),</span> <span class="n">end_</span><span class="p">(</span><span class="n">end</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">      <span class="n">CellIterator</span> <span class="o">&amp;</span><span class="k">operator</span><span class="o">++</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">current_</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">      <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">      <span class="n">Cell</span> <span class="k">operator</span><span class="o">*</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">bool</span> <span class="n">escaped</span><span class="p">{</span><span class="nb">false</span><span class="p">};</span>
+</span></span><span class="line"><span class="cl">        <span class="k">class</span> <span class="nc">Cell</span> <span class="n">cell</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">cell</span><span class="p">.</span><span class="n">buffer_</span> <span class="o">=</span> <span class="n">buffer_</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">cell</span><span class="p">.</span><span class="n">start_</span> <span class="o">=</span> <span class="n">current_</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">cell</span><span class="p">.</span><span class="n">end_</span> <span class="o">=</span> <span class="n">end_</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="n">size_t</span> <span class="n">last_quote_location</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">bool</span> <span class="n">quote_opened</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="n">i</span> <span class="o">=</span> <span class="n">current_</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">end_</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">          <span class="n">current_</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">          <span class="k">if</span> <span class="p">(</span><span class="n">buffer_</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">delimiter</span><span class="o">::</span><span class="n">value</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">quote_opened</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="c1">// actual delimiter
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>            <span class="c1">// end of cell
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>            <span class="n">cell</span><span class="p">.</span><span class="n">end_</span> <span class="o">=</span> <span class="n">current_</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="n">cell</span><span class="p">.</span><span class="n">escaped_</span> <span class="o">=</span> <span class="n">escaped</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="n">cell</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">          <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="n">buffer_</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">quote_character</span><span class="o">::</span><span class="n">value</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">              <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">quote_opened</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="c1">// first quote for this cell
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>                <span class="n">quote_opened</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="n">last_quote_location</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">              <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">escaped</span> <span class="o">=</span> <span class="p">(</span><span class="n">last_quote_location</span> <span class="o">==</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                <span class="n">last_quote_location</span> <span class="o">+=</span> <span class="p">(</span><span class="n">i</span> <span class="o">-</span> <span class="n">last_quote_location</span><span class="p">)</span> <span class="o">*</span> <span class="n">size_t</span><span class="p">(</span><span class="o">!</span><span class="n">escaped</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                <span class="n">quote_opened</span> <span class="o">=</span> <span class="n">escaped</span> <span class="o">||</span> <span class="p">(</span><span class="n">buffer_</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="n">delimiter</span><span class="o">::</span><span class="n">value</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">              <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">          <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="n">cell</span><span class="p">.</span><span class="n">end_</span> <span class="o">=</span> <span class="n">current_</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">cell</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">      <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">      <span class="kt">bool</span> <span class="k">operator</span><span class="o">!=</span><span class="p">(</span><span class="k">const</span> <span class="n">CellIterator</span> <span class="o">&amp;</span><span class="n">rhs</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="n">current_</span> <span class="o">!=</span> <span class="n">rhs</span><span class="p">.</span><span class="n">current_</span><span class="p">;</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">};</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>CellIterator 中定义了自增操作符、取值操作符和不等操作符。Iterator 必须实现这三个操作符:</p>
+<div class="highlight" id="id-4"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span><span class="lnt">60
+</span><span class="lnt">61
+</span><span class="lnt">62
+</span><span class="lnt">63
+</span><span class="lnt">64
+</span><span class="lnt">65
+</span><span class="lnt">66
+</span><span class="lnt">67
+</span><span class="lnt">68
+</span><span class="lnt">69
+</span><span class="lnt">70
+</span><span class="lnt">71
+</span><span class="lnt">72
+</span><span class="lnt">73
+</span><span class="lnt">74
+</span><span class="lnt">75
+</span><span class="lnt">76
+</span><span class="lnt">77
+</span><span class="lnt">78
+</span><span class="lnt">79
+</span><span class="lnt">80
+</span><span class="lnt">81
+</span><span class="lnt">82
+</span><span class="lnt">83
+</span><span class="lnt">84
+</span><span class="lnt">85
+</span><span class="lnt">86
+</span><span class="lnt">87
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="cl"><span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// forward-declaration to allow use in Iter
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">class</span> <span class="nc">IntVector</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Iter</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Iter</span> <span class="p">(</span><span class="k">const</span> <span class="n">IntVector</span><span class="o">*</span> <span class="n">p_vec</span><span class="p">,</span> <span class="kt">int</span> <span class="n">pos</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="o">:</span> <span class="n">_pos</span><span class="p">(</span> <span class="n">pos</span> <span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">,</span> <span class="n">_p_vec</span><span class="p">(</span> <span class="n">p_vec</span> <span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// these three methods form the basis of an iterator for use with
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="c1">// a range-based for loop
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="kt">bool</span>
+</span></span><span class="line"><span class="cl">    <span class="k">operator</span><span class="o">!=</span> <span class="p">(</span><span class="k">const</span> <span class="n">Iter</span><span class="o">&amp;</span> <span class="n">other</span><span class="p">)</span> <span class="k">const</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">_pos</span> <span class="o">!=</span> <span class="n">other</span><span class="p">.</span><span class="n">_pos</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// this method must be defined after the definition of IntVector
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="c1">// since it needs to use it
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="kt">int</span> <span class="k">operator</span><span class="o">*</span> <span class="p">()</span> <span class="k">const</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">const</span> <span class="n">Iter</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">++</span> <span class="p">()</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="o">++</span><span class="n">_pos</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// although not strictly necessary for a range-based for loop
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="c1">// following the normal convention of returning a value from
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="c1">// operator++ is a good idea.
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">private</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">_pos</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">const</span> <span class="n">IntVector</span> <span class="o">*</span><span class="n">_p_vec</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">IntVector</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">IntVector</span> <span class="p">()</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="nf">get</span> <span class="p">(</span><span class="kt">int</span> <span class="n">col</span><span class="p">)</span> <span class="k">const</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">_data</span><span class="p">[</span> <span class="n">col</span> <span class="p">];</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Iter</span> <span class="nf">begin</span> <span class="p">()</span> <span class="k">const</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">Iter</span><span class="p">(</span> <span class="k">this</span><span class="p">,</span> <span class="mi">0</span> <span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">Iter</span> <span class="nf">end</span> <span class="p">()</span> <span class="k">const</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">Iter</span><span class="p">(</span> <span class="k">this</span><span class="p">,</span> <span class="mi">100</span> <span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="kt">void</span> <span class="nf">set</span> <span class="p">(</span><span class="kt">int</span> <span class="n">index</span><span class="p">,</span> <span class="kt">int</span> <span class="n">val</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">_data</span><span class="p">[</span> <span class="n">index</span> <span class="p">]</span> <span class="o">=</span> <span class="n">val</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">private</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">   <span class="kt">int</span> <span class="n">_data</span><span class="p">[</span> <span class="mi">100</span> <span class="p">];</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">int</span>
+</span></span><span class="line"><span class="cl"><span class="n">Iter</span><span class="o">::</span><span class="k">operator</span><span class="o">*</span> <span class="p">()</span> <span class="k">const</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">     <span class="k">return</span> <span class="n">_p_vec</span><span class="o">-&gt;</span><span class="n">get</span><span class="p">(</span> <span class="n">_pos</span> <span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// sample usage of the range-based for loop on IntVector
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">IntVector</span> <span class="n">v</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="p">(</span> <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">100</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">v</span><span class="p">.</span><span class="n">set</span><span class="p">(</span> <span class="n">i</span> <span class="p">,</span> <span class="n">i</span> <span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="p">(</span> <span class="kt">int</span> <span class="nl">i</span> <span class="p">:</span> <span class="n">v</span> <span class="p">)</span> <span class="p">{</span> <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">i</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>C++ 11 range-based for loops: <a href="https://www.cprogramming.com/c&#43;&#43;11/c&#43;&#43;11-ranged-for-loop.html"target="_blank" rel="external nofollow noopener noreferrer">https://www.cprogramming.com/c++11/c++11-ranged-for-loop.html</a></p>
+<p>还定义了<code>begin</code>和<code>end</code>两个方法用于返回<code>RowIterator</code>。</p>
+<h4 id="rowiterator" class="heading-element">
+  <a href="#rowiterator" class="heading-mark"></a>RowIterator</h4><p>RowIterator 的定义和 CellIterator 的定义大致相同。</p>
+<h3 id="miohpp" class="heading-element">
+  <a href="#miohpp" class="heading-mark"></a>mio.hpp</h3><p>mio.hpp 相比与其他三个文件的代码多了不少，也复杂了许多。文件一开始定义了<code>template &lt;access_mode AccessMode, typename ByteT&gt; struct basic_mmap</code>结构体，然后围绕这个结构体声明了一系列操作符:</p>
+<p><img loading="lazy" src="/images/202410/16/11.png" alt="/images/202410/16/11.png" srcset="/images/202410/16/11.png?size=small, /images/202410/16/11.png?size=medium 1.5x, /images/202410/16/11.png?size=large 2x" data-title="/images/202410/16/11.png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></p>
+<p>其定义在行号 1058 处:</p>
+<p><img loading="lazy" src="/images/202410/16/12.png" alt="/images/202410/16/12.png" srcset="/images/202410/16/12.png?size=small, /images/202410/16/12.png?size=medium 1.5x, /images/202410/16/12.png?size=large 2x" data-title="/images/202410/16/12.png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></p>
+<p>之后定义了 5 个工厂方法，方便构建<code>mmap</code>、<code>mmap_source</code>以及<code>mmap_sink</code>对象:</p>
+<p><img loading="lazy" src="/images/202410/16/13.png" alt="/images/202410/16/13.png" srcset="/images/202410/16/13.png?size=small, /images/202410/16/13.png?size=medium 1.5x, /images/202410/16/13.png?size=large 2x" data-title="/images/202410/16/13.png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></p>
+<p>然后在 587 处开始定义了字符串相关的工具函数:</p>
+<p><img loading="lazy" src="/images/202410/16/14.png" alt="/images/202410/16/14.png" srcset="/images/202410/16/14.png?size=small, /images/202410/16/14.png?size=medium 1.5x, /images/202410/16/14.png?size=large 2x" data-title="/images/202410/16/14.png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></p>
+<p>在 684 处开始定义了与 Windows 平台相关的<code>open_file_helper</code>函数。</p>
+<p><img loading="lazy" src="/images/202410/16/15.png" alt="/images/202410/16/15.png" srcset="/images/202410/16/15.png?size=small, /images/202410/16/15.png?size=medium 1.5x, /images/202410/16/15.png?size=large 2x" data-title="/images/202410/16/15.png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></p>
+<p>然后定义了<code>template &lt;typename String&gt; file_handle_type open_file</code>，<code>inline size_t query_file_size</code>和<code>inline mmap_context memory_map</code>函数，以及<code>struct mmap_context</code>结构体。之后，实现了许多在<code>template &lt;access_mode AccessMode, typename ByteT&gt; struct basic_mmap</code>声明的方法。</p>
+<p>最后定义了<code>template &lt;access_mode AccessMode, typename ByteT&gt; class basic_shared_mmap</code>类。</p>
+<h3 id="writerhpp" class="heading-element">
+  <a href="#writerhpp" class="heading-mark"></a>writer.hpp</h3><p>writer.hpp 中包含将数据导出的功能。主要定义了两个方法:<code>write_row</code>和<code>write_rows</code>，代表写入一行和写入多行。</p>
+<p>例如，将数据写入到文件中:</p>
+<div class="highlight" id="id-5"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;csv2/reader.hpp&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;csv2/parameters.hpp&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;csv2/mio.hpp&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;csv2/writer.hpp&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;ostream&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;vector&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;string&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="cl"><span class="k">using</span> <span class="k">namespace</span> <span class="n">csv2</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="n">std</span><span class="o">::</span><span class="n">ofstream</span> <span class="n">out</span><span class="p">(</span><span class="s">&#34;info.csv&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">	<span class="n">csv2</span><span class="o">::</span><span class="n">Writer</span><span class="o">&lt;</span><span class="n">csv2</span><span class="o">::</span><span class="n">delimiter</span><span class="o">&lt;</span><span class="sc">&#39;,&#39;</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">ofstream</span><span class="o">&gt;</span> <span class="n">writer</span><span class="p">(</span><span class="n">out</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">	<span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">header</span> <span class="o">=</span> <span class="p">{</span> <span class="s">&#34;Name&#34;</span><span class="p">,</span> <span class="s">&#34;Age&#34;</span> <span class="p">};</span>
+</span></span><span class="line"><span class="cl">	<span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;&gt;</span> <span class="n">content</span><span class="p">{{</span> <span class="s">&#34;Andy&#34;</span><span class="p">,</span> <span class="s">&#34;19&#34;</span> <span class="p">},</span> <span class="p">{</span> <span class="s">&#34;Peter&#34;</span><span class="p">,</span> <span class="s">&#34;21&#34;</span> <span class="p">},</span> <span class="p">{</span> <span class="s">&#34;Lucas&#34;</span><span class="p">,</span> <span class="s">&#34;20&#34;</span> <span class="p">}};</span>
+</span></span><span class="line"><span class="cl">	<span class="n">writer</span><span class="p">.</span><span class="n">write_row</span><span class="p">(</span><span class="n">header</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">	<span class="n">writer</span><span class="p">.</span><span class="n">write_rows</span><span class="p">(</span><span class="n">content</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p><img loading="lazy" src="/images/202410/16/10.png" alt="/images/202410/16/10.png" srcset="/images/202410/16/10.png?size=small, /images/202410/16/10.png?size=medium 1.5x, /images/202410/16/10.png?size=large 2x" data-title="/images/202410/16/10.png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></p>
+<h3 id="parametershpp" class="heading-element">
+  <a href="#parametershpp" class="heading-mark"></a>parameters.hpp</h3><p>首先，为了组织代码引入了<code>trim_policy</code>命名空间。 包含了<code>no_trimming</code>、<code>trim_characters</code>两个结构体，以及<code>using trim_whitespace = trim_characters&lt;' ', '\t'&gt;;</code>一句，于是给空白符<code>' '</code>和<code>'\t'</code>新的使用方式——<code>trim_whitespace</code>。需要注意的是，该标识符在<code>trim_policy</code>命名空间中。</p>
+<p><img loading="lazy" src="/images/202410/16/3.png" alt="/images/202410/16/3.png" srcset="/images/202410/16/3.png?size=small, /images/202410/16/3.png?size=medium 1.5x, /images/202410/16/3.png?size=large 2x" data-title="/images/202410/16/3.png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></p>
+<p>此外，还包含<code>delimiter</code>、<code>quote_character</code>以及<code>first_row_is_header</code>三个结构体，和之前不同的是它们在<code>csv2</code>命令空间中。</p>
+<p>整个文件的结构体里面的方法或数据都是<code>static</code>的，表示我们可以用<code>delimiter&lt;':'&gt;::value</code>的方式直接获取里面的数据，而不用实例化（实例化从逻辑上好像也有一些问题，同样是用<code>:</code>作为分隔符却实例化了两个不同的对象，有点奇怪）。</p>
+<p>关于可变参数模板可看<a href="#point-5">知识点 5</a>。</p>
+<p>pair 的使用: <a href="https://cplusplus.com/reference/utility/pair/pair/"target="_blank" rel="external nofollow noopener noreferrer">https://cplusplus.com/reference/utility/pair/pair/</a></p>
+<h2 id="知识点" class="heading-element">
+  <a href="#%e7%9f%a5%e8%af%86%e7%82%b9" class="heading-mark"></a>知识点</h2><h3 id="1-cmake-项目添加第三方库" class="heading-element">
+  <a href="#1-cmake-%e9%a1%b9%e7%9b%ae%e6%b7%bb%e5%8a%a0%e7%ac%ac%e4%b8%89%e6%96%b9%e5%ba%93" class="heading-mark"></a>1. CMake 项目添加第三方库</h3><p>在 CMakeLists.txt 中添加如下语句:</p>
+<p><img loading="lazy" src="/images/202410/16/1.png" alt="/images/202410/16/1.png" srcset="/images/202410/16/1.png?size=small, /images/202410/16/1.png?size=medium 1.5x, /images/202410/16/1.png?size=large 2x" data-title="/images/202410/16/1.png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></p>
+<p>即可将三方库的头文件包含进来。</p>
+<h3 id="2-static-const-使用" class="heading-element">
+  <a href="#2-static-const-%e4%bd%bf%e7%94%a8" class="heading-mark"></a>2. Static Const 使用</h3><p>mio.hpp 中有如下一段代码:</p>
+<div class="highlight" id="id-6"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="line"><span class="cl"><span class="cm">/**
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * Determines the operating system&#39;s page allocation granularity.
+</span></span></span><span class="line"><span class="cl"><span class="cm"> *
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * On the first call to this function, it invokes the operating system specific syscall
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * to determine the page size, caches the value, and returns it. Any subsequent call to
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * this function serves the cached value, so no further syscalls are made.
+</span></span></span><span class="line"><span class="cl"><span class="cm"> */</span>
+</span></span><span class="line"><span class="cl"><span class="kr">inline</span> <span class="n">size_t</span> <span class="nf">page_size</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="k">static</span> <span class="k">const</span> <span class="n">size_t</span> <span class="n">page_size</span> <span class="o">=</span> <span class="p">[]</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="cp">#ifdef _WIN32
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>    <span class="n">SYSTEM_INFO</span> <span class="n">SystemInfo</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">GetSystemInfo</span><span class="p">(</span><span class="o">&amp;</span><span class="n">SystemInfo</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">SystemInfo</span><span class="p">.</span><span class="n">dwAllocationGranularity</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="cp">#else
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>    <span class="k">return</span> <span class="n">sysconf</span><span class="p">(</span><span class="n">_SC_PAGE_SIZE</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="cp">#endif
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>  <span class="p">}();</span>
+</span></span><span class="line"><span class="cl">  <span class="k">return</span> <span class="n">page_size</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p><code>page_size()</code>内部的匿名函数只会运行一次，得益于<code>static const</code>声明，这样可以避免重复调用<code>sysconf()</code>函数（如注释所述）。</p>
+<p><a href="https://www.tutorialspoint.com/static-const-vs-hashdefine-vs-enum"target="_blank" rel="external nofollow noopener noreferrer">https://www.tutorialspoint.com/static-const-vs-hashdefine-vs-enum</a></p>
+<h3 id="3-static_assert" class="heading-element">
+  <a href="#3-static_assert" class="heading-mark"></a>3. static_assert</h3><p>mio.hpp 中有<code>static_assert</code>的写法。</p>
+<p><img loading="lazy" src="/images/202410/16/2.png" alt="/images/202410/16/2.png" srcset="/images/202410/16/2.png?size=small, /images/202410/16/2.png?size=medium 1.5x, /images/202410/16/2.png?size=large 2x" data-title="/images/202410/16/2.png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></p>
+<p>static_assert declaration: <a href="https://en.cppreference.com/w/cpp/language/static_assert"target="_blank" rel="external nofollow noopener noreferrer">https://en.cppreference.com/w/cpp/language/static_assert</a></p>
+<p>Understanding static_assert in C++ 11: <a href="https://www.geeksforgeeks.org/understanding-static_assert-c-11/"target="_blank" rel="external nofollow noopener noreferrer">https://www.geeksforgeeks.org/understanding-static_assert-c-11/</a></p>
+<h3 id="div-idpoint-44-mmapdiv" class="heading-element">
+  <a href="#div-idpoint-44-mmapdiv" class="heading-mark"></a><div id="point-4">4. mmap</div></h3><p>mio.hpp 中的<code>memory_map</code>函数使用了<code>mmap</code>。</p>
+<p><a href="https://www.delftstack.com/howto/c/use-mmap-function-to-write-to-the-memory-in-c/"target="_blank" rel="external nofollow noopener noreferrer">Use the mmap Function to Write to the Memory in C</a></p>
+<p>Shared Memory: <a href="https://kuafu1994.github.io/MoreOnMemory/sharedMemory.html"target="_blank" rel="external nofollow noopener noreferrer">https://kuafu1994.github.io/MoreOnMemory/sharedMemory.html</a></p>
+<p>mapread.c 和 mapwrite.c: <a href="https://gist.github.com/marcetcheverry/991042"target="_blank" rel="external nofollow noopener noreferrer">https://gist.github.com/marcetcheverry/991042</a></p>
+<p>Memory Mapped I/O: <a href="https://www.cs.uleth.ca/~holzmann/C/system/mmap.html"target="_blank" rel="external nofollow noopener noreferrer">https://www.cs.uleth.ca/~holzmann/C/system/mmap.html</a></p>
+<h4 id="存储映射-io" class="heading-element">
+  <a href="#%e5%ad%98%e5%82%a8%e6%98%a0%e5%b0%84-io" class="heading-mark"></a>存储映射 I/O</h4><p>存储映射 I/O（Memory-Mapped I/O）能将一个磁盘文件映射到存储空间的一个缓冲区上，当从缓冲区中取数据时，就相当于读文件中的相应字节。与此类似，将数据存入缓冲区时，相应字节就自动写入文件。如此一来，就可以在不调用 read 和 write 的情况下执行 I/O。——《UNIX 环境高级编程》14.8 节</p>
+<p>探索内存原理的内存映射文件: <a href="https://zhuanlan.zhihu.com/p/429987335"target="_blank" rel="external nofollow noopener noreferrer">https://zhuanlan.zhihu.com/p/429987335</a></p>
+<p>File Mapping in C++ Applications: <a href="https://www.geeksforgeeks.org/file-mapping-in-cpp-applications/"target="_blank" rel="external nofollow noopener noreferrer">https://www.geeksforgeeks.org/file-mapping-in-cpp-applications/</a></p>
+<p>File Mapping: <a href="https://learn.microsoft.com/en-us/windows/win32/memory/file-mapping"target="_blank" rel="external nofollow noopener noreferrer">https://learn.microsoft.com/en-us/windows/win32/memory/file-mapping</a></p>
+<p>Mapping files into virtual memory in C on windows: <a href="https://stackoverflow.com/questions/68368291/mapping-files-into-virtual-memory-in-c-on-windows"target="_blank" rel="external nofollow noopener noreferrer">https://stackoverflow.com/questions/68368291/mapping-files-into-virtual-memory-in-c-on-windows</a></p>
+<p>示例代码:</p>
+<div class="highlight" id="id-7"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span><span class="lnt">60
+</span><span class="lnt">61
+</span><span class="lnt">62
+</span><span class="lnt">63
+</span><span class="lnt">64
+</span><span class="lnt">65
+</span><span class="lnt">66
+</span><span class="lnt">67
+</span><span class="lnt">68
+</span><span class="lnt">69
+</span><span class="lnt">70
+</span><span class="lnt">71
+</span><span class="lnt">72
+</span><span class="lnt">73
+</span><span class="lnt">74
+</span><span class="lnt">75
+</span><span class="lnt">76
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;cstdio&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;windows.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="cl"><span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span><span class="o">*</span> <span class="n">argv</span><span class="p">[])</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="k">const</span> <span class="n">TCHAR</span><span class="o">*</span> <span class="n">lpFileName</span> <span class="o">=</span> <span class="n">TEXT</span><span class="p">(</span><span class="s">&#34;hello.txt&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">	<span class="n">HANDLE</span> <span class="n">hFile</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="n">HANDLE</span> <span class="n">hMap</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="n">LPVOID</span> <span class="n">lpBasePtr</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="n">LARGE_INTEGER</span> <span class="n">liFileSize</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="n">hFile</span> <span class="o">=</span> <span class="n">CreateFile</span><span class="p">(</span><span class="n">lpFileName</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">		<span class="n">GENERIC_READ</span><span class="p">,</span>                          <span class="c1">// dwDesiredAccess
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>		<span class="mi">0</span><span class="p">,</span>                                     <span class="c1">// dwShareMode
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>		<span class="nb">NULL</span><span class="p">,</span>                                  <span class="c1">// lpSecurityAttributes
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>		<span class="n">OPEN_EXISTING</span><span class="p">,</span>                         <span class="c1">// dwCreationDisposition
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>		<span class="n">FILE_ATTRIBUTE_NORMAL</span><span class="p">,</span>                 <span class="c1">// dwFlagsAndAttributes
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>		<span class="mi">0</span><span class="p">);</span>                                    <span class="c1">// hTemplateFile
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="k">if</span> <span class="p">(</span><span class="n">hFile</span> <span class="o">==</span> <span class="n">INVALID_HANDLE_VALUE</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span> <span class="s">&#34;CreateFile failed with error %d</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">GetLastError</span><span class="p">());</span>
+</span></span><span class="line"><span class="cl">		<span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">GetFileSizeEx</span><span class="p">(</span><span class="n">hFile</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">liFileSize</span><span class="p">))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span> <span class="s">&#34;GetFileSize failed with error %d</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">GetLastError</span><span class="p">());</span>
+</span></span><span class="line"><span class="cl">		<span class="n">CloseHandle</span><span class="p">(</span><span class="n">hFile</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">		<span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="k">if</span> <span class="p">(</span><span class="n">liFileSize</span><span class="p">.</span><span class="n">QuadPart</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span> <span class="s">&#34;File is empty</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">		<span class="n">CloseHandle</span><span class="p">(</span><span class="n">hFile</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">		<span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="n">hMap</span> <span class="o">=</span> <span class="n">CreateFileMapping</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">		<span class="n">hFile</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">		<span class="nb">NULL</span><span class="p">,</span>                          <span class="c1">// Mapping attributes
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>		<span class="n">PAGE_READONLY</span><span class="p">,</span>                 <span class="c1">// Protection flags
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>		<span class="mi">0</span><span class="p">,</span>                             <span class="c1">// MaximumSizeHigh
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>		<span class="mi">0</span><span class="p">,</span>                             <span class="c1">// MaximumSizeLow
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>		<span class="nb">NULL</span><span class="p">);</span>                         <span class="c1">// Name
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="k">if</span> <span class="p">(</span><span class="n">hMap</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span> <span class="s">&#34;CreateFileMapping failed with error %d</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">GetLastError</span><span class="p">());</span>
+</span></span><span class="line"><span class="cl">		<span class="n">CloseHandle</span><span class="p">(</span><span class="n">hFile</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">		<span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="n">lpBasePtr</span> <span class="o">=</span> <span class="n">MapViewOfFile</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">		<span class="n">hMap</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">		<span class="n">FILE_MAP_READ</span><span class="p">,</span>         <span class="c1">// dwDesiredAccess
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>		<span class="mi">0</span><span class="p">,</span>                     <span class="c1">// dwFileOffsetHigh
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>		<span class="mi">0</span><span class="p">,</span>                     <span class="c1">// dwFileOffsetLow
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>		<span class="mi">0</span><span class="p">);</span>                    <span class="c1">// dwNumberOfBytesToMap
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="k">if</span> <span class="p">(</span><span class="n">lpBasePtr</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span> <span class="s">&#34;MapViewOfFile failed with error %d</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">GetLastError</span><span class="p">());</span>
+</span></span><span class="line"><span class="cl">		<span class="n">CloseHandle</span><span class="p">(</span><span class="n">hMap</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">		<span class="n">CloseHandle</span><span class="p">(</span><span class="n">hFile</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">		<span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="c1">// Display file content as ASCII charaters
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="kt">char</span><span class="o">*</span> <span class="n">ptr</span> <span class="o">=</span> <span class="p">(</span><span class="kt">char</span><span class="o">*</span><span class="p">)</span><span class="n">lpBasePtr</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="n">LONGLONG</span> <span class="n">i</span> <span class="o">=</span> <span class="n">liFileSize</span><span class="p">.</span><span class="n">QuadPart</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="k">while</span> <span class="p">(</span><span class="n">i</span><span class="o">--</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="n">fputc</span><span class="p">(</span><span class="o">*</span><span class="n">ptr</span><span class="o">++</span><span class="p">,</span> <span class="n">stdout</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="n">UnmapViewOfFile</span><span class="p">(</span><span class="n">lpBasePtr</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">	<span class="n">CloseHandle</span><span class="p">(</span><span class="n">hMap</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">	<span class="n">CloseHandle</span><span class="p">(</span><span class="n">hFile</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="n">printf</span><span class="p">(</span><span class="s">&#34;</span><span class="se">\n</span><span class="s">Done</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="div-idpoint-55-可变参数模板div" class="heading-element">
+  <a href="#div-idpoint-55-%e5%8f%af%e5%8f%98%e5%8f%82%e6%95%b0%e6%a8%a1%e6%9d%bfdiv" class="heading-mark"></a><div id="point-5">5. 可变参数模板</div></h3><p>在 parameters.hpp 中使用了可变参数模板（Variadic Template Function）。</p>
+<p><a href="https://thispointer.com/c11-variadic-template-function-tutorial-examples/"target="_blank" rel="external nofollow noopener noreferrer">C++11 – Variadic Template Function | Tutorial &amp; Examples</a></p>
+<div class="highlight" id="id-8"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="n">logging</span><span class="p">(</span><span class="n">T</span> <span class="n">t</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl">    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">t</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;</span><span class="se">\n</span><span class="s">Last Call</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="p">,</span> <span class="k">typename</span> <span class="p">...</span> <span class="n">Args</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="n">logging</span><span class="p">(</span><span class="n">T</span> <span class="n">first</span><span class="p">,</span> <span class="n">Args</span><span class="p">...</span> <span class="n">args</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl">    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">first</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;, &#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">logging</span><span class="p">(</span><span class="n">args</span><span class="p">...);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="6-pragma-once" class="heading-element">
+  <a href="#6-pragma-once" class="heading-mark"></a>6. <code>#pragma once</code></h3><p><a href="https://stackoverflow.com/questions/5776910/what-does-pragma-once-mean-in-c"target="_blank" rel="external nofollow noopener noreferrer">What does <code>#pragma</code> once mean in C?</a></p>
+<p>截至到 2023 年为止，主流的编译器都支持<code>#pragma once</code>。</p>
+<h3 id="7-__has_include" class="heading-element">
+  <a href="#7-__has_include" class="heading-mark"></a>7. <code>__has_include()</code></h3><p>根据<a href="https://en.cppreference.com/w/cpp/preprocessor/include"target="_blank" rel="external nofollow noopener noreferrer">Source file inclusion</a>的描述，<code>__has_include()</code>可以用来检测某个头文件是否存在，但此时并没有将其引入。</p>
+<h3 id="8-definedidentifier" class="heading-element">
+  <a href="#8-definedidentifier" class="heading-mark"></a>8. <code>defined(identifier)</code></h3><p>reader.hpp 中有<code>#if defined(identifier)</code>一句。</p>
+<p><img loading="lazy" src="/images/202410/16/4.png" alt="/images/202410/16/4.png" srcset="/images/202410/16/4.png?size=small, /images/202410/16/4.png?size=medium 1.5x, /images/202410/16/4.png?size=large 2x" data-title="/images/202410/16/4.png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></p>
+<p><a href="https://learn.microsoft.com/en-us/cpp/preprocessor/hash-if-hash-elif-hash-else-and-hash-endif-directives-c-cpp?view=msvc-170"target="_blank" rel="external nofollow noopener noreferrer"><code>#if</code>, <code>#elif</code>, <code>#else</code>, and <code>#endif</code> directives</a></p>
+<h3 id="9-模板默认参数" class="heading-element">
+  <a href="#9-%e6%a8%a1%e6%9d%bf%e9%bb%98%e8%ae%a4%e5%8f%82%e6%95%b0" class="heading-mark"></a>9. 模板默认参数</h3><p>reader.hpp 有默认模板参数的写法:</p>
+<p><img loading="lazy" src="/images/202410/16/5.png" alt="/images/202410/16/5.png" srcset="/images/202410/16/5.png?size=small, /images/202410/16/5.png?size=medium 1.5x, /images/202410/16/5.png?size=large 2x" data-title="/images/202410/16/5.png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></p>
+<p>在 C++ 17 之前，如果不用任何模板参数且正常使用 Reader 类的话，需要使用如下语法:</p>
+<div class="highlight" id="id-9"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="line"><span class="cl"><span class="n">Reader</span><span class="o">&lt;&gt;</span> <span class="n">reader</span><span class="p">;</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>将 CMakeLists.txt 中的 C++版本由 14</p>
+<div class="highlight" id="id-10"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">set(CMAKE_CXX_STANDARD 14)</span></span></code></pre></td></tr></table>
+</div>
+</div><p>改为 17</p>
+<div class="highlight" id="id-11"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">set(CMAKE_CXX_STANDARD 17)</span></span></code></pre></td></tr></table>
+</div>
+</div><p>即可用如下轻便的语法使用 Reader。</p>
+<div class="highlight" id="id-12"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="line"><span class="cl"><span class="n">Reader</span> <span class="n">reader</span><span class="p">;</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="div-idpoint-1010-stdforwarddiv" class="heading-element">
+  <a href="#div-idpoint-1010-stdforwarddiv" class="heading-mark"></a><div id="point-10">10. std::forward</div></h3><p><a href="https://cplusplus.com/reference/utility/forward/"target="_blank" rel="external nofollow noopener noreferrer">https://cplusplus.com/reference/utility/forward/</a></p>
+<p>通过使用<code>std::forward</code>函数可以根据实参调用不同的函数，如下面例子所示:</p>
+<div class="highlight" id="id-13"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;utility&gt;</span><span class="cp">      </span><span class="c1">// std::forward
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp">     </span><span class="c1">// std::cout
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl"><span class="c1">// function with lvalue and rvalue reference overloads:
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kt">void</span> <span class="nf">overloaded</span> <span class="p">(</span><span class="k">const</span> <span class="kt">int</span><span class="o">&amp;</span> <span class="n">x</span><span class="p">)</span> <span class="p">{</span><span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;[lvalue]&#34;</span><span class="p">;}</span>
+</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">overloaded</span> <span class="p">(</span><span class="kt">int</span><span class="o">&amp;&amp;</span> <span class="n">x</span><span class="p">)</span> <span class="p">{</span><span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;[rvalue]&#34;</span><span class="p">;}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// function template taking rvalue reference to deduced type:
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span> <span class="kt">void</span> <span class="n">fn</span> <span class="p">(</span><span class="n">T</span><span class="o">&amp;&amp;</span> <span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="n">overloaded</span> <span class="p">(</span><span class="n">x</span><span class="p">);</span>                   <span class="c1">// always an lvalue
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="n">overloaded</span> <span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">forward</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">(</span><span class="n">x</span><span class="p">));</span>  <span class="c1">// rvalue if argument is rvalue
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">main</span> <span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="kt">int</span> <span class="n">a</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;calling fn with lvalue: &#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">fn</span> <span class="p">(</span><span class="n">a</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="sc">&#39;\n&#39;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;calling fn with rvalue: &#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">fn</span> <span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="sc">&#39;\n&#39;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="11-stdstring" class="heading-element">
+  <a href="#11-stdstring" class="heading-mark"></a>11. std::string</h3><p><a href="https://cplusplus.com/reference/string/string/"target="_blank" rel="external nofollow noopener noreferrer">https://cplusplus.com/reference/string/string/</a></p>
+<p>string::erase 可用于清除指定位置的字符。</p>
+<p>string::reserve 可用于指定 string 存储空间的大小。</p>
+<p>string::push_back 可将字符存入 string 中。</p>
+<h2 id="最后" class="heading-element">
+  <a href="#%e6%9c%80%e5%90%8e" class="heading-mark"></a>最后</h2><p>项目中涉及到的存储映射 I/O ，若要想彻底弄清楚机制，可能需要补充一些操作系统方面的知识。</p></div><div class="post-footer" id="post-footer">
+  <div class="post-info">
+    <div class="post-info-line">
+      <div class="post-info-mod">
+        <span title="更新于 2024-10-07 14:16:41">更新于 2024-10-07&nbsp;</span>
+      </div></div><div class="post-info-line">
+        <div class="post-info-md"></div>
+        <div class="post-info-share">
+          <span><a href="javascript:void(0);" title="分享到 Twitter" data-sharer="twitter" data-url="https://andyfree96.github.io/csv2%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="csv2源码剖析" data-hashtags="CSV,C&#43;&#43;"><i class="fa-brands fa-twitter fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="https://andyfree96.github.io/csv2%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-hashtag="CSV"><i class="fa-brands fa-facebook-square fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 WhatsApp" data-sharer="whatsapp" data-url="https://andyfree96.github.io/csv2%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="csv2源码剖析" data-web><i class="fa-brands fa-whatsapp fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 Line" data-sharer="line" data-url="https://andyfree96.github.io/csv2%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="csv2源码剖析"><i data-svg-src="/lib/simple-icons/icons/line.min.svg" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="https://andyfree96.github.io/csv2%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="csv2源码剖析" data-image="/images/202410/16/samsung-memory-dIfsOkzzSk4-unsplash.jpg"><i class="fa-brands fa-weibo fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 Myspace" data-sharer="myspace" data-url="https://andyfree96.github.io/csv2%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="csv2源码剖析" data-description=""><i data-svg-src="/lib/simple-icons/icons/myspace.min.svg" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 Blogger" data-sharer="blogger" data-url="https://andyfree96.github.io/csv2%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="csv2源码剖析" data-description=""><i class="fa-brands fa-blogger fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 Evernote" data-sharer="evernote" data-url="https://andyfree96.github.io/csv2%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="csv2源码剖析"><i class="fa-brands fa-evernote fa-fw" aria-hidden="true"></i></a>
+  </span>
+        </div>
+      </div></div>
+
+  <div class="post-info-more">
+    <section class="post-tags"><i class="fa-solid fa-tags fa-fw me-1" aria-hidden="true"></i><a href="/tags/csv/" class="post-tag" title="标签 - CSV">CSV</a><a href="/tags/c&#43;&#43;/" class="post-tag" title="标签 - C&#43;&#43;">C&#43;&#43;</a></section>
+    <section>
+      <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+    </section>
+  </div>
+
+  <div class="post-nav"><a href="/google%E6%90%9C%E7%B4%A2%E9%82%A3%E4%BA%9B%E4%BA%8B%E5%84%BF/" class="post-nav-item" rel="prev" title="Google搜索那些事儿"><i class="fa-solid fa-angle-left fa-fw" aria-hidden="true"></i>Google搜索那些事儿</a></div>
+</div>
+<div class="post-reward">
+    <div class="comment">请作者喝杯咖啡!</div>
+    <input type="checkbox" class="reward-input" name="reward" id="fi-reward" hidden />
+    <label class="reward-button" for="fi-reward">赞赏</label>
+    <div class="reward-ways" data-mode="static"><div><img loading="lazy" src="/reward/alipay.png" alt="AndyFree96 支付宝" data-title="AndyFree96 支付宝" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/><span data-animation>支付宝</span>
+          </div><div><img loading="lazy" src="/reward/wechatpay.png" alt="AndyFree96 微信" data-title="AndyFree96 微信" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/><span data-animation>微信</span>
+          </div></div>
+  </div><div id="comments"><div id="gitalk" class="comment"></div><noscript>
+        Please enable JavaScript to view the comments powered by <a href="https://github.com/gitalk/gitalk" rel="external nofollow noopener noreferrer">Gitalk</a>.
+      </noscript></div></article>
+
+  <aside class="toc" id="toc-auto" aria-label="目录"><h2 class="toc-title">目录&nbsp;<i class="toc-icon fa-solid fa-angle-down fa-fw" aria-hidden="true"></i></h2>
+      <div class="toc-content" id="toc-content-auto"></div></aside></main><footer class="footer">
+    <div class="footer-container"><div class="footer-line powered">由 <a href="https://gohugo.io/" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.125.4"><img class="hugo-icon" src="/images/hugo.min.svg" alt="Hugo logo" /> Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/hugo-fixit/FixIt" target="_blank" rel="external" title="FixIt v0.3.2"><img class="fixit-icon" src="/images/fixit.min.svg" alt="FixIt logo" /> FixIt</a>
+        </div><div class="footer-line copyright" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright fa-fw" aria-hidden="true"></i>
+            <span itemprop="copyrightYear">2024</span><span class="author" itemprop="copyrightHolder">
+              <a href="https://andyfree96.github.io/"target="_blank" rel="external nofollow noopener noreferrer">AndyFree96</a></span></div></div>
+  </footer></div><div class="widgets"><div class="fixed-buttons animate__faster d-none"><div class="fixed-button back-to-top" role="button" aria-label="回到顶部"><i class="fa-solid fa-arrow-up fa-fw" aria-hidden="true"></i><span class="variant-numeric d-none">0%</span>
+        </div><div class="fixed-button view-comments d-none" role="button" aria-label="查看评论"><i class="fa-solid fa-comment fa-fw" aria-hidden="true"></i></div></div><div id="mask"></div><div class="reading-progress-bar" style="left: 0;top: 0;"></div><noscript>
+    <div class="noscript-warning">FixIt 主题在启用 JavaScript 的情况下效果最佳。</div>
+  </noscript>
+</div><link rel="stylesheet" href="/lib/gitalk/gitalk.min.css"><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script src="/lib/gitalk/gitalk.min.js"></script><script src="/lib/sharer/sharer.min.js" async defer></script><script src="/lib/cookieconsent/cookieconsent.min.js" defer></script><script>window.config={"code":{"copyTitle":"复制到剪贴板","editLockTitle":"锁定可编辑代码块","editUnLockTitle":"解锁可编辑代码块","editable":true,"maxShownLines":10},"comment":{"enable":true,"expired":false,"gitalk":{"admin":["AndyFree96"],"clientID":"72d758093a489dc215d2","clientSecret":"22314c0a264dffd45faa9ac57485f75f1fbd9873","id":"2024-10-07T14:16:41+08:00","owner":"AndyFree96","repo":"AndyFree96.github.io","title":"csv2源码剖析"}},"cookieconsent":{"content":{"dismiss":"同意","link":"了解更多","message":"本网站使用 Cookies 来改善您的浏览体验。"},"enable":true,"palette":{"button":{"background":"#f0f0f0"},"popup":{"background":"#1aa3ff"}},"theme":"edgeless"}};</script><script src="/js/theme.min.js" defer></script></body>
+</html>
