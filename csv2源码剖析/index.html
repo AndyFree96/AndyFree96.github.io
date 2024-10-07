@@ -52,7 +52,7 @@ csv2是一个轻量级 C&#43;&#43; 库，用于将 CSV 文件解析为 C&#43;&#4
     <meta property="article:modified_time" content="2024-10-07T14:16:41+08:00">
     <meta property="article:tag" content="CSV">
     <meta property="article:tag" content="C&#43;&#43;">
-    <meta property="article:tag" content="源码">
+    <meta property="article:tag" content="源码剖析">
 <meta name="twitter:card" content="summary"><meta name="twitter:title" content="csv2源码剖析">
 <meta name="twitter:description" content="
 纸上得来终觉浅，绝知此事要躬行。——陆游《冬夜读书示子聿》
@@ -79,7 +79,7 @@ csv2是一个轻量级 C&#43;&#43; 库，用于将 CSV 文件解析为 C&#43;&#4
     "mainEntityOfPage": {
       "@type": "WebPage",
       "@id": "https:\/\/andyfree96.github.io\/csv2%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90\/"
-    },"genre": "posts","keywords": "CSV, C\u002b\u002b, 源码","wordcount":  3836 ,
+    },"genre": "posts","keywords": "CSV, C\u002b\u002b, 源码剖析","wordcount":  3836 ,
     "url": "https:\/\/andyfree96.github.io\/csv2%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90\/","datePublished": "2024-10-07T14:16:41+08:00","dateModified": "2024-10-07T14:16:41+08:00","publisher": {
       "@type": "Organization",
       "name": ""},"author": {
@@ -265,12 +265,12 @@ csv2是一个轻量级 C&#43;&#43; 库，用于将 CSV 文件解析为 C&#43;&#4
         <li><a href="#1-cmake-项目添加第三方库">1. CMake 项目添加第三方库</a></li>
         <li><a href="#2-static-const-使用">2. Static Const 使用</a></li>
         <li><a href="#3-static_assert">3. static_assert</a></li>
-        <li><a href="#div-idpoint-44-mmapdiv"><div id="point-4">4. mmap</div></a>
+        <li><a href="#div-idpoint-4-styledisplay-inline4-mmapdiv"><div id="point-4" style="display: inline">4. mmap</div></a>
           <ul>
             <li><a href="#存储映射-io">存储映射 I/O</a></li>
           </ul>
         </li>
-        <li><a href="#div-idpoint-55-可变参数模板div"><div id="point-5">5. 可变参数模板</div></a></li>
+        <li><a href="#div-idpoint-5-styledisplay-inline5-可变参数模板div"><div id="point-5" style="display: inline">5. 可变参数模板</div></a></li>
         <li><a href="#6-pragma-once">6. <code>#pragma once</code></a></li>
         <li><a href="#7-__has_include">7. <code>__has_include()</code></a></li>
         <li><a href="#8-definedidentifier">8. <code>defined(identifier)</code></a></li>
@@ -852,8 +852,8 @@ csv2是一个轻量级 C&#43;&#43; 库，用于将 CSV 文件解析为 C&#43;&#4
 <p><img loading="lazy" src="/images/202410/16/2.png" alt="/images/202410/16/2.png" srcset="/images/202410/16/2.png?size=small, /images/202410/16/2.png?size=medium 1.5x, /images/202410/16/2.png?size=large 2x" data-title="/images/202410/16/2.png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></p>
 <p>static_assert declaration: <a href="https://en.cppreference.com/w/cpp/language/static_assert"target="_blank" rel="external nofollow noopener noreferrer">https://en.cppreference.com/w/cpp/language/static_assert</a></p>
 <p>Understanding static_assert in C++ 11: <a href="https://www.geeksforgeeks.org/understanding-static_assert-c-11/"target="_blank" rel="external nofollow noopener noreferrer">https://www.geeksforgeeks.org/understanding-static_assert-c-11/</a></p>
-<h3 id="div-idpoint-44-mmapdiv" class="heading-element">
-  <a href="#div-idpoint-44-mmapdiv" class="heading-mark"></a><div id="point-4">4. mmap</div></h3><p>mio.hpp 中的<code>memory_map</code>函数使用了<code>mmap</code>。</p>
+<h3 id="div-idpoint-4-styledisplay-inline4-mmapdiv" class="heading-element">
+  <a href="#div-idpoint-4-styledisplay-inline4-mmapdiv" class="heading-mark"></a><div id="point-4" style="display: inline">4. mmap</div></h3><p>mio.hpp 中的<code>memory_map</code>函数使用了<code>mmap</code>。</p>
 <p><a href="https://www.delftstack.com/howto/c/use-mmap-function-to-write-to-the-memory-in-c/"target="_blank" rel="external nofollow noopener noreferrer">Use the mmap Function to Write to the Memory in C</a></p>
 <p>Shared Memory: <a href="https://kuafu1994.github.io/MoreOnMemory/sharedMemory.html"target="_blank" rel="external nofollow noopener noreferrer">https://kuafu1994.github.io/MoreOnMemory/sharedMemory.html</a></p>
 <p>mapread.c 和 mapwrite.c: <a href="https://gist.github.com/marcetcheverry/991042"target="_blank" rel="external nofollow noopener noreferrer">https://gist.github.com/marcetcheverry/991042</a></p>
@@ -1022,8 +1022,8 @@ csv2是一个轻量级 C&#43;&#43; 库，用于将 CSV 文件解析为 C&#43;&#4
 </span></span><span class="line"><span class="cl">	<span class="n">printf</span><span class="p">(</span><span class="s">&#34;</span><span class="se">\n</span><span class="s">Done</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table>
 </div>
-</div><h3 id="div-idpoint-55-可变参数模板div" class="heading-element">
-  <a href="#div-idpoint-55-%e5%8f%af%e5%8f%98%e5%8f%82%e6%95%b0%e6%a8%a1%e6%9d%bfdiv" class="heading-mark"></a><div id="point-5">5. 可变参数模板</div></h3><p>在 parameters.hpp 中使用了可变参数模板（Variadic Template Function）。</p>
+</div><h3 id="div-idpoint-5-styledisplay-inline5-可变参数模板div" class="heading-element">
+  <a href="#div-idpoint-5-styledisplay-inline5-%e5%8f%af%e5%8f%98%e5%8f%82%e6%95%b0%e6%a8%a1%e6%9d%bfdiv" class="heading-mark"></a><div id="point-5" style="display: inline">5. 可变参数模板</div></h3><p>在 parameters.hpp 中使用了可变参数模板（Variadic Template Function）。</p>
 <p><a href="https://thispointer.com/c11-variadic-template-function-tutorial-examples/"target="_blank" rel="external nofollow noopener noreferrer">C++11 – Variadic Template Function | Tutorial &amp; Examples</a></p>
 <div class="highlight" id="id-8"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -1172,7 +1172,7 @@ csv2是一个轻量级 C&#43;&#43; 库，用于将 CSV 文件解析为 C&#43;&#4
       </div></div><div class="post-info-line">
         <div class="post-info-md"></div>
         <div class="post-info-share">
-          <span><a href="javascript:void(0);" title="分享到 Twitter" data-sharer="twitter" data-url="https://andyfree96.github.io/csv2%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="csv2源码剖析" data-via="IRONAnthony96" data-hashtags="CSV,C&#43;&#43;,源码"><i class="fa-brands fa-twitter fa-fw" aria-hidden="true"></i></a>
+          <span><a href="javascript:void(0);" title="分享到 Twitter" data-sharer="twitter" data-url="https://andyfree96.github.io/csv2%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="csv2源码剖析" data-via="IRONAnthony96" data-hashtags="CSV,C&#43;&#43;,源码剖析"><i class="fa-brands fa-twitter fa-fw" aria-hidden="true"></i></a>
   <a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="https://andyfree96.github.io/csv2%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-hashtag="CSV"><i class="fa-brands fa-facebook-square fa-fw" aria-hidden="true"></i></a>
   <a href="javascript:void(0);" title="分享到 WhatsApp" data-sharer="whatsapp" data-url="https://andyfree96.github.io/csv2%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="csv2源码剖析" data-web><i class="fa-brands fa-whatsapp fa-fw" aria-hidden="true"></i></a>
   <a href="javascript:void(0);" title="分享到 Line" data-sharer="line" data-url="https://andyfree96.github.io/csv2%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="csv2源码剖析"><i data-svg-src="/lib/simple-icons/icons/line.min.svg" aria-hidden="true"></i></a>
@@ -1185,7 +1185,7 @@ csv2是一个轻量级 C&#43;&#43; 库，用于将 CSV 文件解析为 C&#43;&#4
       </div></div>
 
   <div class="post-info-more">
-    <section class="post-tags"><i class="fa-solid fa-tags fa-fw me-1" aria-hidden="true"></i><a href="/tags/csv/" class="post-tag" title="标签 - CSV">CSV</a><a href="/tags/c&#43;&#43;/" class="post-tag" title="标签 - C&#43;&#43;">C&#43;&#43;</a><a href="/tags/%E6%BA%90%E7%A0%81/" class="post-tag" title="标签 - 源码">源码</a></section>
+    <section class="post-tags"><i class="fa-solid fa-tags fa-fw me-1" aria-hidden="true"></i><a href="/tags/csv/" class="post-tag" title="标签 - CSV">CSV</a><a href="/tags/c&#43;&#43;/" class="post-tag" title="标签 - C&#43;&#43;">C&#43;&#43;</a><a href="/tags/%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" class="post-tag" title="标签 - 源码剖析">源码剖析</a></section>
     <section>
       <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
     </section>

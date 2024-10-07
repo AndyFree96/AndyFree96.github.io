@@ -400,7 +400,7 @@ static_assert declaration: https://en.cppreference.com/w/cpp/language/static_ass
 
 Understanding static_assert in C&#43;&#43; 11: https://www.geeksforgeeks.org/understanding-static_assert-c-11/
 
-### &lt;div id=&#34;point-4&#34;&gt;4. mmap&lt;/div&gt;
+### &lt;div id=&#34;point-4&#34; style=&#34;display: inline&#34;&gt;4. mmap&lt;/div&gt;
 
 mio.hpp 中的`memory_map`函数使用了`mmap`。
 
@@ -505,7 +505,7 @@ int main(int argc, char* argv[]) {
 }
 ```
 
-### &lt;div id=&#34;point-5&#34;&gt;5. 可变参数模板&lt;/div&gt;
+### &lt;div id=&#34;point-5&#34; style=&#34;display: inline&#34;&gt;5. 可变参数模板&lt;/div&gt;
 
 在 parameters.hpp 中使用了可变参数模板（Variadic Template Function）。
 
