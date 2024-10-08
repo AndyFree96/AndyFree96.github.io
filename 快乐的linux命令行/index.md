@@ -448,7 +448,9 @@ https://linuxize.com/post/uname-command-in-linux/
 
 ## 推荐
 
-https://billie66.github.io/TLCL/
+快乐的 Linux 命令行: https://billie66.github.io/TLCL/
+
+[the-art-of-command-line](https://github.com/jlevy/the-art-of-command-line): Master the command line, in one page
 
 
 ---

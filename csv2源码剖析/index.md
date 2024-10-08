@@ -574,7 +574,7 @@ set(CMAKE_CXX_STANDARD 17)
 Reader reader;
 ```
 
-### &lt;div id=&#34;point-10&#34;&gt;10. std::forward&lt;/div&gt;
+### &lt;div id=&#34;point-10&#34; style=&#34;display: inline&#34;&gt;10. std::forward&lt;/div&gt;
 
 https://cplusplus.com/reference/utility/forward/
 
