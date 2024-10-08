@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html
+  itemscope
+  itemtype="http://schema.org/WebPage"
+  lang="zh-CN"
+>
+  <head>
+    
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=2"
+    />
+    <meta name="robots" content="noodp" />
+    <meta name="google-adsense-account" content="ca-pub-5868664387231059" />
+    <title>Requests库使用 - 东尼的博客</title><meta name="author" content="AndyFree96">
+<meta name="author-link" content="https://andyfree96.github.io/">
+<meta name="description" content="我们可以使用 Python 内置的 urllib 包来请求网络资源。它用起来比较麻烦，而且缺少很多实用的高级功能。本文我们将会介绍一个更加方便的 Python 第三方库——Requests 的使用。" /><meta name="keywords" content='Python, Requests, HTTP, 网络爬虫' />
+  <meta itemprop="name" content="Requests库使用">
+  <meta itemprop="description" content="我们可以使用 Python 内置的 urllib 包来请求网络资源。它用起来比较麻烦，而且缺少很多实用的高级功能。本文我们将会介绍一个更加方便的 Python 第三方库——Requests 的使用。">
+  <meta itemprop="datePublished" content="2021-10-08T08:26:24+08:00">
+  <meta itemprop="dateModified" content="2021-10-08T08:26:24+08:00">
+  <meta itemprop="wordCount" content="2023">
+  <meta itemprop="keywords" content="Python,Requests,HTTP,网络爬虫"><meta property="og:url" content="https://andyfree96.github.io/requests%E5%BA%93%E4%BD%BF%E7%94%A8/">
+  <meta property="og:site_name" content="东尼的博客">
+  <meta property="og:title" content="Requests库使用">
+  <meta property="og:description" content="我们可以使用 Python 内置的 urllib 包来请求网络资源。它用起来比较麻烦，而且缺少很多实用的高级功能。本文我们将会介绍一个更加方便的 Python 第三方库——Requests 的使用。">
+  <meta property="og:locale" content="zh-CN">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2021-10-08T08:26:24+08:00">
+    <meta property="article:modified_time" content="2021-10-08T08:26:24+08:00">
+    <meta property="article:tag" content="Python">
+    <meta property="article:tag" content="Requests">
+    <meta property="article:tag" content="HTTP">
+<meta name="twitter:card" content="summary"><meta name="twitter:title" content="Requests库使用">
+<meta name="twitter:description" content="我们可以使用 Python 内置的 urllib 包来请求网络资源。它用起来比较麻烦，而且缺少很多实用的高级功能。本文我们将会介绍一个更加方便的 Python 第三方库——Requests 的使用。">
+      <meta name="twitter:site" content="@IRONAnthony96">
+<meta name="application-name" content="FixIt">
+<meta name="apple-mobile-web-app-title" content="FixIt"><meta name="theme-color" data-light="#f8f8f8" data-dark="#252627" content="#f8f8f8"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" href="https://andyfree96.github.io/requests%E5%BA%93%E4%BD%BF%E7%94%A8/" /><link rel="prev" href="https://andyfree96.github.io/google%E6%90%9C%E7%B4%A2%E9%82%A3%E4%BA%9B%E4%BA%8B%E5%84%BF/" /><link rel="next" href="https://andyfree96.github.io/beautifulsoup%E5%BA%93%E4%BD%BF%E7%94%A8/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "BlogPosting",
+    "headline": "Requests库使用",
+    "inLanguage": "zh-CN",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https:\/\/andyfree96.github.io\/requests%E5%BA%93%E4%BD%BF%E7%94%A8\/"
+    },"genre": "posts","keywords": "Python, Requests, HTTP","wordcount":  2023 ,
+    "url": "https:\/\/andyfree96.github.io\/requests%E5%BA%93%E4%BD%BF%E7%94%A8\/","datePublished": "2021-10-08T08:26:24+08:00","dateModified": "2021-10-08T08:26:24+08:00","publisher": {
+      "@type": "Organization",
+      "name": ""},"author": {
+        "@type": "Person",
+        "name": "AndyFree96"
+      },"description": ""
+  }
+  </script></head>
+  <body
+    data-header-desktop="sticky"
+    data-header-mobile="auto"
+  ><script>
+      (window.localStorage?.getItem("theme")
+        ? localStorage.getItem("theme") === "dark"
+        : "auto" === "auto"
+        ? window.matchMedia("(prefers-color-scheme: dark)").matches
+        : "auto" === "dark") &&
+        document.body.setAttribute("data-theme", "dark");
+    </script><div
+      class="wrapper"
+      data-page-style="normal"
+    ><header class="desktop animate__faster" id="header-desktop">
+  <div class="header-wrapper">
+    <div class="header-title">
+      <a href="/" title="东尼的博客"><span class="header-title-text">东尼的博客</span></a><span class="header-subtitle"></span></div>
+    <nav>
+      <ul class="menu"><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/posts/"
+                
+                
+              >📕 文章</a></li><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/categories/"
+                
+                
+              >🗂 分类</a></li><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/tags/"
+                
+                
+              >🔖 标签</a></li><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/book"
+                
+                
+              >📚 书单</a></li><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/paper"
+                
+                
+              >📝 论文</a></li><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/opencourse"
+                
+                
+              >👨🏻‍💻 公开课</a></li><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/resource"
+                
+                
+              >⚡️ 资源</a></li><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/about"
+                
+                
+              >🙋🏻‍♂️ 关于</a></li><li class="menu-item delimiter"></li><li class="menu-item theme-switch" title="切换主题">
+          <i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i>
+        </li></ul>
+    </nav>
+  </div>
+</header><header class="mobile animate__faster" id="header-mobile">
+  <div class="header-container">
+    <div class="header-wrapper">
+      <div class="header-title">
+        <a href="/" title="东尼的博客"><span class="header-title-text">东尼的博客</span></a><span class="header-subtitle"></span></div>
+      <div class="menu-toggle" id="menu-toggle-mobile">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+    <nav>
+      <ul class="menu" id="menu-mobile"><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/posts/"
+                  
+                  
+                >📕 文章</a></li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/categories/"
+                  
+                  
+                >🗂 分类</a></li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/tags/"
+                  
+                  
+                >🔖 标签</a></li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/book"
+                  
+                  
+                >📚 书单</a></li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/paper"
+                  
+                  
+                >📝 论文</a></li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/opencourse"
+                  
+                  
+                >👨🏻‍💻 公开课</a></li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/resource"
+                  
+                  
+                >⚡️ 资源</a></li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/about"
+                  
+                  
+                >🙋🏻‍♂️ 关于</a></li><li class="menu-item menu-system">
+          <span class="menu-system-item theme-switch" title="切换主题"><i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i></span></li>
+      </ul>
+    </nav>
+  </div>
+</header><main
+        class="container"
+      ><aside class="aside-collection animate__animated animate__fadeIn animate__faster" aria-label="合集"></aside>
+
+  <article class="page single">
+    <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span title="转载" class="icon-repost"><i class="fa-solid fa-share fa-fw" aria-hidden="true"></i></span><span>Requests库使用</span>
+      </h1></div><div class="post-meta">
+      <div class="post-meta-line"><span class="post-author"><a href="https://andyfree96.github.io/" title="作者"target="_blank" rel="external nofollow noopener noreferrer author" class="author"><img loading="lazy" src="/avatar/1.jpg" alt="AndyFree96" data-title="AndyFree96" class="avatar" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/>&nbsp;AndyFree96</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E7%BD%91%E7%BB%9C%E7%88%AC%E8%99%AB/" class="post-category" title="分类 - 网络爬虫"><i class="fa-regular fa-folder fa-fw" aria-hidden="true"></i> 网络爬虫</a></span></div><div class="post-meta-line"><span title="发布于 2021-10-08 08:26:24"><i class="fa-solid fa-calendar-days fa-fw me-1" aria-hidden="true"></i><time datetime="2021-10-08">2021-10-08</time></span>&nbsp;<span title="2023 字"><i class="fa-solid fa-pencil-alt fa-fw me-1" aria-hidden="true"></i>约 2100 字</span>&nbsp;<span><i class="fa-regular fa-clock fa-fw me-1" aria-hidden="true"></i>预计阅读 5 分钟</span>&nbsp;</div>
+    </div><div class="featured-image"><img loading="lazy" src="/images/202110/1/steve-johnson-UaP_MmMxiTs-unsplash.jpg" alt="/images/202110/1/steve-johnson-UaP_MmMxiTs-unsplash.jpg" data-title="/images/202110/1/steve-johnson-UaP_MmMxiTs-unsplash.jpg" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></div><div class="details toc" id="toc-static" data-kept="false">
+        <div class="details-summary toc-title">
+          <span>目录</span>
+          <span><i class="details-icon fa-solid fa-angle-right" aria-hidden="true"></i></span>
+        </div>
+        <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#安装-requests">安装 Requests</a></li>
+    <li><a href="#发送请求">发送请求</a></li>
+    <li><a href="#传递-url-参数">传递 URL 参数</a></li>
+    <li><a href="#响应内容">响应内容</a></li>
+    <li><a href="#二进制响应内容">二进制响应内容</a></li>
+    <li><a href="#json-响应内容">JSON 响应内容</a></li>
+    <li><a href="#定制请求头">定制请求头</a></li>
+    <li><a href="#post-请求">POST 请求</a></li>
+    <li><a href="#响应状态码">响应状态码</a></li>
+    <li><a href="#响应头">响应头</a></li>
+    <li><a href="#cookie">Cookie</a></li>
+    <li><a href="#超时">超时</a></li>
+    <li><a href="#错误与异常">错误与异常</a></li>
+    <li><a href="#代理">代理</a></li>
+    <li><a href="#参考">参考</a></li>
+  </ul>
+</nav></div>
+      </div><div class="content" id="content"><p>我们可以使用 Python 内置的 urllib 包来请求网络资源。它用起来比较麻烦，而且缺少很多实用的高级功能。本文我们将会介绍一个更加方便的 Python 第三方库——Requests 的使用。</p>
+<h2 id="安装-requests" class="heading-element">
+  <a href="#%e5%ae%89%e8%a3%85-requests" class="heading-mark"></a>安装 Requests</h2><p>要安装<code>Requests</code>，只要在终端中运行这个简单命令即可：</p>
+<div class="highlight" id="id-1"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-Python" data-lang="Python"><span class="line"><span class="cl"><span class="n">pip</span> <span class="n">install</span> <span class="o">-</span><span class="n">i</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">pypi</span><span class="o">.</span><span class="n">douban</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">simple</span> <span class="n">requests</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>安装好<code>Requests</code>后，就可以开始尝试使用它啦！</p>
+<h2 id="发送请求" class="heading-element">
+  <a href="#%e5%8f%91%e9%80%81%e8%af%b7%e6%b1%82" class="heading-mark"></a>发送请求</h2><p>使用<code>Requests</code>发送网络请求非常简单。导入<code>Requests</code>模块：</p>
+<div class="highlight" id="id-2"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-Python" data-lang="Python"><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">requests</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>然后获取某个网页。我们来获取 Github 的公共时间线：</p>
+<div class="highlight" id="id-3"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-Python" data-lang="Python"><span class="line"><span class="cl"><span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;https://api.github.com/events&#39;</span><span class="p">)</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>现在，有了一个名为<code>r</code>的<code>Response</code>的对象。我们可以从这个对象中获取所有我们想要的信息。</p>
+<h2 id="传递-url-参数" class="heading-element">
+  <a href="#%e4%bc%a0%e9%80%92-url-%e5%8f%82%e6%95%b0" class="heading-mark"></a>传递 URL 参数</h2><p>我们可能会想用 URL 的查询字符串传递某种数据。如果是手动构建 URL，那么数据会以键值对的形式置于 URL 中，跟在一个问号的后面。例如，<code>http://httpbin.org/get?key=val</code>。<code>Requests</code>允许我们使用<code>params</code>关键字参数，以一个字符串字典来提供这些参数。举例来说，如果想传递<code>key1=value1</code>和<code>key2=value2</code>到<code>http://httpbin.org/get</code>，那么可以使用如下代码：</p>
+<div class="highlight" id="id-4"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-Python" data-lang="Python"><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">requests</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">payload</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span><span class="s1">&#39;viljw&#39;</span><span class="p">,</span> <span class="s1">&#39;cat&#39;</span><span class="p">:</span><span class="s1">&#39;ruby&#39;</span><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;http://httpbin.org/get&#39;</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">payload</span><span class="p">)</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>打印输出该 URL，能看到 URL 已被正确编码：</p>
+<div class="highlight" id="id-5"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-Python" data-lang="Python"><span class="line"><span class="cl"><span class="nb">print</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">url</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># http://httpbin.org/get?name=viljw&amp;cat=ruby</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="响应内容" class="heading-element">
+  <a href="#%e5%93%8d%e5%ba%94%e5%86%85%e5%ae%b9" class="heading-mark"></a>响应内容</h2><p>我们能读取服务器响应内容。举个例子：</p>
+<div class="highlight" id="id-6"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-Python" data-lang="Python"><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">requests</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&#34;http://httpbin.org/get&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nb">print</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">text</span><span class="p">)</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>输出内容如下：</p>
+<p><img loading="lazy" src="/images/202110/1/1.png" alt="/images/202110/1/1.png" srcset="/images/202110/1/1.png?size=small, /images/202110/1/1.png?size=medium 1.5x, /images/202110/1/1.png?size=large 2x" data-title="/images/202110/1/1.png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></p>
+<p><code>Requests</code>会自动节码来自服务器的内容。大多数 unicode 字符集都能被无缝地解码。</p>
+<p>请求发出后，<code>Requests</code>会基于 HTTP 头部对响应的编码作出有根据的推测。当访问<code>r.text</code>时，<code>Requests</code>会使用其推测的文本编码。我们可以找出<code>Requests</code>使用了什么编码，并且能够使用<code>r.encoding</code>属性来改变它：</p>
+<div class="highlight" id="id-7"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-Python" data-lang="Python"><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">requests</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&#34;http://httpbin.org/get&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nb">print</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">encoding</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">r</span><span class="o">.</span><span class="n">encoding</span> <span class="o">=</span> <span class="s1">&#39;utf-8&#39;</span>
+</span></span><span class="line"><span class="cl"><span class="nb">print</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">encoding</span><span class="p">)</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p><img loading="lazy" src="/images/202110/1/2.png" alt="/images/202110/1/2.png" srcset="/images/202110/1/2.png?size=small, /images/202110/1/2.png?size=medium 1.5x, /images/202110/1/2.png?size=large 2x" data-title="/images/202110/1/2.png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></p>
+<p>如果改变了编码，每当访问<code>r.text</code>，<code>Requests</code>都将会使用<code>r.encoding</code>的新值。</p>
+<h2 id="二进制响应内容" class="heading-element">
+  <a href="#%e4%ba%8c%e8%bf%9b%e5%88%b6%e5%93%8d%e5%ba%94%e5%86%85%e5%ae%b9" class="heading-mark"></a>二进制响应内容</h2><p>对于非文本请求，也能以字节的方式访问请求响应体。例如，以请求返回的二进制数据创建一张图片，可以使用如下代码：</p>
+<div class="highlight" id="id-8"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-Python" data-lang="Python"><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">requests</span>
+</span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
+</span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">io</span> <span class="kn">import</span> <span class="n">BytesIO</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&#34;https://github.com/fluidicon.png&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">im</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">BytesIO</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">content</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl"><span class="n">im</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p><img loading="lazy" src="/images/202110/1/3.png" alt="/images/202110/1/3.png" srcset="/images/202110/1/3.png?size=small, /images/202110/1/3.png?size=medium 1.5x, /images/202110/1/3.png?size=large 2x" data-title="/images/202110/1/3.png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></p>
+<h2 id="json-响应内容" class="heading-element">
+  <a href="#json-%e5%93%8d%e5%ba%94%e5%86%85%e5%ae%b9" class="heading-mark"></a>JSON 响应内容</h2><p><code>Requests</code>中有一个内置的 JSON 解码器，帮助我们处理 JSON 数据：</p>
+<div class="highlight" id="id-9"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-Python" data-lang="Python"><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">requests</span>
+</span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">pprint</span> <span class="kn">import</span> <span class="n">pprint</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">payload</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span><span class="s2">&#34;viljw&#34;</span><span class="p">,</span> <span class="s1">&#39;cat&#39;</span><span class="p">:</span><span class="s1">&#39;ruby&#39;</span><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&#34;http://httpbin.org/get&#34;</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">payload</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">pprint</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">json</span><span class="p">())</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p><img loading="lazy" src="/images/202110/1/4.png" alt="/images/202110/1/4.png" srcset="/images/202110/1/4.png?size=small, /images/202110/1/4.png?size=medium 1.5x, /images/202110/1/4.png?size=large 2x" data-title="/images/202110/1/4.png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></p>
+<h2 id="定制请求头" class="heading-element">
+  <a href="#%e5%ae%9a%e5%88%b6%e8%af%b7%e6%b1%82%e5%a4%b4" class="heading-mark"></a>定制请求头</h2><p>如果想为请求添加 HTTP 头部，只要简单地传递一个<code>dict</code>给<code>headers</code>参数就可。</p>
+<div class="highlight" id="id-10"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-Python" data-lang="Python"><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">requests</span>
+</span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">pprint</span> <span class="kn">import</span> <span class="n">pprint</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">headers</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;User-Agent&#39;</span><span class="p">:</span> <span class="s1">&#39;viljw-agent&#39;</span><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&#34;http://httpbin.org/get&#34;</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">pprint</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">json</span><span class="p">())</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>如下图所示，<code>User-Agent</code>字段的值已被更改为<code>viljw-agent</code>。</p>
+<p><img loading="lazy" src="/images/202110/1/5.png" alt="/images/202110/1/5.png" srcset="/images/202110/1/5.png?size=small, /images/202110/1/5.png?size=medium 1.5x, /images/202110/1/5.png?size=large 2x" data-title="/images/202110/1/5.png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></p>
+<h2 id="post-请求" class="heading-element">
+  <a href="#post-%e8%af%b7%e6%b1%82" class="heading-mark"></a>POST 请求</h2><p>通常，我们会想要发送一些编码为表单形式的数据——非常像一个 HTML 表单。要实现这个，只需要简单地传递一个字典给<code>data</code>参数。字典数据在发出请求时会自动编码为表单形式：</p>
+<div class="highlight" id="id-11"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-Python" data-lang="Python"><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">requests</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">payload</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&#34;name&#34;</span><span class="p">:</span><span class="s2">&#34;viljw&#34;</span><span class="p">,</span> <span class="s2">&#34;actor&#34;</span><span class="p">:</span><span class="s2">&#34;peter&#34;</span><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&#34;http://httpbin.org/post&#34;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">payload</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nb">print</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">text</span><span class="p">)</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p><img loading="lazy" src="/images/202110/1/6.png" alt="/images/202110/1/6.png" srcset="/images/202110/1/6.png?size=small, /images/202110/1/6.png?size=medium 1.5x, /images/202110/1/6.png?size=large 2x" data-title="/images/202110/1/6.png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></p>
+<p>还可以给<code>data</code>参数传入一个元组列表。在表单中多个元素使用同一 key 的时候，这种方式很有用：</p>
+<div class="highlight" id="id-12"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-Python" data-lang="Python"><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">requests</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">payload</span> <span class="o">=</span> <span class="p">[(</span><span class="s2">&#34;name&#34;</span><span class="p">,</span><span class="s2">&#34;viljw&#34;</span><span class="p">),</span> <span class="p">(</span><span class="s2">&#34;actor&#34;</span><span class="p">,</span><span class="s2">&#34;peter&#34;</span><span class="p">),(</span><span class="s2">&#34;actor&#34;</span><span class="p">,</span><span class="s1">&#39;marry&#39;</span><span class="p">)]</span>
+</span></span><span class="line"><span class="cl"><span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&#34;http://httpbin.org/post&#34;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">payload</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nb">print</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">text</span><span class="p">)</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p><img loading="lazy" src="/images/202110/1/7.png" alt="/images/202110/1/7.png" srcset="/images/202110/1/7.png?size=small, /images/202110/1/7.png?size=medium 1.5x, /images/202110/1/7.png?size=large 2x" data-title="/images/202110/1/7.png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></p>
+<h2 id="响应状态码" class="heading-element">
+  <a href="#%e5%93%8d%e5%ba%94%e7%8a%b6%e6%80%81%e7%a0%81" class="heading-mark"></a>响应状态码</h2><p>我们可以查看响应状态码：</p>
+<div class="highlight" id="id-13"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-Python" data-lang="Python"><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">requests</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&#34;http://httpbin.org/get&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nb">print</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">status_code</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 200</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>为了方便使用，<code>Requests</code>附带了也给内置的状态码查询对象：</p>
+<div class="highlight" id="id-14"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-Python" data-lang="Python"><span class="line"><span class="cl"><span class="n">r</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="n">requests</span><span class="o">.</span><span class="n">codes</span><span class="o">.</span><span class="n">ok</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># True</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>如果发送了一个错误请求(一个 4XX 客户端错误，或 5XX 服务器错误响应)，我们可以通过<code>Response.raise_for_status()</code>来抛出异常：</p>
+<div class="highlight" id="id-15"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">In <span class="o">[</span>1<span class="o">]</span>: import requests
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">In <span class="o">[</span>2<span class="o">]</span>: <span class="nv">bad_r</span> <span class="o">=</span> requests.get<span class="o">(</span><span class="s1">&#39;http://httpbin.org/status/404&#39;</span><span class="o">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">In <span class="o">[</span>3<span class="o">]</span>: bad_r.status_code
+</span></span><span class="line"><span class="cl">Out<span class="o">[</span>3<span class="o">]</span>: <span class="m">404</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">In <span class="o">[</span>4<span class="o">]</span>: bad_r.raise_for_status<span class="o">()</span>
+</span></span><span class="line"><span class="cl">---------------------------------------------------------------------------
+</span></span><span class="line"><span class="cl">HTTPError                                 Traceback <span class="o">(</span>most recent call last<span class="o">)</span>
+</span></span><span class="line"><span class="cl">&lt;ipython-input-4-cdf6910f7d4c&gt; in &lt;module&gt;<span class="o">()</span>
+</span></span><span class="line"><span class="cl">----&gt; <span class="m">1</span> bad_r.raise_for_status<span class="o">()</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">c:<span class="se">\p</span>ython<span class="se">\l</span>ib<span class="se">\s</span>ite-packages<span class="se">\r</span>equests<span class="se">\m</span>odels.py in raise_for_status<span class="o">(</span>self<span class="o">)</span>
+</span></span><span class="line"><span class="cl">    <span class="m">927</span>
+</span></span><span class="line"><span class="cl">    <span class="m">928</span>         <span class="k">if</span> http_error_msg:
+</span></span><span class="line"><span class="cl">--&gt; <span class="m">929</span>             raise HTTPError<span class="o">(</span>http_error_msg, <span class="nv">response</span><span class="o">=</span>self<span class="o">)</span>
+</span></span><span class="line"><span class="cl">    <span class="m">930</span>
+</span></span><span class="line"><span class="cl">    <span class="m">931</span>     def close<span class="o">(</span>self<span class="o">)</span>:
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">HTTPError: <span class="m">404</span> Client Error: NOT FOUND <span class="k">for</span> url: http://httpbin.org/status/404</span></span></code></pre></td></tr></table>
+</div>
+</div><p>但由于我们的例子中<code>r</code>的<code>status_code</code>是 200，当我们调用<code>raise_for_status()</code>时，得到的是：</p>
+<div class="highlight" id="id-16"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">In <span class="o">[</span>6<span class="o">]</span>: r.raise_for_status<span class="o">()</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># None</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="响应头" class="heading-element">
+  <a href="#%e5%93%8d%e5%ba%94%e5%a4%b4" class="heading-mark"></a>响应头</h2><p>我们可以查看以字典形式的服务器响应头：</p>
+<div class="highlight" id="id-17"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">In <span class="o">[</span>7<span class="o">]</span>: r.headers
+</span></span><span class="line"><span class="cl">Out<span class="o">[</span>7<span class="o">]</span>: <span class="o">{</span><span class="s1">&#39;Access-Control-Allow-Credentials&#39;</span>: <span class="s1">&#39;true&#39;</span>, <span class="s1">&#39;Access-Control-Allow-Origin&#39;</span>: <span class="s1">&#39;*&#39;</span>, <span class="s1">&#39;Content-Encoding&#39;</span>: <span class="s1">&#39;gzip&#39;</span>, <span class="s1">&#39;Content-Type&#39;</span>: <span class="s1">&#39;application/json&#39;</span>, <span class="s1">&#39;Date&#39;</span>: <span class="s1">&#39;Thu, 03 Oct 2019 07:11:16 GMT&#39;</span>, <span class="s1">&#39;Referrer-Policy&#39;</span>: <span class="s1">&#39;no-referrer-when-downgrade&#39;</span>, <span class="s1">&#39;Server&#39;</span>: <span class="s1">&#39;nginx&#39;</span>, <span class="s1">&#39;X-Content-Type-Options&#39;</span>: <span class="s1">&#39;nosniff&#39;</span>, <span class="s1">&#39;X-Frame-Options&#39;</span>: <span class="s1">&#39;DENY&#39;</span>, <span class="s1">&#39;X-XSS-Protection&#39;</span>: <span class="s1">&#39;1; mode=block&#39;</span>, <span class="s1">&#39;Content-Length&#39;</span>: <span class="s1">&#39;184&#39;</span>, <span class="s1">&#39;Connection&#39;</span>: <span class="s1">&#39;keep-alive&#39;</span><span class="o">}</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="cookie" class="heading-element">
+  <a href="#cookie" class="heading-mark"></a>Cookie</h2><p>如果某个响应中包含一些 cookie，可以快速访问它们：</p>
+<div class="highlight" id="id-18"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">In <span class="o">[</span>19<span class="o">]</span>: <span class="nv">r</span> <span class="o">=</span> requests.get<span class="o">(</span><span class="s1">&#39;https://www.baidu.com&#39;</span><span class="o">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">In <span class="o">[</span>20<span class="o">]</span>: r.cookies
+</span></span><span class="line"><span class="cl">Out<span class="o">[</span>20<span class="o">]</span>: &lt;RequestsCookieJar<span class="o">[</span>Cookie<span class="o">(</span><span class="nv">version</span><span class="o">=</span>0, <span class="nv">name</span><span class="o">=</span><span class="s1">&#39;BDORZ&#39;</span>, <span class="nv">value</span><span class="o">=</span><span class="s1">&#39;27315&#39;</span>, <span class="nv">port</span><span class="o">=</span>None, <span class="nv">port_specified</span><span class="o">=</span>False, <span class="nv">domain</span><span class="o">=</span><span class="s1">&#39;.baidu.com&#39;</span>, <span class="nv">domain_specified</span><span class="o">=</span>True, <span class="nv">domain_initial_dot</span><span class="o">=</span>True, <span class="nv">path</span><span class="o">=</span><span class="s1">&#39;/&#39;</span>, <span class="nv">path_specified</span><span class="o">=</span>True, <span class="nv">secure</span><span class="o">=</span>False, <span class="nv">expires</span><span class="o">=</span>1570173564, <span class="nv">discard</span><span class="o">=</span>False, <span class="nv">comment</span><span class="o">=</span>None, <span class="nv">comment_url</span><span class="o">=</span>None, <span class="nv">rest</span><span class="o">={}</span>, <span class="nv">rfc2109</span><span class="o">=</span>False<span class="o">)]</span>&gt;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">In <span class="o">[</span>21<span class="o">]</span>: r.cookies<span class="o">[</span><span class="s1">&#39;BDORZ&#39;</span><span class="o">]</span>
+</span></span><span class="line"><span class="cl">Out<span class="o">[</span>21<span class="o">]</span>: <span class="s1">&#39;27315&#39;</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>要想发送 cookies 到服务器，可以使用<code>cookies</code>参数：</p>
+<div class="highlight" id="id-19"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">In <span class="o">[</span>27<span class="o">]</span>: <span class="nv">url</span> <span class="o">=</span> <span class="s1">&#39;http://httpbin.org/cookies&#39;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">In <span class="o">[</span>28<span class="o">]</span>: <span class="nv">cookies</span> <span class="o">=</span> dict<span class="o">(</span><span class="nv">cookies_are</span><span class="o">=</span><span class="s2">&#34;working&#34;</span><span class="o">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">In <span class="o">[</span>29<span class="o">]</span>: <span class="nv">r</span> <span class="o">=</span> requests.get<span class="o">(</span>url, <span class="nv">cookies</span><span class="o">=</span>cookies<span class="o">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">In <span class="o">[</span>30<span class="o">]</span>: r.json<span class="o">()</span>
+</span></span><span class="line"><span class="cl">Out<span class="o">[</span>30<span class="o">]</span>: <span class="o">{</span><span class="s1">&#39;cookies&#39;</span>: <span class="o">{</span><span class="s1">&#39;cookies_are&#39;</span>: <span class="s1">&#39;working&#39;</span><span class="o">}}</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="超时" class="heading-element">
+  <a href="#%e8%b6%85%e6%97%b6" class="heading-mark"></a>超时</h2><p>可以告诉<code>Requests</code>在经过以<code>timeout</code>参数设定的秒数时间之后停止等待响应。</p>
+<div class="highlight" id="id-20"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">&gt;&gt;&gt; requests.get<span class="o">(</span><span class="s1">&#39;http://github.com&#39;</span>, <span class="nv">timeout</span><span class="o">=</span>0.001<span class="o">)</span>
+</span></span><span class="line"><span class="cl">Traceback <span class="o">(</span>most recent call last<span class="o">)</span>:
+</span></span><span class="line"><span class="cl">  File <span class="s2">&#34;&lt;stdin&gt;&#34;</span>, line 1, in &lt;module&gt;
+</span></span><span class="line"><span class="cl">requests.exceptions.Timeout: HTTPConnectionPool<span class="o">(</span><span class="nv">host</span><span class="o">=</span><span class="s1">&#39;github.com&#39;</span>, <span class="nv">port</span><span class="o">=</span>80<span class="o">)</span>: Request timed out. <span class="o">(</span><span class="nv">timeout</span><span class="o">=</span>0.001<span class="o">)</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="错误与异常" class="heading-element">
+  <a href="#%e9%94%99%e8%af%af%e4%b8%8e%e5%bc%82%e5%b8%b8" class="heading-mark"></a>错误与异常</h2><p>遇到网络问题(如：DNS 查询失败、拒绝连接等)时，<code>Requests</code>会抛出一个<code>ConnectionError</code>异常。</p>
+<p>如果 HTTP 请求返回了不成功的状态码， <code>Response.raise_for_status()</code>会抛出一个<code>HTTPError</code>异常。</p>
+<p>若请求超时，则抛出一个<code>Timeout</code>异常。</p>
+<p>若请求超过了设定的最大重定向次数，则会抛出一个<code>TooManyRedirects</code>异常。</p>
+<p>所有<code>Requests</code>显式抛出的异常都继承自 <code>requests.exceptions.RequestException</code> 。</p>
+<h2 id="代理" class="heading-element">
+  <a href="#%e4%bb%a3%e7%90%86" class="heading-mark"></a>代理</h2><p>如果需要使用代理，可以通过任意请求方法提供<code>proxies</code>参数来配置单个请求：</p>
+<div class="highlight" id="id-21"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-Python" data-lang="Python"><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">requests</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">proxies</span> <span class="o">=</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="s1">&#39;https&#39;</span><span class="p">:</span> <span class="s1">&#39;https://127.0.0.1:1080&#39;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;https://www.google.com&#39;</span><span class="p">,</span> <span class="n">proxies</span><span class="o">=</span><span class="n">proxies</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nb">print</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">status_code</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 200</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>也可以通过环境变量<code>HTTP_PROXY</code>和<code>HTTPS_PROXY</code>来配置代理。</p>
+<div class="highlight" id="id-22"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">$ <span class="nb">export</span> <span class="nv">HTTP_PROXY</span><span class="o">=</span><span class="s2">&#34;http://10.10.1.10:3128&#34;</span>
+</span></span><span class="line"><span class="cl">$ <span class="nb">export</span> <span class="nv">HTTPS_PROXY</span><span class="o">=</span><span class="s2">&#34;http://10.10.1.10:1080&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">$ python
+</span></span><span class="line"><span class="cl">&gt;&gt;&gt; import requests
+</span></span><span class="line"><span class="cl">&gt;&gt;&gt; requests.get<span class="o">(</span><span class="s2">&#34;http://example.org&#34;</span><span class="o">)</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="参考" class="heading-element">
+  <a href="#%e5%8f%82%e8%80%83" class="heading-mark"></a>参考</h2><ul>
+<li><a href="https://requests-docs-cn.readthedocs.io/zh_CN/latest/index.html"target="_blank" rel="external nofollow noopener noreferrer">https://requests-docs-cn.readthedocs.io/zh_CN/latest/index.html</a></li>
+</ul></div><div class="post-footer" id="post-footer">
+  <div class="post-info">
+    <div class="post-info-line">
+      <div class="post-info-mod">
+        <span title="更新于 2021-10-08 08:26:24">更新于 2021-10-08&nbsp;</span>
+      </div></div><div class="post-info-line">
+        <div class="post-info-md"></div>
+        <div class="post-info-share">
+          <span><a href="javascript:void(0);" title="分享到 Twitter" data-sharer="twitter" data-url="https://andyfree96.github.io/requests%E5%BA%93%E4%BD%BF%E7%94%A8/" data-title="Requests库使用" data-via="IRONAnthony96" data-hashtags="Python,Requests,HTTP"><i class="fa-brands fa-twitter fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="https://andyfree96.github.io/requests%E5%BA%93%E4%BD%BF%E7%94%A8/" data-hashtag="Python"><i class="fa-brands fa-facebook-square fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 WhatsApp" data-sharer="whatsapp" data-url="https://andyfree96.github.io/requests%E5%BA%93%E4%BD%BF%E7%94%A8/" data-title="Requests库使用" data-web><i class="fa-brands fa-whatsapp fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 Line" data-sharer="line" data-url="https://andyfree96.github.io/requests%E5%BA%93%E4%BD%BF%E7%94%A8/" data-title="Requests库使用"><i data-svg-src="/lib/simple-icons/icons/line.min.svg" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="https://andyfree96.github.io/requests%E5%BA%93%E4%BD%BF%E7%94%A8/" data-title="Requests库使用" data-image="/images/202110/1/steve-johnson-UaP_MmMxiTs-unsplash.jpg"><i class="fa-brands fa-weibo fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 Myspace" data-sharer="myspace" data-url="https://andyfree96.github.io/requests%E5%BA%93%E4%BD%BF%E7%94%A8/" data-title="Requests库使用" data-description=""><i data-svg-src="/lib/simple-icons/icons/myspace.min.svg" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 Blogger" data-sharer="blogger" data-url="https://andyfree96.github.io/requests%E5%BA%93%E4%BD%BF%E7%94%A8/" data-title="Requests库使用" data-description=""><i class="fa-brands fa-blogger fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 Evernote" data-sharer="evernote" data-url="https://andyfree96.github.io/requests%E5%BA%93%E4%BD%BF%E7%94%A8/" data-title="Requests库使用"><i class="fa-brands fa-evernote fa-fw" aria-hidden="true"></i></a>
+  </span>
+        </div>
+      </div></div>
+
+  <div class="post-info-more">
+    <section class="post-tags"><i class="fa-solid fa-tags fa-fw me-1" aria-hidden="true"></i><a href="/tags/python/" class="post-tag" title="标签 - Python">Python</a><a href="/tags/requests/" class="post-tag" title="标签 - Requests">Requests</a><a href="/tags/http/" class="post-tag" title="标签 - HTTP">HTTP</a></section>
+    <section>
+      <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+    </section>
+  </div>
+
+  <div class="post-nav"><a href="/google%E6%90%9C%E7%B4%A2%E9%82%A3%E4%BA%9B%E4%BA%8B%E5%84%BF/" class="post-nav-item" rel="prev" title="Google搜索那些事儿"><i class="fa-solid fa-angle-left fa-fw" aria-hidden="true"></i>Google搜索那些事儿</a>
+      <a href="/beautifulsoup%E5%BA%93%E4%BD%BF%E7%94%A8/" class="post-nav-item" rel="next" title="BeautifulSoup库使用">BeautifulSoup库使用<i class="fa-solid fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
+</div>
+<div class="post-reward">
+    <div class="comment">请作者喝杯咖啡!</div>
+    <input type="checkbox" class="reward-input" name="reward" id="fi-reward" hidden />
+    <label class="reward-button" for="fi-reward">赞赏</label>
+    <div class="reward-ways" data-mode="static"><div><img loading="lazy" src="/reward/alipay.png" alt="AndyFree96 支付宝" data-title="AndyFree96 支付宝" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/><span data-animation>支付宝</span>
+          </div><div><img loading="lazy" src="/reward/wechatpay.png" alt="AndyFree96 微信" data-title="AndyFree96 微信" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/><span data-animation>微信</span>
+          </div></div>
+  </div><div id="comments"><div id="gitalk" class="comment"></div><noscript>
+        Please enable JavaScript to view the comments powered by <a href="https://github.com/gitalk/gitalk" rel="external nofollow noopener noreferrer">Gitalk</a>.
+      </noscript></div></article>
+
+  <aside class="toc" id="toc-auto" aria-label="目录"><h2 class="toc-title">目录&nbsp;<i class="toc-icon fa-solid fa-angle-down fa-fw" aria-hidden="true"></i></h2>
+      <div class="toc-content" id="toc-content-auto"></div></aside></main><footer class="footer">
+    <div class="footer-container"><div class="footer-line powered">由 <a href="https://gohugo.io/" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.125.4"><img class="hugo-icon" src="/images/hugo.min.svg" alt="Hugo logo" /> Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/hugo-fixit/FixIt" target="_blank" rel="external" title="FixIt v0.3.2"><img class="fixit-icon" src="/images/fixit.min.svg" alt="FixIt logo" /> FixIt</a>
+        </div><div class="footer-line copyright" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright fa-fw" aria-hidden="true"></i>
+            <span itemprop="copyrightYear">2024</span><span class="author" itemprop="copyrightHolder">
+              <a href="https://andyfree96.github.io/"target="_blank" rel="external nofollow noopener noreferrer">AndyFree96</a></span></div></div>
+  </footer></div><div class="widgets"><div class="fixed-buttons animate__faster d-none"><div class="fixed-button back-to-top" role="button" aria-label="回到顶部"><i class="fa-solid fa-arrow-up fa-fw" aria-hidden="true"></i><span class="variant-numeric d-none">0%</span>
+        </div><div class="fixed-button view-comments d-none" role="button" aria-label="查看评论"><i class="fa-solid fa-comment fa-fw" aria-hidden="true"></i></div></div><div id="mask"></div><div class="reading-progress-bar" style="left: 0;top: 0;"></div><noscript>
+    <div class="noscript-warning">FixIt 主题在启用 JavaScript 的情况下效果最佳。</div>
+  </noscript>
+</div><link rel="stylesheet" href="/lib/gitalk/gitalk.min.css"><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script src="/lib/gitalk/gitalk.min.js"></script><script src="/lib/sharer/sharer.min.js" async defer></script><script src="/lib/cookieconsent/cookieconsent.min.js" defer></script><script>window.config={"code":{"copyTitle":"复制到剪贴板","editLockTitle":"锁定可编辑代码块","editUnLockTitle":"解锁可编辑代码块","editable":true,"maxShownLines":10},"comment":{"enable":true,"expired":false,"gitalk":{"admin":["AndyFree96"],"clientID":"72d758093a489dc215d2","clientSecret":"22314c0a264dffd45faa9ac57485f75f1fbd9873","id":"2021-10-08T08:26:24+08:00","owner":"AndyFree96","repo":"AndyFree96.github.io","title":"Requests库使用"}},"cookieconsent":{"content":{"dismiss":"同意","link":"了解更多","message":"本网站使用 Cookies 来改善您的浏览体验。"},"enable":true,"palette":{"button":{"background":"#f0f0f0"},"popup":{"background":"#1aa3ff"}},"theme":"edgeless"}};</script><script src="/js/theme.min.js" defer></script></body>
+</html>

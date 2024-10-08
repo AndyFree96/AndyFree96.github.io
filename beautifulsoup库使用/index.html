@@ -1,0 +1,1473 @@
+<!DOCTYPE html>
+<html
+  itemscope
+  itemtype="http://schema.org/WebPage"
+  lang="zh-CN"
+>
+  <head>
+    
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=2"
+    />
+    <meta name="robots" content="noodp" />
+    <meta name="google-adsense-account" content="ca-pub-5868664387231059" />
+    <title>BeautifulSoup库使用 - 东尼的博客</title><meta name="author" content="AndyFree96">
+<meta name="author-link" content="https://andyfree96.github.io/">
+<meta name="description" content="BeautifulSoup是啥？它是一个可以从 HTML 或 XML 文件中提取数据的 Python 库。它能通过我们喜欢的转换器实现文档导航，查找和修改。" /><meta name="keywords" content='Python, BeautifulSoup, 解析器, 网络爬虫' />
+  <meta itemprop="name" content="BeautifulSoup库使用">
+  <meta itemprop="description" content="BeautifulSoup是啥？它是一个可以从 HTML 或 XML 文件中提取数据的 Python 库。它能通过我们喜欢的转换器实现文档导航，查找和修改。">
+  <meta itemprop="datePublished" content="2021-11-08T08:36:00+08:00">
+  <meta itemprop="dateModified" content="2021-11-08T08:36:00+08:00">
+  <meta itemprop="wordCount" content="5209">
+  <meta itemprop="keywords" content="Python,BeautifulSoup,解析器,网络爬虫"><meta property="og:url" content="https://andyfree96.github.io/beautifulsoup%E5%BA%93%E4%BD%BF%E7%94%A8/">
+  <meta property="og:site_name" content="东尼的博客">
+  <meta property="og:title" content="BeautifulSoup库使用">
+  <meta property="og:description" content="BeautifulSoup是啥？它是一个可以从 HTML 或 XML 文件中提取数据的 Python 库。它能通过我们喜欢的转换器实现文档导航，查找和修改。">
+  <meta property="og:locale" content="zh-CN">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2021-11-08T08:36:00+08:00">
+    <meta property="article:modified_time" content="2021-11-08T08:36:00+08:00">
+    <meta property="article:tag" content="Python">
+    <meta property="article:tag" content="BeautifulSoup">
+    <meta property="article:tag" content="解析器">
+<meta name="twitter:card" content="summary"><meta name="twitter:title" content="BeautifulSoup库使用">
+<meta name="twitter:description" content="BeautifulSoup是啥？它是一个可以从 HTML 或 XML 文件中提取数据的 Python 库。它能通过我们喜欢的转换器实现文档导航，查找和修改。">
+      <meta name="twitter:site" content="@IRONAnthony96">
+<meta name="application-name" content="FixIt">
+<meta name="apple-mobile-web-app-title" content="FixIt"><meta name="theme-color" data-light="#f8f8f8" data-dark="#252627" content="#f8f8f8"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" href="https://andyfree96.github.io/beautifulsoup%E5%BA%93%E4%BD%BF%E7%94%A8/" /><link rel="prev" href="https://andyfree96.github.io/requests%E5%BA%93%E4%BD%BF%E7%94%A8/" /><link rel="next" href="https://andyfree96.github.io/%E5%BF%AB%E4%B9%90%E7%9A%84linux%E5%91%BD%E4%BB%A4%E8%A1%8C/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "BlogPosting",
+    "headline": "BeautifulSoup库使用",
+    "inLanguage": "zh-CN",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https:\/\/andyfree96.github.io\/beautifulsoup%E5%BA%93%E4%BD%BF%E7%94%A8\/"
+    },"genre": "posts","keywords": "Python, BeautifulSoup, 解析器","wordcount":  5209 ,
+    "url": "https:\/\/andyfree96.github.io\/beautifulsoup%E5%BA%93%E4%BD%BF%E7%94%A8\/","datePublished": "2021-11-08T08:36:00+08:00","dateModified": "2021-11-08T08:36:00+08:00","publisher": {
+      "@type": "Organization",
+      "name": ""},"author": {
+        "@type": "Person",
+        "name": "AndyFree96"
+      },"description": ""
+  }
+  </script></head>
+  <body
+    data-header-desktop="sticky"
+    data-header-mobile="auto"
+  ><script>
+      (window.localStorage?.getItem("theme")
+        ? localStorage.getItem("theme") === "dark"
+        : "auto" === "auto"
+        ? window.matchMedia("(prefers-color-scheme: dark)").matches
+        : "auto" === "dark") &&
+        document.body.setAttribute("data-theme", "dark");
+    </script><div
+      class="wrapper"
+      data-page-style="normal"
+    ><header class="desktop animate__faster" id="header-desktop">
+  <div class="header-wrapper">
+    <div class="header-title">
+      <a href="/" title="东尼的博客"><span class="header-title-text">东尼的博客</span></a><span class="header-subtitle"></span></div>
+    <nav>
+      <ul class="menu"><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/posts/"
+                
+                
+              >📕 文章</a></li><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/categories/"
+                
+                
+              >🗂 分类</a></li><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/tags/"
+                
+                
+              >🔖 标签</a></li><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/book"
+                
+                
+              >📚 书单</a></li><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/paper"
+                
+                
+              >📝 论文</a></li><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/opencourse"
+                
+                
+              >👨🏻‍💻 公开课</a></li><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/resource"
+                
+                
+              >⚡️ 资源</a></li><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/about"
+                
+                
+              >🙋🏻‍♂️ 关于</a></li><li class="menu-item delimiter"></li><li class="menu-item theme-switch" title="切换主题">
+          <i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i>
+        </li></ul>
+    </nav>
+  </div>
+</header><header class="mobile animate__faster" id="header-mobile">
+  <div class="header-container">
+    <div class="header-wrapper">
+      <div class="header-title">
+        <a href="/" title="东尼的博客"><span class="header-title-text">东尼的博客</span></a><span class="header-subtitle"></span></div>
+      <div class="menu-toggle" id="menu-toggle-mobile">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+    <nav>
+      <ul class="menu" id="menu-mobile"><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/posts/"
+                  
+                  
+                >📕 文章</a></li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/categories/"
+                  
+                  
+                >🗂 分类</a></li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/tags/"
+                  
+                  
+                >🔖 标签</a></li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/book"
+                  
+                  
+                >📚 书单</a></li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/paper"
+                  
+                  
+                >📝 论文</a></li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/opencourse"
+                  
+                  
+                >👨🏻‍💻 公开课</a></li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/resource"
+                  
+                  
+                >⚡️ 资源</a></li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/about"
+                  
+                  
+                >🙋🏻‍♂️ 关于</a></li><li class="menu-item menu-system">
+          <span class="menu-system-item theme-switch" title="切换主题"><i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i></span></li>
+      </ul>
+    </nav>
+  </div>
+</header><main
+        class="container"
+      ><aside class="aside-collection animate__animated animate__fadeIn animate__faster" aria-label="合集"></aside>
+
+  <article class="page single">
+    <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span title="转载" class="icon-repost"><i class="fa-solid fa-share fa-fw" aria-hidden="true"></i></span><span>BeautifulSoup库使用</span>
+      </h1></div><div class="post-meta">
+      <div class="post-meta-line"><span class="post-author"><a href="https://andyfree96.github.io/" title="作者"target="_blank" rel="external nofollow noopener noreferrer author" class="author"><img loading="lazy" src="/avatar/1.jpg" alt="AndyFree96" data-title="AndyFree96" class="avatar" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/>&nbsp;AndyFree96</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E7%BD%91%E7%BB%9C%E7%88%AC%E8%99%AB/" class="post-category" title="分类 - 网络爬虫"><i class="fa-regular fa-folder fa-fw" aria-hidden="true"></i> 网络爬虫</a></span></div><div class="post-meta-line"><span title="发布于 2021-11-08 08:36:00"><i class="fa-solid fa-calendar-days fa-fw me-1" aria-hidden="true"></i><time datetime="2021-11-08">2021-11-08</time></span>&nbsp;<span title="5209 字"><i class="fa-solid fa-pencil-alt fa-fw me-1" aria-hidden="true"></i>约 5300 字</span>&nbsp;<span><i class="fa-regular fa-clock fa-fw me-1" aria-hidden="true"></i>预计阅读 11 分钟</span>&nbsp;</div>
+    </div><div class="featured-image"><img loading="lazy" src="/images/202110/2/luke-jones-JcEEIM963oM-unsplash.jpg" alt="/images/202110/2/luke-jones-JcEEIM963oM-unsplash.jpg" data-title="/images/202110/2/luke-jones-JcEEIM963oM-unsplash.jpg" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></div><div class="details toc" id="toc-static" data-kept="false">
+        <div class="details-summary toc-title">
+          <span>目录</span>
+          <span><i class="details-icon fa-solid fa-angle-right" aria-hidden="true"></i></span>
+        </div>
+        <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#安装-beautifulsoup">安装 BeautifulSoup</a></li>
+    <li><a href="#安装解析器">安装解析器</a></li>
+    <li><a href="#如何使用">如何使用</a></li>
+    <li><a href="#对象的种类">对象的种类</a>
+      <ul>
+        <li><a href="#tag">Tag</a>
+          <ul>
+            <li><a href="#name">Name</a></li>
+            <li><a href="#attributes">Attributes</a></li>
+            <li><a href="#多值属性">多值属性</a></li>
+          </ul>
+        </li>
+        <li><a href="#navigablestring">NavigableString</a></li>
+        <li><a href="#beautifulsoup">BeautifulSoup</a></li>
+        <li><a href="#comment">Comment</a></li>
+      </ul>
+    </li>
+    <li><a href="#搜索文档树">搜索文档树</a>
+      <ul>
+        <li><a href="#过滤器">过滤器</a>
+          <ul>
+            <li><a href="#字符串">字符串</a></li>
+            <li><a href="#正则表达式">正则表达式</a></li>
+            <li><a href="#列表">列表</a></li>
+            <li><a href="#true">True</a></li>
+            <li><a href="#方法">方法</a></li>
+          </ul>
+        </li>
+        <li><a href="#find_all">find_all()</a>
+          <ul>
+            <li><a href="#name-参数">name 参数</a></li>
+            <li><a href="#keyword-参数">keyword 参数</a></li>
+            <li><a href="#按-css-搜索">按 CSS 搜索</a></li>
+            <li><a href="#text-参数">text 参数</a></li>
+            <li><a href="#limit-参数">limit 参数</a></li>
+            <li><a href="#recursive-参数">recursive 参数</a></li>
+          </ul>
+        </li>
+        <li><a href="#像调用-find_all一样调用-tag">像调用 find_all()一样调用 tag</a></li>
+        <li><a href="#css-选择器">CSS 选择器</a></li>
+      </ul>
+    </li>
+    <li><a href="#爬取豆瓣电影-top250-海报">爬取豆瓣电影 TOP250 海报</a></li>
+    <li><a href="#总结">总结</a></li>
+    <li><a href="#参考">参考</a></li>
+  </ul>
+</nav></div>
+      </div><div class="content" id="content"><p><code>BeautifulSoup</code>是啥？它是一个可以从 HTML 或 XML 文件中提取数据的 Python 库。它能通过我们喜欢的转换器实现文档导航，查找和修改。</p>
+<h2 id="安装-beautifulsoup" class="heading-element">
+  <a href="#%e5%ae%89%e8%a3%85-beautifulsoup" class="heading-mark"></a>安装 BeautifulSoup</h2><p>可以通过<code>pip</code>来安装，包的名字的是<code>beautifulsoup4</code>。</p>
+<div class="highlight" id="id-1"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-Python" data-lang="Python"><span class="line"><span class="cl"><span class="n">pip</span> <span class="n">install</span> <span class="o">-</span><span class="n">i</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">pypi</span><span class="o">.</span><span class="n">douban</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">simple</span> <span class="n">beautifulsoup4</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="安装解析器" class="heading-element">
+  <a href="#%e5%ae%89%e8%a3%85%e8%a7%a3%e6%9e%90%e5%99%a8" class="heading-mark"></a>安装解析器</h2><p><code>BeautifulSoup</code>除了支持 Python 标准库中的 HTML 解析器之外，还支持一些第三方的解析器，比如<a href="https://lxml.de"target="_blank" rel="external nofollow noopener noreferrer">lxml</a>。可以按下列方式来安装 lxml：</p>
+<div class="highlight" id="id-2"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-Python" data-lang="Python"><span class="line"><span class="cl"><span class="n">pip</span> <span class="n">install</span> <span class="o">-</span><span class="n">i</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">pypi</span><span class="o">.</span><span class="n">douban</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">simple</span> <span class="n">lxml</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>另一个可供选择的解析器是纯 Python 实现的<a href="https://github.com/html5lib/html5lib-python"target="_blank" rel="external nofollow noopener noreferrer">html5lib</a>，可以按下列方式来安装 html5lib：</p>
+<div class="highlight" id="id-3"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-Python" data-lang="Python"><span class="line"><span class="cl"><span class="n">pip</span> <span class="n">install</span> <span class="o">-</span><span class="n">i</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">pypi</span><span class="o">.</span><span class="n">douban</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">simple</span> <span class="n">html5lib</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>下表列出了主要的解析器以及它们的优缺点：</p>
+<p><img loading="lazy" src="/images/202110/2/1.png" alt="/images/202110/2/1.png" srcset="/images/202110/2/1.png?size=small, /images/202110/2/1.png?size=medium 1.5x, /images/202110/2/1.png?size=large 2x" data-title="/images/202110/2/1.png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></p>
+<h2 id="如何使用" class="heading-element">
+  <a href="#%e5%a6%82%e4%bd%95%e4%bd%bf%e7%94%a8" class="heading-mark"></a>如何使用</h2><p>将一段文档传入<code>BeautifulSoup</code>的构造方法就能得到一个文档对象，可以传入一段字符串或一个文件句柄。</p>
+<div class="highlight" id="id-4"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-Python" data-lang="Python"><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">bs4</span> <span class="kn">import</span> <span class="n">BeautifulSoup</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">soup</span> <span class="o">=</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="s2">&#34;index.html&#34;</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">suop</span> <span class="o">=</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="s2">&#34;&lt;html&gt;data&lt;/html&gt;&#34;</span><span class="p">)</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>如果手动指定解析器的话，<code>BeautifulSoup</code>会选择指定的解析器来解析文档。</p>
+<h2 id="对象的种类" class="heading-element">
+  <a href="#%e5%af%b9%e8%b1%a1%e7%9a%84%e7%a7%8d%e7%b1%bb" class="heading-mark"></a>对象的种类</h2><p><code>BeautifulSoup</code>将复杂的 HTML 文档转换成一个复杂的树形结构，每个节点都是 Python 对象，所有对象可以归纳为 4 中：<code>Tag</code>，<code>NavigableString</code>，<code>BeautifulSoup</code>，<code>Comment</code>。</p>
+<h3 id="tag" class="heading-element">
+  <a href="#tag" class="heading-mark"></a>Tag</h3><p><code>Tag</code>对象与 XML 或 HTML 文档中的 tag 相同：</p>
+<div class="highlight" id="id-5"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-Python" data-lang="Python"><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">bs4</span> <span class="kn">import</span> <span class="n">BeautifulSoup</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">soup</span> <span class="o">=</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="s1">&#39;&lt;b class=&#34;boldest&#34;&gt;Extremely bold&lt;/b&gt;&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">tag</span> <span class="o">=</span> <span class="n">soup</span><span class="o">.</span><span class="n">b</span>
+</span></span><span class="line"><span class="cl"><span class="nb">type</span><span class="p">(</span><span class="n">tag</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># &lt;class &#39;bs4.element.Tag&#39;&gt;</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p><code>Tag</code>有很多方法和属性，比如遍历文档树和搜索文档树。现在介绍一下 tag 中最重要的属性：<code>name</code>和<code>attributes</code>。</p>
+<h4 id="name" class="heading-element">
+  <a href="#name" class="heading-mark"></a>Name</h4><p>每个 tag 都有自己的名字，通过<code>.name</code>来获取：</p>
+<div class="highlight" id="id-6"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-Python" data-lang="Python"><span class="line"><span class="cl"><span class="n">tag</span><span class="o">.</span><span class="n">name</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># &#39;b&#39;</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>如果改变 tag 的 name 将会影响所有通过当前<code>BeautifulSoup</code>对象生成的 HTML 文档：</p>
+<div class="highlight" id="id-7"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-Python" data-lang="Python"><span class="line"><span class="cl"><span class="n">tag</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&#34;blockquote&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="n">tag</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># &lt;blockquote class=&#34;boldest&#34;&gt;Extremely bold&lt;/blockquote&gt;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">tag</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&#34;ironman&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="n">tag</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># &lt;ironman class=&#34;boldest&#34;&gt;Extremely bold&lt;/ironman&gt;</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="attributes" class="heading-element">
+  <a href="#attributes" class="heading-mark"></a>Attributes</h4><p>一个 tag 可能有很多个属性。tag <code>&lt;b class=&quot;boldest&quot;&gt;</code>有一个名为<code>class</code>的属性，值为<code>boldest</code>。tag 的属性的操作方法与字典相同：</p>
+<div class="highlight" id="id-8"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-Python" data-lang="Python"><span class="line"><span class="cl"><span class="n">tag</span><span class="p">[</span><span class="s1">&#39;class&#39;</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># [&#39;boldest&#39;]</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>也可以直接<code>.</code>取属性，比如：<code>.attrs</code>：</p>
+<div class="highlight" id="id-9"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-Python" data-lang="Python"><span class="line"><span class="cl"><span class="n">tag</span><span class="o">.</span><span class="n">attrs</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># {&#39;class&#39;: [&#39;boldest&#39;]}</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>tag 的属性可以被添加，删除或修改，和字典一样。</p>
+<div class="highlight" id="id-10"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-Python" data-lang="Python"><span class="line"><span class="cl"><span class="n">In</span> <span class="p">[</span><span class="mi">13</span><span class="p">]:</span> <span class="n">tag</span><span class="p">[</span><span class="s1">&#39;class&#39;</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="n">Out</span><span class="p">[</span><span class="mi">13</span><span class="p">]:</span> <span class="p">[</span><span class="s1">&#39;boldest&#39;</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">In</span> <span class="p">[</span><span class="mi">14</span><span class="p">]:</span> <span class="n">tag</span><span class="p">[</span><span class="s1">&#39;class&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;verybold&#39;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">In</span> <span class="p">[</span><span class="mi">15</span><span class="p">]:</span> <span class="n">tag</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">In</span> <span class="p">[</span><span class="mi">16</span><span class="p">]:</span> <span class="n">tag</span>
+</span></span><span class="line"><span class="cl"><span class="n">Out</span><span class="p">[</span><span class="mi">16</span><span class="p">]:</span> <span class="o">&lt;</span><span class="n">ironman</span> <span class="n">class</span><span class="o">=</span><span class="s2">&#34;verybold&#34;</span> <span class="nb">id</span><span class="o">=</span><span class="s2">&#34;1&#34;</span><span class="o">&gt;</span><span class="n">Extremely</span> <span class="n">bold</span><span class="o">&lt;/</span><span class="n">ironman</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">In</span> <span class="p">[</span><span class="mi">17</span><span class="p">]:</span> <span class="k">del</span> <span class="n">tag</span><span class="p">[</span><span class="s1">&#39;class&#39;</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">In</span> <span class="p">[</span><span class="mi">18</span><span class="p">]:</span> <span class="k">del</span> <span class="n">tag</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">In</span> <span class="p">[</span><span class="mi">19</span><span class="p">]:</span> <span class="n">tag</span>
+</span></span><span class="line"><span class="cl"><span class="n">Out</span><span class="p">[</span><span class="mi">19</span><span class="p">]:</span> <span class="o">&lt;</span><span class="n">ironman</span><span class="o">&gt;</span><span class="n">Extremely</span> <span class="n">bold</span><span class="o">&lt;/</span><span class="n">ironman</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">In</span> <span class="p">[</span><span class="mi">20</span><span class="p">]:</span> <span class="n">tag</span><span class="p">[</span><span class="s1">&#39;class&#39;</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="ne">KeyError</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">In</span> <span class="p">[</span><span class="mi">21</span><span class="p">]:</span> <span class="n">tag</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;class&#39;</span><span class="p">)</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="多值属性" class="heading-element">
+  <a href="#%e5%a4%9a%e5%80%bc%e5%b1%9e%e6%80%a7" class="heading-mark"></a>多值属性</h4><p>HTML 定义了一系列可以包含多个值的属性。最常见的多值属性是<code>class</code>（一个 tag 可以有多个 CSS 的<code>class</code>）。在<code>BeautifulSoup</code>中多值属性的返回类型是 list：</p>
+<div class="highlight" id="id-11"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-Python" data-lang="Python"><span class="line"><span class="cl"><span class="n">In</span> <span class="p">[</span><span class="mi">22</span><span class="p">]:</span> <span class="n">css_soup</span> <span class="o">=</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="s1">&#39;&lt;p class=&#34;body strikeout&#34;&gt;&lt;/p&gt;&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">In</span> <span class="p">[</span><span class="mi">23</span><span class="p">]:</span> <span class="n">css_soup</span><span class="o">.</span><span class="n">p</span><span class="p">[</span><span class="s1">&#39;class&#39;</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="n">Out</span><span class="p">[</span><span class="mi">23</span><span class="p">]:</span> <span class="p">[</span><span class="s1">&#39;body&#39;</span><span class="p">,</span> <span class="s1">&#39;strikeout&#39;</span><span class="p">]</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>如果某个属性看起来好像有多个值，但在任何版本的 HTML 定义中都没有被定义为多值属性，那么<code>BeautifulSoup</code>会将这个属性作为字符串返回</p>
+<div class="highlight" id="id-12"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-Python" data-lang="Python"><span class="line"><span class="cl"><span class="n">In</span> <span class="p">[</span><span class="mi">25</span><span class="p">]:</span> <span class="n">id_soup</span> <span class="o">=</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="s1">&#39;&lt;p id=&#34;my id&#34;&gt;&lt;/p&gt;&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">In</span> <span class="p">[</span><span class="mi">26</span><span class="p">]:</span> <span class="n">id_soup</span><span class="o">.</span><span class="n">p</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="n">Out</span><span class="p">[</span><span class="mi">26</span><span class="p">]:</span> <span class="s1">&#39;my id&#39;</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="navigablestring" class="heading-element">
+  <a href="#navigablestring" class="heading-mark"></a>NavigableString</h3><p>字符串常被包含在 tag 内。<code>BeautifulSoup</code>用<code>NavigableString</code>类来包装 tag 中的字符串：</p>
+<div class="highlight" id="id-13"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-Python" data-lang="Python"><span class="line"><span class="cl"><span class="n">In</span> <span class="p">[</span><span class="mi">27</span><span class="p">]:</span> <span class="n">tag</span>
+</span></span><span class="line"><span class="cl"><span class="n">Out</span><span class="p">[</span><span class="mi">27</span><span class="p">]:</span> <span class="o">&lt;</span><span class="n">ironman</span><span class="o">&gt;</span><span class="n">Extremely</span> <span class="n">bold</span><span class="o">&lt;/</span><span class="n">ironman</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">In</span> <span class="p">[</span><span class="mi">28</span><span class="p">]:</span> <span class="n">tag</span><span class="o">.</span><span class="n">string</span>
+</span></span><span class="line"><span class="cl"><span class="n">Out</span><span class="p">[</span><span class="mi">28</span><span class="p">]:</span> <span class="s1">&#39;Extremely bold&#39;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">In</span> <span class="p">[</span><span class="mi">29</span><span class="p">]:</span> <span class="nb">type</span><span class="p">(</span><span class="n">tag</span><span class="o">.</span><span class="n">string</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">Out</span><span class="p">[</span><span class="mi">29</span><span class="p">]:</span> <span class="n">bs4</span><span class="o">.</span><span class="n">element</span><span class="o">.</span><span class="n">NavigableString</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>NavigableString 对象支持<a href="https://www.crummy.com/software/BeautifulSoup/bs4/doc.zh/#id15"target="_blank" rel="external nofollow noopener noreferrer">遍历文档树</a>和<a href="https://www.crummy.com/software/BeautifulSoup/bs4/doc.zh/#id24"target="_blank" rel="external nofollow noopener noreferrer">搜索文档树</a>中定义的大部分属性, 并非全部。</p>
+<h3 id="beautifulsoup" class="heading-element">
+  <a href="#beautifulsoup" class="heading-mark"></a>BeautifulSoup</h3><p><code>BeautifulSoup</code>对象表示的是整个文档的内容。大部分时候，可以把它当作<code>Tag</code>对象，它支持<a href="https://www.crummy.com/software/BeautifulSoup/bs4/doc.zh/#id15"target="_blank" rel="external nofollow noopener noreferrer">遍历文档树</a>和<a href="https://www.crummy.com/software/BeautifulSoup/bs4/doc.zh/#id24"target="_blank" rel="external nofollow noopener noreferrer">搜索文档树</a>中定义的大部分方法。</p>
+<h3 id="comment" class="heading-element">
+  <a href="#comment" class="heading-mark"></a>Comment</h3><p><code>Tag</code>，<code>NavigableString</code>，<code>BeautifulSoup</code>几乎覆盖了 html 和 xml 中的所有内容，但是还有一些特殊对象。</p>
+<div class="highlight" id="id-14"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-Python" data-lang="Python"><span class="line"><span class="cl"><span class="n">In</span> <span class="p">[</span><span class="mi">30</span><span class="p">]:</span> <span class="n">markup</span> <span class="o">=</span> <span class="s2">&#34;&lt;b&gt;&lt;!--Hey, buddy. Want to buy a used parser?--&gt;&lt;/b&gt;&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">In</span> <span class="p">[</span><span class="mi">31</span><span class="p">]:</span> <span class="n">soup</span> <span class="o">=</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="n">markup</span><span class="p">,</span> <span class="s1">&#39;lxml&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">In</span> <span class="p">[</span><span class="mi">32</span><span class="p">]:</span> <span class="n">comment</span> <span class="o">=</span> <span class="n">soup</span><span class="o">.</span><span class="n">b</span><span class="o">.</span><span class="n">string</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">In</span> <span class="p">[</span><span class="mi">34</span><span class="p">]:</span> <span class="nb">type</span><span class="p">(</span><span class="n">comment</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">Out</span><span class="p">[</span><span class="mi">34</span><span class="p">]:</span> <span class="n">bs4</span><span class="o">.</span><span class="n">element</span><span class="o">.</span><span class="n">Comment</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p><code>Comment</code>对象是一个特殊类型的<code>NavigableString</code>对象。 <code>soup = BeautifulSoup(markup, 'lxml')</code>中的<code>lxml</code>用于指定解析器。</p>
+<h2 id="搜索文档树" class="heading-element">
+  <a href="#%e6%90%9c%e7%b4%a2%e6%96%87%e6%a1%a3%e6%a0%91" class="heading-mark"></a>搜索文档树</h2><p><code>BeautifulSoup</code>定义了很多搜索方法，这里着重介绍 2 个：<code>find_all()</code>和<code>select()</code>。</p>
+<p>以“爱丽丝”文档作为例子：</p>
+<div class="highlight" id="id-15"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-Python" data-lang="Python"><span class="line"><span class="cl"><span class="n">In</span> <span class="p">[</span><span class="mi">40</span><span class="p">]:</span> <span class="n">html_doc</span> <span class="o">=</span> <span class="s2">&#34;&#34;&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s2">    ...: &lt;html&gt;&lt;head&gt;&lt;title&gt;The Dormouse&#39;s story&lt;/title&gt;&lt;/head&gt;
+</span></span></span><span class="line"><span class="cl"><span class="s2">    ...:
+</span></span></span><span class="line"><span class="cl"><span class="s2">    ...: &lt;p class=&#34;title&#34;&gt;&lt;b&gt;The Dormouse&#39;s story&lt;/b&gt;&lt;/p&gt;
+</span></span></span><span class="line"><span class="cl"><span class="s2">    ...:
+</span></span></span><span class="line"><span class="cl"><span class="s2">    ...: &lt;p class=&#34;story&#34;&gt;Once upon a time there were three little sisters; and their names were
+</span></span></span><span class="line"><span class="cl"><span class="s2">    ...: &lt;a href=&#34;http://example.com/elsie&#34; class=&#34;sister&#34; id=&#34;link1&#34;&gt;Elsie&lt;/a&gt;,
+</span></span></span><span class="line"><span class="cl"><span class="s2">    ...: &lt;a href=&#34;http://example.com/lacie&#34; class=&#34;sister&#34; id=&#34;link2&#34;&gt;Lacie&lt;/a&gt; and
+</span></span></span><span class="line"><span class="cl"><span class="s2">    ...: &lt;a href=&#34;http://example.com/tillie&#34; class=&#34;sister&#34; id=&#34;link3&#34;&gt;Tillie&lt;/a&gt;;
+</span></span></span><span class="line"><span class="cl"><span class="s2">    ...: and they lived at the bottom of a well.&lt;/p&gt;
+</span></span></span><span class="line"><span class="cl"><span class="s2">    ...:
+</span></span></span><span class="line"><span class="cl"><span class="s2">    ...: &lt;p class=&#34;story&#34;&gt;...&lt;/p&gt;
+</span></span></span><span class="line"><span class="cl"><span class="s2">    ...: &#34;&#34;&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">In</span> <span class="p">[</span><span class="mi">41</span><span class="p">]:</span> <span class="kn">from</span> <span class="nn">bs4</span> <span class="kn">import</span> <span class="n">BeautifulSoup</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">In</span> <span class="p">[</span><span class="mi">42</span><span class="p">]:</span> <span class="n">soup</span> <span class="o">=</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="n">html_doc</span><span class="p">,</span> <span class="s1">&#39;lxml&#39;</span><span class="p">)</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>使用<code>find_all()</code>类似的方法可以查找到想要查找的文档内容。</p>
+<h3 id="过滤器" class="heading-element">
+  <a href="#%e8%bf%87%e6%bb%a4%e5%99%a8" class="heading-mark"></a>过滤器</h3><p>在介绍<code>find_all()</code>方法之前，先介绍一下过滤器的类型，这些过滤器贯穿整个搜索的 API。过滤器可以被用在 tag 的 name 中，节点的属性中，字符串中或它们的混合中。</p>
+<h4 id="字符串" class="heading-element">
+  <a href="#%e5%ad%97%e7%ac%a6%e4%b8%b2" class="heading-mark"></a>字符串</h4><p>最简单的过滤器是字符串。在搜索方法中传入也给字符串参数，<code>BeautifulSoup</code>会查找与字符串完整匹配的内容，下面的例子用于查找文档中所有<code>&lt;b&gt;</code>标签：</p>
+<div class="highlight" id="id-16"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-Python" data-lang="Python"><span class="line"><span class="cl"><span class="n">In</span> <span class="p">[</span><span class="mi">43</span><span class="p">]:</span> <span class="n">soup</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="s1">&#39;b&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">Out</span><span class="p">[</span><span class="mi">43</span><span class="p">]:</span> <span class="p">[</span><span class="o">&lt;</span><span class="n">b</span><span class="o">&gt;</span><span class="n">The</span> <span class="n">Dormouse</span><span class="s1">&#39;s story&lt;/b&gt;]</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="正则表达式" class="heading-element">
+  <a href="#%e6%ad%a3%e5%88%99%e8%a1%a8%e8%be%be%e5%bc%8f" class="heading-mark"></a>正则表达式</h4><p>如果传入正则表达式作为参数，<code>BeautifulSoup</code>会通过正则表达式的<code>match()</code>来匹配内容。下例中找出所有以 b 开头的标签，这意味着<code>&lt;body&gt;</code>和<code>&lt;b&gt;</code>标签都应该被找到：</p>
+<div class="highlight" id="id-17"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-Python" data-lang="Python"><span class="line"><span class="cl"><span class="n">In</span> <span class="p">[</span><span class="mi">44</span><span class="p">]:</span> <span class="kn">import</span> <span class="nn">re</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">In</span> <span class="p">[</span><span class="mi">45</span><span class="p">]:</span> <span class="k">for</span> <span class="n">tag</span> <span class="ow">in</span> <span class="n">soup</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s1">&#39;^b&#39;</span><span class="p">)):</span>
+</span></span><span class="line"><span class="cl">    <span class="o">...</span><span class="p">:</span>     <span class="nb">print</span><span class="p">(</span><span class="n">tag</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="o">...</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># body</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># b</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="列表" class="heading-element">
+  <a href="#%e5%88%97%e8%a1%a8" class="heading-mark"></a>列表</h4><p>如果传入列表参数<code>BeautifulSoup</code>会将领与列表中任一元素匹配的内容返回。下列代码将会找到文档中所有<code>&lt;a&gt;</code>和<code>&lt;b&gt;</code>标签：</p>
+<div class="highlight" id="id-18"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-Python" data-lang="Python"><span class="line"><span class="cl"><span class="n">In</span> <span class="p">[</span><span class="mi">46</span><span class="p">]:</span> <span class="n">soup</span><span class="o">.</span><span class="n">find_all</span><span class="p">([</span><span class="s1">&#39;a&#39;</span><span class="p">,</span><span class="s1">&#39;b&#39;</span><span class="p">])</span>
+</span></span><span class="line"><span class="cl"><span class="n">Out</span><span class="p">[</span><span class="mi">46</span><span class="p">]:</span>
+</span></span><span class="line"><span class="cl"><span class="p">[</span><span class="o">&lt;</span><span class="n">b</span><span class="o">&gt;</span><span class="n">The</span> <span class="n">Dormouse</span><span class="s1">&#39;s story&lt;/b&gt;,</span>
+</span></span><span class="line"><span class="cl"> <span class="o">&lt;</span><span class="n">a</span> <span class="n">class</span><span class="o">=</span><span class="s2">&#34;sister&#34;</span> <span class="n">href</span><span class="o">=</span><span class="s2">&#34;http://example.com/elsie&#34;</span> <span class="nb">id</span><span class="o">=</span><span class="s2">&#34;link1&#34;</span><span class="o">&gt;</span><span class="n">Elsie</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl"> <span class="o">&lt;</span><span class="n">a</span> <span class="n">class</span><span class="o">=</span><span class="s2">&#34;sister&#34;</span> <span class="n">href</span><span class="o">=</span><span class="s2">&#34;http://example.com/lacie&#34;</span> <span class="nb">id</span><span class="o">=</span><span class="s2">&#34;link2&#34;</span><span class="o">&gt;</span><span class="n">Lacie</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl"> <span class="o">&lt;</span><span class="n">a</span> <span class="n">class</span><span class="o">=</span><span class="s2">&#34;sister&#34;</span> <span class="n">href</span><span class="o">=</span><span class="s2">&#34;http://example.com/tillie&#34;</span> <span class="nb">id</span><span class="o">=</span><span class="s2">&#34;link3&#34;</span><span class="o">&gt;</span><span class="n">Tillie</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span><span class="p">]</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="true" class="heading-element">
+  <a href="#true" class="heading-mark"></a>True</h4><p><code>True</code>可以匹配任何值，以下代码查找到所有的 tag，但不会返回字符串节点：</p>
+<div class="highlight" id="id-19"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-Python" data-lang="Python"><span class="line"><span class="cl"><span class="n">In</span> <span class="p">[</span><span class="mi">47</span><span class="p">]:</span> <span class="k">for</span> <span class="n">tag</span> <span class="ow">in</span> <span class="n">soup</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="kc">True</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="o">...</span><span class="p">:</span>     <span class="nb">print</span><span class="p">(</span><span class="n">tag</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="o">...</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># html</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># head</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># title</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># body</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># p</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># b</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># p</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># a</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># a</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># a</span>
+</span></span><span class="line"><span class="cl"><span class="n">p</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="方法" class="heading-element">
+  <a href="#%e6%96%b9%e6%b3%95" class="heading-mark"></a>方法</h4><p>如果没有合适的过滤器，还可以定义一个方法，方法只接受一个元素参数，如果这个方法返回<code>True</code>表示当前元素匹配并且被找到，若不是则返回<code>False</code>。</p>
+<p>下列方法检验了当前元素，如果包含<code>class</code>属性却不包含<code>id</code>属性则返回<code>True</code>：</p>
+<div class="highlight" id="id-20"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-Python" data-lang="Python"><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">has_class_but_no_id</span><span class="p">(</span><span class="n">tag</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">tag</span><span class="o">.</span><span class="n">has_attr</span><span class="p">(</span><span class="s1">&#39;class&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">tag</span><span class="o">.</span><span class="n">has_attr</span><span class="p">(</span><span class="s1">&#39;id&#39;</span><span class="p">)</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>将该方法作为参数传入<code>find_all()</code>方法将得到所有<code>&lt;p&gt;</code>标签：</p>
+<div class="highlight" id="id-21"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-Python" data-lang="Python"><span class="line"><span class="cl"><span class="n">In</span> <span class="p">[</span><span class="mi">66</span><span class="p">]:</span> <span class="n">soup</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="n">has_class_but_no_id</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">Out</span><span class="p">[</span><span class="mi">66</span><span class="p">]:</span>
+</span></span><span class="line"><span class="cl"><span class="p">[</span><span class="o">&lt;</span><span class="n">p</span> <span class="n">class</span><span class="o">=</span><span class="s2">&#34;title&#34;</span><span class="o">&gt;&lt;</span><span class="n">b</span><span class="o">&gt;</span><span class="n">The</span> <span class="n">Dormouse</span><span class="s1">&#39;s story&lt;/b&gt;&lt;/p&gt;,</span>
+</span></span><span class="line"><span class="cl"> <span class="o">&lt;</span><span class="n">p</span> <span class="n">class</span><span class="o">=</span><span class="s2">&#34;story&#34;</span><span class="o">&gt;</span><span class="n">Once</span> <span class="n">upon</span> <span class="n">a</span> <span class="n">time</span> <span class="n">there</span> <span class="n">were</span> <span class="n">three</span> <span class="n">little</span> <span class="n">sisters</span><span class="p">;</span> <span class="ow">and</span> <span class="n">their</span> <span class="n">names</span> <span class="n">were</span>
+</span></span><span class="line"><span class="cl"> <span class="o">&lt;</span><span class="n">a</span> <span class="n">class</span><span class="o">=</span><span class="s2">&#34;sister&#34;</span> <span class="n">href</span><span class="o">=</span><span class="s2">&#34;http://example.com/elsie&#34;</span> <span class="nb">id</span><span class="o">=</span><span class="s2">&#34;link1&#34;</span><span class="o">&gt;</span><span class="n">Elsie</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl"> <span class="o">&lt;</span><span class="n">a</span> <span class="n">class</span><span class="o">=</span><span class="s2">&#34;sister&#34;</span> <span class="n">href</span><span class="o">=</span><span class="s2">&#34;http://example.com/lacie&#34;</span> <span class="nb">id</span><span class="o">=</span><span class="s2">&#34;link2&#34;</span><span class="o">&gt;</span><span class="n">Lacie</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span> <span class="ow">and</span>
+</span></span><span class="line"><span class="cl"> <span class="o">&lt;</span><span class="n">a</span> <span class="n">class</span><span class="o">=</span><span class="s2">&#34;sister&#34;</span> <span class="n">href</span><span class="o">=</span><span class="s2">&#34;http://example.com/tillie&#34;</span> <span class="nb">id</span><span class="o">=</span><span class="s2">&#34;link3&#34;</span><span class="o">&gt;</span><span class="n">Tillie</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"> <span class="ow">and</span> <span class="n">they</span> <span class="n">lived</span> <span class="n">at</span> <span class="n">the</span> <span class="n">bottom</span> <span class="n">of</span> <span class="n">a</span> <span class="n">well</span><span class="o">.&lt;/</span><span class="n">p</span><span class="o">&gt;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl"> <span class="o">&lt;</span><span class="n">p</span> <span class="n">class</span><span class="o">=</span><span class="s2">&#34;story&#34;</span><span class="o">&gt;...&lt;/</span><span class="n">p</span><span class="o">&gt;</span><span class="p">]</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>返回结果中只有<code>&lt;p&gt;</code>标签没有<code>&lt;a&gt;</code>标签，因为<code>&lt;a&gt;</code>标签还定义了<code>id</code>，没有返回<code>&lt;html&gt;</code>和<code>&lt;head&gt;</code>，因为<code>&lt;html&gt;</code>和<code>&lt;head&gt;</code>中没有定义<code>class</code>属性。</p>
+<p>下面代码找到所有被文字包含的节点内容：</p>
+<div class="highlight" id="id-22"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-Python" data-lang="Python"><span class="line"><span class="cl"><span class="n">In</span> <span class="p">[</span><span class="mi">68</span><span class="p">]:</span> <span class="kn">from</span> <span class="nn">bs4</span> <span class="kn">import</span> <span class="n">NavigableString</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">surrounded_by_strings</span><span class="p">(</span><span class="n">tag</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">tag</span><span class="o">.</span><span class="n">next_element</span><span class="p">,</span> <span class="n">NavigableString</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">tag</span><span class="o">.</span><span class="n">previous_element</span><span class="p">,</span> <span class="n">NavigableString</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">In</span> <span class="p">[</span><span class="mi">70</span><span class="p">]:</span> <span class="k">for</span> <span class="n">tag</span> <span class="ow">in</span> <span class="n">soup</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="n">surrounded_by_strings</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="o">...</span><span class="p">:</span>     <span class="nb">print</span><span class="p">(</span><span class="n">tag</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="o">...</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># p</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># a</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># a</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># a</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># p</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="find_all" class="heading-element">
+  <a href="#find_all" class="heading-mark"></a>find_all()</h3><div class="highlight" id="id-23"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-Python" data-lang="Python"><span class="line"><span class="cl"><span class="n">find_all</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">attrs</span><span class="p">,</span> <span class="n">recursive</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p><code>find_all()</code>方法搜索当前 tag 的所有 tag 子节点，并判断是否符合过滤器的条件。</p>
+<h4 id="name-参数" class="heading-element">
+  <a href="#name-%e5%8f%82%e6%95%b0" class="heading-mark"></a>name 参数</h4><p><code>name</code>参数可以查找所有名字为<code>name</code>的 tag，字符串对象会被自动忽略掉。</p>
+<p>例如：</p>
+<div class="highlight" id="id-24"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-Python" data-lang="Python"><span class="line"><span class="cl"><span class="n">In</span> <span class="p">[</span><span class="mi">72</span><span class="p">]:</span> <span class="n">soup</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="s2">&#34;title&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">Out</span><span class="p">[</span><span class="mi">72</span><span class="p">]:</span> <span class="p">[</span><span class="o">&lt;</span><span class="n">title</span><span class="o">&gt;</span><span class="n">The</span> <span class="n">Dormouse</span><span class="s1">&#39;s story&lt;/title&gt;]</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p><code>name</code>参数的值可以是任一类型的过滤器，字符串、正则表达式、列表、方法或是<code>True</code>。</p>
+<h4 id="keyword-参数" class="heading-element">
+  <a href="#keyword-%e5%8f%82%e6%95%b0" class="heading-mark"></a>keyword 参数</h4><p>如果一个指定名字的参数不是搜索内置的参数名，搜索时会把该参数当作指定名字 tag 的属性来搜索。如果包含一个名字为<code>id</code>参数，<code>BeautifulSoup</code>会搜索每个 tag 的<code>id</code>属性。</p>
+<div class="highlight" id="id-25"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-Python" data-lang="Python"><span class="line"><span class="cl"><span class="n">In</span> <span class="p">[</span><span class="mi">73</span><span class="p">]:</span> <span class="n">soup</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="s2">&#34;link2&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">Out</span><span class="p">[</span><span class="mi">73</span><span class="p">]:</span> <span class="p">[</span><span class="o">&lt;</span><span class="n">a</span> <span class="n">class</span><span class="o">=</span><span class="s2">&#34;sister&#34;</span> <span class="n">href</span><span class="o">=</span><span class="s2">&#34;http://example.com/lacie&#34;</span> <span class="nb">id</span><span class="o">=</span><span class="s2">&#34;link2&#34;</span><span class="o">&gt;</span><span class="n">Lacie</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span><span class="p">]</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>如果传入<code>href</code>参数，<code>BeautifulSoup</code>会搜索每个 tag 的<code>href</code>属性：</p>
+<div class="highlight" id="id-26"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-Python" data-lang="Python"><span class="line"><span class="cl"><span class="n">In</span> <span class="p">[</span><span class="mi">76</span><span class="p">]:</span> <span class="n">soup</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="n">href</span><span class="o">=</span><span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s1">&#39;elsie&#39;</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl"><span class="n">Out</span><span class="p">[</span><span class="mi">76</span><span class="p">]:</span> <span class="p">[</span><span class="o">&lt;</span><span class="n">a</span> <span class="n">class</span><span class="o">=</span><span class="s2">&#34;sister&#34;</span> <span class="n">href</span><span class="o">=</span><span class="s2">&#34;http://example.com/elsie&#34;</span> <span class="nb">id</span><span class="o">=</span><span class="s2">&#34;link1&#34;</span><span class="o">&gt;</span><span class="n">Elsie</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span><span class="p">]</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>搜索指定名字的属性时可以使用的参数值包括：字符串、正则表达式、列表、True。</p>
+<p>下例在文档中查找所有包含<code>id</code>属性的 tag，无论<code>id</code>的值是什么：</p>
+<div class="highlight" id="id-27"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-Python" data-lang="Python"><span class="line"><span class="cl"><span class="n">In</span> <span class="p">[</span><span class="mi">77</span><span class="p">]:</span> <span class="n">soup</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">Out</span><span class="p">[</span><span class="mi">77</span><span class="p">]:</span>
+</span></span><span class="line"><span class="cl"><span class="p">[</span><span class="o">&lt;</span><span class="n">a</span> <span class="n">class</span><span class="o">=</span><span class="s2">&#34;sister&#34;</span> <span class="n">href</span><span class="o">=</span><span class="s2">&#34;http://example.com/elsie&#34;</span> <span class="nb">id</span><span class="o">=</span><span class="s2">&#34;link1&#34;</span><span class="o">&gt;</span><span class="n">Elsie</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl"> <span class="o">&lt;</span><span class="n">a</span> <span class="n">class</span><span class="o">=</span><span class="s2">&#34;sister&#34;</span> <span class="n">href</span><span class="o">=</span><span class="s2">&#34;http://example.com/lacie&#34;</span> <span class="nb">id</span><span class="o">=</span><span class="s2">&#34;link2&#34;</span><span class="o">&gt;</span><span class="n">Lacie</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl"> <span class="o">&lt;</span><span class="n">a</span> <span class="n">class</span><span class="o">=</span><span class="s2">&#34;sister&#34;</span> <span class="n">href</span><span class="o">=</span><span class="s2">&#34;http://example.com/tillie&#34;</span> <span class="nb">id</span><span class="o">=</span><span class="s2">&#34;link3&#34;</span><span class="o">&gt;</span><span class="n">Tillie</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span><span class="p">]</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>使用多个指定名字的参数可以同时过滤 tag 的多个属性：</p>
+<div class="highlight" id="id-28"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-Python" data-lang="Python"><span class="line"><span class="cl"><span class="n">In</span> <span class="p">[</span><span class="mi">78</span><span class="p">]:</span> <span class="n">soup</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="n">href</span><span class="o">=</span><span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s2">&#34;elsie&#34;</span><span class="p">),</span> <span class="nb">id</span><span class="o">=</span><span class="s1">&#39;link1&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">Out</span><span class="p">[</span><span class="mi">78</span><span class="p">]:</span> <span class="p">[</span><span class="o">&lt;</span><span class="n">a</span> <span class="n">class</span><span class="o">=</span><span class="s2">&#34;sister&#34;</span> <span class="n">href</span><span class="o">=</span><span class="s2">&#34;http://example.com/elsie&#34;</span> <span class="nb">id</span><span class="o">=</span><span class="s2">&#34;link1&#34;</span><span class="o">&gt;</span><span class="n">Elsie</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span><span class="p">]</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>有些 tag 属性在搜索时不能使用，比如 HTML5 中的<code>data-*</code>属性：</p>
+<div class="highlight" id="id-29"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-Python" data-lang="Python"><span class="line"><span class="cl"><span class="n">In</span> <span class="p">[</span><span class="mi">79</span><span class="p">]:</span> <span class="n">data_soup</span> <span class="o">=</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="s1">&#39;&lt;div data-foo=&#34;value&#34;&gt;foo!&lt;/div&gt;&#39;</span><span class="p">,</span> <span class="s1">&#39;lxml&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">In</span> <span class="p">[</span><span class="mi">80</span><span class="p">]:</span> <span class="n">data_soup</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="n">data</span><span class="o">-</span><span class="n">foo</span><span class="o">=</span><span class="s2">&#34;value&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="n">File</span> <span class="s2">&#34;&lt;ipython-input-80-a766c8a0cac6&gt;&#34;</span><span class="p">,</span> <span class="n">line</span> <span class="mi">1</span>
+</span></span><span class="line"><span class="cl">    <span class="n">data_soup</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="n">data</span><span class="o">-</span><span class="n">foo</span><span class="o">=</span><span class="s2">&#34;value&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">                      <span class="o">^</span>
+</span></span><span class="line"><span class="cl"><span class="ne">SyntaxError</span><span class="p">:</span> <span class="n">keyword</span> <span class="n">can</span><span class="s1">&#39;t be an expression</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>可以通过<code>find_all()</code>方法<code>attrs</code>参数定义一个字典参数来搜索包含特殊属性的 tag：</p>
+<div class="highlight" id="id-30"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-Python" data-lang="Python"><span class="line"><span class="cl"><span class="n">In</span> <span class="p">[</span><span class="mi">81</span><span class="p">]:</span> <span class="n">data_soup</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="n">attrs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;data-foo&#39;</span><span class="p">:</span><span class="s1">&#39;value&#39;</span><span class="p">})</span>
+</span></span><span class="line"><span class="cl"><span class="n">Out</span><span class="p">[</span><span class="mi">81</span><span class="p">]:</span> <span class="p">[</span><span class="o">&lt;</span><span class="n">div</span> <span class="n">data</span><span class="o">-</span><span class="n">foo</span><span class="o">=</span><span class="s2">&#34;value&#34;</span><span class="o">&gt;</span><span class="n">foo</span><span class="err">!</span><span class="o">&lt;/</span><span class="n">div</span><span class="o">&gt;</span><span class="p">]</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="按-css-搜索" class="heading-element">
+  <a href="#%e6%8c%89-css-%e6%90%9c%e7%b4%a2" class="heading-mark"></a>按 CSS 搜索</h4><p>可以通过<code>class_</code>参数搜索指定 CSS 类名的 tag：</p>
+<div class="highlight" id="id-31"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-Python" data-lang="Python"><span class="line"><span class="cl"><span class="n">In</span> <span class="p">[</span><span class="mi">82</span><span class="p">]:</span> <span class="n">soup</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="n">class_</span><span class="o">=</span><span class="s2">&#34;sister&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">Out</span><span class="p">[</span><span class="mi">82</span><span class="p">]:</span>
+</span></span><span class="line"><span class="cl"><span class="p">[</span><span class="o">&lt;</span><span class="n">a</span> <span class="n">class</span><span class="o">=</span><span class="s2">&#34;sister&#34;</span> <span class="n">href</span><span class="o">=</span><span class="s2">&#34;http://example.com/elsie&#34;</span> <span class="nb">id</span><span class="o">=</span><span class="s2">&#34;link1&#34;</span><span class="o">&gt;</span><span class="n">Elsie</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl"> <span class="o">&lt;</span><span class="n">a</span> <span class="n">class</span><span class="o">=</span><span class="s2">&#34;sister&#34;</span> <span class="n">href</span><span class="o">=</span><span class="s2">&#34;http://example.com/lacie&#34;</span> <span class="nb">id</span><span class="o">=</span><span class="s2">&#34;link2&#34;</span><span class="o">&gt;</span><span class="n">Lacie</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl"> <span class="o">&lt;</span><span class="n">a</span> <span class="n">class</span><span class="o">=</span><span class="s2">&#34;sister&#34;</span> <span class="n">href</span><span class="o">=</span><span class="s2">&#34;http://example.com/tillie&#34;</span> <span class="nb">id</span><span class="o">=</span><span class="s2">&#34;link3&#34;</span><span class="o">&gt;</span><span class="n">Tillie</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span><span class="p">]</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p><code>class_</code>参数同样接受不同类型的过滤器，字符串，正则表达式，方法或<code>True</code>。</p>
+<h4 id="text-参数" class="heading-element">
+  <a href="#text-%e5%8f%82%e6%95%b0" class="heading-mark"></a>text 参数</h4><p>通过<code>text</code>参数可以搜索文档中的字符串内容。与<code>name</code>参数的可选值一样，<code>text</code>参数接受字符串，正则表达式，列表，<code>True</code>，方法。</p>
+<div class="highlight" id="id-32"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-Python" data-lang="Python"><span class="line"><span class="cl"><span class="n">In</span> <span class="p">[</span><span class="mi">83</span><span class="p">]:</span> <span class="n">soup</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="s1">&#39;Elsie&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">Out</span><span class="p">[</span><span class="mi">83</span><span class="p">]:</span> <span class="p">[</span><span class="s1">&#39;Elsie&#39;</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">In</span> <span class="p">[</span><span class="mi">84</span><span class="p">]:</span> <span class="n">soup</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Tillie&#39;</span><span class="p">,</span><span class="s1">&#39;Elsie&#39;</span><span class="p">,</span><span class="s1">&#39;Lacie&#39;</span><span class="p">])</span>
+</span></span><span class="line"><span class="cl"><span class="n">Out</span><span class="p">[</span><span class="mi">84</span><span class="p">]:</span> <span class="p">[</span><span class="s1">&#39;Elsie&#39;</span><span class="p">,</span> <span class="s1">&#39;Lacie&#39;</span><span class="p">,</span> <span class="s1">&#39;Tillie&#39;</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">In</span> <span class="p">[</span><span class="mi">85</span><span class="p">]:</span> <span class="n">soup</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s1">&#39;Dormouse&#39;</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl"><span class="n">Out</span><span class="p">[</span><span class="mi">85</span><span class="p">]:</span> <span class="p">[</span><span class="s2">&#34;The Dormouse&#39;s story&#34;</span><span class="p">,</span> <span class="s2">&#34;The Dormouse&#39;s story&#34;</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">is_the_only_string_within_a_tag</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;&#34;&#34;Return True if this string is the only child of its parent tag.&#34;&#34;&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="p">(</span><span class="n">s</span> <span class="o">==</span> <span class="n">s</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">string</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">In</span> <span class="p">[</span><span class="mi">87</span><span class="p">]:</span> <span class="n">soup</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="n">is_the_only_string_within_a_tag</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">Out</span><span class="p">[</span><span class="mi">87</span><span class="p">]:</span>
+</span></span><span class="line"><span class="cl"><span class="p">[</span><span class="s2">&#34;The Dormouse&#39;s story&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl"> <span class="s2">&#34;The Dormouse&#39;s story&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl"> <span class="s1">&#39;Elsie&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl"> <span class="s1">&#39;Lacie&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl"> <span class="s1">&#39;Tillie&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl"> <span class="s1">&#39;...&#39;</span><span class="p">]</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>虽然<code>text</code>参数用于搜索字符串，还可以与其它参数混合使用来过滤 tag。<code>BeautifulSoup</code>会找到<code>.string</code>属性与<code>text</code>参数值相符的 tag。以下代码用来搜索内容中包含<code>Elsie</code>的<code>&lt;a&gt;</code>标签：</p>
+<div class="highlight" id="id-33"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-Python" data-lang="Python"><span class="line"><span class="cl"><span class="n">In</span> <span class="p">[</span><span class="mi">88</span><span class="p">]:</span> <span class="n">soup</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s2">&#34;Elsie&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">Out</span><span class="p">[</span><span class="mi">88</span><span class="p">]:</span> <span class="p">[</span><span class="o">&lt;</span><span class="n">a</span> <span class="n">class</span><span class="o">=</span><span class="s2">&#34;sister&#34;</span> <span class="n">href</span><span class="o">=</span><span class="s2">&#34;http://example.com/elsie&#34;</span> <span class="nb">id</span><span class="o">=</span><span class="s2">&#34;link1&#34;</span><span class="o">&gt;</span><span class="n">Elsie</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span><span class="p">]</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="limit-参数" class="heading-element">
+  <a href="#limit-%e5%8f%82%e6%95%b0" class="heading-mark"></a>limit 参数</h4><p><code>find_all()</code>方法返回全部的搜索结构，如果文档树很大那么搜索会很慢。如果我们不需要全部结果，可以使用<code>limit</code>参数限制返回结果的数量。当搜索结果的数量达到<code>limit</code>的限制时，就停止搜索返回结果。</p>
+<div class="highlight" id="id-34"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-Python" data-lang="Python"><span class="line"><span class="cl"><span class="n">In</span> <span class="p">[</span><span class="mi">89</span><span class="p">]:</span> <span class="n">soup</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">Out</span><span class="p">[</span><span class="mi">89</span><span class="p">]:</span>
+</span></span><span class="line"><span class="cl"><span class="p">[</span><span class="o">&lt;</span><span class="n">a</span> <span class="n">class</span><span class="o">=</span><span class="s2">&#34;sister&#34;</span> <span class="n">href</span><span class="o">=</span><span class="s2">&#34;http://example.com/elsie&#34;</span> <span class="nb">id</span><span class="o">=</span><span class="s2">&#34;link1&#34;</span><span class="o">&gt;</span><span class="n">Elsie</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl"> <span class="o">&lt;</span><span class="n">a</span> <span class="n">class</span><span class="o">=</span><span class="s2">&#34;sister&#34;</span> <span class="n">href</span><span class="o">=</span><span class="s2">&#34;http://example.com/lacie&#34;</span> <span class="nb">id</span><span class="o">=</span><span class="s2">&#34;link2&#34;</span><span class="o">&gt;</span><span class="n">Lacie</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl"> <span class="o">&lt;</span><span class="n">a</span> <span class="n">class</span><span class="o">=</span><span class="s2">&#34;sister&#34;</span> <span class="n">href</span><span class="o">=</span><span class="s2">&#34;http://example.com/tillie&#34;</span> <span class="nb">id</span><span class="o">=</span><span class="s2">&#34;link3&#34;</span><span class="o">&gt;</span><span class="n">Tillie</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">In</span> <span class="p">[</span><span class="mi">90</span><span class="p">]:</span> <span class="n">soup</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">,</span><span class="n">limit</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">Out</span><span class="p">[</span><span class="mi">90</span><span class="p">]:</span>
+</span></span><span class="line"><span class="cl"><span class="p">[</span><span class="o">&lt;</span><span class="n">a</span> <span class="n">class</span><span class="o">=</span><span class="s2">&#34;sister&#34;</span> <span class="n">href</span><span class="o">=</span><span class="s2">&#34;http://example.com/elsie&#34;</span> <span class="nb">id</span><span class="o">=</span><span class="s2">&#34;link1&#34;</span><span class="o">&gt;</span><span class="n">Elsie</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl"> <span class="o">&lt;</span><span class="n">a</span> <span class="n">class</span><span class="o">=</span><span class="s2">&#34;sister&#34;</span> <span class="n">href</span><span class="o">=</span><span class="s2">&#34;http://example.com/lacie&#34;</span> <span class="nb">id</span><span class="o">=</span><span class="s2">&#34;link2&#34;</span><span class="o">&gt;</span><span class="n">Lacie</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span><span class="p">]</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="recursive-参数" class="heading-element">
+  <a href="#recursive-%e5%8f%82%e6%95%b0" class="heading-mark"></a>recursive 参数</h4><p>调用 tag 的<code>find_all()</code>方法时，<code>BeautifulSoup</code>会检索当前 tag 的所有子孙节点，如果只想搜索 tag 的直接子节点，可以使用参数<code>recursive=False</code>。</p>
+<p>有如下文档：</p>
+<div class="highlight" id="id-35"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-Python" data-lang="Python"><span class="line"><span class="cl"><span class="o">&lt;</span><span class="n">html</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl"> <span class="o">&lt;</span><span class="n">head</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="o">&lt;</span><span class="n">title</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">   <span class="n">The</span> <span class="n">Dormouse</span><span class="s1">&#39;s story</span>
+</span></span><span class="line"><span class="cl">  <span class="o">&lt;/</span><span class="n">title</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl"> <span class="o">&lt;/</span><span class="n">head</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="o">...</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>是否使用<code>recursive</code>参数的结果：</p>
+<div class="highlight" id="id-36"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-Python" data-lang="Python"><span class="line"><span class="cl"><span class="n">In</span> <span class="p">[</span><span class="mi">95</span><span class="p">]:</span> <span class="n">soup</span><span class="o">.</span><span class="n">html</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="s1">&#39;title&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">Out</span><span class="p">[</span><span class="mi">95</span><span class="p">]:</span>
+</span></span><span class="line"><span class="cl"><span class="p">[</span><span class="o">&lt;</span><span class="n">title</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">The</span> <span class="n">Dormouse</span><span class="s1">&#39;s story</span>
+</span></span><span class="line"><span class="cl">   <span class="o">&lt;/</span><span class="n">title</span><span class="o">&gt;</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">In</span> <span class="p">[</span><span class="mi">96</span><span class="p">]:</span> <span class="n">soup</span><span class="o">.</span><span class="n">html</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="s1">&#39;title&#39;</span><span class="p">,</span> <span class="n">recursive</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">Out</span><span class="p">[</span><span class="mi">96</span><span class="p">]:</span> <span class="p">[]</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="像调用-find_all一样调用-tag" class="heading-element">
+  <a href="#%e5%83%8f%e8%b0%83%e7%94%a8-find_all%e4%b8%80%e6%a0%b7%e8%b0%83%e7%94%a8-tag" class="heading-mark"></a>像调用 find_all()一样调用 tag</h3><p><code>find_all()</code>几乎是<code>BeautifulSoup</code>中最常见的搜索方法，所以定义了它的简写方法。<code>BeautifulSoup</code>对象和<code>Tag</code>对象可以被当作一个方法来使用，这个方法的执行结果与调用这个对象的<code>find_all()</code>方法相同。</p>
+<p>下面两行代码是等价的：</p>
+<div class="highlight" id="id-37"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-Python" data-lang="Python"><span class="line"><span class="cl"><span class="n">soup</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="s2">&#34;a&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">soup</span><span class="p">(</span><span class="s2">&#34;a&#34;</span><span class="p">)</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>以下两行代码也是等价的：</p>
+<div class="highlight" id="id-38"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-Python" data-lang="Python"><span class="line"><span class="cl"><span class="n">soup</span><span class="o">.</span><span class="n">title</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">soup</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="css-选择器" class="heading-element">
+  <a href="#css-%e9%80%89%e6%8b%a9%e5%99%a8" class="heading-mark"></a>CSS 选择器</h3><p><code>BeautifulSoup</code>支持大部分的 CSS 选择器，在<code>Tag</code>或<code>BeautifulSoup</code>对象的<code>select()</code>方法中传入字符串参数即可使用 CSS 选择器的语法找到 tag：</p>
+<div class="highlight" id="id-39"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-Python" data-lang="Python"><span class="line"><span class="cl"><span class="n">In</span> <span class="p">[</span><span class="mi">1</span><span class="p">]:</span> <span class="kn">from</span> <span class="nn">bs4</span> <span class="kn">import</span> <span class="n">BeautifulSoup</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">In</span> <span class="p">[</span><span class="mi">2</span><span class="p">]:</span> <span class="n">html_doc</span> <span class="o">=</span> <span class="s2">&#34;&#34;&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s2">   ...: &lt;html&gt;&lt;head&gt;&lt;title&gt;The Dormouse&#39;s story&lt;/title&gt;&lt;/head&gt;
+</span></span></span><span class="line"><span class="cl"><span class="s2">   ...: &lt;body&gt;
+</span></span></span><span class="line"><span class="cl"><span class="s2">   ...: &lt;p class=&#34;title&#34;&gt;&lt;b&gt;The Dormouse&#39;s story&lt;/b&gt;&lt;/p&gt;
+</span></span></span><span class="line"><span class="cl"><span class="s2">   ...:
+</span></span></span><span class="line"><span class="cl"><span class="s2">   ...: &lt;p class=&#34;story&#34;&gt;Once upon a time there were three little sisters; and their names were
+</span></span></span><span class="line"><span class="cl"><span class="s2">   ...: &lt;a href=&#34;http://example.com/elsie&#34; class=&#34;sister&#34; id=&#34;link1&#34;&gt;Elsie&lt;/a&gt;,
+</span></span></span><span class="line"><span class="cl"><span class="s2">   ...: &lt;a href=&#34;http://example.com/lacie&#34; class=&#34;sister&#34; id=&#34;link2&#34;&gt;Lacie&lt;/a&gt; and
+</span></span></span><span class="line"><span class="cl"><span class="s2">   ...: &lt;a href=&#34;http://example.com/tillie&#34; class=&#34;sister&#34; id=&#34;link3&#34;&gt;Tillie&lt;/a&gt;;
+</span></span></span><span class="line"><span class="cl"><span class="s2">   ...: and they lived at the bottom of a well.&lt;/p&gt;
+</span></span></span><span class="line"><span class="cl"><span class="s2">   ...:
+</span></span></span><span class="line"><span class="cl"><span class="s2">   ...: &lt;p class=&#34;story&#34;&gt;...&lt;/p&gt;
+</span></span></span><span class="line"><span class="cl"><span class="s2">   ...: &#34;&#34;&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">In</span> <span class="p">[</span><span class="mi">3</span><span class="p">]:</span> <span class="n">soup</span> <span class="o">=</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="n">html_doc</span><span class="p">,</span> <span class="s1">&#39;lxml&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">In</span> <span class="p">[</span><span class="mi">4</span><span class="p">]:</span> <span class="n">soup</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s1">&#39;title&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">Out</span><span class="p">[</span><span class="mi">4</span><span class="p">]:</span> <span class="p">[</span><span class="o">&lt;</span><span class="n">title</span><span class="o">&gt;</span><span class="n">The</span> <span class="n">Dormouse</span><span class="s1">&#39;s story&lt;/title&gt;]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">In</span> <span class="p">[</span><span class="mi">5</span><span class="p">]:</span> <span class="n">soup</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s1">&#39;p:nth-of-type(3)&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">Out</span><span class="p">[</span><span class="mi">5</span><span class="p">]:</span> <span class="p">[</span><span class="o">&lt;</span><span class="n">p</span> <span class="n">class</span><span class="o">=</span><span class="s2">&#34;story&#34;</span><span class="o">&gt;...&lt;/</span><span class="n">p</span><span class="o">&gt;</span><span class="p">]</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>通过 tag 标签逐层查找：</p>
+<div class="highlight" id="id-40"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-Python" data-lang="Python"><span class="line"><span class="cl"><span class="n">In</span> <span class="p">[</span><span class="mi">6</span><span class="p">]:</span> <span class="n">soup</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s1">&#39;body a&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">Out</span><span class="p">[</span><span class="mi">6</span><span class="p">]:</span>
+</span></span><span class="line"><span class="cl"><span class="p">[</span><span class="o">&lt;</span><span class="n">a</span> <span class="n">class</span><span class="o">=</span><span class="s2">&#34;sister&#34;</span> <span class="n">href</span><span class="o">=</span><span class="s2">&#34;http://example.com/elsie&#34;</span> <span class="nb">id</span><span class="o">=</span><span class="s2">&#34;link1&#34;</span><span class="o">&gt;</span><span class="n">Elsie</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl"> <span class="o">&lt;</span><span class="n">a</span> <span class="n">class</span><span class="o">=</span><span class="s2">&#34;sister&#34;</span> <span class="n">href</span><span class="o">=</span><span class="s2">&#34;http://example.com/lacie&#34;</span> <span class="nb">id</span><span class="o">=</span><span class="s2">&#34;link2&#34;</span><span class="o">&gt;</span><span class="n">Lacie</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl"> <span class="o">&lt;</span><span class="n">a</span> <span class="n">class</span><span class="o">=</span><span class="s2">&#34;sister&#34;</span> <span class="n">href</span><span class="o">=</span><span class="s2">&#34;http://example.com/tillie&#34;</span> <span class="nb">id</span><span class="o">=</span><span class="s2">&#34;link3&#34;</span><span class="o">&gt;</span><span class="n">Tillie</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">In</span> <span class="p">[</span><span class="mi">7</span><span class="p">]:</span> <span class="n">soup</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s1">&#39;html head title&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">Out</span><span class="p">[</span><span class="mi">7</span><span class="p">]:</span> <span class="p">[</span><span class="o">&lt;</span><span class="n">title</span><span class="o">&gt;</span><span class="n">The</span> <span class="n">Dormouse</span><span class="s1">&#39;s story&lt;/title&gt;]</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>找到某个 tag 标签下的直接子标签：</p>
+<div class="highlight" id="id-41"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-Python" data-lang="Python"><span class="line"><span class="cl"><span class="n">In</span> <span class="p">[</span><span class="mi">8</span><span class="p">]:</span> <span class="n">soup</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s1">&#39;head &gt; title&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">Out</span><span class="p">[</span><span class="mi">8</span><span class="p">]:</span> <span class="p">[</span><span class="o">&lt;</span><span class="n">title</span><span class="o">&gt;</span><span class="n">The</span> <span class="n">Dormouse</span><span class="s1">&#39;s story&lt;/title&gt;]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">In</span> <span class="p">[</span><span class="mi">9</span><span class="p">]:</span> <span class="n">soup</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s1">&#39;p &gt; a&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">Out</span><span class="p">[</span><span class="mi">9</span><span class="p">]:</span>
+</span></span><span class="line"><span class="cl"><span class="p">[</span><span class="o">&lt;</span><span class="n">a</span> <span class="n">class</span><span class="o">=</span><span class="s2">&#34;sister&#34;</span> <span class="n">href</span><span class="o">=</span><span class="s2">&#34;http://example.com/elsie&#34;</span> <span class="nb">id</span><span class="o">=</span><span class="s2">&#34;link1&#34;</span><span class="o">&gt;</span><span class="n">Elsie</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl"> <span class="o">&lt;</span><span class="n">a</span> <span class="n">class</span><span class="o">=</span><span class="s2">&#34;sister&#34;</span> <span class="n">href</span><span class="o">=</span><span class="s2">&#34;http://example.com/lacie&#34;</span> <span class="nb">id</span><span class="o">=</span><span class="s2">&#34;link2&#34;</span><span class="o">&gt;</span><span class="n">Lacie</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl"> <span class="o">&lt;</span><span class="n">a</span> <span class="n">class</span><span class="o">=</span><span class="s2">&#34;sister&#34;</span> <span class="n">href</span><span class="o">=</span><span class="s2">&#34;http://example.com/tillie&#34;</span> <span class="nb">id</span><span class="o">=</span><span class="s2">&#34;link3&#34;</span><span class="o">&gt;</span><span class="n">Tillie</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span><span class="p">]</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>找到兄弟节点标签：</p>
+<div class="highlight" id="id-42"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-Python" data-lang="Python"><span class="line"><span class="cl"><span class="n">In</span> <span class="p">[</span><span class="mi">14</span><span class="p">]:</span> <span class="n">soup</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s1">&#39;#link1 ~ .sister&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">Out</span><span class="p">[</span><span class="mi">14</span><span class="p">]:</span>
+</span></span><span class="line"><span class="cl"><span class="p">[</span><span class="o">&lt;</span><span class="n">a</span> <span class="n">class</span><span class="o">=</span><span class="s2">&#34;sister&#34;</span> <span class="n">href</span><span class="o">=</span><span class="s2">&#34;http://example.com/lacie&#34;</span> <span class="nb">id</span><span class="o">=</span><span class="s2">&#34;link2&#34;</span><span class="o">&gt;</span><span class="n">Lacie</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl"> <span class="o">&lt;</span><span class="n">a</span> <span class="n">class</span><span class="o">=</span><span class="s2">&#34;sister&#34;</span> <span class="n">href</span><span class="o">=</span><span class="s2">&#34;http://example.com/tillie&#34;</span> <span class="nb">id</span><span class="o">=</span><span class="s2">&#34;link3&#34;</span><span class="o">&gt;</span><span class="n">Tillie</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">In</span> <span class="p">[</span><span class="mi">15</span><span class="p">]:</span> <span class="n">soup</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s1">&#39;#link1 + .sister&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">Out</span><span class="p">[</span><span class="mi">15</span><span class="p">]:</span> <span class="p">[</span><span class="o">&lt;</span><span class="n">a</span> <span class="n">class</span><span class="o">=</span><span class="s2">&#34;sister&#34;</span> <span class="n">href</span><span class="o">=</span><span class="s2">&#34;http://example.com/lacie&#34;</span> <span class="nb">id</span><span class="o">=</span><span class="s2">&#34;link2&#34;</span><span class="o">&gt;</span><span class="n">Lacie</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span><span class="p">]</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>通过 CSS 的类名查找：</p>
+<div class="highlight" id="id-43"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-Python" data-lang="Python"><span class="line"><span class="cl"><span class="n">In</span> <span class="p">[</span><span class="mi">16</span><span class="p">]:</span> <span class="n">soup</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s1">&#39;.sister&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">Out</span><span class="p">[</span><span class="mi">16</span><span class="p">]:</span>
+</span></span><span class="line"><span class="cl"><span class="p">[</span><span class="o">&lt;</span><span class="n">a</span> <span class="n">class</span><span class="o">=</span><span class="s2">&#34;sister&#34;</span> <span class="n">href</span><span class="o">=</span><span class="s2">&#34;http://example.com/elsie&#34;</span> <span class="nb">id</span><span class="o">=</span><span class="s2">&#34;link1&#34;</span><span class="o">&gt;</span><span class="n">Elsie</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl"> <span class="o">&lt;</span><span class="n">a</span> <span class="n">class</span><span class="o">=</span><span class="s2">&#34;sister&#34;</span> <span class="n">href</span><span class="o">=</span><span class="s2">&#34;http://example.com/lacie&#34;</span> <span class="nb">id</span><span class="o">=</span><span class="s2">&#34;link2&#34;</span><span class="o">&gt;</span><span class="n">Lacie</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl"> <span class="o">&lt;</span><span class="n">a</span> <span class="n">class</span><span class="o">=</span><span class="s2">&#34;sister&#34;</span> <span class="n">href</span><span class="o">=</span><span class="s2">&#34;http://example.com/tillie&#34;</span> <span class="nb">id</span><span class="o">=</span><span class="s2">&#34;link3&#34;</span><span class="o">&gt;</span><span class="n">Tillie</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">In</span> <span class="p">[</span><span class="mi">17</span><span class="p">]:</span> <span class="n">soup</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s1">&#39;[class~=sister]&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">Out</span><span class="p">[</span><span class="mi">17</span><span class="p">]:</span>
+</span></span><span class="line"><span class="cl"><span class="p">[</span><span class="o">&lt;</span><span class="n">a</span> <span class="n">class</span><span class="o">=</span><span class="s2">&#34;sister&#34;</span> <span class="n">href</span><span class="o">=</span><span class="s2">&#34;http://example.com/elsie&#34;</span> <span class="nb">id</span><span class="o">=</span><span class="s2">&#34;link1&#34;</span><span class="o">&gt;</span><span class="n">Elsie</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl"> <span class="o">&lt;</span><span class="n">a</span> <span class="n">class</span><span class="o">=</span><span class="s2">&#34;sister&#34;</span> <span class="n">href</span><span class="o">=</span><span class="s2">&#34;http://example.com/lacie&#34;</span> <span class="nb">id</span><span class="o">=</span><span class="s2">&#34;link2&#34;</span><span class="o">&gt;</span><span class="n">Lacie</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl"> <span class="o">&lt;</span><span class="n">a</span> <span class="n">class</span><span class="o">=</span><span class="s2">&#34;sister&#34;</span> <span class="n">href</span><span class="o">=</span><span class="s2">&#34;http://example.com/tillie&#34;</span> <span class="nb">id</span><span class="o">=</span><span class="s2">&#34;link3&#34;</span><span class="o">&gt;</span><span class="n">Tillie</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span><span class="p">]</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>通过 tag 的 id 查找：</p>
+<div class="highlight" id="id-44"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-Python" data-lang="Python"><span class="line"><span class="cl"><span class="n">In</span> <span class="p">[</span><span class="mi">18</span><span class="p">]:</span> <span class="n">soup</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s1">&#39;#link1&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">Out</span><span class="p">[</span><span class="mi">18</span><span class="p">]:</span> <span class="p">[</span><span class="o">&lt;</span><span class="n">a</span> <span class="n">class</span><span class="o">=</span><span class="s2">&#34;sister&#34;</span> <span class="n">href</span><span class="o">=</span><span class="s2">&#34;http://example.com/elsie&#34;</span> <span class="nb">id</span><span class="o">=</span><span class="s2">&#34;link1&#34;</span><span class="o">&gt;</span><span class="n">Elsie</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">In</span> <span class="p">[</span><span class="mi">19</span><span class="p">]:</span> <span class="n">soup</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s1">&#39;a#link2&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">Out</span><span class="p">[</span><span class="mi">19</span><span class="p">]:</span> <span class="p">[</span><span class="o">&lt;</span><span class="n">a</span> <span class="n">class</span><span class="o">=</span><span class="s2">&#34;sister&#34;</span> <span class="n">href</span><span class="o">=</span><span class="s2">&#34;http://example.com/lacie&#34;</span> <span class="nb">id</span><span class="o">=</span><span class="s2">&#34;link2&#34;</span><span class="o">&gt;</span><span class="n">Lacie</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span><span class="p">]</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>通过是否存在某个属性来查找：</p>
+<div class="highlight" id="id-45"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-Python" data-lang="Python"><span class="line"><span class="cl"><span class="n">In</span> <span class="p">[</span><span class="mi">20</span><span class="p">]:</span> <span class="n">soup</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s1">&#39;a[href]&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">Out</span><span class="p">[</span><span class="mi">20</span><span class="p">]:</span>
+</span></span><span class="line"><span class="cl"><span class="p">[</span><span class="o">&lt;</span><span class="n">a</span> <span class="n">class</span><span class="o">=</span><span class="s2">&#34;sister&#34;</span> <span class="n">href</span><span class="o">=</span><span class="s2">&#34;http://example.com/elsie&#34;</span> <span class="nb">id</span><span class="o">=</span><span class="s2">&#34;link1&#34;</span><span class="o">&gt;</span><span class="n">Elsie</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl"> <span class="o">&lt;</span><span class="n">a</span> <span class="n">class</span><span class="o">=</span><span class="s2">&#34;sister&#34;</span> <span class="n">href</span><span class="o">=</span><span class="s2">&#34;http://example.com/lacie&#34;</span> <span class="nb">id</span><span class="o">=</span><span class="s2">&#34;link2&#34;</span><span class="o">&gt;</span><span class="n">Lacie</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl"> <span class="o">&lt;</span><span class="n">a</span> <span class="n">class</span><span class="o">=</span><span class="s2">&#34;sister&#34;</span> <span class="n">href</span><span class="o">=</span><span class="s2">&#34;http://example.com/tillie&#34;</span> <span class="nb">id</span><span class="o">=</span><span class="s2">&#34;link3&#34;</span><span class="o">&gt;</span><span class="n">Tillie</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span><span class="p">]</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>通过属性的值来查找：</p>
+<div class="highlight" id="id-46"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-Python" data-lang="Python"><span class="line"><span class="cl"><span class="n">In</span> <span class="p">[</span><span class="mi">21</span><span class="p">]:</span> <span class="n">soup</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s1">&#39;a[href=&#34;http://example.com/elsie&#34;]&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">Out</span><span class="p">[</span><span class="mi">21</span><span class="p">]:</span> <span class="p">[</span><span class="o">&lt;</span><span class="n">a</span> <span class="n">class</span><span class="o">=</span><span class="s2">&#34;sister&#34;</span> <span class="n">href</span><span class="o">=</span><span class="s2">&#34;http://example.com/elsie&#34;</span> <span class="nb">id</span><span class="o">=</span><span class="s2">&#34;link1&#34;</span><span class="o">&gt;</span><span class="n">Elsie</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">In</span> <span class="p">[</span><span class="mi">22</span><span class="p">]:</span> <span class="n">soup</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s1">&#39;a[href^=&#34;http://example.com/&#34;]&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">Out</span><span class="p">[</span><span class="mi">22</span><span class="p">]:</span>
+</span></span><span class="line"><span class="cl"><span class="p">[</span><span class="o">&lt;</span><span class="n">a</span> <span class="n">class</span><span class="o">=</span><span class="s2">&#34;sister&#34;</span> <span class="n">href</span><span class="o">=</span><span class="s2">&#34;http://example.com/elsie&#34;</span> <span class="nb">id</span><span class="o">=</span><span class="s2">&#34;link1&#34;</span><span class="o">&gt;</span><span class="n">Elsie</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl"> <span class="o">&lt;</span><span class="n">a</span> <span class="n">class</span><span class="o">=</span><span class="s2">&#34;sister&#34;</span> <span class="n">href</span><span class="o">=</span><span class="s2">&#34;http://example.com/lacie&#34;</span> <span class="nb">id</span><span class="o">=</span><span class="s2">&#34;link2&#34;</span><span class="o">&gt;</span><span class="n">Lacie</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl"> <span class="o">&lt;</span><span class="n">a</span> <span class="n">class</span><span class="o">=</span><span class="s2">&#34;sister&#34;</span> <span class="n">href</span><span class="o">=</span><span class="s2">&#34;http://example.com/tillie&#34;</span> <span class="nb">id</span><span class="o">=</span><span class="s2">&#34;link3&#34;</span><span class="o">&gt;</span><span class="n">Tillie</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">In</span> <span class="p">[</span><span class="mi">23</span><span class="p">]:</span> <span class="n">soup</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s1">&#39;a[href$=&#34;tillie&#34;]&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">Out</span><span class="p">[</span><span class="mi">23</span><span class="p">]:</span> <span class="p">[</span><span class="o">&lt;</span><span class="n">a</span> <span class="n">class</span><span class="o">=</span><span class="s2">&#34;sister&#34;</span> <span class="n">href</span><span class="o">=</span><span class="s2">&#34;http://example.com/tillie&#34;</span> <span class="nb">id</span><span class="o">=</span><span class="s2">&#34;link3&#34;</span><span class="o">&gt;</span><span class="n">Tillie</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">In</span> <span class="p">[</span><span class="mi">24</span><span class="p">]:</span> <span class="n">soup</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s1">&#39;a[href*=&#34;.com/el&#34;]&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">Out</span><span class="p">[</span><span class="mi">24</span><span class="p">]:</span> <span class="p">[</span><span class="o">&lt;</span><span class="n">a</span> <span class="n">class</span><span class="o">=</span><span class="s2">&#34;sister&#34;</span> <span class="n">href</span><span class="o">=</span><span class="s2">&#34;http://example.com/elsie&#34;</span> <span class="nb">id</span><span class="o">=</span><span class="s2">&#34;link1&#34;</span><span class="o">&gt;</span><span class="n">Elsie</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span><span class="p">]</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>更多有关 CSS 选择器的内容，请参考<a href="https://www.w3school.com.cn/cssref/css_selectors.ASP"target="_blank" rel="external nofollow noopener noreferrer">CSS 选择器参考手册</a>。</p>
+<h2 id="爬取豆瓣电影-top250-海报" class="heading-element">
+  <a href="#%e7%88%ac%e5%8f%96%e8%b1%86%e7%93%a3%e7%94%b5%e5%bd%b1-top250-%e6%b5%b7%e6%8a%a5" class="heading-mark"></a>爬取豆瓣电影 TOP250 海报</h2><p>接下来，通过爬取豆瓣电影 TOP250 海报实践一下。访问<a href="https://movie.douban.com/top250"target="_blank" rel="external nofollow noopener noreferrer">豆瓣电影 Top 250</a></p>
+<p><img loading="lazy" src="/images/202110/2/3.png" alt="/images/202110/2/3.png" srcset="/images/202110/2/3.png?size=small, /images/202110/2/3.png?size=medium 1.5x, /images/202110/2/3.png?size=large 2x" data-title="/images/202110/2/3.png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></p>
+<p>可以看到每部电影左侧都配有一张海报，我们的目的就是下载这些海报到本地。</p>
+<p>多看几页，就会发现每个页面的 URL 和页号是有关系的。</p>
+<p><img loading="lazy" src="/images/202110/2/4.png" alt="/images/202110/2/4.png" srcset="/images/202110/2/4.png?size=small, /images/202110/2/4.png?size=medium 1.5x, /images/202110/2/4.png?size=large 2x" data-title="/images/202110/2/4.png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></p>
+<p>URL 中<code>start</code>这个参数的值等于<code>(页号 - 1) * 25</code>。接下来，再审查一下元素</p>
+<p><img loading="lazy" src="/images/202110/2/5.png" alt="/images/202110/2/5.png" srcset="/images/202110/2/5.png?size=small, /images/202110/2/5.png?size=medium 1.5x, /images/202110/2/5.png?size=large 2x" data-title="/images/202110/2/5.png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></p>
+<p>可以发现海报的地址包含在<code>class</code>值为<code>pic</code>的<code>div</code>元素下，我们可以用<code>BeautifulSoup</code>的<code>select()</code>方法获取到<code>img</code>元素，再提取<code>src</code>属性。代码如下所示：</p>
+<div class="highlight" id="id-47"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span><span class="lnt">60
+</span><span class="lnt">61
+</span><span class="lnt">62
+</span><span class="lnt">63
+</span><span class="lnt">64
+</span><span class="lnt">65
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-Python" data-lang="Python"><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">urllib.request</span> <span class="kn">import</span> <span class="n">urlopen</span>
+</span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">bs4</span> <span class="kn">import</span> <span class="n">BeautifulSoup</span>
+</span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">fake_useragent</span> <span class="kn">import</span> <span class="n">UserAgent</span>
+</span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">urllib.request</span> <span class="kn">import</span> <span class="n">Request</span>
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">os</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">BASE_URL</span> <span class="o">=</span> <span class="s2">&#34;https://movie.douban.com/top250?start=</span><span class="si">{page_id}</span><span class="s2">&amp;filter=&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="n">user_agent</span> <span class="o">=</span> <span class="n">UserAgent</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">get_content</span><span class="p">(</span><span class="n">url</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;&#34;&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s2">    根据url发送请求
+</span></span></span><span class="line"><span class="cl"><span class="s2">    :param url: 请求url
+</span></span></span><span class="line"><span class="cl"><span class="s2">    :return: 响应内容
+</span></span></span><span class="line"><span class="cl"><span class="s2">    &#34;&#34;&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">headers</span> <span class="o">=</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="s1">&#39;User-Agent&#39;</span><span class="p">:</span> <span class="n">user_agent</span><span class="o">.</span><span class="n">random</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="n">request</span> <span class="o">=</span> <span class="n">Request</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">response</span> <span class="o">=</span> <span class="n">urlopen</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">response</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">parse_html</span><span class="p">(</span><span class="n">html</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;&#34;&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s2">    解析HTML
+</span></span></span><span class="line"><span class="cl"><span class="s2">    :param html: HTML文档字符串
+</span></span></span><span class="line"><span class="cl"><span class="s2">    :return:
+</span></span></span><span class="line"><span class="cl"><span class="s2">    &#34;&#34;&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">soup</span> <span class="o">=</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="n">html</span><span class="p">,</span> <span class="s1">&#39;lxml&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">items</span> <span class="o">=</span> <span class="n">soup</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s2">&#34;.pic img&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">items</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="k">yield</span> <span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&#34;src&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">save_image</span><span class="p">(</span><span class="n">image_url</span><span class="p">,</span> <span class="n">file_name</span><span class="p">,</span> <span class="n">folder</span><span class="o">=</span><span class="s1">&#39;images&#39;</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;&#34;&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s2">    保存图片
+</span></span></span><span class="line"><span class="cl"><span class="s2">    :param image_url: 图片地址
+</span></span></span><span class="line"><span class="cl"><span class="s2">    :param file_name: 文件名
+</span></span></span><span class="line"><span class="cl"><span class="s2">    :param folder: 保存目录
+</span></span></span><span class="line"><span class="cl"><span class="s2">    &#34;&#34;&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">image</span> <span class="o">=</span> <span class="n">get_content</span><span class="p">(</span><span class="n">image_url</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">folder</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">folder</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">file_name</span> <span class="o">=</span> <span class="s2">&#34;</span><span class="si">{}</span><span class="s2">/</span><span class="si">{}</span><span class="s2">.jpg&#34;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">folder</span><span class="p">,</span> <span class="n">file_name</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">file_name</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f_obj</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="n">f_obj</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">print</span><span class="p">(</span><span class="s2">&#34;保存:&#34;</span><span class="p">,</span> <span class="n">file_name</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+</span></span><span class="line"><span class="cl">    <span class="n">total</span> <span class="o">=</span> <span class="mi">0</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">20</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="n">url</span> <span class="o">=</span> <span class="n">BASE_URL</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">page_id</span><span class="o">=</span><span class="n">i</span> <span class="o">*</span> <span class="mi">25</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="n">html</span> <span class="o">=</span> <span class="n">get_content</span><span class="p">(</span><span class="n">url</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="n">image</span> <span class="ow">in</span> <span class="n">parse_html</span><span class="p">(</span><span class="n">html</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">            <span class="nb">print</span><span class="p">(</span><span class="s2">&#34;下载:&#34;</span><span class="p">,</span> <span class="n">image</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="n">save_image</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">total</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="n">total</span> <span class="o">+=</span> <span class="mi">1</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">main</span><span class="p">()</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>运行结果如下：</p>
+<p><img loading="lazy" src="/images/202110/2/6.png" alt="/images/202110/2/6.png" srcset="/images/202110/2/6.png?size=small, /images/202110/2/6.png?size=medium 1.5x, /images/202110/2/6.png?size=large 2x" data-title="/images/202110/2/6.png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></p>
+<p>最后，可以将所有的海报拼接起来：</p>
+<div class="highlight" id="id-48"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-Python" data-lang="Python"><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">math</span>
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">PIL.Image</span> <span class="k">as</span> <span class="nn">Image</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">merge_images</span><span class="p">(</span><span class="n">folder</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">1000</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;&#34;&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s2">    将folder目录下的图片按尺寸size拼接
+</span></span></span><span class="line"><span class="cl"><span class="s2">    :param folder: 图片
+</span></span></span><span class="line"><span class="cl"><span class="s2">    :param size: 尺寸
+</span></span></span><span class="line"><span class="cl"><span class="s2">    &#34;&#34;&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">images_count</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">folder</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">    <span class="n">each_size</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">size</span> <span class="o">*</span> <span class="n">size</span> <span class="o">/</span> <span class="n">images_count</span><span class="p">))</span> <span class="o">-</span> <span class="mi">1</span>
+</span></span><span class="line"><span class="cl">    <span class="n">lines_count</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">size</span> <span class="o">/</span> <span class="n">each_size</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">final_image</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s1">&#39;RGB&#39;</span><span class="p">,</span> <span class="p">(</span><span class="n">size</span><span class="p">,</span> <span class="n">size</span><span class="p">),</span> <span class="s1">&#39;white&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">row</span><span class="p">,</span> <span class="n">column</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">images_count</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="n">image_path</span> <span class="o">=</span> <span class="s2">&#34;</span><span class="si">{}</span><span class="s2">/</span><span class="si">{}</span><span class="s2">.jpg&#34;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">folder</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="k">try</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">            <span class="n">image</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">image_path</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="k">except</span> <span class="ne">IOError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">            <span class="nb">print</span><span class="p">(</span><span class="n">image_path</span><span class="p">,</span> <span class="s2">&#34;出错啦！！！&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="k">else</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">            <span class="n">image</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">resize</span><span class="p">((</span><span class="n">each_size</span><span class="p">,</span> <span class="n">each_size</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">            <span class="n">final_image</span><span class="o">.</span><span class="n">paste</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="p">(</span><span class="n">row</span> <span class="o">*</span> <span class="n">each_size</span><span class="p">,</span> <span class="n">column</span> <span class="o">*</span> <span class="n">each_size</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">            <span class="n">column</span> <span class="o">+=</span> <span class="mi">1</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="n">column</span> <span class="o">==</span> <span class="n">lines_count</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">                <span class="n">column</span> <span class="o">=</span> <span class="mi">0</span>
+</span></span><span class="line"><span class="cl">                <span class="n">row</span> <span class="o">+=</span> <span class="mi">1</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">final_image</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s2">&#34;</span><span class="si">{}</span><span class="s2">/</span><span class="si">{}</span><span class="s2">.jpg&#34;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">folder</span><span class="p">,</span> <span class="s2">&#34;final_image&#34;</span><span class="p">)))</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>得到：</p>
+<p><img loading="lazy" src="/images/202110/2/7.jpg" alt="/images/202110/2/7.jpg" srcset="/images/202110/2/7.jpg?size=small, /images/202110/2/7.jpg?size=medium 1.5x, /images/202110/2/7.jpg?size=large 2x" data-title="/images/202110/2/7.jpg" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></p>
+<h2 id="总结" class="heading-element">
+  <a href="#%e6%80%bb%e7%bb%93" class="heading-mark"></a>总结</h2><p>本文我们介绍了<code>BeautifulSoup</code>库的一些内容，它可以将 HTML/XML 文档进行解析，得到一个文档树</p>
+<p><img loading="lazy" src="/images/202110/2/2.png" alt="/images/202110/2/2.png" srcset="/images/202110/2/2.png?size=small, /images/202110/2/2.png?size=medium 1.5x, /images/202110/2/2.png?size=large 2x" data-title="/images/202110/2/2.png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></p>
+<p>树中的每个节点都是<code>BeautifulSoup</code>四种对象中的一种。可以用<code>find_all()</code>或<code>select()</code>找到我们需要查找的节点。之后，可以通过节点的属性或者方法获取到我们需要的信息。</p>
+<h2 id="参考" class="heading-element">
+  <a href="#%e5%8f%82%e8%80%83" class="heading-mark"></a>参考</h2><ul>
+<li><a href="https://www.crummy.com/software/BeautifulSoup/bs4/doc.zh/"target="_blank" rel="external nofollow noopener noreferrer">https://www.crummy.com/software/BeautifulSoup/bs4/doc.zh/</a></li>
+</ul></div><div class="post-footer" id="post-footer">
+  <div class="post-info">
+    <div class="post-info-line">
+      <div class="post-info-mod">
+        <span title="更新于 2021-11-08 08:36:00">更新于 2021-11-08&nbsp;</span>
+      </div></div><div class="post-info-line">
+        <div class="post-info-md"></div>
+        <div class="post-info-share">
+          <span><a href="javascript:void(0);" title="分享到 Twitter" data-sharer="twitter" data-url="https://andyfree96.github.io/beautifulsoup%E5%BA%93%E4%BD%BF%E7%94%A8/" data-title="BeautifulSoup库使用" data-via="IRONAnthony96" data-hashtags="Python,BeautifulSoup,解析器"><i class="fa-brands fa-twitter fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="https://andyfree96.github.io/beautifulsoup%E5%BA%93%E4%BD%BF%E7%94%A8/" data-hashtag="Python"><i class="fa-brands fa-facebook-square fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 WhatsApp" data-sharer="whatsapp" data-url="https://andyfree96.github.io/beautifulsoup%E5%BA%93%E4%BD%BF%E7%94%A8/" data-title="BeautifulSoup库使用" data-web><i class="fa-brands fa-whatsapp fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 Line" data-sharer="line" data-url="https://andyfree96.github.io/beautifulsoup%E5%BA%93%E4%BD%BF%E7%94%A8/" data-title="BeautifulSoup库使用"><i data-svg-src="/lib/simple-icons/icons/line.min.svg" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="https://andyfree96.github.io/beautifulsoup%E5%BA%93%E4%BD%BF%E7%94%A8/" data-title="BeautifulSoup库使用" data-image="/images/202110/2/luke-jones-JcEEIM963oM-unsplash.jpg"><i class="fa-brands fa-weibo fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 Myspace" data-sharer="myspace" data-url="https://andyfree96.github.io/beautifulsoup%E5%BA%93%E4%BD%BF%E7%94%A8/" data-title="BeautifulSoup库使用" data-description=""><i data-svg-src="/lib/simple-icons/icons/myspace.min.svg" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 Blogger" data-sharer="blogger" data-url="https://andyfree96.github.io/beautifulsoup%E5%BA%93%E4%BD%BF%E7%94%A8/" data-title="BeautifulSoup库使用" data-description=""><i class="fa-brands fa-blogger fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 Evernote" data-sharer="evernote" data-url="https://andyfree96.github.io/beautifulsoup%E5%BA%93%E4%BD%BF%E7%94%A8/" data-title="BeautifulSoup库使用"><i class="fa-brands fa-evernote fa-fw" aria-hidden="true"></i></a>
+  </span>
+        </div>
+      </div></div>
+
+  <div class="post-info-more">
+    <section class="post-tags"><i class="fa-solid fa-tags fa-fw me-1" aria-hidden="true"></i><a href="/tags/python/" class="post-tag" title="标签 - Python">Python</a><a href="/tags/beautifulsoup/" class="post-tag" title="标签 - BeautifulSoup">BeautifulSoup</a><a href="/tags/%E8%A7%A3%E6%9E%90%E5%99%A8/" class="post-tag" title="标签 - 解析器">解析器</a></section>
+    <section>
+      <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+    </section>
+  </div>
+
+  <div class="post-nav"><a href="/requests%E5%BA%93%E4%BD%BF%E7%94%A8/" class="post-nav-item" rel="prev" title="Requests库使用"><i class="fa-solid fa-angle-left fa-fw" aria-hidden="true"></i>Requests库使用</a>
+      <a href="/%E5%BF%AB%E4%B9%90%E7%9A%84linux%E5%91%BD%E4%BB%A4%E8%A1%8C/" class="post-nav-item" rel="next" title="快乐的Linux命令行">快乐的Linux命令行<i class="fa-solid fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
+</div>
+<div class="post-reward">
+    <div class="comment">请作者喝杯咖啡!</div>
+    <input type="checkbox" class="reward-input" name="reward" id="fi-reward" hidden />
+    <label class="reward-button" for="fi-reward">赞赏</label>
+    <div class="reward-ways" data-mode="static"><div><img loading="lazy" src="/reward/alipay.png" alt="AndyFree96 支付宝" data-title="AndyFree96 支付宝" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/><span data-animation>支付宝</span>
+          </div><div><img loading="lazy" src="/reward/wechatpay.png" alt="AndyFree96 微信" data-title="AndyFree96 微信" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/><span data-animation>微信</span>
+          </div></div>
+  </div><div id="comments"><div id="gitalk" class="comment"></div><noscript>
+        Please enable JavaScript to view the comments powered by <a href="https://github.com/gitalk/gitalk" rel="external nofollow noopener noreferrer">Gitalk</a>.
+      </noscript></div></article>
+
+  <aside class="toc" id="toc-auto" aria-label="目录"><h2 class="toc-title">目录&nbsp;<i class="toc-icon fa-solid fa-angle-down fa-fw" aria-hidden="true"></i></h2>
+      <div class="toc-content" id="toc-content-auto"></div></aside></main><footer class="footer">
+    <div class="footer-container"><div class="footer-line powered">由 <a href="https://gohugo.io/" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.125.4"><img class="hugo-icon" src="/images/hugo.min.svg" alt="Hugo logo" /> Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/hugo-fixit/FixIt" target="_blank" rel="external" title="FixIt v0.3.2"><img class="fixit-icon" src="/images/fixit.min.svg" alt="FixIt logo" /> FixIt</a>
+        </div><div class="footer-line copyright" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright fa-fw" aria-hidden="true"></i>
+            <span itemprop="copyrightYear">2024</span><span class="author" itemprop="copyrightHolder">
+              <a href="https://andyfree96.github.io/"target="_blank" rel="external nofollow noopener noreferrer">AndyFree96</a></span></div></div>
+  </footer></div><div class="widgets"><div class="fixed-buttons animate__faster d-none"><div class="fixed-button back-to-top" role="button" aria-label="回到顶部"><i class="fa-solid fa-arrow-up fa-fw" aria-hidden="true"></i><span class="variant-numeric d-none">0%</span>
+        </div><div class="fixed-button view-comments d-none" role="button" aria-label="查看评论"><i class="fa-solid fa-comment fa-fw" aria-hidden="true"></i></div></div><div id="mask"></div><div class="reading-progress-bar" style="left: 0;top: 0;"></div><noscript>
+    <div class="noscript-warning">FixIt 主题在启用 JavaScript 的情况下效果最佳。</div>
+  </noscript>
+</div><link rel="stylesheet" href="/lib/gitalk/gitalk.min.css"><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script src="/lib/gitalk/gitalk.min.js"></script><script src="/lib/sharer/sharer.min.js" async defer></script><script src="/lib/cookieconsent/cookieconsent.min.js" defer></script><script>window.config={"code":{"copyTitle":"复制到剪贴板","editLockTitle":"锁定可编辑代码块","editUnLockTitle":"解锁可编辑代码块","editable":true,"maxShownLines":10},"comment":{"enable":true,"expired":false,"gitalk":{"admin":["AndyFree96"],"clientID":"72d758093a489dc215d2","clientSecret":"22314c0a264dffd45faa9ac57485f75f1fbd9873","id":"2021-11-08T08:36:00+08:00","owner":"AndyFree96","repo":"AndyFree96.github.io","title":"BeautifulSoup库使用"}},"cookieconsent":{"content":{"dismiss":"同意","link":"了解更多","message":"本网站使用 Cookies 来改善您的浏览体验。"},"enable":true,"palette":{"button":{"background":"#f0f0f0"},"popup":{"background":"#1aa3ff"}},"theme":"edgeless"}};</script><script src="/js/theme.min.js" defer></script></body>
+</html>
