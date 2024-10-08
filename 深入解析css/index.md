@@ -6,6 +6,7 @@
 
 - **2023/11/23 更新**: 增加 4 个练习**项目**——Parallax scroll animation、Voyage Slider、App Menu With Lock Screen 和 Old Film Effect
 - **2023/12/13 更新**: 增加练习**项目**——Polaroid Camera
+- **2024/10/08 更新**: **选择器**增加来自[@Shefali\_\_J](https://x.com/Shefali__J)的*选择器速查表*
 &lt;!--more--&gt;
 
 ## 准备
@@ -1564,6 +1565,14 @@ CSS Pseudo-classes: https://www.w3schools.com/css/css_pseudo_classes.asp
 - `[attr*=&#34;value&#34;]`——“包含”属性选择器。该选择器匹配的元素拥有指定属性 attr，且属性值包含指定的字符串值，例如: `[class*=&#34;sprite-&#34;]`。
 - `[attr~=&#34;value&#34;]`——“空格分隔的列表”属性选择器。该选择器匹配的元素拥有指定属性 attr，且属性值是一个空格分隔的值列表，列表中的某个值等于指定字符串值，例如: `a[rel=&#34;author&#34;]`。
 - `[attr|=&#34;value&#34;]`——匹配的元素拥有指定属性 attr，且属性值要么等于指定的字符串值，要么以该字符串开头且紧跟着一个连字符。例如: `[lang|=&#34;es&#34;]`。
+
+### 选择器速查表
+
+需要的话，可以收藏一下[@Shefali\_\_J](https://x.com/Shefali__J)的[CSS Selectors Cheatsheet](https://x.com/Shefali__J/status/1843151265100153248)！
+
+![](/images/202402/2/GZHvioHbkAA-hI1.jpg)
+
+高清图可在[CheatSheets](https://github.com/WebdevShefali/CheatSheets)下载。
 
 ## 预处理器
 
