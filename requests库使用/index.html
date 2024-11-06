@@ -15,16 +15,22 @@
     <meta name="google-adsense-account" content="ca-pub-5868664387231059" />
     <title>Requests库使用 - 东尼的博客</title><meta name="author" content="AndyFree96">
 <meta name="author-link" content="https://andyfree96.github.io/">
-<meta name="description" content="我们可以使用 Python 内置的 urllib 包来请求网络资源。它用起来比较麻烦，而且缺少很多实用的高级功能。本文我们将会介绍一个更加方便的 Python 第三方库——Requests 的使用。" /><meta name="keywords" content='Python, Requests, HTTP, 网络爬虫' />
+<meta name="description" content="
+2024/11/06 更新: 修改JSON 响应内容、定制请求头、POST 请求中的代码以及图片
+
+我们可以使用 Python 内置的 urllib 包来请求网络资源。它用起来比较麻烦，而且缺少很多实用的高级功能。本文我们将会介绍一个更加方便的 Python 第三方库——Requests 的使用。" /><meta name="keywords" content='Python, Requests, HTTP, 网络爬虫' />
   <meta itemprop="name" content="Requests库使用">
-  <meta itemprop="description" content="我们可以使用 Python 内置的 urllib 包来请求网络资源。它用起来比较麻烦，而且缺少很多实用的高级功能。本文我们将会介绍一个更加方便的 Python 第三方库——Requests 的使用。">
+  <meta itemprop="description" content="
+2024/11/06 更新: 修改JSON 响应内容、定制请求头、POST 请求中的代码以及图片
+
+我们可以使用 Python 内置的 urllib 包来请求网络资源。它用起来比较麻烦，而且缺少很多实用的高级功能。本文我们将会介绍一个更加方便的 Python 第三方库——Requests 的使用。">
   <meta itemprop="datePublished" content="2021-10-08T08:26:24+08:00">
   <meta itemprop="dateModified" content="2021-10-08T08:26:24+08:00">
-  <meta itemprop="wordCount" content="2023">
+  <meta itemprop="wordCount" content="2060">
   <meta itemprop="keywords" content="Python,Requests,HTTP,网络爬虫"><meta property="og:url" content="https://andyfree96.github.io/requests%E5%BA%93%E4%BD%BF%E7%94%A8/">
   <meta property="og:site_name" content="东尼的博客">
   <meta property="og:title" content="Requests库使用">
-  <meta property="og:description" content="我们可以使用 Python 内置的 urllib 包来请求网络资源。它用起来比较麻烦，而且缺少很多实用的高级功能。本文我们将会介绍一个更加方便的 Python 第三方库——Requests 的使用。">
+  <meta property="og:description" content=" 2024/11/06 更新: 修改JSON 响应内容、定制请求头、POST 请求中的代码以及图片 我们可以使用 Python 内置的 urllib 包来请求网络资源。它用起来比较麻烦，而且缺少很多实用的高级功能。本文我们将会介绍一个更加方便的 Python 第三方库——Requests 的使用。">
   <meta property="og:locale" content="zh-CN">
   <meta property="og:type" content="article">
     <meta property="article:section" content="posts">
@@ -34,7 +40,10 @@
     <meta property="article:tag" content="Requests">
     <meta property="article:tag" content="HTTP">
 <meta name="twitter:card" content="summary"><meta name="twitter:title" content="Requests库使用">
-<meta name="twitter:description" content="我们可以使用 Python 内置的 urllib 包来请求网络资源。它用起来比较麻烦，而且缺少很多实用的高级功能。本文我们将会介绍一个更加方便的 Python 第三方库——Requests 的使用。">
+<meta name="twitter:description" content="
+2024/11/06 更新: 修改JSON 响应内容、定制请求头、POST 请求中的代码以及图片
+
+我们可以使用 Python 内置的 urllib 包来请求网络资源。它用起来比较麻烦，而且缺少很多实用的高级功能。本文我们将会介绍一个更加方便的 Python 第三方库——Requests 的使用。">
       <meta name="twitter:site" content="@IRONAnthony96">
 <meta name="application-name" content="FixIt">
 <meta name="apple-mobile-web-app-title" content="FixIt"><meta name="theme-color" data-light="#f8f8f8" data-dark="#252627" content="#f8f8f8"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
@@ -50,7 +59,7 @@
     "mainEntityOfPage": {
       "@type": "WebPage",
       "@id": "https:\/\/andyfree96.github.io\/requests%E5%BA%93%E4%BD%BF%E7%94%A8\/"
-    },"genre": "posts","keywords": "Python, Requests, HTTP","wordcount":  2023 ,
+    },"genre": "posts","keywords": "Python, Requests, HTTP","wordcount":  2060 ,
     "url": "https:\/\/andyfree96.github.io\/requests%E5%BA%93%E4%BD%BF%E7%94%A8\/","datePublished": "2021-10-08T08:26:24+08:00","dateModified": "2021-10-08T08:26:24+08:00","publisher": {
       "@type": "Organization",
       "name": ""},"author": {
@@ -208,7 +217,7 @@
   <article class="page single">
     <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span title="转载" class="icon-repost"><i class="fa-solid fa-share fa-fw" aria-hidden="true"></i></span><span>Requests库使用</span>
       </h1></div><div class="post-meta">
-      <div class="post-meta-line"><span class="post-author"><a href="https://andyfree96.github.io/" title="作者"target="_blank" rel="external nofollow noopener noreferrer author" class="author"><img loading="lazy" src="/avatar/1.jpg" alt="AndyFree96" data-title="AndyFree96" class="avatar" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/>&nbsp;AndyFree96</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E7%BD%91%E7%BB%9C%E7%88%AC%E8%99%AB/" class="post-category" title="分类 - 网络爬虫"><i class="fa-regular fa-folder fa-fw" aria-hidden="true"></i> 网络爬虫</a></span></div><div class="post-meta-line"><span title="发布于 2021-10-08 08:26:24"><i class="fa-solid fa-calendar-days fa-fw me-1" aria-hidden="true"></i><time datetime="2021-10-08">2021-10-08</time></span>&nbsp;<span title="2023 字"><i class="fa-solid fa-pencil-alt fa-fw me-1" aria-hidden="true"></i>约 2100 字</span>&nbsp;<span><i class="fa-regular fa-clock fa-fw me-1" aria-hidden="true"></i>预计阅读 5 分钟</span>&nbsp;</div>
+      <div class="post-meta-line"><span class="post-author"><a href="https://andyfree96.github.io/" title="作者"target="_blank" rel="external nofollow noopener noreferrer author" class="author"><img loading="lazy" src="/avatar/1.jpg" alt="AndyFree96" data-title="AndyFree96" class="avatar" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/>&nbsp;AndyFree96</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E7%BD%91%E7%BB%9C%E7%88%AC%E8%99%AB/" class="post-category" title="分类 - 网络爬虫"><i class="fa-regular fa-folder fa-fw" aria-hidden="true"></i> 网络爬虫</a></span></div><div class="post-meta-line"><span title="发布于 2021-10-08 08:26:24"><i class="fa-solid fa-calendar-days fa-fw me-1" aria-hidden="true"></i><time datetime="2021-10-08">2021-10-08</time></span>&nbsp;<span title="2060 字"><i class="fa-solid fa-pencil-alt fa-fw me-1" aria-hidden="true"></i>约 2100 字</span>&nbsp;<span><i class="fa-regular fa-clock fa-fw me-1" aria-hidden="true"></i>预计阅读 5 分钟</span>&nbsp;</div>
     </div><div class="featured-image"><img loading="lazy" src="/images/202110/1/steve-johnson-UaP_MmMxiTs-unsplash.jpg" alt="/images/202110/1/steve-johnson-UaP_MmMxiTs-unsplash.jpg" data-title="/images/202110/1/steve-johnson-UaP_MmMxiTs-unsplash.jpg" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></div><div class="details toc" id="toc-static" data-kept="false">
         <div class="details-summary toc-title">
           <span>目录</span>
@@ -233,7 +242,10 @@
     <li><a href="#参考">参考</a></li>
   </ul>
 </nav></div>
-      </div><div class="content" id="content"><p>我们可以使用 Python 内置的 urllib 包来请求网络资源。它用起来比较麻烦，而且缺少很多实用的高级功能。本文我们将会介绍一个更加方便的 Python 第三方库——Requests 的使用。</p>
+      </div><div class="content" id="content"><ul>
+<li><strong>2024/11/06 更新</strong>: 修改<strong>JSON 响应内容</strong>、<strong>定制请求头</strong>、<strong>POST 请求</strong>中的代码以及图片</li>
+</ul>
+<p>我们可以使用 Python 内置的 urllib 包来请求网络资源。它用起来比较麻烦，而且缺少很多实用的高级功能。本文我们将会介绍一个更加方便的 Python 第三方库——Requests 的使用。</p>
 <h2 id="安装-requests" class="heading-element">
   <a href="#%e5%ae%89%e8%a3%85-requests" class="heading-mark"></a>安装 Requests</h2><p>要安装<code>Requests</code>，只要在终端中运行这个简单命令即可：</p>
 <div class="highlight" id="id-1"><div class="chroma">
@@ -274,7 +286,7 @@
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-Python" data-lang="Python"><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">requests</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="n">payload</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span><span class="s1">&#39;viljw&#39;</span><span class="p">,</span> <span class="s1">&#39;cat&#39;</span><span class="p">:</span><span class="s1">&#39;ruby&#39;</span><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="n">payload</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span><span class="s1">&#39;anthony&#39;</span><span class="p">,</span> <span class="s1">&#39;cat&#39;</span><span class="p">:</span><span class="s1">&#39;ruby&#39;</span><span class="p">}</span>
 </span></span><span class="line"><span class="cl"><span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;http://httpbin.org/get&#39;</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">payload</span><span class="p">)</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>打印输出该 URL，能看到 URL 已被正确编码：</p>
@@ -287,7 +299,7 @@
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-Python" data-lang="Python"><span class="line"><span class="cl"><span class="nb">print</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">url</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="c1"># http://httpbin.org/get?name=viljw&amp;cat=ruby</span></span></span></code></pre></td></tr></table>
+</span></span><span class="line"><span class="cl"><span class="c1"># http://httpbin.org/get?name=anthony&amp;cat=ruby</span></span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="响应内容" class="heading-element">
   <a href="#%e5%93%8d%e5%ba%94%e5%86%85%e5%ae%b9" class="heading-mark"></a>响应内容</h2><p>我们能读取服务器响应内容。举个例子：</p>
@@ -364,7 +376,7 @@
 <pre tabindex="0" class="chroma"><code class="language-Python" data-lang="Python"><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">requests</span>
 </span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">pprint</span> <span class="kn">import</span> <span class="n">pprint</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="n">payload</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span><span class="s2">&#34;viljw&#34;</span><span class="p">,</span> <span class="s1">&#39;cat&#39;</span><span class="p">:</span><span class="s1">&#39;ruby&#39;</span><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="n">payload</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span><span class="s2">&#34;anthony&#34;</span><span class="p">,</span> <span class="s1">&#39;cat&#39;</span><span class="p">:</span><span class="s1">&#39;ruby&#39;</span><span class="p">}</span>
 </span></span><span class="line"><span class="cl"><span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&#34;http://httpbin.org/get&#34;</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">payload</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl"><span class="n">pprint</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">json</span><span class="p">())</span></span></span></code></pre></td></tr></table>
 </div>
@@ -384,11 +396,11 @@
 <pre tabindex="0" class="chroma"><code class="language-Python" data-lang="Python"><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">requests</span>
 </span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">pprint</span> <span class="kn">import</span> <span class="n">pprint</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="n">headers</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;User-Agent&#39;</span><span class="p">:</span> <span class="s1">&#39;viljw-agent&#39;</span><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="n">headers</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;User-Agent&#39;</span><span class="p">:</span> <span class="s1">&#39;anthony-agent&#39;</span><span class="p">}</span>
 </span></span><span class="line"><span class="cl"><span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&#34;http://httpbin.org/get&#34;</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl"><span class="n">pprint</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">json</span><span class="p">())</span></span></span></code></pre></td></tr></table>
 </div>
-</div><p>如下图所示，<code>User-Agent</code>字段的值已被更改为<code>viljw-agent</code>。</p>
+</div><p>如下图所示，<code>User-Agent</code>字段的值已被更改为<code>anthony-agent</code>。</p>
 <p><img loading="lazy" src="/images/202110/1/5.png" alt="/images/202110/1/5.png" srcset="/images/202110/1/5.png?size=small, /images/202110/1/5.png?size=medium 1.5x, /images/202110/1/5.png?size=large 2x" data-title="/images/202110/1/5.png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></p>
 <h2 id="post-请求" class="heading-element">
   <a href="#post-%e8%af%b7%e6%b1%82" class="heading-mark"></a>POST 请求</h2><p>通常，我们会想要发送一些编码为表单形式的数据——非常像一个 HTML 表单。要实现这个，只需要简单地传递一个字典给<code>data</code>参数。字典数据在发出请求时会自动编码为表单形式：</p>
@@ -403,7 +415,7 @@
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-Python" data-lang="Python"><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">requests</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="n">payload</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&#34;name&#34;</span><span class="p">:</span><span class="s2">&#34;viljw&#34;</span><span class="p">,</span> <span class="s2">&#34;actor&#34;</span><span class="p">:</span><span class="s2">&#34;peter&#34;</span><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="n">payload</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&#34;name&#34;</span><span class="p">:</span><span class="s2">&#34;anthony&#34;</span><span class="p">,</span> <span class="s2">&#34;actor&#34;</span><span class="p">:</span><span class="s2">&#34;peter&#34;</span><span class="p">}</span>
 </span></span><span class="line"><span class="cl"><span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&#34;http://httpbin.org/post&#34;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">payload</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl"><span class="nb">print</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">text</span><span class="p">)</span></span></span></code></pre></td></tr></table>
 </div>
@@ -420,7 +432,7 @@
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-Python" data-lang="Python"><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">requests</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="n">payload</span> <span class="o">=</span> <span class="p">[(</span><span class="s2">&#34;name&#34;</span><span class="p">,</span><span class="s2">&#34;viljw&#34;</span><span class="p">),</span> <span class="p">(</span><span class="s2">&#34;actor&#34;</span><span class="p">,</span><span class="s2">&#34;peter&#34;</span><span class="p">),(</span><span class="s2">&#34;actor&#34;</span><span class="p">,</span><span class="s1">&#39;marry&#39;</span><span class="p">)]</span>
+</span></span><span class="line"><span class="cl"><span class="n">payload</span> <span class="o">=</span> <span class="p">[(</span><span class="s2">&#34;name&#34;</span><span class="p">,</span><span class="s2">&#34;anthony&#34;</span><span class="p">),</span> <span class="p">(</span><span class="s2">&#34;actor&#34;</span><span class="p">,</span><span class="s2">&#34;peter&#34;</span><span class="p">),(</span><span class="s2">&#34;actor&#34;</span><span class="p">,</span><span class="s1">&#39;marry&#39;</span><span class="p">)]</span>
 </span></span><span class="line"><span class="cl"><span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&#34;http://httpbin.org/post&#34;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">payload</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl"><span class="nb">print</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">text</span><span class="p">)</span></span></span></code></pre></td></tr></table>
 </div>

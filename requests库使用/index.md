@@ -1,6 +1,8 @@
 # Requests库使用
 
 
+- **2024/11/06 更新**: 修改**JSON 响应内容**、**定制请求头**、**POST 请求**中的代码以及图片
+
 我们可以使用 Python 内置的 urllib 包来请求网络资源。它用起来比较麻烦，而且缺少很多实用的高级功能。本文我们将会介绍一个更加方便的 Python 第三方库——Requests 的使用。
 
 &lt;!--more--&gt;
@@ -38,7 +40,7 @@ r = requests.get(&#39;https://api.github.com/events&#39;)
 ```Python
 import requests
 
-payload = {&#39;name&#39;:&#39;viljw&#39;, &#39;cat&#39;:&#39;ruby&#39;}
+payload = {&#39;name&#39;:&#39;anthony&#39;, &#39;cat&#39;:&#39;ruby&#39;}
 r = requests.get(&#39;http://httpbin.org/get&#39;, params=payload)
 ```
 
@@ -47,7 +49,7 @@ r = requests.get(&#39;http://httpbin.org/get&#39;, params=payload)
 ```Python
 print(r.url)
 
-# http://httpbin.org/get?name=viljw&amp;cat=ruby
+# http://httpbin.org/get?name=anthony&amp;cat=ruby
 ```
 
 ## 响应内容
@@ -106,7 +108,7 @@ im.show()
 import requests
 from pprint import pprint
 
-payload = {&#39;name&#39;:&#34;viljw&#34;, &#39;cat&#39;:&#39;ruby&#39;}
+payload = {&#39;name&#39;:&#34;anthony&#34;, &#39;cat&#39;:&#39;ruby&#39;}
 r = requests.get(&#34;http://httpbin.org/get&#34;, params=payload)
 pprint(r.json())
 ```
@@ -121,12 +123,12 @@ pprint(r.json())
 import requests
 from pprint import pprint
 
-headers = {&#39;User-Agent&#39;: &#39;viljw-agent&#39;}
+headers = {&#39;User-Agent&#39;: &#39;anthony-agent&#39;}
 r = requests.get(&#34;http://httpbin.org/get&#34;, headers=headers)
 pprint(r.json())
 ```
 
-如下图所示，`User-Agent`字段的值已被更改为`viljw-agent`。
+如下图所示，`User-Agent`字段的值已被更改为`anthony-agent`。
 
 ![](/images/202110/1/5.png)
 
@@ -137,7 +139,7 @@ pprint(r.json())
 ```Python
 import requests
 
-payload = {&#34;name&#34;:&#34;viljw&#34;, &#34;actor&#34;:&#34;peter&#34;}
+payload = {&#34;name&#34;:&#34;anthony&#34;, &#34;actor&#34;:&#34;peter&#34;}
 r = requests.post(&#34;http://httpbin.org/post&#34;, data=payload)
 print(r.text)
 ```
@@ -149,7 +151,7 @@ print(r.text)
 ```Python
 import requests
 
-payload = [(&#34;name&#34;,&#34;viljw&#34;), (&#34;actor&#34;,&#34;peter&#34;),(&#34;actor&#34;,&#39;marry&#39;)]
+payload = [(&#34;name&#34;,&#34;anthony&#34;), (&#34;actor&#34;,&#34;peter&#34;),(&#34;actor&#34;,&#39;marry&#39;)]
 r = requests.post(&#34;http://httpbin.org/post&#34;, data=payload)
 print(r.text)
 ```
