@@ -4,9 +4,9 @@
 &lt;!-- - **2022/11/10 更新**: 增加**背景、阴影和混合模式**
 - **2022/11/14 更新**: 增加**选择器**和**预处理器** --&gt;
 
-- **2023/11/23 更新**: 增加 4 个练习**项目**——Parallax scroll animation、Voyage Slider、App Menu With Lock Screen 和 Old Film Effect
-- **2023/12/13 更新**: 增加练习**项目**——Polaroid Camera
-- **2024/10/08 更新**: **选择器**增加来自[@Shefali\_\_J](https://x.com/Shefali__J)的[选择器速查表](https://x.com/Shefali__J/status/1843151265100153248)
+- **2023/11/23 更新**: 增加 4 个练习[项目](#项目)——Parallax scroll animation、Voyage Slider、App Menu With Lock Screen 和 Old Film Effect
+- **2023/12/13 更新**: 增加练习[项目](#项目)——Polaroid Camera
+- **2024/10/08 更新**: [选择器](#选择器)增加来自[@Shefali\_\_J](https://x.com/Shefali__J)的[选择器速查表](https://x.com/Shefali__J/status/1843151265100153248)
 &lt;!--more--&gt;
 
 ## 准备
