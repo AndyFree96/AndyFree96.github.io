@@ -91,10 +91,6 @@ sudo find / -maxdepth 2 -name &#34;*.config&#34; -o -name &#34;ssh&#34;
 
 https://man7.org/linux/man-pages/man1/find.1.html
 
-#### 参考
-
-https://www.journaldev.com/25686/find-command-in-linux-unix
-
 ## 2. 文档编辑
 
 ### grep
@@ -204,8 +200,6 @@ grep -ci andy *
 ![](/images/202410/14/10.png)
 
 https://man7.org/linux/man-pages/man1/grep.1.html
-
-#### 参考
 
 How To Use grep Command In Linux/UNIX: https://phoenixnap.com/kb/grep-command-linux-unix-examples
 
@@ -395,8 +389,6 @@ ps -ef | grep python
 
 https://man7.org/linux/man-pages/man1/ps.1.html
 
-#### 参考
-
 https://www.journaldev.com/24613/linux-ps-command
 
 https://www.geeksforgeeks.org/ps-command-in-linux-with-examples/
@@ -449,10 +441,6 @@ sudo hostnamectl set-hostname lucas
 ```
 
 ![](/images/202410/9/3.png)
-
-#### 参考
-
-https://linuxize.com/post/uname-command-in-linux/
 
 ## 8. 系统设置
 
