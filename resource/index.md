@@ -667,5 +667,5 @@ Stanford Algorithm [Part 1](https://www.youtube.com/playlist?list=PLXFMmlk03Dt7Q
 ---
 
 > 作者:   
-> URL: http://localhost:1313/resource/  
+> URL: https://andyfree96.github.io/resource/  
 
