@@ -32,9 +32,12 @@
 
 我坚信技术的力量源于分享和协作，期待与更多的技术爱好者交流碰撞灵感！欢迎关注我的社交媒体账号，一起探索无限可能：
 
-- GitHub: [AndyFree96](https://github.com/AndyFree96) — 持续更新开源项目与技术实验
-- Twitter: [@IRONAnthony96](https://x.com/IRONAnthony96) — 分享前沿技术动态与个人思考
-- 知乎: [IRONAnthony](https://www.zhihu.com/people/IRONAnthony) — 技术答疑与知识分享
+- GitHub: [AndyFree96](https://github.com/AndyFree96)
+- Twitter: [@IRONAnthony96](https://x.com/IRONAnthony96)
+- 知乎: [IRONAnthony](https://www.zhihu.com/people/IRONAnthony)
+- Facebook: [anthonyfree96](https://www.facebook.com/anthonyfree96)
+
+不定期更新开源项目，分享前沿技术动态与个人思考，技术答疑与知识分享。
 
 ---
 
