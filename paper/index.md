@@ -15,5 +15,5 @@
 ---
 
 > 作者:   
-> URL: https://andyfree96.github.io/paper/  
+> URL: http://localhost:1313/paper/  
 
