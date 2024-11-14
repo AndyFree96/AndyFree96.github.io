@@ -26,11 +26,11 @@
 - [Lobste.rs tagged as PDF](https://lobste.rs/t/pdf) ，Lobsters 是一个聚焦于技术的社区，主要是链接聚合和对话题进行讨论。其中的 PDF 分类可以认为也是一个论文的集散地。
 - [Papers We Love](https://github.com/papers-we-love/papers-we-love) ，GitHub 上的一个近 3 万颗星的计算机科学方面的论文社区。
 
-{{&lt; admonition type=tip title=&#34;注意&#34; open=true &gt;}}
+{{&lt; admonition type=note title=&#34;注意&#34; open=true &gt;}}
 以上内容摘抄自[左耳朵耗子](https://coolshell.cn/)《左耳听风》专栏“技术资源集散地”一文
 {{&lt; /admonition &gt;}}
 
-## ✨ 私人阅读清单
+## ✨ 阅读清单
 
 ### 2024
 
