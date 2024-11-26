@@ -61,7 +61,8 @@
       &#34;政治&#34;,
       &#34;电影&#34;,
       &#34;历史&#34;,
-      &#34;理财&#34;
+      &#34;理财&#34;,
+      &#34;数学&#34;
     ]
   },
   &#34;toolbox&#34;: {
@@ -132,7 +133,7 @@
         &#34;focus&#34;: &#34;series&#34;
       },
       &#34;data&#34;: [
-        9,
+        10,
         7
       ]
     },
@@ -385,6 +386,31 @@
         1,
         2
       ]
+    },
+    {
+      &#34;name&#34;: &#34;数学&#34;,
+      &#34;type&#34;: &#34;bar&#34;,
+      &#34;barGap&#34;: 0,
+      &#34;label&#34;: {
+        &#34;show&#34;: true,
+        &#34;position&#34;: &#34;insideBottom&#34;,
+        &#34;distance&#34;: 15,
+        &#34;align&#34;: &#34;left&#34;,
+        &#34;verticalAlign&#34;: &#34;middle&#34;,
+        &#34;rotate&#34;: 90,
+        &#34;formatter&#34;: &#34;{c}  {name|{a}}&#34;,
+        &#34;fontSize&#34;: 12,
+        &#34;rich&#34;: {
+          &#34;name&#34;: {}
+        }
+      },
+      &#34;emphasis&#34;: {
+        &#34;focus&#34;: &#34;series&#34;
+      },
+      &#34;data&#34;: [
+        0,
+        4
+      ]
     }
   ]
 }{{&lt; /echarts &gt;}}
@@ -410,6 +436,8 @@
 [操作系统导论](https://book.douban.com/subject/33463930/)
 
 [C&#43;&#43;并发编程实战（第 2 版）](https://book.douban.com/subject/35653912/)
+
+[深入浅出面向对象分析与设计（中文版）](https://book.douban.com/subject/3530721/)
 
 #### 文学
 
@@ -486,6 +514,16 @@
 [手把手教你读财报（新准则升级版）](https://book.douban.com/subject/35299355/)
 
 [张新民教你读财报](https://book.douban.com/subject/36162233/)
+
+#### 数学
+
+[统计学（第 3 版）](https://book.douban.com/subject/32908247/)
+
+[统计学漫话](https://book.douban.com/subject/26875220/)
+
+[机会的数学](https://book.douban.com/subject/1032716/)
+
+[概率论与数理统计](https://book.douban.com/subject/2201479/)
 
 
 ---
