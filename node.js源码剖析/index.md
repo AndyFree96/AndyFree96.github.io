@@ -9,6 +9,11 @@ Node.js 的诞生，让 JavaScript 从浏览器的专属语言，跃升为构建
 
 &lt;!--more--&gt;
 
+## 参考
+
+- [Node.js 源码剖析](https://theanarkh.github.io/understand-nodejs/)
+- [《深入浅出 Node.js》朴灵](https://book.douban.com/subject/25768396/)
+
 
 ---
 

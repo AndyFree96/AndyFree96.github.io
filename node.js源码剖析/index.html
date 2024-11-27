@@ -24,7 +24,7 @@
 无论你是想提升对 Node.js 的理解，还是希望从源码中汲取工程设计的智慧，这都将是一次充满收获的技术旅程。准备好了吗？让我们从入口文件开始，走进 Node.js 的源码迷宫！">
   <meta itemprop="datePublished" content="2024-06-27T11:33:50+08:00">
   <meta itemprop="dateModified" content="2024-06-27T11:33:50+08:00">
-  <meta itemprop="wordCount" content="291">
+  <meta itemprop="wordCount" content="313">
   <meta itemprop="keywords" content="Node.js,运行时,非阻塞,异步,事件驱动,源码剖析"><meta property="og:url" content="https://andyfree96.github.io/node.js%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/">
   <meta property="og:site_name" content="东尼的博客">
   <meta property="og:title" content="Node.js 源码剖析：非阻塞世界的引擎密码">
@@ -61,7 +61,7 @@
     "mainEntityOfPage": {
       "@type": "WebPage",
       "@id": "https:\/\/andyfree96.github.io\/node.js%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90\/"
-    },"genre": "posts","keywords": "Node.js, 运行时, 非阻塞, 异步, 事件驱动, 源码剖析","wordcount":  291 ,
+    },"genre": "posts","keywords": "Node.js, 运行时, 非阻塞, 异步, 事件驱动, 源码剖析","wordcount":  313 ,
     "url": "https:\/\/andyfree96.github.io\/node.js%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90\/","datePublished": "2024-06-27T11:33:50+08:00","dateModified": "2024-06-27T11:33:50+08:00","publisher": {
       "@type": "Organization",
       "name": ""},"author": {
@@ -219,10 +219,25 @@
   <article class="page single">
     <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span title="转载" class="icon-repost"><i class="fa-solid fa-share fa-fw" aria-hidden="true"></i></span><span>Node.js 源码剖析：非阻塞世界的引擎密码</span>
       </h1><p class="single-subtitle animate__animated animate__fadeIn">深入核心模块与事件驱动架构，解密高性能背后的奥义</p></div><div class="post-meta">
-      <div class="post-meta-line"><span class="post-author"><a href="https://andyfree96.github.io/" title="作者"target="_blank" rel="external nofollow noopener noreferrer author" class="author"><img loading="lazy" src="/avatar/1.jpg" alt="AndyFree96" data-title="AndyFree96" class="avatar" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/>&nbsp;AndyFree96</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" class="post-category" title="分类 - 源码剖析"><i class="fa-regular fa-folder fa-fw" aria-hidden="true"></i> 源码剖析</a></span></div><div class="post-meta-line"><span title="发布于 2024-06-27 11:33:50"><i class="fa-solid fa-calendar-days fa-fw me-1" aria-hidden="true"></i><time datetime="2024-06-27">2024-06-27</time></span>&nbsp;<span title="291 字"><i class="fa-solid fa-pencil-alt fa-fw me-1" aria-hidden="true"></i>约 300 字</span>&nbsp;<span><i class="fa-regular fa-clock fa-fw me-1" aria-hidden="true"></i>预计阅读 1 分钟</span>&nbsp;</div>
-    </div><div class="featured-image"><img loading="lazy" src="/images/202406/1/vinicius-henrique-photography-tlCzxI2RQAc-unsplash.jpg" alt="/images/202406/1/vinicius-henrique-photography-tlCzxI2RQAc-unsplash.jpg" data-title="/images/202406/1/vinicius-henrique-photography-tlCzxI2RQAc-unsplash.jpg" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></div><div class="content" id="content"><p>Node.js 的诞生，让 JavaScript 从浏览器的专属语言，跃升为构建高性能服务器的利器。凭借事件驱动的架构和非阻塞 I/O 特性，Node.js 成为现代网络应用开发中的重要基石。然而，当你写下 <code>http.createServer</code>时，是否好奇过这些简单的 API 背后究竟发生了什么？</p>
+      <div class="post-meta-line"><span class="post-author"><a href="https://andyfree96.github.io/" title="作者"target="_blank" rel="external nofollow noopener noreferrer author" class="author"><img loading="lazy" src="/avatar/1.jpg" alt="AndyFree96" data-title="AndyFree96" class="avatar" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/>&nbsp;AndyFree96</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" class="post-category" title="分类 - 源码剖析"><i class="fa-regular fa-folder fa-fw" aria-hidden="true"></i> 源码剖析</a></span></div><div class="post-meta-line"><span title="发布于 2024-06-27 11:33:50"><i class="fa-solid fa-calendar-days fa-fw me-1" aria-hidden="true"></i><time datetime="2024-06-27">2024-06-27</time></span>&nbsp;<span title="313 字"><i class="fa-solid fa-pencil-alt fa-fw me-1" aria-hidden="true"></i>约 400 字</span>&nbsp;<span><i class="fa-regular fa-clock fa-fw me-1" aria-hidden="true"></i>预计阅读 1 分钟</span>&nbsp;</div>
+    </div><div class="featured-image"><img loading="lazy" src="/images/202406/1/vinicius-henrique-photography-tlCzxI2RQAc-unsplash.jpg" alt="/images/202406/1/vinicius-henrique-photography-tlCzxI2RQAc-unsplash.jpg" data-title="/images/202406/1/vinicius-henrique-photography-tlCzxI2RQAc-unsplash.jpg" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></div><div class="details toc" id="toc-static" data-kept="false">
+        <div class="details-summary toc-title">
+          <span>目录</span>
+          <span><i class="details-icon fa-solid fa-angle-right" aria-hidden="true"></i></span>
+        </div>
+        <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#参考">参考</a></li>
+  </ul>
+</nav></div>
+      </div><div class="content" id="content"><p>Node.js 的诞生，让 JavaScript 从浏览器的专属语言，跃升为构建高性能服务器的利器。凭借事件驱动的架构和非阻塞 I/O 特性，Node.js 成为现代网络应用开发中的重要基石。然而，当你写下 <code>http.createServer</code>时，是否好奇过这些简单的 API 背后究竟发生了什么？</p>
 <p>本篇文章将带你深入 Node.js 的源码世界，揭开其核心模块、事件循环、异步模型和底层实现的神秘面纱。从 libuv 的非阻塞 I/O，到 V8 引擎对 JavaScript 的极速解析，我们将从代码的视角探索 Node.js 是如何在性能与灵活性之间找到绝佳平衡的。</p>
-<p>无论你是想提升对 Node.js 的理解，还是希望从源码中汲取工程设计的智慧，这都将是一次充满收获的技术旅程。准备好了吗？让我们从入口文件开始，走进 Node.js 的源码迷宫！</p></div><div class="post-footer" id="post-footer">
+<p>无论你是想提升对 Node.js 的理解，还是希望从源码中汲取工程设计的智慧，这都将是一次充满收获的技术旅程。准备好了吗？让我们从入口文件开始，走进 Node.js 的源码迷宫！</p>
+<h2 id="参考" class="heading-element">
+  <a href="#%e5%8f%82%e8%80%83" class="heading-mark"></a>参考</h2><ul>
+<li><a href="https://theanarkh.github.io/understand-nodejs/"target="_blank" rel="external nofollow noopener noreferrer">Node.js 源码剖析</a></li>
+<li><a href="https://book.douban.com/subject/25768396/"target="_blank" rel="external nofollow noopener noreferrer">《深入浅出 Node.js》朴灵</a></li>
+</ul></div><div class="post-footer" id="post-footer">
   <div class="post-info">
     <div class="post-info-line">
       <div class="post-info-mod">
@@ -263,7 +278,8 @@
         Please enable JavaScript to view the comments powered by <a href="https://github.com/gitalk/gitalk" rel="external nofollow noopener noreferrer">Gitalk</a>.
       </noscript></div></article>
 
-  <aside class="toc" id="toc-auto" aria-label="目录"></aside></main><footer class="footer">
+  <aside class="toc" id="toc-auto" aria-label="目录"><h2 class="toc-title">目录&nbsp;<i class="toc-icon fa-solid fa-angle-down fa-fw" aria-hidden="true"></i></h2>
+      <div class="toc-content" id="toc-content-auto"></div></aside></main><footer class="footer">
     <div class="footer-container"><div class="footer-line powered">由 <a href="https://gohugo.io/" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.125.4"><img class="hugo-icon" src="/images/hugo.min.svg" alt="Hugo logo" /> Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/hugo-fixit/FixIt" target="_blank" rel="external" title="FixIt v0.3.2"><img class="fixit-icon" src="/images/fixit.min.svg" alt="FixIt logo" /> FixIt</a>
         </div><div class="footer-line copyright" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright fa-fw" aria-hidden="true"></i>
             <span itemprop="copyrightYear">2024</span><span class="author" itemprop="copyrightHolder">
