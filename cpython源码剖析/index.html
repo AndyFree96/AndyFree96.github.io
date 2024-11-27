@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html
+  itemscope
+  itemtype="http://schema.org/WebPage"
+  lang="zh-CN"
+>
+  <head>
+    
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=2"
+    />
+    <meta name="robots" content="noodp" />
+    <meta name="google-adsense-account" content="ca-pub-5868664387231059" />
+    <title>CPython源码剖析 - 东尼的博客</title><meta name="author" content="AndyFree96">
+<meta name="author-link" content="https://andyfree96.github.io/">
+<meta name="description" content="我们经常说，Python 是一门解释型语言，但你知道它的解释器 CPython 究竟是如何工作的么？Python 的内存管理、字节码执行、垃圾回收……这些幕后英雄是如何协作的？在这篇文章中，我们将通过剖析 CPython 源码，一起探索 Python 的运行本质。" /><meta name="keywords" content='draft' />
+  <meta itemprop="name" content="CPython源码剖析">
+  <meta itemprop="description" content="我们经常说，Python 是一门解释型语言，但你知道它的解释器 CPython 究竟是如何工作的么？Python 的内存管理、字节码执行、垃圾回收……这些幕后英雄是如何协作的？在这篇文章中，我们将通过剖析 CPython 源码，一起探索 Python 的运行本质。">
+  <meta itemprop="datePublished" content="2024-11-27T10:29:07+08:00">
+  <meta itemprop="dateModified" content="2024-11-27T10:29:07+08:00">
+  <meta itemprop="wordCount" content="1027">
+  <meta itemprop="keywords" content="Draft"><meta property="og:url" content="https://andyfree96.github.io/cpython%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/">
+  <meta property="og:site_name" content="东尼的博客">
+  <meta property="og:title" content="CPython源码剖析">
+  <meta property="og:description" content="我们经常说，Python 是一门解释型语言，但你知道它的解释器 CPython 究竟是如何工作的么？Python 的内存管理、字节码执行、垃圾回收……这些幕后英雄是如何协作的？在这篇文章中，我们将通过剖析 CPython 源码，一起探索 Python 的运行本质。">
+  <meta property="og:locale" content="zh-CN">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2024-11-27T10:29:07+08:00">
+    <meta property="article:modified_time" content="2024-11-27T10:29:07+08:00">
+    <meta property="article:tag" content="Draft">
+<meta name="twitter:card" content="summary"><meta name="twitter:title" content="CPython源码剖析">
+<meta name="twitter:description" content="我们经常说，Python 是一门解释型语言，但你知道它的解释器 CPython 究竟是如何工作的么？Python 的内存管理、字节码执行、垃圾回收……这些幕后英雄是如何协作的？在这篇文章中，我们将通过剖析 CPython 源码，一起探索 Python 的运行本质。">
+      <meta name="twitter:site" content="@IRONAnthony96">
+<meta name="application-name" content="FixIt">
+<meta name="apple-mobile-web-app-title" content="FixIt"><meta name="theme-color" data-light="#f8f8f8" data-dark="#252627" content="#f8f8f8"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" href="https://andyfree96.github.io/cpython%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" /><link rel="prev" href="https://andyfree96.github.io/csv2%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "BlogPosting",
+    "headline": "CPython源码剖析",
+    "inLanguage": "zh-CN",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https:\/\/andyfree96.github.io\/cpython%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90\/"
+    },"genre": "posts","keywords": "draft","wordcount":  1027 ,
+    "url": "https:\/\/andyfree96.github.io\/cpython%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90\/","datePublished": "2024-11-27T10:29:07+08:00","dateModified": "2024-11-27T10:29:07+08:00","publisher": {
+      "@type": "Organization",
+      "name": ""},"author": {
+        "@type": "Person",
+        "name": "AndyFree96"
+      },"description": ""
+  }
+  </script></head>
+  <body
+    data-header-desktop="sticky"
+    data-header-mobile="auto"
+  ><script>
+      (window.localStorage?.getItem("theme")
+        ? localStorage.getItem("theme") === "dark"
+        : "auto" === "auto"
+        ? window.matchMedia("(prefers-color-scheme: dark)").matches
+        : "auto" === "dark") &&
+        document.body.setAttribute("data-theme", "dark");
+    </script><div
+      class="wrapper"
+      data-page-style="normal"
+    ><header class="desktop animate__faster" id="header-desktop">
+  <div class="header-wrapper">
+    <div class="header-title">
+      <a href="/" title="东尼的博客"><span class="header-title-text">东尼的博客</span></a><span class="header-subtitle"></span></div>
+    <nav>
+      <ul class="menu"><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/posts/"
+                
+                
+              >📕 文章</a></li><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/categories/"
+                
+                
+              >🧰 分类</a></li><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/tags/"
+                
+                
+              >🔖 标签</a></li><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/book"
+                
+                
+              >📚 书单</a></li><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/paper"
+                
+                
+              >📝 论文</a></li><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/opencourse"
+                
+                
+              >👨🏻‍💻 公开课</a></li><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/resource"
+                
+                
+              >⚡️ 资源</a></li><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/about"
+                
+                
+              >🙋🏻‍♂️ 关于</a></li><li class="menu-item delimiter"></li><li class="menu-item theme-switch" title="切换主题">
+          <i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i>
+        </li></ul>
+    </nav>
+  </div>
+</header><header class="mobile animate__faster" id="header-mobile">
+  <div class="header-container">
+    <div class="header-wrapper">
+      <div class="header-title">
+        <a href="/" title="东尼的博客"><span class="header-title-text">东尼的博客</span></a><span class="header-subtitle"></span></div>
+      <div class="menu-toggle" id="menu-toggle-mobile">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+    <nav>
+      <ul class="menu" id="menu-mobile"><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/posts/"
+                  
+                  
+                >📕 文章</a></li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/categories/"
+                  
+                  
+                >🧰 分类</a></li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/tags/"
+                  
+                  
+                >🔖 标签</a></li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/book"
+                  
+                  
+                >📚 书单</a></li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/paper"
+                  
+                  
+                >📝 论文</a></li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/opencourse"
+                  
+                  
+                >👨🏻‍💻 公开课</a></li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/resource"
+                  
+                  
+                >⚡️ 资源</a></li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/about"
+                  
+                  
+                >🙋🏻‍♂️ 关于</a></li><li class="menu-item menu-system">
+          <span class="menu-system-item theme-switch" title="切换主题"><i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i></span></li>
+      </ul>
+    </nav>
+  </div>
+</header><main
+        class="container"
+      ><aside class="aside-collection animate__animated animate__fadeIn animate__faster" aria-label="合集"></aside>
+
+  <article class="page single">
+    <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span title="转载" class="icon-repost"><i class="fa-solid fa-share fa-fw" aria-hidden="true"></i></span><span>CPython源码剖析</span>
+      </h1></div><div class="post-meta">
+      <div class="post-meta-line"><span class="post-author"><a href="https://andyfree96.github.io/" title="作者"target="_blank" rel="external nofollow noopener noreferrer author" class="author"><img loading="lazy" src="/avatar/1.jpg" alt="AndyFree96" data-title="AndyFree96" class="avatar" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/>&nbsp;AndyFree96</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/draft/" class="post-category" title="分类 - Draft"><i class="fa-regular fa-folder fa-fw" aria-hidden="true"></i> Draft</a></span></div><div class="post-meta-line"><span title="发布于 2024-11-27 10:29:07"><i class="fa-solid fa-calendar-days fa-fw me-1" aria-hidden="true"></i><time datetime="2024-11-27">2024-11-27</time></span>&nbsp;<span title="1027 字"><i class="fa-solid fa-pencil-alt fa-fw me-1" aria-hidden="true"></i>约 1100 字</span>&nbsp;<span><i class="fa-regular fa-clock fa-fw me-1" aria-hidden="true"></i>预计阅读 3 分钟</span>&nbsp;</div>
+    </div><div class="featured-image"><img loading="lazy" src="/images/202411/4/annie-spratt-6TTV6JO2zy8-unsplash.jpg" alt="/images/202411/4/annie-spratt-6TTV6JO2zy8-unsplash.jpg" data-title="/images/202411/4/annie-spratt-6TTV6JO2zy8-unsplash.jpg" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></div><div class="details toc" id="toc-static" data-kept="false">
+        <div class="details-summary toc-title">
+          <span>目录</span>
+          <span><i class="details-icon fa-solid fa-angle-right" aria-hidden="true"></i></span>
+        </div>
+        <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#为什么阅读-cpython-源码">为什么阅读 CPython 源码？</a></li>
+    <li><a href="#参考">参考</a></li>
+  </ul>
+</nav></div>
+      </div><div class="content" id="content"><p>我们经常说，Python 是一门<strong>解释型语言</strong>，但你知道它的解释器 CPython 究竟是如何工作的么？Python 的内存管理、字节码执行、垃圾回收……这些<em>幕后英雄</em>是如何协作的？在这篇文章中，我们将通过剖析 CPython 源码，一起探索 Python 的运行本质。</p>
+<h2 id="为什么阅读-cpython-源码" class="heading-element">
+  <a href="#%e4%b8%ba%e4%bb%80%e4%b9%88%e9%98%85%e8%af%bb-cpython-%e6%ba%90%e7%a0%81" class="heading-mark"></a>为什么阅读 CPython 源码？</h2><p>理由很简单！</p>
+<div class="details admonition note open">
+    <div class="details-summary admonition-title">
+      <i class="icon fa-solid fa-pencil-alt fa-fw" aria-hidden="true"></i>注意<i class="details-icon fa-solid fa-angle-right fa-fw" aria-hidden="true"></i>
+    </div>
+    <div class="details-content">
+      <div class="admonition-content">只是想看看<strong>成功且优秀的代码</strong>是什么样的。</div>
+    </div>
+  </div>
+<p><strong>严谨的代码结构</strong>：CPython 是由全球顶尖开发者共同维护的开源项目，其代码结构极为清晰。模块划分合理，功能边界明确，适合学习如何设计大规模软件系统。通过阅读，能学会如何平衡代码的灵活性和可维护性。</p>
+<p><strong>注释和文档的典范</strong>：CPython 源码中的注释和文档量非常丰富，代码可读性极高。尤其是核心部分的实现，几乎每个模块和关键函数都有注释，解释其意图、设计思路和限制条件。这是“写给人看的代码”应该具备的标准。</p>
+<p><strong>简洁而高效的实现</strong>：尽管实现的是复杂的功能，但 CPython 的代码常常让人感叹“原来还能这么简洁优雅”。它展示了如何用最小的复杂度完成既定任务，同时保持代码的直观性。</p>
+<p><strong>一致的风格</strong>：优秀代码的重要特征之一是风格统一。CPython 的开发者严格遵循 PEP（Python Enhancement Proposals）中的规范，代码风格干净利落且一致，值得作为日常开发中的代码书写范例。</p>
+<p><strong>精妙的性能优化</strong>：CPython 在追求易读性和高性能之间做出了巧妙的平衡。例如：内存管理的实现（如引用计数）、对象模型的优化、以及对关键代码路径的 C 语言加速。这些地方让人看到“优秀代码”不仅是可读的，还能高效运行。</p>
+<p><strong>经典设计模式的应用</strong>：CPython 源码中，很多地方使用了经典的设计模式，例如工厂模式（用于对象创建）、适配器模式（处理不同平台的系统调用）、策略模式（优化特定的算法执行）。它是学习设计模式实际应用的最佳实践。</p>
+<p><strong>跨平台的实现技巧</strong>：作为一个需要在多种操作系统上运行的解释器，CPython 的代码展示了如何编写兼容性良好的跨平台代码，同时又能利用特定平台的优势。它的解决方案体现了顶级工程师的智慧。</p>
+<p><strong>迭代与社区合作的典范</strong>：CPython 是经过二十多年迭代的成熟项目，许多代码并非一蹴而就，而是在社区的协作中不断打磨。这种“演化式”代码开发过程本身就是一种学习：代码如何从朴素走向优雅，从复杂趋于简洁。</p>
+<p>阅读 CPython 源码，不仅能感受到编程艺术的美感，还能学到如何写出让别人（包括未来的自己）一看就懂的代码。作为一个开发者，我始终相信手里得有倚天剑或者屠龙刀，CPython 源码无疑就是这把神兵利器的锻造场！</p>
+<h2 id="参考" class="heading-element">
+  <a href="#%e5%8f%82%e8%80%83" class="heading-mark"></a>参考</h2><ul>
+<li><a href="https://flaggo.github.io/python3-source-code-analysis/"target="_blank" rel="external nofollow noopener noreferrer">https://flaggo.github.io/python3-source-code-analysis/</a></li>
+<li><a href="https://book.douban.com/subject/3117898/"target="_blank" rel="external nofollow noopener noreferrer">《Python 源码剖析》陈儒</a></li>
+</ul></div><div class="post-footer" id="post-footer">
+  <div class="post-info">
+    <div class="post-info-line">
+      <div class="post-info-mod">
+        <span title="更新于 2024-11-27 10:29:07">更新于 2024-11-27&nbsp;</span>
+      </div></div><div class="post-info-line">
+        <div class="post-info-md"></div>
+        <div class="post-info-share">
+          <span><a href="javascript:void(0);" title="分享到 Twitter" data-sharer="twitter" data-url="https://andyfree96.github.io/cpython%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="CPython源码剖析" data-via="IRONAnthony96" data-hashtags="draft"><i class="fa-brands fa-twitter fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="https://andyfree96.github.io/cpython%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-hashtag="draft"><i class="fa-brands fa-facebook-square fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 WhatsApp" data-sharer="whatsapp" data-url="https://andyfree96.github.io/cpython%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="CPython源码剖析" data-web><i class="fa-brands fa-whatsapp fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 Line" data-sharer="line" data-url="https://andyfree96.github.io/cpython%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="CPython源码剖析"><i data-svg-src="/lib/simple-icons/icons/line.min.svg" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="https://andyfree96.github.io/cpython%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="CPython源码剖析" data-image="/images/202411/4/annie-spratt-6TTV6JO2zy8-unsplash.jpg"><i class="fa-brands fa-weibo fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 Myspace" data-sharer="myspace" data-url="https://andyfree96.github.io/cpython%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="CPython源码剖析" data-description=""><i data-svg-src="/lib/simple-icons/icons/myspace.min.svg" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 Blogger" data-sharer="blogger" data-url="https://andyfree96.github.io/cpython%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="CPython源码剖析" data-description=""><i class="fa-brands fa-blogger fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 Evernote" data-sharer="evernote" data-url="https://andyfree96.github.io/cpython%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="CPython源码剖析"><i class="fa-brands fa-evernote fa-fw" aria-hidden="true"></i></a>
+  </span>
+        </div>
+      </div></div>
+
+  <div class="post-info-more">
+    <section class="post-tags"><i class="fa-solid fa-tags fa-fw me-1" aria-hidden="true"></i><a href="/tags/draft/" class="post-tag" title="标签 - Draft">Draft</a></section>
+    <section>
+      <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+    </section>
+  </div>
+
+  <div class="post-nav"><a href="/csv2%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" class="post-nav-item" rel="prev" title="csv2源码剖析"><i class="fa-solid fa-angle-left fa-fw" aria-hidden="true"></i>csv2源码剖析</a></div>
+</div>
+<div class="post-reward">
+    <div class="comment">请作者喝杯咖啡!</div>
+    <input type="checkbox" class="reward-input" name="reward" id="fi-reward" hidden />
+    <label class="reward-button" for="fi-reward">赞赏</label>
+    <div class="reward-ways" data-mode="static"><div><img loading="lazy" src="/reward/alipay.png" alt="AndyFree96 支付宝" data-title="AndyFree96 支付宝" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/><span data-animation>支付宝</span>
+          </div><div><img loading="lazy" src="/reward/wechatpay.png" alt="AndyFree96 微信" data-title="AndyFree96 微信" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/><span data-animation>微信</span>
+          </div></div>
+  </div><div id="comments"><div id="gitalk" class="comment"></div><noscript>
+        Please enable JavaScript to view the comments powered by <a href="https://github.com/gitalk/gitalk" rel="external nofollow noopener noreferrer">Gitalk</a>.
+      </noscript></div></article>
+
+  <aside class="toc" id="toc-auto" aria-label="目录"><h2 class="toc-title">目录&nbsp;<i class="toc-icon fa-solid fa-angle-down fa-fw" aria-hidden="true"></i></h2>
+      <div class="toc-content" id="toc-content-auto"></div></aside></main><footer class="footer">
+    <div class="footer-container"><div class="footer-line powered">由 <a href="https://gohugo.io/" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.125.4"><img class="hugo-icon" src="/images/hugo.min.svg" alt="Hugo logo" /> Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/hugo-fixit/FixIt" target="_blank" rel="external" title="FixIt v0.3.2"><img class="fixit-icon" src="/images/fixit.min.svg" alt="FixIt logo" /> FixIt</a>
+        </div><div class="footer-line copyright" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright fa-fw" aria-hidden="true"></i>
+            <span itemprop="copyrightYear">2024</span><span class="author" itemprop="copyrightHolder">
+              <a href="https://andyfree96.github.io/"target="_blank" rel="external nofollow noopener noreferrer">AndyFree96</a></span></div></div>
+  </footer></div><div class="widgets"><div class="fixed-buttons animate__faster d-none"><div class="fixed-button back-to-top" role="button" aria-label="回到顶部"><i class="fa-solid fa-arrow-up fa-fw" aria-hidden="true"></i><span class="variant-numeric d-none">0%</span>
+        </div><div class="fixed-button view-comments d-none" role="button" aria-label="查看评论"><i class="fa-solid fa-comment fa-fw" aria-hidden="true"></i></div></div><div id="mask"></div><div class="reading-progress-bar" style="left: 0;top: 0;"></div><noscript>
+    <div class="noscript-warning">FixIt 主题在启用 JavaScript 的情况下效果最佳。</div>
+  </noscript>
+</div><link rel="stylesheet" href="/lib/gitalk/gitalk.min.css"><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script src="/lib/gitalk/gitalk.min.js"></script><script src="/lib/sharer/sharer.min.js" async defer></script><script src="/lib/cookieconsent/cookieconsent.min.js" defer></script><script>window.config={"code":{"copyTitle":"复制到剪贴板","editLockTitle":"锁定可编辑代码块","editUnLockTitle":"解锁可编辑代码块","editable":true,"maxShownLines":10},"comment":{"enable":true,"expired":false,"gitalk":{"admin":["AndyFree96"],"clientID":"72d758093a489dc215d2","clientSecret":"22314c0a264dffd45faa9ac57485f75f1fbd9873","id":"2024-11-27T10:29:07+08:00","owner":"AndyFree96","repo":"AndyFree96.github.io","title":"CPython源码剖析"}},"cookieconsent":{"content":{"dismiss":"同意","link":"了解更多","message":"本网站使用 Cookies 来改善您的浏览体验。"},"enable":true,"palette":{"button":{"background":"#f0f0f0"},"popup":{"background":"#1aa3ff"}},"theme":"edgeless"}};</script><script src="/js/theme.min.js" defer></script></body>
+</html>
