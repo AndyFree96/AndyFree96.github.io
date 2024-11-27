@@ -13,17 +13,17 @@
     />
     <meta name="robots" content="noodp" />
     <meta name="google-adsense-account" content="ca-pub-5868664387231059" />
-    <title>CPython源码剖析 - 东尼的博客</title><meta name="author" content="AndyFree96">
+    <title>CPython 源码剖析：Python 运行的奥秘 - 东尼的博客</title><meta name="author" content="AndyFree96">
 <meta name="author-link" content="https://andyfree96.github.io/">
 <meta name="description" content="我们经常说，Python 是一门解释型语言，但你知道它的解释器 CPython 究竟是如何工作的么？Python 的内存管理、字节码执行、垃圾回收……这些幕后英雄是如何协作的？在这篇文章中，我们将通过剖析 CPython 源码，一起探索 Python 的运行本质。" /><meta name="keywords" content='Python, CPython, 源码剖析' />
-  <meta itemprop="name" content="CPython源码剖析">
+  <meta itemprop="name" content="CPython 源码剖析：Python 运行的奥秘">
   <meta itemprop="description" content="我们经常说，Python 是一门解释型语言，但你知道它的解释器 CPython 究竟是如何工作的么？Python 的内存管理、字节码执行、垃圾回收……这些幕后英雄是如何协作的？在这篇文章中，我们将通过剖析 CPython 源码，一起探索 Python 的运行本质。">
   <meta itemprop="datePublished" content="2024-11-27T10:29:07+08:00">
   <meta itemprop="dateModified" content="2024-11-27T10:29:07+08:00">
   <meta itemprop="wordCount" content="1027">
   <meta itemprop="keywords" content="Python,CPython,源码剖析"><meta property="og:url" content="https://andyfree96.github.io/cpython%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/">
   <meta property="og:site_name" content="东尼的博客">
-  <meta property="og:title" content="CPython源码剖析">
+  <meta property="og:title" content="CPython 源码剖析：Python 运行的奥秘">
   <meta property="og:description" content="我们经常说，Python 是一门解释型语言，但你知道它的解释器 CPython 究竟是如何工作的么？Python 的内存管理、字节码执行、垃圾回收……这些幕后英雄是如何协作的？在这篇文章中，我们将通过剖析 CPython 源码，一起探索 Python 的运行本质。">
   <meta property="og:locale" content="zh-CN">
   <meta property="og:type" content="article">
@@ -33,7 +33,7 @@
     <meta property="article:tag" content="Python">
     <meta property="article:tag" content="CPython">
     <meta property="article:tag" content="源码剖析">
-<meta name="twitter:card" content="summary"><meta name="twitter:title" content="CPython源码剖析">
+<meta name="twitter:card" content="summary"><meta name="twitter:title" content="CPython 源码剖析：Python 运行的奥秘">
 <meta name="twitter:description" content="我们经常说，Python 是一门解释型语言，但你知道它的解释器 CPython 究竟是如何工作的么？Python 的内存管理、字节码执行、垃圾回收……这些幕后英雄是如何协作的？在这篇文章中，我们将通过剖析 CPython 源码，一起探索 Python 的运行本质。">
       <meta name="twitter:site" content="@IRONAnthony96">
 <meta name="application-name" content="FixIt">
@@ -45,7 +45,7 @@
   {
     "@context": "http://schema.org",
     "@type": "BlogPosting",
-    "headline": "CPython源码剖析",
+    "headline": "CPython 源码剖析：Python 运行的奥秘",
     "inLanguage": "zh-CN",
     "mainEntityOfPage": {
       "@type": "WebPage",
@@ -206,8 +206,8 @@
       ><aside class="aside-collection animate__animated animate__fadeIn animate__faster" aria-label="合集"></aside>
 
   <article class="page single">
-    <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span title="转载" class="icon-repost"><i class="fa-solid fa-share fa-fw" aria-hidden="true"></i></span><span>CPython源码剖析</span>
-      </h1></div><div class="post-meta">
+    <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span title="转载" class="icon-repost"><i class="fa-solid fa-share fa-fw" aria-hidden="true"></i></span><span>CPython 源码剖析：Python 运行的奥秘</span>
+      </h1><p class="single-subtitle animate__animated animate__fadeIn">从代码到字节码，揭示 Python 内部机制的设计之美</p></div><div class="post-meta">
       <div class="post-meta-line"><span class="post-author"><a href="https://andyfree96.github.io/" title="作者"target="_blank" rel="external nofollow noopener noreferrer author" class="author"><img loading="lazy" src="/avatar/1.jpg" alt="AndyFree96" data-title="AndyFree96" class="avatar" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/>&nbsp;AndyFree96</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" class="post-category" title="分类 - 源码剖析"><i class="fa-regular fa-folder fa-fw" aria-hidden="true"></i> 源码剖析</a></span></div><div class="post-meta-line"><span title="发布于 2024-11-27 10:29:07"><i class="fa-solid fa-calendar-days fa-fw me-1" aria-hidden="true"></i><time datetime="2024-11-27">2024-11-27</time></span>&nbsp;<span title="1027 字"><i class="fa-solid fa-pencil-alt fa-fw me-1" aria-hidden="true"></i>约 1100 字</span>&nbsp;<span><i class="fa-regular fa-clock fa-fw me-1" aria-hidden="true"></i>预计阅读 3 分钟</span>&nbsp;</div>
     </div><div class="featured-image"><img loading="lazy" src="/images/202411/4/annie-spratt-6TTV6JO2zy8-unsplash.jpg" alt="/images/202411/4/annie-spratt-6TTV6JO2zy8-unsplash.jpg" data-title="/images/202411/4/annie-spratt-6TTV6JO2zy8-unsplash.jpg" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></div><div class="details toc" id="toc-static" data-kept="false">
         <div class="details-summary toc-title">
@@ -252,14 +252,14 @@
       </div></div><div class="post-info-line">
         <div class="post-info-md"></div>
         <div class="post-info-share">
-          <span><a href="javascript:void(0);" title="分享到 Twitter" data-sharer="twitter" data-url="https://andyfree96.github.io/cpython%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="CPython源码剖析" data-via="IRONAnthony96" data-hashtags="Python,CPython,源码剖析"><i class="fa-brands fa-twitter fa-fw" aria-hidden="true"></i></a>
+          <span><a href="javascript:void(0);" title="分享到 Twitter" data-sharer="twitter" data-url="https://andyfree96.github.io/cpython%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="CPython 源码剖析：Python 运行的奥秘" data-via="IRONAnthony96" data-hashtags="Python,CPython,源码剖析"><i class="fa-brands fa-twitter fa-fw" aria-hidden="true"></i></a>
   <a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="https://andyfree96.github.io/cpython%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-hashtag="Python"><i class="fa-brands fa-facebook-square fa-fw" aria-hidden="true"></i></a>
-  <a href="javascript:void(0);" title="分享到 WhatsApp" data-sharer="whatsapp" data-url="https://andyfree96.github.io/cpython%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="CPython源码剖析" data-web><i class="fa-brands fa-whatsapp fa-fw" aria-hidden="true"></i></a>
-  <a href="javascript:void(0);" title="分享到 Line" data-sharer="line" data-url="https://andyfree96.github.io/cpython%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="CPython源码剖析"><i data-svg-src="/lib/simple-icons/icons/line.min.svg" aria-hidden="true"></i></a>
-  <a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="https://andyfree96.github.io/cpython%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="CPython源码剖析" data-image="/images/202411/4/annie-spratt-6TTV6JO2zy8-unsplash.jpg"><i class="fa-brands fa-weibo fa-fw" aria-hidden="true"></i></a>
-  <a href="javascript:void(0);" title="分享到 Myspace" data-sharer="myspace" data-url="https://andyfree96.github.io/cpython%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="CPython源码剖析" data-description=""><i data-svg-src="/lib/simple-icons/icons/myspace.min.svg" aria-hidden="true"></i></a>
-  <a href="javascript:void(0);" title="分享到 Blogger" data-sharer="blogger" data-url="https://andyfree96.github.io/cpython%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="CPython源码剖析" data-description=""><i class="fa-brands fa-blogger fa-fw" aria-hidden="true"></i></a>
-  <a href="javascript:void(0);" title="分享到 Evernote" data-sharer="evernote" data-url="https://andyfree96.github.io/cpython%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="CPython源码剖析"><i class="fa-brands fa-evernote fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 WhatsApp" data-sharer="whatsapp" data-url="https://andyfree96.github.io/cpython%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="CPython 源码剖析：Python 运行的奥秘" data-web><i class="fa-brands fa-whatsapp fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 Line" data-sharer="line" data-url="https://andyfree96.github.io/cpython%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="CPython 源码剖析：Python 运行的奥秘"><i data-svg-src="/lib/simple-icons/icons/line.min.svg" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="https://andyfree96.github.io/cpython%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="CPython 源码剖析：Python 运行的奥秘" data-image="/images/202411/4/annie-spratt-6TTV6JO2zy8-unsplash.jpg"><i class="fa-brands fa-weibo fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 Myspace" data-sharer="myspace" data-url="https://andyfree96.github.io/cpython%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="CPython 源码剖析：Python 运行的奥秘" data-description=""><i data-svg-src="/lib/simple-icons/icons/myspace.min.svg" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 Blogger" data-sharer="blogger" data-url="https://andyfree96.github.io/cpython%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="CPython 源码剖析：Python 运行的奥秘" data-description=""><i class="fa-brands fa-blogger fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 Evernote" data-sharer="evernote" data-url="https://andyfree96.github.io/cpython%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="CPython 源码剖析：Python 运行的奥秘"><i class="fa-brands fa-evernote fa-fw" aria-hidden="true"></i></a>
   </span>
         </div>
       </div></div>
@@ -271,7 +271,7 @@
     </section>
   </div>
 
-  <div class="post-nav"><a href="/csv2%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" class="post-nav-item" rel="prev" title="csv2源码剖析"><i class="fa-solid fa-angle-left fa-fw" aria-hidden="true"></i>csv2源码剖析</a></div>
+  <div class="post-nav"><a href="/csv2%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" class="post-nav-item" rel="prev" title="csv2 源码剖析：轻量级 CSV 处理的高效之道"><i class="fa-solid fa-angle-left fa-fw" aria-hidden="true"></i>csv2 源码剖析：轻量级 CSV 处理的高效之道</a></div>
 </div>
 <div class="post-reward">
     <div class="comment">请作者喝杯咖啡!</div>
@@ -294,5 +294,5 @@
         </div><div class="fixed-button view-comments d-none" role="button" aria-label="查看评论"><i class="fa-solid fa-comment fa-fw" aria-hidden="true"></i></div></div><div id="mask"></div><div class="reading-progress-bar" style="left: 0;top: 0;"></div><noscript>
     <div class="noscript-warning">FixIt 主题在启用 JavaScript 的情况下效果最佳。</div>
   </noscript>
-</div><link rel="stylesheet" href="/lib/gitalk/gitalk.min.css"><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script src="/lib/gitalk/gitalk.min.js"></script><script src="/lib/sharer/sharer.min.js" async defer></script><script src="/lib/cookieconsent/cookieconsent.min.js" defer></script><script>window.config={"code":{"copyTitle":"复制到剪贴板","editLockTitle":"锁定可编辑代码块","editUnLockTitle":"解锁可编辑代码块","editable":true,"maxShownLines":10},"comment":{"enable":true,"expired":false,"gitalk":{"admin":["AndyFree96"],"clientID":"72d758093a489dc215d2","clientSecret":"22314c0a264dffd45faa9ac57485f75f1fbd9873","id":"2024-11-27T10:29:07+08:00","owner":"AndyFree96","repo":"AndyFree96.github.io","title":"CPython源码剖析"}},"cookieconsent":{"content":{"dismiss":"同意","link":"了解更多","message":"本网站使用 Cookies 来改善您的浏览体验。"},"enable":true,"palette":{"button":{"background":"#f0f0f0"},"popup":{"background":"#1aa3ff"}},"theme":"edgeless"}};</script><script src="/js/theme.min.js" defer></script></body>
+</div><link rel="stylesheet" href="/lib/gitalk/gitalk.min.css"><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script src="/lib/gitalk/gitalk.min.js"></script><script src="/lib/sharer/sharer.min.js" async defer></script><script src="/lib/cookieconsent/cookieconsent.min.js" defer></script><script>window.config={"code":{"copyTitle":"复制到剪贴板","editLockTitle":"锁定可编辑代码块","editUnLockTitle":"解锁可编辑代码块","editable":true,"maxShownLines":10},"comment":{"enable":true,"expired":false,"gitalk":{"admin":["AndyFree96"],"clientID":"72d758093a489dc215d2","clientSecret":"22314c0a264dffd45faa9ac57485f75f1fbd9873","id":"2024-11-27T10:29:07+08:00","owner":"AndyFree96","repo":"AndyFree96.github.io","title":"CPython 源码剖析：Python 运行的奥秘"}},"cookieconsent":{"content":{"dismiss":"同意","link":"了解更多","message":"本网站使用 Cookies 来改善您的浏览体验。"},"enable":true,"palette":{"button":{"background":"#f0f0f0"},"popup":{"background":"#1aa3ff"}},"theme":"edgeless"}};</script><script src="/js/theme.min.js" defer></script></body>
 </html>
