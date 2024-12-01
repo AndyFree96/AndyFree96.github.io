@@ -31,7 +31,7 @@
   <meta property="og:description" content="Node.js 的诞生，让 JavaScript 从浏览器的专属语言，跃升为构建高性能服务器的利器。凭借事件驱动的架构和非阻塞 I/O 特性，Node.js 成为现代网络应用开发中的重要基石。然而，当你写下 http.createServer时，是否好奇过这些简单的 API 背后究竟发生了什么？
 本篇文章将带你深入 Node.js 的源码世界，揭开其核心模块、事件循环、异步模型和底层实现的神秘面纱。从 libuv 的非阻塞 I/O，到 V8 引擎对 JavaScript 的极速解析，我们将从代码的视角探索 Node.js 是如何在性能与灵活性之间找到绝佳平衡的。
 无论你是想提升对 Node.js 的理解，还是希望从源码中汲取工程设计的智慧，这都将是一次充满收获的技术旅程。准备好了吗？让我们从入口文件开始，走进 Node.js 的源码迷宫！">
-  <meta property="og:locale" content="zh-CN">
+  <meta property="og:locale" content="zh_CN">
   <meta property="og:type" content="article">
     <meta property="article:section" content="posts">
     <meta property="article:published_time" content="2024-06-27T11:33:50+08:00">
@@ -42,8 +42,10 @@
     <meta property="article:tag" content="异步">
     <meta property="article:tag" content="事件驱动">
     <meta property="article:tag" content="源码剖析">
-<meta name="twitter:card" content="summary"><meta name="twitter:title" content="Node.js 源码剖析：非阻塞世界的引擎密码">
-<meta name="twitter:description" content="Node.js 的诞生，让 JavaScript 从浏览器的专属语言，跃升为构建高性能服务器的利器。凭借事件驱动的架构和非阻塞 I/O 特性，Node.js 成为现代网络应用开发中的重要基石。然而，当你写下 http.createServer时，是否好奇过这些简单的 API 背后究竟发生了什么？
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Node.js 源码剖析：非阻塞世界的引擎密码">
+  <meta name="twitter:description" content="Node.js 的诞生，让 JavaScript 从浏览器的专属语言，跃升为构建高性能服务器的利器。凭借事件驱动的架构和非阻塞 I/O 特性，Node.js 成为现代网络应用开发中的重要基石。然而，当你写下 http.createServer时，是否好奇过这些简单的 API 背后究竟发生了什么？
 本篇文章将带你深入 Node.js 的源码世界，揭开其核心模块、事件循环、异步模型和底层实现的神秘面纱。从 libuv 的非阻塞 I/O，到 V8 引擎对 JavaScript 的极速解析，我们将从代码的视角探索 Node.js 是如何在性能与灵活性之间找到绝佳平衡的。
 无论你是想提升对 Node.js 的理解，还是希望从源码中汲取工程设计的智慧，这都将是一次充满收获的技术旅程。准备好了吗？让我们从入口文件开始，走进 Node.js 的源码迷宫！">
       <meta name="twitter:site" content="@IRONAnthony96">
@@ -280,7 +282,7 @@
 
   <aside class="toc" id="toc-auto" aria-label="目录"><h2 class="toc-title">目录&nbsp;<i class="toc-icon fa-solid fa-angle-down fa-fw" aria-hidden="true"></i></h2>
       <div class="toc-content" id="toc-content-auto"></div></aside></main><footer class="footer">
-    <div class="footer-container"><div class="footer-line powered">由 <a href="https://gohugo.io/" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.125.4"><img class="hugo-icon" src="/images/hugo.min.svg" alt="Hugo logo" /> Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/hugo-fixit/FixIt" target="_blank" rel="external" title="FixIt v0.3.2"><img class="fixit-icon" src="/images/fixit.min.svg" alt="FixIt logo" /> FixIt</a>
+    <div class="footer-container"><div class="footer-line powered">由 <a href="https://gohugo.io/" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.135.0"><img class="hugo-icon" src="/images/hugo.min.svg" alt="Hugo logo" /> Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/hugo-fixit/FixIt" target="_blank" rel="external" title="FixIt v0.3.2"><img class="fixit-icon" src="/images/fixit.min.svg" alt="FixIt logo" /> FixIt</a>
         </div><div class="footer-line copyright" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright fa-fw" aria-hidden="true"></i>
             <span itemprop="copyrightYear">2024</span><span class="author" itemprop="copyrightHolder">
               <a href="https://andyfree96.github.io/"target="_blank" rel="external nofollow noopener noreferrer">AndyFree96</a></span></div></div>
