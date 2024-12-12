@@ -11,7 +11,7 @@
 
 为了持续提升自己的技术能力，我目前正在学习：
 
-- C&#43;&#43; 并发编程：深入理解多线程编程模型及并发控制技术，提高系统性能与效率。
+- 并发编程：深入理解多线程编程模型及并发控制技术，提高系统性能与效率。
 - 操作系统原理：研究操作系统的核心概念，如进程管理、内存管理、文件系统等，以更好地理解底层系统架构。
 
 ---
@@ -48,6 +48,22 @@
 - [陈硕的 Blog](https://www.cnblogs.com/Solstice)
 - [酷 壳 – CoolShell](https://coolshell.cn/)
 - [阮一峰的网络日志](https://www.ruanyifeng.com/blog/)
+- [Lil&#39;Log](https://lilianweng.github.io/)
+- [ruder.io](https://www.ruder.io/)
+- [Machine Learning Mastery](https://machinelearningmastery.com/blog/)
+- [PyImageSearch](https://pyimagesearch.com/blog/)
+- [Stack Abuse](https://stackabuse.com/)
+- [Real Python](https://realpython.com/)
+- [JavaScript Today](https://javascripttoday.com/)
+- [Meeting C&#43;&#43;](https://www.meetingcpp.com/blog/blogroll/)
+- [Fluent{C&#43;&#43;}](https://www.fluentcpp.com/)
+- [C&#43;&#43; Stories](https://www.cppstories.com/)
+- [Sutterʼs Mill](https://herbsutter.com/)
+- [Modernes C&#43;&#43;](https://www.modernescpp.com/)
+- [C&#43;&#43; Tips of the Week](https://abseil.io/tips/)
+- [C&#43;&#43; Team Blog](https://devblogs.microsoft.com/cppblog/)
+- [Scott Brady&#39;s Blog](https://www.scottbrady91.com/)
+- [Code with Steve](https://www.stevejgordon.co.uk/)
 
 
 ---
