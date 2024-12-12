@@ -27,7 +27,7 @@ VirtualBox 官网：https://www.virtualbox.org
 
 ubuntu 官网：https://ubuntu.com
 
-下载好，可以参考[VirtualBox 上 Ubuntu16.04 安装教程](https://blog.csdn.net/scene_2015/article/details/83025750)一文进行安装。
+可以参考[VirtualBox 上 Ubuntu16.04 安装教程](https://blog.csdn.net/scene_2015/article/details/83025750)进行安装。
 
 ### 安装 Bochs
 

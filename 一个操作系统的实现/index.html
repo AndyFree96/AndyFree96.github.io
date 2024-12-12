@@ -20,7 +20,7 @@
   <meta itemprop="description" content="操作系统（Operating System）是现代计算机系统的核心，它管理着硬件资源，调度应用程序运行，并为用户提供友好的交互界面。尽管我们每天都在使用各种操作系统，如 Windows、Linux、macOS 等，但其背后的设计与实现却常常被视为复杂而深奥的技术领域。然而，实现一个简单的操作系统并非遥不可及。通过深入了解操作系统的基本原理——如进程管理、内存管理、文件系统和设备驱动，我们可以循序渐进地从零开始构建一个微型操作系统。这不仅能加深对计算机系统的理解，还能让你体验到亲手编写底层代码的乐趣。在这篇文章中，我们将从最基础的引导程序开始，逐步构建一个简单的操作系统雏形。">
   <meta itemprop="datePublished" content="2024-12-12T10:45:15+08:00">
   <meta itemprop="dateModified" content="2024-12-12T10:45:15+08:00">
-  <meta itemprop="wordCount" content="2332">
+  <meta itemprop="wordCount" content="2326">
   <meta itemprop="keywords" content="操作系统,Linux,文件系统,内存管理,进程调度"><meta property="og:url" content="https://andyfree96.github.io/%E4%B8%80%E4%B8%AA%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%AE%9E%E7%8E%B0/">
   <meta property="og:site_name" content="东尼的博客">
   <meta property="og:title" content="一个操作系统的实现">
@@ -52,7 +52,7 @@
     "mainEntityOfPage": {
       "@type": "WebPage",
       "@id": "https:\/\/andyfree96.github.io\/%E4%B8%80%E4%B8%AA%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%AE%9E%E7%8E%B0\/"
-    },"genre": "posts","keywords": "操作系统, Linux, 文件系统, 内存管理, 进程调度","wordcount":  2332 ,
+    },"genre": "posts","keywords": "操作系统, Linux, 文件系统, 内存管理, 进程调度","wordcount":  2326 ,
     "url": "https:\/\/andyfree96.github.io\/%E4%B8%80%E4%B8%AA%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%AE%9E%E7%8E%B0\/","datePublished": "2024-12-12T10:45:15+08:00","dateModified": "2024-12-12T10:45:15+08:00","publisher": {
       "@type": "Organization",
       "name": ""},"author": {
@@ -210,7 +210,7 @@
   <article class="page single">
     <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span title="转载" class="icon-repost"><i class="fa-solid fa-share fa-fw" aria-hidden="true"></i></span><span>一个操作系统的实现</span>
       </h1></div><div class="post-meta">
-      <div class="post-meta-line"><span class="post-author"><a href="https://andyfree96.github.io/" title="作者"target="_blank" rel="external nofollow noopener noreferrer author" class="author"><img loading="lazy" src="/avatar/1.jpg" alt="AndyFree96" data-title="AndyFree96" class="avatar" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/>&nbsp;AndyFree96</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" class="post-category" title="分类 - 操作系统"><i class="fa-regular fa-folder fa-fw" aria-hidden="true"></i> 操作系统</a></span></div><div class="post-meta-line"><span title="发布于 2024-12-12 10:45:15"><i class="fa-solid fa-calendar-days fa-fw me-1" aria-hidden="true"></i><time datetime="2024-12-12">2024-12-12</time></span>&nbsp;<span title="2332 字"><i class="fa-solid fa-pencil-alt fa-fw me-1" aria-hidden="true"></i>约 2400 字</span>&nbsp;<span><i class="fa-regular fa-clock fa-fw me-1" aria-hidden="true"></i>预计阅读 5 分钟</span>&nbsp;</div>
+      <div class="post-meta-line"><span class="post-author"><a href="https://andyfree96.github.io/" title="作者"target="_blank" rel="external nofollow noopener noreferrer author" class="author"><img loading="lazy" src="/avatar/1.jpg" alt="AndyFree96" data-title="AndyFree96" class="avatar" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/>&nbsp;AndyFree96</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" class="post-category" title="分类 - 操作系统"><i class="fa-regular fa-folder fa-fw" aria-hidden="true"></i> 操作系统</a></span></div><div class="post-meta-line"><span title="发布于 2024-12-12 10:45:15"><i class="fa-solid fa-calendar-days fa-fw me-1" aria-hidden="true"></i><time datetime="2024-12-12">2024-12-12</time></span>&nbsp;<span title="2326 字"><i class="fa-solid fa-pencil-alt fa-fw me-1" aria-hidden="true"></i>约 2400 字</span>&nbsp;<span><i class="fa-regular fa-clock fa-fw me-1" aria-hidden="true"></i>预计阅读 5 分钟</span>&nbsp;</div>
     </div><div class="featured-image"><img loading="lazy" src="/images/202412/1/brayden-prato-lA-9rdUobaw-unsplash.jpg" alt="/images/202412/1/brayden-prato-lA-9rdUobaw-unsplash.jpg" data-title="/images/202412/1/brayden-prato-lA-9rdUobaw-unsplash.jpg" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></div><div class="details toc" id="toc-static" data-kept="false">
         <div class="details-summary toc-title">
           <span>目录</span>
@@ -248,7 +248,7 @@
   <a href="#ubuntu" class="heading-mark"></a>Ubuntu</h3><p>为了安装 Ubuntu 系统，需要去官网将系统的 ISO 文件下载好。</p>
 <p><img loading="lazy" src="/images/202412/7/2.png" alt="/images/202412/7/2.png" srcset="/images/202412/7/2.png?size=small, /images/202412/7/2.png?size=medium 1.5x, /images/202412/7/2.png?size=large 2x" data-title="/images/202412/7/2.png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></p>
 <p>ubuntu 官网：https://ubuntu.com</p>
-<p>下载好，可以参考<a href="https://blog.csdn.net/scene_2015/article/details/83025750"target="_blank" rel="external nofollow noopener noreferrer">VirtualBox 上 Ubuntu16.04 安装教程</a>一文进行安装。</p>
+<p>可以参考<a href="https://blog.csdn.net/scene_2015/article/details/83025750"target="_blank" rel="external nofollow noopener noreferrer">VirtualBox 上 Ubuntu16.04 安装教程</a>进行安装。</p>
 <h3 id="安装-bochs" class="heading-element">
   <a href="#%e5%ae%89%e8%a3%85-bochs" class="heading-mark"></a>安装 Bochs</h3><p>Bochs 是什么？一个模拟器而已。有了它，我们不再需要频繁地重启计算机，可以用来对操作系统进行调试。</p>
 <p>如何安装呢？在 Ubuntu 下非常简单，用如下命令即可：</p>
