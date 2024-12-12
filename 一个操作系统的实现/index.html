@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html
+  itemscope
+  itemtype="http://schema.org/WebPage"
+  lang="zh-CN"
+>
+  <head>
+    
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=2"
+    />
+    <meta name="robots" content="noodp" />
+    <meta name="google-adsense-account" content="ca-pub-5868664387231059" />
+    <title>一个操作系统的实现 - 东尼的博客</title><meta name="author" content="AndyFree96">
+<meta name="author-link" content="https://andyfree96.github.io/">
+<meta name="description" content="操作系统（Operating System）是现代计算机系统的核心，它管理着硬件资源，调度应用程序运行，并为用户提供友好的交互界面。尽管我们每天都在使用各种操作系统，如 Windows、Linux、macOS 等，但其背后的设计与实现却常常被视为复杂而深奥的技术领域。然而，实现一个简单的操作系统并非遥不可及。通过深入了解操作系统的基本原理——如进程管理、内存管理、文件系统和设备驱动，我们可以循序渐进地从零开始构建一个微型操作系统。这不仅能加深对计算机系统的理解，还能让你体验到亲手编写底层代码的乐趣。在这篇文章中，我们将从最基础的引导程序开始，逐步构建一个简单的操作系统雏形。" /><meta name="keywords" content='操作系统, Linux, 文件系统, 内存管理, 进程调度' />
+  <meta itemprop="name" content="一个操作系统的实现">
+  <meta itemprop="description" content="操作系统（Operating System）是现代计算机系统的核心，它管理着硬件资源，调度应用程序运行，并为用户提供友好的交互界面。尽管我们每天都在使用各种操作系统，如 Windows、Linux、macOS 等，但其背后的设计与实现却常常被视为复杂而深奥的技术领域。然而，实现一个简单的操作系统并非遥不可及。通过深入了解操作系统的基本原理——如进程管理、内存管理、文件系统和设备驱动，我们可以循序渐进地从零开始构建一个微型操作系统。这不仅能加深对计算机系统的理解，还能让你体验到亲手编写底层代码的乐趣。在这篇文章中，我们将从最基础的引导程序开始，逐步构建一个简单的操作系统雏形。">
+  <meta itemprop="datePublished" content="2024-12-12T10:45:15+08:00">
+  <meta itemprop="dateModified" content="2024-12-12T10:45:15+08:00">
+  <meta itemprop="wordCount" content="2332">
+  <meta itemprop="keywords" content="操作系统,Linux,文件系统,内存管理,进程调度"><meta property="og:url" content="https://andyfree96.github.io/%E4%B8%80%E4%B8%AA%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%AE%9E%E7%8E%B0/">
+  <meta property="og:site_name" content="东尼的博客">
+  <meta property="og:title" content="一个操作系统的实现">
+  <meta property="og:description" content="操作系统（Operating System）是现代计算机系统的核心，它管理着硬件资源，调度应用程序运行，并为用户提供友好的交互界面。尽管我们每天都在使用各种操作系统，如 Windows、Linux、macOS 等，但其背后的设计与实现却常常被视为复杂而深奥的技术领域。然而，实现一个简单的操作系统并非遥不可及。通过深入了解操作系统的基本原理——如进程管理、内存管理、文件系统和设备驱动，我们可以循序渐进地从零开始构建一个微型操作系统。这不仅能加深对计算机系统的理解，还能让你体验到亲手编写底层代码的乐趣。在这篇文章中，我们将从最基础的引导程序开始，逐步构建一个简单的操作系统雏形。">
+  <meta property="og:locale" content="zh-CN">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2024-12-12T10:45:15+08:00">
+    <meta property="article:modified_time" content="2024-12-12T10:45:15+08:00">
+    <meta property="article:tag" content="操作系统">
+    <meta property="article:tag" content="Linux">
+    <meta property="article:tag" content="文件系统">
+    <meta property="article:tag" content="内存管理">
+    <meta property="article:tag" content="进程调度">
+<meta name="twitter:card" content="summary"><meta name="twitter:title" content="一个操作系统的实现">
+<meta name="twitter:description" content="操作系统（Operating System）是现代计算机系统的核心，它管理着硬件资源，调度应用程序运行，并为用户提供友好的交互界面。尽管我们每天都在使用各种操作系统，如 Windows、Linux、macOS 等，但其背后的设计与实现却常常被视为复杂而深奥的技术领域。然而，实现一个简单的操作系统并非遥不可及。通过深入了解操作系统的基本原理——如进程管理、内存管理、文件系统和设备驱动，我们可以循序渐进地从零开始构建一个微型操作系统。这不仅能加深对计算机系统的理解，还能让你体验到亲手编写底层代码的乐趣。在这篇文章中，我们将从最基础的引导程序开始，逐步构建一个简单的操作系统雏形。">
+      <meta name="twitter:site" content="@IRONAnthony96">
+<meta name="application-name" content="FixIt">
+<meta name="apple-mobile-web-app-title" content="FixIt"><meta name="theme-color" data-light="#f8f8f8" data-dark="#252627" content="#f8f8f8"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" href="https://andyfree96.github.io/%E4%B8%80%E4%B8%AA%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%AE%9E%E7%8E%B0/" /><link rel="prev" href="https://andyfree96.github.io/cpython%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "BlogPosting",
+    "headline": "一个操作系统的实现",
+    "inLanguage": "zh-CN",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https:\/\/andyfree96.github.io\/%E4%B8%80%E4%B8%AA%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%AE%9E%E7%8E%B0\/"
+    },"genre": "posts","keywords": "操作系统, Linux, 文件系统, 内存管理, 进程调度","wordcount":  2332 ,
+    "url": "https:\/\/andyfree96.github.io\/%E4%B8%80%E4%B8%AA%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%AE%9E%E7%8E%B0\/","datePublished": "2024-12-12T10:45:15+08:00","dateModified": "2024-12-12T10:45:15+08:00","publisher": {
+      "@type": "Organization",
+      "name": ""},"author": {
+        "@type": "Person",
+        "name": "AndyFree96"
+      },"description": ""
+  }
+  </script></head>
+  <body
+    data-header-desktop="sticky"
+    data-header-mobile="auto"
+  ><script>
+      (window.localStorage?.getItem("theme")
+        ? localStorage.getItem("theme") === "dark"
+        : "auto" === "auto"
+        ? window.matchMedia("(prefers-color-scheme: dark)").matches
+        : "auto" === "dark") &&
+        document.body.setAttribute("data-theme", "dark");
+    </script><div
+      class="wrapper"
+      data-page-style="normal"
+    ><header class="desktop animate__faster" id="header-desktop">
+  <div class="header-wrapper">
+    <div class="header-title">
+      <a href="/" title="东尼的博客"><span class="header-title-text">东尼的博客</span></a><span class="header-subtitle"></span></div>
+    <nav>
+      <ul class="menu"><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/posts/"
+                
+                
+              >📕 文章</a></li><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/categories/"
+                
+                
+              >🧰 分类</a></li><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/tags/"
+                
+                
+              >🔖 标签</a></li><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/book"
+                
+                
+              >📚 书单</a></li><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/paper"
+                
+                
+              >📝 论文</a></li><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/opencourse"
+                
+                
+              >👨🏻‍💻 公开课</a></li><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/resource"
+                
+                
+              >⚡️ 资源</a></li><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/about"
+                
+                
+              >🙋🏻‍♂️ 关于</a></li><li class="menu-item delimiter"></li><li class="menu-item theme-switch" title="切换主题">
+          <i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i>
+        </li></ul>
+    </nav>
+  </div>
+</header><header class="mobile animate__faster" id="header-mobile">
+  <div class="header-container">
+    <div class="header-wrapper">
+      <div class="header-title">
+        <a href="/" title="东尼的博客"><span class="header-title-text">东尼的博客</span></a><span class="header-subtitle"></span></div>
+      <div class="menu-toggle" id="menu-toggle-mobile">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+    <nav>
+      <ul class="menu" id="menu-mobile"><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/posts/"
+                  
+                  
+                >📕 文章</a></li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/categories/"
+                  
+                  
+                >🧰 分类</a></li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/tags/"
+                  
+                  
+                >🔖 标签</a></li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/book"
+                  
+                  
+                >📚 书单</a></li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/paper"
+                  
+                  
+                >📝 论文</a></li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/opencourse"
+                  
+                  
+                >👨🏻‍💻 公开课</a></li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/resource"
+                  
+                  
+                >⚡️ 资源</a></li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/about"
+                  
+                  
+                >🙋🏻‍♂️ 关于</a></li><li class="menu-item menu-system">
+          <span class="menu-system-item theme-switch" title="切换主题"><i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i></span></li>
+      </ul>
+    </nav>
+  </div>
+</header><main
+        class="container"
+      ><aside class="aside-collection animate__animated animate__fadeIn animate__faster" aria-label="合集"></aside>
+
+  <article class="page single">
+    <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span title="转载" class="icon-repost"><i class="fa-solid fa-share fa-fw" aria-hidden="true"></i></span><span>一个操作系统的实现</span>
+      </h1></div><div class="post-meta">
+      <div class="post-meta-line"><span class="post-author"><a href="https://andyfree96.github.io/" title="作者"target="_blank" rel="external nofollow noopener noreferrer author" class="author"><img loading="lazy" src="/avatar/1.jpg" alt="AndyFree96" data-title="AndyFree96" class="avatar" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/>&nbsp;AndyFree96</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" class="post-category" title="分类 - 操作系统"><i class="fa-regular fa-folder fa-fw" aria-hidden="true"></i> 操作系统</a></span></div><div class="post-meta-line"><span title="发布于 2024-12-12 10:45:15"><i class="fa-solid fa-calendar-days fa-fw me-1" aria-hidden="true"></i><time datetime="2024-12-12">2024-12-12</time></span>&nbsp;<span title="2332 字"><i class="fa-solid fa-pencil-alt fa-fw me-1" aria-hidden="true"></i>约 2400 字</span>&nbsp;<span><i class="fa-regular fa-clock fa-fw me-1" aria-hidden="true"></i>预计阅读 5 分钟</span>&nbsp;</div>
+    </div><div class="featured-image"><img loading="lazy" src="/images/202412/1/brayden-prato-lA-9rdUobaw-unsplash.jpg" alt="/images/202412/1/brayden-prato-lA-9rdUobaw-unsplash.jpg" data-title="/images/202412/1/brayden-prato-lA-9rdUobaw-unsplash.jpg" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></div><div class="details toc" id="toc-static" data-kept="false">
+        <div class="details-summary toc-title">
+          <span>目录</span>
+          <span><i class="details-icon fa-solid fa-angle-right" aria-hidden="true"></i></span>
+        </div>
+        <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#环境搭建">环境搭建</a>
+      <ul>
+        <li><a href="#virtualbox">VirtualBox</a></li>
+        <li><a href="#ubuntu">Ubuntu</a></li>
+        <li><a href="#安装-bochs">安装 Bochs</a></li>
+        <li><a href="#nasm">NASM</a></li>
+      </ul>
+    </li>
+    <li><a href="#引导程序">引导程序</a>
+      <ul>
+        <li><a href="#引导扇区">引导扇区</a></li>
+        <li><a href="#和"><code>$</code>和<code>$$</code></a></li>
+      </ul>
+    </li>
+    <li><a href="#推荐">推荐</a></li>
+    <li><a href="#参考">参考</a></li>
+  </ul>
+</nav></div>
+      </div><div class="content" id="content"><p>操作系统（Operating System）是现代计算机系统的核心，它管理着硬件资源，调度应用程序运行，并为用户提供友好的交互界面。尽管我们每天都在使用各种操作系统，如 Windows、Linux、macOS 等，但其背后的设计与实现却常常被视为复杂而深奥的技术领域。然而，实现一个简单的操作系统并非遥不可及。通过深入了解操作系统的基本原理——如进程管理、内存管理、文件系统和设备驱动，我们可以循序渐进地从零开始构建一个微型操作系统。这不仅能加深对计算机系统的理解，还能让你体验到亲手编写底层代码的乐趣。在这篇文章中，我们将从最基础的引导程序开始，逐步构建一个简单的操作系统雏形。</p>
+<h2 id="环境搭建" class="heading-element">
+  <a href="#%e7%8e%af%e5%a2%83%e6%90%ad%e5%bb%ba" class="heading-mark"></a>环境搭建</h2><p>本节主要介绍在 Ubuntu 系统下的环境搭建。</p>
+<h3 id="virtualbox" class="heading-element">
+  <a href="#virtualbox" class="heading-mark"></a>VirtualBox</h3><p>为了使用 Ubuntu 系统，本文选择的是在虚拟机上进行安装，这里选用的软件是 VirtualBox 6.1。</p>
+<p><img loading="lazy" src="/images/202412/7/1.png" alt="/images/202412/7/1.png" srcset="/images/202412/7/1.png?size=small, /images/202412/7/1.png?size=medium 1.5x, /images/202412/7/1.png?size=large 2x" data-title="/images/202412/7/1.png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></p>
+<p>VirtualBox 官网：https://www.virtualbox.org</p>
+<p>在官网将安装包下载安装好即可。</p>
+<h3 id="ubuntu" class="heading-element">
+  <a href="#ubuntu" class="heading-mark"></a>Ubuntu</h3><p>为了安装 Ubuntu 系统，需要去官网将系统的 ISO 文件下载好。</p>
+<p><img loading="lazy" src="/images/202412/7/2.png" alt="/images/202412/7/2.png" srcset="/images/202412/7/2.png?size=small, /images/202412/7/2.png?size=medium 1.5x, /images/202412/7/2.png?size=large 2x" data-title="/images/202412/7/2.png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></p>
+<p>ubuntu 官网：https://ubuntu.com</p>
+<p>下载好，可以参考<a href="https://blog.csdn.net/scene_2015/article/details/83025750"target="_blank" rel="external nofollow noopener noreferrer">VirtualBox 上 Ubuntu16.04 安装教程</a>一文进行安装。</p>
+<h3 id="安装-bochs" class="heading-element">
+  <a href="#%e5%ae%89%e8%a3%85-bochs" class="heading-mark"></a>安装 Bochs</h3><p>Bochs 是什么？一个模拟器而已。有了它，我们不再需要频繁地重启计算机，可以用来对操作系统进行调试。</p>
+<p>如何安装呢？在 Ubuntu 下非常简单，用如下命令即可：</p>
+<div class="highlight" id="id-1"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">sudo apt-get install vgabios bochs bochs-x bximage</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="nasm" class="heading-element">
+  <a href="#nasm" class="heading-mark"></a>NASM</h3><p>除了 Bochs 我们还需要一个汇编编译器，执行如下命令即可进行安装：</p>
+<div class="highlight" id="id-2"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">sudo apt-get install nasm</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="引导程序" class="heading-element">
+  <a href="#%e5%bc%95%e5%af%bc%e7%a8%8b%e5%ba%8f" class="heading-mark"></a>引导程序</h2><p>完成了环境搭建后，我们可以从引导程序开始。</p>
+<p>代码如下：</p>
+<div class="highlight" id="id-3"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">	org 07c00h	; 程序加载到7c00处
+</span></span><span class="line"><span class="cl">	mov ax, cs
+</span></span><span class="line"><span class="cl">	mov ds, ax
+</span></span><span class="line"><span class="cl">	mov es, ax
+</span></span><span class="line"><span class="cl">	call DispStr	; 调用显示字符串例程
+</span></span><span class="line"><span class="cl">	jmp $		; 无限循环
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">DispStr:
+</span></span><span class="line"><span class="cl">	mov ax, BootMessage
+</span></span><span class="line"><span class="cl">	mov bp, ax	; ES:BP = 串地址
+</span></span><span class="line"><span class="cl">	mov cx, 16	; CX = 串长度
+</span></span><span class="line"><span class="cl">	mov ax, 1301h	; AH = 13, AL = 01
+</span></span><span class="line"><span class="cl">	mov bx, 000ch	; 页号为0(BH = 0), 黑底红字(BL = 0c, 高亮)
+</span></span><span class="line"><span class="cl">	mov dl, 0
+</span></span><span class="line"><span class="cl">	int 10h	; 10h号中断
+</span></span><span class="line"><span class="cl">	ret
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">BootMessage:	db &#34;Hello, OS world!&#34;
+</span></span><span class="line"><span class="cl">times 510-($-$$) db 0	; 用0填充剩余空间, 使生成的二进制代码恰好为512字节
+</span></span><span class="line"><span class="cl">dw 0xaa55		; 结束标志</span></span></code></pre></td></tr></table>
+</div>
+</div><p>把这段代码用 NASM 编译一下：</p>
+<div class="highlight" id="id-4"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">nasm boot.asm -o boot.bin</span></span></code></pre></td></tr></table>
+</div>
+</div><p>接下来，我们 bximage 工具生成一个磁盘映像，它既可以生成虚拟软盘，也可以生成虚拟硬盘。这里，我们创建一个软盘映像：</p>
+<p><img loading="lazy" src="/images/202412/1/1.png" alt="/images/202412/1/1.png" srcset="/images/202412/1/1.png?size=small, /images/202412/1/1.png?size=medium 1.5x, /images/202412/1/1.png?size=large 2x" data-title="/images/202412/1/1.png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></p>
+<p>如果想用默认值，直接回车就行。这里，我们只有一个地方没有使用默认值，那就是被问到创建硬盘还是软盘映像的时候，输入了“fd”。</p>
+<p>完成之后，当前目录下就会多了一个 a.img 文件，</p>
+<p><img loading="lazy" src="/images/202412/1/2.png" alt="/images/202412/1/2.png" srcset="/images/202412/1/2.png?size=small, /images/202412/1/2.png?size=medium 1.5x, /images/202412/1/2.png?size=large 2x" data-title="/images/202412/1/2.png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></p>
+<p>便是软盘映像。所谓的映像，可以理解为原始设备的逐字节复制，也就是说，软盘的第 M 个字节对应映像文件的第 M 个字节。</p>
+<p>接下来，我们可以把 boot.bin 文件的内容写入软盘映像，使用<code>dd</code>命令即可：</p>
+<div class="highlight" id="id-5"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">dd if=boot.bin of=a.img bs=512 count=1 conv=notrunc</span></span></code></pre></td></tr></table>
+</div>
+</div><p><img loading="lazy" src="/images/202412/1/3.png" alt="/images/202412/1/3.png" srcset="/images/202412/1/3.png?size=small, /images/202412/1/3.png?size=medium 1.5x, /images/202412/1/3.png?size=large 2x" data-title="/images/202412/1/3.png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></p>
+<p>接下来，我们需要编写一下 Bochs 的配置文件。为什么需要配置文件？因为需要告诉 Bochs，我们希望的虚拟机是什么样的。例如，内存多大、软盘映像和硬盘映像都是哪些文件等内容。下面就是一个配置文件的例子：</p>
+<div class="highlight" id="id-6"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># how much memory the emulated machine will have
+</span></span><span class="line"><span class="cl">megs: 32
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"># filename of ROM images
+</span></span><span class="line"><span class="cl">romimage: file=/usr/share/bochs/BIOS-bochs-latest
+</span></span><span class="line"><span class="cl">vgaromimage: file=/usr/share/vgabios/vgabios.bin
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"># what disk images will be used
+</span></span><span class="line"><span class="cl">floppya: 1_44=a.img, status=inserted
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"># choose the boot disk
+</span></span><span class="line"><span class="cl">boot: floppy
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"># where do we send long messages?
+</span></span><span class="line"><span class="cl">log: bochsout.txt
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"># disable the mouse
+</span></span><span class="line"><span class="cl">mouse: enabled=0
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"># enable key mapping, using US layout as default
+</span></span><span class="line"><span class="cl">keyboard_mapping: enabled=1, map=/usr/share/bochs/keymaps/x11-pc-us.map</span></span></code></pre></td></tr></table>
+</div>
+</div><p>将以上内容保存至名为<code>a.config</code>的文件中。之后，执行命令：</p>
+<div class="highlight" id="id-7"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">bochs -f a.config</span></span></code></pre></td></tr></table>
+</div>
+</div><p>如果输入一个不带任何参数的 bochs 命令并执行，那么 Bochs 将在当前目录顺序寻找以下文件作为默认配置文件：</p>
+<ul>
+<li>.bochsrc</li>
+<li>bochsrc</li>
+<li>bochsrc.txt</li>
+</ul>
+<p>所以若我们将文件命名为 bochsrc 时，<code>-f a.config</code>是可以省略的。</p>
+<p>假如你正在运行一个有调试功能的 Bochs，那么启动后会看到终端出现若干选项，默认选项为“6. Begin simulation”，直接回车即可启动。由于是可调试的，Bochs 并没有急于进入运转状态，而是出现一个提示符，等待你的输入，我们可以输入<code>c</code>：</p>
+<p><img loading="lazy" src="/images/202412/1/4.png" alt="/images/202412/1/4.png" srcset="/images/202412/1/4.png?size=small, /images/202412/1/4.png?size=medium 1.5x, /images/202412/1/4.png?size=large 2x" data-title="/images/202412/1/4.png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></p>
+<p>可以看到 Bochs 模拟器中显示了红色的“Hello, OS world!”。</p>
+<p>除了<code>c</code>指令，还可以尝试其他调试指令：</p>
+<table>
+<thead>
+<tr>
+<th>行为</th>
+<th>指令</th>
+<th>举例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>在某物理地址设置断点</td>
+<td><code>b addr</code></td>
+<td><code>b 0x30400</code></td>
+</tr>
+<tr>
+<td>显示当前所有断点信息</td>
+<td><code>info break</code></td>
+<td><code>info break</code></td>
+</tr>
+<tr>
+<td>继续执行,直到遇上断点</td>
+<td><code>c</code></td>
+<td><code>c</code></td>
+</tr>
+<tr>
+<td>单步执行</td>
+<td><code>s</code></td>
+<td><code>s</code></td>
+</tr>
+<tr>
+<td>单步执行(遇到函数则跳过)</td>
+<td><code>n</code></td>
+<td><code>n</code></td>
+</tr>
+<tr>
+<td>查看寄存器信息</td>
+<td><code>info cpu</code></td>
+<td><code>info cpu</code></td>
+</tr>
+<tr>
+<td>查看寄存器信息</td>
+<td><code>r</code></td>
+<td><code>r</code></td>
+</tr>
+<tr>
+<td>查看寄存器信息</td>
+<td><code>fp</code></td>
+<td><code>fp</code></td>
+</tr>
+<tr>
+<td>查看寄存器信息</td>
+<td><code>sreg</code></td>
+<td><code>sreg</code></td>
+</tr>
+<tr>
+<td>查看寄存器信息</td>
+<td><code>creg</code></td>
+<td><code>creg</code></td>
+</tr>
+<tr>
+<td>查看堆栈</td>
+<td><code>print-stack</code></td>
+<td><code>print-stack</code></td>
+</tr>
+<tr>
+<td>查看内存物理地址内容</td>
+<td><code>xp /nuf addr</code></td>
+<td><code>xp /40bx 0x9013e</code></td>
+</tr>
+<tr>
+<td>查看线性地址内容</td>
+<td><code>xp /nuf addr</code></td>
+<td><code>xp /40bx 0x13e</code></td>
+</tr>
+<tr>
+<td>反汇编一段内存</td>
+<td><code>u start end</code></td>
+<td><code>u 0x30400 0x3040D</code></td>
+</tr>
+<tr>
+<td>反汇编执行的每一条指令</td>
+<td><code>trace-on</code></td>
+<td><code>trace-on</code></td>
+</tr>
+<tr>
+<td>每执行一条指令就打印 CPU 信息</td>
+<td><code>trace-reg</code></td>
+<td><code>trace-reg</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="引导扇区" class="heading-element">
+  <a href="#%e5%bc%95%e5%af%bc%e6%89%87%e5%8c%ba" class="heading-mark"></a>引导扇区</h3><p>当计算机电源被按下后，它会先进行加电自检（POST），然后寻找启动盘，如果选择的是从软盘启动，计算机就会检查软盘的 0 面 0 磁道 1 扇区。若该扇区以<code>0xAA55</code>结束，则 BIOS 会认为它是一个引导扇区。当然，一个正确的引导扇区除了以<code>0xAA55</code>结束之外，还应该包含一段少于 512 字节的执行码。</p>
+<p><img loading="lazy" src="/images/202412/1/7.png" alt="图7" srcset="/images/202412/1/7.png?size=small, /images/202412/1/7.png?size=medium 1.5x, /images/202412/1/7.png?size=large 2x" data-title="图7" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></p>
+<p>上图来自: <a href="https://www.ionos.com/digitalguide/server/configuration/what-is-mbr/"target="_blank" rel="external nofollow noopener noreferrer">https://www.ionos.com/digitalguide/server/configuration/what-is-mbr/</a></p>
+<p>一旦 BIOS 发现了引导扇区，就会将这 512 字节的内容装载到内存地址<code>0000:7c00</code>处，然后跳转到<code>0000:7c00</code>处将控制权交给这段引导代码。到此为止，计算机不再由 BIOS 中固有的程序来控制，而变成由操作系统的一部分来控制。</p>
+<p>这也就是为什么代码的第一行是<code>org 07c00</code>。这行代码就是告诉编译器，将来我们的这段代码要被加载到内存偏移地址<code>0x7c00</code>处。</p>
+<h3 id="和" class="heading-element">
+  <a href="#%e5%92%8c" class="heading-mark"></a><code>$</code>和<code>$$</code></h3><p>代码中的<code>$</code>表示当前行被汇编后的地址。我们可以把生成的二进制代码文件反汇编看看：</p>
+<div class="highlight" id="id-8"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">ndisasm -o 0x7c00 boot.bin &gt;&gt; disboot.asm</span></span></code></pre></td></tr></table>
+</div>
+</div><p>打开 disboot.asm 可以看到：</p>
+<p><img loading="lazy" src="/images/202412/1/5.png" alt="/images/202412/1/5.png" srcset="/images/202412/1/5.png?size=small, /images/202412/1/5.png?size=medium 1.5x, /images/202412/1/5.png?size=large 2x" data-title="/images/202412/1/5.png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></p>
+<p><img loading="lazy" src="/images/202412/1/6.png" alt="/images/202412/1/6.png" srcset="/images/202412/1/6.png?size=small, /images/202412/1/6.png?size=medium 1.5x, /images/202412/1/6.png?size=large 2x" data-title="/images/202412/1/6.png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></p>
+<p>其中有一行：</p>
+<div class="highlight" id="id-9"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">00007C09 EBFE   jmp short 0x7c09</span></span></code></pre></td></tr></table>
+</div>
+</div><p><code>$</code>在这里的意思就是<code>0x7c09</code>。</p>
+<p><code>$$</code>表示什么呢？它表示一个节（section）的开始处被汇编后的地址。这里，我们的程序只有 1 个节。故<code>$$</code>实际上就表示程序被编译后的开始地址，也就是<code>0x7c00</code>。</p>
+<p><code>$-$$</code>表示本行距离程序开始处的相对距离。<code>times 510-($-$$) db 0</code>表示将 0 这个字节重复<code>510-($-$$)</code>遍，也就是在剩下的空间中不停地填充 0，直到程序有 510 个字节。加上结束标志<code>0xAA55</code>占用的 2 个字节，恰好是 512 字节。</p>
+<h2 id="推荐" class="heading-element">
+  <a href="#%e6%8e%a8%e8%8d%90" class="heading-mark"></a>推荐</h2><ul>
+<li>nasm(1) - Linux man page: <a href="https://linux.die.net/man/1/nasm"target="_blank" rel="external nofollow noopener noreferrer">https://linux.die.net/man/1/nasm</a></li>
+<li>NASM Tutorial: <a href="https://cs.lmu.edu/~ray/notes/nasmtutorial/"target="_blank" rel="external nofollow noopener noreferrer">https://cs.lmu.edu/~ray/notes/nasmtutorial/</a></li>
+<li>Linux dd Command: <a href="https://linuxhint.com/linux_dd_command/"target="_blank" rel="external nofollow noopener noreferrer">https://linuxhint.com/linux_dd_command/</a></li>
+</ul>
+<h2 id="参考" class="heading-element">
+  <a href="#%e5%8f%82%e8%80%83" class="heading-mark"></a>参考</h2><ul>
+<li>《ORANGE&rsquo;S: 一个操作系统的实现》</li>
+</ul></div><div class="post-footer" id="post-footer">
+  <div class="post-info">
+    <div class="post-info-line">
+      <div class="post-info-mod">
+        <span title="更新于 2024-12-12 10:45:15">更新于 2024-12-12&nbsp;</span>
+      </div></div><div class="post-info-line">
+        <div class="post-info-md"></div>
+        <div class="post-info-share">
+          <span><a href="javascript:void(0);" title="分享到 Twitter" data-sharer="twitter" data-url="https://andyfree96.github.io/%E4%B8%80%E4%B8%AA%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%AE%9E%E7%8E%B0/" data-title="一个操作系统的实现" data-via="IRONAnthony96" data-hashtags="操作系统,Linux,文件系统,内存管理,进程调度"><i class="fa-brands fa-twitter fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="https://andyfree96.github.io/%E4%B8%80%E4%B8%AA%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%AE%9E%E7%8E%B0/" data-hashtag="操作系统"><i class="fa-brands fa-facebook-square fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 WhatsApp" data-sharer="whatsapp" data-url="https://andyfree96.github.io/%E4%B8%80%E4%B8%AA%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%AE%9E%E7%8E%B0/" data-title="一个操作系统的实现" data-web><i class="fa-brands fa-whatsapp fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 Line" data-sharer="line" data-url="https://andyfree96.github.io/%E4%B8%80%E4%B8%AA%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%AE%9E%E7%8E%B0/" data-title="一个操作系统的实现"><i data-svg-src="/lib/simple-icons/icons/line.min.svg" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="https://andyfree96.github.io/%E4%B8%80%E4%B8%AA%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%AE%9E%E7%8E%B0/" data-title="一个操作系统的实现" data-image="/images/202412/1/brayden-prato-lA-9rdUobaw-unsplash.jpg"><i class="fa-brands fa-weibo fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 Myspace" data-sharer="myspace" data-url="https://andyfree96.github.io/%E4%B8%80%E4%B8%AA%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%AE%9E%E7%8E%B0/" data-title="一个操作系统的实现" data-description=""><i data-svg-src="/lib/simple-icons/icons/myspace.min.svg" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 Blogger" data-sharer="blogger" data-url="https://andyfree96.github.io/%E4%B8%80%E4%B8%AA%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%AE%9E%E7%8E%B0/" data-title="一个操作系统的实现" data-description=""><i class="fa-brands fa-blogger fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 Evernote" data-sharer="evernote" data-url="https://andyfree96.github.io/%E4%B8%80%E4%B8%AA%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%AE%9E%E7%8E%B0/" data-title="一个操作系统的实现"><i class="fa-brands fa-evernote fa-fw" aria-hidden="true"></i></a>
+  </span>
+        </div>
+      </div></div>
+
+  <div class="post-info-more">
+    <section class="post-tags"><i class="fa-solid fa-tags fa-fw me-1" aria-hidden="true"></i><a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" class="post-tag" title="标签 - 操作系统">操作系统</a><a href="/tags/linux/" class="post-tag" title="标签 - Linux">Linux</a><a href="/tags/%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/" class="post-tag" title="标签 - 文件系统">文件系统</a><a href="/tags/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" class="post-tag" title="标签 - 内存管理">内存管理</a><a href="/tags/%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6/" class="post-tag" title="标签 - 进程调度">进程调度</a></section>
+    <section>
+      <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+    </section>
+  </div>
+
+  <div class="post-nav"><a href="/cpython%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" class="post-nav-item" rel="prev" title="CPython 源码剖析：Python 运行的奥秘"><i class="fa-solid fa-angle-left fa-fw" aria-hidden="true"></i>CPython 源码剖析：Python 运行的奥秘</a></div>
+</div>
+<div class="post-reward">
+    <div class="comment">请作者喝杯咖啡!</div>
+    <input type="checkbox" class="reward-input" name="reward" id="fi-reward" hidden />
+    <label class="reward-button" for="fi-reward">赞赏</label>
+    <div class="reward-ways" data-mode="static"><div><img loading="lazy" src="/reward/alipay.png" alt="AndyFree96 支付宝" data-title="AndyFree96 支付宝" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/><span data-animation>支付宝</span>
+          </div><div><img loading="lazy" src="/reward/wechatpay.png" alt="AndyFree96 微信" data-title="AndyFree96 微信" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/><span data-animation>微信</span>
+          </div></div>
+  </div><div id="comments"><div id="gitalk" class="comment"></div><noscript>
+        Please enable JavaScript to view the comments powered by <a href="https://github.com/gitalk/gitalk" rel="external nofollow noopener noreferrer">Gitalk</a>.
+      </noscript></div></article>
+
+  <aside class="toc" id="toc-auto" aria-label="目录"><h2 class="toc-title">目录&nbsp;<i class="toc-icon fa-solid fa-angle-down fa-fw" aria-hidden="true"></i></h2>
+      <div class="toc-content" id="toc-content-auto"></div></aside></main><footer class="footer">
+    <div class="footer-container"><div class="footer-line powered">由 <a href="https://gohugo.io/" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.125.4"><img class="hugo-icon" src="/images/hugo.min.svg" alt="Hugo logo" /> Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/hugo-fixit/FixIt" target="_blank" rel="external" title="FixIt v0.3.2"><img class="fixit-icon" src="/images/fixit.min.svg" alt="FixIt logo" /> FixIt</a>
+        </div><div class="footer-line copyright" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright fa-fw" aria-hidden="true"></i>
+            <span itemprop="copyrightYear">2024</span><span class="author" itemprop="copyrightHolder">
+              <a href="https://andyfree96.github.io/"target="_blank" rel="external nofollow noopener noreferrer">AndyFree96</a></span></div></div>
+  </footer></div><div class="widgets"><div class="fixed-buttons animate__faster d-none"><div class="fixed-button back-to-top" role="button" aria-label="回到顶部"><i class="fa-solid fa-arrow-up fa-fw" aria-hidden="true"></i><span class="variant-numeric d-none">0%</span>
+        </div><div class="fixed-button view-comments d-none" role="button" aria-label="查看评论"><i class="fa-solid fa-comment fa-fw" aria-hidden="true"></i></div></div><div id="mask"></div><div class="reading-progress-bar" style="left: 0;top: 0;"></div><noscript>
+    <div class="noscript-warning">FixIt 主题在启用 JavaScript 的情况下效果最佳。</div>
+  </noscript>
+</div><link rel="stylesheet" href="/lib/gitalk/gitalk.min.css"><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script src="/lib/gitalk/gitalk.min.js"></script><script src="/lib/sharer/sharer.min.js" async defer></script><script src="/lib/cookieconsent/cookieconsent.min.js" defer></script><script>window.config={"code":{"copyTitle":"复制到剪贴板","editLockTitle":"锁定可编辑代码块","editUnLockTitle":"解锁可编辑代码块","editable":true,"maxShownLines":10},"comment":{"enable":true,"expired":false,"gitalk":{"admin":["AndyFree96"],"clientID":"72d758093a489dc215d2","clientSecret":"22314c0a264dffd45faa9ac57485f75f1fbd9873","id":"2024-12-12T10:45:15+08:00","owner":"AndyFree96","repo":"AndyFree96.github.io","title":"一个操作系统的实现"}},"cookieconsent":{"content":{"dismiss":"同意","link":"了解更多","message":"本网站使用 Cookies 来改善您的浏览体验。"},"enable":true,"palette":{"button":{"background":"#f0f0f0"},"popup":{"background":"#1aa3ff"}},"theme":"edgeless"}};</script><script src="/js/theme.min.js" defer></script></body>
+</html>
