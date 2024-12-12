@@ -64,6 +64,8 @@
 - [C&#43;&#43; Team Blog](https://devblogs.microsoft.com/cppblog/)
 - [Scott Brady&#39;s Blog](https://www.scottbrady91.com/)
 - [Code with Steve](https://www.stevejgordon.co.uk/)
+- [Dev To](https://dev.to/)
+- [CSS-Tricks](https://css-tricks.com/)
 
 
 ---
