@@ -48,6 +48,7 @@
 - [陈硕的 Blog](https://www.cnblogs.com/Solstice)
 - [酷 壳 – CoolShell](https://coolshell.cn/)
 - [阮一峰的网络日志](https://www.ruanyifeng.com/blog/)
+- [Skywind（林伟）](https://skywind.me/blog/)
 - [Lil&#39;Log](https://lilianweng.github.io/)
 - [ruder.io](https://www.ruder.io/)
 - [Machine Learning Mastery](https://machinelearningmastery.com/blog/)
