@@ -48,7 +48,19 @@
 - [陈硕的 Blog](https://www.cnblogs.com/Solstice)
 - [酷 壳 – CoolShell](https://coolshell.cn/)
 - [阮一峰的网络日志](https://www.ruanyifeng.com/blog/)
+- [张鑫旭](https://www.zhangxinxu.com/)
+- [数据库内核月报](http://mysql.taobao.org/monthly/)
+- [Glow 技术团队博客](https://tech.glowing.com/cn/)
+- [美团技术团队](https://tech.meituan.com/)
+- [廖雪峰的官方网站](https://liaoxuefeng.com/)
+- [Netflix Tech Blog](https://netflixtechblog.com/)
+- [Google Research Blog](https://research.google/blog/)
 - [Skywind（林伟）](https://skywind.me/blog/)
+- [囧克斯 勾三股四](https://jiongks.name/)
+- [MacTalk-池建强的随想录](https://macshuo.com/)
+- [凹凸实验室](https://aotu.io/)
+- [web.dev](https://web.dev/blog/)
+- [DIYgod](https://diygod.cc/)
 - [Lil&#39;Log](https://lilianweng.github.io/)
 - [ruder.io](https://www.ruder.io/)
 - [Machine Learning Mastery](https://machinelearningmastery.com/blog/)
@@ -67,6 +79,7 @@
 - [Code with Steve](https://www.stevejgordon.co.uk/)
 - [Dev To](https://dev.to/)
 - [CSS-Tricks](https://css-tricks.com/)
+- [Smashing Magazine](https://www.smashingmagazine.com/)
 
 
 ---
