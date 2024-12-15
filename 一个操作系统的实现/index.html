@@ -25,7 +25,7 @@
   <meta property="og:site_name" content="东尼的博客">
   <meta property="og:title" content="一个操作系统的实现">
   <meta property="og:description" content="操作系统（Operating System）是现代计算机系统的核心，它管理着硬件资源，调度应用程序运行，并为用户提供友好的交互界面。尽管我们每天都在使用各种操作系统，如 Windows、Linux、macOS 等，但其背后的设计与实现却常常被视为复杂而深奥的技术领域。然而，实现一个简单的操作系统并非遥不可及。通过深入了解操作系统的基本原理——如进程管理、内存管理、文件系统和设备驱动，我们可以循序渐进地从零开始构建一个微型操作系统。这不仅能加深对计算机系统的理解，还能让你体验到亲手编写底层代码的乐趣。在这篇文章中，我们将从最基础的引导程序开始，逐步构建一个简单的操作系统雏形。">
-  <meta property="og:locale" content="zh-CN">
+  <meta property="og:locale" content="zh_CN">
   <meta property="og:type" content="article">
     <meta property="article:section" content="posts">
     <meta property="article:published_time" content="2024-12-12T10:45:15+08:00">
@@ -35,8 +35,10 @@
     <meta property="article:tag" content="文件系统">
     <meta property="article:tag" content="内存管理">
     <meta property="article:tag" content="进程调度">
-<meta name="twitter:card" content="summary"><meta name="twitter:title" content="一个操作系统的实现">
-<meta name="twitter:description" content="操作系统（Operating System）是现代计算机系统的核心，它管理着硬件资源，调度应用程序运行，并为用户提供友好的交互界面。尽管我们每天都在使用各种操作系统，如 Windows、Linux、macOS 等，但其背后的设计与实现却常常被视为复杂而深奥的技术领域。然而，实现一个简单的操作系统并非遥不可及。通过深入了解操作系统的基本原理——如进程管理、内存管理、文件系统和设备驱动，我们可以循序渐进地从零开始构建一个微型操作系统。这不仅能加深对计算机系统的理解，还能让你体验到亲手编写底层代码的乐趣。在这篇文章中，我们将从最基础的引导程序开始，逐步构建一个简单的操作系统雏形。">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="一个操作系统的实现">
+  <meta name="twitter:description" content="操作系统（Operating System）是现代计算机系统的核心，它管理着硬件资源，调度应用程序运行，并为用户提供友好的交互界面。尽管我们每天都在使用各种操作系统，如 Windows、Linux、macOS 等，但其背后的设计与实现却常常被视为复杂而深奥的技术领域。然而，实现一个简单的操作系统并非遥不可及。通过深入了解操作系统的基本原理——如进程管理、内存管理、文件系统和设备驱动，我们可以循序渐进地从零开始构建一个微型操作系统。这不仅能加深对计算机系统的理解，还能让你体验到亲手编写底层代码的乐趣。在这篇文章中，我们将从最基础的引导程序开始，逐步构建一个简单的操作系统雏形。">
       <meta name="twitter:site" content="@IRONAnthony96">
 <meta name="application-name" content="FixIt">
 <meta name="apple-mobile-web-app-title" content="FixIt"><meta name="theme-color" data-light="#f8f8f8" data-dark="#252627" content="#f8f8f8"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
@@ -407,95 +409,95 @@
 <p>可以看到 Bochs 模拟器中显示了红色的“Hello, OS world!”。</p>
 <p>除了<code>c</code>指令，还可以尝试其他调试指令：</p>
 <table>
-<thead>
-<tr>
-<th>行为</th>
-<th>指令</th>
-<th>举例</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>在某物理地址设置断点</td>
-<td><code>b addr</code></td>
-<td><code>b 0x30400</code></td>
-</tr>
-<tr>
-<td>显示当前所有断点信息</td>
-<td><code>info break</code></td>
-<td><code>info break</code></td>
-</tr>
-<tr>
-<td>继续执行,直到遇上断点</td>
-<td><code>c</code></td>
-<td><code>c</code></td>
-</tr>
-<tr>
-<td>单步执行</td>
-<td><code>s</code></td>
-<td><code>s</code></td>
-</tr>
-<tr>
-<td>单步执行(遇到函数则跳过)</td>
-<td><code>n</code></td>
-<td><code>n</code></td>
-</tr>
-<tr>
-<td>查看寄存器信息</td>
-<td><code>info cpu</code></td>
-<td><code>info cpu</code></td>
-</tr>
-<tr>
-<td>查看寄存器信息</td>
-<td><code>r</code></td>
-<td><code>r</code></td>
-</tr>
-<tr>
-<td>查看寄存器信息</td>
-<td><code>fp</code></td>
-<td><code>fp</code></td>
-</tr>
-<tr>
-<td>查看寄存器信息</td>
-<td><code>sreg</code></td>
-<td><code>sreg</code></td>
-</tr>
-<tr>
-<td>查看寄存器信息</td>
-<td><code>creg</code></td>
-<td><code>creg</code></td>
-</tr>
-<tr>
-<td>查看堆栈</td>
-<td><code>print-stack</code></td>
-<td><code>print-stack</code></td>
-</tr>
-<tr>
-<td>查看内存物理地址内容</td>
-<td><code>xp /nuf addr</code></td>
-<td><code>xp /40bx 0x9013e</code></td>
-</tr>
-<tr>
-<td>查看线性地址内容</td>
-<td><code>xp /nuf addr</code></td>
-<td><code>xp /40bx 0x13e</code></td>
-</tr>
-<tr>
-<td>反汇编一段内存</td>
-<td><code>u start end</code></td>
-<td><code>u 0x30400 0x3040D</code></td>
-</tr>
-<tr>
-<td>反汇编执行的每一条指令</td>
-<td><code>trace-on</code></td>
-<td><code>trace-on</code></td>
-</tr>
-<tr>
-<td>每执行一条指令就打印 CPU 信息</td>
-<td><code>trace-reg</code></td>
-<td><code>trace-reg</code></td>
-</tr>
-</tbody>
+  <thead>
+      <tr>
+          <th style="text-align: left">行为</th>
+          <th style="text-align: left">指令</th>
+          <th style="text-align: left">举例</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left">在某物理地址设置断点</td>
+          <td style="text-align: left"><code>b addr</code></td>
+          <td style="text-align: left"><code>b 0x30400</code></td>
+      </tr>
+      <tr>
+          <td style="text-align: left">显示当前所有断点信息</td>
+          <td style="text-align: left"><code>info break</code></td>
+          <td style="text-align: left"><code>info break</code></td>
+      </tr>
+      <tr>
+          <td style="text-align: left">继续执行,直到遇上断点</td>
+          <td style="text-align: left"><code>c</code></td>
+          <td style="text-align: left"><code>c</code></td>
+      </tr>
+      <tr>
+          <td style="text-align: left">单步执行</td>
+          <td style="text-align: left"><code>s</code></td>
+          <td style="text-align: left"><code>s</code></td>
+      </tr>
+      <tr>
+          <td style="text-align: left">单步执行(遇到函数则跳过)</td>
+          <td style="text-align: left"><code>n</code></td>
+          <td style="text-align: left"><code>n</code></td>
+      </tr>
+      <tr>
+          <td style="text-align: left">查看寄存器信息</td>
+          <td style="text-align: left"><code>info cpu</code></td>
+          <td style="text-align: left"><code>info cpu</code></td>
+      </tr>
+      <tr>
+          <td style="text-align: left">查看寄存器信息</td>
+          <td style="text-align: left"><code>r</code></td>
+          <td style="text-align: left"><code>r</code></td>
+      </tr>
+      <tr>
+          <td style="text-align: left">查看寄存器信息</td>
+          <td style="text-align: left"><code>fp</code></td>
+          <td style="text-align: left"><code>fp</code></td>
+      </tr>
+      <tr>
+          <td style="text-align: left">查看寄存器信息</td>
+          <td style="text-align: left"><code>sreg</code></td>
+          <td style="text-align: left"><code>sreg</code></td>
+      </tr>
+      <tr>
+          <td style="text-align: left">查看寄存器信息</td>
+          <td style="text-align: left"><code>creg</code></td>
+          <td style="text-align: left"><code>creg</code></td>
+      </tr>
+      <tr>
+          <td style="text-align: left">查看堆栈</td>
+          <td style="text-align: left"><code>print-stack</code></td>
+          <td style="text-align: left"><code>print-stack</code></td>
+      </tr>
+      <tr>
+          <td style="text-align: left">查看内存物理地址内容</td>
+          <td style="text-align: left"><code>xp /nuf addr</code></td>
+          <td style="text-align: left"><code>xp /40bx 0x9013e</code></td>
+      </tr>
+      <tr>
+          <td style="text-align: left">查看线性地址内容</td>
+          <td style="text-align: left"><code>xp /nuf addr</code></td>
+          <td style="text-align: left"><code>xp /40bx 0x13e</code></td>
+      </tr>
+      <tr>
+          <td style="text-align: left">反汇编一段内存</td>
+          <td style="text-align: left"><code>u start end</code></td>
+          <td style="text-align: left"><code>u 0x30400 0x3040D</code></td>
+      </tr>
+      <tr>
+          <td style="text-align: left">反汇编执行的每一条指令</td>
+          <td style="text-align: left"><code>trace-on</code></td>
+          <td style="text-align: left"><code>trace-on</code></td>
+      </tr>
+      <tr>
+          <td style="text-align: left">每执行一条指令就打印 CPU 信息</td>
+          <td style="text-align: left"><code>trace-reg</code></td>
+          <td style="text-align: left"><code>trace-reg</code></td>
+      </tr>
+  </tbody>
 </table>
 <h3 id="引导扇区" class="heading-element">
   <a href="#%e5%bc%95%e5%af%bc%e6%89%87%e5%8c%ba" class="heading-mark"></a>引导扇区</h3><p>当计算机电源被按下后，它会先进行加电自检（POST），然后寻找启动盘，如果选择的是从软盘启动，计算机就会检查软盘的 0 面 0 磁道 1 扇区。若该扇区以<code>0xAA55</code>结束，则 BIOS 会认为它是一个引导扇区。当然，一个正确的引导扇区除了以<code>0xAA55</code>结束之外，还应该包含一段少于 512 字节的执行码。</p>
@@ -577,7 +579,7 @@
 
   <aside class="toc" id="toc-auto" aria-label="目录"><h2 class="toc-title">目录&nbsp;<i class="toc-icon fa-solid fa-angle-down fa-fw" aria-hidden="true"></i></h2>
       <div class="toc-content" id="toc-content-auto"></div></aside></main><footer class="footer">
-    <div class="footer-container"><div class="footer-line powered">由 <a href="https://gohugo.io/" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.125.4"><img class="hugo-icon" src="/images/hugo.min.svg" alt="Hugo logo" /> Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/hugo-fixit/FixIt" target="_blank" rel="external" title="FixIt v0.3.2"><img class="fixit-icon" src="/images/fixit.min.svg" alt="FixIt logo" /> FixIt</a>
+    <div class="footer-container"><div class="footer-line powered">由 <a href="https://gohugo.io/" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.135.0"><img class="hugo-icon" src="/images/hugo.min.svg" alt="Hugo logo" /> Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/hugo-fixit/FixIt" target="_blank" rel="external" title="FixIt v0.3.2"><img class="fixit-icon" src="/images/fixit.min.svg" alt="FixIt logo" /> FixIt</a>
         </div><div class="footer-line copyright" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright fa-fw" aria-hidden="true"></i>
             <span itemprop="copyrightYear">2024</span><span class="author" itemprop="copyrightHolder">
               <a href="https://andyfree96.github.io/"target="_blank" rel="external nofollow noopener noreferrer">AndyFree96</a></span></div></div>

@@ -26,16 +26,9 @@ csv2是一个轻量级 C&#43;&#43; 库，用于将 CSV 文件解析为 C&#43;&#4
 轻量级：代码库很小，适用于嵌入式或对依赖库要求较高的项目。
 " /><meta name="keywords" content='CSV, C&#43;&#43;, 源码剖析' />
   <meta itemprop="name" content="csv2 源码剖析：轻量级 CSV 处理的高效之道">
-  <meta itemprop="description" content="
-纸上得来终觉浅，绝知此事要躬行。——陆游《冬夜读书示子聿》
-
+  <meta itemprop="description" content=" 纸上得来终觉浅，绝知此事要躬行。——陆游《冬夜读书示子聿》
 csv2是一个轻量级 C&#43;&#43; 库，用于将 CSV 文件解析为 C&#43;&#43; 中的 STL 容器。该库的主要功能是高效地处理 CSV 数据，简化了处理 CSV 文件的代码编写过程。以下是它的主要特性：
-
-简单易用：通过使用 STL 容器（如 std::vector 和 std::tuple），使得开发者能够轻松将 CSV 文件的内容转换为标准 C&#43;&#43; 数据结构。
-依赖少：该库只有 C&#43;&#43;17 标准库的依赖，因此不需要额外的第三方库。
-高效解析：该库采用高效的解析机制，支持处理大型 CSV 文件。
-轻量级：代码库很小，适用于嵌入式或对依赖库要求较高的项目。
-">
+简单易用：通过使用 STL 容器（如 std::vector 和 std::tuple），使得开发者能够轻松将 CSV 文件的内容转换为标准 C&#43;&#43; 数据结构。 依赖少：该库只有 C&#43;&#43;17 标准库的依赖，因此不需要额外的第三方库。 高效解析：该库采用高效的解析机制，支持处理大型 CSV 文件。 轻量级：代码库很小，适用于嵌入式或对依赖库要求较高的项目。 ">
   <meta itemprop="datePublished" content="2024-10-07T14:16:41+08:00">
   <meta itemprop="dateModified" content="2024-10-07T14:16:41+08:00">
   <meta itemprop="wordCount" content="3836">
@@ -45,7 +38,7 @@ csv2是一个轻量级 C&#43;&#43; 库，用于将 CSV 文件解析为 C&#43;&#4
   <meta property="og:description" content=" 纸上得来终觉浅，绝知此事要躬行。——陆游《冬夜读书示子聿》
 csv2是一个轻量级 C&#43;&#43; 库，用于将 CSV 文件解析为 C&#43;&#43; 中的 STL 容器。该库的主要功能是高效地处理 CSV 数据，简化了处理 CSV 文件的代码编写过程。以下是它的主要特性：
 简单易用：通过使用 STL 容器（如 std::vector 和 std::tuple），使得开发者能够轻松将 CSV 文件的内容转换为标准 C&#43;&#43; 数据结构。 依赖少：该库只有 C&#43;&#43;17 标准库的依赖，因此不需要额外的第三方库。 高效解析：该库采用高效的解析机制，支持处理大型 CSV 文件。 轻量级：代码库很小，适用于嵌入式或对依赖库要求较高的项目。 ">
-  <meta property="og:locale" content="zh-CN">
+  <meta property="og:locale" content="zh_CN">
   <meta property="og:type" content="article">
     <meta property="article:section" content="posts">
     <meta property="article:published_time" content="2024-10-07T14:16:41+08:00">
@@ -53,17 +46,12 @@ csv2是一个轻量级 C&#43;&#43; 库，用于将 CSV 文件解析为 C&#43;&#4
     <meta property="article:tag" content="CSV">
     <meta property="article:tag" content="C&#43;&#43;">
     <meta property="article:tag" content="源码剖析">
-<meta name="twitter:card" content="summary"><meta name="twitter:title" content="csv2 源码剖析：轻量级 CSV 处理的高效之道">
-<meta name="twitter:description" content="
-纸上得来终觉浅，绝知此事要躬行。——陆游《冬夜读书示子聿》
 
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="csv2 源码剖析：轻量级 CSV 处理的高效之道">
+  <meta name="twitter:description" content=" 纸上得来终觉浅，绝知此事要躬行。——陆游《冬夜读书示子聿》
 csv2是一个轻量级 C&#43;&#43; 库，用于将 CSV 文件解析为 C&#43;&#43; 中的 STL 容器。该库的主要功能是高效地处理 CSV 数据，简化了处理 CSV 文件的代码编写过程。以下是它的主要特性：
-
-简单易用：通过使用 STL 容器（如 std::vector 和 std::tuple），使得开发者能够轻松将 CSV 文件的内容转换为标准 C&#43;&#43; 数据结构。
-依赖少：该库只有 C&#43;&#43;17 标准库的依赖，因此不需要额外的第三方库。
-高效解析：该库采用高效的解析机制，支持处理大型 CSV 文件。
-轻量级：代码库很小，适用于嵌入式或对依赖库要求较高的项目。
-">
+简单易用：通过使用 STL 容器（如 std::vector 和 std::tuple），使得开发者能够轻松将 CSV 文件的内容转换为标准 C&#43;&#43; 数据结构。 依赖少：该库只有 C&#43;&#43;17 标准库的依赖，因此不需要额外的第三方库。 高效解析：该库采用高效的解析机制，支持处理大型 CSV 文件。 轻量级：代码库很小，适用于嵌入式或对依赖库要求较高的项目。 ">
       <meta name="twitter:site" content="@IRONAnthony96">
 <meta name="application-name" content="FixIt">
 <meta name="apple-mobile-web-app-title" content="FixIt"><meta name="theme-color" data-light="#f8f8f8" data-dark="#252627" content="#f8f8f8"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
@@ -1207,7 +1195,7 @@ csv2是一个轻量级 C&#43;&#43; 库，用于将 CSV 文件解析为 C&#43;&#4
 
   <aside class="toc" id="toc-auto" aria-label="目录"><h2 class="toc-title">目录&nbsp;<i class="toc-icon fa-solid fa-angle-down fa-fw" aria-hidden="true"></i></h2>
       <div class="toc-content" id="toc-content-auto"></div></aside></main><footer class="footer">
-    <div class="footer-container"><div class="footer-line powered">由 <a href="https://gohugo.io/" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.125.4"><img class="hugo-icon" src="/images/hugo.min.svg" alt="Hugo logo" /> Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/hugo-fixit/FixIt" target="_blank" rel="external" title="FixIt v0.3.2"><img class="fixit-icon" src="/images/fixit.min.svg" alt="FixIt logo" /> FixIt</a>
+    <div class="footer-container"><div class="footer-line powered">由 <a href="https://gohugo.io/" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.135.0"><img class="hugo-icon" src="/images/hugo.min.svg" alt="Hugo logo" /> Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/hugo-fixit/FixIt" target="_blank" rel="external" title="FixIt v0.3.2"><img class="fixit-icon" src="/images/fixit.min.svg" alt="FixIt logo" /> FixIt</a>
         </div><div class="footer-line copyright" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright fa-fw" aria-hidden="true"></i>
             <span itemprop="copyrightYear">2024</span><span class="author" itemprop="copyrightHolder">
               <a href="https://andyfree96.github.io/"target="_blank" rel="external nofollow noopener noreferrer">AndyFree96</a></span></div></div>
