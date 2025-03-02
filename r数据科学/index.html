@@ -706,7 +706,7 @@
 </div><p><img loading="lazy" src="/images/202411/1/21.png" alt="/images/202411/1/21.png" srcset="/images/202411/1/21.png?size=small, /images/202411/1/21.png?size=medium 1.5x, /images/202411/1/21.png?size=large 2x" data-title="/images/202411/1/21.png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></p>
 <p>但很难对特别大的数据集使用透明度。另一种解决办法是使用分箱。之前使用了<code>geom_histogram()</code>和<code>geom_freqpoly()</code>函数在一个维度上进行分箱，我们可以使用<code>geom_bin2d()</code>和<code>geom_hex()</code>函数在两个维度上进行分箱。</p>
 <p><code>geom_bin2d()</code>和<code>geom_hex()</code>函数将坐标平面分为二维分箱，并使用一种填充颜色表示落入每个分箱的数据点。<code>geom_bin2d()</code>创建长方形分箱。<code>geom_hex()</code>创建六边形分箱。</p>
-<div class="highlight" id="id-1"><div class="chroma">
+<div class="highlight" id="id-27"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -716,7 +716,7 @@
 </span></span><span class="line"><span class="cl">  <span class="nf">geom_bin2d</span><span class="p">(</span><span class="n">mapping</span> <span class="o">=</span> <span class="nf">aes</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="n">carat</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">price</span><span class="p">))</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p><img loading="lazy" src="/images/202411/1/22.png" alt="/images/202411/1/22.png" srcset="/images/202411/1/22.png?size=small, /images/202411/1/22.png?size=medium 1.5x, /images/202411/1/22.png?size=large 2x" data-title="/images/202411/1/22.png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></p>
-<div class="highlight" id="id-2"><div class="chroma">
+<div class="highlight" id="id-28"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -731,7 +731,7 @@
 </div>
 </div><p><img loading="lazy" src="/images/202411/1/23.png" alt="/images/202411/1/23.png" srcset="/images/202411/1/23.png?size=small, /images/202411/1/23.png?size=medium 1.5x, /images/202411/1/23.png?size=large 2x" data-title="/images/202411/1/23.png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></p>
 <p>另一种方式是对一个连续变量进行分箱，因此该连续变量的作用就相当于分类变量。之后就可以使用前面学过的对分类变量和连续变量的组合进行可视化的技术了。例如，可以对<code>carat</code>进行分箱，然后为每个组生成一个箱线图：</p>
-<div class="highlight" id="id-3"><div class="chroma">
+<div class="highlight" id="id-29"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -744,7 +744,7 @@
 </div>
 </div><p><img loading="lazy" src="/images/202411/1/24.png" alt="/images/202411/1/24.png" srcset="/images/202411/1/24.png?size=small, /images/202411/1/24.png?size=medium 1.5x, /images/202411/1/24.png?size=large 2x" data-title="/images/202411/1/24.png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></p>
 <p>另一种方法是近似地显示每个分箱中数据点的数量，此时可以使用<code>cut_number()</code>函数：</p>
-<div class="highlight" id="id-4"><div class="chroma">
+<div class="highlight" id="id-30"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -904,7 +904,7 @@
 </table>
 <h4 id="加载数据集" class="heading-element">
   <a href="#%e5%8a%a0%e8%bd%bd%e6%95%b0%e6%8d%ae%e9%9b%86" class="heading-mark"></a>加载数据集</h4><p>我们先将数据集进行加载：</p>
-<div class="highlight" id="id-5"><div class="chroma">
+<div class="highlight" id="id-31"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -921,7 +921,7 @@
 </div>
 </div><p><img loading="lazy" src="/images/202411/3/1.png" alt="/images/202411/3/1.png" srcset="/images/202411/3/1.png?size=small, /images/202411/3/1.png?size=medium 1.5x, /images/202411/3/1.png?size=large 2x" data-title="/images/202411/3/1.png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></p>
 <p>查看一下数据的维度：</p>
-<div class="highlight" id="id-6"><div class="chroma">
+<div class="highlight" id="id-32"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -935,7 +935,7 @@
 </div><p><img loading="lazy" src="/images/202411/3/2.png" alt="/images/202411/3/2.png" srcset="/images/202411/3/2.png?size=small, /images/202411/3/2.png?size=medium 1.5x, /images/202411/3/2.png?size=large 2x" data-title="/images/202411/3/2.png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></p>
 <h4 id="数据质量诊断" class="heading-element">
   <a href="#%e6%95%b0%e6%8d%ae%e8%b4%a8%e9%87%8f%e8%af%8a%e6%96%ad" class="heading-mark"></a>数据质量诊断</h4><p>数据质量诊断（Data quality diagnosis）可以使用<code>dlookr</code>包的<code>diagnose</code>函数对数据集进行查看：</p>
-<div class="highlight" id="id-7"><div class="chroma">
+<div class="highlight" id="id-33"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -951,7 +951,7 @@
 <p>Data quality diagnosis：https://cran.r-project.org/web/packages/dlookr/vignettes/diagonosis.html</p>
 <h4 id="数据转换" class="heading-element">
   <a href="#%e6%95%b0%e6%8d%ae%e8%bd%ac%e6%8d%a2" class="heading-mark"></a>数据转换</h4><p>当前，<code>film_date</code>和<code>pushlished_date</code>字段中存储的是 Unix 时间戳，我们将其转换为日期：</p>
-<div class="highlight" id="id-8"><div class="chroma">
+<div class="highlight" id="id-34"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -967,7 +967,7 @@
 </div><h4 id="单个变量-1" class="heading-element">
   <a href="#%e5%8d%95%e4%b8%aa%e5%8f%98%e9%87%8f-1" class="heading-mark"></a>单个变量</h4><h5 id="分类变量-1" class="heading-element">
   <a href="#%e5%88%86%e7%b1%bb%e5%8f%98%e9%87%8f-1" class="heading-mark"></a>分类变量</h5><p>对于单个分类变量，我们想知道<code>speaker_occupation</code>字段的情况，例如最热门的 10 个职业是什么？</p>
-<div class="highlight" id="id-9"><div class="chroma">
+<div class="highlight" id="id-35"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
@@ -1000,7 +1000,7 @@
 <p>TED 最热门的 10 大职业如上图所示。</p>
 <h5 id="连续变量-1" class="heading-element">
   <a href="#%e8%bf%9e%e7%bb%ad%e5%8f%98%e9%87%8f-1" class="heading-mark"></a>连续变量</h5><p>对于单个连续变量，我们想知道<code>duration</code>字段的情况。</p>
-<div class="highlight" id="id-10"><div class="chroma">
+<div class="highlight" id="id-36"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -1014,7 +1014,7 @@
 <h4 id="多个变量-1" class="heading-element">
   <a href="#%e5%a4%9a%e4%b8%aa%e5%8f%98%e9%87%8f-1" class="heading-mark"></a>多个变量</h4><h5 id="分类变量与连续变量-1" class="heading-element">
   <a href="#%e5%88%86%e7%b1%bb%e5%8f%98%e9%87%8f%e4%b8%8e%e8%bf%9e%e7%bb%ad%e5%8f%98%e9%87%8f-1" class="heading-mark"></a>分类变量与连续变量</h5><p><code>speaker_occupation</code>是分类变量，而<code>views</code>是连续变量，现在我们探索一下 10 大热门职业 TED 演讲的观看数量。</p>
-<div class="highlight" id="id-11"><div class="chroma">
+<div class="highlight" id="id-37"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -1037,7 +1037,7 @@
 <p>可以看到，与其他职业相比，作家的 TED 演讲观看数量分布最广且正偏（上侧的须较下侧的须更长）。整体而言，作家的 TED 演讲观看数量最大。</p>
 <h5 id="两个分类变量-1" class="heading-element">
   <a href="#%e4%b8%a4%e4%b8%aa%e5%88%86%e7%b1%bb%e5%8f%98%e9%87%8f-1" class="heading-mark"></a>两个分类变量</h5><p>接下来，我们探究一下<code>event</code>和<code>speaker_occupation</code>两个分类变量之间的关系。</p>
-<div class="highlight" id="id-12"><div class="chroma">
+<div class="highlight" id="id-38"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
@@ -1065,7 +1065,7 @@
 </div><p><img loading="lazy" src="/images/202411/3/7.png" alt="/images/202411/3/7.png" srcset="/images/202411/3/7.png?size=small, /images/202411/3/7.png?size=medium 1.5x, /images/202411/3/7.png?size=large 2x" data-title="/images/202411/3/7.png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></p>
 <h5 id="两个连续变量-1" class="heading-element">
   <a href="#%e4%b8%a4%e4%b8%aa%e8%bf%9e%e7%bb%ad%e5%8f%98%e9%87%8f-1" class="heading-mark"></a>两个连续变量</h5><p>最后，我们查看一下<code>comments</code>和<code>views</code>两个连续变量之间的关系。</p>
-<div class="highlight" id="id-13"><div class="chroma">
+<div class="highlight" id="id-39"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -1075,7 +1075,7 @@
 </span></span><span class="line"><span class="cl">  <span class="nf">geom_point</span><span class="p">(</span><span class="n">mapping</span> <span class="o">=</span> <span class="nf">aes</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="n">views</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">comments</span><span class="p">))</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p><img loading="lazy" src="/images/202411/3/8.png" alt="/images/202411/3/8.png" srcset="/images/202411/3/8.png?size=small, /images/202411/3/8.png?size=medium 1.5x, /images/202411/3/8.png?size=large 2x" data-title="/images/202411/3/8.png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></p>
-<div class="highlight" id="id-14"><div class="chroma">
+<div class="highlight" id="id-40"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2

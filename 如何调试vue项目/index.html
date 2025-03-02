@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html
+  itemscope
+  itemtype="http://schema.org/WebPage"
+  lang="zh-CN"
+>
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=2"
+    />
+    <meta name="robots" content="noodp" />
+    <meta name="google-adsense-account" content="ca-pub-5868664387231059" />
+    <title>如何调试Vue项目 - 东尼的博客</title><meta name="author" content="AndyFree96">
+<meta name="author-link" content="https://andyfree96.github.io/">
+<meta name="description" content="在开发 Vue 应用的过程中，调试是确保项目稳定性和高效性的关键步骤。无论是开发环境中的小问题，还是生产环境中的复杂 bug，合理的调试方法都能大大提升开发效率并减少错误发生的概率。本文将深入探讨 Vue 项目调试的常见技巧与工具，从基础的调试方法到进阶的技术方案，为开发者提供一个系统化的调试框架。通过合理的调试策略，开发者能够快速定位问题，并对症下药，确保项目的顺利进行。" /><meta name="keywords" content='Vue, 前端开发, 调试' />
+  <meta itemprop="name" content="如何调试Vue项目">
+  <meta itemprop="description" content="在开发 Vue 应用的过程中，调试是确保项目稳定性和高效性的关键步骤。无论是开发环境中的小问题，还是生产环境中的复杂 bug，合理的调试方法都能大大提升开发效率并减少错误发生的概率。本文将深入探讨 Vue 项目调试的常见技巧与工具，从基础的调试方法到进阶的技术方案，为开发者提供一个系统化的调试框架。通过合理的调试策略，开发者能够快速定位问题，并对症下药，确保项目的顺利进行。">
+  <meta itemprop="datePublished" content="2025-03-02T11:52:35+08:00">
+  <meta itemprop="dateModified" content="2025-03-02T11:52:35+08:00">
+  <meta itemprop="wordCount" content="423">
+  <meta itemprop="keywords" content="Vue,前端开发,调试"><meta property="og:url" content="http://localhost:1313/%E5%A6%82%E4%BD%95%E8%B0%83%E8%AF%95vue%E9%A1%B9%E7%9B%AE/">
+  <meta property="og:site_name" content="东尼的博客">
+  <meta property="og:title" content="如何调试Vue项目">
+  <meta property="og:description" content="在开发 Vue 应用的过程中，调试是确保项目稳定性和高效性的关键步骤。无论是开发环境中的小问题，还是生产环境中的复杂 bug，合理的调试方法都能大大提升开发效率并减少错误发生的概率。本文将深入探讨 Vue 项目调试的常见技巧与工具，从基础的调试方法到进阶的技术方案，为开发者提供一个系统化的调试框架。通过合理的调试策略，开发者能够快速定位问题，并对症下药，确保项目的顺利进行。">
+  <meta property="og:locale" content="zh_CN">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2025-03-02T11:52:35+08:00">
+    <meta property="article:modified_time" content="2025-03-02T11:52:35+08:00">
+    <meta property="article:tag" content="Vue">
+    <meta property="article:tag" content="前端开发">
+    <meta property="article:tag" content="调试">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="如何调试Vue项目">
+  <meta name="twitter:description" content="在开发 Vue 应用的过程中，调试是确保项目稳定性和高效性的关键步骤。无论是开发环境中的小问题，还是生产环境中的复杂 bug，合理的调试方法都能大大提升开发效率并减少错误发生的概率。本文将深入探讨 Vue 项目调试的常见技巧与工具，从基础的调试方法到进阶的技术方案，为开发者提供一个系统化的调试框架。通过合理的调试策略，开发者能够快速定位问题，并对症下药，确保项目的顺利进行。">
+      <meta name="twitter:site" content="@IRONAnthony96">
+<meta name="application-name" content="FixIt">
+<meta name="apple-mobile-web-app-title" content="FixIt"><meta name="theme-color" data-light="#f8f8f8" data-dark="#252627" content="#f8f8f8"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" href="http://localhost:1313/%E5%A6%82%E4%BD%95%E8%B0%83%E8%AF%95vue%E9%A1%B9%E7%9B%AE/" /><link rel="prev" href="http://localhost:1313/cpython%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "BlogPosting",
+    "headline": "如何调试Vue项目",
+    "inLanguage": "zh-CN",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "http:\/\/localhost:1313\/%E5%A6%82%E4%BD%95%E8%B0%83%E8%AF%95vue%E9%A1%B9%E7%9B%AE\/"
+    },"genre": "posts","keywords": "Vue, 前端开发, 调试","wordcount":  423 ,
+    "url": "http:\/\/localhost:1313\/%E5%A6%82%E4%BD%95%E8%B0%83%E8%AF%95vue%E9%A1%B9%E7%9B%AE\/","datePublished": "2025-03-02T11:52:35+08:00","dateModified": "2025-03-02T11:52:35+08:00","publisher": {
+      "@type": "Organization",
+      "name": ""},"author": {
+        "@type": "Person",
+        "name": "AndyFree96"
+      },"description": ""
+  }
+  </script></head>
+  <body
+    data-header-desktop="sticky"
+    data-header-mobile="auto"
+  ><script>
+      (window.localStorage?.getItem("theme")
+        ? localStorage.getItem("theme") === "dark"
+        : "auto" === "auto"
+        ? window.matchMedia("(prefers-color-scheme: dark)").matches
+        : "auto" === "dark") &&
+        document.body.setAttribute("data-theme", "dark");
+    </script><div
+      class="wrapper"
+      data-page-style="normal"
+    ><header class="desktop animate__faster" id="header-desktop">
+  <div class="header-wrapper">
+    <div class="header-title">
+      <a href="/" title="东尼的博客"><span class="header-title-text">东尼的博客</span></a><span class="header-subtitle"></span></div>
+    <nav>
+      <ul class="menu"><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/posts/"
+                
+                
+              >📕 文章</a></li><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/categories/"
+                
+                
+              >🧰 分类</a></li><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/tags/"
+                
+                
+              >🔖 标签</a></li><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/book"
+                
+                
+              >📚 书单</a></li><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/paper"
+                
+                
+              >📝 论文</a></li><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/opencourse"
+                
+                
+              >👨🏻‍💻 公开课</a></li><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/resource"
+                
+                
+              >⚡️ 资源</a></li><li class="menu-item">
+              <a
+                class="menu-link"
+                href="/about"
+                
+                
+              >🙋🏻‍♂️ 关于</a></li><li class="menu-item delimiter"></li><li class="menu-item theme-switch" title="切换主题">
+          <i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i>
+        </li></ul>
+    </nav>
+  </div>
+</header><header class="mobile animate__faster" id="header-mobile">
+  <div class="header-container">
+    <div class="header-wrapper">
+      <div class="header-title">
+        <a href="/" title="东尼的博客"><span class="header-title-text">东尼的博客</span></a><span class="header-subtitle"></span></div>
+      <div class="menu-toggle" id="menu-toggle-mobile">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+    <nav>
+      <ul class="menu" id="menu-mobile"><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/posts/"
+                  
+                  
+                >📕 文章</a></li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/categories/"
+                  
+                  
+                >🧰 分类</a></li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/tags/"
+                  
+                  
+                >🔖 标签</a></li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/book"
+                  
+                  
+                >📚 书单</a></li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/paper"
+                  
+                  
+                >📝 论文</a></li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/opencourse"
+                  
+                  
+                >👨🏻‍💻 公开课</a></li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/resource"
+                  
+                  
+                >⚡️ 资源</a></li><li
+              class="menu-item"
+            ><a
+                  class="menu-link"
+                  href="/about"
+                  
+                  
+                >🙋🏻‍♂️ 关于</a></li><li class="menu-item menu-system">
+          <span class="menu-system-item theme-switch" title="切换主题"><i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i></span></li>
+      </ul>
+    </nav>
+  </div>
+</header><main
+        class="container"
+      ><aside class="aside-collection animate__animated animate__fadeIn animate__faster" aria-label="合集"></aside>
+
+  <article class="page single">
+    <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span title="转载" class="icon-repost"><i class="fa-solid fa-share fa-fw" aria-hidden="true"></i></span><span>如何调试Vue项目</span>
+      </h1></div><div class="post-meta">
+      <div class="post-meta-line"><span class="post-author"><a href="https://andyfree96.github.io/" title="作者"target="_blank" rel="external nofollow noopener noreferrer author" class="author"><img loading="lazy" src="/avatar/1.jpg" alt="AndyFree96" data-title="AndyFree96" class="avatar" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/>&nbsp;AndyFree96</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/vue/" class="post-category" title="分类 - Vue"><i class="fa-regular fa-folder fa-fw" aria-hidden="true"></i> Vue</a></span></div><div class="post-meta-line"><span title="发布于 2025-03-02 11:52:35"><i class="fa-solid fa-calendar-days fa-fw me-1" aria-hidden="true"></i><time datetime="2025-03-02">2025-03-02</time></span>&nbsp;<span title="423 字"><i class="fa-solid fa-pencil-alt fa-fw me-1" aria-hidden="true"></i>约 500 字</span>&nbsp;<span><i class="fa-regular fa-clock fa-fw me-1" aria-hidden="true"></i>预计阅读 1 分钟</span>&nbsp;</div>
+    </div><div class="featured-image"><img loading="lazy" src="/images/202503/1/simon-berger-lCjH6ZOBhXs-unsplash.jpg" alt="/images/202503/1/simon-berger-lCjH6ZOBhXs-unsplash.jpg" data-title="/images/202503/1/simon-berger-lCjH6ZOBhXs-unsplash.jpg" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></div><div class="details toc" id="toc-static" data-kept="false">
+        <div class="details-summary toc-title">
+          <span>目录</span>
+          <span><i class="details-icon fa-solid fa-angle-right" aria-hidden="true"></i></span>
+        </div>
+        <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#调试准备">调试准备</a></li>
+    <li><a href="#创建项目">创建项目</a></li>
+    <li><a href="#运行项目">运行项目</a></li>
+    <li><a href="#vscode-调试">VSCode 调试</a></li>
+    <li><a href="#推荐">推荐</a></li>
+  </ul>
+</nav></div>
+      </div><div class="content" id="content"><p>在开发 Vue 应用的过程中，调试是确保项目稳定性和高效性的关键步骤。无论是开发环境中的小问题，还是生产环境中的复杂 bug，合理的调试方法都能大大提升开发效率并减少错误发生的概率。本文将深入探讨 Vue 项目调试的常见技巧与工具，从基础的调试方法到进阶的技术方案，为开发者提供一个系统化的调试框架。通过合理的调试策略，开发者能够快速定位问题，并对症下药，确保项目的顺利进行。</p>
+<h2 id="调试准备" class="heading-element">
+  <a href="#%e8%b0%83%e8%af%95%e5%87%86%e5%a4%87" class="heading-mark"></a>调试准备</h2><p>相关环境</p>
+<ul>
+<li>编辑器: VSCode</li>
+<li>Node 版本: 20.10.0</li>
+<li>包管理器: cnpm 9.2.0</li>
+</ul>
+<h2 id="创建项目" class="heading-element">
+  <a href="#%e5%88%9b%e5%bb%ba%e9%a1%b9%e7%9b%ae" class="heading-mark"></a>创建项目</h2><p>参考<a href="https://vuejs.org/guide/quick-start.html"target="_blank" rel="external nofollow noopener noreferrer">Vue 官方文档</a>，使用<code>cnpm</code>快速创建项目:</p>
+<div class="highlight" id="id-1"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">cnpm create vue@latest</span></span></code></pre></td></tr></table>
+</div>
+</div><p><img loading="lazy" src="/images/202503/1/1.png" alt="/images/202503/1/1.png" srcset="/images/202503/1/1.png?size=small, /images/202503/1/1.png?size=medium 1.5x, /images/202503/1/1.png?size=large 2x" data-title="/images/202503/1/1.png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></p>
+<h2 id="运行项目" class="heading-element">
+  <a href="#%e8%bf%90%e8%a1%8c%e9%a1%b9%e7%9b%ae" class="heading-mark"></a>运行项目</h2><p>在终端运行如下命令，启动项目:</p>
+<div class="highlight" id="id-2"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">npm run dev</span></span></code></pre></td></tr></table>
+</div>
+</div><p><img loading="lazy" src="/images/202503/1/2.png" alt="/images/202503/1/2.png" srcset="/images/202503/1/2.png?size=small, /images/202503/1/2.png?size=medium 1.5x, /images/202503/1/2.png?size=large 2x" data-title="/images/202503/1/2.png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></p>
+<p>此时我们可以使用 Vue DevTools 工具进行调试，或者配置 VSCode 进行调试。</p>
+<h2 id="vscode-调试" class="heading-element">
+  <a href="#vscode-%e8%b0%83%e8%af%95" class="heading-mark"></a>VSCode 调试</h2><p>创建调试配置文件<code>.vscode/launch.json</code>，添加一个调试配置:</p>
+<p><img loading="lazy" src="/images/202503/1/3.png" alt="/images/202503/1/3.png" srcset="/images/202503/1/3.png?size=small, /images/202503/1/3.png?size=medium 1.5x, /images/202503/1/3.png?size=large 2x" data-title="/images/202503/1/3.png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></p>
+<p><code>.vscode/launch.json</code>内容如下:</p>
+<div class="highlight" id="id-3"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;version&#34;</span><span class="p">:</span> <span class="s2">&#34;0.2.0&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;configurations&#34;</span><span class="p">:</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;type&#34;</span><span class="p">:</span> <span class="s2">&#34;chrome&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;request&#34;</span><span class="p">:</span> <span class="s2">&#34;launch&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;name&#34;</span><span class="p">:</span> <span class="s2">&#34;Launch Chrome against localhost&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;url&#34;</span><span class="p">:</span> <span class="s2">&#34;http://localhost:5173&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;webRoot&#34;</span><span class="p">:</span> <span class="s2">&#34;${workspaceFolder}&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p><img loading="lazy" src="/images/202503/1/4.png" alt="/images/202503/1/4.png" srcset="/images/202503/1/4.png?size=small, /images/202503/1/4.png?size=medium 1.5x, /images/202503/1/4.png?size=large 2x" data-title="/images/202503/1/4.png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></p>
+<p>点击调试按钮，即可启动调试。</p>
+<p><img loading="lazy" src="/images/202503/1/5.png" alt="/images/202503/1/5.png" srcset="/images/202503/1/5.png?size=small, /images/202503/1/5.png?size=medium 1.5x, /images/202503/1/5.png?size=large 2x" data-title="/images/202503/1/5.png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></p>
+<h2 id="推荐" class="heading-element">
+  <a href="#%e6%8e%a8%e8%8d%90" class="heading-mark"></a>推荐</h2><p><a href="https://blog.csdn.net/Cyj1414589221/article/details/136627666"target="_blank" rel="external nofollow noopener noreferrer">如何优雅的调试 Vue 项目？</a></p>
+<p><a href="https://vueschool.io/articles/vuejs-tutorials/debugging-magic-with-vue-devtools/"target="_blank" rel="external nofollow noopener noreferrer">Debugging Magic with Vue Devtools</a></p>
+<p><a href="https://www.zipy.ai/blog/vue-js-errors"target="_blank" rel="external nofollow noopener noreferrer">Decoding 14 Vue.js errors: A Vue.js debugging guide</a></p></div><div class="post-footer" id="post-footer">
+  <div class="post-info">
+    <div class="post-info-line">
+      <div class="post-info-mod">
+        <span title="更新于 2025-03-02 11:52:35">更新于 2025-03-02&nbsp;</span>
+      </div></div><div class="post-info-line">
+        <div class="post-info-md"></div>
+        <div class="post-info-share">
+          <span><a href="javascript:void(0);" title="分享到 Twitter" data-sharer="twitter" data-url="http://localhost:1313/%E5%A6%82%E4%BD%95%E8%B0%83%E8%AF%95vue%E9%A1%B9%E7%9B%AE/" data-title="如何调试Vue项目" data-via="IRONAnthony96" data-hashtags="Vue,前端开发,调试"><i class="fa-brands fa-twitter fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="http://localhost:1313/%E5%A6%82%E4%BD%95%E8%B0%83%E8%AF%95vue%E9%A1%B9%E7%9B%AE/" data-hashtag="Vue"><i class="fa-brands fa-facebook-square fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 WhatsApp" data-sharer="whatsapp" data-url="http://localhost:1313/%E5%A6%82%E4%BD%95%E8%B0%83%E8%AF%95vue%E9%A1%B9%E7%9B%AE/" data-title="如何调试Vue项目" data-web><i class="fa-brands fa-whatsapp fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 Line" data-sharer="line" data-url="http://localhost:1313/%E5%A6%82%E4%BD%95%E8%B0%83%E8%AF%95vue%E9%A1%B9%E7%9B%AE/" data-title="如何调试Vue项目"><i data-svg-src="/lib/simple-icons/icons/line.min.svg" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="http://localhost:1313/%E5%A6%82%E4%BD%95%E8%B0%83%E8%AF%95vue%E9%A1%B9%E7%9B%AE/" data-title="如何调试Vue项目" data-image="/images/202503/1/simon-berger-lCjH6ZOBhXs-unsplash.jpg"><i class="fa-brands fa-weibo fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 Myspace" data-sharer="myspace" data-url="http://localhost:1313/%E5%A6%82%E4%BD%95%E8%B0%83%E8%AF%95vue%E9%A1%B9%E7%9B%AE/" data-title="如何调试Vue项目" data-description=""><i data-svg-src="/lib/simple-icons/icons/myspace.min.svg" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 Blogger" data-sharer="blogger" data-url="http://localhost:1313/%E5%A6%82%E4%BD%95%E8%B0%83%E8%AF%95vue%E9%A1%B9%E7%9B%AE/" data-title="如何调试Vue项目" data-description=""><i class="fa-brands fa-blogger fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 Evernote" data-sharer="evernote" data-url="http://localhost:1313/%E5%A6%82%E4%BD%95%E8%B0%83%E8%AF%95vue%E9%A1%B9%E7%9B%AE/" data-title="如何调试Vue项目"><i class="fa-brands fa-evernote fa-fw" aria-hidden="true"></i></a>
+  </span>
+        </div>
+      </div></div>
+
+  <div class="post-info-more">
+    <section class="post-tags"><i class="fa-solid fa-tags fa-fw me-1" aria-hidden="true"></i><a href="/tags/vue/" class="post-tag" title="标签 - Vue">Vue</a><a href="/tags/%E5%89%8D%E7%AB%AF%E5%BC%80%E5%8F%91/" class="post-tag" title="标签 - 前端开发">前端开发</a><a href="/tags/%E8%B0%83%E8%AF%95/" class="post-tag" title="标签 - 调试">调试</a></section>
+    <section>
+      <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+    </section>
+  </div>
+
+  <div class="post-nav"><a href="/cpython%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" class="post-nav-item" rel="prev" title="CPython 源码剖析：Python 运行的奥秘"><i class="fa-solid fa-angle-left fa-fw" aria-hidden="true"></i>CPython 源码剖析：Python 运行的奥秘</a></div>
+</div>
+<div class="post-reward">
+    <div class="comment">请作者喝杯咖啡!</div>
+    <input type="checkbox" class="reward-input" name="reward" id="fi-reward" hidden />
+    <label class="reward-button" for="fi-reward">赞赏</label>
+    <div class="reward-ways" data-mode="static"><div><img loading="lazy" src="/reward/alipay.png" alt="AndyFree96 支付宝" data-title="AndyFree96 支付宝" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/><span data-animation>支付宝</span>
+          </div><div><img loading="lazy" src="/reward/wechatpay.png" alt="AndyFree96 微信" data-title="AndyFree96 微信" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/><span data-animation>微信</span>
+          </div></div>
+  </div></article>
+
+  <aside class="toc" id="toc-auto" aria-label="目录"><h2 class="toc-title">目录&nbsp;<i class="toc-icon fa-solid fa-angle-down fa-fw" aria-hidden="true"></i></h2>
+      <div class="toc-content" id="toc-content-auto"></div></aside></main><footer class="footer">
+    <div class="footer-container"><div class="footer-line powered">由 <a href="https://gohugo.io/" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.135.0"><img class="hugo-icon" src="/images/hugo.min.svg" alt="Hugo logo" /> Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/hugo-fixit/FixIt" target="_blank" rel="external" title="FixIt v0.3.2"><img class="fixit-icon" src="/images/fixit.min.svg" alt="FixIt logo" /> FixIt</a>
+        </div><div class="footer-line copyright" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright fa-fw" aria-hidden="true"></i>
+            <span itemprop="copyrightYear">2025</span><span class="author" itemprop="copyrightHolder">
+              <a href="https://andyfree96.github.io/"target="_blank" rel="external nofollow noopener noreferrer">AndyFree96</a></span></div></div>
+  </footer></div><div class="widgets"><div class="fixed-buttons animate__faster d-none"><div class="fixed-button back-to-top" role="button" aria-label="回到顶部"><i class="fa-solid fa-arrow-up fa-fw" aria-hidden="true"></i><span class="variant-numeric d-none">0%</span>
+        </div></div><div id="mask"></div><div class="reading-progress-bar" style="left: 0;top: 0;"></div><noscript>
+    <div class="noscript-warning">FixIt 主题在启用 JavaScript 的情况下效果最佳。</div>
+  </noscript>
+</div><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script src="/lib/sharer/sharer.min.js" async defer></script><script src="/lib/cookieconsent/cookieconsent.min.js" defer></script><script>window.config={"code":{"copyTitle":"复制到剪贴板","editLockTitle":"锁定可编辑代码块","editUnLockTitle":"解锁可编辑代码块","editable":true,"maxShownLines":10},"comment":{"enable":false},"cookieconsent":{"content":{"dismiss":"同意","link":"了解更多","message":"本网站使用 Cookies 来改善您的浏览体验。"},"enable":true,"palette":{"button":{"background":"#f0f0f0"},"popup":{"background":"#1aa3ff"}},"theme":"edgeless"}};</script><script src="/js/theme.min.js" defer></script></body>
+</html>
