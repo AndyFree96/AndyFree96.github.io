@@ -470,5 +470,5 @@ Linux 命令大全: https://www.runoob.com/linux/linux-command-manual.html
 ---
 
 > 作者: [AndyFree96](https://andyfree96.github.io/)  
-> URL: http://localhost:1313/%E5%BF%AB%E4%B9%90%E7%9A%84linux%E5%91%BD%E4%BB%A4%E8%A1%8C/  
+> URL: http://localhost:14625/%E5%BF%AB%E4%B9%90%E7%9A%84linux%E5%91%BD%E4%BB%A4%E8%A1%8C/  
 

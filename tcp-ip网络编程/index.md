@@ -5,16 +5,16 @@
 
 &lt;!--more--&gt;
 
-## 理解网络编程和套接字
+## 第 1 章 理解网络编程和套接字
 
 ### 理解网络编程和套接字
 
 网络编程中接受连接请求的套接字创建过程如下:
 
-1. 调用`socket`函数创建套接字
-2. 调用`bind`函数分配 IP 地址和端口号
-3. 调用`listen`函数转为可接收请求和状态
-4. 调用`accpet`函数受理连接请求
+1. 调用`socket`函数创建套接字（购买电话机）
+2. 调用`bind`函数分配 IP 地址和端口号（分配电话号码）
+3. 调用`listen`函数转为可接收请求和状态（连接电话线）
+4. 调用`accpet`函数受理连接请求（接听电话）
 
 客户端程序只有“调用 socket 函数创建套接字”和“调用 connect 函数向服务器发送连接请求”两个步骤。
 
@@ -28,7 +28,9 @@
 
 文件描述符从 3 开始由小到大顺序编号，因为 0、1、2 分配给标准 I/O 的描述符。
 
-![](/images/202402/3/1.png)
+![](/images/202402/3/d9ac5694316f677dcdc6de93beaaddbf_MD5.jpeg)
+
+在 Linux 下我们使用`read`和`write`函数对 socket 进行读取和写入。
 
 ### 基于 Windows 平台的实现
 
@@ -39,7 +41,7 @@ Windows 套接字（简称 Winsock）大部分是参考 BSD 系列的 UNIX 套�
 - 导入头文件`winsock2.h`
 - 链接`ws2_32.lib`库
 
-![](/images/202402/3/2.png)
+![](/images/202402/3/b21e54db2bbb6f803a4dbb10777ef3e1_MD5.jpeg)
 
 Winsock 编程时必须首先调用`WSAStartup`函数，设置程序中用到的 Winsock 版本，并初始化相应版本的库。
 
@@ -51,18 +53,20 @@ Winsock 编程时必须首先调用`WSAStartup`函数，设置程序中用到的
 
 int main()
 {
-	WSADATA wsaData;
-	if (WSAStartup(MAKEWORD(2, 2), &amp;wsaData) != 0) {
-		std::cout &lt;&lt; &#34;WSAStartup ERROR!&#34; &lt;&lt; std::endl;
-	}
-	WSACleanup();
-	return 0;
+ WSADATA wsaData;
+ if (WSAStartup(MAKEWORD(2, 2), &amp;wsaData) != 0) {
+  std::cout &lt;&lt; &#34;WSAStartup ERROR!&#34; &lt;&lt; std::endl;
+ }
+ WSACleanup();
+ return 0;
 }
 ```
 
-## 套接字类型与协议设置
+在 Windows 中使用`send`和`recv`函数进行发送和收取。
 
-协议是计算机对话使用的通信规则。
+## 第 2 章 套接字类型与协议设置
+
+协议是计算机对话使用的通信规则。简而言之，协议就是为了完成数据交换而定好的约定。
 
 ```C
 ##include &lt;sys/socket.h&gt;
@@ -80,7 +84,7 @@ int socket(int domain, int type, int protocol);
 
 套接字通信中的协议有一些分类，通过`socket`函数的第一个参数传递套接字中使用的协议分类信息。
 
-![](/images/202402/3/3.png)
+![](/images/202402/3/75b57b9ff133e37e431da732ffaabe26_MD5.jpeg)
 
 ### 套接字类型
 
@@ -88,9 +92,30 @@ int socket(int domain, int type, int protocol);
 
 #### 面向连接的套接字（SOCK_STREAM）
 
+![](/images/202402/3/9a3faa092b5cf00421bc789c4d3fe6fc_MD5.jpeg)
+
+上图的数据（糖果）传输方式特征整理如下：
+
+- 传输过程中数据不会消失
+- 按序传输数据
+- 传输的数据不存在数据边界（Boundary）（比如，集满 100 个才打包一次）
+
+&gt; 存在数据边界意味着接收数据的次数应和传输次数相同。
+
+传输端和接收端各有 1 名工人，意味着套接字连接必须一一对应。
+
 可靠的、按序传递的、基于字节的面向连接的数据传输方式的套接字。（传送带传输，收和发套接字都有缓存，多次`write`可能只需要一次`read`，即二者的次数可以不等，传输的数据不存在数据边界）
 
 #### 面向消息的套接字（SOCK_DGRAM）
+
+![](/images/202402/3/a70da8094f1458296fed88d0b5212d8e_MD5.jpeg)
+
+上图中摩托车快递包括（数据）传输方式如下：
+
+- 强调快速传输而非传输顺序
+- 传输的顺序可能丢失也可能损毁
+- 传输的数据有数据边界
+- 限制每次传输的数据大小
 
 不可靠的、不按序传递的、以数据的高速传递为目的的套接字（摩托车传输，发一次得收一次，传输的数据存在数据边界）。
 
@@ -120,11 +145,11 @@ int tcp_socket = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP);
 int udp_socket = socket(PF_INET, SOCKET_STREAM, IPPROTO_UDP);
 ```
 
-## 地址族与数据序列
+## 第 3 章 地址族与数据序列
 
 ### 分配给套接字的 IP 地址和端口号
 
-IP 是 Internet Protocol（网络协议）的简写，是为收发网络数据而分配给计算机的值。端口号并非赋予计算机的值，而是为区分程序中创建的套接字而分配给套接字的序号。
+IP 是 Internet Protocol（网络协议）的简写，是为收发网络数据而分配给计算机的值。端口号并非赋予计算机的值，而是为**区分**程序中创建的**套接字**而分配给套接字的序号。
 
 #### 网络地址（Internet Address）
 
@@ -133,11 +158,11 @@ IP 是 Internet Protocol（网络协议）的简写，是为收发网络数据�
 - IPv4（Internet Protocol version 4） 4 字节地址族
 - IPv6（Internet Protocol version 6） 16 字节地址族
 
-![](/images/202402/3/4.png)
+![](/images/202402/3/ba0b5e44179ec23bbfeae541aee00d1a_MD5.jpeg)
 
 网络地址（网络 ID）是为区分网络而设置的一部分 IP 地址。传输数据时，并非一开始就浏览所有 4 字节 IP 地址，进而找到目标主机；而是仅浏览 4 字节 IP 地址的网络地址，向把数据传到网络。网络（构成网络的路由器（Router）或交换机（Switch））接到数据后，浏览传输数据的主机地址（主机 ID）并将数据传给目标计算机。
 
-![](/images/202402/3/5.png)
+![](/images/202402/3/717720ccfbe784056763a16b6d4ace77_MD5.jpeg)
 
 &gt; 构建网络需要一种物理设备完成外网与本网主机之间的数据交换，这种设备便是路由器或交换机。它们也是一种计算机，只不过为了特殊目的而设计运行的，因而有了别名。我们可在自己的计算机中安装适当的软件，也可以将其作为交换机。交换机的功能比路由器简单一些，实际差别不大。
 
@@ -145,13 +170,13 @@ IP 是 Internet Protocol（网络协议）的简写，是为收发网络数据�
 
 只需通过 IP 地址的第一个字节即可判断网络地址占用的字节数:
 
-![](/images/202402/3/6.png)
+![](/images/202402/3/4be9a9031760daf059eb56259af2e843_MD5.jpeg)
 
 #### 用于区分套接字的端口号
 
 计算机中一般配有 NIC（Network Interface Card，网络接口卡）数据传输设备。通过 NIC 向计算机内部传输数据时会用到 IP。操作系统负责把传递到内部的数据适当分配给套接字，这时就要利用端口号。也就是说，通过 NIC 收到的数据内有端口号，操作系统参考此端口号把数据传输给相应端口的套接字。
 
-![](/images/202402/3/7.png)
+![](/images/202402/3/adb4d8c6b2871295a337082440a156f0_MD5.jpeg)
 
 端口号是在同意操作系统内为区分不同套接字而设置的，因此无法将一个端口号分配给不同套接字。端口号由 16 位构成，可分配的端口号范围是 0~65535。但 0~1023 是知名端口号（Wll-known PORT），一般分配给特定应用程序。TCP 套接字和 UDP 套接字不会公用端口号，所以允许重复。
 
@@ -178,9 +203,7 @@ struct in_addr {
 };
 ```
 
-![](/images/202402/3/8.png)
-
-#### 结构体`sockaddr_in`的成员分析
+![](/images/202402/3/d051ea7fb947bad7b928b0de84134acf_MD5.jpeg)
 
 ### 网络字节序与地址转换
 
@@ -193,13 +216,50 @@ CPU 向内存保存数据的方式有两种:
 
 主流的 Intel 系列 CPU 以小端序方式保存数据。
 
-在通过网络传输数据时约定统一的方式，称为网络字节序（Network Byte Order），非常简单——统一为大端序。即，先把数据数组转化为大端序格式再进行网络传输。
+在通过网络传输数据时约定统一的方式，称为网络字节序（Network Byte Order），非常简单——**统一为大端序**。即，先把数据数组转化为大端序格式再进行网络传输。
 
 #### 字节序转换（Endian Conversions）
 
-![](/images/202402/3/9.png)
+![](/images/202402/3/c82b23d25b4ea19ece000376952f7188_MD5.jpeg)
 
-&gt; 除了向`sockaddr_in`结构体变量填充数据外，其他情况无需考虑字节序问题。
+```c
+#include &lt;stdio.h&gt;
+#include &lt;arpa/inet.h&gt;
+
+
+
+int main(int argc, char *argv[]){
+
+  unsigned short host_port = 0x1234;
+
+  unsigned short net_port;
+
+  unsigned long host_addr = 0x12345678;
+
+  unsigned long net_addr;
+
+
+
+  net_port = htons(host_port);
+
+  net_addr = htonl(host_addr);
+
+  printf(&#34;Host ordered port : %#x \n&#34;, host_port);
+
+  printf(&#34;Network ordered port : %#x \n&#34;, net_port);
+
+  printf(&#34;Host ordered address : %#lx \n&#34;, host_addr);
+
+  printf(&#34;Network ordered address : %#lx \n&#34;, net_addr);
+
+  return 0;
+
+}
+```
+
+![](/images/202402/3/c52d4349940012c9bec4877a5c811fc9_MD5.jpeg)
+
+&gt; 数据传输采用网络字节序，传输前会进行转换，接收数据也会进行转换，这个过程是自动的。除了向`sockaddr_in`结构体变量填充数据外，其他情况无需考虑字节序问题。
 
 ### 网络地址的初始化与分配
 
@@ -211,25 +271,52 @@ CPU 向内存保存数据的方式有两种:
 ##include&lt;arpa/inet.h&gt;
 
 in_addr_t inet_addr(const char* string);
-
 // 成功返回32位大端序整型值，失败时返回INADDR_NONE。
 
-char* inet_ntoa(struct in_addr adr);
+int inet_aton(const char* string, struct in_addr* addr);
+// 成功返回1，失败返回0
 
+char* inet_ntoa(struct in_addr adr);
 // 成功返回转换的字符串地址值，失败时返回-1
 ```
 
-## 基于 TCP 的服务器端/客户端(1)
+若用`inet_addr`函数，需要将转换后的 IP 地址代入`sockaddr_in`结构体中声明的`in_addr`结构体变量。而`inet_aton`函数则不需要此过程。若传递`in_addr`结构体变量地址，函数会自动把结果填入该结构体变量。
+
+## 第 4 章 基于 TCP 的服务器端/客户端(1)
+
+### 理解 TCP 和 UDP
+
+根据数据传输方式的不同，基于网络协议的套接字一般分为 TCP 套接字和 UDP 套接字。因为 TCP 套接字是面向连接的，因此又称基于流（stream）的套接字。
+
+**链路层**
+
+专门定义 LAN、WAN、MAN 等网络标准。
+
+**IP 层**
+
+向目标传输数据需要经过哪条路径？在 IP 层解决这个问题。
+
+IP 协议本身是面向消息、不可靠的协议。每次传输数据时会帮我们选择路径，但并不一致。如果传输中发生路径错误，则选择其他路径。但如果发生数据丢失或错误，则无法解决。
+
+**TCP/UDP 层**
+
+TCP 可以保证可靠的数据传输，但它发送数据以 IP 层为基础。IP 只关注 1 数据包（数据传输的基本单位）的传输过程。因此，即使传输多个数据包，每个数据包也是由 IP 层实际传输的，也就是说传输顺序以及传输本身是不可靠的。
+
+TCP 可以在数据交换过程中确认对方已收到数据，并重传丢失的数据，从而保证了通信的可靠性。
+
+**应用层**
+
+上述内容是套接字通信过程中自动处理的。选择数据传输路径、数据确认过程都被隐藏到套接字内部，从而将开发者从细节中解放出来。
 
 ### 实现基于 TCP 的服务器端/客户端
 
 #### TCP 服务器端的默认函数调用顺序
 
-![](/images/202402/3/10.png)
+![](/images/202402/3/3ade83d343edb828972950abefd45222_MD5.jpeg)
 
 #### 进入等待连接请求状态
 
-我们已调用`bind`函数给套接字分配了地址，接下来就要通过`listen`函数进入等待连接请求状态。只有调用了`listen`函数，客户端才能进入可发出连接请求的状态。这时客户端才能调用`connect`函数（若提前调用将发生错误）。
+我们已调用`bind`函数给套接字分配了地址，接下来就要通过`listen`函数进入等待连接请求状态。**只有调用了`listen`函数**，客户端才能进入可发出连接请求的状态。这时客户端才能调用`connect`函数（若提前调用将发生错误）。
 
 ```C&#43;&#43;
 ##include &lt;sys/socket.h&gt;
@@ -237,11 +324,11 @@ char* inet_ntoa(struct in_addr adr);
 int listen(int sock, int backlog);
 
 // 成功返回0，失败返回-1
-// sock 希望进入等待连接状态的套接字文件描述符，传递的描述符套接字参数成为服务器端套接字（监听套接字）
+// sock 希望进入等待连接状态的套接字文件描述符，传递的描述符套接字参数成为服务器端套接字（监听套接字，或者说是门卫）
 // backlog 连接请求等待队列的长度，若为5，则队列长度为5，表示最多使5个连接请求进入队列
 ```
 
-![](/images/202402/3/11.png)
+![](/images/202402/3/0ee9e872edce692147e59388f817455a_MD5.jpeg)
 
 #### 受理客户端连接请求
 
@@ -258,11 +345,11 @@ int accpet(int sock, struct sockaddr* addr, socklen_t* addrlen);
 // addrlen 第二个参数addr结构体的长度，但是存有长度的变量地址。函数调用完成后，该变量即被填入客户端地址长度
 ```
 
-![](/images/202402/3/12.png)
+![](/images/202402/3/5961770d7719159030e1ff26f1768cc7_MD5.jpeg)
 
 #### TCP 客户端的默认函数调用顺序
 
-![](/images/202402/3/13.png)
+![](/images/202402/3/4e5d794ceb5c2e4fa22b619b74812c52_MD5.jpeg)
 
 服务器调用`listen`函数后创建连接请求等待队列，之后客户端即可请求连接。通过如下函数即可发起请求连接:
 
@@ -288,7 +375,7 @@ int connect(int sock, struct sockaddr* servaddr, socklen_t addrlen);
 
 #### 基于 TCP 和服务器端/客户端函数调用关系
 
-![](/images/202402/3/14.png)
+![](/images/202402/3/4bda3f6d62f915cb3d24a7b7c313e7c6_MD5.jpeg)
 
 服务器端创建套接字后连续调用`bind`和`listen`函数进入等待状态，客户端通过调用`connect`函数发起连接请求。客户端只能等到服务器端调用`listen`函数后才能调`connect`函数。客户端调用`connect`函数前，服务器端有可能率先调用`accpet`函数。此时服务器端在调用`accpet`函数时进入阻塞状态，直到客户端调用`connect`函数为止。
 
@@ -298,7 +385,7 @@ int connect(int sock, struct sockaddr* servaddr, socklen_t addrlen);
 
 插入循环语句反复调用`accept`函数。
 
-![](/images/202402/3/15.png)
+![](/images/202402/3/4ccd444887bbd97199bbcbacddc137db_MD5.jpeg)
 
 从上图可看出，调用`accept`函数后紧接着调用 I/O 相关的`read`和`write`函数，之后调用`close`函数。这并非针对服务器端套接字，而是针对`accept`函数调用时创建的套接字。
 
@@ -306,7 +393,7 @@ int connect(int sock, struct sockaddr* servaddr, socklen_t addrlen);
 
 #### 迭代回声服务器/客户端
 
-![](/images/202402/3/16.png)
+![](/images/202402/3/fcbe8d276e41de657afdde3314332db5_MD5.jpeg)
 
 ### 基于 Windows 的实现
 
@@ -326,59 +413,59 @@ void ErrorHandling(const char* message);
 
 int main(int argc, char* argv[])
 {
-	WSADATA wsaData;
-	SOCKET hServerSocket, hClientSocket;
-	char message[BUF_SIZE];
-	int strlen, i;
-	int clientAddrSize;
+ WSADATA wsaData;
+ SOCKET hServerSocket, hClientSocket;
+ char message[BUF_SIZE];
+ int strlen, i;
+ int clientAddrSize;
 
-	SOCKADDR_IN serverAddr, clientAddr;
-	if (argc != 2) {
-		printf(&#34;Usage : %s &lt;port&gt;\n&#34;, argv[0]);
-		exit(1);
-	}
+ SOCKADDR_IN serverAddr, clientAddr;
+ if (argc != 2) {
+  printf(&#34;Usage : %s &lt;port&gt;\n&#34;, argv[0]);
+  exit(1);
+ }
 
-	if (WSAStartup(MAKEWORD(2, 2), &amp;wsaData) != 0)
-		ErrorHandling(&#34;WSAStartup() error!&#34;);
-	hServerSocket = socket(PF_INET, SOCK_STREAM, 0);
-	if (hServerSocket == INVALID_SOCKET) ErrorHandling(&#34;socket() error!&#34;);
-	memset(&amp;serverAddr, 0, sizeof(serverAddr));
-	serverAddr.sin_family = AF_INET;
-	serverAddr.sin_addr.s_addr = htonl(INADDR_ANY);
-	serverAddr.sin_port = htons(atoi(argv[1]));
+ if (WSAStartup(MAKEWORD(2, 2), &amp;wsaData) != 0)
+  ErrorHandling(&#34;WSAStartup() error!&#34;);
+ hServerSocket = socket(PF_INET, SOCK_STREAM, 0);
+ if (hServerSocket == INVALID_SOCKET) ErrorHandling(&#34;socket() error!&#34;);
+ memset(&amp;serverAddr, 0, sizeof(serverAddr));
+ serverAddr.sin_family = AF_INET;
+ serverAddr.sin_addr.s_addr = htonl(INADDR_ANY);
+ serverAddr.sin_port = htons(atoi(argv[1]));
 
-	if (bind(hServerSocket, (sockaddr*)&amp;serverAddr, sizeof(serverAddr)) == SOCKET_ERROR) {
-		ErrorHandling(&#34;bind() error!&#34;);
-	}
+ if (bind(hServerSocket, (sockaddr*)&amp;serverAddr, sizeof(serverAddr)) == SOCKET_ERROR) {
+  ErrorHandling(&#34;bind() error!&#34;);
+ }
 
-	if (listen(hServerSocket, 5) == SOCKET_ERROR) {
-		ErrorHandling(&#34;listen() error!&#34;);
-	}
+ if (listen(hServerSocket, 5) == SOCKET_ERROR) {
+  ErrorHandling(&#34;listen() error!&#34;);
+ }
 
-	clientAddrSize = sizeof(clientAddr);
+ clientAddrSize = sizeof(clientAddr);
 
-	for (i = 0; i &lt; 5; i&#43;&#43;) {
-		hClientSocket = accept(hServerSocket, (sockaddr*)&amp;clientAddr, &amp;clientAddrSize);
-		if (hClientSocket == -1) ErrorHandling(&#34;accept() error!&#34;);
-		else std::cout &lt;&lt; &#34;Connected client &#34; &lt;&lt; i &#43; 1 &lt;&lt; &#34;\n&#34;;
-		while ((strlen = recv(hClientSocket, message, BUF_SIZE, 0)) != 0) {
-			send(hClientSocket, message, strlen, 0);
-		}
+ for (i = 0; i &lt; 5; i&#43;&#43;) {
+  hClientSocket = accept(hServerSocket, (sockaddr*)&amp;clientAddr, &amp;clientAddrSize);
+  if (hClientSocket == -1) ErrorHandling(&#34;accept() error!&#34;);
+  else std::cout &lt;&lt; &#34;Connected client &#34; &lt;&lt; i &#43; 1 &lt;&lt; &#34;\n&#34;;
+  while ((strlen = recv(hClientSocket, message, BUF_SIZE, 0)) != 0) {
+   send(hClientSocket, message, strlen, 0);
+  }
 
 
-		closesocket(hClientSocket);
-	}
-	closesocket(hServerSocket);
-	WSACleanup();
+  closesocket(hClientSocket);
+ }
+ closesocket(hServerSocket);
+ WSACleanup();
 
-	return 0;
+ return 0;
 }
 
 
 void ErrorHandling(const char* message) {
-	fputs(message, stderr);
-	fputc(&#39;\n&#39;, stderr);
-	exit(1);
+ fputs(message, stderr);
+ fputc(&#39;\n&#39;, stderr);
+ exit(1);
 }
 ```
 
@@ -398,54 +485,62 @@ void ErrorHandling(const char* message);
 
 int main(int argc, char* argv[])
 {
-	WSADATA wsaData;
-	SOCKET hSocket;
-	char message[BUF_SIZE];
-	int strLen;
-	SOCKADDR_IN serverAddr;
+ WSADATA wsaData;
+ SOCKET hSocket;
+ char message[BUF_SIZE];
+ int strLen;
+ SOCKADDR_IN serverAddr;
 
-	if (argc != 3) {
-		printf(&#34;Usage : %s &lt;IP&gt; &lt;port&gt;\n&#34;, argv[0]);
-		exit(1);
-	}
+ if (argc != 3) {
+  printf(&#34;Usage : %s &lt;IP&gt; &lt;port&gt;\n&#34;, argv[0]);
+  exit(1);
+ }
 
-	if (WSAStartup(MAKEWORD(2, 2), &amp;wsaData) != 0)
-		ErrorHandling(&#34;WSAStartup() error!&#34;);
+ if (WSAStartup(MAKEWORD(2, 2), &amp;wsaData) != 0)
+  ErrorHandling(&#34;WSAStartup() error!&#34;);
 
-	hSocket = socket(PF_INET, SOCK_STREAM, 0);
-	if (hSocket == INVALID_SOCKET) ErrorHandling(&#34;socket() error&#34;);
-	memset(&amp;serverAddr, 0, sizeof(serverAddr));
-	serverAddr.sin_family = AF_INET;
-	serverAddr.sin_addr.s_addr = inet_addr(argv[1]);
-	serverAddr.sin_port = htons(atoi(argv[2]));
+ hSocket = socket(PF_INET, SOCK_STREAM, 0);
+ if (hSocket == INVALID_SOCKET) ErrorHandling(&#34;socket() error&#34;);
+ memset(&amp;serverAddr, 0, sizeof(serverAddr));
+ serverAddr.sin_family = AF_INET;
+ serverAddr.sin_addr.s_addr = inet_addr(argv[1]);
+ serverAddr.sin_port = htons(atoi(argv[2]));
 
-	if (connect(hSocket, (sockaddr*)&amp;serverAddr, sizeof(serverAddr)) == SOCKET_ERROR) {
-		ErrorHandling(&#34;connect() error!&#34;);
-	}
+ if (connect(hSocket, (sockaddr*)&amp;serverAddr, sizeof(serverAddr)) == SOCKET_ERROR) {
+  ErrorHandling(&#34;connect() error!&#34;);
+ }
 
-	while (1)
-	{
-		fputs(&#34;Input message (Q to quit): &#34;, stdout);
-		fgets(message, BUF_SIZE, stdin);
-		if (!strcmp(message, &#34;q\n&#34;) || !strcmp(message, &#34;Q\n&#34;)) break;
-		send(hSocket, message, strlen(message), 0);
-		strLen = recv(hSocket, message, BUF_SIZE - 1, 0);
-		message[strLen] = 0;
-		printf(&#34;Message from server : %s&#34;, message);
-	}
-	closesocket(hSocket);
-	WSACleanup();
-	return 0;
+ while (1)
+ {
+  fputs(&#34;Input message (Q to quit): &#34;, stdout);
+  fgets(message, BUF_SIZE, stdin);
+  if (!strcmp(message, &#34;q\n&#34;) || !strcmp(message, &#34;Q\n&#34;)) break;
+  send(hSocket, message, strlen(message), 0);
+  strLen = recv(hSocket, message, BUF_SIZE - 1, 0);
+  message[strLen] = 0;
+  printf(&#34;Message from server : %s&#34;, message);
+ }
+ closesocket(hSocket);
+ WSACleanup();
+ return 0;
 }
 
 void ErrorHandling(const char* message) {
-	fputs(message, stderr);
-	fputc(&#39;\n&#39;, stderr);
-	exit(1);
+ fputs(message, stderr);
+ fputc(&#39;\n&#39;, stderr);
+ exit(1);
 }
 ```
 
-## 基于 TCP 的服务器端/客户端(2)
+## 第 5 章 基于 TCP 的服务器端/客户端(2)
+
+上一章的问题出在客户端的：
+
+```c
+    write(sock, message, strlen(message));
+
+    str_len = read(sock, message, BUF_SIZE - 1);
+```
 
 ### 回声客户端的完美实现
 
@@ -536,7 +631,7 @@ void error_handling(char *message)
 
 TCP 套接字的数据收发无边界。服务器端即使调用 1 次`write`函数传输 40 字节的数据，客户端也有可能通过 4 次`read`函数调用每次读取 10 字节。`write`函数调用后并非立即传输数据，`read`函数调用后也并非马上接收数据。`write`函数调用瞬间，数据将移至输出缓冲；`read`函数调用瞬间，从输入缓冲读取数据。
 
-![](/images/202402/3/17.png)
+![](/images/202402/3/2642f4da7d817ed71466f034b87dfd03_MD5.jpeg)
 
 如上图所示，调用`write`函数时，数据将移到输出缓冲，在适当的时候（不管是分别传送还是一次性传送）传向对方的输入缓冲。这时对方将调用`read`函数从输入缓冲读取数据。这些 I/O 缓冲特性可整理如下。
 
@@ -546,6 +641,8 @@ TCP 套接字的数据收发无边界。服务器端即使调用 1 次`write`函
 - 关闭套接字将丢失输入缓冲中的数据
 
 不会发生超过输入缓冲大小的数据传输，因为 TCP 会控制数据流。TCP 中有滑动窗口（Sliding Window）协议。数据收发也是如此，TCP 不会因为缓冲溢出而丢失数据。
+
+&gt; write 函数和 Windows 的 send 函数并不是在完成向对方主机的数据传输时返回，而是在数据移到输出缓冲时。TCP 会保证对输出缓冲数据的传输。
 
 #### TCP 内部工作原理 1：与对方套接字的连接
 
@@ -557,19 +654,19 @@ TCP 套接字从创建到消失分为以下 3 步。
 
 连接过程中实际交换的信息格式如下:
 
-![](/images/202402/3/18.png)
+![](/images/202402/3/03db63f052c38bdfbe11a22cdeba2be4_MD5.jpeg)
 
 该过程又称 Tree-way handhshaking（三次握手）。
 
 #### TCP 内部工作原理 2：与对方主机的数据交换
 
-![](/images/202402/3/19.png)
+![](/images/202402/3/bdd0559f68ad5b6822030de02ff6f2f4_MD5.jpeg)
 
 ACK 号 -&gt; SEQ 号 &#43; 传递字节数 &#43; 1
 
 #### TCP 内部工作原理 3：断开与套接字的连接
 
-![](/images/202402/3/20.png)
+![](/images/202402/3/2767fa5ee3643cfb9e1efead4c6fb115_MD5.jpeg)
 
 数据包内的 FIN 表示断开连接。即双方各发送 1 次 FIN 消息后断开连接。该过程经历了 4 个阶段，因此又称四次握手（Four-way handshaking）。
 
@@ -591,79 +688,79 @@ void ErrorHandling(const char* message);
 int calculate(int opnum, int opnds[], char op);
 
 int main(int argc, char* argv[]) {
-	WSADATA wsData;
-	SOCKET serverSocket, clientSocket;
-	SOCKADDR_IN serverAddr, clientAddr;
-	char opinfo[BUF_SIZE];
-	int clientAddrSize, i;
-	int result, opndCount;
-	int recvCount, recvLen;
+ WSADATA wsData;
+ SOCKET serverSocket, clientSocket;
+ SOCKADDR_IN serverAddr, clientAddr;
+ char opinfo[BUF_SIZE];
+ int clientAddrSize, i;
+ int result, opndCount;
+ int recvCount, recvLen;
 
 
-	if (argc != 2) {
-		printf(&#34;Usage : %s &lt;port&gt;\n&#34;, argv[0]);
-		exit(1);
-	}
+ if (argc != 2) {
+  printf(&#34;Usage : %s &lt;port&gt;\n&#34;, argv[0]);
+  exit(1);
+ }
 
-	if (WSAStartup(MAKEWORD(2, 2), &amp;wsData) != 0) ErrorHandling(&#34;WSAStartup() error!&#34;);
+ if (WSAStartup(MAKEWORD(2, 2), &amp;wsData) != 0) ErrorHandling(&#34;WSAStartup() error!&#34;);
 
-	serverSocket = socket(PF_INET, SOCK_STREAM, 0);
-	if (serverSocket == INVALID_SOCKET) ErrorHandling(&#34;socket() error!&#34;);
-	memset(&amp;serverAddr, 0, sizeof(serverAddr));
-	serverAddr.sin_family = PF_INET;
-	serverAddr.sin_port = htons(atoi(argv[1]));
-	serverAddr.sin_addr.s_addr = htonl(INADDR_ANY);
+ serverSocket = socket(PF_INET, SOCK_STREAM, 0);
+ if (serverSocket == INVALID_SOCKET) ErrorHandling(&#34;socket() error!&#34;);
+ memset(&amp;serverAddr, 0, sizeof(serverAddr));
+ serverAddr.sin_family = PF_INET;
+ serverAddr.sin_port = htons(atoi(argv[1]));
+ serverAddr.sin_addr.s_addr = htonl(INADDR_ANY);
 
-	if (bind(serverSocket, (SOCKADDR*)&amp;serverAddr, sizeof(serverAddr)) == SOCKET_ERROR)
-		ErrorHandling(&#34;bind() error!&#34;);
+ if (bind(serverSocket, (SOCKADDR*)&amp;serverAddr, sizeof(serverAddr)) == SOCKET_ERROR)
+  ErrorHandling(&#34;bind() error!&#34;);
 
-	if (listen(serverSocket, 5) == SOCKET_ERROR)
-		ErrorHandling(&#34;listen() error!&#34;);
+ if (listen(serverSocket, 5) == SOCKET_ERROR)
+  ErrorHandling(&#34;listen() error!&#34;);
 
-	clientAddrSize = sizeof(clientAddr);
+ clientAddrSize = sizeof(clientAddr);
 
-	for (i = 0; i &lt; 5; i&#43;&#43;) {
-		opndCount = 0;
-		clientSocket = accept(serverSocket, (SOCKADDR*)&amp;clientAddr, &amp;clientAddrSize);
-		recv(clientSocket, (char*)&amp;opndCount, 1, 0);
-		recvLen = 0;
-		while ((opndCount * OPZS &#43; 1) &gt; recvLen) {
-			recvCount = recv(clientSocket, opinfo, BUF_SIZE - 1, 0);
-			recvLen &#43;= recvCount;
-		}
-		result = calculate(opndCount, (int*)opinfo, opinfo[recvLen - 1]);
-		send(clientSocket, (char*)&amp;result, sizeof(result), 0);
-		closesocket(clientSocket);
+ for (i = 0; i &lt; 5; i&#43;&#43;) {
+  opndCount = 0;
+  clientSocket = accept(serverSocket, (SOCKADDR*)&amp;clientAddr, &amp;clientAddrSize);
+  recv(clientSocket, (char*)&amp;opndCount, 1, 0);
+  recvLen = 0;
+  while ((opndCount * OPZS &#43; 1) &gt; recvLen) {
+   recvCount = recv(clientSocket, opinfo, BUF_SIZE - 1, 0);
+   recvLen &#43;= recvCount;
+  }
+  result = calculate(opndCount, (int*)opinfo, opinfo[recvLen - 1]);
+  send(clientSocket, (char*)&amp;result, sizeof(result), 0);
+  closesocket(clientSocket);
 
-	}
+ }
 
-	closesocket(serverSocket);
-	WSACleanup();
-	return 0;
+ closesocket(serverSocket);
+ WSACleanup();
+ return 0;
 }
 
 
 void ErrorHandling(const char* message) {
-	fputs(message, stderr);
-	fputc(&#39;\n&#39;, stderr);
-	exit(1);
+ fputs(message, stderr);
+ fputc(&#39;\n&#39;, stderr);
+ exit(1);
 }
 
 int calculate(int opnum, int opnds[], char op) {
-	int result = opnds[0], i;
-	switch (op) {
-	case &#39;&#43;&#39;:
-		for (i = 1; i &lt; opnum; i&#43;&#43;) result &#43;= opnds[i];
-		break;
-	case &#39;-&#39;:
-		for (i = 1; i &lt; opnum; i&#43;&#43;) result -= opnds[i];
-		break;
+ int result = opnds[0], i;
+ switch (op) {
+ case &#39;&#43;&#39;:
+  for (i = 1; i &lt; opnum; i&#43;&#43;) result &#43;= opnds[i];
+  break;
+ case &#39;-&#39;:
+  for (i = 1; i &lt; opnum; i&#43;&#43;) result -= opnds[i];
+  break;
 
-	case &#39;*&#39;:
-		for (i = 1; i &lt; opnum; i&#43;&#43;) result *= opnds[i];
-		break;
-	}
-	return result;
+ case &#39;*&#39;:
+  for (i = 1; i &lt; opnum; i&#43;&#43;) result *= opnds[i];
+  break;
+ }
+ return result;
 }
 ```
 
@@ -685,73 +782,73 @@ void ErrorHandling(const char* message);
 
 int main(int argc, char* argv[])
 {
-	WSADATA wsData;
-	SOCKET hSocket;
-	char opmsg[BUF_SIZE];
-	int result, opndCount, i;
-	SOCKADDR_IN serverAddr;
+ WSADATA wsData;
+ SOCKET hSocket;
+ char opmsg[BUF_SIZE];
+ int result, opndCount, i;
+ SOCKADDR_IN serverAddr;
 
 
-	if (argc != 3) {
-		printf(&#34;Usage : %s &lt;IP&gt; &lt;port&gt;\n&#34;, argv[0]);
-		exit(1);
-	}
+ if (argc != 3) {
+  printf(&#34;Usage : %s &lt;IP&gt; &lt;port&gt;\n&#34;, argv[0]);
+  exit(1);
+ }
 
-	if (WSAStartup(MAKEWORD(2, 2), &amp;wsData) != 0) {
-		ErrorHandling(&#34;WSAStartup() error!&#34;);
-	}
+ if (WSAStartup(MAKEWORD(2, 2), &amp;wsData) != 0) {
+  ErrorHandling(&#34;WSAStartup() error!&#34;);
+ }
 
-	hSocket = socket(PF_INET, SOCK_STREAM, 0);
-	if (hSocket == INVALID_SOCKET) ErrorHandling(&#34;socket() error!&#34;);
-	memset(&amp;serverAddr, 0, sizeof(serverAddr));
-	serverAddr.sin_addr.s_addr = inet_addr(argv[1]);
-	serverAddr.sin_family = AF_INET;
-	serverAddr.sin_port = htons(atoi(argv[2]));
+ hSocket = socket(PF_INET, SOCK_STREAM, 0);
+ if (hSocket == INVALID_SOCKET) ErrorHandling(&#34;socket() error!&#34;);
+ memset(&amp;serverAddr, 0, sizeof(serverAddr));
+ serverAddr.sin_addr.s_addr = inet_addr(argv[1]);
+ serverAddr.sin_family = AF_INET;
+ serverAddr.sin_port = htons(atoi(argv[2]));
 
-	if (connect(hSocket, (SOCKADDR*)&amp;serverAddr, sizeof(serverAddr)) == SOCKET_ERROR)
-		ErrorHandling(&#34;socket() error!&#34;);
-	else
-		puts(&#34;Connected ......&#34;);
+ if (connect(hSocket, (SOCKADDR*)&amp;serverAddr, sizeof(serverAddr)) == SOCKET_ERROR)
+  ErrorHandling(&#34;socket() error!&#34;);
+ else
+  puts(&#34;Connected ......&#34;);
 
-	fputs(&#34;Operand count : &#34;, stdout);
-	scanf(&#34;%d&#34;, &amp;opndCount);
-	opmsg[0] = (char)opndCount;
+ fputs(&#34;Operand count : &#34;, stdout);
+ scanf(&#34;%d&#34;, &amp;opndCount);
+ opmsg[0] = (char)opndCount;
 
-	for (i = 0; i &lt; opndCount; i&#43;&#43;) {
-		printf(&#34;Operand %d : &#34;, i &#43; 1);
-		scanf(&#34;%d&#34;, (int*)&amp;opmsg[i * OPSZ &#43; 1]);
-	}
+ for (i = 0; i &lt; opndCount; i&#43;&#43;) {
+  printf(&#34;Operand %d : &#34;, i &#43; 1);
+  scanf(&#34;%d&#34;, (int*)&amp;opmsg[i * OPSZ &#43; 1]);
+ }
 
-	fgetc(stdin);
-	fputs(&#34;Operator : &#34;, stdout);
-	scanf(&#34;%c&#34;, &amp;opmsg[opndCount * OPSZ &#43; 1]);
-	send(hSocket, opmsg, opndCount * OPSZ &#43; 2, 0);
-	recv(hSocket, (char*)&amp;result, RLT_SIZE, 0);
-	printf(&#34;Operation result : %d \n&#34;, result);
-	closesocket(hSocket);
-	WSACleanup();
-	return 0;
+ fgetc(stdin);
+ fputs(&#34;Operator : &#34;, stdout);
+ scanf(&#34;%c&#34;, &amp;opmsg[opndCount * OPSZ &#43; 1]);
+ send(hSocket, opmsg, opndCount * OPSZ &#43; 2, 0);
+ recv(hSocket, (char*)&amp;result, RLT_SIZE, 0);
+ printf(&#34;Operation result : %d \n&#34;, result);
+ closesocket(hSocket);
+ WSACleanup();
+ return 0;
 }
 
 void ErrorHandling(const char* message) {
-	fputs(message, stderr);
-	fputc(&#39;\n&#39;, stderr);
-	exit(1);
+ fputs(message, stderr);
+ fputc(&#39;\n&#39;, stderr);
+ exit(1);
 }
 
 ```
 
 ### 推荐
 
-File Transfer using TCP Socket in C: https://idiotdeveloper.com/file-transfer-using-tcp-socket-in-c/
+File Transfer using TCP Socket in C: &lt;https://idiotdeveloper.com/file-transfer-using-tcp-socket-in-c/&gt;
 
-## 基于 UDP 的服务器端/客户端
+## 第 6 章 基于 UDP 的服务器端/客户端
 
 ### 理解 UDP
 
 #### UDP 内部工作原理
 
-![](/images/202402/3/21.png)
+![](/images/202402/3/cd660fef8b97c2f2dde24447ea99cdcf_MD5.jpeg)
 
 ### 实现基于 UDP 的服务器端/客户端
 
@@ -765,6 +862,8 @@ TCP 中，套接字之间应该是一对一的关系。若要向 10 个客户端
 
 只需 1 个 UDP 套接字就可以向任意主机传输数据（类似收发信件的邮筒）。只需 1 个 UDP 套接字就能和多台主机通信。
 
+UDP 程序中，调用`sendto`函数传输数据前应完成对套接字的地址分配工作，因此调用`bind`函数。`bind`函数不区分 TCP 和 UDP。如果调用`sendto`函数时发现尚未分配地址信息，则在首次调用`sendto`函数时相应套接字自动分配 IP 和端口。且此时分配的地址一直保留到程序结束为止。
+
 ### 基于 Windows 实现
 
 ```C&#43;&#43;
@@ -777,7 +876,7 @@ int recvfrom(SOCKET s, char* buf, int len, int flag, struct sockaddr* from, int*
 // 成功返回接收的字节数，失败返回SOCKET_ERROR
 ```
 
-## 优雅地断开套接字连接
+## 第 7 章 优雅地断开套接字连接
 
 ### 基于 TCP 的半关闭
 
@@ -785,8 +884,7 @@ int recvfrom(SOCKET s, char* buf, int len, int flag, struct sockaddr* from, int*
 
 两台主机通过套接字建立连接后进入可交换数据的状态，又称“流形成的状态”。也就是把建立套接字后可交换数据的状态看作一种流。此处的流可以比作水流。水朝着一个方向流动，同样，在套接字的流中，数据也只能向一个方向流动。为了进行双向通信，就需要如下图所示的 2 个流。
 
-![](/images/202402/3/22.png)
-
+![](/images/202402/3/730f34d041c1706160efda6b652f14cd_MD5.jpeg)
 一旦两台主机建立了套接字连接，每个主机机会拥有单独的输入流和输出流。其中一个主机的输入流与一台主机的输出流相连，而输出流则与另一主机的输入流相连。优雅地断开连接方式指的是只断开其中一个流，而非同时断开两个流。Linux 的`close`和 Windows 的`closesocket`函数将同时断开这两个流，因此不够优雅。
 
 #### 针对优雅断开的`shutdown`函数
@@ -840,58 +938,58 @@ int shutdown(SOCKET sock, int howto);
 void ErrorHandling(const char* message);
 
 int main(int argc, char* argv[]) {
-	WSADATA wsaData;
-	SOCKET serverSocket, clientSocket;
-	FILE* fp;
-	char buf[BUF_SIZE];
-	int readCount;
-	SOCKADDR_IN serverAddr, clientAddr;
-	int clientAddrSize;
+ WSADATA wsaData;
+ SOCKET serverSocket, clientSocket;
+ FILE* fp;
+ char buf[BUF_SIZE];
+ int readCount;
+ SOCKADDR_IN serverAddr, clientAddr;
+ int clientAddrSize;
 
-	if (argc != 2) {
-		printf(&#34;Usage : %s &lt;port&gt;\n&#34;, argv[0]);
-		exit(1);
-	}
+ if (argc != 2) {
+  printf(&#34;Usage : %s &lt;port&gt;\n&#34;, argv[0]);
+  exit(1);
+ }
 
-	if (WSAStartup(MAKEWORD(2, 2), &amp;wsaData) != 0) ErrorHandling(&#34;WSAStartup() error!&#34;);
+ if (WSAStartup(MAKEWORD(2, 2), &amp;wsaData) != 0) ErrorHandling(&#34;WSAStartup() error!&#34;);
 
-	fp = fopen(&#34;file_server_win.cpp&#34;, &#34;rb&#34;);
-	serverSocket = socket(PF_INET, SOCK_STREAM, 0);
-	memset(&amp;serverAddr, 0, sizeof(serverAddr));
-	serverAddr.sin_family = AF_INET;
-	serverAddr.sin_addr.s_addr = htonl(INADDR_ANY);
-	serverAddr.sin_port = htons(atoi(argv[1]));
+ fp = fopen(&#34;file_server_win.cpp&#34;, &#34;rb&#34;);
+ serverSocket = socket(PF_INET, SOCK_STREAM, 0);
+ memset(&amp;serverAddr, 0, sizeof(serverAddr));
+ serverAddr.sin_family = AF_INET;
+ serverAddr.sin_addr.s_addr = htonl(INADDR_ANY);
+ serverAddr.sin_port = htons(atoi(argv[1]));
 
-	bind(serverSocket, (SOCKADDR*)&amp;serverAddr, sizeof(serverAddr));
-	listen(serverSocket, 5);
+ bind(serverSocket, (SOCKADDR*)&amp;serverAddr, sizeof(serverAddr));
+ listen(serverSocket, 5);
 
-	clientAddrSize = sizeof(clientAddr);
-	clientSocket = accept(serverSocket, (SOCKADDR*)&amp;clientAddr, &amp;clientAddrSize);
+ clientAddrSize = sizeof(clientAddr);
+ clientSocket = accept(serverSocket, (SOCKADDR*)&amp;clientAddr, &amp;clientAddrSize);
 
-	while (true) {
-		readCount = fread((void*)buf, 1, BUF_SIZE, fp);
-		if (readCount &lt; BUF_SIZE) {
-			send(clientSocket, (char*)&amp;buf, readCount, 0);
-			break;
-		}
-		send(clientSocket, (char*)&amp;buf, BUF_SIZE, 0);
-	}
+ while (true) {
+  readCount = fread((void*)buf, 1, BUF_SIZE, fp);
+  if (readCount &lt; BUF_SIZE) {
+   send(clientSocket, (char*)&amp;buf, readCount, 0);
+   break;
+  }
+  send(clientSocket, (char*)&amp;buf, BUF_SIZE, 0);
+ }
 
-	shutdown(clientSocket, SD_SEND);
-	recv(clientSocket, (char*)buf, BUF_SIZE, 0);
-	printf(&#34;Message from client : %s \n&#34;, buf);
-	fclose(fp);
-	closesocket(clientSocket);
-	closesocket(serverSocket);
-	WSACleanup();
-	return 0;
+ shutdown(clientSocket, SD_SEND);
+ recv(clientSocket, (char*)buf, BUF_SIZE, 0);
+ printf(&#34;Message from client : %s \n&#34;, buf);
+ fclose(fp);
+ closesocket(clientSocket);
+ closesocket(serverSocket);
+ WSACleanup();
+ return 0;
 }
 
 
 void ErrorHandling(const char* message) {
-	fputs(message, stderr);
-	fputc(&#39;\n&#39;, stderr);
-	exit(1);
+ fputs(message, stderr);
+ fputc(&#39;\n&#39;, stderr);
+ exit(1);
 }
 ```
 
@@ -911,64 +1009,68 @@ void ErrorHandling(const char* message);
 
 int main(int argc, char* argv[])
 {
-	WSADATA wsData;
-	SOCKET hSocket;
-	char buf[BUF_SIZE];
-	int readCount;
-	SOCKADDR_IN serverAddr;
-	FILE* fp;
+ WSADATA wsData;
+ SOCKET hSocket;
+ char buf[BUF_SIZE];
+ int readCount;
+ SOCKADDR_IN serverAddr;
+ FILE* fp;
 
 
-	if (argc != 3) {
-		printf(&#34;Usage : %s &lt;IP&gt; &lt;port&gt;\n&#34;, argv[0]);
-		exit(1);
-	}
+ if (argc != 3) {
+  printf(&#34;Usage : %s &lt;IP&gt; &lt;port&gt;\n&#34;, argv[0]);
+  exit(1);
+ }
 
-	if (WSAStartup(MAKEWORD(2, 2), &amp;wsData) != 0) {
-		ErrorHandling(&#34;WSAStartup() error!&#34;);
-	}
+ if (WSAStartup(MAKEWORD(2, 2), &amp;wsData) != 0) {
+  ErrorHandling(&#34;WSAStartup() error!&#34;);
+ }
 
-	fp = fopen(&#34;receive.dat&#34;, &#34;wb&#34;);
+ fp = fopen(&#34;receive.dat&#34;, &#34;wb&#34;);
 
 
-	hSocket = socket(PF_INET, SOCK_STREAM, 0);
-	if (hSocket == INVALID_SOCKET) ErrorHandling(&#34;socket() error!&#34;);
-	memset(&amp;serverAddr, 0, sizeof(serverAddr));
-	serverAddr.sin_addr.s_addr = inet_addr(argv[1]);
-	serverAddr.sin_family = AF_INET;
-	serverAddr.sin_port = htons(atoi(argv[2]));
+ hSocket = socket(PF_INET, SOCK_STREAM, 0);
+ if (hSocket == INVALID_SOCKET) ErrorHandling(&#34;socket() error!&#34;);
+ memset(&amp;serverAddr, 0, sizeof(serverAddr));
+ serverAddr.sin_addr.s_addr = inet_addr(argv[1]);
+ serverAddr.sin_family = AF_INET;
+ serverAddr.sin_port = htons(atoi(argv[2]));
 
-	if (connect(hSocket, (SOCKADDR*)&amp;serverAddr, sizeof(serverAddr)) == SOCKET_ERROR)
-		ErrorHandling(&#34;socket() error!&#34;);
-	else
-		puts(&#34;Connected ......&#34;);
+ if (connect(hSocket, (SOCKADDR*)&amp;serverAddr, sizeof(serverAddr)) == SOCKET_ERROR)
+  ErrorHandling(&#34;socket() error!&#34;);
+ else
+  puts(&#34;Connected ......&#34;);
 
-	while ((readCount = recv(hSocket, buf, BUF_SIZE, 0)) != 0)
-	{
-		fwrite((void*)buf, 1, readCount, fp);
-	}
+ while ((readCount = recv(hSocket, buf, BUF_SIZE, 0)) != 0)
+ {
+  fwrite((void*)buf, 1, readCount, fp);
+ }
 
-	puts(&#34;Received file data&#34;);
-	send(hSocket, &#34;Thank you&#34;, 10, 0);
-	fclose(fp);
-	closesocket(hSocket);
-	WSACleanup();
-	return 0;
+ puts(&#34;Received file data&#34;);
+ send(hSocket, &#34;Thank you&#34;, 10, 0);
+ fclose(fp);
+ closesocket(hSocket);
+ WSACleanup();
+ return 0;
 }
 
 void ErrorHandling(const char* message) {
-	fputs(message, stderr);
-	fputc(&#39;\n&#39;, stderr);
-	exit(1);
+ fputs(message, stderr);
+ fputc(&#39;\n&#39;, stderr);
+ exit(1);
 }
 
 ```
 
-## 域名及网络地址
+## 第 8 章 域名及网络地址
 
-## 套接字的多种可选项
+### 域名系统
 
-## 多进程服务器端
+DNS（Domain Name System，域名系统）是对 IP 地址和域名进行相互转换的系统，其核心是 DNS 服务器。
+
+## 第 9 章 套接字的多种可选项
+
+## 第 10 章 多进程服务器端
 
 ### 进程概念及应用
 
@@ -990,7 +1092,7 @@ void ErrorHandling(const char* message) {
 
 无论进程是如何创建的，所有进程都会从操作系统分配到 ID。此 ID 称为进程 ID，其值为大于 2 的整数。1 要分配给操作系统启动后（用于协助操作系统）首个进程，因此用户进程无法得到 ID 值 1。
 
-![ps命令结果](/images/202402/3/23.png)
+![](/images/202402/3/80e083338bb60d84651965a846d90f5d_MD5.jpeg)
 
 通过 ps 命令可以查看当前运行的所有进程。
 
@@ -1011,7 +1113,7 @@ pid_t fork(void);
 
 这里的父进程（Parent Process）指的是原进程，即调用`fork`函数的主体，而子进程（Child Process）是通过父进程调用`fork`函数复制出的进程。
 
-![](/images/202402/3/24.png)
+![](/images/202402/3/8375b14a87ae0a7902efe5acf1a52a87_MD5.jpeg)
 
 从上图可以看到，父进程调用`fork`函数的同时复制出子进程，并分别得到`fork`函数的返回值。在父进程和子进程中`gval`和`lval`互不影响。因此`fork`函数调用后分成了完全不同的进程，只是二者共享同一代码而已。
 
@@ -1022,24 +1124,24 @@ pid_t fork(void);
 int gval = 10;
 
 int main(int argc, char* argv[]){
-	pid_t pid;
-	int lval = 20;
-	gval&#43;&#43;, lval&#43;=5;
+ pid_t pid;
+ int lval = 20;
+ gval&#43;&#43;, lval&#43;=5;
 
-	pid = fork();
-	if (pid == 0)
-		gval &#43;= 2, lval &#43;= 2;
-	else
-		gval -= 2, lval -= 2;
-	if (pid == 0)
-		printf(&#34;Child Proc : [%d, %d] \n&#34;, gval, lval);
-	else
-		printf(&#34;Parent Proc : [%d, %d] \n&#34;, gval, lval);
-	return 0;
+ pid = fork();
+ if (pid == 0)
+  gval &#43;= 2, lval &#43;= 2;
+ else
+  gval -= 2, lval -= 2;
+ if (pid == 0)
+  printf(&#34;Child Proc : [%d, %d] \n&#34;, gval, lval);
+ else
+  printf(&#34;Parent Proc : [%d, %d] \n&#34;, gval, lval);
+ return 0;
 }
 ```
 
-![](/images/202402/3/25.png)
+![](/images/202402/3/af64c2d370865eb20def2ea480d5e532_MD5.jpeg)
 
 ### 进程和僵尸进程
 
@@ -1064,21 +1166,21 @@ int main(int argc, char* argv[]){
 
 int main(int argc, char* argv[]){
 
-	pid_t pid = fork();
-	if (pid == 0) puts(&#34;Child Process&#34;);
-	else {
-		printf(&#34;Child Process ID : %d \n&#34;, pid);
-		sleep(30); // Sleep 30 sec
-	}
-	if (pid == 0)
-		puts(&#34;End Child Process&#34;);
-	else
-		puts(&#34;End Parent Process&#34;);
-	return 0;
+ pid_t pid = fork();
+ if (pid == 0) puts(&#34;Child Process&#34;);
+ else {
+  printf(&#34;Child Process ID : %d \n&#34;, pid);
+  sleep(30); // Sleep 30 sec
+ }
+ if (pid == 0)
+  puts(&#34;End Child Process&#34;);
+ else
+  puts(&#34;End Parent Process&#34;);
+ return 0;
 }
 ```
 
-![](/images/202402/3/26.png)
+![](/images/202402/3/cb42e4e8d2c21256ce2ae5ed227567d6_MD5.jpeg)
 
 #### 销毁僵尸进程 1：利用 wait 函数
 
@@ -1101,8 +1203,8 @@ pid_t wait(int* statloc);
 ```C&#43;&#43;
 if (WIFEXITED(status)) // 是正常终止吗？
 {
-	puts(&#34;Normal termination!&#34;);
-	printf(&#34;Child pass num: %d&#34;, WEXITSTATUS(status)); // 返回值是多少？
+ puts(&#34;Normal termination!&#34;);
+ printf(&#34;Child pass num: %d&#34;, WEXITSTATUS(status)); // 返回值是多少？
 }
 
 ```
@@ -1143,7 +1245,7 @@ int main(int argc, char* argv[]){
 }
 ```
 
-![](/images/202402/3/27.png)
+![](/images/202402/3/36acb81fd92ad987b6d7e1046fe1b814_MD5.jpeg)
 
 调用`wait`函数时，如果没有已终止的子进程，那么程序将阻塞（Blocking）直到有子进程终止，因此需谨慎调用该函数。
 
@@ -1195,7 +1297,7 @@ int main(int argc, char *argv[])
 }
 ```
 
-![](/images/202402/3/28.png)
+![](/images/202402/3/f01d0681df37aab5e11789fe5800d929_MD5.jpeg)
 
 ### 信号处理
 
@@ -1282,7 +1384,7 @@ int main(int argc, char *argv[])
 }
 ```
 
-![](/images/202402/3/29.png)
+![](/images/202402/3/74d9bdb4388e8b5d2e9eb4c59596193b_MD5.jpeg)
 
 发生信号时将唤醒由于调用`sleep`函数而进入阻塞状态的进程。调用函数的主体是操作系统，但进程处于睡眠状态无法调用函数。因此，产生信号时，为了调用信号处理器 ，将唤醒由于调用`sleep`函数而进入阻塞状态的进程。而且，进程一旦被唤醒，就不会再进入睡眠状态。即使还未到`sleep`函数中规定的时间也如此。所以上述示例运行不到 10 秒就会结束，连续输入`CTRL &#43; C`可能 1 秒都不到。
 
@@ -1303,7 +1405,7 @@ int sigaction(int signo, const struct sigaction* act, struct sigaction* oldact);
 
 声明并初始化`sigaction`结构体变量以调用上述函数，该结构体定义如下:
 
-![](/images/202402/3/30.png)
+![](/images/202402/3/898c2d98aaf56be8ffeab63714213308_MD5.jpeg)
 
 结构体的`sa_handler`成员保存信号处理函数的指针值（地址值）。
 
@@ -1341,7 +1443,7 @@ int main(int argc, char *argv[])
 }
 ```
 
-![](/images/202402/3/31.png)
+![](/images/202402/3/45b9440a6ac8588ad74188c38b675cf4_MD5.jpeg)
 
 #### 利用信号处理技术消灭僵尸进程
 
@@ -1407,7 +1509,7 @@ int main(int argc, char *argv[])
 }
 ```
 
-![](/images/202402/3/32.png)
+![](/images/202402/3/dec115cbb6ea7d7ac7a55b24331f30ef_MD5.jpeg)
 
 ### 基于多任务的并发服务器
 
@@ -1415,7 +1517,7 @@ int main(int argc, char *argv[])
 
 此前的回声服务器端每次都只能向一个客户端提供服务。因此，我们可以扩展回声服务器端，使其可以同时向国歌客户端提供服务，实现模型如下。
 
-![](/images/202402/3/33.png)
+![](/images/202402/3/7a671c9c26590298799a00c728ebfde8_MD5.jpeg)
 
 每当有客户端请求服务（连接请求）时，回声服务器都创建子进程以提供服务。请求服务的客户端若有 5 个，则将创建 5 个子进程提供服务。过程如下:
 
@@ -1545,15 +1647,15 @@ void error_handling(char *message)
 
 调用`fork`函数后，2 个文件描述符指向同一套接字。
 
-![](/images/202402/3/34.png)
+![](/images/202402/3/32f76c3d18c68dbaef5fb7ae826c38aa_MD5.jpeg)
 
 1 个套接字中存在 2 个文件描述符时，只有 2 个文件描述符都终止（销毁）后，才能销毁套接字。如果维持上图中的连接状态，即使子进程销毁了与客户端连接的套接字文件描述符，也无法完全销毁套接字（服务器端套接字同样如此）。因此，调用`fork`函数后，要将无关的套接字文件描述符关掉，如下图所示。
 
-![](/images/202402/3/35.png)
+![](/images/202402/3/bb8ed8d26656741d49fcbcfa2965ed3c_MD5.jpeg)
 
 为了将文件描述符整理成上图形式，`echo_mpserv.c`调用了`close`函数。
 
-![](/images/202402/3/36.png)
+![](/images/202402/3/e46860f5f7a5b2af84953746f2f611c3_MD5.jpeg)
 
 ### 分割 TCP 的 I/O 程序
 
@@ -1565,13 +1667,13 @@ void error_handling(char *message)
 
 传输数据后需等待服务器端返回的数据，因为程序代码中重复调用了`read`和`write`函数。这么写的原因是，程序在 1 个进程中运行。现在可创建多个进程，因此可以分割数据收发过程。分割模型如下:
 
-![](/images/202402/3/37.png)
+![](/images/202402/3/36d01a1a4fae08c51bd8ae3e76dd6913_MD5.jpeg)
 
 如此实现的一个重要原因是程序实现更简单。父进程中只需编写接收数据的代码，子进程中只需编写发送数据的代码，所以会简化。
 
 另一个好处是可以提高频繁交换数据的性能。
 
-![](/images/202402/3/38.png)
+![](/images/202402/3/949e1b3ca033480531d4034e52a5f493_MD5.jpeg)
 
 分割 I/O 后的客户端发送数据时不必考虑接收数据的情况，因此可以连续发送数据，由此提高同一时间内传输的数据量。这种差异在网络较慢时尤为明显。
 
@@ -1674,7 +1776,7 @@ void write_routine(int sock, char *buf)
 }
 ```
 
-## 进程间通信
+## 第 11 章 进程间通信
 
 ### 进程间通信的基本概念
 
@@ -1686,7 +1788,7 @@ void write_routine(int sock, char *buf)
 
 #### 通过管道实现进程间通信
 
-![](/images/202402/3/39.png)
+![](/images/202402/3/482530beaff389a5f91c9d5e4d20276a_MD5.jpeg)
 
 为了完成进程间通信，需要创建管道。管道并非属于进程的资源，而是和套接字一样，属于操作系统（也就不是`fork`函数的复制对象）。所以，两个进程通过操作系统提供的内存空间进行通信。创建管道的函数如下:
 
@@ -1731,17 +1833,17 @@ int main(int argc, char *argv[])
 }
 ```
 
-![](/images/202402/3/40.png)
+![](/images/202402/3/e0186034152fd2f4e1287a7ce3c926bd_MD5.jpeg)
 
 上例中的通信方法如下。父子进程都可以访问管道 I/O 路径，但子进程仅用输入路径，父进程仅用输出路径。
 
-![](/images/202402/3/41.png)
+![](/images/202402/3/1a96628ebff47987a9dbd3c6320aeda0_MD5.jpeg)
 
 #### 通过管道进程进程间双向通信
 
 创建 2 个进程通过 1 个管道进程双向数据交换，通信方式如下:
 
-![](/images/202402/3/42.png)
+![](/images/202402/3/661db8f4e842908b7b988b867a673b1e_MD5.jpeg)
 
 ```C
 // pipe2.c
@@ -1781,13 +1883,13 @@ int main(int argc, char *argv[])
 
 运行结果:
 
-![](/images/202402/3/43.png)
+![](/images/202402/3/181876452fbcca6784cee127caf3c8be_MD5.jpeg)
 
 向管道传递数据时，先读的进程会把数据取走。简而言之，数据进入管道后称为无主数据。通过`read`函数先读取数据的进程将得到数据，即使是该进程将数据传到了管道。
 
 只用 1 个管道进行双向通信并非易事。为了实现这点，程序需要预测并控制运行流程，这在每种系统中都不同，可以视为不可能完成的任务。我们可以通过创建 2 个管道进行双向通信。各自负责不同的数据流动即可。
 
-![](/images/202402/3/44.png)
+![](/images/202402/3/f3bf94d15e9109924750da60fd117215_MD5.jpeg)
 
 ```C
 ##include &lt;stdio.h&gt;
@@ -1824,7 +1926,7 @@ int main(int argc, char *argv[])
 }
 ```
 
-![](/images/202402/3/45.png)
+![](/images/202402/3/6e3f6a36f8c19c371a197db0ad3ea1d4_MD5.jpeg)
 
 ### 运用进程间通信
 
@@ -1958,37 +2060,41 @@ void error_handling(char *message)
 }
 ```
 
-## I/O 复用
+## 第 12 章 I/O 复用
 
-## 多种 I/O 函数
+## 第 13 章 多种 I/O 函数
 
-## 多播与广播
+## 第 14 章 多播与广播
 
-## 套接字和标准 I/O
+## 第 15 章 套接字和标准 I/O
 
-## 关于 I/O 流分离的其他内容
+## 第 16 章 关于 I/O 流分离的其他内容
 
-## 由于 select 和 epoll
+## 第 17 章 优于 select 和 epoll
 
-## 多线程服务器端的实现
+## 第 18 章 多线程服务器端的实现
 
-## Windows 平台下的线程的使用
+## 第 19 章 Windows 平台下的线程的使用
 
-## Windows 中的线程同步
+## 第 20 章 Windows 中的线程同步
 
-## 异步通知的 I/O 模型
+## 第 21 章 异步通知的 I/O 模型
 
-## 重叠 I/O 模型
+## 第 22 章 重叠 I/O 模型
 
-## 制作 HTTP 服务器端
+## 第 23 章 IOCP
 
-## 进阶内容
+## 第 24 章 制作 HTTP 服务器端
+
+## 第 25 章 进阶内容
 
 ## 推荐
 
-Windows Sockets 2: https://learn.microsoft.com/en-us/windows/win32/api/_winsock/
+Windows Sockets 2: &lt;https://learn.microsoft.com/en-us/windows/win32/api/_winsock/&gt;
 
 《计算机网络 自顶向下》
+
+[TCP-IP-NetworkNote](https://github.com/riba2534/TCP-IP-NetworkNote): 📘《TCP/IP 网络编程》(韩-尹圣雨)学习笔记
 
 ## 参考
 
@@ -1998,5 +2104,5 @@ Windows Sockets 2: https://learn.microsoft.com/en-us/windows/win32/api/_winsock/
 ---
 
 > 作者: [AndyFree96](https://andyfree96.github.io/)  
-> URL: http://localhost:1313/tcp-ip%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/  
+> URL: http://localhost:14625/tcp-ip%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/  
 

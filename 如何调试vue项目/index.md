@@ -77,5 +77,5 @@ npm run dev
 ---
 
 > 作者: [AndyFree96](https://andyfree96.github.io/)  
-> URL: http://localhost:1313/%E5%A6%82%E4%BD%95%E8%B0%83%E8%AF%95vue%E9%A1%B9%E7%9B%AE/  
+> URL: http://localhost:14625/%E5%A6%82%E4%BD%95%E8%B0%83%E8%AF%95vue%E9%A1%B9%E7%9B%AE/  
 

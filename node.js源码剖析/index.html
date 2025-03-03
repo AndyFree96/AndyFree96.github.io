@@ -4,7 +4,7 @@
   itemtype="http://schema.org/WebPage"
   lang="zh-CN"
 >
-  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=14625&amp;path=livereload" data-no-instant defer></script>
     
     <meta charset="utf-8" />
     <meta
@@ -25,13 +25,13 @@
   <meta itemprop="datePublished" content="2024-06-27T11:33:50+08:00">
   <meta itemprop="dateModified" content="2024-06-27T11:33:50+08:00">
   <meta itemprop="wordCount" content="313">
-  <meta itemprop="keywords" content="Node.js,运行时,非阻塞,异步,事件驱动,源码剖析"><meta property="og:url" content="http://localhost:1313/node.js%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/">
+  <meta itemprop="keywords" content="Node.js,运行时,非阻塞,异步,事件驱动,源码剖析"><meta property="og:url" content="http://localhost:14625/node.js%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/">
   <meta property="og:site_name" content="东尼的博客">
   <meta property="og:title" content="Node.js 源码剖析：非阻塞世界的引擎密码">
   <meta property="og:description" content="Node.js 的诞生，让 JavaScript 从浏览器的专属语言，跃升为构建高性能服务器的利器。凭借事件驱动的架构和非阻塞 I/O 特性，Node.js 成为现代网络应用开发中的重要基石。然而，当你写下 http.createServer时，是否好奇过这些简单的 API 背后究竟发生了什么？
 本篇文章将带你深入 Node.js 的源码世界，揭开其核心模块、事件循环、异步模型和底层实现的神秘面纱。从 libuv 的非阻塞 I/O，到 V8 引擎对 JavaScript 的极速解析，我们将从代码的视角探索 Node.js 是如何在性能与灵活性之间找到绝佳平衡的。
 无论你是想提升对 Node.js 的理解，还是希望从源码中汲取工程设计的智慧，这都将是一次充满收获的技术旅程。准备好了吗？让我们从入口文件开始，走进 Node.js 的源码迷宫！">
-  <meta property="og:locale" content="zh_CN">
+  <meta property="og:locale" content="zh-CN">
   <meta property="og:type" content="article">
     <meta property="article:section" content="posts">
     <meta property="article:published_time" content="2024-06-27T11:33:50+08:00">
@@ -42,17 +42,15 @@
     <meta property="article:tag" content="异步">
     <meta property="article:tag" content="事件驱动">
     <meta property="article:tag" content="源码剖析">
-
-  <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="Node.js 源码剖析：非阻塞世界的引擎密码">
-  <meta name="twitter:description" content="Node.js 的诞生，让 JavaScript 从浏览器的专属语言，跃升为构建高性能服务器的利器。凭借事件驱动的架构和非阻塞 I/O 特性，Node.js 成为现代网络应用开发中的重要基石。然而，当你写下 http.createServer时，是否好奇过这些简单的 API 背后究竟发生了什么？
+<meta name="twitter:card" content="summary"><meta name="twitter:title" content="Node.js 源码剖析：非阻塞世界的引擎密码">
+<meta name="twitter:description" content="Node.js 的诞生，让 JavaScript 从浏览器的专属语言，跃升为构建高性能服务器的利器。凭借事件驱动的架构和非阻塞 I/O 特性，Node.js 成为现代网络应用开发中的重要基石。然而，当你写下 http.createServer时，是否好奇过这些简单的 API 背后究竟发生了什么？
 本篇文章将带你深入 Node.js 的源码世界，揭开其核心模块、事件循环、异步模型和底层实现的神秘面纱。从 libuv 的非阻塞 I/O，到 V8 引擎对 JavaScript 的极速解析，我们将从代码的视角探索 Node.js 是如何在性能与灵活性之间找到绝佳平衡的。
 无论你是想提升对 Node.js 的理解，还是希望从源码中汲取工程设计的智慧，这都将是一次充满收获的技术旅程。准备好了吗？让我们从入口文件开始，走进 Node.js 的源码迷宫！">
       <meta name="twitter:site" content="@IRONAnthony96">
 <meta name="application-name" content="FixIt">
 <meta name="apple-mobile-web-app-title" content="FixIt"><meta name="theme-color" data-light="#f8f8f8" data-dark="#252627" content="#f8f8f8"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" href="http://localhost:1313/node.js%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" /><link rel="prev" href="http://localhost:1313/resource/" /><link rel="next" href="http://localhost:1313/r%E6%95%B0%E6%8D%AE%E7%A7%91%E5%AD%A6/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" href="http://localhost:14625/node.js%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" /><link rel="prev" href="http://localhost:14625/resource/" /><link rel="next" href="http://localhost:14625/r%E6%95%B0%E6%8D%AE%E7%A7%91%E5%AD%A6/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><script type="application/ld+json">
   {
@@ -62,9 +60,9 @@
     "inLanguage": "zh-CN",
     "mainEntityOfPage": {
       "@type": "WebPage",
-      "@id": "http:\/\/localhost:1313\/node.js%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90\/"
+      "@id": "http:\/\/localhost:14625\/node.js%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90\/"
     },"genre": "posts","keywords": "Node.js, 运行时, 非阻塞, 异步, 事件驱动, 源码剖析","wordcount":  313 ,
-    "url": "http:\/\/localhost:1313\/node.js%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90\/","datePublished": "2024-06-27T11:33:50+08:00","dateModified": "2024-06-27T11:33:50+08:00","publisher": {
+    "url": "http:\/\/localhost:14625\/node.js%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90\/","datePublished": "2024-06-27T11:33:50+08:00","dateModified": "2024-06-27T11:33:50+08:00","publisher": {
       "@type": "Organization",
       "name": ""},"author": {
         "@type": "Person",
@@ -247,14 +245,14 @@
       </div></div><div class="post-info-line">
         <div class="post-info-md"></div>
         <div class="post-info-share">
-          <span><a href="javascript:void(0);" title="分享到 Twitter" data-sharer="twitter" data-url="http://localhost:1313/node.js%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="Node.js 源码剖析：非阻塞世界的引擎密码" data-via="IRONAnthony96" data-hashtags="Node.js,运行时,非阻塞,异步,事件驱动,源码剖析"><i class="fa-brands fa-twitter fa-fw" aria-hidden="true"></i></a>
-  <a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="http://localhost:1313/node.js%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-hashtag="Node.js"><i class="fa-brands fa-facebook-square fa-fw" aria-hidden="true"></i></a>
-  <a href="javascript:void(0);" title="分享到 WhatsApp" data-sharer="whatsapp" data-url="http://localhost:1313/node.js%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="Node.js 源码剖析：非阻塞世界的引擎密码" data-web><i class="fa-brands fa-whatsapp fa-fw" aria-hidden="true"></i></a>
-  <a href="javascript:void(0);" title="分享到 Line" data-sharer="line" data-url="http://localhost:1313/node.js%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="Node.js 源码剖析：非阻塞世界的引擎密码"><i data-svg-src="/lib/simple-icons/icons/line.min.svg" aria-hidden="true"></i></a>
-  <a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="http://localhost:1313/node.js%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="Node.js 源码剖析：非阻塞世界的引擎密码" data-image="/images/202406/1/vinicius-henrique-photography-tlCzxI2RQAc-unsplash.jpg"><i class="fa-brands fa-weibo fa-fw" aria-hidden="true"></i></a>
-  <a href="javascript:void(0);" title="分享到 Myspace" data-sharer="myspace" data-url="http://localhost:1313/node.js%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="Node.js 源码剖析：非阻塞世界的引擎密码" data-description=""><i data-svg-src="/lib/simple-icons/icons/myspace.min.svg" aria-hidden="true"></i></a>
-  <a href="javascript:void(0);" title="分享到 Blogger" data-sharer="blogger" data-url="http://localhost:1313/node.js%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="Node.js 源码剖析：非阻塞世界的引擎密码" data-description=""><i class="fa-brands fa-blogger fa-fw" aria-hidden="true"></i></a>
-  <a href="javascript:void(0);" title="分享到 Evernote" data-sharer="evernote" data-url="http://localhost:1313/node.js%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="Node.js 源码剖析：非阻塞世界的引擎密码"><i class="fa-brands fa-evernote fa-fw" aria-hidden="true"></i></a>
+          <span><a href="javascript:void(0);" title="分享到 Twitter" data-sharer="twitter" data-url="http://localhost:14625/node.js%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="Node.js 源码剖析：非阻塞世界的引擎密码" data-via="IRONAnthony96" data-hashtags="Node.js,运行时,非阻塞,异步,事件驱动,源码剖析"><i class="fa-brands fa-twitter fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="http://localhost:14625/node.js%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-hashtag="Node.js"><i class="fa-brands fa-facebook-square fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 WhatsApp" data-sharer="whatsapp" data-url="http://localhost:14625/node.js%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="Node.js 源码剖析：非阻塞世界的引擎密码" data-web><i class="fa-brands fa-whatsapp fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 Line" data-sharer="line" data-url="http://localhost:14625/node.js%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="Node.js 源码剖析：非阻塞世界的引擎密码"><i data-svg-src="/lib/simple-icons/icons/line.min.svg" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="http://localhost:14625/node.js%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="Node.js 源码剖析：非阻塞世界的引擎密码" data-image="/images/202406/1/vinicius-henrique-photography-tlCzxI2RQAc-unsplash.jpg"><i class="fa-brands fa-weibo fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 Myspace" data-sharer="myspace" data-url="http://localhost:14625/node.js%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="Node.js 源码剖析：非阻塞世界的引擎密码" data-description=""><i data-svg-src="/lib/simple-icons/icons/myspace.min.svg" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 Blogger" data-sharer="blogger" data-url="http://localhost:14625/node.js%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="Node.js 源码剖析：非阻塞世界的引擎密码" data-description=""><i class="fa-brands fa-blogger fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 Evernote" data-sharer="evernote" data-url="http://localhost:14625/node.js%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="Node.js 源码剖析：非阻塞世界的引擎密码"><i class="fa-brands fa-evernote fa-fw" aria-hidden="true"></i></a>
   </span>
         </div>
       </div></div>
@@ -280,7 +278,7 @@
 
   <aside class="toc" id="toc-auto" aria-label="目录"><h2 class="toc-title">目录&nbsp;<i class="toc-icon fa-solid fa-angle-down fa-fw" aria-hidden="true"></i></h2>
       <div class="toc-content" id="toc-content-auto"></div></aside></main><footer class="footer">
-    <div class="footer-container"><div class="footer-line powered">由 <a href="https://gohugo.io/" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.135.0"><img class="hugo-icon" src="/images/hugo.min.svg" alt="Hugo logo" /> Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/hugo-fixit/FixIt" target="_blank" rel="external" title="FixIt v0.3.2"><img class="fixit-icon" src="/images/fixit.min.svg" alt="FixIt logo" /> FixIt</a>
+    <div class="footer-container"><div class="footer-line powered">由 <a href="https://gohugo.io/" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.125.4"><img class="hugo-icon" src="/images/hugo.min.svg" alt="Hugo logo" /> Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/hugo-fixit/FixIt" target="_blank" rel="external" title="FixIt v0.3.2"><img class="fixit-icon" src="/images/fixit.min.svg" alt="FixIt logo" /> FixIt</a>
         </div><div class="footer-line copyright" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright fa-fw" aria-hidden="true"></i>
             <span itemprop="copyrightYear">2025</span><span class="author" itemprop="copyrightHolder">
               <a href="https://andyfree96.github.io/"target="_blank" rel="external nofollow noopener noreferrer">AndyFree96</a></span></div></div>

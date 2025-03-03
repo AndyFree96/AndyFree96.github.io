@@ -190,5 +190,5 @@ Git 注意到我们修改了`hello_world.py`。我们可以提交所做的修改
 ---
 
 > 作者: [AndyFree96](https://andyfree96.github.io/)  
-> URL: http://localhost:1313/git%E7%AE%80%E6%98%8E%E6%95%99%E7%A8%8B/  
+> URL: http://localhost:14625/git%E7%AE%80%E6%98%8E%E6%95%99%E7%A8%8B/  
 

@@ -87,10 +87,14 @@
 - [Dev To](https://dev.to/)
 - [CSS-Tricks](https://css-tricks.com/)
 - [Smashing Magazine](https://www.smashingmagazine.com/)
+- [overreacted](https://overreacted.io/)
+- [Speckyboy](https://speckyboy.com/)
+- [CODROPS](https://tympanus.net/codrops/)
+- [ultimatecourses](https://ultimatecourses.com/blog/)
 
 
 ---
 
 > 作者:   
-> URL: http://localhost:1313/about/  
+> URL: http://localhost:14625/about/  
 
