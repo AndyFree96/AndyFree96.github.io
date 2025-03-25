@@ -18,5 +18,5 @@ Node.js 的诞生，让 JavaScript 从浏览器的专属语言，跃升为构建
 ---
 
 > 作者: [AndyFree96](https://andyfree96.github.io/)  
-> URL: http://localhost:14625/node.js%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/  
+> URL: http://localhost:1313/node.js%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/  
 

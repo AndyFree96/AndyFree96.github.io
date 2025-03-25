@@ -4,7 +4,7 @@
   itemtype="http://schema.org/WebPage"
   lang="zh-CN"
 >
-  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=14625&amp;path=livereload" data-no-instant defer></script>
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
     
     <meta charset="utf-8" />
     <meta
@@ -21,7 +21,7 @@
   <meta itemprop="datePublished" content="2024-11-27T10:29:07+08:00">
   <meta itemprop="dateModified" content="2024-11-27T10:29:07+08:00">
   <meta itemprop="wordCount" content="1027">
-  <meta itemprop="keywords" content="Python,CPython,源码剖析"><meta property="og:url" content="http://localhost:14625/cpython%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/">
+  <meta itemprop="keywords" content="Python,CPython,源码剖析"><meta property="og:url" content="http://localhost:1313/cpython%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/">
   <meta property="og:site_name" content="东尼的博客">
   <meta property="og:title" content="CPython 源码剖析：Python 运行的奥秘">
   <meta property="og:description" content="我们经常说，Python 是一门解释型语言，但你知道它的解释器 CPython 究竟是如何工作的么？Python 的内存管理、字节码执行、垃圾回收……这些幕后英雄是如何协作的？在这篇文章中，我们将通过剖析 CPython 源码，一起探索 Python 的运行本质。">
@@ -39,7 +39,7 @@
 <meta name="application-name" content="FixIt">
 <meta name="apple-mobile-web-app-title" content="FixIt"><meta name="theme-color" data-light="#f8f8f8" data-dark="#252627" content="#f8f8f8"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" href="http://localhost:14625/cpython%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" /><link rel="prev" href="http://localhost:14625/csv2%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" /><link rel="next" href="http://localhost:14625/%E5%A6%82%E4%BD%95%E8%B0%83%E8%AF%95vue%E9%A1%B9%E7%9B%AE/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" href="http://localhost:1313/cpython%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" /><link rel="prev" href="http://localhost:1313/csv2%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><script type="application/ld+json">
   {
@@ -49,9 +49,9 @@
     "inLanguage": "zh-CN",
     "mainEntityOfPage": {
       "@type": "WebPage",
-      "@id": "http:\/\/localhost:14625\/cpython%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90\/"
+      "@id": "http:\/\/localhost:1313\/cpython%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90\/"
     },"genre": "posts","keywords": "Python, CPython, 源码剖析","wordcount":  1027 ,
-    "url": "http:\/\/localhost:14625\/cpython%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90\/","datePublished": "2024-11-27T10:29:07+08:00","dateModified": "2024-11-27T10:29:07+08:00","publisher": {
+    "url": "http:\/\/localhost:1313\/cpython%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90\/","datePublished": "2024-11-27T10:29:07+08:00","dateModified": "2024-11-27T10:29:07+08:00","publisher": {
       "@type": "Organization",
       "name": ""},"author": {
         "@type": "Person",
@@ -252,14 +252,14 @@
       </div></div><div class="post-info-line">
         <div class="post-info-md"></div>
         <div class="post-info-share">
-          <span><a href="javascript:void(0);" title="分享到 Twitter" data-sharer="twitter" data-url="http://localhost:14625/cpython%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="CPython 源码剖析：Python 运行的奥秘" data-via="IRONAnthony96" data-hashtags="Python,CPython,源码剖析"><i class="fa-brands fa-twitter fa-fw" aria-hidden="true"></i></a>
-  <a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="http://localhost:14625/cpython%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-hashtag="Python"><i class="fa-brands fa-facebook-square fa-fw" aria-hidden="true"></i></a>
-  <a href="javascript:void(0);" title="分享到 WhatsApp" data-sharer="whatsapp" data-url="http://localhost:14625/cpython%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="CPython 源码剖析：Python 运行的奥秘" data-web><i class="fa-brands fa-whatsapp fa-fw" aria-hidden="true"></i></a>
-  <a href="javascript:void(0);" title="分享到 Line" data-sharer="line" data-url="http://localhost:14625/cpython%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="CPython 源码剖析：Python 运行的奥秘"><i data-svg-src="/lib/simple-icons/icons/line.min.svg" aria-hidden="true"></i></a>
-  <a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="http://localhost:14625/cpython%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="CPython 源码剖析：Python 运行的奥秘" data-image="/images/202411/4/annie-spratt-6TTV6JO2zy8-unsplash.jpg"><i class="fa-brands fa-weibo fa-fw" aria-hidden="true"></i></a>
-  <a href="javascript:void(0);" title="分享到 Myspace" data-sharer="myspace" data-url="http://localhost:14625/cpython%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="CPython 源码剖析：Python 运行的奥秘" data-description=""><i data-svg-src="/lib/simple-icons/icons/myspace.min.svg" aria-hidden="true"></i></a>
-  <a href="javascript:void(0);" title="分享到 Blogger" data-sharer="blogger" data-url="http://localhost:14625/cpython%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="CPython 源码剖析：Python 运行的奥秘" data-description=""><i class="fa-brands fa-blogger fa-fw" aria-hidden="true"></i></a>
-  <a href="javascript:void(0);" title="分享到 Evernote" data-sharer="evernote" data-url="http://localhost:14625/cpython%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="CPython 源码剖析：Python 运行的奥秘"><i class="fa-brands fa-evernote fa-fw" aria-hidden="true"></i></a>
+          <span><a href="javascript:void(0);" title="分享到 Twitter" data-sharer="twitter" data-url="http://localhost:1313/cpython%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="CPython 源码剖析：Python 运行的奥秘" data-via="IRONAnthony96" data-hashtags="Python,CPython,源码剖析"><i class="fa-brands fa-twitter fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="http://localhost:1313/cpython%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-hashtag="Python"><i class="fa-brands fa-facebook-square fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 WhatsApp" data-sharer="whatsapp" data-url="http://localhost:1313/cpython%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="CPython 源码剖析：Python 运行的奥秘" data-web><i class="fa-brands fa-whatsapp fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 Line" data-sharer="line" data-url="http://localhost:1313/cpython%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="CPython 源码剖析：Python 运行的奥秘"><i data-svg-src="/lib/simple-icons/icons/line.min.svg" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="http://localhost:1313/cpython%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="CPython 源码剖析：Python 运行的奥秘" data-image="/images/202411/4/annie-spratt-6TTV6JO2zy8-unsplash.jpg"><i class="fa-brands fa-weibo fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 Myspace" data-sharer="myspace" data-url="http://localhost:1313/cpython%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="CPython 源码剖析：Python 运行的奥秘" data-description=""><i data-svg-src="/lib/simple-icons/icons/myspace.min.svg" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 Blogger" data-sharer="blogger" data-url="http://localhost:1313/cpython%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="CPython 源码剖析：Python 运行的奥秘" data-description=""><i class="fa-brands fa-blogger fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 Evernote" data-sharer="evernote" data-url="http://localhost:1313/cpython%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="CPython 源码剖析：Python 运行的奥秘"><i class="fa-brands fa-evernote fa-fw" aria-hidden="true"></i></a>
   </span>
         </div>
       </div></div>
@@ -271,8 +271,7 @@
     </section>
   </div>
 
-  <div class="post-nav"><a href="/csv2%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" class="post-nav-item" rel="prev" title="csv2 源码剖析：轻量级 CSV 处理的高效之道"><i class="fa-solid fa-angle-left fa-fw" aria-hidden="true"></i>csv2 源码剖析：轻量级 CSV 处理的高效之道</a>
-      <a href="/%E5%A6%82%E4%BD%95%E8%B0%83%E8%AF%95vue%E9%A1%B9%E7%9B%AE/" class="post-nav-item" rel="next" title="如何调试Vue项目">如何调试Vue项目<i class="fa-solid fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
+  <div class="post-nav"><a href="/csv2%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" class="post-nav-item" rel="prev" title="csv2 源码剖析：轻量级 CSV 处理的高效之道"><i class="fa-solid fa-angle-left fa-fw" aria-hidden="true"></i>csv2 源码剖析：轻量级 CSV 处理的高效之道</a></div>
 </div>
 <div class="post-reward">
     <div class="comment">请作者喝杯咖啡!</div>

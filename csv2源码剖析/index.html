@@ -4,7 +4,7 @@
   itemtype="http://schema.org/WebPage"
   lang="zh-CN"
 >
-  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=14625&amp;path=livereload" data-no-instant defer></script>
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
     
     <meta charset="utf-8" />
     <meta
@@ -39,7 +39,7 @@ csv2是一个轻量级 C&#43;&#43; 库，用于将 CSV 文件解析为 C&#43;&#4
   <meta itemprop="datePublished" content="2024-10-07T14:16:41+08:00">
   <meta itemprop="dateModified" content="2024-10-07T14:16:41+08:00">
   <meta itemprop="wordCount" content="3836">
-  <meta itemprop="keywords" content="CSV,C&#43;&#43;,源码剖析"><meta property="og:url" content="http://localhost:14625/csv2%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/">
+  <meta itemprop="keywords" content="CSV,C&#43;&#43;,源码剖析"><meta property="og:url" content="http://localhost:1313/csv2%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/">
   <meta property="og:site_name" content="东尼的博客">
   <meta property="og:title" content="csv2 源码剖析：轻量级 CSV 处理的高效之道">
   <meta property="og:description" content=" 纸上得来终觉浅，绝知此事要躬行。——陆游《冬夜读书示子聿》
@@ -68,7 +68,7 @@ csv2是一个轻量级 C&#43;&#43; 库，用于将 CSV 文件解析为 C&#43;&#4
 <meta name="application-name" content="FixIt">
 <meta name="apple-mobile-web-app-title" content="FixIt"><meta name="theme-color" data-light="#f8f8f8" data-dark="#252627" content="#f8f8f8"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" href="http://localhost:14625/csv2%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" /><link rel="prev" href="http://localhost:14625/r%E6%95%B0%E6%8D%AE%E7%A7%91%E5%AD%A6/" /><link rel="next" href="http://localhost:14625/cpython%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" href="http://localhost:1313/csv2%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" /><link rel="prev" href="http://localhost:1313/r%E6%95%B0%E6%8D%AE%E7%A7%91%E5%AD%A6/" /><link rel="next" href="http://localhost:1313/cpython%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><script type="application/ld+json">
   {
@@ -78,9 +78,9 @@ csv2是一个轻量级 C&#43;&#43; 库，用于将 CSV 文件解析为 C&#43;&#4
     "inLanguage": "zh-CN",
     "mainEntityOfPage": {
       "@type": "WebPage",
-      "@id": "http:\/\/localhost:14625\/csv2%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90\/"
+      "@id": "http:\/\/localhost:1313\/csv2%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90\/"
     },"genre": "posts","keywords": "CSV, C\u002b\u002b, 源码剖析","wordcount":  3836 ,
-    "url": "http:\/\/localhost:14625\/csv2%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90\/","datePublished": "2024-10-07T14:16:41+08:00","dateModified": "2024-10-07T14:16:41+08:00","publisher": {
+    "url": "http:\/\/localhost:1313\/csv2%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90\/","datePublished": "2024-10-07T14:16:41+08:00","dateModified": "2024-10-07T14:16:41+08:00","publisher": {
       "@type": "Organization",
       "name": ""},"author": {
         "@type": "Person",
@@ -1075,7 +1075,7 @@ csv2是一个轻量级 C&#43;&#43; 库，用于将 CSV 文件解析为 C&#43;&#4
 <pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="line"><span class="cl"><span class="n">Reader</span><span class="o">&lt;&gt;</span> <span class="n">reader</span><span class="p">;</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>将 CMakeLists.txt 中的 C++版本由 14</p>
-<div class="highlight" id="id-1"><div class="chroma">
+<div class="highlight" id="id-10"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
@@ -1083,7 +1083,7 @@ csv2是一个轻量级 C&#43;&#43; 库，用于将 CSV 文件解析为 C&#43;&#4
 <pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">set(CMAKE_CXX_STANDARD 14)</span></span></code></pre></td></tr></table>
 </div>
 </div><p>改为 17</p>
-<div class="highlight" id="id-2"><div class="chroma">
+<div class="highlight" id="id-11"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
@@ -1091,7 +1091,7 @@ csv2是一个轻量级 C&#43;&#43; 库，用于将 CSV 文件解析为 C&#43;&#4
 <pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">set(CMAKE_CXX_STANDARD 17)</span></span></code></pre></td></tr></table>
 </div>
 </div><p>即可用如下轻便的语法使用 Reader。</p>
-<div class="highlight" id="id-3"><div class="chroma">
+<div class="highlight" id="id-12"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
@@ -1101,7 +1101,7 @@ csv2是一个轻量级 C&#43;&#43; 库，用于将 CSV 文件解析为 C&#43;&#4
 </div><h3 id="div-idpoint-10-styledisplay-inline10-stdforwarddiv" class="heading-element">
   <a href="#div-idpoint-10-styledisplay-inline10-stdforwarddiv" class="heading-mark"></a><div id="point-10" style="display: inline">10. std::forward</div></h3><p><a href="https://cplusplus.com/reference/utility/forward/"target="_blank" rel="external nofollow noopener noreferrer">https://cplusplus.com/reference/utility/forward/</a></p>
 <p>通过使用<code>std::forward</code>函数可以根据实参调用不同的函数，如下面例子所示:</p>
-<div class="highlight" id="id-4"><div class="chroma">
+<div class="highlight" id="id-13"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
@@ -1172,14 +1172,14 @@ csv2是一个轻量级 C&#43;&#43; 库，用于将 CSV 文件解析为 C&#43;&#4
       </div></div><div class="post-info-line">
         <div class="post-info-md"></div>
         <div class="post-info-share">
-          <span><a href="javascript:void(0);" title="分享到 Twitter" data-sharer="twitter" data-url="http://localhost:14625/csv2%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="csv2 源码剖析：轻量级 CSV 处理的高效之道" data-via="IRONAnthony96" data-hashtags="CSV,C&#43;&#43;,源码剖析"><i class="fa-brands fa-twitter fa-fw" aria-hidden="true"></i></a>
-  <a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="http://localhost:14625/csv2%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-hashtag="CSV"><i class="fa-brands fa-facebook-square fa-fw" aria-hidden="true"></i></a>
-  <a href="javascript:void(0);" title="分享到 WhatsApp" data-sharer="whatsapp" data-url="http://localhost:14625/csv2%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="csv2 源码剖析：轻量级 CSV 处理的高效之道" data-web><i class="fa-brands fa-whatsapp fa-fw" aria-hidden="true"></i></a>
-  <a href="javascript:void(0);" title="分享到 Line" data-sharer="line" data-url="http://localhost:14625/csv2%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="csv2 源码剖析：轻量级 CSV 处理的高效之道"><i data-svg-src="/lib/simple-icons/icons/line.min.svg" aria-hidden="true"></i></a>
-  <a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="http://localhost:14625/csv2%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="csv2 源码剖析：轻量级 CSV 处理的高效之道" data-image="/images/202410/16/samsung-memory-dIfsOkzzSk4-unsplash.jpg"><i class="fa-brands fa-weibo fa-fw" aria-hidden="true"></i></a>
-  <a href="javascript:void(0);" title="分享到 Myspace" data-sharer="myspace" data-url="http://localhost:14625/csv2%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="csv2 源码剖析：轻量级 CSV 处理的高效之道" data-description=""><i data-svg-src="/lib/simple-icons/icons/myspace.min.svg" aria-hidden="true"></i></a>
-  <a href="javascript:void(0);" title="分享到 Blogger" data-sharer="blogger" data-url="http://localhost:14625/csv2%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="csv2 源码剖析：轻量级 CSV 处理的高效之道" data-description=""><i class="fa-brands fa-blogger fa-fw" aria-hidden="true"></i></a>
-  <a href="javascript:void(0);" title="分享到 Evernote" data-sharer="evernote" data-url="http://localhost:14625/csv2%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="csv2 源码剖析：轻量级 CSV 处理的高效之道"><i class="fa-brands fa-evernote fa-fw" aria-hidden="true"></i></a>
+          <span><a href="javascript:void(0);" title="分享到 Twitter" data-sharer="twitter" data-url="http://localhost:1313/csv2%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="csv2 源码剖析：轻量级 CSV 处理的高效之道" data-via="IRONAnthony96" data-hashtags="CSV,C&#43;&#43;,源码剖析"><i class="fa-brands fa-twitter fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="http://localhost:1313/csv2%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-hashtag="CSV"><i class="fa-brands fa-facebook-square fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 WhatsApp" data-sharer="whatsapp" data-url="http://localhost:1313/csv2%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="csv2 源码剖析：轻量级 CSV 处理的高效之道" data-web><i class="fa-brands fa-whatsapp fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 Line" data-sharer="line" data-url="http://localhost:1313/csv2%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="csv2 源码剖析：轻量级 CSV 处理的高效之道"><i data-svg-src="/lib/simple-icons/icons/line.min.svg" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="http://localhost:1313/csv2%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="csv2 源码剖析：轻量级 CSV 处理的高效之道" data-image="/images/202410/16/samsung-memory-dIfsOkzzSk4-unsplash.jpg"><i class="fa-brands fa-weibo fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 Myspace" data-sharer="myspace" data-url="http://localhost:1313/csv2%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="csv2 源码剖析：轻量级 CSV 处理的高效之道" data-description=""><i data-svg-src="/lib/simple-icons/icons/myspace.min.svg" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 Blogger" data-sharer="blogger" data-url="http://localhost:1313/csv2%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="csv2 源码剖析：轻量级 CSV 处理的高效之道" data-description=""><i class="fa-brands fa-blogger fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 Evernote" data-sharer="evernote" data-url="http://localhost:1313/csv2%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="csv2 源码剖析：轻量级 CSV 处理的高效之道"><i class="fa-brands fa-evernote fa-fw" aria-hidden="true"></i></a>
   </span>
         </div>
       </div></div>

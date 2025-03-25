@@ -250,5 +250,5 @@ df.a.str.split(&#39; &#39;).str.get(0).head(10)
 ---
 
 > 作者: [AndyFree96](https://andyfree96.github.io/)  
-> URL: http://localhost:14625/pandas%E7%AE%80%E6%98%8E%E6%95%99%E7%A8%8B/  
+> URL: http://localhost:1313/pandas%E7%AE%80%E6%98%8E%E6%95%99%E7%A8%8B/  
 
