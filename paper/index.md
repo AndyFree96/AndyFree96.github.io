@@ -35,14 +35,23 @@
 ### 2024
 
 | #   | 标题                                                    | 年份 | 论文                                     | 代码                                                                     | 状态 |
-| --- | ------------------------------------------------------- | ---- | ---------------------------------------- | ------------------------------------------------------------------------ | ---- |
+| :-- | :------------------------------------------------------ | :--- | :--------------------------------------- | :----------------------------------------------------------------------- | :--- |
 | 1   | You Only Look Once: Unified, Real-Time Object Detection | 2015 | [Link](https://arxiv.org/abs/1506.02640) | [Link](https://github.com/abeardear/pytorch-YOLO-v1)                     | ❎   |
 | 2   | YOLOv4: Optimal Speed and Accuracy of Object Detection  | 2020 | [Link](https://arxiv.org/abs/2004.10934) | [Link](https://github.com/AlexeyAB/darknet)                              | ❎   |
 | 3   | A Neural Algorithm of Artistic Style                    | 2015 | [Link](https://arxiv.org/abs/1508.06576) | [Link](https://github.com/Kautenja/a-neural-algorithm-of-artistic-style) | ❎   |
+
+### 2025
+
+| #   | 标题                                                       | 年份 | 论文                                                                                                   | 代码 | 状态 |
+| :-- | :--------------------------------------------------------- | :--- | :----------------------------------------------------------------------------------------------------- | :--- | :--- |
+| 1   | The Google File System                                     | 2003 | [Link](https://static.googleusercontent.com/media/research.google.com/en//archive/gfs-sosp2003.pdf)    | 无   | ❎   |
+| 2   | What Every Programmer Should Know About Memory             | 2007 | [Link](https://people.freebsd.org/~lstewart/articles/cpumemory.pdf)                                    | 无   | ❎   |
+| 3   | Bigtable: A Distributed Storage System for Structured Data | 2006 | [Link](https://static.googleusercontent.com/media/research.google.com/en//archive/bigtable-osdi06.pdf) | 无   | ❎   |
+| 4   | Why Functional Programming Matters                         | 1990 | [Link](https://www.cs.utexas.edu/~shmat/courses/cs345/whyfp.pdf)                                       | 无   | ❎   |
 
 
 ---
 
 > 作者:   
-> URL: http://localhost:1313/paper/  
+> URL: https://andyfree96.github.io/paper/  
 

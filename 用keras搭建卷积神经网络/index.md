@@ -268,5 +268,5 @@ print(&#39;acc&#39;, score[1])
 ---
 
 > 作者: [AndyFree96](https://andyfree96.github.io/)  
-> URL: http://localhost:1313/%E7%94%A8keras%E6%90%AD%E5%BB%BA%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/  
+> URL: https://andyfree96.github.io/%E7%94%A8keras%E6%90%AD%E5%BB%BA%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/  
 
