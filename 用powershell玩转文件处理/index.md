@@ -6,7 +6,7 @@ PowerShell 是一个功能强大的自动化脚本平台，不仅可以管理系
 &lt;!--more--&gt;
 
 {{&lt; admonition type=note title=&#34;注意&#34; open=true &gt;}}
-用到的文件可在[Github](https://github.com/AndyFree96/pwsh/tree/main/1/files)找到！
+文中用到的示例文件可在[Github](https://github.com/AndyFree96/pwsh/tree/main/1/files)下载
 {{&lt; /admonition &gt;}}
 
 ## 快速查看与读取文件内容
