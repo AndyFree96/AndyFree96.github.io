@@ -3,11 +3,11 @@
 
 PowerShell 是一个功能强大的自动化脚本平台，不仅可以管理系统和服务，还可以轻松高效地处理各种文件操作。无论你是系统管理员、开发者，还是数据分析师，掌握 PowerShell 的文件处理能力都能让你的工作事半功倍。本文将带你系统性地了解如何用 PowerShell 玩转文件处理，从基础操作到进阶技巧，让你轻松驾驭文件的读取、修改、管理与批处理任务。
 
-&lt;!--more--&gt;
+<!--more-->
 
-{{&lt; admonition type=note title=&#34;注意&#34; open=true &gt;}}
+{{< admonition type=note title="注意" open=true >}}
 文中用到的示例文件可在[Github](https://github.com/AndyFree96/pwsh/tree/main/1/files)下载
-{{&lt; /admonition &gt;}}
+{{< /admonition >}}
 
 ## 快速查看与读取文件内容
 
@@ -41,10 +41,10 @@ Get-Content .\1.txt -Tail 2
 
 ### 按关键字过滤内容
 
-列出文件中包含关键字 &#34;summer&#34; 的行：
+列出文件中包含关键字 "summer" 的行：
 
 ```powershell
-Get-Content .\1.txt | Select-String -Pattern &#34;summer&#34;
+Get-Content .\1.txt | Select-String -Pattern "summer"
 ```
 
 ![](/images/202507/1/4.png)
@@ -52,7 +52,7 @@ Get-Content .\1.txt | Select-String -Pattern &#34;summer&#34;
 或者
 
 ```powersehll
-Get-Content .\1.txt | Select-String -Pattern &#34;summer&#34;
+Get-Content .\1.txt | Select-String -Pattern "summer"
 
 ```
 
@@ -69,7 +69,7 @@ New-Item .\newfile.txt
 ### 写入内容
 
 ```powershell
-Set-Content .\newfile.txt &#34;Hello, PowerShell!&#34;
+Set-Content .\newfile.txt "Hello, PowerShell!"
 ```
 
 ![](/images/202507/1/6.png)
@@ -77,7 +77,7 @@ Set-Content .\newfile.txt &#34;Hello, PowerShell!&#34;
 ### 追加内容
 
 ```powershell
-Add-Content .\newfile.txt &#34;Awesome!!!&#34;
+Add-Content .\newfile.txt "Awesome!!!"
 ```
 
 ![](/images/202507/1/7.png)
@@ -132,8 +132,8 @@ Remove-Item .\archive\ -Recurse
 
 ```powershell
 1..10 | ForEach-Object {
-  $fileName = &#34;demo$_.log&#34;
-  &#34;This is log file number $_&#34; | Set-Content -Path $fileName
+  $fileName = "demo$_.log"
+  "This is log file number $_" | Set-Content -Path $fileName
 }
 ```
 
@@ -149,7 +149,7 @@ Get-ChildItem -Path .\ -Filter *.log
 
 ```powershell
 Get-ChildItem -Path .\ -Filter *.log | ForEach-Object {
-  Rename-Item $_ -NewName $_.Name.Replace(&#34;demo&#34;, &#34;access_log_&#34;)
+  Rename-Item $_ -NewName $_.Name.Replace("demo", "access_log_")
 }
 ```
 
@@ -183,10 +183,10 @@ Expand-Archive -Path .\log.zip -DestinationPath .\unzipped_logs
 
 ## 按文件内容查找文件
 
-查找文件内容中包含关键字&#34;summer&#34;文件名：
+查找文件内容中包含关键字"summer"文件名：
 
 ```powershell
-Get-ChildItem -Path .\ -Filter *.txt | Where-Object { Select-String -Path $_.FullName -Pattern &#34;summer&#34;}
+Get-ChildItem -Path .\ -Filter *.txt | Where-Object { Select-String -Path $_.FullName -Pattern "summer"}
 ```
 
 ![](/images/202507/1/9.png)
@@ -195,7 +195,7 @@ Get-ChildItem -Path .\ -Filter *.txt | Where-Object { Select-String -Path $_.Ful
 
 ```powershell
  Get-ChildItem -Path .\ -Filter *.txt | ForEach-Object {
-  Select-String -Path $_.FullName -Pattern &#34;summer&#34;
+  Select-String -Path $_.FullName -Pattern "summer"
 }
 ```
 

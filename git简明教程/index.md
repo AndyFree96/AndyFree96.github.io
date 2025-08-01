@@ -3,7 +3,7 @@
 
 版本控制软件能够让我们拍摄处于可行状态下的项目的快照。更改项目（比如实现新功能）后，如果项目不能正常运行，可以恢复到前一个可行状态。通过版本控制软件，我们可以无顾忌地改进项目，不再需要担心项目因为自己犯了错而遭到破坏。对于大型项目而言，这显得尤为重要。对小项目来说，这也是大有益处的。
 
-&lt;!--more--&gt;
+<!--more-->
 
 ## 安装 Git
 
@@ -18,8 +18,8 @@
 Git 会跟踪到底是谁修改了项目，哪怕参与项目开发的人只有一个。为此，Git 需要知道你的用户名和电子邮件地址。你必须提供用户名，但可以使用虚构的电子邮件地址：
 
 ```bash
-$ git config --global user.name &#34;username&#34;
-$ git config --global user.email &#34;username@example.com&#34;
+$ git config --global user.name "username"
+$ git config --global user.email "username@example.com"
 ```
 
 如果忘记了这一步，在你首次提交时，Git 将提示你提供这些信息。
@@ -31,7 +31,7 @@ $ git config --global user.email &#34;username@example.com&#34;
 ```Python
 # hello_world.py
 
-print(&#34;Hello Git World!&#34;)
+print("Hello Git World!")
 ```
 
 ## 忽略文件
@@ -84,7 +84,7 @@ $ git add .
 
 ![](/images/201911/1/7.png)
 
-我们执行命令`git commit -m &#34;message&#34;`以拍摄项目的快照。选项`-m`让 Git 将接下来的消息`&#34;Started project&#34;`记录到项目的历史记录中。输出表明我们在分支`master`上，且有两个文件被修改了。现在我们检查状态时，发现我们在分支`master`上，且工作目录是干净的。
+我们执行命令`git commit -m "message"`以拍摄项目的快照。选项`-m`让 Git 将接下来的消息`"Started project"`记录到项目的历史记录中。输出表明我们在分支`master`上，且有两个文件被修改了。现在我们检查状态时，发现我们在分支`master`上，且工作目录是干净的。
 
 ![](/images/201911/1/8.png)
 
@@ -107,8 +107,8 @@ Git 记录所有的项目提交。下面来看一下提交历史：
 ```Python
 # hello_world.py
 
-print(&#34;Hello Git World!&#34;)
-print(&#34;Hello everyone.&#34;)
+print("Hello Git World!")
+print("Hello everyone.")
 ```
 
 查看项目状态，Git 注意到了这个文件发生了变化：
@@ -132,10 +132,10 @@ print(&#34;Hello everyone.&#34;)
 ```Python
 # hello_world.py
 
-print(&#34;Hello Git World!&#34;)
-print(&#34;Hello everyone.&#34;)
+print("Hello Git World!")
+print("Hello everyone.")
 
-print(&#34;Oh no, I broke the project!&#34;)
+print("Oh no, I broke the project!")
 ```
 
 保存并查看状态：
@@ -180,7 +180,7 @@ Git 注意到我们修改了`hello_world.py`。我们可以提交所做的修改
 
 ![](/images/201911/1/21.png)
 
-以闯关&#43;可视化的形式学习 Git 相关知识。
+以闯关+可视化的形式学习 Git 相关知识。
 
 ## 参考
 

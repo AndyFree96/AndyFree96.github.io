@@ -3,31 +3,31 @@
 
 [Axios](https://github.com/axios/axios)是一个基于 Promise 的 HTTP 客户端，我们可以在浏览器和 Node.js 中使用它。Axios 使向 REST 端点发送异步 HTTP 请求和执行 CRUD 操作变得更加容易。它可以在纯 JavaScript 中使用，也可以在 Vue 或者 React 之类的库中使用。
 
-&lt;!--more--&gt;
+<!--more-->
 
 先看一个在浏览器中使用 Axios 的例子，我们发送一个请求到`https://api.github.com/users/USERNAME`，以获取到用户的一些信息。
 
 新建一个名为 1.html 的文件，代码如下：
 
 ```HTML
-&lt;!DOCTYPE html&gt;
-&lt;html&gt;
-    &lt;head&gt;&lt;/head&gt;
-    &lt;title&gt;Axios&lt;/title&gt;
-    &lt;body&gt;
-        &lt;script src=&#34;https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js&#34;&gt;&lt;/script&gt;
-        &lt;script src=&#34;main.js&#34;&gt;&lt;/script&gt;
-    &lt;/body&gt;
-&lt;/html&gt;
+<!DOCTYPE html>
+<html>
+    <head></head>
+    <title>Axios</title>
+    <body>
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+        <script src="main.js"></script>
+    </body>
+</html>
 ```
 
 main.js 代码如下：
 
 ```JavaScript
-axios.get(&#34;https://api.github.com/users/andyfree96&#34;).then(response =&gt; {
+axios.get("https://api.github.com/users/andyfree96").then(response => {
     console.log(response.data);
-}).catch(error =&gt; {
-    console.log(&#34;ERROR!&#34;);
+}).catch(error => {
+    console.log("ERROR!");
 });
 ```
 
@@ -77,9 +77,9 @@ npm init -y
 回调函数：
 
 ```js
-const axios = require(&#39;axios&#39;);
+const axios = require('axios');
 
-axios.get(&#39;https://api.github.com/users/andyfree96&#39;).then((response) =&gt; {
+axios.get('https://api.github.com/users/andyfree96').then((response) => {
   console.log(response.status);
   console.log(response.statusText);
   console.log(response.data);
@@ -93,10 +93,10 @@ axios.get(&#39;https://api.github.com/users/andyfree96&#39;).then((response) =&g
 async/await：
 
 ```js
-const axios = require(&#39;axios&#39;);
+const axios = require('axios');
 
 async function makeGetRequest() {
-  let response = await axios.get(&#39;https://httpbin.org/get&#39;);
+  let response = await axios.get('https://httpbin.org/get');
   let data = response.data;
   console.log(data);
   console.log(response.request._header);
@@ -114,10 +114,10 @@ makeGetRequest();
 HEAD 请求是一个没有消息体的 GET 请求。
 
 ```js
-const axios = require(&#39;axios&#39;);
+const axios = require('axios');
 
 async function makeHeadRequest() {
-  let response = await axios.head(&#39;http://www.baidu.com&#39;);
+  let response = await axios.head('http://www.baidu.com');
   console.log(`status: ${response.status}`);
   console.log(`server : ${response.headers.server}`);
   console.log(response.headers);
@@ -134,13 +134,13 @@ Axios 有两个基本的 API：
 - `axios(url, config)`
 
 ```js
-const axios = require(&#39;axios&#39;);
+const axios = require('axios');
 
 async function makeRequest() {
   const config = {
-    method: &#39;get&#39;,
+    method: 'get',
   };
-  const url = &#39;http://httpbin.org/get&#39;;
+  const url = 'http://httpbin.org/get';
   let response = await axios(url, config);
   console.log(response.data);
 }
@@ -151,13 +151,13 @@ makeRequest();
 ## Axios 自定义头部
 
 ```js
-const axios = require(&#39;axios&#39;);
+const axios = require('axios');
 
 async function makeRequest() {
   const config = {
-    method: &#39;get&#39;,
-    url: &#39;http://www.baidu.com&#39;,
-    headers: { &#39;User-Agent&#39;: &#39;5.js&#39; },
+    method: 'get',
+    url: 'http://www.baidu.com',
+    headers: { 'User-Agent': '5.js' },
   };
   let response = await axios(config);
   console.log(response.request._header);
@@ -170,9 +170,9 @@ makeRequest();
 
 ```js
 const config = {
-  method: &#39;get&#39;,
-  url: &#39;http://www.baidu.com&#39;,
-  headers: { &#39;User-Agent&#39;: &#39;5.js&#39; },
+  method: 'get',
+  url: 'http://www.baidu.com',
+  headers: { 'User-Agent': '5.js' },
 };
 ```
 
@@ -181,10 +181,10 @@ const config = {
 ## Axios 的 POST 请求
 
 ```js
-const axios = require(&#39;axios&#39;);
+const axios = require('axios');
 
 async function makePostRequest() {
-  let response = await axios.post(&#39;https://httpbin.org/post&#39;);
+  let response = await axios.post('https://httpbin.org/post');
   console.log(response.data);
 }
 
@@ -196,19 +196,19 @@ makePostRequest();
 ## 下载图片
 
 ```js
-const axios = require(&#39;axios&#39;);
-const fs = require(&#39;fs&#39;);
+const axios = require('axios');
+const fs = require('fs');
 
 async function getImage(url) {
   const config = {
-    responseType: &#39;stream&#39;,
+    responseType: 'stream',
   };
   let response = await axios.get(url, config);
-  response.data.pipe(fs.createWriteStream(&#39;./image.png&#39;));
+  response.data.pipe(fs.createWriteStream('./image.png'));
 }
 
 getImage(
-  &#39;https://himg.bdimg.com/sys/portraitn/item/856f6c656f73636f74743936f939&#39;
+  'https://himg.bdimg.com/sys/portraitn/item/856f6c656f73636f74743936f939'
 );
 ```
 
@@ -219,12 +219,12 @@ getImage(
 我们可以用 Axios 一次性创建多个请求。
 
 ```js
-const axios = require(&#39;axios&#39;);
+const axios = require('axios');
 
 async function makeRequests() {
   let [response1, response2] = await Promise.all([
-    axios.get(&#39;https://api.github.com/users/andyfree96&#39;),
-    axios.get(&#39;https://api.github.com/users/google&#39;),
+    axios.get('https://api.github.com/users/andyfree96'),
+    axios.get('https://api.github.com/users/google'),
   ]);
   console.log(response1.data.created_at);
   console.log(response2.data.created_at);
@@ -249,24 +249,24 @@ npm i -g json-server
 
 ```JSON
 {
-  &#34;employees&#34;: [
+  "employees": [
     {
-      &#34;id&#34;: 1,
-      &#34;first_name&#34;: &#34;Sebastian&#34;,
-      &#34;last_name&#34;: &#34;Eschweiler&#34;,
-      &#34;email&#34;: &#34;sebastian@codingthesmartway.com&#34;
+      "id": 1,
+      "first_name": "Sebastian",
+      "last_name": "Eschweiler",
+      "email": "sebastian@codingthesmartway.com"
     },
     {
-      &#34;id&#34;: 2,
-      &#34;first_name&#34;: &#34;Steve&#34;,
-      &#34;last_name&#34;: &#34;Palmer&#34;,
-      &#34;email&#34;: &#34;steve@codingthesmartway.com&#34;
+      "id": 2,
+      "first_name": "Steve",
+      "last_name": "Palmer",
+      "email": "steve@codingthesmartway.com"
     },
     {
-      &#34;id&#34;: 3,
-      &#34;first_name&#34;: &#34;Ann&#34;,
-      &#34;last_name&#34;: &#34;Smith&#34;,
-      &#34;email&#34;: &#34;ann@codingthesmartway.com&#34;
+      "id": 3,
+      "first_name": "Ann",
+      "last_name": "Smith",
+      "email": "ann@codingthesmartway.com"
     }
   ]
 }
@@ -291,16 +291,16 @@ json-server --watch employees.json
 接下来我们可以使用 Axios 添加员工，
 
 ```js
-const axios = require(&#39;axios&#39;);
+const axios = require('axios');
 
 async function makePostRequest() {
   const params = {
     id: 4,
-    first_name: &#39;Andy&#39;,
-    last_name: &#39;Scott&#39;,
-    email: &#39;andyfree96@126.com&#39;,
+    first_name: 'Andy',
+    last_name: 'Scott',
+    email: 'andyfree96@126.com',
   };
-  let response = await axios.post(&#39;http://localhost:3000/employees/&#39;, params);
+  let response = await axios.post('http://localhost:3000/employees/', params);
   console.log(response.data);
 }
 
@@ -310,10 +310,10 @@ makePostRequest();
 获取员工,
 
 ```js
-const axios = require(&#39;axios&#39;);
+const axios = require('axios');
 
 async function makeRequest() {
-  let response = await axios.get(&#39;http://localhost:3000/employees&#39;);
+  let response = await axios.get('http://localhost:3000/employees');
   console.log(response.data);
 }
 
@@ -323,10 +323,10 @@ makeRequest();
 删除员工,
 
 ```js
-const axios = require(&#39;axios&#39;);
+const axios = require('axios');
 
 async function makeDeleteRequest() {
-  let response = axios.delete(&#39;http://localhost:3000/employees/4/&#39;);
+  let response = axios.delete('http://localhost:3000/employees/4/');
   console.log(response.data);
 }
 

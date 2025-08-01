@@ -3,13 +3,13 @@
 
 搜索引擎是我们日常学习工作最常使用的服务之一。你可能每天都在用它，但是却仍旧不知道“搜索”。高效地使用搜索引擎可以事半功倍，下面就盘点一下那些年我们可能错过的实用 Google 搜索技巧吧！
 
-&lt;!--more--&gt;
+<!--more-->
 
 ![](/images/202404/1/2.gif)
 
 ## 使用加号(或空格)表示与
 
-不需要使用“&#43;”来表示逻辑与，只要空格就可以了。什么意思呢？简单地说就是，当我们在搜索框输入`A B`搜索时，就是告诉 Google，我们要搜索的内容与 A 并且和 B 有关。比如说，我们想要搜索与 java 和 python 有关的内容，就可以用`java python`进行搜索。
+不需要使用“+”来表示逻辑与，只要空格就可以了。什么意思呢？简单地说就是，当我们在搜索框输入`A B`搜索时，就是告诉 Google，我们要搜索的内容与 A 并且和 B 有关。比如说，我们想要搜索与 java 和 python 有关的内容，就可以用`java python`进行搜索。
 
 ![](/images/202404/1/3.png)
 
@@ -118,7 +118,7 @@ Google 还包含了许多其他实用有趣的功能。比如：
 
 ## 参考
 
-1. [Ten Tips for Smarter Google Searches](http://www.informit.com/articles/article.aspx?p=675274&amp;seqNum=1)
+1. [Ten Tips for Smarter Google Searches](http://www.informit.com/articles/article.aspx?p=675274&seqNum=1)
 
 2. [15 fun things to type into Google](https://www.theguardian.com/technology/2016/jan/21/15-fun-things-you-can-do-on-google)
 

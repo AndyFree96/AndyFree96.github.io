@@ -3,7 +3,7 @@
 
 ![](/page/jean-carlo-emer--chlDlxLkw8-unsplash.jpg)
 
-大家好！我是**东东东尼君**，一个热爱学习和分享的技术探索者。在编程的世界里，我专注于 JavaScript、Node.js、C/C&#43;&#43; 和 Python，并且不断扩展自己的技能边界，从前端到后端，从数据分析到机器学习，力求通过技术创造更大的价值。
+大家好！我是**东东东尼君**，一个热爱学习和分享的技术探索者。在编程的世界里，我专注于 JavaScript、Node.js、C/C++ 和 Python，并且不断扩展自己的技能边界，从前端到后端，从数据分析到机器学习，力求通过技术创造更大的价值。
 
 ---
 
@@ -22,13 +22,13 @@
 
 - 技术文章：深入探讨前后端开发、系统架构、数据库优化、机器学习等主题。
 - 开源项目：分享我的项目经验和代码库，包括实际案例中的技术挑战和解决方案。
-- 学习笔记：记录学习新技术的过程，如 C&#43;&#43; 并发编程 和 操作系统原理。
+- 学习笔记：记录学习新技术的过程，如 C++ 并发编程 和 操作系统原理。
 - 行业观察：关于前沿技术、开发者工具和行业趋势的分析与个人见解
 - 读书笔记：总结技术书籍、经典书籍的阅读收获和思考。
 
 ---
 
-## 📢 社交媒体 &amp; 开源社区
+## 📢 社交媒体 & 开源社区
 
 我坚信技术的力量源于分享和协作，期待与更多的技术爱好者交流碰撞灵感！欢迎关注我的社交媒体账号，一起探索无限可能：
 
@@ -61,28 +61,28 @@
 - [Google Research Blog](https://research.google/blog/)
 - [Skywind（林伟）](https://skywind.me/blog/)
 - [囧克斯 勾三股四](https://jiongks.name/)
-- [Reimu&#39;s blog](https://blog.k8s.li/)
-- [weirane&#39;s blog](https://blog.ruo-chen.wang/)
+- [Reimu's blog](https://blog.k8s.li/)
+- [weirane's blog](https://blog.ruo-chen.wang/)
 - [Beyond the Void](https://byvoid.com)
 - [MacTalk-池建强的随想录](https://macshuo.com/)
 - [凹凸实验室](https://aotu.io/)
 - [web.dev](https://web.dev/blog/)
 - [DIYgod](https://diygod.cc/)
-- [Lil&#39;Log](https://lilianweng.github.io/)
+- [Lil'Log](https://lilianweng.github.io/)
 - [ruder.io](https://www.ruder.io/)
 - [Machine Learning Mastery](https://machinelearningmastery.com/blog/)
 - [PyImageSearch](https://pyimagesearch.com/blog/)
 - [Stack Abuse](https://stackabuse.com/)
 - [Real Python](https://realpython.com/)
 - [JavaScript Today](https://javascripttoday.com/)
-- [Meeting C&#43;&#43;](https://www.meetingcpp.com/blog/blogroll/)
-- [Fluent{C&#43;&#43;}](https://www.fluentcpp.com/)
-- [C&#43;&#43; Stories](https://www.cppstories.com/)
+- [Meeting C++](https://www.meetingcpp.com/blog/blogroll/)
+- [Fluent{C++}](https://www.fluentcpp.com/)
+- [C++ Stories](https://www.cppstories.com/)
 - [Sutterʼs Mill](https://herbsutter.com/)
-- [Modernes C&#43;&#43;](https://www.modernescpp.com/)
-- [C&#43;&#43; Tips of the Week](https://abseil.io/tips/)
-- [C&#43;&#43; Team Blog](https://devblogs.microsoft.com/cppblog/)
-- [Scott Brady&#39;s Blog](https://www.scottbrady91.com/)
+- [Modernes C++](https://www.modernescpp.com/)
+- [C++ Tips of the Week](https://abseil.io/tips/)
+- [C++ Team Blog](https://devblogs.microsoft.com/cppblog/)
+- [Scott Brady's Blog](https://www.scottbrady91.com/)
 - [Code with Steve](https://www.stevejgordon.co.uk/)
 - [Dev To](https://dev.to/)
 - [CSS-Tricks](https://css-tricks.com/)
@@ -95,6 +95,6 @@
 
 ---
 
-> 作者:   
+> 作者: <no value>  
 > URL: http://localhost:1313/about/  
 

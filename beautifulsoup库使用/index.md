@@ -3,7 +3,7 @@
 
 `BeautifulSoup`是啥？它是一个可以从 HTML 或 XML 文件中提取数据的 Python 库。它能通过我们喜欢的转换器实现文档导航，查找和修改。
 
-&lt;!--more--&gt;
+<!--more-->
 
 ## 安装 BeautifulSoup
 
@@ -38,9 +38,9 @@ pip install -i https://pypi.douban.com/simple html5lib
 ```Python
 from bs4 import BeautifulSoup
 
-soup = BeautifulSoup(open(&#34;index.html&#34;))
+soup = BeautifulSoup(open("index.html"))
 
-suop = BeautifulSoup(&#34;&lt;html&gt;data&lt;/html&gt;&#34;)
+suop = BeautifulSoup("<html>data</html>")
 ```
 
 如果手动指定解析器的话，`BeautifulSoup`会选择指定的解析器来解析文档。
@@ -56,10 +56,10 @@ suop = BeautifulSoup(&#34;&lt;html&gt;data&lt;/html&gt;&#34;)
 ```Python
 from bs4 import BeautifulSoup
 
-soup = BeautifulSoup(&#39;&lt;b class=&#34;boldest&#34;&gt;Extremely bold&lt;/b&gt;&#39;)
+soup = BeautifulSoup('<b class="boldest">Extremely bold</b>')
 tag = soup.b
 type(tag)
-# &lt;class &#39;bs4.element.Tag&#39;&gt;
+# <class 'bs4.element.Tag'>
 ```
 
 `Tag`有很多方法和属性，比如遍历文档树和搜索文档树。现在介绍一下 tag 中最重要的属性：`name`和`attributes`。
@@ -70,29 +70,29 @@ type(tag)
 
 ```Python
 tag.name
-# &#39;b&#39;
+# 'b'
 ```
 
 如果改变 tag 的 name 将会影响所有通过当前`BeautifulSoup`对象生成的 HTML 文档：
 
 ```Python
-tag.name = &#34;blockquote&#34;
+tag.name = "blockquote"
 tag
-# &lt;blockquote class=&#34;boldest&#34;&gt;Extremely bold&lt;/blockquote&gt;
+# <blockquote class="boldest">Extremely bold</blockquote>
 
-tag.name = &#34;ironman&#34;
+tag.name = "ironman"
 tag
-# &lt;ironman class=&#34;boldest&#34;&gt;Extremely bold&lt;/ironman&gt;
+# <ironman class="boldest">Extremely bold</ironman>
 ```
 
 #### Attributes
 
-一个 tag 可能有很多个属性。tag `&lt;b class=&#34;boldest&#34;&gt;`有一个名为`class`的属性，值为`boldest`。tag 的属性的操作方法与字典相同：
+一个 tag 可能有很多个属性。tag `<b class="boldest">`有一个名为`class`的属性，值为`boldest`。tag 的属性的操作方法与字典相同：
 
 ```Python
-tag[&#39;class&#39;]
+tag['class']
 
-# [&#39;boldest&#39;]
+# ['boldest']
 ```
 
 也可以直接`.`取属性，比如：`.attrs`：
@@ -100,33 +100,33 @@ tag[&#39;class&#39;]
 ```Python
 tag.attrs
 
-# {&#39;class&#39;: [&#39;boldest&#39;]}
+# {'class': ['boldest']}
 ```
 
 tag 的属性可以被添加，删除或修改，和字典一样。
 
 ```Python
-In [13]: tag[&#39;class&#39;]
-Out[13]: [&#39;boldest&#39;]
+In [13]: tag['class']
+Out[13]: ['boldest']
 
-In [14]: tag[&#39;class&#39;] = &#39;verybold&#39;
+In [14]: tag['class'] = 'verybold'
 
-In [15]: tag[&#39;id&#39;] = 1
+In [15]: tag['id'] = 1
 
 In [16]: tag
-Out[16]: &lt;ironman class=&#34;verybold&#34; id=&#34;1&#34;&gt;Extremely bold&lt;/ironman&gt;
+Out[16]: <ironman class="verybold" id="1">Extremely bold</ironman>
 
-In [17]: del tag[&#39;class&#39;]
+In [17]: del tag['class']
 
-In [18]: del tag[&#39;id&#39;]
+In [18]: del tag['id']
 
 In [19]: tag
-Out[19]: &lt;ironman&gt;Extremely bold&lt;/ironman&gt;
+Out[19]: <ironman>Extremely bold</ironman>
 
-In [20]: tag[&#39;class&#39;]
+In [20]: tag['class']
 KeyError
 
-In [21]: tag.get(&#39;class&#39;)
+In [21]: tag.get('class')
 ```
 
 #### 多值属性
@@ -134,19 +134,19 @@ In [21]: tag.get(&#39;class&#39;)
 HTML 定义了一系列可以包含多个值的属性。最常见的多值属性是`class`（一个 tag 可以有多个 CSS 的`class`）。在`BeautifulSoup`中多值属性的返回类型是 list：
 
 ```Python
-In [22]: css_soup = BeautifulSoup(&#39;&lt;p class=&#34;body strikeout&#34;&gt;&lt;/p&gt;&#39;)
+In [22]: css_soup = BeautifulSoup('<p class="body strikeout"></p>')
 
-In [23]: css_soup.p[&#39;class&#39;]
-Out[23]: [&#39;body&#39;, &#39;strikeout&#39;]
+In [23]: css_soup.p['class']
+Out[23]: ['body', 'strikeout']
 ```
 
 如果某个属性看起来好像有多个值，但在任何版本的 HTML 定义中都没有被定义为多值属性，那么`BeautifulSoup`会将这个属性作为字符串返回
 
 ```Python
-In [25]: id_soup = BeautifulSoup(&#39;&lt;p id=&#34;my id&#34;&gt;&lt;/p&gt;&#39;)
+In [25]: id_soup = BeautifulSoup('<p id="my id"></p>')
 
-In [26]: id_soup.p[&#39;id&#39;]
-Out[26]: &#39;my id&#39;
+In [26]: id_soup.p['id']
+Out[26]: 'my id'
 ```
 
 ### NavigableString
@@ -155,10 +155,10 @@ Out[26]: &#39;my id&#39;
 
 ```Python
 In [27]: tag
-Out[27]: &lt;ironman&gt;Extremely bold&lt;/ironman&gt;
+Out[27]: <ironman>Extremely bold</ironman>
 
 In [28]: tag.string
-Out[28]: &#39;Extremely bold&#39;
+Out[28]: 'Extremely bold'
 
 In [29]: type(tag.string)
 Out[29]: bs4.element.NavigableString
@@ -175,9 +175,9 @@ NavigableString 对象支持[遍历文档树](https://www.crummy.com/software/Be
 `Tag`，`NavigableString`，`BeautifulSoup`几乎覆盖了 html 和 xml 中的所有内容，但是还有一些特殊对象。
 
 ```Python
-In [30]: markup = &#34;&lt;b&gt;&lt;!--Hey, buddy. Want to buy a used parser?--&gt;&lt;/b&gt;&#34;
+In [30]: markup = "<b><!--Hey, buddy. Want to buy a used parser?--></b>"
 
-In [31]: soup = BeautifulSoup(markup, &#39;lxml&#39;)
+In [31]: soup = BeautifulSoup(markup, 'lxml')
 
 In [32]: comment = soup.b.string
 
@@ -185,7 +185,7 @@ In [34]: type(comment)
 Out[34]: bs4.element.Comment
 ```
 
-`Comment`对象是一个特殊类型的`NavigableString`对象。 `soup = BeautifulSoup(markup, &#39;lxml&#39;)`中的`lxml`用于指定解析器。
+`Comment`对象是一个特殊类型的`NavigableString`对象。 `soup = BeautifulSoup(markup, 'lxml')`中的`lxml`用于指定解析器。
 
 ## 搜索文档树
 
@@ -194,23 +194,23 @@ Out[34]: bs4.element.Comment
 以“爱丽丝”文档作为例子：
 
 ```Python
-In [40]: html_doc = &#34;&#34;&#34;
-    ...: &lt;html&gt;&lt;head&gt;&lt;title&gt;The Dormouse&#39;s story&lt;/title&gt;&lt;/head&gt;
+In [40]: html_doc = """
+    ...: <html><head><title>The Dormouse's story</title></head>
     ...:
-    ...: &lt;p class=&#34;title&#34;&gt;&lt;b&gt;The Dormouse&#39;s story&lt;/b&gt;&lt;/p&gt;
+    ...: <p class="title"><b>The Dormouse's story</b></p>
     ...:
-    ...: &lt;p class=&#34;story&#34;&gt;Once upon a time there were three little sisters; and their names were
-    ...: &lt;a href=&#34;http://example.com/elsie&#34; class=&#34;sister&#34; id=&#34;link1&#34;&gt;Elsie&lt;/a&gt;,
-    ...: &lt;a href=&#34;http://example.com/lacie&#34; class=&#34;sister&#34; id=&#34;link2&#34;&gt;Lacie&lt;/a&gt; and
-    ...: &lt;a href=&#34;http://example.com/tillie&#34; class=&#34;sister&#34; id=&#34;link3&#34;&gt;Tillie&lt;/a&gt;;
-    ...: and they lived at the bottom of a well.&lt;/p&gt;
+    ...: <p class="story">Once upon a time there were three little sisters; and their names were
+    ...: <a href="http://example.com/elsie" class="sister" id="link1">Elsie</a>,
+    ...: <a href="http://example.com/lacie" class="sister" id="link2">Lacie</a> and
+    ...: <a href="http://example.com/tillie" class="sister" id="link3">Tillie</a>;
+    ...: and they lived at the bottom of a well.</p>
     ...:
-    ...: &lt;p class=&#34;story&#34;&gt;...&lt;/p&gt;
-    ...: &#34;&#34;&#34;
+    ...: <p class="story">...</p>
+    ...: """
 
 In [41]: from bs4 import BeautifulSoup
 
-In [42]: soup = BeautifulSoup(html_doc, &#39;lxml&#39;)
+In [42]: soup = BeautifulSoup(html_doc, 'lxml')
 ```
 
 使用`find_all()`类似的方法可以查找到想要查找的文档内容。
@@ -221,21 +221,21 @@ In [42]: soup = BeautifulSoup(html_doc, &#39;lxml&#39;)
 
 #### 字符串
 
-最简单的过滤器是字符串。在搜索方法中传入也给字符串参数，`BeautifulSoup`会查找与字符串完整匹配的内容，下面的例子用于查找文档中所有`&lt;b&gt;`标签：
+最简单的过滤器是字符串。在搜索方法中传入也给字符串参数，`BeautifulSoup`会查找与字符串完整匹配的内容，下面的例子用于查找文档中所有`<b>`标签：
 
 ```Python
-In [43]: soup.find_all(&#39;b&#39;)
-Out[43]: [&lt;b&gt;The Dormouse&#39;s story&lt;/b&gt;]
+In [43]: soup.find_all('b')
+Out[43]: [<b>The Dormouse's story</b>]
 ```
 
 #### 正则表达式
 
-如果传入正则表达式作为参数，`BeautifulSoup`会通过正则表达式的`match()`来匹配内容。下例中找出所有以 b 开头的标签，这意味着`&lt;body&gt;`和`&lt;b&gt;`标签都应该被找到：
+如果传入正则表达式作为参数，`BeautifulSoup`会通过正则表达式的`match()`来匹配内容。下例中找出所有以 b 开头的标签，这意味着`<body>`和`<b>`标签都应该被找到：
 
 ```Python
 In [44]: import re
 
-In [45]: for tag in soup.find_all(re.compile(&#39;^b&#39;)):
+In [45]: for tag in soup.find_all(re.compile('^b')):
     ...:     print(tag.name)
     ...:
 # body
@@ -244,15 +244,15 @@ In [45]: for tag in soup.find_all(re.compile(&#39;^b&#39;)):
 
 #### 列表
 
-如果传入列表参数`BeautifulSoup`会将领与列表中任一元素匹配的内容返回。下列代码将会找到文档中所有`&lt;a&gt;`和`&lt;b&gt;`标签：
+如果传入列表参数`BeautifulSoup`会将领与列表中任一元素匹配的内容返回。下列代码将会找到文档中所有`<a>`和`<b>`标签：
 
 ```Python
-In [46]: soup.find_all([&#39;a&#39;,&#39;b&#39;])
+In [46]: soup.find_all(['a','b'])
 Out[46]:
-[&lt;b&gt;The Dormouse&#39;s story&lt;/b&gt;,
- &lt;a class=&#34;sister&#34; href=&#34;http://example.com/elsie&#34; id=&#34;link1&#34;&gt;Elsie&lt;/a&gt;,
- &lt;a class=&#34;sister&#34; href=&#34;http://example.com/lacie&#34; id=&#34;link2&#34;&gt;Lacie&lt;/a&gt;,
- &lt;a class=&#34;sister&#34; href=&#34;http://example.com/tillie&#34; id=&#34;link3&#34;&gt;Tillie&lt;/a&gt;]
+[<b>The Dormouse's story</b>,
+ <a class="sister" href="http://example.com/elsie" id="link1">Elsie</a>,
+ <a class="sister" href="http://example.com/lacie" id="link2">Lacie</a>,
+ <a class="sister" href="http://example.com/tillie" id="link3">Tillie</a>]
 ```
 
 #### True
@@ -285,24 +285,24 @@ p
 
 ```Python
 def has_class_but_no_id(tag):
-    return tag.has_attr(&#39;class&#39;) and not tag.has_attr(&#39;id&#39;)
+    return tag.has_attr('class') and not tag.has_attr('id')
 ```
 
-将该方法作为参数传入`find_all()`方法将得到所有`&lt;p&gt;`标签：
+将该方法作为参数传入`find_all()`方法将得到所有`<p>`标签：
 
 ```Python
 In [66]: soup.find_all(has_class_but_no_id)
 Out[66]:
-[&lt;p class=&#34;title&#34;&gt;&lt;b&gt;The Dormouse&#39;s story&lt;/b&gt;&lt;/p&gt;,
- &lt;p class=&#34;story&#34;&gt;Once upon a time there were three little sisters; and their names were
- &lt;a class=&#34;sister&#34; href=&#34;http://example.com/elsie&#34; id=&#34;link1&#34;&gt;Elsie&lt;/a&gt;,
- &lt;a class=&#34;sister&#34; href=&#34;http://example.com/lacie&#34; id=&#34;link2&#34;&gt;Lacie&lt;/a&gt; and
- &lt;a class=&#34;sister&#34; href=&#34;http://example.com/tillie&#34; id=&#34;link3&#34;&gt;Tillie&lt;/a&gt;;
- and they lived at the bottom of a well.&lt;/p&gt;,
- &lt;p class=&#34;story&#34;&gt;...&lt;/p&gt;]
+[<p class="title"><b>The Dormouse's story</b></p>,
+ <p class="story">Once upon a time there were three little sisters; and their names were
+ <a class="sister" href="http://example.com/elsie" id="link1">Elsie</a>,
+ <a class="sister" href="http://example.com/lacie" id="link2">Lacie</a> and
+ <a class="sister" href="http://example.com/tillie" id="link3">Tillie</a>;
+ and they lived at the bottom of a well.</p>,
+ <p class="story">...</p>]
 ```
 
-返回结果中只有`&lt;p&gt;`标签没有`&lt;a&gt;`标签，因为`&lt;a&gt;`标签还定义了`id`，没有返回`&lt;html&gt;`和`&lt;head&gt;`，因为`&lt;html&gt;`和`&lt;head&gt;`中没有定义`class`属性。
+返回结果中只有`<p>`标签没有`<a>`标签，因为`<a>`标签还定义了`id`，没有返回`<html>`和`<head>`，因为`<html>`和`<head>`中没有定义`class`属性。
 
 下面代码找到所有被文字包含的节点内容：
 
@@ -337,8 +337,8 @@ find_all(name, attrs, recursive, text, **kwargs)
 例如：
 
 ```Python
-In [72]: soup.find_all(&#34;title&#34;)
-Out[72]: [&lt;title&gt;The Dormouse&#39;s story&lt;/title&gt;]
+In [72]: soup.find_all("title")
+Out[72]: [<title>The Dormouse's story</title>]
 ```
 
 `name`参数的值可以是任一类型的过滤器，字符串、正则表达式、列表、方法或是`True`。
@@ -348,15 +348,15 @@ Out[72]: [&lt;title&gt;The Dormouse&#39;s story&lt;/title&gt;]
 如果一个指定名字的参数不是搜索内置的参数名，搜索时会把该参数当作指定名字 tag 的属性来搜索。如果包含一个名字为`id`参数，`BeautifulSoup`会搜索每个 tag 的`id`属性。
 
 ```Python
-In [73]: soup.find_all(id=&#34;link2&#34;)
-Out[73]: [&lt;a class=&#34;sister&#34; href=&#34;http://example.com/lacie&#34; id=&#34;link2&#34;&gt;Lacie&lt;/a&gt;]
+In [73]: soup.find_all(id="link2")
+Out[73]: [<a class="sister" href="http://example.com/lacie" id="link2">Lacie</a>]
 ```
 
 如果传入`href`参数，`BeautifulSoup`会搜索每个 tag 的`href`属性：
 
 ```Python
-In [76]: soup.find_all(href=re.compile(&#39;elsie&#39;))
-Out[76]: [&lt;a class=&#34;sister&#34; href=&#34;http://example.com/elsie&#34; id=&#34;link1&#34;&gt;Elsie&lt;/a&gt;]
+In [76]: soup.find_all(href=re.compile('elsie'))
+Out[76]: [<a class="sister" href="http://example.com/elsie" id="link1">Elsie</a>]
 ```
 
 搜索指定名字的属性时可以使用的参数值包括：字符串、正则表达式、列表、True。
@@ -366,35 +366,35 @@ Out[76]: [&lt;a class=&#34;sister&#34; href=&#34;http://example.com/elsie&#34; i
 ```Python
 In [77]: soup.find_all(id=True)
 Out[77]:
-[&lt;a class=&#34;sister&#34; href=&#34;http://example.com/elsie&#34; id=&#34;link1&#34;&gt;Elsie&lt;/a&gt;,
- &lt;a class=&#34;sister&#34; href=&#34;http://example.com/lacie&#34; id=&#34;link2&#34;&gt;Lacie&lt;/a&gt;,
- &lt;a class=&#34;sister&#34; href=&#34;http://example.com/tillie&#34; id=&#34;link3&#34;&gt;Tillie&lt;/a&gt;]
+[<a class="sister" href="http://example.com/elsie" id="link1">Elsie</a>,
+ <a class="sister" href="http://example.com/lacie" id="link2">Lacie</a>,
+ <a class="sister" href="http://example.com/tillie" id="link3">Tillie</a>]
 ```
 
 使用多个指定名字的参数可以同时过滤 tag 的多个属性：
 
 ```Python
-In [78]: soup.find_all(href=re.compile(&#34;elsie&#34;), id=&#39;link1&#39;)
-Out[78]: [&lt;a class=&#34;sister&#34; href=&#34;http://example.com/elsie&#34; id=&#34;link1&#34;&gt;Elsie&lt;/a&gt;]
+In [78]: soup.find_all(href=re.compile("elsie"), id='link1')
+Out[78]: [<a class="sister" href="http://example.com/elsie" id="link1">Elsie</a>]
 ```
 
 有些 tag 属性在搜索时不能使用，比如 HTML5 中的`data-*`属性：
 
 ```Python
-In [79]: data_soup = BeautifulSoup(&#39;&lt;div data-foo=&#34;value&#34;&gt;foo!&lt;/div&gt;&#39;, &#39;lxml&#39;)
+In [79]: data_soup = BeautifulSoup('<div data-foo="value">foo!</div>', 'lxml')
 
-In [80]: data_soup.find_all(data-foo=&#34;value&#34;)
-  File &#34;&lt;ipython-input-80-a766c8a0cac6&gt;&#34;, line 1
-    data_soup.find_all(data-foo=&#34;value&#34;)
+In [80]: data_soup.find_all(data-foo="value")
+  File "<ipython-input-80-a766c8a0cac6>", line 1
+    data_soup.find_all(data-foo="value")
                       ^
-SyntaxError: keyword can&#39;t be an expression
+SyntaxError: keyword can't be an expression
 ```
 
 可以通过`find_all()`方法`attrs`参数定义一个字典参数来搜索包含特殊属性的 tag：
 
 ```Python
-In [81]: data_soup.find_all(attrs={&#39;data-foo&#39;:&#39;value&#39;})
-Out[81]: [&lt;div data-foo=&#34;value&#34;&gt;foo!&lt;/div&gt;]
+In [81]: data_soup.find_all(attrs={'data-foo':'value'})
+Out[81]: [<div data-foo="value">foo!</div>]
 ```
 
 #### 按 CSS 搜索
@@ -402,11 +402,11 @@ Out[81]: [&lt;div data-foo=&#34;value&#34;&gt;foo!&lt;/div&gt;]
 可以通过`class_`参数搜索指定 CSS 类名的 tag：
 
 ```Python
-In [82]: soup.find_all(&#39;a&#39;, class_=&#34;sister&#34;)
+In [82]: soup.find_all('a', class_="sister")
 Out[82]:
-[&lt;a class=&#34;sister&#34; href=&#34;http://example.com/elsie&#34; id=&#34;link1&#34;&gt;Elsie&lt;/a&gt;,
- &lt;a class=&#34;sister&#34; href=&#34;http://example.com/lacie&#34; id=&#34;link2&#34;&gt;Lacie&lt;/a&gt;,
- &lt;a class=&#34;sister&#34; href=&#34;http://example.com/tillie&#34; id=&#34;link3&#34;&gt;Tillie&lt;/a&gt;]
+[<a class="sister" href="http://example.com/elsie" id="link1">Elsie</a>,
+ <a class="sister" href="http://example.com/lacie" id="link2">Lacie</a>,
+ <a class="sister" href="http://example.com/tillie" id="link3">Tillie</a>]
 ```
 
 `class_`参数同样接受不同类型的过滤器，字符串，正则表达式，方法或`True`。
@@ -416,34 +416,34 @@ Out[82]:
 通过`text`参数可以搜索文档中的字符串内容。与`name`参数的可选值一样，`text`参数接受字符串，正则表达式，列表，`True`，方法。
 
 ```Python
-In [83]: soup.find_all(text=&#39;Elsie&#39;)
-Out[83]: [&#39;Elsie&#39;]
+In [83]: soup.find_all(text='Elsie')
+Out[83]: ['Elsie']
 
-In [84]: soup.find_all(text=[&#39;Tillie&#39;,&#39;Elsie&#39;,&#39;Lacie&#39;])
-Out[84]: [&#39;Elsie&#39;, &#39;Lacie&#39;, &#39;Tillie&#39;]
+In [84]: soup.find_all(text=['Tillie','Elsie','Lacie'])
+Out[84]: ['Elsie', 'Lacie', 'Tillie']
 
-In [85]: soup.find_all(text=re.compile(&#39;Dormouse&#39;))
-Out[85]: [&#34;The Dormouse&#39;s story&#34;, &#34;The Dormouse&#39;s story&#34;]
+In [85]: soup.find_all(text=re.compile('Dormouse'))
+Out[85]: ["The Dormouse's story", "The Dormouse's story"]
 
 def is_the_only_string_within_a_tag(s):
-    &#34;&#34;&#34;Return True if this string is the only child of its parent tag.&#34;&#34;&#34;
+    """Return True if this string is the only child of its parent tag."""
     return (s == s.parent.string)
 
 In [87]: soup.find_all(text=is_the_only_string_within_a_tag)
 Out[87]:
-[&#34;The Dormouse&#39;s story&#34;,
- &#34;The Dormouse&#39;s story&#34;,
- &#39;Elsie&#39;,
- &#39;Lacie&#39;,
- &#39;Tillie&#39;,
- &#39;...&#39;]
+["The Dormouse's story",
+ "The Dormouse's story",
+ 'Elsie',
+ 'Lacie',
+ 'Tillie',
+ '...']
 ```
 
-虽然`text`参数用于搜索字符串，还可以与其它参数混合使用来过滤 tag。`BeautifulSoup`会找到`.string`属性与`text`参数值相符的 tag。以下代码用来搜索内容中包含`Elsie`的`&lt;a&gt;`标签：
+虽然`text`参数用于搜索字符串，还可以与其它参数混合使用来过滤 tag。`BeautifulSoup`会找到`.string`属性与`text`参数值相符的 tag。以下代码用来搜索内容中包含`Elsie`的`<a>`标签：
 
 ```Python
-In [88]: soup.find_all(&#39;a&#39;, text=&#34;Elsie&#34;)
-Out[88]: [&lt;a class=&#34;sister&#34; href=&#34;http://example.com/elsie&#34; id=&#34;link1&#34;&gt;Elsie&lt;/a&gt;]
+In [88]: soup.find_all('a', text="Elsie")
+Out[88]: [<a class="sister" href="http://example.com/elsie" id="link1">Elsie</a>]
 ```
 
 #### limit 参数
@@ -451,16 +451,16 @@ Out[88]: [&lt;a class=&#34;sister&#34; href=&#34;http://example.com/elsie&#34; i
 `find_all()`方法返回全部的搜索结构，如果文档树很大那么搜索会很慢。如果我们不需要全部结果，可以使用`limit`参数限制返回结果的数量。当搜索结果的数量达到`limit`的限制时，就停止搜索返回结果。
 
 ```Python
-In [89]: soup.find_all(&#39;a&#39;)
+In [89]: soup.find_all('a')
 Out[89]:
-[&lt;a class=&#34;sister&#34; href=&#34;http://example.com/elsie&#34; id=&#34;link1&#34;&gt;Elsie&lt;/a&gt;,
- &lt;a class=&#34;sister&#34; href=&#34;http://example.com/lacie&#34; id=&#34;link2&#34;&gt;Lacie&lt;/a&gt;,
- &lt;a class=&#34;sister&#34; href=&#34;http://example.com/tillie&#34; id=&#34;link3&#34;&gt;Tillie&lt;/a&gt;]
+[<a class="sister" href="http://example.com/elsie" id="link1">Elsie</a>,
+ <a class="sister" href="http://example.com/lacie" id="link2">Lacie</a>,
+ <a class="sister" href="http://example.com/tillie" id="link3">Tillie</a>]
 
-In [90]: soup.find_all(&#39;a&#39;,limit=2)
+In [90]: soup.find_all('a',limit=2)
 Out[90]:
-[&lt;a class=&#34;sister&#34; href=&#34;http://example.com/elsie&#34; id=&#34;link1&#34;&gt;Elsie&lt;/a&gt;,
- &lt;a class=&#34;sister&#34; href=&#34;http://example.com/lacie&#34; id=&#34;link2&#34;&gt;Lacie&lt;/a&gt;]
+[<a class="sister" href="http://example.com/elsie" id="link1">Elsie</a>,
+ <a class="sister" href="http://example.com/lacie" id="link2">Lacie</a>]
 ```
 
 #### recursive 参数
@@ -470,25 +470,25 @@ Out[90]:
 有如下文档：
 
 ```Python
-&lt;html&gt;
- &lt;head&gt;
-  &lt;title&gt;
-   The Dormouse&#39;s story
-  &lt;/title&gt;
- &lt;/head&gt;
+<html>
+ <head>
+  <title>
+   The Dormouse's story
+  </title>
+ </head>
 ...
 ```
 
 是否使用`recursive`参数的结果：
 
 ```Python
-In [95]: soup.html.find_all(&#39;title&#39;)
+In [95]: soup.html.find_all('title')
 Out[95]:
-[&lt;title&gt;
-    The Dormouse&#39;s story
-   &lt;/title&gt;]
+[<title>
+    The Dormouse's story
+   </title>]
 
-In [96]: soup.html.find_all(&#39;title&#39;, recursive=False)
+In [96]: soup.html.find_all('title', recursive=False)
 Out[96]: []
 ```
 
@@ -499,8 +499,8 @@ Out[96]: []
 下面两行代码是等价的：
 
 ```Python
-soup.find_all(&#34;a&#34;)
-soup(&#34;a&#34;)
+soup.find_all("a")
+soup("a")
 ```
 
 以下两行代码也是等价的：
@@ -517,121 +517,121 @@ soup.title(text=True)
 ```Python
 In [1]: from bs4 import BeautifulSoup
 
-In [2]: html_doc = &#34;&#34;&#34;
-   ...: &lt;html&gt;&lt;head&gt;&lt;title&gt;The Dormouse&#39;s story&lt;/title&gt;&lt;/head&gt;
-   ...: &lt;body&gt;
-   ...: &lt;p class=&#34;title&#34;&gt;&lt;b&gt;The Dormouse&#39;s story&lt;/b&gt;&lt;/p&gt;
+In [2]: html_doc = """
+   ...: <html><head><title>The Dormouse's story</title></head>
+   ...: <body>
+   ...: <p class="title"><b>The Dormouse's story</b></p>
    ...:
-   ...: &lt;p class=&#34;story&#34;&gt;Once upon a time there were three little sisters; and their names were
-   ...: &lt;a href=&#34;http://example.com/elsie&#34; class=&#34;sister&#34; id=&#34;link1&#34;&gt;Elsie&lt;/a&gt;,
-   ...: &lt;a href=&#34;http://example.com/lacie&#34; class=&#34;sister&#34; id=&#34;link2&#34;&gt;Lacie&lt;/a&gt; and
-   ...: &lt;a href=&#34;http://example.com/tillie&#34; class=&#34;sister&#34; id=&#34;link3&#34;&gt;Tillie&lt;/a&gt;;
-   ...: and they lived at the bottom of a well.&lt;/p&gt;
+   ...: <p class="story">Once upon a time there were three little sisters; and their names were
+   ...: <a href="http://example.com/elsie" class="sister" id="link1">Elsie</a>,
+   ...: <a href="http://example.com/lacie" class="sister" id="link2">Lacie</a> and
+   ...: <a href="http://example.com/tillie" class="sister" id="link3">Tillie</a>;
+   ...: and they lived at the bottom of a well.</p>
    ...:
-   ...: &lt;p class=&#34;story&#34;&gt;...&lt;/p&gt;
-   ...: &#34;&#34;&#34;
+   ...: <p class="story">...</p>
+   ...: """
 
-In [3]: soup = BeautifulSoup(html_doc, &#39;lxml&#39;)
+In [3]: soup = BeautifulSoup(html_doc, 'lxml')
 
-In [4]: soup.select(&#39;title&#39;)
-Out[4]: [&lt;title&gt;The Dormouse&#39;s story&lt;/title&gt;]
+In [4]: soup.select('title')
+Out[4]: [<title>The Dormouse's story</title>]
 
-In [5]: soup.select(&#39;p:nth-of-type(3)&#39;)
-Out[5]: [&lt;p class=&#34;story&#34;&gt;...&lt;/p&gt;]
+In [5]: soup.select('p:nth-of-type(3)')
+Out[5]: [<p class="story">...</p>]
 ```
 
 通过 tag 标签逐层查找：
 
 ```Python
-In [6]: soup.select(&#39;body a&#39;)
+In [6]: soup.select('body a')
 Out[6]:
-[&lt;a class=&#34;sister&#34; href=&#34;http://example.com/elsie&#34; id=&#34;link1&#34;&gt;Elsie&lt;/a&gt;,
- &lt;a class=&#34;sister&#34; href=&#34;http://example.com/lacie&#34; id=&#34;link2&#34;&gt;Lacie&lt;/a&gt;,
- &lt;a class=&#34;sister&#34; href=&#34;http://example.com/tillie&#34; id=&#34;link3&#34;&gt;Tillie&lt;/a&gt;]
+[<a class="sister" href="http://example.com/elsie" id="link1">Elsie</a>,
+ <a class="sister" href="http://example.com/lacie" id="link2">Lacie</a>,
+ <a class="sister" href="http://example.com/tillie" id="link3">Tillie</a>]
 
-In [7]: soup.select(&#39;html head title&#39;)
-Out[7]: [&lt;title&gt;The Dormouse&#39;s story&lt;/title&gt;]
+In [7]: soup.select('html head title')
+Out[7]: [<title>The Dormouse's story</title>]
 ```
 
 找到某个 tag 标签下的直接子标签：
 
 ```Python
-In [8]: soup.select(&#39;head &gt; title&#39;)
-Out[8]: [&lt;title&gt;The Dormouse&#39;s story&lt;/title&gt;]
+In [8]: soup.select('head > title')
+Out[8]: [<title>The Dormouse's story</title>]
 
-In [9]: soup.select(&#39;p &gt; a&#39;)
+In [9]: soup.select('p > a')
 Out[9]:
-[&lt;a class=&#34;sister&#34; href=&#34;http://example.com/elsie&#34; id=&#34;link1&#34;&gt;Elsie&lt;/a&gt;,
- &lt;a class=&#34;sister&#34; href=&#34;http://example.com/lacie&#34; id=&#34;link2&#34;&gt;Lacie&lt;/a&gt;,
- &lt;a class=&#34;sister&#34; href=&#34;http://example.com/tillie&#34; id=&#34;link3&#34;&gt;Tillie&lt;/a&gt;]
+[<a class="sister" href="http://example.com/elsie" id="link1">Elsie</a>,
+ <a class="sister" href="http://example.com/lacie" id="link2">Lacie</a>,
+ <a class="sister" href="http://example.com/tillie" id="link3">Tillie</a>]
 
 ```
 
 找到兄弟节点标签：
 
 ```Python
-In [14]: soup.select(&#39;#link1 ~ .sister&#39;)
+In [14]: soup.select('#link1 ~ .sister')
 Out[14]:
-[&lt;a class=&#34;sister&#34; href=&#34;http://example.com/lacie&#34; id=&#34;link2&#34;&gt;Lacie&lt;/a&gt;,
- &lt;a class=&#34;sister&#34; href=&#34;http://example.com/tillie&#34; id=&#34;link3&#34;&gt;Tillie&lt;/a&gt;]
+[<a class="sister" href="http://example.com/lacie" id="link2">Lacie</a>,
+ <a class="sister" href="http://example.com/tillie" id="link3">Tillie</a>]
 
-In [15]: soup.select(&#39;#link1 &#43; .sister&#39;)
-Out[15]: [&lt;a class=&#34;sister&#34; href=&#34;http://example.com/lacie&#34; id=&#34;link2&#34;&gt;Lacie&lt;/a&gt;]
+In [15]: soup.select('#link1 + .sister')
+Out[15]: [<a class="sister" href="http://example.com/lacie" id="link2">Lacie</a>]
 ```
 
 通过 CSS 的类名查找：
 
 ```Python
-In [16]: soup.select(&#39;.sister&#39;)
+In [16]: soup.select('.sister')
 Out[16]:
-[&lt;a class=&#34;sister&#34; href=&#34;http://example.com/elsie&#34; id=&#34;link1&#34;&gt;Elsie&lt;/a&gt;,
- &lt;a class=&#34;sister&#34; href=&#34;http://example.com/lacie&#34; id=&#34;link2&#34;&gt;Lacie&lt;/a&gt;,
- &lt;a class=&#34;sister&#34; href=&#34;http://example.com/tillie&#34; id=&#34;link3&#34;&gt;Tillie&lt;/a&gt;]
+[<a class="sister" href="http://example.com/elsie" id="link1">Elsie</a>,
+ <a class="sister" href="http://example.com/lacie" id="link2">Lacie</a>,
+ <a class="sister" href="http://example.com/tillie" id="link3">Tillie</a>]
 
-In [17]: soup.select(&#39;[class~=sister]&#39;)
+In [17]: soup.select('[class~=sister]')
 Out[17]:
-[&lt;a class=&#34;sister&#34; href=&#34;http://example.com/elsie&#34; id=&#34;link1&#34;&gt;Elsie&lt;/a&gt;,
- &lt;a class=&#34;sister&#34; href=&#34;http://example.com/lacie&#34; id=&#34;link2&#34;&gt;Lacie&lt;/a&gt;,
- &lt;a class=&#34;sister&#34; href=&#34;http://example.com/tillie&#34; id=&#34;link3&#34;&gt;Tillie&lt;/a&gt;]
+[<a class="sister" href="http://example.com/elsie" id="link1">Elsie</a>,
+ <a class="sister" href="http://example.com/lacie" id="link2">Lacie</a>,
+ <a class="sister" href="http://example.com/tillie" id="link3">Tillie</a>]
 ```
 
 通过 tag 的 id 查找：
 
 ```Python
-In [18]: soup.select(&#39;#link1&#39;)
-Out[18]: [&lt;a class=&#34;sister&#34; href=&#34;http://example.com/elsie&#34; id=&#34;link1&#34;&gt;Elsie&lt;/a&gt;]
+In [18]: soup.select('#link1')
+Out[18]: [<a class="sister" href="http://example.com/elsie" id="link1">Elsie</a>]
 
-In [19]: soup.select(&#39;a#link2&#39;)
-Out[19]: [&lt;a class=&#34;sister&#34; href=&#34;http://example.com/lacie&#34; id=&#34;link2&#34;&gt;Lacie&lt;/a&gt;]
+In [19]: soup.select('a#link2')
+Out[19]: [<a class="sister" href="http://example.com/lacie" id="link2">Lacie</a>]
 ```
 
 通过是否存在某个属性来查找：
 
 ```Python
-In [20]: soup.select(&#39;a[href]&#39;)
+In [20]: soup.select('a[href]')
 Out[20]:
-[&lt;a class=&#34;sister&#34; href=&#34;http://example.com/elsie&#34; id=&#34;link1&#34;&gt;Elsie&lt;/a&gt;,
- &lt;a class=&#34;sister&#34; href=&#34;http://example.com/lacie&#34; id=&#34;link2&#34;&gt;Lacie&lt;/a&gt;,
- &lt;a class=&#34;sister&#34; href=&#34;http://example.com/tillie&#34; id=&#34;link3&#34;&gt;Tillie&lt;/a&gt;]
+[<a class="sister" href="http://example.com/elsie" id="link1">Elsie</a>,
+ <a class="sister" href="http://example.com/lacie" id="link2">Lacie</a>,
+ <a class="sister" href="http://example.com/tillie" id="link3">Tillie</a>]
 ```
 
 通过属性的值来查找：
 
 ```Python
-In [21]: soup.select(&#39;a[href=&#34;http://example.com/elsie&#34;]&#39;)
-Out[21]: [&lt;a class=&#34;sister&#34; href=&#34;http://example.com/elsie&#34; id=&#34;link1&#34;&gt;Elsie&lt;/a&gt;]
+In [21]: soup.select('a[href="http://example.com/elsie"]')
+Out[21]: [<a class="sister" href="http://example.com/elsie" id="link1">Elsie</a>]
 
-In [22]: soup.select(&#39;a[href^=&#34;http://example.com/&#34;]&#39;)
+In [22]: soup.select('a[href^="http://example.com/"]')
 Out[22]:
-[&lt;a class=&#34;sister&#34; href=&#34;http://example.com/elsie&#34; id=&#34;link1&#34;&gt;Elsie&lt;/a&gt;,
- &lt;a class=&#34;sister&#34; href=&#34;http://example.com/lacie&#34; id=&#34;link2&#34;&gt;Lacie&lt;/a&gt;,
- &lt;a class=&#34;sister&#34; href=&#34;http://example.com/tillie&#34; id=&#34;link3&#34;&gt;Tillie&lt;/a&gt;]
+[<a class="sister" href="http://example.com/elsie" id="link1">Elsie</a>,
+ <a class="sister" href="http://example.com/lacie" id="link2">Lacie</a>,
+ <a class="sister" href="http://example.com/tillie" id="link3">Tillie</a>]
 
-In [23]: soup.select(&#39;a[href$=&#34;tillie&#34;]&#39;)
-Out[23]: [&lt;a class=&#34;sister&#34; href=&#34;http://example.com/tillie&#34; id=&#34;link3&#34;&gt;Tillie&lt;/a&gt;]
+In [23]: soup.select('a[href$="tillie"]')
+Out[23]: [<a class="sister" href="http://example.com/tillie" id="link3">Tillie</a>]
 
-In [24]: soup.select(&#39;a[href*=&#34;.com/el&#34;]&#39;)
-Out[24]: [&lt;a class=&#34;sister&#34; href=&#34;http://example.com/elsie&#34; id=&#34;link1&#34;&gt;Elsie&lt;/a&gt;]
+In [24]: soup.select('a[href*=".com/el"]')
+Out[24]: [<a class="sister" href="http://example.com/elsie" id="link1">Elsie</a>]
 ```
 
 更多有关 CSS 选择器的内容，请参考[CSS 选择器参考手册](https://www.w3school.com.cn/cssref/css_selectors.ASP)。
@@ -661,18 +661,18 @@ from fake_useragent import UserAgent
 from urllib.request import Request
 import os
 
-BASE_URL = &#34;https://movie.douban.com/top250?start={page_id}&amp;filter=&#34;
+BASE_URL = "https://movie.douban.com/top250?start={page_id}&filter="
 user_agent = UserAgent()
 
 
 def get_content(url):
-    &#34;&#34;&#34;
+    """
     根据url发送请求
     :param url: 请求url
     :return: 响应内容
-    &#34;&#34;&#34;
+    """
     headers = {
-        &#39;User-Agent&#39;: user_agent.random
+        'User-Agent': user_agent.random
 
     }
     request = Request(url, headers=headers)
@@ -681,44 +681,44 @@ def get_content(url):
 
 
 def parse_html(html):
-    &#34;&#34;&#34;
+    """
     解析HTML
     :param html: HTML文档字符串
     :return:
-    &#34;&#34;&#34;
-    soup = BeautifulSoup(html, &#39;lxml&#39;)
-    items = soup.select(&#34;.pic img&#34;)
+    """
+    soup = BeautifulSoup(html, 'lxml')
+    items = soup.select(".pic img")
     for item in items:
-        yield item.get(&#34;src&#34;)
+        yield item.get("src")
 
 
-def save_image(image_url, file_name, folder=&#39;images&#39;):
-    &#34;&#34;&#34;
+def save_image(image_url, file_name, folder='images'):
+    """
     保存图片
     :param image_url: 图片地址
     :param file_name: 文件名
     :param folder: 保存目录
-    &#34;&#34;&#34;
+    """
     image = get_content(image_url)
     if not os.path.exists(folder):
         os.mkdir(folder)
-    file_name = &#34;{}/{}.jpg&#34;.format(folder, file_name)
-    with open(file_name, &#39;wb&#39;) as f_obj:
+    file_name = "{}/{}.jpg".format(folder, file_name)
+    with open(file_name, 'wb') as f_obj:
         f_obj.write(image)
-    print(&#34;保存:&#34;, file_name)
+    print("保存:", file_name)
 
 
 def main():
     total = 0
     for i in range(20):
         url = BASE_URL.format(page_id=i * 25)
-        html = get_content(url).decode(&#39;utf-8&#39;)
+        html = get_content(url).decode('utf-8')
         for image in parse_html(html):
-            print(&#34;下载:&#34;, image)
+            print("下载:", image)
             save_image(image, total)
-            total &#43;= 1
+            total += 1
 
-if __name__ == &#39;__main__&#39;:
+if __name__ == '__main__':
     main()
 
 ```
@@ -734,31 +734,31 @@ import math
 import PIL.Image as Image
 
 def merge_images(folder, size=1000):
-    &#34;&#34;&#34;
+    """
     将folder目录下的图片按尺寸size拼接
     :param folder: 图片
     :param size: 尺寸
-    &#34;&#34;&#34;
+    """
     images_count = len(os.listdir(folder))
     each_size = int(math.sqrt(size * size / images_count)) - 1
     lines_count = int(size / each_size)
-    final_image = Image.new(&#39;RGB&#39;, (size, size), &#39;white&#39;)
+    final_image = Image.new('RGB', (size, size), 'white')
     row, column = 0, 0
     for i in range(images_count):
-        image_path = &#34;{}/{}.jpg&#34;.format(folder, i)
+        image_path = "{}/{}.jpg".format(folder, i)
         try:
             image = Image.open(image_path)
         except IOError as e:
-            print(image_path, &#34;出错啦！！！&#34;)
+            print(image_path, "出错啦！！！")
         else:
             image = image.resize((each_size, each_size))
             final_image.paste(image, (row * each_size, column * each_size))
-            column &#43;= 1
+            column += 1
             if column == lines_count:
                 column = 0
-                row &#43;= 1
+                row += 1
 
-    final_image.save(&#34;{}/{}.jpg&#34;.format(folder, &#34;final_image&#34;)))
+    final_image.save("{}/{}.jpg".format(folder, "final_image")))
 ```
 
 得到：

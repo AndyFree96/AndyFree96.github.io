@@ -1,33 +1,22 @@
 <!DOCTYPE html>
-<html
-  itemscope
-  itemtype="http://schema.org/WebPage"
-  lang="zh-CN"
->
+<html itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
   <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
     
-    <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, maximum-scale=2"
-    />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
     <meta name="robots" content="noodp" />
-    <meta name="google-adsense-account" content="ca-pub-5868664387231059" />
     <title>Requests库使用 - 东尼的博客</title><meta name="author" content="AndyFree96">
-<meta name="author-link" content="https://andyfree96.github.io/">
-<meta name="description" content="
-2024/11/06 更新: 修改JSON 响应内容、定制请求头、POST 请求中的代码以及图片
-
-我们可以使用 Python 内置的 urllib 包来请求网络资源。它用起来比较麻烦，而且缺少很多实用的高级功能。本文我们将会介绍一个更加方便的 Python 第三方库——Requests 的使用。" /><meta name="keywords" content='Python, Requests, HTTP, 网络爬虫' />
+<meta name="description" content=" 2024/11/06 更新: 修改JSON 响应内容、定制请求头、POST 请求中的代码以及图片 我们可以使用 Python 内置的 urllib 包来请求网络资源。它用起来比较麻烦，而且缺少很多实用的高级功能。本文我们将会介绍一个更加方便的 Python 第三方库——Requests 的使用。
+"><meta name="keywords" content='Python, Requests, HTTP, 网络爬虫'>
   <meta itemprop="name" content="Requests库使用">
-  <meta itemprop="description" content=" 2024/11/06 更新: 修改JSON 响应内容、定制请求头、POST 请求中的代码以及图片 我们可以使用 Python 内置的 urllib 包来请求网络资源。它用起来比较麻烦，而且缺少很多实用的高级功能。本文我们将会介绍一个更加方便的 Python 第三方库——Requests 的使用。">
+  <meta itemprop="description" content="2024/11/06 更新: 修改JSON 响应内容、定制请求头、POST 请求中的代码以及图片 我们可以使用 Python 内置的 urllib 包来请求网络资源。它用起来比较麻烦，而且缺少很多实用的高级功能。本文我们将会介绍一个更加方便的 Python 第三方库——Requests 的使用。">
   <meta itemprop="datePublished" content="2021-10-08T08:26:24+08:00">
   <meta itemprop="dateModified" content="2021-10-08T08:26:24+08:00">
-  <meta itemprop="wordCount" content="2060">
+  <meta itemprop="wordCount" content="2048">
   <meta itemprop="keywords" content="Python,Requests,HTTP,网络爬虫"><meta property="og:url" content="http://localhost:1313/requests%E5%BA%93%E4%BD%BF%E7%94%A8/">
   <meta property="og:site_name" content="东尼的博客">
   <meta property="og:title" content="Requests库使用">
-  <meta property="og:description" content=" 2024/11/06 更新: 修改JSON 响应内容、定制请求头、POST 请求中的代码以及图片 我们可以使用 Python 内置的 urllib 包来请求网络资源。它用起来比较麻烦，而且缺少很多实用的高级功能。本文我们将会介绍一个更加方便的 Python 第三方库——Requests 的使用。">
+  <meta property="og:description" content="2024/11/06 更新: 修改JSON 响应内容、定制请求头、POST 请求中的代码以及图片 我们可以使用 Python 内置的 urllib 包来请求网络资源。它用起来比较麻烦，而且缺少很多实用的高级功能。本文我们将会介绍一个更加方便的 Python 第三方库——Requests 的使用。">
   <meta property="og:locale" content="zh_CN">
   <meta property="og:type" content="article">
     <meta property="article:section" content="posts">
@@ -39,12 +28,12 @@
 
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Requests库使用">
-  <meta name="twitter:description" content=" 2024/11/06 更新: 修改JSON 响应内容、定制请求头、POST 请求中的代码以及图片 我们可以使用 Python 内置的 urllib 包来请求网络资源。它用起来比较麻烦，而且缺少很多实用的高级功能。本文我们将会介绍一个更加方便的 Python 第三方库——Requests 的使用。">
+  <meta name="twitter:description" content="2024/11/06 更新: 修改JSON 响应内容、定制请求头、POST 请求中的代码以及图片 我们可以使用 Python 内置的 urllib 包来请求网络资源。它用起来比较麻烦，而且缺少很多实用的高级功能。本文我们将会介绍一个更加方便的 Python 第三方库——Requests 的使用。">
       <meta name="twitter:site" content="@IRONAnthony96">
-<meta name="application-name" content="FixIt">
+<meta name="twitter:creator" content="@IRONAnthony96" /><meta name="application-name" content="FixIt">
 <meta name="apple-mobile-web-app-title" content="FixIt"><meta name="theme-color" data-light="#f8f8f8" data-dark="#252627" content="#f8f8f8"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" href="http://localhost:1313/requests%E5%BA%93%E4%BD%BF%E7%94%A8/" /><link rel="prev" href="http://localhost:1313/matplotlib%E7%AE%80%E6%98%8E%E6%95%99%E7%A8%8B/" /><link rel="next" href="http://localhost:1313/beautifulsoup%E5%BA%93%E4%BD%BF%E7%94%A8/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" type="text/html" href="http://localhost:1313/requests%E5%BA%93%E4%BD%BF%E7%94%A8/" title="Requests库使用 - 东尼的博客" /><link rel="prev" type="text/html" href="http://localhost:1313/matplotlib%E7%AE%80%E6%98%8E%E6%95%99%E7%A8%8B/" title="Matplotlib简明教程" /><link rel="next" type="text/html" href="http://localhost:1313/beautifulsoup%E5%BA%93%E4%BD%BF%E7%94%A8/" title="BeautifulSoup库使用" /><link rel="alternate" type="text/markdown" href="http://localhost:1313/requests%E5%BA%93%E4%BD%BF%E7%94%A8/index.md" title="Requests库使用 - 东尼的博客"><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><script type="application/ld+json">
   {
@@ -55,7 +44,7 @@
     "mainEntityOfPage": {
       "@type": "WebPage",
       "@id": "http:\/\/localhost:1313\/requests%E5%BA%93%E4%BD%BF%E7%94%A8\/"
-    },"genre": "posts","keywords": "Python, Requests, HTTP","wordcount":  2060 ,
+    },"genre": "posts","keywords": "Python, Requests, HTTP","wordcount":  2048 ,
     "url": "http:\/\/localhost:1313\/requests%E5%BA%93%E4%BD%BF%E7%94%A8\/","datePublished": "2021-10-08T08:26:24+08:00","dateModified": "2021-10-08T08:26:24+08:00","publisher": {
       "@type": "Organization",
       "name": ""},"author": {
@@ -63,74 +52,21 @@
         "name": "AndyFree96"
       },"description": ""
   }
-  </script></head>
-  <body
-    data-header-desktop="sticky"
-    data-header-mobile="auto"
-  ><script>
-      (window.localStorage?.getItem("theme")
-        ? localStorage.getItem("theme") === "dark"
-        : "auto" === "auto"
-        ? window.matchMedia("(prefers-color-scheme: dark)").matches
-        : "auto" === "dark") &&
-        document.body.setAttribute("data-theme", "dark");
-    </script><div
-      class="wrapper"
-      data-page-style="normal"
-    ><header class="desktop animate__faster" id="header-desktop">
+  </script><script src="/js/head/color-scheme.min.js"></script></head>
+  <body data-header-desktop="sticky" data-header-mobile="auto"><div class="wrapper" data-page-style="normal"><header class="desktop animate__faster" id="header-desktop">
   <div class="header-wrapper">
     <div class="header-title">
       <a href="/" title="东尼的博客"><span class="header-title-text">东尼的博客</span></a><span class="header-subtitle"></span></div>
     <nav>
       <ul class="menu"><li class="menu-item">
-              <a
-                class="menu-link"
-                href="/posts/"
-                
-                
-              >📕 文章</a></li><li class="menu-item">
-              <a
-                class="menu-link"
-                href="/categories/"
-                
-                
-              >🧰 分类</a></li><li class="menu-item">
-              <a
-                class="menu-link"
-                href="/tags/"
-                
-                
-              >🔖 标签</a></li><li class="menu-item">
-              <a
-                class="menu-link"
-                href="/book"
-                
-                
-              >📚 书单</a></li><li class="menu-item">
-              <a
-                class="menu-link"
-                href="/paper"
-                
-                
-              >📝 论文</a></li><li class="menu-item">
-              <a
-                class="menu-link"
-                href="/opencourse"
-                
-                
-              >👨🏻‍💻 公开课</a></li><li class="menu-item">
-              <a
-                class="menu-link"
-                href="/resource"
-                
-                
-              >⚡️ 资源</a></li><li class="menu-item">
-              <a
-                class="menu-link"
-                href="/about"
-                
-                
-              >🙋🏻‍♂️ 关于</a></li><li class="menu-item delimiter"></li><li class="menu-item theme-switch" title="切换主题">
+              <a class="menu-link" href="/posts/">📕 文章</a></li><li class="menu-item">
+              <a class="menu-link" href="/categories/">🧰 分类</a></li><li class="menu-item">
+              <a class="menu-link" href="/tags/">🔖 标签</a></li><li class="menu-item">
+              <a class="menu-link" href="/book">📚 书单</a></li><li class="menu-item">
+              <a class="menu-link" href="/paper">📝 论文</a></li><li class="menu-item">
+              <a class="menu-link" href="/opencourse">👨🏻‍💻 公开课</a></li><li class="menu-item">
+              <a class="menu-link" href="/resource">⚡️ 资源</a></li><li class="menu-item">
+              <a class="menu-link" href="/about">🙋🏻‍♂️ 关于</a></li><li class="menu-item delimiter"></li><li class="menu-item theme-switch" title="切换主题">
           <i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i>
         </li></ul>
     </nav>
@@ -145,76 +81,18 @@
       </div>
     </div>
     <nav>
-      <ul class="menu" id="menu-mobile"><li
-              class="menu-item"
-            ><a
-                  class="menu-link"
-                  href="/posts/"
-                  
-                  
-                >📕 文章</a></li><li
-              class="menu-item"
-            ><a
-                  class="menu-link"
-                  href="/categories/"
-                  
-                  
-                >🧰 分类</a></li><li
-              class="menu-item"
-            ><a
-                  class="menu-link"
-                  href="/tags/"
-                  
-                  
-                >🔖 标签</a></li><li
-              class="menu-item"
-            ><a
-                  class="menu-link"
-                  href="/book"
-                  
-                  
-                >📚 书单</a></li><li
-              class="menu-item"
-            ><a
-                  class="menu-link"
-                  href="/paper"
-                  
-                  
-                >📝 论文</a></li><li
-              class="menu-item"
-            ><a
-                  class="menu-link"
-                  href="/opencourse"
-                  
-                  
-                >👨🏻‍💻 公开课</a></li><li
-              class="menu-item"
-            ><a
-                  class="menu-link"
-                  href="/resource"
-                  
-                  
-                >⚡️ 资源</a></li><li
-              class="menu-item"
-            ><a
-                  class="menu-link"
-                  href="/about"
-                  
-                  
-                >🙋🏻‍♂️ 关于</a></li><li class="menu-item menu-system">
+      <ul class="menu" id="menu-mobile"><li class="menu-item"><a class="menu-link" href="/posts/">📕 文章</a></li><li class="menu-item"><a class="menu-link" href="/categories/">🧰 分类</a></li><li class="menu-item"><a class="menu-link" href="/tags/">🔖 标签</a></li><li class="menu-item"><a class="menu-link" href="/book">📚 书单</a></li><li class="menu-item"><a class="menu-link" href="/paper">📝 论文</a></li><li class="menu-item"><a class="menu-link" href="/opencourse">👨🏻‍💻 公开课</a></li><li class="menu-item"><a class="menu-link" href="/resource">⚡️ 资源</a></li><li class="menu-item"><a class="menu-link" href="/about">🙋🏻‍♂️ 关于</a></li><li class="menu-item menu-system">
           <span class="menu-system-item theme-switch" title="切换主题"><i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i></span></li>
       </ul>
     </nav>
   </div>
-</header><main
-        class="container"
-      ><aside class="aside-collection animate__animated animate__fadeIn animate__faster" aria-label="合集"></aside>
+</header><main class="container"><aside class="aside-collection animate__animated animate__fadeIn animate__faster" aria-label="合集"></aside>
 
   <article class="page single">
     <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span title="转载" class="icon-repost"><i class="fa-solid fa-share fa-fw" aria-hidden="true"></i></span><span>Requests库使用</span>
       </h1></div><div class="post-meta">
-      <div class="post-meta-line"><span class="post-author"><a href="https://andyfree96.github.io/" title="作者"target="_blank" rel="external nofollow noopener noreferrer author" class="author"><img loading="lazy" src="/avatar/1.jpg" alt="AndyFree96" data-title="AndyFree96" class="avatar" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/>&nbsp;AndyFree96</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E7%BD%91%E7%BB%9C%E7%88%AC%E8%99%AB/" class="post-category" title="分类 - 网络爬虫"><i class="fa-regular fa-folder fa-fw" aria-hidden="true"></i> 网络爬虫</a></span></div><div class="post-meta-line"><span title="发布于 2021-10-08 08:26:24"><i class="fa-solid fa-calendar-days fa-fw me-1" aria-hidden="true"></i><time datetime="2021-10-08">2021-10-08</time></span>&nbsp;<span title="2060 字"><i class="fa-solid fa-pencil-alt fa-fw me-1" aria-hidden="true"></i>约 2100 字</span>&nbsp;<span><i class="fa-regular fa-clock fa-fw me-1" aria-hidden="true"></i>预计阅读 5 分钟</span>&nbsp;</div>
-    </div><div class="featured-image"><img loading="lazy" src="/images/202110/1/steve-johnson-UaP_MmMxiTs-unsplash.jpg" alt="/images/202110/1/steve-johnson-UaP_MmMxiTs-unsplash.jpg" data-title="/images/202110/1/steve-johnson-UaP_MmMxiTs-unsplash.jpg" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></div><div class="details toc" id="toc-static" data-kept="false">
+      <div class="post-meta-line"><span class="post-author"><a href="https://andyfree96.github.io/" title="作者"target="_blank" rel="external nofollow noopener noreferrer author" class="author"><img class="avatar" src='/avatar/1.jpg' alt="AndyFree96" height="16" width="16">&nbsp;AndyFree96</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E7%BD%91%E7%BB%9C%E7%88%AC%E8%99%AB/" class="post-category" title="分类 - 网络爬虫"><i class="fa-regular fa-folder fa-fw" aria-hidden="true"></i> 网络爬虫</a></span></div><div class="post-meta-line"><span title="发布于 2021-10-08 08:26:24"><i class="fa-solid fa-calendar-days fa-fw me-1" aria-hidden="true"></i><time datetime="2021-10-08">2021-10-08</time></span>&nbsp;<span title="2048 字"><i class="fa-solid fa-pencil-alt fa-fw me-1" aria-hidden="true"></i>约 2100 字</span>&nbsp;<span><i class="fa-regular fa-clock fa-fw me-1" aria-hidden="true"></i>预计阅读 5 分钟</span>&nbsp;</div>
+    </div><div class="featured-image"><img src='/images/202110/1/steve-johnson-UaP_MmMxiTs-unsplash.jpg' alt="/images/202110/1/steve-johnson-UaP_MmMxiTs-unsplash.jpg"></div><div class="details toc" id="toc-static" data-kept="false">
         <div class="details-summary toc-title">
           <span>目录</span>
           <span><i class="details-icon fa-solid fa-angle-right" aria-hidden="true"></i></span>
@@ -242,9 +120,12 @@
 <li><strong>2024/11/06 更新</strong>: 修改<strong>JSON 响应内容</strong>、<strong>定制请求头</strong>、<strong>POST 请求</strong>中的代码以及图片</li>
 </ul>
 <p>我们可以使用 Python 内置的 urllib 包来请求网络资源。它用起来比较麻烦，而且缺少很多实用的高级功能。本文我们将会介绍一个更加方便的 Python 第三方库——Requests 的使用。</p>
-<h2 id="安装-requests" class="heading-element">
-  <a href="#%e5%ae%89%e8%a3%85-requests" class="heading-mark"></a>安装 Requests</h2><p>要安装<code>Requests</code>，只要在终端中运行这个简单命令即可：</p>
-<div class="highlight" id="id-1"><div class="chroma">
+<h2 class="heading-element" id="安装-requests"><span>安装 Requests</span>
+  <a href="#%e5%ae%89%e8%a3%85-requests" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>要安装<code>Requests</code>，只要在终端中运行这个简单命令即可：</p>
+<div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
@@ -252,9 +133,12 @@
 <pre tabindex="0" class="chroma"><code class="language-Python" data-lang="Python"><span class="line"><span class="cl"><span class="n">pip</span> <span class="n">install</span> <span class="o">-</span><span class="n">i</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">pypi</span><span class="o">.</span><span class="n">douban</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">simple</span> <span class="n">requests</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>安装好<code>Requests</code>后，就可以开始尝试使用它啦！</p>
-<h2 id="发送请求" class="heading-element">
-  <a href="#%e5%8f%91%e9%80%81%e8%af%b7%e6%b1%82" class="heading-mark"></a>发送请求</h2><p>使用<code>Requests</code>发送网络请求非常简单。导入<code>Requests</code>模块：</p>
-<div class="highlight" id="id-2"><div class="chroma">
+<h2 class="heading-element" id="发送请求"><span>发送请求</span>
+  <a href="#%e5%8f%91%e9%80%81%e8%af%b7%e6%b1%82" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>使用<code>Requests</code>发送网络请求非常简单。导入<code>Requests</code>模块：</p>
+<div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
@@ -262,7 +146,7 @@
 <pre tabindex="0" class="chroma"><code class="language-Python" data-lang="Python"><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">requests</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>然后获取某个网页。我们来获取 Github 的公共时间线：</p>
-<div class="highlight" id="id-3"><div class="chroma">
+<div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
@@ -270,9 +154,12 @@
 <pre tabindex="0" class="chroma"><code class="language-Python" data-lang="Python"><span class="line"><span class="cl"><span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;https://api.github.com/events&#39;</span><span class="p">)</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>现在，有了一个名为<code>r</code>的<code>Response</code>的对象。我们可以从这个对象中获取所有我们想要的信息。</p>
-<h2 id="传递-url-参数" class="heading-element">
-  <a href="#%e4%bc%a0%e9%80%92-url-%e5%8f%82%e6%95%b0" class="heading-mark"></a>传递 URL 参数</h2><p>我们可能会想用 URL 的查询字符串传递某种数据。如果是手动构建 URL，那么数据会以键值对的形式置于 URL 中，跟在一个问号的后面。例如，<code>http://httpbin.org/get?key=val</code>。<code>Requests</code>允许我们使用<code>params</code>关键字参数，以一个字符串字典来提供这些参数。举例来说，如果想传递<code>key1=value1</code>和<code>key2=value2</code>到<code>http://httpbin.org/get</code>，那么可以使用如下代码：</p>
-<div class="highlight" id="id-4"><div class="chroma">
+<h2 class="heading-element" id="传递-url-参数"><span>传递 URL 参数</span>
+  <a href="#%e4%bc%a0%e9%80%92-url-%e5%8f%82%e6%95%b0" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>我们可能会想用 URL 的查询字符串传递某种数据。如果是手动构建 URL，那么数据会以键值对的形式置于 URL 中，跟在一个问号的后面。例如，<code>http://httpbin.org/get?key=val</code>。<code>Requests</code>允许我们使用<code>params</code>关键字参数，以一个字符串字典来提供这些参数。举例来说，如果想传递<code>key1=value1</code>和<code>key2=value2</code>到<code>http://httpbin.org/get</code>，那么可以使用如下代码：</p>
+<div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -286,7 +173,7 @@
 </span></span><span class="line"><span class="cl"><span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;http://httpbin.org/get&#39;</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">payload</span><span class="p">)</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>打印输出该 URL，能看到 URL 已被正确编码：</p>
-<div class="highlight" id="id-5"><div class="chroma">
+<div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -297,9 +184,12 @@
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="c1"># http://httpbin.org/get?name=anthony&amp;cat=ruby</span></span></span></code></pre></td></tr></table>
 </div>
-</div><h2 id="响应内容" class="heading-element">
-  <a href="#%e5%93%8d%e5%ba%94%e5%86%85%e5%ae%b9" class="heading-mark"></a>响应内容</h2><p>我们能读取服务器响应内容。举个例子：</p>
-<div class="highlight" id="id-6"><div class="chroma">
+</div><h2 class="heading-element" id="响应内容"><span>响应内容</span>
+  <a href="#%e5%93%8d%e5%ba%94%e5%86%85%e5%ae%b9" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>我们能读取服务器响应内容。举个例子：</p>
+<div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -313,10 +203,10 @@
 </span></span><span class="line"><span class="cl"><span class="nb">print</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">text</span><span class="p">)</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>输出内容如下：</p>
-<p><img loading="lazy" src="/images/202110/1/1.png" alt="/images/202110/1/1.png" srcset="/images/202110/1/1.png?size=small, /images/202110/1/1.png?size=medium 1.5x, /images/202110/1/1.png?size=large 2x" data-title="/images/202110/1/1.png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></p>
+<p><img loading="lazy" src='/images/202110/1/1.png' alt="/images/202110/1/1.png"></p>
 <p><code>Requests</code>会自动节码来自服务器的内容。大多数 unicode 字符集都能被无缝地解码。</p>
 <p>请求发出后，<code>Requests</code>会基于 HTTP 头部对响应的编码作出有根据的推测。当访问<code>r.text</code>时，<code>Requests</code>会使用其推测的文本编码。我们可以找出<code>Requests</code>使用了什么编码，并且能够使用<code>r.encoding</code>属性来改变它：</p>
-<div class="highlight" id="id-7"><div class="chroma">
+<div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -333,11 +223,14 @@
 </span></span><span class="line"><span class="cl"><span class="n">r</span><span class="o">.</span><span class="n">encoding</span> <span class="o">=</span> <span class="s1">&#39;utf-8&#39;</span>
 </span></span><span class="line"><span class="cl"><span class="nb">print</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">encoding</span><span class="p">)</span></span></span></code></pre></td></tr></table>
 </div>
-</div><p><img loading="lazy" src="/images/202110/1/2.png" alt="/images/202110/1/2.png" srcset="/images/202110/1/2.png?size=small, /images/202110/1/2.png?size=medium 1.5x, /images/202110/1/2.png?size=large 2x" data-title="/images/202110/1/2.png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></p>
+</div><p><img loading="lazy" src='/images/202110/1/2.png' alt="/images/202110/1/2.png"></p>
 <p>如果改变了编码，每当访问<code>r.text</code>，<code>Requests</code>都将会使用<code>r.encoding</code>的新值。</p>
-<h2 id="二进制响应内容" class="heading-element">
-  <a href="#%e4%ba%8c%e8%bf%9b%e5%88%b6%e5%93%8d%e5%ba%94%e5%86%85%e5%ae%b9" class="heading-mark"></a>二进制响应内容</h2><p>对于非文本请求，也能以字节的方式访问请求响应体。例如，以请求返回的二进制数据创建一张图片，可以使用如下代码：</p>
-<div class="highlight" id="id-8"><div class="chroma">
+<h2 class="heading-element" id="二进制响应内容"><span>二进制响应内容</span>
+  <a href="#%e4%ba%8c%e8%bf%9b%e5%88%b6%e5%93%8d%e5%ba%94%e5%86%85%e5%ae%b9" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>对于非文本请求，也能以字节的方式访问请求响应体。例如，以请求返回的二进制数据创建一张图片，可以使用如下代码：</p>
+<div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -356,10 +249,13 @@
 </span></span><span class="line"><span class="cl"><span class="n">im</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">BytesIO</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">content</span><span class="p">))</span>
 </span></span><span class="line"><span class="cl"><span class="n">im</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></span></span></code></pre></td></tr></table>
 </div>
-</div><p><img loading="lazy" src="/images/202110/1/3.png" alt="/images/202110/1/3.png" srcset="/images/202110/1/3.png?size=small, /images/202110/1/3.png?size=medium 1.5x, /images/202110/1/3.png?size=large 2x" data-title="/images/202110/1/3.png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></p>
-<h2 id="json-响应内容" class="heading-element">
-  <a href="#json-%e5%93%8d%e5%ba%94%e5%86%85%e5%ae%b9" class="heading-mark"></a>JSON 响应内容</h2><p><code>Requests</code>中有一个内置的 JSON 解码器，帮助我们处理 JSON 数据：</p>
-<div class="highlight" id="id-9"><div class="chroma">
+</div><p><img loading="lazy" src='/images/202110/1/3.png' alt="/images/202110/1/3.png"></p>
+<h2 class="heading-element" id="json-响应内容"><span>JSON 响应内容</span>
+  <a href="#json-%e5%93%8d%e5%ba%94%e5%86%85%e5%ae%b9" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p><code>Requests</code>中有一个内置的 JSON 解码器，帮助我们处理 JSON 数据：</p>
+<div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -376,10 +272,13 @@
 </span></span><span class="line"><span class="cl"><span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&#34;http://httpbin.org/get&#34;</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">payload</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl"><span class="n">pprint</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">json</span><span class="p">())</span></span></span></code></pre></td></tr></table>
 </div>
-</div><p><img loading="lazy" src="/images/202110/1/4.png" alt="/images/202110/1/4.png" srcset="/images/202110/1/4.png?size=small, /images/202110/1/4.png?size=medium 1.5x, /images/202110/1/4.png?size=large 2x" data-title="/images/202110/1/4.png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></p>
-<h2 id="定制请求头" class="heading-element">
-  <a href="#%e5%ae%9a%e5%88%b6%e8%af%b7%e6%b1%82%e5%a4%b4" class="heading-mark"></a>定制请求头</h2><p>如果想为请求添加 HTTP 头部，只要简单地传递一个<code>dict</code>给<code>headers</code>参数就可。</p>
-<div class="highlight" id="id-10"><div class="chroma">
+</div><p><img loading="lazy" src='/images/202110/1/4.png' alt="/images/202110/1/4.png"></p>
+<h2 class="heading-element" id="定制请求头"><span>定制请求头</span>
+  <a href="#%e5%ae%9a%e5%88%b6%e8%af%b7%e6%b1%82%e5%a4%b4" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>如果想为请求添加 HTTP 头部，只要简单地传递一个<code>dict</code>给<code>headers</code>参数就可。</p>
+<div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -397,10 +296,13 @@
 </span></span><span class="line"><span class="cl"><span class="n">pprint</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">json</span><span class="p">())</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>如下图所示，<code>User-Agent</code>字段的值已被更改为<code>anthony-agent</code>。</p>
-<p><img loading="lazy" src="/images/202110/1/5.png" alt="/images/202110/1/5.png" srcset="/images/202110/1/5.png?size=small, /images/202110/1/5.png?size=medium 1.5x, /images/202110/1/5.png?size=large 2x" data-title="/images/202110/1/5.png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></p>
-<h2 id="post-请求" class="heading-element">
-  <a href="#post-%e8%af%b7%e6%b1%82" class="heading-mark"></a>POST 请求</h2><p>通常，我们会想要发送一些编码为表单形式的数据——非常像一个 HTML 表单。要实现这个，只需要简单地传递一个字典给<code>data</code>参数。字典数据在发出请求时会自动编码为表单形式：</p>
-<div class="highlight" id="id-11"><div class="chroma">
+<p><img loading="lazy" src='/images/202110/1/5.png' alt="/images/202110/1/5.png"></p>
+<h2 class="heading-element" id="post-请求"><span>POST 请求</span>
+  <a href="#post-%e8%af%b7%e6%b1%82" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>通常，我们会想要发送一些编码为表单形式的数据——非常像一个 HTML 表单。要实现这个，只需要简单地传递一个字典给<code>data</code>参数。字典数据在发出请求时会自动编码为表单形式：</p>
+<div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -415,9 +317,9 @@
 </span></span><span class="line"><span class="cl"><span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&#34;http://httpbin.org/post&#34;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">payload</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl"><span class="nb">print</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">text</span><span class="p">)</span></span></span></code></pre></td></tr></table>
 </div>
-</div><p><img loading="lazy" src="/images/202110/1/6.png" alt="/images/202110/1/6.png" srcset="/images/202110/1/6.png?size=small, /images/202110/1/6.png?size=medium 1.5x, /images/202110/1/6.png?size=large 2x" data-title="/images/202110/1/6.png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></p>
+</div><p><img loading="lazy" src='/images/202110/1/6.png' alt="/images/202110/1/6.png"></p>
 <p>还可以给<code>data</code>参数传入一个元组列表。在表单中多个元素使用同一 key 的时候，这种方式很有用：</p>
-<div class="highlight" id="id-12"><div class="chroma">
+<div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -432,10 +334,13 @@
 </span></span><span class="line"><span class="cl"><span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&#34;http://httpbin.org/post&#34;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">payload</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl"><span class="nb">print</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">text</span><span class="p">)</span></span></span></code></pre></td></tr></table>
 </div>
-</div><p><img loading="lazy" src="/images/202110/1/7.png" alt="/images/202110/1/7.png" srcset="/images/202110/1/7.png?size=small, /images/202110/1/7.png?size=medium 1.5x, /images/202110/1/7.png?size=large 2x" data-title="/images/202110/1/7.png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></p>
-<h2 id="响应状态码" class="heading-element">
-  <a href="#%e5%93%8d%e5%ba%94%e7%8a%b6%e6%80%81%e7%a0%81" class="heading-mark"></a>响应状态码</h2><p>我们可以查看响应状态码：</p>
-<div class="highlight" id="id-13"><div class="chroma">
+</div><p><img loading="lazy" src='/images/202110/1/7.png' alt="/images/202110/1/7.png"></p>
+<h2 class="heading-element" id="响应状态码"><span>响应状态码</span>
+  <a href="#%e5%93%8d%e5%ba%94%e7%8a%b6%e6%80%81%e7%a0%81" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>我们可以查看响应状态码：</p>
+<div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -453,7 +358,7 @@
 </span></span><span class="line"><span class="cl"><span class="c1"># 200</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>为了方便使用，<code>Requests</code>附带了也给内置的状态码查询对象：</p>
-<div class="highlight" id="id-14"><div class="chroma">
+<div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -465,7 +370,7 @@
 </span></span><span class="line"><span class="cl"><span class="c1"># True</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>如果发送了一个错误请求(一个 4XX 客户端错误，或 5XX 服务器错误响应)，我们可以通过<code>Response.raise_for_status()</code>来抛出异常：</p>
-<div class="highlight" id="id-15"><div class="chroma">
+<div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
@@ -513,7 +418,7 @@
 </span></span><span class="line"><span class="cl">HTTPError: <span class="m">404</span> Client Error: NOT FOUND <span class="k">for</span> url: http://httpbin.org/status/404</span></span></code></pre></td></tr></table>
 </div>
 </div><p>但由于我们的例子中<code>r</code>的<code>status_code</code>是 200，当我们调用<code>raise_for_status()</code>时，得到的是：</p>
-<div class="highlight" id="id-16"><div class="chroma">
+<div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -524,9 +429,12 @@
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="c1"># None</span></span></span></code></pre></td></tr></table>
 </div>
-</div><h2 id="响应头" class="heading-element">
-  <a href="#%e5%93%8d%e5%ba%94%e5%a4%b4" class="heading-mark"></a>响应头</h2><p>我们可以查看以字典形式的服务器响应头：</p>
-<div class="highlight" id="id-17"><div class="chroma">
+</div><h2 class="heading-element" id="响应头"><span>响应头</span>
+  <a href="#%e5%93%8d%e5%ba%94%e5%a4%b4" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>我们可以查看以字典形式的服务器响应头：</p>
+<div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -535,9 +443,12 @@
 <pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">In <span class="o">[</span>7<span class="o">]</span>: r.headers
 </span></span><span class="line"><span class="cl">Out<span class="o">[</span>7<span class="o">]</span>: <span class="o">{</span><span class="s1">&#39;Access-Control-Allow-Credentials&#39;</span>: <span class="s1">&#39;true&#39;</span>, <span class="s1">&#39;Access-Control-Allow-Origin&#39;</span>: <span class="s1">&#39;*&#39;</span>, <span class="s1">&#39;Content-Encoding&#39;</span>: <span class="s1">&#39;gzip&#39;</span>, <span class="s1">&#39;Content-Type&#39;</span>: <span class="s1">&#39;application/json&#39;</span>, <span class="s1">&#39;Date&#39;</span>: <span class="s1">&#39;Thu, 03 Oct 2019 07:11:16 GMT&#39;</span>, <span class="s1">&#39;Referrer-Policy&#39;</span>: <span class="s1">&#39;no-referrer-when-downgrade&#39;</span>, <span class="s1">&#39;Server&#39;</span>: <span class="s1">&#39;nginx&#39;</span>, <span class="s1">&#39;X-Content-Type-Options&#39;</span>: <span class="s1">&#39;nosniff&#39;</span>, <span class="s1">&#39;X-Frame-Options&#39;</span>: <span class="s1">&#39;DENY&#39;</span>, <span class="s1">&#39;X-XSS-Protection&#39;</span>: <span class="s1">&#39;1; mode=block&#39;</span>, <span class="s1">&#39;Content-Length&#39;</span>: <span class="s1">&#39;184&#39;</span>, <span class="s1">&#39;Connection&#39;</span>: <span class="s1">&#39;keep-alive&#39;</span><span class="o">}</span></span></span></code></pre></td></tr></table>
 </div>
-</div><h2 id="cookie" class="heading-element">
-  <a href="#cookie" class="heading-mark"></a>Cookie</h2><p>如果某个响应中包含一些 cookie，可以快速访问它们：</p>
-<div class="highlight" id="id-18"><div class="chroma">
+</div><h2 class="heading-element" id="cookie"><span>Cookie</span>
+  <a href="#cookie" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>如果某个响应中包含一些 cookie，可以快速访问它们：</p>
+<div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -557,7 +468,7 @@
 </span></span><span class="line"><span class="cl">Out<span class="o">[</span>21<span class="o">]</span>: <span class="s1">&#39;27315&#39;</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>要想发送 cookies 到服务器，可以使用<code>cookies</code>参数：</p>
-<div class="highlight" id="id-19"><div class="chroma">
+<div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -578,9 +489,12 @@
 </span></span><span class="line"><span class="cl">In <span class="o">[</span>30<span class="o">]</span>: r.json<span class="o">()</span>
 </span></span><span class="line"><span class="cl">Out<span class="o">[</span>30<span class="o">]</span>: <span class="o">{</span><span class="s1">&#39;cookies&#39;</span>: <span class="o">{</span><span class="s1">&#39;cookies_are&#39;</span>: <span class="s1">&#39;working&#39;</span><span class="o">}}</span></span></span></code></pre></td></tr></table>
 </div>
-</div><h2 id="超时" class="heading-element">
-  <a href="#%e8%b6%85%e6%97%b6" class="heading-mark"></a>超时</h2><p>可以告诉<code>Requests</code>在经过以<code>timeout</code>参数设定的秒数时间之后停止等待响应。</p>
-<div class="highlight" id="id-20"><div class="chroma">
+</div><h2 class="heading-element" id="超时"><span>超时</span>
+  <a href="#%e8%b6%85%e6%97%b6" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>可以告诉<code>Requests</code>在经过以<code>timeout</code>参数设定的秒数时间之后停止等待响应。</p>
+<div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -593,15 +507,21 @@
 </span></span><span class="line"><span class="cl">  File <span class="s2">&#34;&lt;stdin&gt;&#34;</span>, line 1, in &lt;module&gt;
 </span></span><span class="line"><span class="cl">requests.exceptions.Timeout: HTTPConnectionPool<span class="o">(</span><span class="nv">host</span><span class="o">=</span><span class="s1">&#39;github.com&#39;</span>, <span class="nv">port</span><span class="o">=</span>80<span class="o">)</span>: Request timed out. <span class="o">(</span><span class="nv">timeout</span><span class="o">=</span>0.001<span class="o">)</span></span></span></code></pre></td></tr></table>
 </div>
-</div><h2 id="错误与异常" class="heading-element">
-  <a href="#%e9%94%99%e8%af%af%e4%b8%8e%e5%bc%82%e5%b8%b8" class="heading-mark"></a>错误与异常</h2><p>遇到网络问题(如：DNS 查询失败、拒绝连接等)时，<code>Requests</code>会抛出一个<code>ConnectionError</code>异常。</p>
+</div><h2 class="heading-element" id="错误与异常"><span>错误与异常</span>
+  <a href="#%e9%94%99%e8%af%af%e4%b8%8e%e5%bc%82%e5%b8%b8" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>遇到网络问题(如：DNS 查询失败、拒绝连接等)时，<code>Requests</code>会抛出一个<code>ConnectionError</code>异常。</p>
 <p>如果 HTTP 请求返回了不成功的状态码， <code>Response.raise_for_status()</code>会抛出一个<code>HTTPError</code>异常。</p>
 <p>若请求超时，则抛出一个<code>Timeout</code>异常。</p>
 <p>若请求超过了设定的最大重定向次数，则会抛出一个<code>TooManyRedirects</code>异常。</p>
 <p>所有<code>Requests</code>显式抛出的异常都继承自 <code>requests.exceptions.RequestException</code> 。</p>
-<h2 id="代理" class="heading-element">
-  <a href="#%e4%bb%a3%e7%90%86" class="heading-mark"></a>代理</h2><p>如果需要使用代理，可以通过任意请求方法提供<code>proxies</code>参数来配置单个请求：</p>
-<div class="highlight" id="id-21"><div class="chroma">
+<h2 class="heading-element" id="代理"><span>代理</span>
+  <a href="#%e4%bb%a3%e7%90%86" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>如果需要使用代理，可以通过任意请求方法提供<code>proxies</code>参数来配置单个请求：</p>
+<div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
@@ -627,7 +547,7 @@
 </span></span><span class="line"><span class="cl"><span class="c1"># 200</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>也可以通过环境变量<code>HTTP_PROXY</code>和<code>HTTPS_PROXY</code>来配置代理。</p>
-<div class="highlight" id="id-22"><div class="chroma">
+<div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -644,8 +564,11 @@
 </span></span><span class="line"><span class="cl">&gt;&gt;&gt; import requests
 </span></span><span class="line"><span class="cl">&gt;&gt;&gt; requests.get<span class="o">(</span><span class="s2">&#34;http://example.org&#34;</span><span class="o">)</span></span></span></code></pre></td></tr></table>
 </div>
-</div><h2 id="参考" class="heading-element">
-  <a href="#%e5%8f%82%e8%80%83" class="heading-mark"></a>参考</h2><ul>
+</div><h2 class="heading-element" id="参考"><span>参考</span>
+  <a href="#%e5%8f%82%e8%80%83" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><ul>
 <li><a href="https://requests-docs-cn.readthedocs.io/zh_CN/latest/index.html"target="_blank" rel="external nofollow noopener noreferrer">https://requests-docs-cn.readthedocs.io/zh_CN/latest/index.html</a></li>
 </ul></div><div class="post-footer" id="post-footer">
   <div class="post-info">
@@ -653,14 +576,14 @@
       <div class="post-info-mod">
         <span title="更新于 2021-10-08 08:26:24">更新于 2021-10-08&nbsp;</span>
       </div></div><div class="post-info-line">
-        <div class="post-info-md"></div>
+        <div class="post-info-md"><span><a href="vscode://file/D:%5chugo-blog%5candyfree96%5ccontent%5cposts%5cRequests%e5%ba%93%e4%bd%bf%e7%94%a8.md" title="在编辑器中打开"target="_blank" rel="external nofollow noopener noreferrer" class="link-to-vscode">在编辑器中打开</a></span></div>
         <div class="post-info-share">
-          <span><a href="javascript:void(0);" title="分享到 Twitter" data-sharer="twitter" data-url="http://localhost:1313/requests%E5%BA%93%E4%BD%BF%E7%94%A8/" data-title="Requests库使用" data-via="IRONAnthony96" data-hashtags="Python,Requests,HTTP"><i class="fa-brands fa-twitter fa-fw" aria-hidden="true"></i></a>
+          <span><a href="javascript:void(0);" title="分享到 X" data-sharer="twitter" data-url="http://localhost:1313/requests%E5%BA%93%E4%BD%BF%E7%94%A8/" data-title="Requests库使用" data-via="IRONAnthony96" data-hashtags="Python,Requests,HTTP"><i class="fa-brands fa-x-twitter fa-fw" aria-hidden="true"></i></a>
   <a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="http://localhost:1313/requests%E5%BA%93%E4%BD%BF%E7%94%A8/" data-hashtag="Python"><i class="fa-brands fa-facebook-square fa-fw" aria-hidden="true"></i></a>
   <a href="javascript:void(0);" title="分享到 WhatsApp" data-sharer="whatsapp" data-url="http://localhost:1313/requests%E5%BA%93%E4%BD%BF%E7%94%A8/" data-title="Requests库使用" data-web><i class="fa-brands fa-whatsapp fa-fw" aria-hidden="true"></i></a>
-  <a href="javascript:void(0);" title="分享到 Line" data-sharer="line" data-url="http://localhost:1313/requests%E5%BA%93%E4%BD%BF%E7%94%A8/" data-title="Requests库使用"><i data-svg-src="/lib/simple-icons/icons/line.min.svg" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 Line" data-sharer="line" data-url="http://localhost:1313/requests%E5%BA%93%E4%BD%BF%E7%94%A8/" data-title="Requests库使用"><svg class="icon" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>LINE</title><path d="M19.365 9.863c.349.0.63.285.63.631.0.345-.281.63-.63.63H17.61v1.125h1.755c.349.0.63.283.63.63.0.344-.281.629-.63.629h-2.386c-.345.0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63h2.386c.346.0.627.285.627.63.0.349-.281.63-.63.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211.0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346.0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195.0.375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345.0.63.285.63.63v4.771zm-5.741.0c0 .344-.282.629-.631.629-.345.0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63.346.0.628.285.628.63v4.771zm-2.466.629H4.917c-.345.0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348.0.63.285.63.63v4.141h1.756c.348.0.629.283.629.63.0.344-.282.629-.629.629M24 10.314C24 4.943 18.615.572 12 .572S0 4.943.0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314"/></svg></a>
   <a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="http://localhost:1313/requests%E5%BA%93%E4%BD%BF%E7%94%A8/" data-title="Requests库使用" data-image="/images/202110/1/steve-johnson-UaP_MmMxiTs-unsplash.jpg"><i class="fa-brands fa-weibo fa-fw" aria-hidden="true"></i></a>
-  <a href="javascript:void(0);" title="分享到 Myspace" data-sharer="myspace" data-url="http://localhost:1313/requests%E5%BA%93%E4%BD%BF%E7%94%A8/" data-title="Requests库使用" data-description=""><i data-svg-src="/lib/simple-icons/icons/myspace.min.svg" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 Myspace" data-sharer="myspace" data-url="http://localhost:1313/requests%E5%BA%93%E4%BD%BF%E7%94%A8/" data-title="Requests库使用" data-description=""><svg class="icon" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>Myspace</title><path d="M19.802 12.274A3.811 3.811.0 0023.62 8.47c0-2.101-1.71-3.795-3.818-3.795a3.816 3.816.0 00-3.818 3.81 3.817 3.817.0 003.818 3.811zm-8.602.705a3.43 3.43.0 003.435-3.424A3.43 3.43.0 0011.2 6.13 3.44 3.44.0 007.764 9.566 3.436 3.436.0 0011.2 13zm-7.8.635c1.71.0 3.093-1.38 3.093-3.081.0-1.704-1.395-3.084-3.105-3.084A3.086 3.086.0 00.3 10.539c0 1.7 1.387 3.078 3.095 3.078zm0 .705c-1.96.0-3.4 1.717-3.4 3.495v1.196c0 .17.138.31.31.31h6.18a.31.31.0 00.309-.31v-1.196c0-1.779-1.437-3.5-3.398-3.5zm7.8-.56c-2.18.0-3.78 1.915-3.78 3.891v1.331c0 .188.156.344.345.344h6.87a.344.344.0 00.342-.344V17.65c0-1.976-1.598-3.891-3.777-3.891zm8.602-.617c-2.422.0-4.197 2.126-4.197 4.323v1.477c0 .21.172.381.382.381h7.63c.21.0.383-.171.383-.381v-1.477c-.001-2.197-1.776-4.323-4.198-4.323z"/></svg></a>
   <a href="javascript:void(0);" title="分享到 Blogger" data-sharer="blogger" data-url="http://localhost:1313/requests%E5%BA%93%E4%BD%BF%E7%94%A8/" data-title="Requests库使用" data-description=""><i class="fa-brands fa-blogger fa-fw" aria-hidden="true"></i></a>
   <a href="javascript:void(0);" title="分享到 Evernote" data-sharer="evernote" data-url="http://localhost:1313/requests%E5%BA%93%E4%BD%BF%E7%94%A8/" data-title="Requests库使用"><i class="fa-brands fa-evernote fa-fw" aria-hidden="true"></i></a>
   </span>
@@ -672,29 +595,26 @@
     <section>
       <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
     </section>
-  </div>
-
-  <div class="post-nav"><a href="/matplotlib%E7%AE%80%E6%98%8E%E6%95%99%E7%A8%8B/" class="post-nav-item" rel="prev" title="Matplotlib简明教程"><i class="fa-solid fa-angle-left fa-fw" aria-hidden="true"></i>Matplotlib简明教程</a>
-      <a href="/beautifulsoup%E5%BA%93%E4%BD%BF%E7%94%A8/" class="post-nav-item" rel="next" title="BeautifulSoup库使用">BeautifulSoup库使用<i class="fa-solid fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
+  </div><div class="post-nav"><a href="/matplotlib%E7%AE%80%E6%98%8E%E6%95%99%E7%A8%8B/" class="post-nav-item" rel="prev" title="Matplotlib简明教程"><i class="fa-solid fa-angle-left fa-fw" aria-hidden="true"></i>Matplotlib简明教程</a><a href="/beautifulsoup%E5%BA%93%E4%BD%BF%E7%94%A8/" class="post-nav-item" rel="next" title="BeautifulSoup库使用">BeautifulSoup库使用<i class="fa-solid fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
 </div>
 <div class="post-reward">
     <div class="comment">请作者喝杯咖啡!</div>
     <input type="checkbox" class="reward-input" name="reward" id="fi-reward" hidden />
-    <label class="reward-button" for="fi-reward">赞赏</label>
-    <div class="reward-ways" data-mode="static"><div><img loading="lazy" src="/reward/alipay.png" alt="AndyFree96 支付宝" data-title="AndyFree96 支付宝" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/><span data-animation>支付宝</span>
-          </div><div><img loading="lazy" src="/reward/wechatpay.png" alt="AndyFree96 微信" data-title="AndyFree96 微信" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/><span data-animation>微信</span>
+    <label class="reward-button" for="fi-reward"><i class="fa-solid fa-qrcode fa-fw" aria-hidden="true"></i>赞赏</label>
+    <div class="reward-ways" data-mode="static"><div><img src='/reward/alipay.png' alt="AndyFree96 支付宝"><span data-animation>支付宝</span>
+          </div><div><img src='/reward/wechatpay.png' alt="AndyFree96 微信"><span data-animation>微信</span>
           </div></div>
   </div></article>
 
   <aside class="toc" id="toc-auto" aria-label="目录"><h2 class="toc-title">目录&nbsp;<i class="toc-icon fa-solid fa-angle-down fa-fw" aria-hidden="true"></i></h2>
       <div class="toc-content" id="toc-content-auto"></div></aside></main><footer class="footer">
-    <div class="footer-container"><div class="footer-line powered">由 <a href="https://gohugo.io/" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.135.0"><img class="hugo-icon" src="/images/hugo.min.svg" alt="Hugo logo" /> Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/hugo-fixit/FixIt" target="_blank" rel="external" title="FixIt v0.3.2"><img class="fixit-icon" src="/images/fixit.min.svg" alt="FixIt logo" /> FixIt</a>
+    <div class="footer-container"><div class="footer-line powered">由 <a href="https://gohugo.io/" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.148.2"><img class="hugo-icon" src="/images/hugo.min.svg" alt="Hugo logo" /> Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/hugo-fixit/FixIt" target="_blank" rel="external" title="FixIt v0.3.20"><img class="fixit-icon" src="/images/fixit.min.svg" alt="FixIt logo" /> FixIt</a>
         </div><div class="footer-line copyright" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright fa-fw" aria-hidden="true"></i>
             <span itemprop="copyrightYear">2025</span><span class="author" itemprop="copyrightHolder">
               <a href="https://andyfree96.github.io/"target="_blank" rel="external nofollow noopener noreferrer">AndyFree96</a></span></div></div>
   </footer></div><div class="widgets"><div class="fixed-buttons animate__faster d-none"><div class="fixed-button back-to-top" role="button" aria-label="回到顶部"><i class="fa-solid fa-arrow-up fa-fw" aria-hidden="true"></i><span class="variant-numeric d-none">0%</span>
         </div></div><div id="mask"></div><div class="reading-progress-bar" style="left: 0;top: 0;"></div><noscript>
-    <div class="noscript-warning">FixIt 主题在启用 JavaScript 的情况下效果最佳。</div>
+    <div class="noscript-warning">该网站在启用 JavaScript 的情况下效果最佳。</div>
   </noscript>
-</div><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script src="/lib/sharer/sharer.min.js" async defer></script><script src="/lib/cookieconsent/cookieconsent.min.js" defer></script><script>window.config={"code":{"copyTitle":"复制到剪贴板","editLockTitle":"锁定可编辑代码块","editUnLockTitle":"解锁可编辑代码块","editable":true,"maxShownLines":10},"comment":{"enable":false},"cookieconsent":{"content":{"dismiss":"同意","link":"了解更多","message":"本网站使用 Cookies 来改善您的浏览体验。"},"enable":true,"palette":{"button":{"background":"#f0f0f0"},"popup":{"background":"#1aa3ff"}},"theme":"edgeless"}};</script><script src="/js/theme.min.js" defer></script></body>
+</div><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script src="/lib/sharer/sharer.min.js" async defer></script><script src="/lib/cookieconsent/cookieconsent.min.js" defer></script><script>window.config={"code":{"copyTitle":"复制到剪贴板","editLockTitle":"锁定可编辑代码块","editUnLockTitle":"解锁可编辑代码块","editable":true,"maxShownLines":10},"comment":{"enable":false},"cookieconsent":{"content":{"dismiss":"同意","link":"了解更多","message":"本网站使用 Cookies 来改善您的浏览体验。"},"enable":true,"palette":{"button":{"background":"#f0f0f0"},"popup":{"background":"#1aa3ff"}},"theme":"edgeless"},"version":"v0.3.20"};console.log('Page config:', window.config);</script><script src="/js/theme.min.js" defer></script></body>
 </html>

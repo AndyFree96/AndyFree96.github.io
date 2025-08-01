@@ -1,36 +1,36 @@
-# json-server源码剖析：快速构建REST API背后的原理
+# Json-Server源码剖析：快速构建REST API背后的原理
 
 
 在前端开发中，构建一套完整的后端接口往往耗时费力，而 [json-server](https://github.com/typicode/json-server)正是为了解决这一痛点而生。只需一个 JSON 文件，它就能快速生成一个 REST API 服务，被广泛用于前端开发、原型验证、接口测试等场景。本文将深入剖析 [json-server](https://github.com/typicode/json-server)的源码，一起理解它是如何工作的，并从中学习一些开发技巧。
 
-&lt;!--more--&gt;
+<!--more-->
 
 ## 一个简单但不完整的实现
 
 由于有一些 Express 的使用经验，在阅读了[json-server](https://github.com/typicode/json-server)的 README.md 介绍后，我的初始想法是将`db.json`文件加载然后遍历对象，将`key`作为路由的 Endpoint 即可，由于有了以下代码：
 
 ```typescript {data-open=true}
-import dbJson from &#39;./fixtures/db.json&#39;;
-import express from &#39;express&#39;;
-import { json } from &#39;milliparsec&#39;;
-import crypto from &#39;crypto&#39;;
-import chalk from &#39;chalk&#39;;
-import { Eta } from &#39;eta&#39;;
-import { fileURLToPath } from &#39;url&#39;;
-import { dirname, join } from &#39;path&#39;;
+import dbJson from './fixtures/db.json';
+import express from 'express';
+import { json } from 'milliparsec';
+import crypto from 'crypto';
+import chalk from 'chalk';
+import { Eta } from 'eta';
+import { fileURLToPath } from 'url';
+import { dirname, join } from 'path';
 
 const PORT = 3001;
 const app = new express();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const eta = new Eta({
-  views: join(__dirname, &#39;views&#39;),
+  views: join(__dirname, 'views'),
 
   cache: true,
 });
 app.use(json());
 
-const kaomojis = [&#39;(˶ᵔ ᵕ ᵔ˶)&#39;, &#39;(˶ˆᗜˆ˵)&#39;, &#39;(˶˃ ᵕ ˂˶)&#39;, &#39;( ∩´͈ ᐜ `͈∩)&#39;];
+const kaomojis = ['(˶ᵔ ᵕ ᵔ˶)', '(˶ˆᗜˆ˵)', '(˶˃ ᵕ ˂˶)', '( ∩´͈ ᐜ `͈∩)'];
 
 function randomEmoji() {
   return kaomojis[Math.floor(Math.random() * kaomojis.length)];
@@ -44,20 +44,20 @@ console.log(chalk.magenta(randomEmoji()));
 for (const key in dbJson) {
   routes.push(`${key}`);
 
-  app.get(`/${key}`, (_, res) =&gt; {
+  app.get(`/${key}`, (_, res) => {
     res.json(dbJson[key]);
   });
 
-  app.get(`/${key}/:id`, (req, res) =&gt; {
+  app.get(`/${key}/:id`, (req, res) => {
     const { id } = req.params;
     let findById = [];
     if (Array.isArray(dbJson[key])) {
-      findById = res.json(dbJson[key].find((item) =&gt; item.id === id));
+      findById = res.json(dbJson[key].find((item) => item.id === id));
     }
     res.json(findById);
   });
 
-  app.post(`/${key}`, (req, res) =&gt; {
+  app.post(`/${key}`, (req, res) => {
     const { body } = req;
     if (!body.id) {
       body.id = crypto.randomUUID();
@@ -70,44 +70,44 @@ for (const key in dbJson) {
     res.json(body);
   });
 
-  app.put(`/${key}/:id`, (req, res) =&gt; {
+  app.put(`/${key}/:id`, (req, res) => {
     const { id } = req.params;
     const { body } = req;
-    const index = dbJson[key].findIndex((item) =&gt; item.id === id);
+    const index = dbJson[key].findIndex((item) => item.id === id);
     if (index !== -1) {
       dbJson[key][index] = body;
       res.json(body);
     } else {
-      res.status(404).json({ error: &#39;Not found&#39; });
+      res.status(404).json({ error: 'Not found' });
     }
   });
 
-  app.delete(`/${key}/:id`, (req, res) =&gt; {
+  app.delete(`/${key}/:id`, (req, res) => {
     const { id } = req.params;
-    const index = dbJson[key].findIndex((item) =&gt; item.id === id);
+    const index = dbJson[key].findIndex((item) => item.id === id);
     if (index !== -1) {
       dbJson[key].splice(index, 1);
-      res.json({ message: &#39;Deleted&#39; });
+      res.json({ message: 'Deleted' });
     } else {
-      res.status(404).json({ error: &#39;Not found&#39; });
+      res.status(404).json({ error: 'Not found' });
     }
   });
 }
 
-app.get(&#39;/&#39;, (_, res) =&gt; {
+app.get('/', (_, res) => {
   const renderedData = {
     data: dbJson,
   };
-  const renderedTemplate = eta.render(&#39;index.html&#39;, renderedData);
+  const renderedTemplate = eta.render('index.html', renderedData);
   res.send(renderedTemplate);
 });
 
-console.log(&#39;\n&#39;);
-console.log(chalk.bold(&#39;Endpoints:&#39;));
+console.log('\n');
+console.log(chalk.bold('Endpoints:'));
 console.log(
   routes
-    .map((route) =&gt; `${chalk.gray(baseUrl)}/${chalk.blue(route)}`)
-    .join(&#39;\n&#39;)
+    .map((route) => `${chalk.gray(baseUrl)}/${chalk.blue(route)}`)
+    .join('\n')
 );
 app.listen(PORT);
 ```
@@ -139,8 +139,8 @@ app.listen(PORT);
 [json-server](https://github.com/typicode/json-server)是如何做到的？查看`package.json`文件，可以看到这段配置：
 
 ```json
-  &#34;bin&#34;: {
-    &#34;json-server&#34;: &#34;lib/bin.js&#34;
+  "bin": {
+    "json-server": "lib/bin.js"
   }
 ```
 
@@ -149,22 +149,22 @@ app.listen(PORT);
 然而，Clone 下来的源码中并没有`lib/bin.js`文件。查看`package.json`文件，可以看到这段配置：
 
 ```json
-  &#34;scripts&#34;: {
-    &#34;build&#34;: &#34;rm -rf lib &amp;&amp; tsc&#34;,
+  "scripts": {
+    "build": "rm -rf lib && tsc",
   }
 ```
 
 当运行`npm run build`时，npm 会执行对应的脚本命令：
 
 ```bash
-rm -rf lib &amp;&amp; tsc
+rm -rf lib && tsc
 ```
 
-`rm -rf lib`会删除`lib`目录及其所有内容（如果存在）。`&amp;&amp;`是一个 Bash 连接符，表示其哪一个命令成功后再执行后一个。`tsc`会更具`tsconfig.json`把`src`目录中的`.ts`文件编译成`.js`文件，输出到`lib`目录（或者在`tsconfig`中设置的目录）。
+`rm -rf lib`会删除`lib`目录及其所有内容（如果存在）。`&&`是一个 Bash 连接符，表示其哪一个命令成功后再执行后一个。`tsc`会根据`tsconfig.json`把`src`目录中的`.ts`文件编译成`.js`文件，输出到`lib`目录（或者在`tsconfig`中设置的目录）。
 
 执行`npm run build`生成`lib`目录中包含了`bin.js`文件。
 
-`bin.js`顶部有以下[Shebang](&lt;https://www.wikiwand.com/en/articles/Shebang_(Unix)&gt;)：
+`bin.js`顶部有以下[Shebang](<https://www.wikiwand.com/en/articles/Shebang_(Unix)>)：
 
 ```bash
 #!/usr/bin/env node
@@ -180,32 +180,32 @@ rm -rf lib &amp;&amp; tsc
 
   // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
 
-  &#34;version&#34;: &#34;0.2.0&#34;,
+  "version": "0.2.0",
 
-  &#34;configurations&#34;: [
+  "configurations": [
     {
-      &#34;type&#34;: &#34;node&#34;,
+      "type": "node",
 
-      &#34;request&#34;: &#34;launch&#34;,
+      "request": "launch",
 
-      &#34;name&#34;: &#34;tsx&#34;,
+      "name": "tsx",
 
-      &#34;program&#34;: &#34;${workspaceFolder}/src/bin.ts&#34;,
+      "program": "${workspaceFolder}/src/bin.ts",
 
-      &#34;runtimeExecutable&#34;: &#34;tsx&#34;,
+      "runtimeExecutable": "tsx",
 
-      &#34;console&#34;: &#34;integratedTerminal&#34;,
+      "console": "integratedTerminal",
 
-      &#34;internalConsoleOptions&#34;: &#34;neverOpen&#34;,
+      "internalConsoleOptions": "neverOpen",
 
-      &#34;args&#34;: [&#34;${workspaceFolder}/fixtures/db.json&#34;], // Files to exclude from debugger (e.g. call stack)
+      "args": ["${workspaceFolder}/fixtures/db.json"], // Files to exclude from debugger (e.g. call stack)
 
-      &#34;skipFiles&#34;: [
+      "skipFiles": [
         // Node.js internal core modules
 
-        &#34;&lt;node_internals&gt;/**&#34;, // Ignore all dependencies (optional)
+        "<node_internals>/**", // Ignore all dependencies (optional)
 
-        &#34;${workspaceFolder}/node_modules/**&#34;
+        "${workspaceFolder}/node_modules/**"
       ]
     }
   ]
@@ -231,30 +231,30 @@ function args(): {
     const { values, positionals } = parseArgs({
       options: {
         port: {
-          type: &#39;string&#39;,
-          short: &#39;p&#39;,
-          default: process.env[&#39;PORT&#39;] ?? &#39;3000&#39;,
+          type: 'string',
+          short: 'p',
+          default: process.env['PORT'] ?? '3000',
         },
         host: {
-          type: &#39;string&#39;,
-          short: &#39;h&#39;,
-          default: process.env[&#39;HOST&#39;] ?? &#39;localhost&#39;,
+          type: 'string',
+          short: 'h',
+          default: process.env['HOST'] ?? 'localhost',
         },
         static: {
-          type: &#39;string&#39;,
-          short: &#39;s&#39;,
+          type: 'string',
+          short: 's',
           multiple: true,
           default: [],
         },
         help: {
-          type: &#39;boolean&#39;,
+          type: 'boolean',
         },
         version: {
-          type: &#39;boolean&#39;,
+          type: 'boolean',
         }, // Deprecated
         watch: {
-          type: &#39;boolean&#39;,
-          short: &#39;w&#39;,
+          type: 'boolean',
+          short: 'w',
         },
       },
       allowPositionals: true,
@@ -262,8 +262,8 @@ function args(): {
     if (values.version) {
       const pkg = JSON.parse(
         readFileSync(
-          fileURLToPath(new URL(&#39;../package.json&#39;, import.meta.url)),
-          &#39;utf-8&#39;
+          fileURLToPath(new URL('../package.json', import.meta.url)),
+          'utf-8'
         )
       ) as PackageJson;
       console.log(pkg.version);
@@ -273,7 +273,7 @@ function args(): {
     if (values.watch) {
       console.log(
         chalk.yellow(
-          &#39;--watch/-w can be omitted, JSON Server 1&#43; watches for file changes by default&#39;
+          '--watch/-w can be omitted, JSON Server 1+ watches for file changes by default'
         )
       );
     }
@@ -284,15 +284,15 @@ function args(): {
     } // App args and options
 
     return {
-      file: positionals[0] ?? &#39;&#39;,
+      file: positionals[0] ?? '',
       port: parseInt(values.port as string),
       host: values.host as string,
       static: values.static as string[],
     };
   } catch (e) {
-    if ((e as NodeJS.ErrnoException).code === &#39;ERR_PARSE_ARGS_UNKNOWN_OPTION&#39;) {
+    if ((e as NodeJS.ErrnoException).code === 'ERR_PARSE_ARGS_UNKNOWN_OPTION') {
       console.log(
-        chalk.red((e as NodeJS.ErrnoException).message.split(&#39;.&#39;)[0])
+        chalk.red((e as NodeJS.ErrnoException).message.split('.')[0])
       );
       help();
       process.exit(1);
@@ -307,7 +307,7 @@ function args(): {
 
 ```typescript {data-open=true}
 return {
-  file: positionals[0] ?? &#39;&#39;,
+  file: positionals[0] ?? '',
   port: parseInt(values.port as string),
   host: values.host as string,
   static: values.static as string[],
@@ -329,21 +329,21 @@ const { file, port, host, static: staticArr } = args();
 ```typescript {data-open=true}
 // Set up database
 
-let adapter: Adapter&lt;Data&gt;;
+let adapter: Adapter<Data>;
 
-if (extname(file) === &#39;.json5&#39;) {
-  adapter = new DataFile&lt;Data&gt;(file, {
+if (extname(file) === '.json5') {
+  adapter = new DataFile<Data>(file, {
     parse: JSON5.parse,
 
     stringify: JSON5.stringify,
   });
 } else {
-  adapter = new JSONFile&lt;Data&gt;(file);
+  adapter = new JSONFile<Data>(file);
 }
 
 const observer = new Observer(adapter);
 
-const db = new Low&lt;Data&gt;(observer, {});
+const db = new Low<Data>(observer, {});
 
 await db.read();
 
@@ -351,21 +351,21 @@ await db.read();
 
 let writing = false; // true if the file is being written to by the app
 
-let prevEndpoints = &#39;&#39;;
+let prevEndpoints = '';
 
-observer.onWriteStart = () =&gt; {
+observer.onWriteStart = () => {
   writing = true;
 };
 
-observer.onWriteEnd = () =&gt; {
+observer.onWriteEnd = () => {
   writing = false;
 };
 
-observer.onReadStart = () =&gt; {
+observer.onReadStart = () => {
   prevEndpoints = JSON.stringify(Object.keys(db.data).sort());
 };
 
-observer.onReadEnd = (data) =&gt; {
+observer.onReadEnd = (data) => {
   if (data === null) {
     return;
   }
@@ -380,45 +380,45 @@ observer.onReadEnd = (data) =&gt; {
 };
 ```
 
-短短的十几行代码已经用到了至少 3 中设计模式：策略模式（Strategy Pattern）、适配器模式（Adapter Pattern）和观察者模式（Observer Pattern）。
+短短的十几行代码已经用到了至少 3 中设计模式：==策略模式（Strategy Pattern）==[primary]、==适配器模式（Adapter Pattern）==[primary]和==观察者模式（Observer Pattern）==[primary]。
 
-策略模式目的是在运行时选择行为。这里通过文件扩展名（`.json5`或`.json`）决定使用不同的`adapter`，在运行时动态选择具体的解析策略。
+==策略模式==[primary]目的是在运行时选择行为。这里通过文件扩展名（`.json5`或`.json`）决定使用不同的`adapter`，在运行时动态选择具体的解析策略。
 
-适配器模式目的是将一个接口转换为所期望的另一个接口。`DataFile&lt;Data&gt;`和`JSONFile&lt;Data&gt;`都实现`Adapter&lt;Data&gt;`接口。它们将底层文件读写（如 JSON、JSON5）都转换成统一的接口，供`Low`类使用。
+==适配器模式==[primary]目的是将一个接口转换为所期望的另一个接口。`DataFile<Data>`和`JSONFile<Data>`都实现`Adapter<Data>`接口。它们将底层文件读写（如 JSON、JSON5）都转换成统一的接口，供`Low`类使用。
 
-观察者模式目的是当被观察者状态变化时，通知所有注册的观察者。`Observer`对象通过注册回调函数监听数据的读取与写入事件。当数据库操作发生时，回调自动执行，实现“事件驱动”响应。[lowdb](https://github.com/typicode/lowdb)的 README.md 文件，有这样的描述：当调用`db.read()`时，会调用`adapter.read()`；当调用`db.write()`时，会调用`adapter.write()`。
+==观察者模式==[primary]目的是当被观察者状态变化时，通知所有注册的观察者。`Observer`对象通过注册回调函数监听数据的读取与写入事件。当数据库操作发生时，回调自动执行，实现“事件驱动”响应。[lowdb](https://github.com/typicode/lowdb)的 README.md 文件，有这样的描述：当调用`db.read()`时，会调用`adapter.read()`；当调用`db.write()`时，会调用`adapter.write()`。
 
 ![](/images/202507/2/bb4209475193a5bec0c25709b87b54b0_MD5.jpeg)
 
 `Adapter`接口原本只有`read`和`write`两个方法：
 
 ```typescript {data-open=true}
-export interface Adapter&lt;T&gt; {
-  read: () =&gt; Promise&lt;T | null&gt;;
+export interface Adapter<T> {
+  read: () => Promise<T | null>;
 
-  write: (data: T) =&gt; Promise&lt;void&gt;;
+  write: (data: T) => Promise<void>;
 }
 ```
 
 为了不让`Observer`破环这种调用关系：
 
-&gt; 当调用`db.read()`时，会调用`adapter.read()`；当调用`db.write()`时，会调用`adapter.write()`。
+> 当调用`db.read()`时，会调用`adapter.read()`；当调用`db.write()`时，会调用`adapter.write()`。
 
 `Observer`必定也需要有`read`和`write`方法。`src/observer.ts`的`Observer`类定义如下：
 
 ```typescript {data-open=true}
-import { Adapter } from &#39;lowdb&#39;;
+import { Adapter } from 'lowdb';
 
 // Lowdb adapter to observe read/write events
 
-export class Observer&lt;T&gt; {
+export class Observer<T> {
   #adapter;
 
   onReadStart = function () {
     return;
   };
 
-  onReadEnd: (data: T | null) =&gt; void = function () {
+  onReadEnd: (data: T | null) => void = function () {
     return;
   };
 
@@ -430,7 +430,7 @@ export class Observer&lt;T&gt; {
     return;
   };
 
-  constructor(adapter: Adapter&lt;T&gt;) {
+  constructor(adapter: Adapter<T>) {
     this.#adapter = adapter;
   }
 
@@ -461,31 +461,31 @@ export class Observer&lt;T&gt; {
 到目前为止都没有涉及到`db.write`操作，那么会在哪儿呢？仔细分析一下就知道要在`POST`、`PUT`、`DELETE`等请求时进行`db.write`操作。而对应的路由定义在`src/app.ts`中：
 
 ```typescript {data-open=true}
-app.post(&#39;/:name&#39;, async (req, res, next) =&gt; {
-  const { name = &#39;&#39; } = req.params;
+app.post('/:name', async (req, res, next) => {
+  const { name = '' } = req.params;
 
   if (isItem(req.body)) {
-    res.locals[&#39;data&#39;] = await service.create(name, req.body);
+    res.locals['data'] = await service.create(name, req.body);
   }
 
   next?.();
 });
 
-app.put(&#39;/:name&#39;, async (req, res, next) =&gt; {
-  const { name = &#39;&#39; } = req.params;
+app.put('/:name', async (req, res, next) => {
+  const { name = '' } = req.params;
 
   if (isItem(req.body)) {
-    res.locals[&#39;data&#39;] = await service.update(name, req.body);
+    res.locals['data'] = await service.update(name, req.body);
   }
 
   next?.();
 });
 
-app.put(&#39;/:name/:id&#39;, async (req, res, next) =&gt; {
-  const { name = &#39;&#39;, id = &#39;&#39; } = req.params;
+app.put('/:name/:id', async (req, res, next) => {
+  const { name = '', id = '' } = req.params;
 
   if (isItem(req.body)) {
-    res.locals[&#39;data&#39;] = await service.updateById(name, id, req.body);
+    res.locals['data'] = await service.updateById(name, id, req.body);
   }
 
   next?.();
@@ -499,9 +499,9 @@ app.put(&#39;/:name/:id&#39;, async (req, res, next) =&gt; {
 
     name: string,
 
-    data: Omit&lt;Item, &#39;id&#39;&gt; = {},
+    data: Omit<Item, 'id'> = {},
 
-  ): Promise&lt;Item | undefined&gt; {
+  ): Promise<Item | undefined> {
 
     const items = this.#get(name)
 
@@ -533,14 +533,14 @@ app.put(&#39;/:name/:id&#39;, async (req, res, next) =&gt; {
 `src/bin.ts`有这么一段：
 
 ```typescript {data-open=true}
-watch(file).on(&#39;change&#39;, () =&gt; {
+watch(file).on('change', () => {
   // Do no reload if the file is being written to by the app
 
   if (!writing) {
-    db.read().catch((e) =&gt; {
+    db.read().catch((e) => {
       if (e instanceof SyntaxError) {
         return console.log(
-          chalk.red([&#39;&#39;, `Error parsing ${file}`, e.message].join(&#39;\n&#39;))
+          chalk.red(['', `Error parsing ${file}`, e.message].join('\n'))
         );
       }
 
@@ -550,17 +550,17 @@ watch(file).on(&#39;change&#39;, () =&gt; {
 });
 ```
 
-`watch(file)`会一直监视`file`文件（也就是`db.json`）。一旦文件有改变，`on(&#39;change&#39;, () =&gt; {...}`中的匿名函数就会被调用。首先会检查数据库没有在写入（即此时没有`POST`、`PUT`、`DELETE`等请求），没有写入的话就可以调用`db.read()`，毕竟文件改变了嘛 😂！
+`watch(file)`会一直监视`file`文件（也就是`db.json`）。一旦文件有改变，`on('change', () => {...}`中的匿名函数就会被调用。首先会检查数据库没有在写入（即此时没有`POST`、`PUT`、`DELETE`等请求），没有写入的话就可以调用`db.read()`，毕竟文件改变了嘛 😂！
 
-## 总结：小而精的架构哲学
+## 小而精的架构哲学
 
 通过对 json-server 的源码剖析，我们看到它用极其简洁的代码，实现了一个功能完整、可扩展的 REST API 服务工具。它将[tinyhttp](https://github.com/tinyhttp/tinyhttp)的中间件机制、[lowdb](https://github.com/typicode/lowdb) 的轻量级持久化能力，以及清晰的模块划分巧妙结合，构建出一个可用于真实项目开发过程的“最小可用后端”。
 
 这不仅是一个实用工具，更是一个学习[tinyhttp](https://github.com/tinyhttp/tinyhttp)项目架构、理解中间件机制、掌握 CLI 工具封装思路的优秀范本。
 
-{{&lt; admonition type=tip title=&#34;提示&#34; open=true &gt;}}
+{{< admonition type=tip title="提示" open=true >}}
 它告诉我们：好的工具，不一定复杂；好的架构，往往“刚刚好”。
-{{&lt; /admonition &gt;}}
+{{< /admonition >}}
 
 无论你是想复刻一个类似的 mock 服务，还是希望掌握 Node.js 项目的组织方式，[json-server](https://github.com/typicode/json-server) 都是一个值得深入阅读和借鉴的项目。
 

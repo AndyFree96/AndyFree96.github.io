@@ -1,13 +1,13 @@
 # 深入解析CSS
 
 
-&lt;!-- - **2022/11/10 更新**: 增加**背景、阴影和混合模式**
-- **2022/11/14 更新**: 增加**选择器**和**预处理器** --&gt;
+<!-- - **2022/11/10 更新**: 增加**背景、阴影和混合模式**
+- **2022/11/14 更新**: 增加**选择器**和**预处理器** -->
 
 - **2023/11/23 更新**: 增加 4 个练习[项目](#项目)——Parallax scroll animation、Voyage Slider、App Menu With Lock Screen 和 Old Film Effect
 - **2023/12/13 更新**: 增加练习[项目](#项目)——Polaroid Camera
 - **2024/10/08 更新**: [选择器](#选择器)增加来自[@Shefali\_\_J](https://x.com/Shefali__J)的[选择器速查表](https://x.com/Shefali__J/status/1843151265100153248)
-&lt;!--more--&gt;
+<!--more-->
 
 ## 准备
 
@@ -57,7 +57,7 @@ Git: https://git-scm.com/
 - 如果 ID 数量一致，那么拥有更多类的选择器胜出。
 - 如果以上两次比较都一致，那么拥有最多标签名的选择器胜出。
 
-&gt; 伪类选择器（如`:hover`）和属性选择器（如`[type=&#34;input&#34;]`）与一个类选择器的优先级相同。通用选择器（`*`）和组合器（`&gt;`、`&#43;`、`~`）对优先级没有影响。
+> 伪类选择器（如`:hover`）和属性选择器（如`[type="input"]`）与一个类选择器的优先级相同。通用选择器（`*`）和组合器（`>`、`+`、`~`）对优先级没有影响。
 
 我们可以用优先级标记来比较不同选择器的优先级:
 
@@ -196,7 +196,7 @@ ul {
   border: 1px solid #999;
 }
 
-.panel &gt; h2 {
+.panel > h2 {
   margin-top: 0;
   font-size: 0.8rem;
   font-weight: bold;
@@ -249,7 +249,7 @@ calc()函数内可以对两个及其以上的值进行基本运算。支持的�
 
 ```CSS
 :root {
-  font-size: calc(0.5em &#43; 1vw);
+  font-size: calc(0.5em + 1vw);
 }
 ```
 
@@ -284,40 +284,40 @@ var()函数接受第二个参数，它指定了备用值。如果第一个参数
 如下所示:
 
 ```HTML
-&lt;!DOCTYPE html&gt;
-&lt;html lang=&#34;en&#34;&gt;
-  &lt;head&gt;
-    &lt;meta charset=&#34;UTF-8&#34; /&gt;
-    &lt;meta http-equiv=&#34;X-UA-Compatible&#34; content=&#34;IE=edge&#34; /&gt;
-    &lt;meta name=&#34;viewport&#34; content=&#34;width=device-width, initial-scale=1.0&#34; /&gt;
-    &lt;title&gt;导航&lt;/title&gt;
-    &lt;link rel=&#34;stylesheet&#34; href=&#34;style.css&#34; /&gt;
-  &lt;/head&gt;
-  &lt;body&gt;
-    &lt;header class=&#34;page-header&#34;&gt;
-      &lt;h1 class=&#34;title&#34; id=&#34;page-title&#34;&gt;Wombat Coffe Roasters&lt;/h1&gt;
-      &lt;nav&gt;
-        &lt;ul class=&#34;nav&#34; class=&#34;main-nav&#34;&gt;
-          &lt;li&gt;&lt;a href=&#34;/&#34;&gt;Home&lt;/a&gt;&lt;/li&gt;
-          &lt;li&gt;&lt;a href=&#34;/coffees&#34;&gt;Coffes&lt;/a&gt;&lt;/li&gt;
-          &lt;li&gt;&lt;a href=&#34;/brewers&#34;&gt;Brewers&lt;/a&gt;&lt;/li&gt;
-          &lt;li&gt;
-            &lt;a href=&#34;/specials&#34; class=&#34;featured&#34;&gt;Specials&lt;/a&gt;
-          &lt;/li&gt;
-        &lt;/ul&gt;
-      &lt;/nav&gt;
-    &lt;/header&gt;
-    &lt;main&gt;
-      &lt;div class=&#34;panel&#34;&gt;&lt;/div&gt;
-      &lt;div class=&#34;panel dark&#34;&gt;&lt;/div&gt;
-    &lt;/main&gt;
-  &lt;/body&gt;
-&lt;/html&gt;
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>导航</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header class="page-header">
+      <h1 class="title" id="page-title">Wombat Coffe Roasters</h1>
+      <nav>
+        <ul class="nav" class="main-nav">
+          <li><a href="/">Home</a></li>
+          <li><a href="/coffees">Coffes</a></li>
+          <li><a href="/brewers">Brewers</a></li>
+          <li>
+            <a href="/specials" class="featured">Specials</a>
+          </li>
+        </ul>
+      </nav>
+    </header>
+    <main>
+      <div class="panel"></div>
+      <div class="panel dark"></div>
+    </main>
+  </body>
+</html>
 ```
 
 ```CSS
 :root {
-  font-size: calc(0.5em &#43; 0.5vw);
+  font-size: calc(0.5em + 0.5vw);
   --bg-color: #368;
 }
 
@@ -351,9 +351,9 @@ h1 {
 ```JavaScript
 const rootElement = document.documentElement;
 const styles = getComputedStyle(rootElement);
-const bgColor = styles.getPropertyValue(&#34;--bg-color&#34;);
+const bgColor = styles.getPropertyValue("--bg-color");
 console.log(String(bgColor).trim());
-rootElement.style.setProperty(&#34;--bg-color&#34;, &#34;red&#34;);
+rootElement.style.setProperty("--bg-color", "red");
 ```
 
 ### 盒模型
@@ -394,7 +394,7 @@ rootElement.style.setProperty(&#34;--bg-color&#34;, &#34;red&#34;);
 
 通常最好避免给元素指定明确的高度。普通文档流是为限定的宽度和无限的高度设计的。内容会填满视口的高度，然后在必要的时候折行。因此，容器的高度由内容天然地决定，而不是容器自己决定。
 
-&gt; 普通文档流——指的是网页元素的默认布局行为。行内元素跟随文字的方向从左到右排列，当到达容器边缘时会换行。块级元素会占据完整的一行，前后都有换行。
+> 普通文档流——指的是网页元素的默认布局行为。行内元素跟随文字的方向从左到右排列，当到达容器边缘时会换行。块级元素会占据完整的一行，前后都有换行。
 
 #### 控制溢出行为
 
@@ -422,35 +422,35 @@ rootElement.style.setProperty(&#34;--bg-color&#34;, &#34;red&#34;);
 我们可以使用负外边距解决这个问题，但这需要给整个表格包裹一层新的容器。代码如下:
 
 ```HTML
-&lt;!DOCTYPE html&gt;
-&lt;html lang=&#34;en&#34;&gt;
-  &lt;head&gt;
-    &lt;meta charset=&#34;UTF-8&#34; /&gt;
-    &lt;meta http-equiv=&#34;X-UA-Compatible&#34; content=&#34;IE=edge&#34; /&gt;
-    &lt;meta name=&#34;viewport&#34; content=&#34;width=device-width, initial-scale=1.0&#34; /&gt;
-    &lt;title&gt;盒模型&lt;/title&gt;
-    &lt;link rel=&#34;stylesheet&#34; href=&#34;style.css&#34; /&gt;
-  &lt;/head&gt;
-  &lt;body&gt;
-    &lt;header&gt;
-      &lt;h1&gt;Franklin Running Club&lt;/h1&gt;
-    &lt;/header&gt;
-    &lt;div class=&#34;wrapper&#34;&gt;
-      &lt;div class=&#34;container&#34;&gt;
-        &lt;main class=&#34;main&#34;&gt;
-          &lt;p&gt;
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>盒模型</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header>
+      <h1>Franklin Running Club</h1>
+    </header>
+    <div class="wrapper">
+      <div class="container">
+        <main class="main">
+          <p>
             The Franklin Running Club meets at 6:00pm every Thursday at the town
             square. Runs are three to five miles, at your own pace.
-          &lt;/p&gt;
-        &lt;/main&gt;
-        &lt;aside class=&#34;sidebar&#34;&gt;
-          &lt;div class=&#34;widget&#34;&gt;&lt;/div&gt;
-          &lt;div class=&#34;widget&#34;&gt;&lt;/div&gt;
-        &lt;/aside&gt;
-      &lt;/div&gt;
-    &lt;/div&gt;
-  &lt;/body&gt;
-&lt;/html&gt;
+          </p>
+        </main>
+        <aside class="sidebar">
+          <div class="widget"></div>
+          <div class="widget"></div>
+        </aside>
+      </div>
+    </div>
+  </body>
+</html>
 
 ```
 
@@ -592,7 +592,7 @@ https://www.educba.com/negative-margin-css/
 
 在没有其他 CSS 的影响下，所以相邻的顶部和底部外边距都会折叠。
 
-&gt; 只有上下外边距会产生折叠，左右外边距不会折叠。
+> 只有上下外边距会产生折叠，左右外边距不会折叠。
 
 如下方法可以防止外边距折叠：
 
@@ -603,7 +603,7 @@ https://www.educba.com/negative-margin-css/
 **猫头鹰选择器**
 
 ```CSS
-body * &#43; * {
+body * + * {
   margin-top: 1.5em;
 }
 ```
@@ -625,9 +625,9 @@ body * &#43; * {
 #### 理解容器折叠
 
 ```HTML
-&lt;!doctype html&gt;
-&lt;head&gt;
-  &lt;style&gt;
+<!doctype html>
+<head>
+  <style>
     :root {
       box-sizing: border-box;
     }
@@ -643,7 +643,7 @@ body * &#43; * {
       font-family: Helvetica, Arial, sans-serif;
     }
 
-    body * &#43; * {
+    body * + * {
       margin-top: 1.5em;
     }
 
@@ -673,70 +673,70 @@ body * &#43; * {
       background-color: #eee;
       border-radius: 0.5em;
     }
-  &lt;/style&gt;
-&lt;/head&gt;
+  </style>
+</head>
 
-&lt;body&gt;
-  &lt;div class=&#34;container&#34;&gt;
-    &lt;header&gt;
-      &lt;h1&gt;Franklin Running Club&lt;/h1&gt;
-    &lt;/header&gt;
+<body>
+  <div class="container">
+    <header>
+      <h1>Franklin Running Club</h1>
+    </header>
 
-    &lt;main class=&#34;main clearfix&#34;&gt;
-      &lt;h2&gt;Running tips&lt;/h2&gt;
+    <main class="main clearfix">
+      <h2>Running tips</h2>
 
-      &lt;div&gt;
-        &lt;div class=&#34;media&#34;&gt;
-          &lt;img class=&#34;media-image&#34; src=&#34;runner.png&#34;&gt;
-          &lt;div class=&#34;media-body&#34;&gt;
-            &lt;h4&gt;Strength&lt;/h4&gt;
-            &lt;p&gt;
+      <div>
+        <div class="media">
+          <img class="media-image" src="runner.png">
+          <div class="media-body">
+            <h4>Strength</h4>
+            <p>
               Strength training is an important part of
-              injury prevention. Focus on your core&amp;mdash;
+              injury prevention. Focus on your core&mdash;
               especially your abs and glutes.
-            &lt;/p&gt;
-          &lt;/div&gt;
-        &lt;/div&gt;
+            </p>
+          </div>
+        </div>
 
-        &lt;div class=&#34;media&#34;&gt;
-          &lt;img class=&#34;media-image&#34; src=&#34;shoes.png&#34;&gt;
-          &lt;div class=&#34;media-body&#34;&gt;
-            &lt;h4&gt;Cadence&lt;/h4&gt;
-            &lt;p&gt;
+        <div class="media">
+          <img class="media-image" src="shoes.png">
+          <div class="media-body">
+            <h4>Cadence</h4>
+            <p>
               Check your stride turnover. The most efficient
               runners take about 180 steps per minute.
-            &lt;/p&gt;
-          &lt;/div&gt;
-        &lt;/div&gt;
+            </p>
+          </div>
+        </div>
 
-        &lt;div class=&#34;media&#34;&gt;
-          &lt;img class=&#34;media-image&#34; src=&#34;shoes.png&#34;&gt;
-          &lt;div class=&#34;media-body&#34;&gt;
-            &lt;h4&gt;Change it up&lt;/h4&gt;
-            &lt;p&gt;
-              Don&#39;t run the same every time you hit the
+        <div class="media">
+          <img class="media-image" src="shoes.png">
+          <div class="media-body">
+            <h4>Change it up</h4>
+            <p>
+              Don't run the same every time you hit the
               road. Vary your pace, and vary the distance
               of your runs.
-            &lt;/p&gt;
-          &lt;/div&gt;
-        &lt;/div&gt;
+            </p>
+          </div>
+        </div>
 
-        &lt;div class=&#34;media&#34;&gt;
-          &lt;img class=&#34;media-image&#34; src=&#34;runner.png&#34;&gt;
-          &lt;div class=&#34;media-body&#34;&gt;
-            &lt;h4&gt;Focus on form&lt;/h4&gt;
-            &lt;p&gt;
+        <div class="media">
+          <img class="media-image" src="runner.png">
+          <div class="media-body">
+            <h4>Focus on form</h4>
+            <p>
               Run tall but relaxed. Your feet should hit
               the ground beneath your hips, not out in
               front of you.
-            &lt;/p&gt;
-          &lt;/div&gt;
-        &lt;/div&gt;
+            </p>
+          </div>
+        </div>
 
-      &lt;/div&gt;
-    &lt;/main&gt;
-  &lt;/div&gt;
-&lt;/body&gt;
+      </div>
+    </main>
+  </div>
+</body>
 
 ```
 
@@ -749,22 +749,22 @@ body * &#43; * {
 一个解决的办法是使用和浮动配套的`clear`属性。将一个元素放在主容器末尾，并对其使用`clear`，这会让容器扩展到浮动元素下面。
 
 ```HTML
-&lt;main class=&#34;main&#34;&gt;
+<main class="main">
   ...
-  &lt;div style=&#34;clear: both;&#34;&gt;&lt;/div&gt;
-&lt;/main&gt;
+  <div style="clear: both;"></div>
+</main>
 ```
 
 因为空`div`本身没有浮动，所以容器就会扩展，直到包含它。
 
 #### 理解清除浮动
 
-&gt; 伪元素——特殊的选择器，可以选中文档的特定部分。伪元素以双冒号开头，大部分浏览器为了向后兼容也支持单冒号形式。
+> 伪元素——特殊的选择器，可以选中文档的特定部分。伪元素以双冒号开头，大部分浏览器为了向后兼容也支持单冒号形式。
 
 ```CSS
 .clearfix::after {
   display: block;
-  content: &#34; &#34;;
+  content: " ";
   clear: both;
 }
 ```
@@ -867,7 +867,7 @@ flex-grow 的值为非负数。若一个弹性子元素的值 flex-grow 值为 0
   grid-gap: 0.5em;
 }
 
-.grid &gt; * {
+.grid > * {
   background-color: darkgray;
   color: white;
   padding: 2em;
@@ -921,7 +921,7 @@ CSS Grid 网格布局教程: https://www.ruanyifeng.com/blog/2019/03/grid-layout
 
 绝对定位不是相对视口，而是相对最近的祖先定位元素。
 
-&gt; 如果祖先元素都没有定位，那么绝对定位的元素会基于初始包含块来定位。初始包含块和视口一样大，固定在网页的顶部。
+> 如果祖先元素都没有定位，那么绝对定位的元素会基于初始包含块来定位。初始包含块和视口一样大，固定在网页的顶部。
 
 ### 相对定位
 
@@ -945,7 +945,7 @@ CSS Grid 网格布局教程: https://www.ruanyifeng.com/blog/2019/03/grid-layout
 
 移动端布局一般是很朴素的设计。主要关注的是内容，在大屏上，可以把页面的大块区域拿来做头部、主图和菜单。在移动设备上，用户通常有更明确的目标。
 
-&gt; 做响应式设计时，要确保 HTML 包含各种屏幕尺寸所需的全部内容。可以对每个屏幕尺寸应用不同的 CSS，但必须共享同一份 HTML。
+> 做响应式设计时，要确保 HTML 包含各种屏幕尺寸所需的全部内容。可以对每个屏幕尺寸应用不同的 CSS，但必须共享同一份 HTML。
 
 断点（breakpoint）：一个特殊的临界值。屏幕尺寸到达这个值时，网页的样式会发生改变，以便给当前屏幕尺寸提供最佳的布局。
 
@@ -954,17 +954,17 @@ CSS Grid 网格布局教程: https://www.ruanyifeng.com/blog/2019/03/grid-layout
 为了避免这种情况，我们将`meta`标签包含进去。
 
 ```HTML
-  &lt;head&gt;
-    &lt;meta charset=&#34;UTF-8&#34; /&gt;
-    &lt;meta name=&#34;viewport&#34; content=&#34;width=device-width, initial-scale=1&#34; /&gt;
-    &lt;title&gt;Wombat Coffee Roasters&lt;/title&gt;
-    &lt;link rel=&#34;stylesheet&#34; href=&#34;./style.css&#34; /&gt;
-  &lt;/head&gt;
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Wombat Coffee Roasters</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
 ```
 
 `meta`标签的`content`属性里包含两个选项。首先，它告诉浏览器当解析 CSS 时将设备宽度作为假定宽度，而不是一个全屏的桌面浏览器宽度。其次，当页面加载时，它使用`initial-scale`将缩放比设置为 100%。
 
-&gt; 现代浏览器的开发者工具提供了模拟移动浏览器的功能。
+> 现代浏览器的开发者工具提供了模拟移动浏览器的功能。
 
 Using the viewport meta tag to control layout on mobile browsers: https://udn.realityripple.com/docs/Mozilla/Mobile/Viewport_meta_tag
 
@@ -976,7 +976,7 @@ Using the viewport meta tag to control layout on mobile browsers: https://udn.re
 
 ```CSS
 @media (min-width: 560px) {
-  .title &gt; h1 {
+  .title > h1 {
     font-size: 2.25rem;
   }
 }
@@ -987,7 +987,7 @@ Using the viewport meta tag to control layout on mobile browsers: https://udn.re
 在媒体查询里更适合用 em，如:
 
 ```CSS
-.title &gt; h1 {
+.title > h1 {
   color: #333;
   text-transform: uppercase;
   font-size: 1.5rem;
@@ -995,7 +995,7 @@ Using the viewport meta tag to control layout on mobile browsers: https://udn.re
 }
 
 @media (min-width: 35em) {
-  .title &gt; h1 {
+  .title > h1 {
     font-size: 2.25rem;
   }
 }
@@ -1037,7 +1037,7 @@ The anatomy of responsive images: https://jakearchibald.com/2015/anatomy-of-resp
 
 RWD 是什么？: https://welly.tw/serp-rank-optimization/what-is-rwd-and-how-to-use
 
-The Beginner&#39;s Guide to Responsive Web Design: https://kinsta.com/blog/responsive-web-design/
+The Beginner's Guide to Responsive Web Design: https://kinsta.com/blog/responsive-web-design/
 
 ## 模块化 CSS
 
@@ -1184,7 +1184,7 @@ body {
 新建一个网页和样式表，添加如下内容:
 
 ```HTML
-&lt;button class=&#34;butotn&#34;&gt;Sign up now&lt;/button&gt;
+<button class="butotn">Sign up now</button>
 ```
 
 ```CSS
@@ -1223,7 +1223,7 @@ body {
 示例:
 
 ```HTML
-    &lt;div class=&#34;blend&#34;&gt;&lt;/div&gt;
+    <div class="blend"></div>
 ```
 
 ```CSS
@@ -1259,7 +1259,7 @@ body {
 ```CSS
 .blend {
   min-height: 80vh;
-  background-image: url(&#34;./bear.jpg&#34;);
+  background-image: url("./bear.jpg");
   background-color: #148;
   background-size: cover;
   background-repeat: no-repeat;
@@ -1286,7 +1286,7 @@ body {
 ```CSS
 .blend {
   min-height: 80vh;
-  background-image: url(&#34;./scratches.png&#34;), url(&#34;./bear.jpg&#34;);
+  background-image: url("./scratches.png"), url("./bear.jpg");
   background-size: 200px, cover;
   background-repeat: repeat, no-repeat;
   background-position: center, center;
@@ -1302,13 +1302,13 @@ body {
 
 ```CSS
 .blend {
-  background-image: url(&#34;./bear.jpg&#34;);
+  background-image: url("./bear.jpg");
   background-size: cover;
   background-position: center;
   padding: 5em 0 10em;
 }
 
-.blend &gt; h1 {
+.blend > h1 {
   margin: 0;
   font-family: Arial, Helvetica, sans-serif;
   font-size: 6rem;
@@ -1345,7 +1345,7 @@ Web 是个生动的媒介，可以做如元素淡出、菜单滑入、颜色从�
 先看一个示例，最开始是个蓝绿色方角按钮，鼠标悬停时，过渡成一个红色圆角按钮:
 
 ```HTML
-    &lt;button&gt;Hover over me&lt;/button&gt;
+    <button>Hover over me</button>
 ```
 
 ```CSS
@@ -1453,7 +1453,7 @@ transform-origin: 100% 50%;
 
 变换本身不具备太多实用性。当和动作结合起来使用的时候，变换就会有用多了。
 
-&gt; SVG——可缩放矢量图形（Scalable Vector Graphics）的简称。这是一种基于 XML 的图片格式，使用向量定义图片。由于图片是使用数学计算来定义的，所以可以放大或缩小到任意尺寸。
+> SVG——可缩放矢量图形（Scalable Vector Graphics）的简称。这是一种基于 XML 的图片格式，使用向量定义图片。由于图片是使用数学计算来定义的，所以可以放大或缩小到任意尺寸。
 
 ## 动画
 
@@ -1496,19 +1496,19 @@ CSS 中的动画包括两部分: 用来定义动画的`@keyframes`规则和为�
 ```
 
 ```HTML
-&lt;!DOCTYPE html&gt;
-&lt;html lang=&#34;en&#34;&gt;
-  &lt;head&gt;
-    &lt;meta charset=&#34;UTF-8&#34; /&gt;
-    &lt;meta http-equiv=&#34;X-UA-Compatible&#34; content=&#34;IE=edge&#34; /&gt;
-    &lt;meta name=&#34;viewport&#34; content=&#34;width=device-width, initial-scale=1.0&#34; /&gt;
-    &lt;title&gt;动画&lt;/title&gt;
-    &lt;link rel=&#34;stylesheet&#34; href=&#34;./style.css&#34; /&gt;
-  &lt;/head&gt;
-  &lt;body&gt;
-    &lt;div class=&#34;box&#34;&gt;&lt;/div&gt;
-  &lt;/body&gt;
-&lt;/html&gt;
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>动画</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <div class="box"></div>
+  </body>
+</html>
 
 ```
 
@@ -1526,11 +1526,11 @@ CSS 中的动画包括两部分: 用来定义动画的`@keyframes`规则和为�
 组合器将多个基础选择器连接起来组成一个复杂选择器。
 
 - 后代组合器（空格）——匹配的目标元素的其他元素的后代。例如: `.nav-menu li`。
-- 子组合器（`&gt;`）——匹配的目标元素紧跟在其他元素后面。例如: `.parent &gt; .child`。
-- 相邻兄弟组合器（`&#43;`）——匹配的目标元素紧跟在其他元素后面。例如: `p &#43; h1`。
+- 子组合器（`>`）——匹配的目标元素紧跟在其他元素后面。例如: `.parent > .child`。
+- 相邻兄弟组合器（`+`）——匹配的目标元素紧跟在其他元素后面。例如: `p + h1`。
 - 通用兄弟组合器（`~`）——匹配所有跟随在指定元素之后的兄弟元素。
 
-多个基础选择器可以连起来（不使用空格或者其他组合器）组成一个复合选择器（例如: `h1.page-header`）。复合选择器选中的元素将匹配其全部基础选择器。例如，`.dropdown.is-active`能选中`&lt;div class=&#34;dropdown is-active&#34;&gt;...&lt;/div&gt;`，当无法选中`&lt;div class=&#34;dropdown&#34;&gt;&lt;/div&gt;`。
+多个基础选择器可以连起来（不使用空格或者其他组合器）组成一个复合选择器（例如: `h1.page-header`）。复合选择器选中的元素将匹配其全部基础选择器。例如，`.dropdown.is-active`能选中`<div class="dropdown is-active">...</div>`，当无法选中`<div class="dropdown"></div>`。
 
 ### 伪类选择器
 
@@ -1559,12 +1559,12 @@ CSS Pseudo-classes: https://www.w3schools.com/css/css_pseudo_classes.asp
 属性选择器用于根据 HTML 属性匹配元素。其优先级与一个类选择器`(0,1,0)`相等。
 
 - `[attr]`——匹配的元素拥有指定属性 attr，无论属性值是什么，例如: `input[disabled]`。
-- `[attr=&#34;value&#34;]`——匹配的元素拥有指定属性 attr，且属性值等于指定的字符串值，例如: `input[type=&#34;radio&#34;]`。
-- `[attr^=&#34;value&#34;]`——“开头”属性选择器。该选择器匹配的元素拥有指定属性 attr，且属性值的开头是指定的字符串值，例如: `a[href^=&#34;https&#34;]`。
-- `[attr$=&#34;value&#34;]`——“结尾”属性选择器。该选择器匹配的元素拥有指定属性 attr，且属性值的结尾是指定的字符串值，例如: `a[href$=&#34;.pdf&#34;]`。
-- `[attr*=&#34;value&#34;]`——“包含”属性选择器。该选择器匹配的元素拥有指定属性 attr，且属性值包含指定的字符串值，例如: `[class*=&#34;sprite-&#34;]`。
-- `[attr~=&#34;value&#34;]`——“空格分隔的列表”属性选择器。该选择器匹配的元素拥有指定属性 attr，且属性值是一个空格分隔的值列表，列表中的某个值等于指定字符串值，例如: `a[rel=&#34;author&#34;]`。
-- `[attr|=&#34;value&#34;]`——匹配的元素拥有指定属性 attr，且属性值要么等于指定的字符串值，要么以该字符串开头且紧跟着一个连字符。例如: `[lang|=&#34;es&#34;]`。
+- `[attr="value"]`——匹配的元素拥有指定属性 attr，且属性值等于指定的字符串值，例如: `input[type="radio"]`。
+- `[attr^="value"]`——“开头”属性选择器。该选择器匹配的元素拥有指定属性 attr，且属性值的开头是指定的字符串值，例如: `a[href^="https"]`。
+- `[attr$="value"]`——“结尾”属性选择器。该选择器匹配的元素拥有指定属性 attr，且属性值的结尾是指定的字符串值，例如: `a[href$=".pdf"]`。
+- `[attr*="value"]`——“包含”属性选择器。该选择器匹配的元素拥有指定属性 attr，且属性值包含指定的字符串值，例如: `[class*="sprite-"]`。
+- `[attr~="value"]`——“空格分隔的列表”属性选择器。该选择器匹配的元素拥有指定属性 attr，且属性值是一个空格分隔的值列表，列表中的某个值等于指定字符串值，例如: `a[rel="author"]`。
+- `[attr|="value"]`——匹配的元素拥有指定属性 attr，且属性值要么等于指定的字符串值，要么以该字符串开头且紧跟着一个连字符。例如: `[lang|="es"]`。
 
 ### 选择器速查表
 
@@ -1596,8 +1596,8 @@ Sass 支持两种语法: Sass 和 SCSS。它们的语言特性一样，但 Sass 
 
 ```
 
-&#34;scripts&#34;: {
-&#34;sass&#34;: &#34;node-sass sass/index.scss build/styles.css&#34;
+"scripts": {
+"sass": "node-sass sass/index.scss build/styles.css"
 },
 
 ```
@@ -1650,7 +1650,7 @@ body {
 
 ##### 行内计算
 
-Sass 支持使用`&#43;`、`-`、`*`、`/`和`%`（模运算）进行行内计算，如此一来，我们就可以从一个初始值获得多个值。
+Sass 支持使用`+`、`-`、`*`、`/`和`%`（模运算）进行行内计算，如此一来，我们就可以从一个初始值获得多个值。
 
 ```Scss
 $padding-left: 3em;
@@ -1687,11 +1687,11 @@ Sass 允许在代码块内嵌套选择器，可以使用嵌套把有关联的代
 .site-nav {
   display: flex;
 
-  &gt; li {
+  > li {
     margin-top: 0;
 
-    // &amp;符号表示将插入外层选择器的位置
-    &amp;.is-active {
+    // &符号表示将插入外层选择器的位置
+    &.is-active {
       display: block;
     }
   }
@@ -1705,16 +1705,16 @@ Sass 允许在代码块内嵌套选择器，可以使用嵌套把有关联的代
 .site-nav {
   display: flex;
 }
-.site-nav &gt; li {
+.site-nav > li {
   margin-top: 0;
 }
-.site-nav &gt; li.is-active {
+.site-nav > li.is-active {
   display: block;
 }
 
 ```
 
-默认情况下，外层的`.site-nav`选择器会自动添加到编译代码的每个选择器前面，拼接的位置会插入一个空格。使用`&amp;`符号代表外层选择器要插入的位置。
+默认情况下，外层的`.site-nav`选择器会自动添加到编译代码的每个选择器前面，拼接的位置会插入一个空格。使用`&`符号代表外层选择器要插入的位置。
 
 也可以在声明块内嵌套媒体查询用以避免重复书写相同选择器:
 
@@ -1762,7 +1762,7 @@ html {
 在`sass/index.scss`文件中引入:
 
 ```Scss
-@import &#34;button&#34;;
+@import "button";
 
 html {
   font-family: Arial, Helvetica, sans-serif;
@@ -1796,12 +1796,12 @@ html {
 
 ```Scss
 @mixin clearfix {
-  &amp;::before {
+  &::before {
     display: table;
-    content: &#34; &#34;;
+    content: " ";
   }
 
-  &amp;::after {
+  &::after {
     clear: both;
   }
 }
@@ -1821,7 +1821,7 @@ html {
 }
 .media::before {
   display: table;
-  content: &#34; &#34;;
+  content: " ";
 }
 .media::after {
   clear: both;
@@ -1942,7 +1942,7 @@ $green-transparent: rgba($green, 0.5);
 }
 ```
 
-更多操作，可阅读[A visual guide to Sass &amp; Compass Color Functions](http://jackiebalzer.com/color)一文。
+更多操作，可阅读[A visual guide to Sass & Compass Color Functions](http://jackiebalzer.com/color)一文。
 
 ##### 循环
 
@@ -1952,7 +1952,7 @@ $green-transparent: rgba($green, 0.5);
 // 从2到4迭代$index值
 @for $index from 2 to 5 {
   // 在选择器中使用变量
-  .nav-links &gt; li:nth-child(#{$index}) {
+  .nav-links > li:nth-child(#{$index}) {
     // 变量乘以一个时间值
     transition-delay: (0.1s * $index) - 0.1s;
   }
@@ -1981,18 +1981,18 @@ PostCSS 中最重要的插件可能就是 Autoprefixer，这个插件可以将�
 之后在项目根目录创建一个名为`gulpfile.js`的文件，添加如下内容:
 
 ```JavaScript
-const gulp = require(&#34;gulp&#34;);
-const autoprefixer = require(&#34;gulp-autoprefixer&#34;);
+const gulp = require("gulp");
+const autoprefixer = require("gulp-autoprefixer");
 
-gulp.task(&#34;prefix&#34;, () =&gt; {
+gulp.task("prefix", () => {
   gulp
-    .src(&#34;./css/*.css&#34;)
+    .src("./css/*.css")
     .pipe(
       autoprefixer({
         cascade: false,
       })
     )
-    .pipe(gulp.dest(&#34;./dist&#34;));
+    .pipe(gulp.dest("./dist"));
 });
 
 ```
@@ -2008,11 +2008,11 @@ gulp.task(&#34;prefix&#34;, () =&gt; {
 在`package.json`文件中加入以下内容:
 
 ```JSON
-  &#34;scripts&#34;: {
-    &#34;gulp&#34;: &#34;gulp prefix&#34;
+  "scripts": {
+    "gulp": "gulp prefix"
   },
-  &#34;browserslist&#34;: [
-    &#34;last 99 versions&#34;
+  "browserslist": [
+    "last 99 versions"
   ],
 ```
 

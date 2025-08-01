@@ -3,7 +3,7 @@
 
 在深度学习领域，卷积神经网络（CNN）已成为图像识别、目标检测、语音识别等任务的核心技术之一。Keras 作为一个高层次的神经网络 API，因其简洁易用而受到广泛欢迎。通过 Keras，我们可以快速搭建、训练并部署复杂的神经网络模型，而无需关注底层实现细节。本文我们将学习使用 Keras 一步一步搭建一个卷积神经网络。具体来说，我们将使用卷积神经网络对手写数字(MNIST 数据集)进行识别，并达到 99%以上的正确率。
 
-&lt;!--more--&gt;
+<!--more-->
 
 ![](/images/202002/1/1.png)
 
@@ -42,7 +42,7 @@
 输入以下命令可以确认正常安装：
 
 ```Python
-python -c &#34;import keras;print(keras.__version__)&#34;
+python -c "import keras;print(keras.__version__)"
 ```
 
 ![](/images/202002/1/5.png)
@@ -132,8 +132,8 @@ x_test = x_test.reshape(x_test.shape[0], img_x, img_y, 1)
 除此之外，我们将数据标准化一下：
 
 ```Python
-x_train = x_train.astype(&#39;float32&#39;)
-x_test = x_test.astype(&#39;float32&#39;)
+x_train = x_train.astype('float32')
+x_test = x_test.astype('float32')
 x_train /= 255
 x_test /= 255
 ```
@@ -157,13 +157,13 @@ print(y_train.shape)
 
 ```Python
 model = Sequential()
-model.add(Conv2D(32, kernel_size=(5,5), activation=&#39;relu&#39;, input_shape=(img_x, img_y, 1)))
+model.add(Conv2D(32, kernel_size=(5,5), activation='relu', input_shape=(img_x, img_y, 1)))
 model.add(MaxPool2D(pool_size=(2,2), strides=(2,2)))
-model.add(Conv2D(64, kernel_size=(5,5), activation=&#39;relu&#39;))
+model.add(Conv2D(64, kernel_size=(5,5), activation='relu'))
 model.add(MaxPool2D(pool_size=(2,2), strides=(2,2)))
 model.add(Flatten())
-model.add(Dense(1000, activation=&#39;relu&#39;))
-model.add(Dense(10, activation=&#39;softmax&#39;))
+model.add(Dense(1000, activation='relu'))
+model.add(Dense(10, activation='softmax'))
 ```
 
 是不是有点搭积木的既视感？
@@ -173,9 +173,9 @@ model.add(Dense(10, activation=&#39;softmax&#39;))
 现在，只需要编译模型，就可以开始训练了。当编译模型时，我们声明了损失函数和优化器（SGD，Adam 等）。
 
 ```Python
-model.compile(optimizer=&#39;adam&#39;,
-              loss=&#39;categorical_crossentropy&#39;,
-              metrics=[&#39;accuracy&#39;])
+model.compile(optimizer='adam',
+              loss='categorical_crossentropy',
+              metrics=['accuracy'])
 ```
 
 Keras 有很多[损失函数](https://keras.io/losses/)和[优化器](https://keras.io/optimizers/)供你选择。
@@ -204,7 +204,7 @@ model.fit(x_train, y_train, batch_size=128, epochs=10)
 
 ```Python
 score = model.evaluate(x_test, y_test)
-print(&#39;acc&#39;, score[1])
+print('acc', score[1])
 # acc 0.9926
 ```
 
@@ -228,8 +228,8 @@ img_x, img_y = 28, 28
 x_train = x_train.reshape(x_train.shape[0], img_x, img_y, 1)
 x_test = x_test.reshape(x_test.shape[0], img_x, img_y, 1)
 
-x_train = x_train.astype(&#39;float32&#39;)
-x_test = x_test.astype(&#39;float32&#39;)
+x_train = x_train.astype('float32')
+x_test = x_test.astype('float32')
 x_train /= 255
 x_test /= 255
 
@@ -238,25 +238,25 @@ y_test = to_categorical(y_test, 10)
 
 # 5. 定义模型结构
 model = Sequential()
-model.add(Conv2D(32, kernel_size=(5,5), activation=&#39;relu&#39;, input_shape=(img_x, img_y, 1)))
+model.add(Conv2D(32, kernel_size=(5,5), activation='relu', input_shape=(img_x, img_y, 1)))
 model.add(MaxPool2D(pool_size=(2,2), strides=(2,2)))
-model.add(Conv2D(64, kernel_size=(5,5), activation=&#39;relu&#39;))
+model.add(Conv2D(64, kernel_size=(5,5), activation='relu'))
 model.add(MaxPool2D(pool_size=(2,2), strides=(2,2)))
 model.add(Flatten())
-model.add(Dense(1000, activation=&#39;relu&#39;))
-model.add(Dense(10, activation=&#39;softmax&#39;))
+model.add(Dense(1000, activation='relu'))
+model.add(Dense(10, activation='softmax'))
 
 # 6. 编译
-model.compile(optimizer=&#39;adam&#39;,
-              loss=&#39;categorical_crossentropy&#39;,
-              metrics=[&#39;accuracy&#39;])
+model.compile(optimizer='adam',
+              loss='categorical_crossentropy',
+              metrics=['accuracy'])
 
 # 7. 训练
 model.fit(x_train, y_train, batch_size=128, epochs=10)
 
 # 8. 评估模型
 score = model.evaluate(x_test, y_test)
-print(&#39;acc&#39;, score[1])
+print('acc', score[1])
 ```
 
 ## 参考

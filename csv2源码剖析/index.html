@@ -1,43 +1,27 @@
 <!DOCTYPE html>
-<html
-  itemscope
-  itemtype="http://schema.org/WebPage"
-  lang="zh-CN"
->
+<html itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
   <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
     
-    <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, maximum-scale=2"
-    />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
     <meta name="robots" content="noodp" />
-    <meta name="google-adsense-account" content="ca-pub-5868664387231059" />
-    <title>csv2 源码剖析：轻量级 CSV 处理的高效之道 - 东尼的博客</title><meta name="author" content="AndyFree96">
-<meta name="author-link" content="https://andyfree96.github.io/">
-<meta name="description" content="
-纸上得来终觉浅，绝知此事要躬行。——陆游《冬夜读书示子聿》
-
+    <title>Csv2 源码剖析：轻量级 CSV 处理的高效之道 - 东尼的博客</title><meta name="author" content="AndyFree96">
+<meta name="description" content=" 纸上得来终觉浅，绝知此事要躬行。——陆游《冬夜读书示子聿》
 csv2是一个轻量级 C&#43;&#43; 库，用于将 CSV 文件解析为 C&#43;&#43; 中的 STL 容器。该库的主要功能是高效地处理 CSV 数据，简化了处理 CSV 文件的代码编写过程。以下是它的主要特性：
-
-简单易用：通过使用 STL 容器（如 std::vector 和 std::tuple），使得开发者能够轻松将 CSV 文件的内容转换为标准 C&#43;&#43; 数据结构。
-依赖少：该库只有 C&#43;&#43;17 标准库的依赖，因此不需要额外的第三方库。
-高效解析：该库采用高效的解析机制，支持处理大型 CSV 文件。
-轻量级：代码库很小，适用于嵌入式或对依赖库要求较高的项目。
-" /><meta name="keywords" content='CSV, C&#43;&#43;, 源码剖析' />
+简单易用：通过使用 STL 容器（如 std::vector 和 std::tuple），使得开发者能够轻松将 CSV 文件的内容转换为标准 C&#43;&#43; 数据结构。 依赖少：该库只有 C&#43;&#43;17 标准库的依赖，因此不需要额外的第三方库。 高效解析：该库采用高效的解析机制，支持处理大型 CSV 文件。 轻量级：代码库很小，适用于嵌入式或对依赖库要求较高的项目。 "><meta name="keywords" content='CSV, C&#43;&#43;, 源码剖析'>
   <meta itemprop="name" content="csv2 源码剖析：轻量级 CSV 处理的高效之道">
-  <meta itemprop="description" content=" 纸上得来终觉浅，绝知此事要躬行。——陆游《冬夜读书示子聿》
+  <meta itemprop="description" content="纸上得来终觉浅，绝知此事要躬行。——陆游《冬夜读书示子聿》
 csv2是一个轻量级 C&#43;&#43; 库，用于将 CSV 文件解析为 C&#43;&#43; 中的 STL 容器。该库的主要功能是高效地处理 CSV 数据，简化了处理 CSV 文件的代码编写过程。以下是它的主要特性：
-简单易用：通过使用 STL 容器（如 std::vector 和 std::tuple），使得开发者能够轻松将 CSV 文件的内容转换为标准 C&#43;&#43; 数据结构。 依赖少：该库只有 C&#43;&#43;17 标准库的依赖，因此不需要额外的第三方库。 高效解析：该库采用高效的解析机制，支持处理大型 CSV 文件。 轻量级：代码库很小，适用于嵌入式或对依赖库要求较高的项目。 ">
+简单易用：通过使用 STL 容器（如 std::vector 和 std::tuple），使得开发者能够轻松将 CSV 文件的内容转换为标准 C&#43;&#43; 数据结构。 依赖少：该库只有 C&#43;&#43;17 标准库的依赖，因此不需要额外的第三方库。 高效解析：该库采用高效的解析机制，支持处理大型 CSV 文件。 轻量级：代码库很小，适用于嵌入式或对依赖库要求较高的项目。">
   <meta itemprop="datePublished" content="2024-10-07T14:16:41+08:00">
   <meta itemprop="dateModified" content="2024-10-07T14:16:41+08:00">
-  <meta itemprop="wordCount" content="3836">
+  <meta itemprop="wordCount" content="3804">
   <meta itemprop="keywords" content="CSV,C&#43;&#43;,源码剖析"><meta property="og:url" content="http://localhost:1313/csv2%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/">
   <meta property="og:site_name" content="东尼的博客">
   <meta property="og:title" content="csv2 源码剖析：轻量级 CSV 处理的高效之道">
-  <meta property="og:description" content=" 纸上得来终觉浅，绝知此事要躬行。——陆游《冬夜读书示子聿》
+  <meta property="og:description" content="纸上得来终觉浅，绝知此事要躬行。——陆游《冬夜读书示子聿》
 csv2是一个轻量级 C&#43;&#43; 库，用于将 CSV 文件解析为 C&#43;&#43; 中的 STL 容器。该库的主要功能是高效地处理 CSV 数据，简化了处理 CSV 文件的代码编写过程。以下是它的主要特性：
-简单易用：通过使用 STL 容器（如 std::vector 和 std::tuple），使得开发者能够轻松将 CSV 文件的内容转换为标准 C&#43;&#43; 数据结构。 依赖少：该库只有 C&#43;&#43;17 标准库的依赖，因此不需要额外的第三方库。 高效解析：该库采用高效的解析机制，支持处理大型 CSV 文件。 轻量级：代码库很小，适用于嵌入式或对依赖库要求较高的项目。 ">
+简单易用：通过使用 STL 容器（如 std::vector 和 std::tuple），使得开发者能够轻松将 CSV 文件的内容转换为标准 C&#43;&#43; 数据结构。 依赖少：该库只有 C&#43;&#43;17 标准库的依赖，因此不需要额外的第三方库。 高效解析：该库采用高效的解析机制，支持处理大型 CSV 文件。 轻量级：代码库很小，适用于嵌入式或对依赖库要求较高的项目。">
   <meta property="og:locale" content="zh_CN">
   <meta property="og:type" content="article">
     <meta property="article:section" content="posts">
@@ -49,14 +33,14 @@ csv2是一个轻量级 C&#43;&#43; 库，用于将 CSV 文件解析为 C&#43;&#4
 
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="csv2 源码剖析：轻量级 CSV 处理的高效之道">
-  <meta name="twitter:description" content=" 纸上得来终觉浅，绝知此事要躬行。——陆游《冬夜读书示子聿》
+  <meta name="twitter:description" content="纸上得来终觉浅，绝知此事要躬行。——陆游《冬夜读书示子聿》
 csv2是一个轻量级 C&#43;&#43; 库，用于将 CSV 文件解析为 C&#43;&#43; 中的 STL 容器。该库的主要功能是高效地处理 CSV 数据，简化了处理 CSV 文件的代码编写过程。以下是它的主要特性：
-简单易用：通过使用 STL 容器（如 std::vector 和 std::tuple），使得开发者能够轻松将 CSV 文件的内容转换为标准 C&#43;&#43; 数据结构。 依赖少：该库只有 C&#43;&#43;17 标准库的依赖，因此不需要额外的第三方库。 高效解析：该库采用高效的解析机制，支持处理大型 CSV 文件。 轻量级：代码库很小，适用于嵌入式或对依赖库要求较高的项目。 ">
+简单易用：通过使用 STL 容器（如 std::vector 和 std::tuple），使得开发者能够轻松将 CSV 文件的内容转换为标准 C&#43;&#43; 数据结构。 依赖少：该库只有 C&#43;&#43;17 标准库的依赖，因此不需要额外的第三方库。 高效解析：该库采用高效的解析机制，支持处理大型 CSV 文件。 轻量级：代码库很小，适用于嵌入式或对依赖库要求较高的项目。">
       <meta name="twitter:site" content="@IRONAnthony96">
-<meta name="application-name" content="FixIt">
+<meta name="twitter:creator" content="@IRONAnthony96" /><meta name="application-name" content="FixIt">
 <meta name="apple-mobile-web-app-title" content="FixIt"><meta name="theme-color" data-light="#f8f8f8" data-dark="#252627" content="#f8f8f8"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" href="http://localhost:1313/csv2%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" /><link rel="prev" href="http://localhost:1313/r%E6%95%B0%E6%8D%AE%E7%A7%91%E5%AD%A6/" /><link rel="next" href="http://localhost:1313/cpython%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" type="text/html" href="http://localhost:1313/csv2%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="csv2 源码剖析：轻量级 CSV 处理的高效之道 - 东尼的博客" /><link rel="prev" type="text/html" href="http://localhost:1313/r%E6%95%B0%E6%8D%AE%E7%A7%91%E5%AD%A6/" title="R数据科学" /><link rel="next" type="text/html" href="http://localhost:1313/cpython%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="CPython 源码剖析：Python 运行的奥秘" /><link rel="alternate" type="text/markdown" href="http://localhost:1313/csv2%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/index.md" title="csv2 源码剖析：轻量级 CSV 处理的高效之道 - 东尼的博客"><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><script type="application/ld+json">
   {
@@ -67,7 +51,7 @@ csv2是一个轻量级 C&#43;&#43; 库，用于将 CSV 文件解析为 C&#43;&#4
     "mainEntityOfPage": {
       "@type": "WebPage",
       "@id": "http:\/\/localhost:1313\/csv2%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90\/"
-    },"genre": "posts","keywords": "CSV, C\u002b\u002b, 源码剖析","wordcount":  3836 ,
+    },"genre": "posts","keywords": "CSV, C\u002b\u002b, 源码剖析","wordcount":  3804 ,
     "url": "http:\/\/localhost:1313\/csv2%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90\/","datePublished": "2024-10-07T14:16:41+08:00","dateModified": "2024-10-07T14:16:41+08:00","publisher": {
       "@type": "Organization",
       "name": ""},"author": {
@@ -75,74 +59,21 @@ csv2是一个轻量级 C&#43;&#43; 库，用于将 CSV 文件解析为 C&#43;&#4
         "name": "AndyFree96"
       },"description": ""
   }
-  </script></head>
-  <body
-    data-header-desktop="sticky"
-    data-header-mobile="auto"
-  ><script>
-      (window.localStorage?.getItem("theme")
-        ? localStorage.getItem("theme") === "dark"
-        : "auto" === "auto"
-        ? window.matchMedia("(prefers-color-scheme: dark)").matches
-        : "auto" === "dark") &&
-        document.body.setAttribute("data-theme", "dark");
-    </script><div
-      class="wrapper"
-      data-page-style="normal"
-    ><header class="desktop animate__faster" id="header-desktop">
+  </script><script src="/js/head/color-scheme.min.js"></script></head>
+  <body data-header-desktop="sticky" data-header-mobile="auto"><div class="wrapper" data-page-style="normal"><header class="desktop animate__faster" id="header-desktop">
   <div class="header-wrapper">
     <div class="header-title">
       <a href="/" title="东尼的博客"><span class="header-title-text">东尼的博客</span></a><span class="header-subtitle"></span></div>
     <nav>
       <ul class="menu"><li class="menu-item">
-              <a
-                class="menu-link"
-                href="/posts/"
-                
-                
-              >📕 文章</a></li><li class="menu-item">
-              <a
-                class="menu-link"
-                href="/categories/"
-                
-                
-              >🧰 分类</a></li><li class="menu-item">
-              <a
-                class="menu-link"
-                href="/tags/"
-                
-                
-              >🔖 标签</a></li><li class="menu-item">
-              <a
-                class="menu-link"
-                href="/book"
-                
-                
-              >📚 书单</a></li><li class="menu-item">
-              <a
-                class="menu-link"
-                href="/paper"
-                
-                
-              >📝 论文</a></li><li class="menu-item">
-              <a
-                class="menu-link"
-                href="/opencourse"
-                
-                
-              >👨🏻‍💻 公开课</a></li><li class="menu-item">
-              <a
-                class="menu-link"
-                href="/resource"
-                
-                
-              >⚡️ 资源</a></li><li class="menu-item">
-              <a
-                class="menu-link"
-                href="/about"
-                
-                
-              >🙋🏻‍♂️ 关于</a></li><li class="menu-item delimiter"></li><li class="menu-item theme-switch" title="切换主题">
+              <a class="menu-link" href="/posts/">📕 文章</a></li><li class="menu-item">
+              <a class="menu-link" href="/categories/">🧰 分类</a></li><li class="menu-item">
+              <a class="menu-link" href="/tags/">🔖 标签</a></li><li class="menu-item">
+              <a class="menu-link" href="/book">📚 书单</a></li><li class="menu-item">
+              <a class="menu-link" href="/paper">📝 论文</a></li><li class="menu-item">
+              <a class="menu-link" href="/opencourse">👨🏻‍💻 公开课</a></li><li class="menu-item">
+              <a class="menu-link" href="/resource">⚡️ 资源</a></li><li class="menu-item">
+              <a class="menu-link" href="/about">🙋🏻‍♂️ 关于</a></li><li class="menu-item delimiter"></li><li class="menu-item theme-switch" title="切换主题">
           <i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i>
         </li></ul>
     </nav>
@@ -157,76 +88,18 @@ csv2是一个轻量级 C&#43;&#43; 库，用于将 CSV 文件解析为 C&#43;&#4
       </div>
     </div>
     <nav>
-      <ul class="menu" id="menu-mobile"><li
-              class="menu-item"
-            ><a
-                  class="menu-link"
-                  href="/posts/"
-                  
-                  
-                >📕 文章</a></li><li
-              class="menu-item"
-            ><a
-                  class="menu-link"
-                  href="/categories/"
-                  
-                  
-                >🧰 分类</a></li><li
-              class="menu-item"
-            ><a
-                  class="menu-link"
-                  href="/tags/"
-                  
-                  
-                >🔖 标签</a></li><li
-              class="menu-item"
-            ><a
-                  class="menu-link"
-                  href="/book"
-                  
-                  
-                >📚 书单</a></li><li
-              class="menu-item"
-            ><a
-                  class="menu-link"
-                  href="/paper"
-                  
-                  
-                >📝 论文</a></li><li
-              class="menu-item"
-            ><a
-                  class="menu-link"
-                  href="/opencourse"
-                  
-                  
-                >👨🏻‍💻 公开课</a></li><li
-              class="menu-item"
-            ><a
-                  class="menu-link"
-                  href="/resource"
-                  
-                  
-                >⚡️ 资源</a></li><li
-              class="menu-item"
-            ><a
-                  class="menu-link"
-                  href="/about"
-                  
-                  
-                >🙋🏻‍♂️ 关于</a></li><li class="menu-item menu-system">
+      <ul class="menu" id="menu-mobile"><li class="menu-item"><a class="menu-link" href="/posts/">📕 文章</a></li><li class="menu-item"><a class="menu-link" href="/categories/">🧰 分类</a></li><li class="menu-item"><a class="menu-link" href="/tags/">🔖 标签</a></li><li class="menu-item"><a class="menu-link" href="/book">📚 书单</a></li><li class="menu-item"><a class="menu-link" href="/paper">📝 论文</a></li><li class="menu-item"><a class="menu-link" href="/opencourse">👨🏻‍💻 公开课</a></li><li class="menu-item"><a class="menu-link" href="/resource">⚡️ 资源</a></li><li class="menu-item"><a class="menu-link" href="/about">🙋🏻‍♂️ 关于</a></li><li class="menu-item menu-system">
           <span class="menu-system-item theme-switch" title="切换主题"><i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i></span></li>
       </ul>
     </nav>
   </div>
-</header><main
-        class="container"
-      ><aside class="aside-collection animate__animated animate__fadeIn animate__faster" aria-label="合集"></aside>
+</header><main class="container"><aside class="aside-collection animate__animated animate__fadeIn animate__faster" aria-label="合集"></aside>
 
   <article class="page single">
-    <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span title="转载" class="icon-repost"><i class="fa-solid fa-share fa-fw" aria-hidden="true"></i></span><span>csv2 源码剖析：轻量级 CSV 处理的高效之道</span>
+    <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span title="转载" class="icon-repost"><i class="fa-solid fa-share fa-fw" aria-hidden="true"></i></span><span>Csv2 源码剖析：轻量级 CSV 处理的高效之道</span>
       </h1><p class="single-subtitle animate__animated animate__fadeIn">深入解析 csv2 的设计与实现</p></div><div class="post-meta">
-      <div class="post-meta-line"><span class="post-author"><a href="https://andyfree96.github.io/" title="作者"target="_blank" rel="external nofollow noopener noreferrer author" class="author"><img loading="lazy" src="/avatar/1.jpg" alt="AndyFree96" data-title="AndyFree96" class="avatar" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/>&nbsp;AndyFree96</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" class="post-category" title="分类 - 源码剖析"><i class="fa-regular fa-folder fa-fw" aria-hidden="true"></i> 源码剖析</a></span></div><div class="post-meta-line"><span title="发布于 2024-10-07 14:16:41"><i class="fa-solid fa-calendar-days fa-fw me-1" aria-hidden="true"></i><time datetime="2024-10-07">2024-10-07</time></span>&nbsp;<span title="3836 字"><i class="fa-solid fa-pencil-alt fa-fw me-1" aria-hidden="true"></i>约 3900 字</span>&nbsp;<span><i class="fa-regular fa-clock fa-fw me-1" aria-hidden="true"></i>预计阅读 8 分钟</span>&nbsp;</div>
-    </div><div class="featured-image"><img loading="lazy" src="/images/202410/16/samsung-memory-dIfsOkzzSk4-unsplash.jpg" alt="/images/202410/16/samsung-memory-dIfsOkzzSk4-unsplash.jpg" data-title="/images/202410/16/samsung-memory-dIfsOkzzSk4-unsplash.jpg" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></div><div class="details toc" id="toc-static" data-kept="false">
+      <div class="post-meta-line"><span class="post-author"><a href="https://andyfree96.github.io/" title="作者"target="_blank" rel="external nofollow noopener noreferrer author" class="author"><img class="avatar" src='/avatar/1.jpg' alt="AndyFree96" height="16" width="16">&nbsp;AndyFree96</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" class="post-category" title="分类 - 源码剖析"><i class="fa-regular fa-folder fa-fw" aria-hidden="true"></i> 源码剖析</a></span></div><div class="post-meta-line"><span title="发布于 2024-10-07 14:16:41"><i class="fa-solid fa-calendar-days fa-fw me-1" aria-hidden="true"></i><time datetime="2024-10-07">2024-10-07</time></span>&nbsp;<span title="3804 字"><i class="fa-solid fa-pencil-alt fa-fw me-1" aria-hidden="true"></i>约 3900 字</span>&nbsp;<span><i class="fa-regular fa-clock fa-fw me-1" aria-hidden="true"></i>预计阅读 8 分钟</span>&nbsp;</div>
+    </div><div class="featured-image"><img src='/images/202410/16/samsung-memory-dIfsOkzzSk4-unsplash.jpg' alt="/images/202410/16/samsung-memory-dIfsOkzzSk4-unsplash.jpg"></div><div class="details toc" id="toc-static" data-kept="false">
         <div class="details-summary toc-title">
           <span>目录</span>
           <span><i class="details-icon fa-solid fa-angle-right" aria-hidden="true"></i></span>
@@ -253,17 +126,17 @@ csv2是一个轻量级 C&#43;&#43; 库，用于将 CSV 文件解析为 C&#43;&#4
         <li><a href="#1-cmake-项目添加第三方库">1. CMake 项目添加第三方库</a></li>
         <li><a href="#2-static-const-使用">2. Static Const 使用</a></li>
         <li><a href="#3-static_assert">3. static_assert</a></li>
-        <li><a href="#div-idpoint-4-styledisplay-inline4-mmapdiv"><div id="point-4" style="display: inline">4. mmap</div></a>
+        <li><a href="#4-mmap"><div id="point-4" style="display: inline">4. mmap</div></a>
           <ul>
             <li><a href="#存储映射-io">存储映射 I/O</a></li>
           </ul>
         </li>
-        <li><a href="#div-idpoint-5-styledisplay-inline5-可变参数模板div"><div id="point-5" style="display: inline">5. 可变参数模板</div></a></li>
+        <li><a href="#5-可变参数模板"><div id="point-5" style="display: inline">5. 可变参数模板</div></a></li>
         <li><a href="#6-pragma-once">6. <code>#pragma once</code></a></li>
         <li><a href="#7-__has_include">7. <code>__has_include()</code></a></li>
         <li><a href="#8-definedidentifier">8. <code>defined(identifier)</code></a></li>
         <li><a href="#9-模板默认参数">9. 模板默认参数</a></li>
-        <li><a href="#div-idpoint-10-styledisplay-inline10-stdforwarddiv"><div id="point-10" style="display: inline">10. std::forward</div></a></li>
+        <li><a href="#10-stdforward"><div id="point-10" style="display: inline">10. std::forward</div></a></li>
         <li><a href="#11-stdstring">11. std::string</a></li>
       </ul>
     </li>
@@ -271,8 +144,7 @@ csv2是一个轻量级 C&#43;&#43; 库，用于将 CSV 文件解析为 C&#43;&#4
   </ul>
 </nav></div>
       </div><div class="content" id="content"><blockquote>
-<p>纸上得来终觉浅，绝知此事要躬行。——陆游《冬夜读书示子聿》</p>
-</blockquote>
+<p>纸上得来终觉浅，绝知此事要躬行。——陆游《冬夜读书示子聿》</p></blockquote>
 <p><a href="https://github.com/p-ranav/csv2"target="_blank" rel="external nofollow noopener noreferrer">csv2</a>是一个轻量级 C++ 库，用于将 CSV 文件解析为 C++ 中的 STL 容器。该库的主要功能是高效地处理 CSV 数据，简化了处理 CSV 文件的代码编写过程。以下是它的主要特性：</p>
 <ol>
 <li>简单易用：通过使用 STL 容器（如 std::vector 和 std::tuple），使得开发者能够轻松将 CSV 文件的内容转换为标准 C++ 数据结构。</li>
@@ -280,18 +152,27 @@ csv2是一个轻量级 C&#43;&#43; 库，用于将 CSV 文件解析为 C&#43;&#4
 <li>高效解析：该库采用高效的解析机制，支持处理大型 CSV 文件。</li>
 <li>轻量级：代码库很小，适用于嵌入式或对依赖库要求较高的项目。</li>
 </ol>
-<h2 id="准备" class="heading-element">
-  <a href="#%e5%87%86%e5%a4%87" class="heading-mark"></a>准备</h2><p>项目源代码地址为<a href="https://github.com/p-ranav/csv2"target="_blank" rel="external nofollow noopener noreferrer">p-ranav/csv2</a> v1.0。</p>
+<h2 class="heading-element" id="准备"><span>准备</span>
+  <a href="#%e5%87%86%e5%a4%87" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>项目源代码地址为<a href="https://github.com/p-ranav/csv2"target="_blank" rel="external nofollow noopener noreferrer">p-ranav/csv2</a> v1.0。</p>
 <p>阅读工具为 CLion。</p>
-<h2 id="剖析" class="heading-element">
-  <a href="#%e5%89%96%e6%9e%90" class="heading-mark"></a>剖析</h2><p>整个项目包含 4 个文件，分别是: <code>reader.hpp</code>、<code>mio.hpp</code>、<code>writer.hpp</code>和<code>parameters.hpp</code>。</p>
+<h2 class="heading-element" id="剖析"><span>剖析</span>
+  <a href="#%e5%89%96%e6%9e%90" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>整个项目包含 4 个文件，分别是: <code>reader.hpp</code>、<code>mio.hpp</code>、<code>writer.hpp</code>和<code>parameters.hpp</code>。</p>
 <p><a href="https://stackoverflow.com/questions/5171502/c-vs-cc-vs-cpp-vs-hpp-vs-h-vs-cxx"target="_blank" rel="external nofollow noopener noreferrer">.c vs .cc vs. .cpp vs .hpp vs .h vs .cxx</a>: 由于历史渊源，造成头文件和源代码文件有些不同的命名方式，但本质而言没有什么区别。</p>
-<h3 id="readerhpp" class="heading-element">
-  <a href="#readerhpp" class="heading-mark"></a>reader.hpp</h3><p>reader.hpp 文件中主要定义了一个名为<code>Reader</code>的类。数据部分主要有:</p>
-<p><img loading="lazy" src="/images/202410/16/6.png" alt="/images/202410/16/6.png" srcset="/images/202410/16/6.png?size=small, /images/202410/16/6.png?size=medium 1.5x, /images/202410/16/6.png?size=large 2x" data-title="/images/202410/16/6.png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></p>
+<h3 class="heading-element" id="readerhpp"><span>reader.hpp</span>
+  <a href="#readerhpp" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p>reader.hpp 文件中主要定义了一个名为<code>Reader</code>的类。数据部分主要有:</p>
+<p><img loading="lazy" src='/images/202410/16/6.png' alt="/images/202410/16/6.png"></p>
 <p>紧接着定义了两个方法: <code>mmap</code>和<code>parse</code>，分别从文件和字符串内容解析内容。</p>
 <p>从文件中解析内容:</p>
-<div class="highlight" id="id-1"><div class="chroma">
+<div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
@@ -349,7 +230,7 @@ csv2是一个轻量级 C&#43;&#43; 库，用于将 CSV 文件解析为 C&#43;&#4
 </span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>从字符串中解析内容:</p>
-<div class="highlight" id="id-2"><div class="chroma">
+<div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
@@ -404,18 +285,24 @@ csv2是一个轻量级 C&#43;&#43; 库，用于将 CSV 文件解析为 C&#43;&#4
 </div>
 </div><p><code>parse</code>方法中使用了<a href="#point-10">知识点 10</a>。</p>
 <p>reader.hpp 中还定义了<code>Cell</code>、<code>Row</code>、<code>RowIterator</code>等类。</p>
-<p><img loading="lazy" src="/images/202410/16/7.png" alt="/images/202410/16/7.png" srcset="/images/202410/16/7.png?size=small, /images/202410/16/7.png?size=medium 1.5x, /images/202410/16/7.png?size=large 2x" data-title="/images/202410/16/7.png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></p>
+<p><img loading="lazy" src='/images/202410/16/7.png' alt="/images/202410/16/7.png"></p>
 <p>为了方便在之后的类中使用 RowIterator、Row 和 CellIterator，文件中加了 forward-declaration，如上图所示。</p>
-<h4 id="cell" class="heading-element">
-  <a href="#cell" class="heading-mark"></a>Cell</h4><p>Cell 类的数据部分定义如下:</p>
-<p><img loading="lazy" src="/images/202410/16/8.png" alt="/images/202410/16/8.png" srcset="/images/202410/16/8.png?size=small, /images/202410/16/8.png?size=medium 1.5x, /images/202410/16/8.png?size=large 2x" data-title="/images/202410/16/8.png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></p>
+<h4 class="heading-element" id="cell"><span>Cell</span>
+  <a href="#cell" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h4><p>Cell 类的数据部分定义如下:</p>
+<p><img loading="lazy" src='/images/202410/16/8.png' alt="/images/202410/16/8.png"></p>
 <p>其中的<code>buffer_</code>指向 memory-mapped buffer，可参考<a href="#point-4">知识点 4</a>，我们可以简单的将其理解为指向数据内容的一个指针。</p>
 <p>主要包括两个方法: <code>read_raw_value</code>和<code>read_value</code>，两个方法稍有区别，前者处理无转义字符，后者处理有转义字符。</p>
-<h4 id="row" class="heading-element">
-  <a href="#row" class="heading-mark"></a>Row</h4><p>Row 类的数据部分定义如下:</p>
-<p><img loading="lazy" src="/images/202410/16/9.png" alt="/images/202410/16/9.png" srcset="/images/202410/16/9.png?size=small, /images/202410/16/9.png?size=medium 1.5x, /images/202410/16/9.png?size=large 2x" data-title="/images/202410/16/9.png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></p>
+<h4 class="heading-element" id="row"><span>Row</span>
+  <a href="#row" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h4><p>Row 类的数据部分定义如下:</p>
+<p><img loading="lazy" src='/images/202410/16/9.png' alt="/images/202410/16/9.png"></p>
 <p>和 Cell 类的定义大同小异。Row 类中还定义了另一个类 CellIterator:</p>
-<div class="highlight" id="id-3"><div class="chroma">
+<div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
@@ -531,7 +418,7 @@ csv2是一个轻量级 C&#43;&#43; 库，用于将 CSV 文件解析为 C&#43;&#4
 </span></span><span class="line"><span class="cl">    <span class="p">};</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>CellIterator 中定义了自增操作符、取值操作符和不等操作符。Iterator 必须实现这三个操作符:</p>
-<div class="highlight" id="id-4"><div class="chroma">
+<div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
@@ -712,25 +599,34 @@ csv2是一个轻量级 C&#43;&#43; 库，用于将 CSV 文件解析为 C&#43;&#4
 </div>
 </div><p>C++ 11 range-based for loops: <a href="https://www.cprogramming.com/c&#43;&#43;11/c&#43;&#43;11-ranged-for-loop.html"target="_blank" rel="external nofollow noopener noreferrer">https://www.cprogramming.com/c++11/c++11-ranged-for-loop.html</a></p>
 <p>还定义了<code>begin</code>和<code>end</code>两个方法用于返回<code>RowIterator</code>。</p>
-<h4 id="rowiterator" class="heading-element">
-  <a href="#rowiterator" class="heading-mark"></a>RowIterator</h4><p>RowIterator 的定义和 CellIterator 的定义大致相同。</p>
-<h3 id="miohpp" class="heading-element">
-  <a href="#miohpp" class="heading-mark"></a>mio.hpp</h3><p>mio.hpp 相比与其他三个文件的代码多了不少，也复杂了许多。文件一开始定义了<code>template &lt;access_mode AccessMode, typename ByteT&gt; struct basic_mmap</code>结构体，然后围绕这个结构体声明了一系列操作符:</p>
-<p><img loading="lazy" src="/images/202410/16/11.png" alt="/images/202410/16/11.png" srcset="/images/202410/16/11.png?size=small, /images/202410/16/11.png?size=medium 1.5x, /images/202410/16/11.png?size=large 2x" data-title="/images/202410/16/11.png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></p>
+<h4 class="heading-element" id="rowiterator"><span>RowIterator</span>
+  <a href="#rowiterator" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h4><p>RowIterator 的定义和 CellIterator 的定义大致相同。</p>
+<h3 class="heading-element" id="miohpp"><span>mio.hpp</span>
+  <a href="#miohpp" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p>mio.hpp 相比与其他三个文件的代码多了不少，也复杂了许多。文件一开始定义了<code>template &lt;access_mode AccessMode, typename ByteT&gt; struct basic_mmap</code>结构体，然后围绕这个结构体声明了一系列操作符:</p>
+<p><img loading="lazy" src='/images/202410/16/11.png' alt="/images/202410/16/11.png"></p>
 <p>其定义在行号 1058 处:</p>
-<p><img loading="lazy" src="/images/202410/16/12.png" alt="/images/202410/16/12.png" srcset="/images/202410/16/12.png?size=small, /images/202410/16/12.png?size=medium 1.5x, /images/202410/16/12.png?size=large 2x" data-title="/images/202410/16/12.png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></p>
+<p><img loading="lazy" src='/images/202410/16/12.png' alt="/images/202410/16/12.png"></p>
 <p>之后定义了 5 个工厂方法，方便构建<code>mmap</code>、<code>mmap_source</code>以及<code>mmap_sink</code>对象:</p>
-<p><img loading="lazy" src="/images/202410/16/13.png" alt="/images/202410/16/13.png" srcset="/images/202410/16/13.png?size=small, /images/202410/16/13.png?size=medium 1.5x, /images/202410/16/13.png?size=large 2x" data-title="/images/202410/16/13.png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></p>
+<p><img loading="lazy" src='/images/202410/16/13.png' alt="/images/202410/16/13.png"></p>
 <p>然后在 587 处开始定义了字符串相关的工具函数:</p>
-<p><img loading="lazy" src="/images/202410/16/14.png" alt="/images/202410/16/14.png" srcset="/images/202410/16/14.png?size=small, /images/202410/16/14.png?size=medium 1.5x, /images/202410/16/14.png?size=large 2x" data-title="/images/202410/16/14.png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></p>
+<p><img loading="lazy" src='/images/202410/16/14.png' alt="/images/202410/16/14.png"></p>
 <p>在 684 处开始定义了与 Windows 平台相关的<code>open_file_helper</code>函数。</p>
-<p><img loading="lazy" src="/images/202410/16/15.png" alt="/images/202410/16/15.png" srcset="/images/202410/16/15.png?size=small, /images/202410/16/15.png?size=medium 1.5x, /images/202410/16/15.png?size=large 2x" data-title="/images/202410/16/15.png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></p>
+<p><img loading="lazy" src='/images/202410/16/15.png' alt="/images/202410/16/15.png"></p>
 <p>然后定义了<code>template &lt;typename String&gt; file_handle_type open_file</code>，<code>inline size_t query_file_size</code>和<code>inline mmap_context memory_map</code>函数，以及<code>struct mmap_context</code>结构体。之后，实现了许多在<code>template &lt;access_mode AccessMode, typename ByteT&gt; struct basic_mmap</code>声明的方法。</p>
 <p>最后定义了<code>template &lt;access_mode AccessMode, typename ByteT&gt; class basic_shared_mmap</code>类。</p>
-<h3 id="writerhpp" class="heading-element">
-  <a href="#writerhpp" class="heading-mark"></a>writer.hpp</h3><p>writer.hpp 中包含将数据导出的功能。主要定义了两个方法:<code>write_row</code>和<code>write_rows</code>，代表写入一行和写入多行。</p>
+<h3 class="heading-element" id="writerhpp"><span>writer.hpp</span>
+  <a href="#writerhpp" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p>writer.hpp 中包含将数据导出的功能。主要定义了两个方法:<code>write_row</code>和<code>write_rows</code>，代表写入一行和写入多行。</p>
 <p>例如，将数据写入到文件中:</p>
-<div class="highlight" id="id-5"><div class="chroma">
+<div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
@@ -775,22 +671,34 @@ csv2是一个轻量级 C&#43;&#43; 库，用于将 CSV 文件解析为 C&#43;&#4
 </span></span><span class="line"><span class="cl">	<span class="n">writer</span><span class="p">.</span><span class="n">write_rows</span><span class="p">(</span><span class="n">content</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table>
 </div>
-</div><p><img loading="lazy" src="/images/202410/16/10.png" alt="/images/202410/16/10.png" srcset="/images/202410/16/10.png?size=small, /images/202410/16/10.png?size=medium 1.5x, /images/202410/16/10.png?size=large 2x" data-title="/images/202410/16/10.png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></p>
-<h3 id="parametershpp" class="heading-element">
-  <a href="#parametershpp" class="heading-mark"></a>parameters.hpp</h3><p>首先，为了组织代码引入了<code>trim_policy</code>命名空间。 包含了<code>no_trimming</code>、<code>trim_characters</code>两个结构体，以及<code>using trim_whitespace = trim_characters&lt;' ', '\t'&gt;;</code>一句，于是给空白符<code>' '</code>和<code>'\t'</code>新的使用方式——<code>trim_whitespace</code>。需要注意的是，该标识符在<code>trim_policy</code>命名空间中。</p>
-<p><img loading="lazy" src="/images/202410/16/3.png" alt="/images/202410/16/3.png" srcset="/images/202410/16/3.png?size=small, /images/202410/16/3.png?size=medium 1.5x, /images/202410/16/3.png?size=large 2x" data-title="/images/202410/16/3.png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></p>
+</div><p><img loading="lazy" src='/images/202410/16/10.png' alt="/images/202410/16/10.png"></p>
+<h3 class="heading-element" id="parametershpp"><span>parameters.hpp</span>
+  <a href="#parametershpp" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p>首先，为了组织代码引入了<code>trim_policy</code>命名空间。 包含了<code>no_trimming</code>、<code>trim_characters</code>两个结构体，以及<code>using trim_whitespace = trim_characters&lt;' ', '\t'&gt;;</code>一句，于是给空白符<code>' '</code>和<code>'\t'</code>新的使用方式——<code>trim_whitespace</code>。需要注意的是，该标识符在<code>trim_policy</code>命名空间中。</p>
+<p><img loading="lazy" src='/images/202410/16/3.png' alt="/images/202410/16/3.png"></p>
 <p>此外，还包含<code>delimiter</code>、<code>quote_character</code>以及<code>first_row_is_header</code>三个结构体，和之前不同的是它们在<code>csv2</code>命令空间中。</p>
 <p>整个文件的结构体里面的方法或数据都是<code>static</code>的，表示我们可以用<code>delimiter&lt;':'&gt;::value</code>的方式直接获取里面的数据，而不用实例化（实例化从逻辑上好像也有一些问题，同样是用<code>:</code>作为分隔符却实例化了两个不同的对象，有点奇怪）。</p>
 <p>关于可变参数模板可看<a href="#point-5">知识点 5</a>。</p>
 <p>pair 的使用: <a href="https://cplusplus.com/reference/utility/pair/pair/"target="_blank" rel="external nofollow noopener noreferrer">https://cplusplus.com/reference/utility/pair/pair/</a></p>
-<h2 id="知识点" class="heading-element">
-  <a href="#%e7%9f%a5%e8%af%86%e7%82%b9" class="heading-mark"></a>知识点</h2><h3 id="1-cmake-项目添加第三方库" class="heading-element">
-  <a href="#1-cmake-%e9%a1%b9%e7%9b%ae%e6%b7%bb%e5%8a%a0%e7%ac%ac%e4%b8%89%e6%96%b9%e5%ba%93" class="heading-mark"></a>1. CMake 项目添加第三方库</h3><p>在 CMakeLists.txt 中添加如下语句:</p>
-<p><img loading="lazy" src="/images/202410/16/1.png" alt="/images/202410/16/1.png" srcset="/images/202410/16/1.png?size=small, /images/202410/16/1.png?size=medium 1.5x, /images/202410/16/1.png?size=large 2x" data-title="/images/202410/16/1.png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></p>
+<h2 class="heading-element" id="知识点"><span>知识点</span>
+  <a href="#%e7%9f%a5%e8%af%86%e7%82%b9" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><h3 class="heading-element" id="1-cmake-项目添加第三方库"><span>1. CMake 项目添加第三方库</span>
+  <a href="#1-cmake-%e9%a1%b9%e7%9b%ae%e6%b7%bb%e5%8a%a0%e7%ac%ac%e4%b8%89%e6%96%b9%e5%ba%93" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p>在 CMakeLists.txt 中添加如下语句:</p>
+<p><img loading="lazy" src='/images/202410/16/1.png' alt="/images/202410/16/1.png"></p>
 <p>即可将三方库的头文件包含进来。</p>
-<h3 id="2-static-const-使用" class="heading-element">
-  <a href="#2-static-const-%e4%bd%bf%e7%94%a8" class="heading-mark"></a>2. Static Const 使用</h3><p>mio.hpp 中有如下一段代码:</p>
-<div class="highlight" id="id-6"><div class="chroma">
+<h3 class="heading-element" id="2-static-const-使用"><span>2. Static Const 使用</span>
+  <a href="#2-static-const-%e4%bd%bf%e7%94%a8" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p>mio.hpp 中有如下一段代码:</p>
+<div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
@@ -835,25 +743,34 @@ csv2是一个轻量级 C&#43;&#43; 库，用于将 CSV 文件解析为 C&#43;&#4
 </div>
 </div><p><code>page_size()</code>内部的匿名函数只会运行一次，得益于<code>static const</code>声明，这样可以避免重复调用<code>sysconf()</code>函数（如注释所述）。</p>
 <p><a href="https://www.tutorialspoint.com/static-const-vs-hashdefine-vs-enum"target="_blank" rel="external nofollow noopener noreferrer">https://www.tutorialspoint.com/static-const-vs-hashdefine-vs-enum</a></p>
-<h3 id="3-static_assert" class="heading-element">
-  <a href="#3-static_assert" class="heading-mark"></a>3. static_assert</h3><p>mio.hpp 中有<code>static_assert</code>的写法。</p>
-<p><img loading="lazy" src="/images/202410/16/2.png" alt="/images/202410/16/2.png" srcset="/images/202410/16/2.png?size=small, /images/202410/16/2.png?size=medium 1.5x, /images/202410/16/2.png?size=large 2x" data-title="/images/202410/16/2.png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></p>
+<h3 class="heading-element" id="3-static_assert"><span>3. static_assert</span>
+  <a href="#3-static_assert" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p>mio.hpp 中有<code>static_assert</code>的写法。</p>
+<p><img loading="lazy" src='/images/202410/16/2.png' alt="/images/202410/16/2.png"></p>
 <p>static_assert declaration: <a href="https://en.cppreference.com/w/cpp/language/static_assert"target="_blank" rel="external nofollow noopener noreferrer">https://en.cppreference.com/w/cpp/language/static_assert</a></p>
 <p>Understanding static_assert in C++ 11: <a href="https://www.geeksforgeeks.org/understanding-static_assert-c-11/"target="_blank" rel="external nofollow noopener noreferrer">https://www.geeksforgeeks.org/understanding-static_assert-c-11/</a></p>
-<h3 id="div-idpoint-4-styledisplay-inline4-mmapdiv" class="heading-element">
-  <a href="#div-idpoint-4-styledisplay-inline4-mmapdiv" class="heading-mark"></a><div id="point-4" style="display: inline">4. mmap</div></h3><p>mio.hpp 中的<code>memory_map</code>函数使用了<code>mmap</code>。</p>
+<h3 class="heading-element" id="4-mmap"><span><div id="point-4" style="display: inline">4. mmap</div></span>
+  <a href="#4-mmap" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p>mio.hpp 中的<code>memory_map</code>函数使用了<code>mmap</code>。</p>
 <p><a href="https://www.delftstack.com/howto/c/use-mmap-function-to-write-to-the-memory-in-c/"target="_blank" rel="external nofollow noopener noreferrer">Use the mmap Function to Write to the Memory in C</a></p>
 <p>Shared Memory: <a href="https://kuafu1994.github.io/MoreOnMemory/sharedMemory.html"target="_blank" rel="external nofollow noopener noreferrer">https://kuafu1994.github.io/MoreOnMemory/sharedMemory.html</a></p>
 <p>mapread.c 和 mapwrite.c: <a href="https://gist.github.com/marcetcheverry/991042"target="_blank" rel="external nofollow noopener noreferrer">https://gist.github.com/marcetcheverry/991042</a></p>
 <p>Memory Mapped I/O: <a href="https://www.cs.uleth.ca/~holzmann/C/system/mmap.html"target="_blank" rel="external nofollow noopener noreferrer">https://www.cs.uleth.ca/~holzmann/C/system/mmap.html</a></p>
-<h4 id="存储映射-io" class="heading-element">
-  <a href="#%e5%ad%98%e5%82%a8%e6%98%a0%e5%b0%84-io" class="heading-mark"></a>存储映射 I/O</h4><p>存储映射 I/O（Memory-Mapped I/O）能将一个磁盘文件映射到存储空间的一个缓冲区上，当从缓冲区中取数据时，就相当于读文件中的相应字节。与此类似，将数据存入缓冲区时，相应字节就自动写入文件。如此一来，就可以在不调用 read 和 write 的情况下执行 I/O。——《UNIX 环境高级编程》14.8 节</p>
+<h4 class="heading-element" id="存储映射-io"><span>存储映射 I/O</span>
+  <a href="#%e5%ad%98%e5%82%a8%e6%98%a0%e5%b0%84-io" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h4><p>存储映射 I/O（Memory-Mapped I/O）能将一个磁盘文件映射到存储空间的一个缓冲区上，当从缓冲区中取数据时，就相当于读文件中的相应字节。与此类似，将数据存入缓冲区时，相应字节就自动写入文件。如此一来，就可以在不调用 read 和 write 的情况下执行 I/O。——《UNIX 环境高级编程》14.8 节</p>
 <p>探索内存原理的内存映射文件: <a href="https://zhuanlan.zhihu.com/p/429987335"target="_blank" rel="external nofollow noopener noreferrer">https://zhuanlan.zhihu.com/p/429987335</a></p>
 <p>File Mapping in C++ Applications: <a href="https://www.geeksforgeeks.org/file-mapping-in-cpp-applications/"target="_blank" rel="external nofollow noopener noreferrer">https://www.geeksforgeeks.org/file-mapping-in-cpp-applications/</a></p>
 <p>File Mapping: <a href="https://learn.microsoft.com/en-us/windows/win32/memory/file-mapping"target="_blank" rel="external nofollow noopener noreferrer">https://learn.microsoft.com/en-us/windows/win32/memory/file-mapping</a></p>
 <p>Mapping files into virtual memory in C on windows: <a href="https://stackoverflow.com/questions/68368291/mapping-files-into-virtual-memory-in-c-on-windows"target="_blank" rel="external nofollow noopener noreferrer">https://stackoverflow.com/questions/68368291/mapping-files-into-virtual-memory-in-c-on-windows</a></p>
 <p>示例代码:</p>
-<div class="highlight" id="id-7"><div class="chroma">
+<div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
@@ -1010,10 +927,13 @@ csv2是一个轻量级 C&#43;&#43; 库，用于将 CSV 文件解析为 C&#43;&#4
 </span></span><span class="line"><span class="cl">	<span class="n">printf</span><span class="p">(</span><span class="s">&#34;</span><span class="se">\n</span><span class="s">Done</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table>
 </div>
-</div><h3 id="div-idpoint-5-styledisplay-inline5-可变参数模板div" class="heading-element">
-  <a href="#div-idpoint-5-styledisplay-inline5-%e5%8f%af%e5%8f%98%e5%8f%82%e6%95%b0%e6%a8%a1%e6%9d%bfdiv" class="heading-mark"></a><div id="point-5" style="display: inline">5. 可变参数模板</div></h3><p>在 parameters.hpp 中使用了可变参数模板（Variadic Template Function）。</p>
+</div><h3 class="heading-element" id="5-可变参数模板"><span><div id="point-5" style="display: inline">5. 可变参数模板</div></span>
+  <a href="#5-%e5%8f%af%e5%8f%98%e5%8f%82%e6%95%b0%e6%a8%a1%e6%9d%bf" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p>在 parameters.hpp 中使用了可变参数模板（Variadic Template Function）。</p>
 <p><a href="https://thispointer.com/c11-variadic-template-function-tutorial-examples/"target="_blank" rel="external nofollow noopener noreferrer">C++11 – Variadic Template Function | Tutorial &amp; Examples</a></p>
-<div class="highlight" id="id-8"><div class="chroma">
+<div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
@@ -1042,20 +962,32 @@ csv2是一个轻量级 C&#43;&#43; 库，用于将 CSV 文件解析为 C&#43;&#4
 </span></span><span class="line"><span class="cl">    <span class="n">logging</span><span class="p">(</span><span class="n">args</span><span class="p">...);</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table>
 </div>
-</div><h3 id="6-pragma-once" class="heading-element">
-  <a href="#6-pragma-once" class="heading-mark"></a>6. <code>#pragma once</code></h3><p><a href="https://stackoverflow.com/questions/5776910/what-does-pragma-once-mean-in-c"target="_blank" rel="external nofollow noopener noreferrer">What does <code>#pragma</code> once mean in C?</a></p>
+</div><h3 class="heading-element" id="6-pragma-once"><span>6. <code>#pragma once</code></span>
+  <a href="#6-pragma-once" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p><a href="https://stackoverflow.com/questions/5776910/what-does-pragma-once-mean-in-c"target="_blank" rel="external nofollow noopener noreferrer">What does <code>#pragma</code> once mean in C?</a></p>
 <p>截至到 2023 年为止，主流的编译器都支持<code>#pragma once</code>。</p>
-<h3 id="7-__has_include" class="heading-element">
-  <a href="#7-__has_include" class="heading-mark"></a>7. <code>__has_include()</code></h3><p>根据<a href="https://en.cppreference.com/w/cpp/preprocessor/include"target="_blank" rel="external nofollow noopener noreferrer">Source file inclusion</a>的描述，<code>__has_include()</code>可以用来检测某个头文件是否存在，但此时并没有将其引入。</p>
-<h3 id="8-definedidentifier" class="heading-element">
-  <a href="#8-definedidentifier" class="heading-mark"></a>8. <code>defined(identifier)</code></h3><p>reader.hpp 中有<code>#if defined(identifier)</code>一句。</p>
-<p><img loading="lazy" src="/images/202410/16/4.png" alt="/images/202410/16/4.png" srcset="/images/202410/16/4.png?size=small, /images/202410/16/4.png?size=medium 1.5x, /images/202410/16/4.png?size=large 2x" data-title="/images/202410/16/4.png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></p>
+<h3 class="heading-element" id="7-__has_include"><span>7. <code>__has_include()</code></span>
+  <a href="#7-__has_include" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p>根据<a href="https://en.cppreference.com/w/cpp/preprocessor/include"target="_blank" rel="external nofollow noopener noreferrer">Source file inclusion</a>的描述，<code>__has_include()</code>可以用来检测某个头文件是否存在，但此时并没有将其引入。</p>
+<h3 class="heading-element" id="8-definedidentifier"><span>8. <code>defined(identifier)</code></span>
+  <a href="#8-definedidentifier" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p>reader.hpp 中有<code>#if defined(identifier)</code>一句。</p>
+<p><img loading="lazy" src='/images/202410/16/4.png' alt="/images/202410/16/4.png"></p>
 <p><a href="https://learn.microsoft.com/en-us/cpp/preprocessor/hash-if-hash-elif-hash-else-and-hash-endif-directives-c-cpp?view=msvc-170"target="_blank" rel="external nofollow noopener noreferrer"><code>#if</code>, <code>#elif</code>, <code>#else</code>, and <code>#endif</code> directives</a></p>
-<h3 id="9-模板默认参数" class="heading-element">
-  <a href="#9-%e6%a8%a1%e6%9d%bf%e9%bb%98%e8%ae%a4%e5%8f%82%e6%95%b0" class="heading-mark"></a>9. 模板默认参数</h3><p>reader.hpp 有默认模板参数的写法:</p>
-<p><img loading="lazy" src="/images/202410/16/5.png" alt="/images/202410/16/5.png" srcset="/images/202410/16/5.png?size=small, /images/202410/16/5.png?size=medium 1.5x, /images/202410/16/5.png?size=large 2x" data-title="/images/202410/16/5.png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></p>
+<h3 class="heading-element" id="9-模板默认参数"><span>9. 模板默认参数</span>
+  <a href="#9-%e6%a8%a1%e6%9d%bf%e9%bb%98%e8%ae%a4%e5%8f%82%e6%95%b0" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p>reader.hpp 有默认模板参数的写法:</p>
+<p><img loading="lazy" src='/images/202410/16/5.png' alt="/images/202410/16/5.png"></p>
 <p>在 C++ 17 之前，如果不用任何模板参数且正常使用 Reader 类的话，需要使用如下语法:</p>
-<div class="highlight" id="id-9"><div class="chroma">
+<div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
@@ -1063,7 +995,7 @@ csv2是一个轻量级 C&#43;&#43; 库，用于将 CSV 文件解析为 C&#43;&#4
 <pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="line"><span class="cl"><span class="n">Reader</span><span class="o">&lt;&gt;</span> <span class="n">reader</span><span class="p">;</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>将 CMakeLists.txt 中的 C++版本由 14</p>
-<div class="highlight" id="id-10"><div class="chroma">
+<div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
@@ -1071,7 +1003,7 @@ csv2是一个轻量级 C&#43;&#43; 库，用于将 CSV 文件解析为 C&#43;&#4
 <pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">set(CMAKE_CXX_STANDARD 14)</span></span></code></pre></td></tr></table>
 </div>
 </div><p>改为 17</p>
-<div class="highlight" id="id-11"><div class="chroma">
+<div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
@@ -1079,17 +1011,20 @@ csv2是一个轻量级 C&#43;&#43; 库，用于将 CSV 文件解析为 C&#43;&#4
 <pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">set(CMAKE_CXX_STANDARD 17)</span></span></code></pre></td></tr></table>
 </div>
 </div><p>即可用如下轻便的语法使用 Reader。</p>
-<div class="highlight" id="id-12"><div class="chroma">
+<div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="line"><span class="cl"><span class="n">Reader</span> <span class="n">reader</span><span class="p">;</span></span></span></code></pre></td></tr></table>
 </div>
-</div><h3 id="div-idpoint-10-styledisplay-inline10-stdforwarddiv" class="heading-element">
-  <a href="#div-idpoint-10-styledisplay-inline10-stdforwarddiv" class="heading-mark"></a><div id="point-10" style="display: inline">10. std::forward</div></h3><p><a href="https://cplusplus.com/reference/utility/forward/"target="_blank" rel="external nofollow noopener noreferrer">https://cplusplus.com/reference/utility/forward/</a></p>
+</div><h3 class="heading-element" id="10-stdforward"><span><div id="point-10" style="display: inline">10. std::forward</div></span>
+  <a href="#10-stdforward" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p><a href="https://cplusplus.com/reference/utility/forward/"target="_blank" rel="external nofollow noopener noreferrer">https://cplusplus.com/reference/utility/forward/</a></p>
 <p>通过使用<code>std::forward</code>函数可以根据实参调用不同的函数，如下面例子所示:</p>
-<div class="highlight" id="id-13"><div class="chroma">
+<div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
@@ -1146,28 +1081,34 @@ csv2是一个轻量级 C&#43;&#43; 库，用于将 CSV 文件解析为 C&#43;&#4
 </span></span><span class="line"><span class="cl">  <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table>
 </div>
-</div><h3 id="11-stdstring" class="heading-element">
-  <a href="#11-stdstring" class="heading-mark"></a>11. std::string</h3><p><a href="https://cplusplus.com/reference/string/string/"target="_blank" rel="external nofollow noopener noreferrer">https://cplusplus.com/reference/string/string/</a></p>
+</div><h3 class="heading-element" id="11-stdstring"><span>11. std::string</span>
+  <a href="#11-stdstring" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p><a href="https://cplusplus.com/reference/string/string/"target="_blank" rel="external nofollow noopener noreferrer">https://cplusplus.com/reference/string/string/</a></p>
 <p>string::erase 可用于清除指定位置的字符。</p>
 <p>string::reserve 可用于指定 string 存储空间的大小。</p>
 <p>string::push_back 可将字符存入 string 中。</p>
-<h2 id="最后" class="heading-element">
-  <a href="#%e6%9c%80%e5%90%8e" class="heading-mark"></a>最后</h2><p>项目中涉及到的存储映射 I/O ，若要想彻底弄清楚机制，可能需要补充一些操作系统方面的知识。</p></div><div class="post-footer" id="post-footer">
+<h2 class="heading-element" id="最后"><span>最后</span>
+  <a href="#%e6%9c%80%e5%90%8e" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>项目中涉及到的存储映射 I/O ，若要想彻底弄清楚机制，可能需要补充一些操作系统方面的知识。</p></div><div class="post-footer" id="post-footer">
   <div class="post-info">
     <div class="post-info-line">
       <div class="post-info-mod">
         <span title="更新于 2024-10-07 14:16:41">更新于 2024-10-07&nbsp;</span>
       </div></div><div class="post-info-line">
-        <div class="post-info-md"></div>
+        <div class="post-info-md"><span><a href="vscode://file/D:%5chugo-blog%5candyfree96%5ccontent%5cposts%5ccsv2%e6%ba%90%e7%a0%81%e5%89%96%e6%9e%90.md" title="在编辑器中打开"target="_blank" rel="external nofollow noopener noreferrer" class="link-to-vscode">在编辑器中打开</a></span></div>
         <div class="post-info-share">
-          <span><a href="javascript:void(0);" title="分享到 Twitter" data-sharer="twitter" data-url="http://localhost:1313/csv2%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="csv2 源码剖析：轻量级 CSV 处理的高效之道" data-via="IRONAnthony96" data-hashtags="CSV,C&#43;&#43;,源码剖析"><i class="fa-brands fa-twitter fa-fw" aria-hidden="true"></i></a>
+          <span><a href="javascript:void(0);" title="分享到 X" data-sharer="twitter" data-url="http://localhost:1313/csv2%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="Csv2 源码剖析：轻量级 CSV 处理的高效之道" data-via="IRONAnthony96" data-hashtags="CSV,C&#43;&#43;,源码剖析"><i class="fa-brands fa-x-twitter fa-fw" aria-hidden="true"></i></a>
   <a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="http://localhost:1313/csv2%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-hashtag="CSV"><i class="fa-brands fa-facebook-square fa-fw" aria-hidden="true"></i></a>
-  <a href="javascript:void(0);" title="分享到 WhatsApp" data-sharer="whatsapp" data-url="http://localhost:1313/csv2%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="csv2 源码剖析：轻量级 CSV 处理的高效之道" data-web><i class="fa-brands fa-whatsapp fa-fw" aria-hidden="true"></i></a>
-  <a href="javascript:void(0);" title="分享到 Line" data-sharer="line" data-url="http://localhost:1313/csv2%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="csv2 源码剖析：轻量级 CSV 处理的高效之道"><i data-svg-src="/lib/simple-icons/icons/line.min.svg" aria-hidden="true"></i></a>
-  <a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="http://localhost:1313/csv2%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="csv2 源码剖析：轻量级 CSV 处理的高效之道" data-image="/images/202410/16/samsung-memory-dIfsOkzzSk4-unsplash.jpg"><i class="fa-brands fa-weibo fa-fw" aria-hidden="true"></i></a>
-  <a href="javascript:void(0);" title="分享到 Myspace" data-sharer="myspace" data-url="http://localhost:1313/csv2%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="csv2 源码剖析：轻量级 CSV 处理的高效之道" data-description=""><i data-svg-src="/lib/simple-icons/icons/myspace.min.svg" aria-hidden="true"></i></a>
-  <a href="javascript:void(0);" title="分享到 Blogger" data-sharer="blogger" data-url="http://localhost:1313/csv2%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="csv2 源码剖析：轻量级 CSV 处理的高效之道" data-description=""><i class="fa-brands fa-blogger fa-fw" aria-hidden="true"></i></a>
-  <a href="javascript:void(0);" title="分享到 Evernote" data-sharer="evernote" data-url="http://localhost:1313/csv2%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="csv2 源码剖析：轻量级 CSV 处理的高效之道"><i class="fa-brands fa-evernote fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 WhatsApp" data-sharer="whatsapp" data-url="http://localhost:1313/csv2%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="Csv2 源码剖析：轻量级 CSV 处理的高效之道" data-web><i class="fa-brands fa-whatsapp fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 Line" data-sharer="line" data-url="http://localhost:1313/csv2%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="Csv2 源码剖析：轻量级 CSV 处理的高效之道"><svg class="icon" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>LINE</title><path d="M19.365 9.863c.349.0.63.285.63.631.0.345-.281.63-.63.63H17.61v1.125h1.755c.349.0.63.283.63.63.0.344-.281.629-.63.629h-2.386c-.345.0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63h2.386c.346.0.627.285.627.63.0.349-.281.63-.63.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211.0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346.0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195.0.375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345.0.63.285.63.63v4.771zm-5.741.0c0 .344-.282.629-.631.629-.345.0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63.346.0.628.285.628.63v4.771zm-2.466.629H4.917c-.345.0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348.0.63.285.63.63v4.141h1.756c.348.0.629.283.629.63.0.344-.282.629-.629.629M24 10.314C24 4.943 18.615.572 12 .572S0 4.943.0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314"/></svg></a>
+  <a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="http://localhost:1313/csv2%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="Csv2 源码剖析：轻量级 CSV 处理的高效之道" data-image="/images/202410/16/samsung-memory-dIfsOkzzSk4-unsplash.jpg"><i class="fa-brands fa-weibo fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 Myspace" data-sharer="myspace" data-url="http://localhost:1313/csv2%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="Csv2 源码剖析：轻量级 CSV 处理的高效之道" data-description=""><svg class="icon" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>Myspace</title><path d="M19.802 12.274A3.811 3.811.0 0023.62 8.47c0-2.101-1.71-3.795-3.818-3.795a3.816 3.816.0 00-3.818 3.81 3.817 3.817.0 003.818 3.811zm-8.602.705a3.43 3.43.0 003.435-3.424A3.43 3.43.0 0011.2 6.13 3.44 3.44.0 007.764 9.566 3.436 3.436.0 0011.2 13zm-7.8.635c1.71.0 3.093-1.38 3.093-3.081.0-1.704-1.395-3.084-3.105-3.084A3.086 3.086.0 00.3 10.539c0 1.7 1.387 3.078 3.095 3.078zm0 .705c-1.96.0-3.4 1.717-3.4 3.495v1.196c0 .17.138.31.31.31h6.18a.31.31.0 00.309-.31v-1.196c0-1.779-1.437-3.5-3.398-3.5zm7.8-.56c-2.18.0-3.78 1.915-3.78 3.891v1.331c0 .188.156.344.345.344h6.87a.344.344.0 00.342-.344V17.65c0-1.976-1.598-3.891-3.777-3.891zm8.602-.617c-2.422.0-4.197 2.126-4.197 4.323v1.477c0 .21.172.381.382.381h7.63c.21.0.383-.171.383-.381v-1.477c-.001-2.197-1.776-4.323-4.198-4.323z"/></svg></a>
+  <a href="javascript:void(0);" title="分享到 Blogger" data-sharer="blogger" data-url="http://localhost:1313/csv2%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="Csv2 源码剖析：轻量级 CSV 处理的高效之道" data-description=""><i class="fa-brands fa-blogger fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 Evernote" data-sharer="evernote" data-url="http://localhost:1313/csv2%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="Csv2 源码剖析：轻量级 CSV 处理的高效之道"><i class="fa-brands fa-evernote fa-fw" aria-hidden="true"></i></a>
   </span>
         </div>
       </div></div>
@@ -1177,29 +1118,26 @@ csv2是一个轻量级 C&#43;&#43; 库，用于将 CSV 文件解析为 C&#43;&#4
     <section>
       <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
     </section>
-  </div>
-
-  <div class="post-nav"><a href="/r%E6%95%B0%E6%8D%AE%E7%A7%91%E5%AD%A6/" class="post-nav-item" rel="prev" title="R数据科学"><i class="fa-solid fa-angle-left fa-fw" aria-hidden="true"></i>R数据科学</a>
-      <a href="/cpython%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" class="post-nav-item" rel="next" title="CPython 源码剖析：Python 运行的奥秘">CPython 源码剖析：Python 运行的奥秘<i class="fa-solid fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
+  </div><div class="post-nav"><a href="/r%E6%95%B0%E6%8D%AE%E7%A7%91%E5%AD%A6/" class="post-nav-item" rel="prev" title="R数据科学"><i class="fa-solid fa-angle-left fa-fw" aria-hidden="true"></i>R数据科学</a><a href="/cpython%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" class="post-nav-item" rel="next" title="CPython 源码剖析：Python 运行的奥秘">CPython 源码剖析：Python 运行的奥秘<i class="fa-solid fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
 </div>
 <div class="post-reward">
     <div class="comment">请作者喝杯咖啡!</div>
     <input type="checkbox" class="reward-input" name="reward" id="fi-reward" hidden />
-    <label class="reward-button" for="fi-reward">赞赏</label>
-    <div class="reward-ways" data-mode="static"><div><img loading="lazy" src="/reward/alipay.png" alt="AndyFree96 支付宝" data-title="AndyFree96 支付宝" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/><span data-animation>支付宝</span>
-          </div><div><img loading="lazy" src="/reward/wechatpay.png" alt="AndyFree96 微信" data-title="AndyFree96 微信" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/><span data-animation>微信</span>
+    <label class="reward-button" for="fi-reward"><i class="fa-solid fa-qrcode fa-fw" aria-hidden="true"></i>赞赏</label>
+    <div class="reward-ways" data-mode="static"><div><img src='/reward/alipay.png' alt="AndyFree96 支付宝"><span data-animation>支付宝</span>
+          </div><div><img src='/reward/wechatpay.png' alt="AndyFree96 微信"><span data-animation>微信</span>
           </div></div>
   </div></article>
 
   <aside class="toc" id="toc-auto" aria-label="目录"><h2 class="toc-title">目录&nbsp;<i class="toc-icon fa-solid fa-angle-down fa-fw" aria-hidden="true"></i></h2>
       <div class="toc-content" id="toc-content-auto"></div></aside></main><footer class="footer">
-    <div class="footer-container"><div class="footer-line powered">由 <a href="https://gohugo.io/" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.135.0"><img class="hugo-icon" src="/images/hugo.min.svg" alt="Hugo logo" /> Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/hugo-fixit/FixIt" target="_blank" rel="external" title="FixIt v0.3.2"><img class="fixit-icon" src="/images/fixit.min.svg" alt="FixIt logo" /> FixIt</a>
+    <div class="footer-container"><div class="footer-line powered">由 <a href="https://gohugo.io/" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.148.2"><img class="hugo-icon" src="/images/hugo.min.svg" alt="Hugo logo" /> Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/hugo-fixit/FixIt" target="_blank" rel="external" title="FixIt v0.3.20"><img class="fixit-icon" src="/images/fixit.min.svg" alt="FixIt logo" /> FixIt</a>
         </div><div class="footer-line copyright" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright fa-fw" aria-hidden="true"></i>
             <span itemprop="copyrightYear">2025</span><span class="author" itemprop="copyrightHolder">
               <a href="https://andyfree96.github.io/"target="_blank" rel="external nofollow noopener noreferrer">AndyFree96</a></span></div></div>
   </footer></div><div class="widgets"><div class="fixed-buttons animate__faster d-none"><div class="fixed-button back-to-top" role="button" aria-label="回到顶部"><i class="fa-solid fa-arrow-up fa-fw" aria-hidden="true"></i><span class="variant-numeric d-none">0%</span>
         </div></div><div id="mask"></div><div class="reading-progress-bar" style="left: 0;top: 0;"></div><noscript>
-    <div class="noscript-warning">FixIt 主题在启用 JavaScript 的情况下效果最佳。</div>
+    <div class="noscript-warning">该网站在启用 JavaScript 的情况下效果最佳。</div>
   </noscript>
-</div><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script src="/lib/sharer/sharer.min.js" async defer></script><script src="/lib/cookieconsent/cookieconsent.min.js" defer></script><script>window.config={"code":{"copyTitle":"复制到剪贴板","editLockTitle":"锁定可编辑代码块","editUnLockTitle":"解锁可编辑代码块","editable":true,"maxShownLines":10},"comment":{"enable":false},"cookieconsent":{"content":{"dismiss":"同意","link":"了解更多","message":"本网站使用 Cookies 来改善您的浏览体验。"},"enable":true,"palette":{"button":{"background":"#f0f0f0"},"popup":{"background":"#1aa3ff"}},"theme":"edgeless"}};</script><script src="/js/theme.min.js" defer></script></body>
+</div><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script src="/lib/sharer/sharer.min.js" async defer></script><script src="/lib/cookieconsent/cookieconsent.min.js" defer></script><script>window.config={"code":{"copyTitle":"复制到剪贴板","editLockTitle":"锁定可编辑代码块","editUnLockTitle":"解锁可编辑代码块","editable":true,"maxShownLines":10},"comment":{"enable":false},"cookieconsent":{"content":{"dismiss":"同意","link":"了解更多","message":"本网站使用 Cookies 来改善您的浏览体验。"},"enable":true,"palette":{"button":{"background":"#f0f0f0"},"popup":{"background":"#1aa3ff"}},"theme":"edgeless"},"version":"v0.3.20"};console.log('Page config:', window.config);</script><script src="/js/theme.min.js" defer></script></body>
 </html>

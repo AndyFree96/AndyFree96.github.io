@@ -1,26 +1,18 @@
 <!DOCTYPE html>
-<html
-  itemscope
-  itemtype="http://schema.org/WebPage"
-  lang="zh-CN"
->
+<html itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
   <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
     
-    <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, maximum-scale=2"
-    />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
     <meta name="robots" content="noodp" />
-    <meta name="google-adsense-account" content="ca-pub-5868664387231059" />
     <title>BeautifulSoup库使用 - 东尼的博客</title><meta name="author" content="AndyFree96">
-<meta name="author-link" content="https://andyfree96.github.io/">
-<meta name="description" content="BeautifulSoup是啥？它是一个可以从 HTML 或 XML 文件中提取数据的 Python 库。它能通过我们喜欢的转换器实现文档导航，查找和修改。" /><meta name="keywords" content='Python, BeautifulSoup, 解析器, 网络爬虫' />
+<meta name="description" content="BeautifulSoup是啥？它是一个可以从 HTML 或 XML 文件中提取数据的 Python 库。它能通过我们喜欢的转换器实现文档导航，查找和修改。
+"><meta name="keywords" content='Python, BeautifulSoup, 解析器, 网络爬虫'>
   <meta itemprop="name" content="BeautifulSoup库使用">
   <meta itemprop="description" content="BeautifulSoup是啥？它是一个可以从 HTML 或 XML 文件中提取数据的 Python 库。它能通过我们喜欢的转换器实现文档导航，查找和修改。">
   <meta itemprop="datePublished" content="2021-11-08T08:36:00+08:00">
   <meta itemprop="dateModified" content="2021-11-08T08:36:00+08:00">
-  <meta itemprop="wordCount" content="5209">
+  <meta itemprop="wordCount" content="5143">
   <meta itemprop="keywords" content="Python,BeautifulSoup,解析器,网络爬虫"><meta property="og:url" content="http://localhost:1313/beautifulsoup%E5%BA%93%E4%BD%BF%E7%94%A8/">
   <meta property="og:site_name" content="东尼的博客">
   <meta property="og:title" content="BeautifulSoup库使用">
@@ -38,10 +30,10 @@
   <meta name="twitter:title" content="BeautifulSoup库使用">
   <meta name="twitter:description" content="BeautifulSoup是啥？它是一个可以从 HTML 或 XML 文件中提取数据的 Python 库。它能通过我们喜欢的转换器实现文档导航，查找和修改。">
       <meta name="twitter:site" content="@IRONAnthony96">
-<meta name="application-name" content="FixIt">
+<meta name="twitter:creator" content="@IRONAnthony96" /><meta name="application-name" content="FixIt">
 <meta name="apple-mobile-web-app-title" content="FixIt"><meta name="theme-color" data-light="#f8f8f8" data-dark="#252627" content="#f8f8f8"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" href="http://localhost:1313/beautifulsoup%E5%BA%93%E4%BD%BF%E7%94%A8/" /><link rel="prev" href="http://localhost:1313/requests%E5%BA%93%E4%BD%BF%E7%94%A8/" /><link rel="next" href="http://localhost:1313/%E5%BF%AB%E4%B9%90%E7%9A%84linux%E5%91%BD%E4%BB%A4%E8%A1%8C/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" type="text/html" href="http://localhost:1313/beautifulsoup%E5%BA%93%E4%BD%BF%E7%94%A8/" title="BeautifulSoup库使用 - 东尼的博客" /><link rel="prev" type="text/html" href="http://localhost:1313/requests%E5%BA%93%E4%BD%BF%E7%94%A8/" title="Requests库使用" /><link rel="next" type="text/html" href="http://localhost:1313/%E5%BF%AB%E4%B9%90%E7%9A%84linux%E5%91%BD%E4%BB%A4%E8%A1%8C/" title="快乐的Linux命令行" /><link rel="alternate" type="text/markdown" href="http://localhost:1313/beautifulsoup%E5%BA%93%E4%BD%BF%E7%94%A8/index.md" title="BeautifulSoup库使用 - 东尼的博客"><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><script type="application/ld+json">
   {
@@ -52,7 +44,7 @@
     "mainEntityOfPage": {
       "@type": "WebPage",
       "@id": "http:\/\/localhost:1313\/beautifulsoup%E5%BA%93%E4%BD%BF%E7%94%A8\/"
-    },"genre": "posts","keywords": "Python, BeautifulSoup, 解析器","wordcount":  5209 ,
+    },"genre": "posts","keywords": "Python, BeautifulSoup, 解析器","wordcount":  5143 ,
     "url": "http:\/\/localhost:1313\/beautifulsoup%E5%BA%93%E4%BD%BF%E7%94%A8\/","datePublished": "2021-11-08T08:36:00+08:00","dateModified": "2021-11-08T08:36:00+08:00","publisher": {
       "@type": "Organization",
       "name": ""},"author": {
@@ -60,74 +52,21 @@
         "name": "AndyFree96"
       },"description": ""
   }
-  </script></head>
-  <body
-    data-header-desktop="sticky"
-    data-header-mobile="auto"
-  ><script>
-      (window.localStorage?.getItem("theme")
-        ? localStorage.getItem("theme") === "dark"
-        : "auto" === "auto"
-        ? window.matchMedia("(prefers-color-scheme: dark)").matches
-        : "auto" === "dark") &&
-        document.body.setAttribute("data-theme", "dark");
-    </script><div
-      class="wrapper"
-      data-page-style="normal"
-    ><header class="desktop animate__faster" id="header-desktop">
+  </script><script src="/js/head/color-scheme.min.js"></script></head>
+  <body data-header-desktop="sticky" data-header-mobile="auto"><div class="wrapper" data-page-style="normal"><header class="desktop animate__faster" id="header-desktop">
   <div class="header-wrapper">
     <div class="header-title">
       <a href="/" title="东尼的博客"><span class="header-title-text">东尼的博客</span></a><span class="header-subtitle"></span></div>
     <nav>
       <ul class="menu"><li class="menu-item">
-              <a
-                class="menu-link"
-                href="/posts/"
-                
-                
-              >📕 文章</a></li><li class="menu-item">
-              <a
-                class="menu-link"
-                href="/categories/"
-                
-                
-              >🧰 分类</a></li><li class="menu-item">
-              <a
-                class="menu-link"
-                href="/tags/"
-                
-                
-              >🔖 标签</a></li><li class="menu-item">
-              <a
-                class="menu-link"
-                href="/book"
-                
-                
-              >📚 书单</a></li><li class="menu-item">
-              <a
-                class="menu-link"
-                href="/paper"
-                
-                
-              >📝 论文</a></li><li class="menu-item">
-              <a
-                class="menu-link"
-                href="/opencourse"
-                
-                
-              >👨🏻‍💻 公开课</a></li><li class="menu-item">
-              <a
-                class="menu-link"
-                href="/resource"
-                
-                
-              >⚡️ 资源</a></li><li class="menu-item">
-              <a
-                class="menu-link"
-                href="/about"
-                
-                
-              >🙋🏻‍♂️ 关于</a></li><li class="menu-item delimiter"></li><li class="menu-item theme-switch" title="切换主题">
+              <a class="menu-link" href="/posts/">📕 文章</a></li><li class="menu-item">
+              <a class="menu-link" href="/categories/">🧰 分类</a></li><li class="menu-item">
+              <a class="menu-link" href="/tags/">🔖 标签</a></li><li class="menu-item">
+              <a class="menu-link" href="/book">📚 书单</a></li><li class="menu-item">
+              <a class="menu-link" href="/paper">📝 论文</a></li><li class="menu-item">
+              <a class="menu-link" href="/opencourse">👨🏻‍💻 公开课</a></li><li class="menu-item">
+              <a class="menu-link" href="/resource">⚡️ 资源</a></li><li class="menu-item">
+              <a class="menu-link" href="/about">🙋🏻‍♂️ 关于</a></li><li class="menu-item delimiter"></li><li class="menu-item theme-switch" title="切换主题">
           <i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i>
         </li></ul>
     </nav>
@@ -142,76 +81,18 @@
       </div>
     </div>
     <nav>
-      <ul class="menu" id="menu-mobile"><li
-              class="menu-item"
-            ><a
-                  class="menu-link"
-                  href="/posts/"
-                  
-                  
-                >📕 文章</a></li><li
-              class="menu-item"
-            ><a
-                  class="menu-link"
-                  href="/categories/"
-                  
-                  
-                >🧰 分类</a></li><li
-              class="menu-item"
-            ><a
-                  class="menu-link"
-                  href="/tags/"
-                  
-                  
-                >🔖 标签</a></li><li
-              class="menu-item"
-            ><a
-                  class="menu-link"
-                  href="/book"
-                  
-                  
-                >📚 书单</a></li><li
-              class="menu-item"
-            ><a
-                  class="menu-link"
-                  href="/paper"
-                  
-                  
-                >📝 论文</a></li><li
-              class="menu-item"
-            ><a
-                  class="menu-link"
-                  href="/opencourse"
-                  
-                  
-                >👨🏻‍💻 公开课</a></li><li
-              class="menu-item"
-            ><a
-                  class="menu-link"
-                  href="/resource"
-                  
-                  
-                >⚡️ 资源</a></li><li
-              class="menu-item"
-            ><a
-                  class="menu-link"
-                  href="/about"
-                  
-                  
-                >🙋🏻‍♂️ 关于</a></li><li class="menu-item menu-system">
+      <ul class="menu" id="menu-mobile"><li class="menu-item"><a class="menu-link" href="/posts/">📕 文章</a></li><li class="menu-item"><a class="menu-link" href="/categories/">🧰 分类</a></li><li class="menu-item"><a class="menu-link" href="/tags/">🔖 标签</a></li><li class="menu-item"><a class="menu-link" href="/book">📚 书单</a></li><li class="menu-item"><a class="menu-link" href="/paper">📝 论文</a></li><li class="menu-item"><a class="menu-link" href="/opencourse">👨🏻‍💻 公开课</a></li><li class="menu-item"><a class="menu-link" href="/resource">⚡️ 资源</a></li><li class="menu-item"><a class="menu-link" href="/about">🙋🏻‍♂️ 关于</a></li><li class="menu-item menu-system">
           <span class="menu-system-item theme-switch" title="切换主题"><i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i></span></li>
       </ul>
     </nav>
   </div>
-</header><main
-        class="container"
-      ><aside class="aside-collection animate__animated animate__fadeIn animate__faster" aria-label="合集"></aside>
+</header><main class="container"><aside class="aside-collection animate__animated animate__fadeIn animate__faster" aria-label="合集"></aside>
 
   <article class="page single">
     <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span title="转载" class="icon-repost"><i class="fa-solid fa-share fa-fw" aria-hidden="true"></i></span><span>BeautifulSoup库使用</span>
       </h1></div><div class="post-meta">
-      <div class="post-meta-line"><span class="post-author"><a href="https://andyfree96.github.io/" title="作者"target="_blank" rel="external nofollow noopener noreferrer author" class="author"><img loading="lazy" src="/avatar/1.jpg" alt="AndyFree96" data-title="AndyFree96" class="avatar" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/>&nbsp;AndyFree96</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E7%BD%91%E7%BB%9C%E7%88%AC%E8%99%AB/" class="post-category" title="分类 - 网络爬虫"><i class="fa-regular fa-folder fa-fw" aria-hidden="true"></i> 网络爬虫</a></span></div><div class="post-meta-line"><span title="发布于 2021-11-08 08:36:00"><i class="fa-solid fa-calendar-days fa-fw me-1" aria-hidden="true"></i><time datetime="2021-11-08">2021-11-08</time></span>&nbsp;<span title="5209 字"><i class="fa-solid fa-pencil-alt fa-fw me-1" aria-hidden="true"></i>约 5300 字</span>&nbsp;<span><i class="fa-regular fa-clock fa-fw me-1" aria-hidden="true"></i>预计阅读 11 分钟</span>&nbsp;</div>
-    </div><div class="featured-image"><img loading="lazy" src="/images/202110/2/luke-jones-JcEEIM963oM-unsplash.jpg" alt="/images/202110/2/luke-jones-JcEEIM963oM-unsplash.jpg" data-title="/images/202110/2/luke-jones-JcEEIM963oM-unsplash.jpg" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></div><div class="details toc" id="toc-static" data-kept="false">
+      <div class="post-meta-line"><span class="post-author"><a href="https://andyfree96.github.io/" title="作者"target="_blank" rel="external nofollow noopener noreferrer author" class="author"><img class="avatar" src='/avatar/1.jpg' alt="AndyFree96" height="16" width="16">&nbsp;AndyFree96</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E7%BD%91%E7%BB%9C%E7%88%AC%E8%99%AB/" class="post-category" title="分类 - 网络爬虫"><i class="fa-regular fa-folder fa-fw" aria-hidden="true"></i> 网络爬虫</a></span></div><div class="post-meta-line"><span title="发布于 2021-11-08 08:36:00"><i class="fa-solid fa-calendar-days fa-fw me-1" aria-hidden="true"></i><time datetime="2021-11-08">2021-11-08</time></span>&nbsp;<span title="5143 字"><i class="fa-solid fa-pencil-alt fa-fw me-1" aria-hidden="true"></i>约 5200 字</span>&nbsp;<span><i class="fa-regular fa-clock fa-fw me-1" aria-hidden="true"></i>预计阅读 11 分钟</span>&nbsp;</div>
+    </div><div class="featured-image"><img src='/images/202110/2/luke-jones-JcEEIM963oM-unsplash.jpg' alt="/images/202110/2/luke-jones-JcEEIM963oM-unsplash.jpg"></div><div class="details toc" id="toc-static" data-kept="false">
         <div class="details-summary toc-title">
           <span>目录</span>
           <span><i class="details-icon fa-solid fa-angle-right" aria-hidden="true"></i></span>
@@ -266,18 +147,24 @@
   </ul>
 </nav></div>
       </div><div class="content" id="content"><p><code>BeautifulSoup</code>是啥？它是一个可以从 HTML 或 XML 文件中提取数据的 Python 库。它能通过我们喜欢的转换器实现文档导航，查找和修改。</p>
-<h2 id="安装-beautifulsoup" class="heading-element">
-  <a href="#%e5%ae%89%e8%a3%85-beautifulsoup" class="heading-mark"></a>安装 BeautifulSoup</h2><p>可以通过<code>pip</code>来安装，包的名字的是<code>beautifulsoup4</code>。</p>
-<div class="highlight" id="id-1"><div class="chroma">
+<h2 class="heading-element" id="安装-beautifulsoup"><span>安装 BeautifulSoup</span>
+  <a href="#%e5%ae%89%e8%a3%85-beautifulsoup" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>可以通过<code>pip</code>来安装，包的名字的是<code>beautifulsoup4</code>。</p>
+<div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-Python" data-lang="Python"><span class="line"><span class="cl"><span class="n">pip</span> <span class="n">install</span> <span class="o">-</span><span class="n">i</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">pypi</span><span class="o">.</span><span class="n">douban</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">simple</span> <span class="n">beautifulsoup4</span></span></span></code></pre></td></tr></table>
 </div>
-</div><h2 id="安装解析器" class="heading-element">
-  <a href="#%e5%ae%89%e8%a3%85%e8%a7%a3%e6%9e%90%e5%99%a8" class="heading-mark"></a>安装解析器</h2><p><code>BeautifulSoup</code>除了支持 Python 标准库中的 HTML 解析器之外，还支持一些第三方的解析器，比如<a href="https://lxml.de"target="_blank" rel="external nofollow noopener noreferrer">lxml</a>。可以按下列方式来安装 lxml：</p>
-<div class="highlight" id="id-2"><div class="chroma">
+</div><h2 class="heading-element" id="安装解析器"><span>安装解析器</span>
+  <a href="#%e5%ae%89%e8%a3%85%e8%a7%a3%e6%9e%90%e5%99%a8" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p><code>BeautifulSoup</code>除了支持 Python 标准库中的 HTML 解析器之外，还支持一些第三方的解析器，比如<a href="https://lxml.de"target="_blank" rel="external nofollow noopener noreferrer">lxml</a>。可以按下列方式来安装 lxml：</p>
+<div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
@@ -285,7 +172,7 @@
 <pre tabindex="0" class="chroma"><code class="language-Python" data-lang="Python"><span class="line"><span class="cl"><span class="n">pip</span> <span class="n">install</span> <span class="o">-</span><span class="n">i</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">pypi</span><span class="o">.</span><span class="n">douban</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">simple</span> <span class="n">lxml</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>另一个可供选择的解析器是纯 Python 实现的<a href="https://github.com/html5lib/html5lib-python"target="_blank" rel="external nofollow noopener noreferrer">html5lib</a>，可以按下列方式来安装 html5lib：</p>
-<div class="highlight" id="id-3"><div class="chroma">
+<div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
@@ -293,10 +180,13 @@
 <pre tabindex="0" class="chroma"><code class="language-Python" data-lang="Python"><span class="line"><span class="cl"><span class="n">pip</span> <span class="n">install</span> <span class="o">-</span><span class="n">i</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">pypi</span><span class="o">.</span><span class="n">douban</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">simple</span> <span class="n">html5lib</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>下表列出了主要的解析器以及它们的优缺点：</p>
-<p><img loading="lazy" src="/images/202110/2/1.png" alt="/images/202110/2/1.png" srcset="/images/202110/2/1.png?size=small, /images/202110/2/1.png?size=medium 1.5x, /images/202110/2/1.png?size=large 2x" data-title="/images/202110/2/1.png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></p>
-<h2 id="如何使用" class="heading-element">
-  <a href="#%e5%a6%82%e4%bd%95%e4%bd%bf%e7%94%a8" class="heading-mark"></a>如何使用</h2><p>将一段文档传入<code>BeautifulSoup</code>的构造方法就能得到一个文档对象，可以传入一段字符串或一个文件句柄。</p>
-<div class="highlight" id="id-4"><div class="chroma">
+<p><img loading="lazy" src='/images/202110/2/1.png' alt="/images/202110/2/1.png"></p>
+<h2 class="heading-element" id="如何使用"><span>如何使用</span>
+  <a href="#%e5%a6%82%e4%bd%95%e4%bd%bf%e7%94%a8" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>将一段文档传入<code>BeautifulSoup</code>的构造方法就能得到一个文档对象，可以传入一段字符串或一个文件句柄。</p>
+<div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -312,11 +202,17 @@
 </span></span><span class="line"><span class="cl"><span class="n">suop</span> <span class="o">=</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="s2">&#34;&lt;html&gt;data&lt;/html&gt;&#34;</span><span class="p">)</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>如果手动指定解析器的话，<code>BeautifulSoup</code>会选择指定的解析器来解析文档。</p>
-<h2 id="对象的种类" class="heading-element">
-  <a href="#%e5%af%b9%e8%b1%a1%e7%9a%84%e7%a7%8d%e7%b1%bb" class="heading-mark"></a>对象的种类</h2><p><code>BeautifulSoup</code>将复杂的 HTML 文档转换成一个复杂的树形结构，每个节点都是 Python 对象，所有对象可以归纳为 4 中：<code>Tag</code>，<code>NavigableString</code>，<code>BeautifulSoup</code>，<code>Comment</code>。</p>
-<h3 id="tag" class="heading-element">
-  <a href="#tag" class="heading-mark"></a>Tag</h3><p><code>Tag</code>对象与 XML 或 HTML 文档中的 tag 相同：</p>
-<div class="highlight" id="id-5"><div class="chroma">
+<h2 class="heading-element" id="对象的种类"><span>对象的种类</span>
+  <a href="#%e5%af%b9%e8%b1%a1%e7%9a%84%e7%a7%8d%e7%b1%bb" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p><code>BeautifulSoup</code>将复杂的 HTML 文档转换成一个复杂的树形结构，每个节点都是 Python 对象，所有对象可以归纳为 4 中：<code>Tag</code>，<code>NavigableString</code>，<code>BeautifulSoup</code>，<code>Comment</code>。</p>
+<h3 class="heading-element" id="tag"><span>Tag</span>
+  <a href="#tag" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p><code>Tag</code>对象与 XML 或 HTML 文档中的 tag 相同：</p>
+<div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -334,9 +230,12 @@
 </span></span><span class="line"><span class="cl"><span class="c1"># &lt;class &#39;bs4.element.Tag&#39;&gt;</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p><code>Tag</code>有很多方法和属性，比如遍历文档树和搜索文档树。现在介绍一下 tag 中最重要的属性：<code>name</code>和<code>attributes</code>。</p>
-<h4 id="name" class="heading-element">
-  <a href="#name" class="heading-mark"></a>Name</h4><p>每个 tag 都有自己的名字，通过<code>.name</code>来获取：</p>
-<div class="highlight" id="id-6"><div class="chroma">
+<h4 class="heading-element" id="name"><span>Name</span>
+  <a href="#name" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h4><p>每个 tag 都有自己的名字，通过<code>.name</code>来获取：</p>
+<div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -346,7 +245,7 @@
 </span></span><span class="line"><span class="cl"><span class="c1"># &#39;b&#39;</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>如果改变 tag 的 name 将会影响所有通过当前<code>BeautifulSoup</code>对象生成的 HTML 文档：</p>
-<div class="highlight" id="id-7"><div class="chroma">
+<div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -365,9 +264,12 @@
 </span></span><span class="line"><span class="cl"><span class="n">tag</span>
 </span></span><span class="line"><span class="cl"><span class="c1"># &lt;ironman class=&#34;boldest&#34;&gt;Extremely bold&lt;/ironman&gt;</span></span></span></code></pre></td></tr></table>
 </div>
-</div><h4 id="attributes" class="heading-element">
-  <a href="#attributes" class="heading-mark"></a>Attributes</h4><p>一个 tag 可能有很多个属性。tag <code>&lt;b class=&quot;boldest&quot;&gt;</code>有一个名为<code>class</code>的属性，值为<code>boldest</code>。tag 的属性的操作方法与字典相同：</p>
-<div class="highlight" id="id-8"><div class="chroma">
+</div><h4 class="heading-element" id="attributes"><span>Attributes</span>
+  <a href="#attributes" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h4><p>一个 tag 可能有很多个属性。tag <code>&lt;b class=&quot;boldest&quot;&gt;</code>有一个名为<code>class</code>的属性，值为<code>boldest</code>。tag 的属性的操作方法与字典相同：</p>
+<div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -379,7 +281,7 @@
 </span></span><span class="line"><span class="cl"><span class="c1"># [&#39;boldest&#39;]</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>也可以直接<code>.</code>取属性，比如：<code>.attrs</code>：</p>
-<div class="highlight" id="id-9"><div class="chroma">
+<div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -391,7 +293,7 @@
 </span></span><span class="line"><span class="cl"><span class="c1"># {&#39;class&#39;: [&#39;boldest&#39;]}</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>tag 的属性可以被添加，删除或修改，和字典一样。</p>
-<div class="highlight" id="id-10"><div class="chroma">
+<div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
@@ -438,9 +340,12 @@
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="n">In</span> <span class="p">[</span><span class="mi">21</span><span class="p">]:</span> <span class="n">tag</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;class&#39;</span><span class="p">)</span></span></span></code></pre></td></tr></table>
 </div>
-</div><h4 id="多值属性" class="heading-element">
-  <a href="#%e5%a4%9a%e5%80%bc%e5%b1%9e%e6%80%a7" class="heading-mark"></a>多值属性</h4><p>HTML 定义了一系列可以包含多个值的属性。最常见的多值属性是<code>class</code>（一个 tag 可以有多个 CSS 的<code>class</code>）。在<code>BeautifulSoup</code>中多值属性的返回类型是 list：</p>
-<div class="highlight" id="id-11"><div class="chroma">
+</div><h4 class="heading-element" id="多值属性"><span>多值属性</span>
+  <a href="#%e5%a4%9a%e5%80%bc%e5%b1%9e%e6%80%a7" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h4><p>HTML 定义了一系列可以包含多个值的属性。最常见的多值属性是<code>class</code>（一个 tag 可以有多个 CSS 的<code>class</code>）。在<code>BeautifulSoup</code>中多值属性的返回类型是 list：</p>
+<div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -454,7 +359,7 @@
 </span></span><span class="line"><span class="cl"><span class="n">Out</span><span class="p">[</span><span class="mi">23</span><span class="p">]:</span> <span class="p">[</span><span class="s1">&#39;body&#39;</span><span class="p">,</span> <span class="s1">&#39;strikeout&#39;</span><span class="p">]</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>如果某个属性看起来好像有多个值，但在任何版本的 HTML 定义中都没有被定义为多值属性，那么<code>BeautifulSoup</code>会将这个属性作为字符串返回</p>
-<div class="highlight" id="id-12"><div class="chroma">
+<div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -467,9 +372,12 @@
 </span></span><span class="line"><span class="cl"><span class="n">In</span> <span class="p">[</span><span class="mi">26</span><span class="p">]:</span> <span class="n">id_soup</span><span class="o">.</span><span class="n">p</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">]</span>
 </span></span><span class="line"><span class="cl"><span class="n">Out</span><span class="p">[</span><span class="mi">26</span><span class="p">]:</span> <span class="s1">&#39;my id&#39;</span></span></span></code></pre></td></tr></table>
 </div>
-</div><h3 id="navigablestring" class="heading-element">
-  <a href="#navigablestring" class="heading-mark"></a>NavigableString</h3><p>字符串常被包含在 tag 内。<code>BeautifulSoup</code>用<code>NavigableString</code>类来包装 tag 中的字符串：</p>
-<div class="highlight" id="id-13"><div class="chroma">
+</div><h3 class="heading-element" id="navigablestring"><span>NavigableString</span>
+  <a href="#navigablestring" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p>字符串常被包含在 tag 内。<code>BeautifulSoup</code>用<code>NavigableString</code>类来包装 tag 中的字符串：</p>
+<div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -491,11 +399,17 @@
 </span></span><span class="line"><span class="cl"><span class="n">Out</span><span class="p">[</span><span class="mi">29</span><span class="p">]:</span> <span class="n">bs4</span><span class="o">.</span><span class="n">element</span><span class="o">.</span><span class="n">NavigableString</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>NavigableString 对象支持<a href="https://www.crummy.com/software/BeautifulSoup/bs4/doc.zh/#id15"target="_blank" rel="external nofollow noopener noreferrer">遍历文档树</a>和<a href="https://www.crummy.com/software/BeautifulSoup/bs4/doc.zh/#id24"target="_blank" rel="external nofollow noopener noreferrer">搜索文档树</a>中定义的大部分属性, 并非全部。</p>
-<h3 id="beautifulsoup" class="heading-element">
-  <a href="#beautifulsoup" class="heading-mark"></a>BeautifulSoup</h3><p><code>BeautifulSoup</code>对象表示的是整个文档的内容。大部分时候，可以把它当作<code>Tag</code>对象，它支持<a href="https://www.crummy.com/software/BeautifulSoup/bs4/doc.zh/#id15"target="_blank" rel="external nofollow noopener noreferrer">遍历文档树</a>和<a href="https://www.crummy.com/software/BeautifulSoup/bs4/doc.zh/#id24"target="_blank" rel="external nofollow noopener noreferrer">搜索文档树</a>中定义的大部分方法。</p>
-<h3 id="comment" class="heading-element">
-  <a href="#comment" class="heading-mark"></a>Comment</h3><p><code>Tag</code>，<code>NavigableString</code>，<code>BeautifulSoup</code>几乎覆盖了 html 和 xml 中的所有内容，但是还有一些特殊对象。</p>
-<div class="highlight" id="id-14"><div class="chroma">
+<h3 class="heading-element" id="beautifulsoup"><span>BeautifulSoup</span>
+  <a href="#beautifulsoup" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p><code>BeautifulSoup</code>对象表示的是整个文档的内容。大部分时候，可以把它当作<code>Tag</code>对象，它支持<a href="https://www.crummy.com/software/BeautifulSoup/bs4/doc.zh/#id15"target="_blank" rel="external nofollow noopener noreferrer">遍历文档树</a>和<a href="https://www.crummy.com/software/BeautifulSoup/bs4/doc.zh/#id24"target="_blank" rel="external nofollow noopener noreferrer">搜索文档树</a>中定义的大部分方法。</p>
+<h3 class="heading-element" id="comment"><span>Comment</span>
+  <a href="#comment" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p><code>Tag</code>，<code>NavigableString</code>，<code>BeautifulSoup</code>几乎覆盖了 html 和 xml 中的所有内容，但是还有一些特殊对象。</p>
+<div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -517,10 +431,13 @@
 </span></span><span class="line"><span class="cl"><span class="n">Out</span><span class="p">[</span><span class="mi">34</span><span class="p">]:</span> <span class="n">bs4</span><span class="o">.</span><span class="n">element</span><span class="o">.</span><span class="n">Comment</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p><code>Comment</code>对象是一个特殊类型的<code>NavigableString</code>对象。 <code>soup = BeautifulSoup(markup, 'lxml')</code>中的<code>lxml</code>用于指定解析器。</p>
-<h2 id="搜索文档树" class="heading-element">
-  <a href="#%e6%90%9c%e7%b4%a2%e6%96%87%e6%a1%a3%e6%a0%91" class="heading-mark"></a>搜索文档树</h2><p><code>BeautifulSoup</code>定义了很多搜索方法，这里着重介绍 2 个：<code>find_all()</code>和<code>select()</code>。</p>
+<h2 class="heading-element" id="搜索文档树"><span>搜索文档树</span>
+  <a href="#%e6%90%9c%e7%b4%a2%e6%96%87%e6%a1%a3%e6%a0%91" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p><code>BeautifulSoup</code>定义了很多搜索方法，这里着重介绍 2 个：<code>find_all()</code>和<code>select()</code>。</p>
 <p>以“爱丽丝”文档作为例子：</p>
-<div class="highlight" id="id-15"><div class="chroma">
+<div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
@@ -560,11 +477,17 @@
 </span></span><span class="line"><span class="cl"><span class="n">In</span> <span class="p">[</span><span class="mi">42</span><span class="p">]:</span> <span class="n">soup</span> <span class="o">=</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="n">html_doc</span><span class="p">,</span> <span class="s1">&#39;lxml&#39;</span><span class="p">)</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>使用<code>find_all()</code>类似的方法可以查找到想要查找的文档内容。</p>
-<h3 id="过滤器" class="heading-element">
-  <a href="#%e8%bf%87%e6%bb%a4%e5%99%a8" class="heading-mark"></a>过滤器</h3><p>在介绍<code>find_all()</code>方法之前，先介绍一下过滤器的类型，这些过滤器贯穿整个搜索的 API。过滤器可以被用在 tag 的 name 中，节点的属性中，字符串中或它们的混合中。</p>
-<h4 id="字符串" class="heading-element">
-  <a href="#%e5%ad%97%e7%ac%a6%e4%b8%b2" class="heading-mark"></a>字符串</h4><p>最简单的过滤器是字符串。在搜索方法中传入也给字符串参数，<code>BeautifulSoup</code>会查找与字符串完整匹配的内容，下面的例子用于查找文档中所有<code>&lt;b&gt;</code>标签：</p>
-<div class="highlight" id="id-16"><div class="chroma">
+<h3 class="heading-element" id="过滤器"><span>过滤器</span>
+  <a href="#%e8%bf%87%e6%bb%a4%e5%99%a8" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p>在介绍<code>find_all()</code>方法之前，先介绍一下过滤器的类型，这些过滤器贯穿整个搜索的 API。过滤器可以被用在 tag 的 name 中，节点的属性中，字符串中或它们的混合中。</p>
+<h4 class="heading-element" id="字符串"><span>字符串</span>
+  <a href="#%e5%ad%97%e7%ac%a6%e4%b8%b2" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h4><p>最简单的过滤器是字符串。在搜索方法中传入也给字符串参数，<code>BeautifulSoup</code>会查找与字符串完整匹配的内容，下面的例子用于查找文档中所有<code>&lt;b&gt;</code>标签：</p>
+<div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -573,9 +496,12 @@
 <pre tabindex="0" class="chroma"><code class="language-Python" data-lang="Python"><span class="line"><span class="cl"><span class="n">In</span> <span class="p">[</span><span class="mi">43</span><span class="p">]:</span> <span class="n">soup</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="s1">&#39;b&#39;</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl"><span class="n">Out</span><span class="p">[</span><span class="mi">43</span><span class="p">]:</span> <span class="p">[</span><span class="o">&lt;</span><span class="n">b</span><span class="o">&gt;</span><span class="n">The</span> <span class="n">Dormouse</span><span class="s1">&#39;s story&lt;/b&gt;]</span></span></span></code></pre></td></tr></table>
 </div>
-</div><h4 id="正则表达式" class="heading-element">
-  <a href="#%e6%ad%a3%e5%88%99%e8%a1%a8%e8%be%be%e5%bc%8f" class="heading-mark"></a>正则表达式</h4><p>如果传入正则表达式作为参数，<code>BeautifulSoup</code>会通过正则表达式的<code>match()</code>来匹配内容。下例中找出所有以 b 开头的标签，这意味着<code>&lt;body&gt;</code>和<code>&lt;b&gt;</code>标签都应该被找到：</p>
-<div class="highlight" id="id-17"><div class="chroma">
+</div><h4 class="heading-element" id="正则表达式"><span>正则表达式</span>
+  <a href="#%e6%ad%a3%e5%88%99%e8%a1%a8%e8%be%be%e5%bc%8f" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h4><p>如果传入正则表达式作为参数，<code>BeautifulSoup</code>会通过正则表达式的<code>match()</code>来匹配内容。下例中找出所有以 b 开头的标签，这意味着<code>&lt;body&gt;</code>和<code>&lt;b&gt;</code>标签都应该被找到：</p>
+<div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -594,9 +520,12 @@
 </span></span><span class="line"><span class="cl"><span class="c1"># body</span>
 </span></span><span class="line"><span class="cl"><span class="c1"># b</span></span></span></code></pre></td></tr></table>
 </div>
-</div><h4 id="列表" class="heading-element">
-  <a href="#%e5%88%97%e8%a1%a8" class="heading-mark"></a>列表</h4><p>如果传入列表参数<code>BeautifulSoup</code>会将领与列表中任一元素匹配的内容返回。下列代码将会找到文档中所有<code>&lt;a&gt;</code>和<code>&lt;b&gt;</code>标签：</p>
-<div class="highlight" id="id-18"><div class="chroma">
+</div><h4 class="heading-element" id="列表"><span>列表</span>
+  <a href="#%e5%88%97%e8%a1%a8" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h4><p>如果传入列表参数<code>BeautifulSoup</code>会将领与列表中任一元素匹配的内容返回。下列代码将会找到文档中所有<code>&lt;a&gt;</code>和<code>&lt;b&gt;</code>标签：</p>
+<div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -613,9 +542,12 @@
 </span></span><span class="line"><span class="cl"> <span class="o">&lt;</span><span class="n">a</span> <span class="n">class</span><span class="o">=</span><span class="s2">&#34;sister&#34;</span> <span class="n">href</span><span class="o">=</span><span class="s2">&#34;http://example.com/lacie&#34;</span> <span class="nb">id</span><span class="o">=</span><span class="s2">&#34;link2&#34;</span><span class="o">&gt;</span><span class="n">Lacie</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span><span class="p">,</span>
 </span></span><span class="line"><span class="cl"> <span class="o">&lt;</span><span class="n">a</span> <span class="n">class</span><span class="o">=</span><span class="s2">&#34;sister&#34;</span> <span class="n">href</span><span class="o">=</span><span class="s2">&#34;http://example.com/tillie&#34;</span> <span class="nb">id</span><span class="o">=</span><span class="s2">&#34;link3&#34;</span><span class="o">&gt;</span><span class="n">Tillie</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span><span class="p">]</span></span></span></code></pre></td></tr></table>
 </div>
-</div><h4 id="true" class="heading-element">
-  <a href="#true" class="heading-mark"></a>True</h4><p><code>True</code>可以匹配任何值，以下代码查找到所有的 tag，但不会返回字符串节点：</p>
-<div class="highlight" id="id-19"><div class="chroma">
+</div><h4 class="heading-element" id="true"><span>True</span>
+  <a href="#true" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h4><p><code>True</code>可以匹配任何值，以下代码查找到所有的 tag，但不会返回字符串节点：</p>
+<div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
@@ -650,10 +582,13 @@
 </span></span><span class="line"><span class="cl"><span class="c1"># a</span>
 </span></span><span class="line"><span class="cl"><span class="n">p</span></span></span></code></pre></td></tr></table>
 </div>
-</div><h4 id="方法" class="heading-element">
-  <a href="#%e6%96%b9%e6%b3%95" class="heading-mark"></a>方法</h4><p>如果没有合适的过滤器，还可以定义一个方法，方法只接受一个元素参数，如果这个方法返回<code>True</code>表示当前元素匹配并且被找到，若不是则返回<code>False</code>。</p>
+</div><h4 class="heading-element" id="方法"><span>方法</span>
+  <a href="#%e6%96%b9%e6%b3%95" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h4><p>如果没有合适的过滤器，还可以定义一个方法，方法只接受一个元素参数，如果这个方法返回<code>True</code>表示当前元素匹配并且被找到，若不是则返回<code>False</code>。</p>
 <p>下列方法检验了当前元素，如果包含<code>class</code>属性却不包含<code>id</code>属性则返回<code>True</code>：</p>
-<div class="highlight" id="id-20"><div class="chroma">
+<div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -663,7 +598,7 @@
 </span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">tag</span><span class="o">.</span><span class="n">has_attr</span><span class="p">(</span><span class="s1">&#39;class&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">tag</span><span class="o">.</span><span class="n">has_attr</span><span class="p">(</span><span class="s1">&#39;id&#39;</span><span class="p">)</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>将该方法作为参数传入<code>find_all()</code>方法将得到所有<code>&lt;p&gt;</code>标签：</p>
-<div class="highlight" id="id-21"><div class="chroma">
+<div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -688,7 +623,7 @@
 </div>
 </div><p>返回结果中只有<code>&lt;p&gt;</code>标签没有<code>&lt;a&gt;</code>标签，因为<code>&lt;a&gt;</code>标签还定义了<code>id</code>，没有返回<code>&lt;html&gt;</code>和<code>&lt;head&gt;</code>，因为<code>&lt;html&gt;</code>和<code>&lt;head&gt;</code>中没有定义<code>class</code>属性。</p>
 <p>下面代码找到所有被文字包含的节点内容：</p>
-<div class="highlight" id="id-22"><div class="chroma">
+<div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
@@ -719,8 +654,11 @@
 </span></span><span class="line"><span class="cl"><span class="c1"># a</span>
 </span></span><span class="line"><span class="cl"><span class="c1"># p</span></span></span></code></pre></td></tr></table>
 </div>
-</div><h3 id="find_all" class="heading-element">
-  <a href="#find_all" class="heading-mark"></a>find_all()</h3><div class="highlight" id="id-23"><div class="chroma">
+</div><h3 class="heading-element" id="find_all"><span>find_all()</span>
+  <a href="#find_all" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
@@ -728,10 +666,13 @@
 <pre tabindex="0" class="chroma"><code class="language-Python" data-lang="Python"><span class="line"><span class="cl"><span class="n">find_all</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">attrs</span><span class="p">,</span> <span class="n">recursive</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p><code>find_all()</code>方法搜索当前 tag 的所有 tag 子节点，并判断是否符合过滤器的条件。</p>
-<h4 id="name-参数" class="heading-element">
-  <a href="#name-%e5%8f%82%e6%95%b0" class="heading-mark"></a>name 参数</h4><p><code>name</code>参数可以查找所有名字为<code>name</code>的 tag，字符串对象会被自动忽略掉。</p>
+<h4 class="heading-element" id="name-参数"><span>name 参数</span>
+  <a href="#name-%e5%8f%82%e6%95%b0" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h4><p><code>name</code>参数可以查找所有名字为<code>name</code>的 tag，字符串对象会被自动忽略掉。</p>
 <p>例如：</p>
-<div class="highlight" id="id-24"><div class="chroma">
+<div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -741,9 +682,12 @@
 </span></span><span class="line"><span class="cl"><span class="n">Out</span><span class="p">[</span><span class="mi">72</span><span class="p">]:</span> <span class="p">[</span><span class="o">&lt;</span><span class="n">title</span><span class="o">&gt;</span><span class="n">The</span> <span class="n">Dormouse</span><span class="s1">&#39;s story&lt;/title&gt;]</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p><code>name</code>参数的值可以是任一类型的过滤器，字符串、正则表达式、列表、方法或是<code>True</code>。</p>
-<h4 id="keyword-参数" class="heading-element">
-  <a href="#keyword-%e5%8f%82%e6%95%b0" class="heading-mark"></a>keyword 参数</h4><p>如果一个指定名字的参数不是搜索内置的参数名，搜索时会把该参数当作指定名字 tag 的属性来搜索。如果包含一个名字为<code>id</code>参数，<code>BeautifulSoup</code>会搜索每个 tag 的<code>id</code>属性。</p>
-<div class="highlight" id="id-25"><div class="chroma">
+<h4 class="heading-element" id="keyword-参数"><span>keyword 参数</span>
+  <a href="#keyword-%e5%8f%82%e6%95%b0" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h4><p>如果一个指定名字的参数不是搜索内置的参数名，搜索时会把该参数当作指定名字 tag 的属性来搜索。如果包含一个名字为<code>id</code>参数，<code>BeautifulSoup</code>会搜索每个 tag 的<code>id</code>属性。</p>
+<div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -753,7 +697,7 @@
 </span></span><span class="line"><span class="cl"><span class="n">Out</span><span class="p">[</span><span class="mi">73</span><span class="p">]:</span> <span class="p">[</span><span class="o">&lt;</span><span class="n">a</span> <span class="n">class</span><span class="o">=</span><span class="s2">&#34;sister&#34;</span> <span class="n">href</span><span class="o">=</span><span class="s2">&#34;http://example.com/lacie&#34;</span> <span class="nb">id</span><span class="o">=</span><span class="s2">&#34;link2&#34;</span><span class="o">&gt;</span><span class="n">Lacie</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span><span class="p">]</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>如果传入<code>href</code>参数，<code>BeautifulSoup</code>会搜索每个 tag 的<code>href</code>属性：</p>
-<div class="highlight" id="id-26"><div class="chroma">
+<div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -764,7 +708,7 @@
 </div>
 </div><p>搜索指定名字的属性时可以使用的参数值包括：字符串、正则表达式、列表、True。</p>
 <p>下例在文档中查找所有包含<code>id</code>属性的 tag，无论<code>id</code>的值是什么：</p>
-<div class="highlight" id="id-27"><div class="chroma">
+<div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -780,7 +724,7 @@
 </span></span><span class="line"><span class="cl"> <span class="o">&lt;</span><span class="n">a</span> <span class="n">class</span><span class="o">=</span><span class="s2">&#34;sister&#34;</span> <span class="n">href</span><span class="o">=</span><span class="s2">&#34;http://example.com/tillie&#34;</span> <span class="nb">id</span><span class="o">=</span><span class="s2">&#34;link3&#34;</span><span class="o">&gt;</span><span class="n">Tillie</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span><span class="p">]</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>使用多个指定名字的参数可以同时过滤 tag 的多个属性：</p>
-<div class="highlight" id="id-28"><div class="chroma">
+<div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -790,7 +734,7 @@
 </span></span><span class="line"><span class="cl"><span class="n">Out</span><span class="p">[</span><span class="mi">78</span><span class="p">]:</span> <span class="p">[</span><span class="o">&lt;</span><span class="n">a</span> <span class="n">class</span><span class="o">=</span><span class="s2">&#34;sister&#34;</span> <span class="n">href</span><span class="o">=</span><span class="s2">&#34;http://example.com/elsie&#34;</span> <span class="nb">id</span><span class="o">=</span><span class="s2">&#34;link1&#34;</span><span class="o">&gt;</span><span class="n">Elsie</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span><span class="p">]</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>有些 tag 属性在搜索时不能使用，比如 HTML5 中的<code>data-*</code>属性：</p>
-<div class="highlight" id="id-29"><div class="chroma">
+<div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -810,7 +754,7 @@
 </span></span><span class="line"><span class="cl"><span class="ne">SyntaxError</span><span class="p">:</span> <span class="n">keyword</span> <span class="n">can</span><span class="s1">&#39;t be an expression</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>可以通过<code>find_all()</code>方法<code>attrs</code>参数定义一个字典参数来搜索包含特殊属性的 tag：</p>
-<div class="highlight" id="id-30"><div class="chroma">
+<div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -819,9 +763,12 @@
 <pre tabindex="0" class="chroma"><code class="language-Python" data-lang="Python"><span class="line"><span class="cl"><span class="n">In</span> <span class="p">[</span><span class="mi">81</span><span class="p">]:</span> <span class="n">data_soup</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="n">attrs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;data-foo&#39;</span><span class="p">:</span><span class="s1">&#39;value&#39;</span><span class="p">})</span>
 </span></span><span class="line"><span class="cl"><span class="n">Out</span><span class="p">[</span><span class="mi">81</span><span class="p">]:</span> <span class="p">[</span><span class="o">&lt;</span><span class="n">div</span> <span class="n">data</span><span class="o">-</span><span class="n">foo</span><span class="o">=</span><span class="s2">&#34;value&#34;</span><span class="o">&gt;</span><span class="n">foo</span><span class="err">!</span><span class="o">&lt;/</span><span class="n">div</span><span class="o">&gt;</span><span class="p">]</span></span></span></code></pre></td></tr></table>
 </div>
-</div><h4 id="按-css-搜索" class="heading-element">
-  <a href="#%e6%8c%89-css-%e6%90%9c%e7%b4%a2" class="heading-mark"></a>按 CSS 搜索</h4><p>可以通过<code>class_</code>参数搜索指定 CSS 类名的 tag：</p>
-<div class="highlight" id="id-31"><div class="chroma">
+</div><h4 class="heading-element" id="按-css-搜索"><span>按 CSS 搜索</span>
+  <a href="#%e6%8c%89-css-%e6%90%9c%e7%b4%a2" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h4><p>可以通过<code>class_</code>参数搜索指定 CSS 类名的 tag：</p>
+<div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -837,9 +784,12 @@
 </span></span><span class="line"><span class="cl"> <span class="o">&lt;</span><span class="n">a</span> <span class="n">class</span><span class="o">=</span><span class="s2">&#34;sister&#34;</span> <span class="n">href</span><span class="o">=</span><span class="s2">&#34;http://example.com/tillie&#34;</span> <span class="nb">id</span><span class="o">=</span><span class="s2">&#34;link3&#34;</span><span class="o">&gt;</span><span class="n">Tillie</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span><span class="p">]</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p><code>class_</code>参数同样接受不同类型的过滤器，字符串，正则表达式，方法或<code>True</code>。</p>
-<h4 id="text-参数" class="heading-element">
-  <a href="#text-%e5%8f%82%e6%95%b0" class="heading-mark"></a>text 参数</h4><p>通过<code>text</code>参数可以搜索文档中的字符串内容。与<code>name</code>参数的可选值一样，<code>text</code>参数接受字符串，正则表达式，列表，<code>True</code>，方法。</p>
-<div class="highlight" id="id-32"><div class="chroma">
+<h4 class="heading-element" id="text-参数"><span>text 参数</span>
+  <a href="#text-%e5%8f%82%e6%95%b0" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h4><p>通过<code>text</code>参数可以搜索文档中的字符串内容。与<code>name</code>参数的可选值一样，<code>text</code>参数接受字符串，正则表达式，列表，<code>True</code>，方法。</p>
+<div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
@@ -887,7 +837,7 @@
 </span></span><span class="line"><span class="cl"> <span class="s1">&#39;...&#39;</span><span class="p">]</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>虽然<code>text</code>参数用于搜索字符串，还可以与其它参数混合使用来过滤 tag。<code>BeautifulSoup</code>会找到<code>.string</code>属性与<code>text</code>参数值相符的 tag。以下代码用来搜索内容中包含<code>Elsie</code>的<code>&lt;a&gt;</code>标签：</p>
-<div class="highlight" id="id-33"><div class="chroma">
+<div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -896,9 +846,12 @@
 <pre tabindex="0" class="chroma"><code class="language-Python" data-lang="Python"><span class="line"><span class="cl"><span class="n">In</span> <span class="p">[</span><span class="mi">88</span><span class="p">]:</span> <span class="n">soup</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s2">&#34;Elsie&#34;</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl"><span class="n">Out</span><span class="p">[</span><span class="mi">88</span><span class="p">]:</span> <span class="p">[</span><span class="o">&lt;</span><span class="n">a</span> <span class="n">class</span><span class="o">=</span><span class="s2">&#34;sister&#34;</span> <span class="n">href</span><span class="o">=</span><span class="s2">&#34;http://example.com/elsie&#34;</span> <span class="nb">id</span><span class="o">=</span><span class="s2">&#34;link1&#34;</span><span class="o">&gt;</span><span class="n">Elsie</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span><span class="p">]</span></span></span></code></pre></td></tr></table>
 </div>
-</div><h4 id="limit-参数" class="heading-element">
-  <a href="#limit-%e5%8f%82%e6%95%b0" class="heading-mark"></a>limit 参数</h4><p><code>find_all()</code>方法返回全部的搜索结构，如果文档树很大那么搜索会很慢。如果我们不需要全部结果，可以使用<code>limit</code>参数限制返回结果的数量。当搜索结果的数量达到<code>limit</code>的限制时，就停止搜索返回结果。</p>
-<div class="highlight" id="id-34"><div class="chroma">
+</div><h4 class="heading-element" id="limit-参数"><span>limit 参数</span>
+  <a href="#limit-%e5%8f%82%e6%95%b0" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h4><p><code>find_all()</code>方法返回全部的搜索结构，如果文档树很大那么搜索会很慢。如果我们不需要全部结果，可以使用<code>limit</code>参数限制返回结果的数量。当搜索结果的数量达到<code>limit</code>的限制时，就停止搜索返回结果。</p>
+<div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
@@ -923,10 +876,13 @@
 </span></span><span class="line"><span class="cl"><span class="p">[</span><span class="o">&lt;</span><span class="n">a</span> <span class="n">class</span><span class="o">=</span><span class="s2">&#34;sister&#34;</span> <span class="n">href</span><span class="o">=</span><span class="s2">&#34;http://example.com/elsie&#34;</span> <span class="nb">id</span><span class="o">=</span><span class="s2">&#34;link1&#34;</span><span class="o">&gt;</span><span class="n">Elsie</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span><span class="p">,</span>
 </span></span><span class="line"><span class="cl"> <span class="o">&lt;</span><span class="n">a</span> <span class="n">class</span><span class="o">=</span><span class="s2">&#34;sister&#34;</span> <span class="n">href</span><span class="o">=</span><span class="s2">&#34;http://example.com/lacie&#34;</span> <span class="nb">id</span><span class="o">=</span><span class="s2">&#34;link2&#34;</span><span class="o">&gt;</span><span class="n">Lacie</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span><span class="p">]</span></span></span></code></pre></td></tr></table>
 </div>
-</div><h4 id="recursive-参数" class="heading-element">
-  <a href="#recursive-%e5%8f%82%e6%95%b0" class="heading-mark"></a>recursive 参数</h4><p>调用 tag 的<code>find_all()</code>方法时，<code>BeautifulSoup</code>会检索当前 tag 的所有子孙节点，如果只想搜索 tag 的直接子节点，可以使用参数<code>recursive=False</code>。</p>
+</div><h4 class="heading-element" id="recursive-参数"><span>recursive 参数</span>
+  <a href="#recursive-%e5%8f%82%e6%95%b0" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h4><p>调用 tag 的<code>find_all()</code>方法时，<code>BeautifulSoup</code>会检索当前 tag 的所有子孙节点，如果只想搜索 tag 的直接子节点，可以使用参数<code>recursive=False</code>。</p>
 <p>有如下文档：</p>
-<div class="highlight" id="id-35"><div class="chroma">
+<div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -946,7 +902,7 @@
 </span></span><span class="line"><span class="cl"><span class="o">...</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>是否使用<code>recursive</code>参数的结果：</p>
-<div class="highlight" id="id-36"><div class="chroma">
+<div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -967,10 +923,13 @@
 </span></span><span class="line"><span class="cl"><span class="n">In</span> <span class="p">[</span><span class="mi">96</span><span class="p">]:</span> <span class="n">soup</span><span class="o">.</span><span class="n">html</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="s1">&#39;title&#39;</span><span class="p">,</span> <span class="n">recursive</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl"><span class="n">Out</span><span class="p">[</span><span class="mi">96</span><span class="p">]:</span> <span class="p">[]</span></span></span></code></pre></td></tr></table>
 </div>
-</div><h3 id="像调用-find_all一样调用-tag" class="heading-element">
-  <a href="#%e5%83%8f%e8%b0%83%e7%94%a8-find_all%e4%b8%80%e6%a0%b7%e8%b0%83%e7%94%a8-tag" class="heading-mark"></a>像调用 find_all()一样调用 tag</h3><p><code>find_all()</code>几乎是<code>BeautifulSoup</code>中最常见的搜索方法，所以定义了它的简写方法。<code>BeautifulSoup</code>对象和<code>Tag</code>对象可以被当作一个方法来使用，这个方法的执行结果与调用这个对象的<code>find_all()</code>方法相同。</p>
+</div><h3 class="heading-element" id="像调用-find_all一样调用-tag"><span>像调用 find_all()一样调用 tag</span>
+  <a href="#%e5%83%8f%e8%b0%83%e7%94%a8-find_all%e4%b8%80%e6%a0%b7%e8%b0%83%e7%94%a8-tag" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p><code>find_all()</code>几乎是<code>BeautifulSoup</code>中最常见的搜索方法，所以定义了它的简写方法。<code>BeautifulSoup</code>对象和<code>Tag</code>对象可以被当作一个方法来使用，这个方法的执行结果与调用这个对象的<code>find_all()</code>方法相同。</p>
 <p>下面两行代码是等价的：</p>
-<div class="highlight" id="id-37"><div class="chroma">
+<div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -980,7 +939,7 @@
 </span></span><span class="line"><span class="cl"><span class="n">soup</span><span class="p">(</span><span class="s2">&#34;a&#34;</span><span class="p">)</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>以下两行代码也是等价的：</p>
-<div class="highlight" id="id-38"><div class="chroma">
+<div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -989,9 +948,12 @@
 <pre tabindex="0" class="chroma"><code class="language-Python" data-lang="Python"><span class="line"><span class="cl"><span class="n">soup</span><span class="o">.</span><span class="n">title</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl"><span class="n">soup</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></span></span></code></pre></td></tr></table>
 </div>
-</div><h3 id="css-选择器" class="heading-element">
-  <a href="#css-%e9%80%89%e6%8b%a9%e5%99%a8" class="heading-mark"></a>CSS 选择器</h3><p><code>BeautifulSoup</code>支持大部分的 CSS 选择器，在<code>Tag</code>或<code>BeautifulSoup</code>对象的<code>select()</code>方法中传入字符串参数即可使用 CSS 选择器的语法找到 tag：</p>
-<div class="highlight" id="id-39"><div class="chroma">
+</div><h3 class="heading-element" id="css-选择器"><span>CSS 选择器</span>
+  <a href="#css-%e9%80%89%e6%8b%a9%e5%99%a8" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p><code>BeautifulSoup</code>支持大部分的 CSS 选择器，在<code>Tag</code>或<code>BeautifulSoup</code>对象的<code>select()</code>方法中传入字符串参数即可使用 CSS 选择器的语法找到 tag：</p>
+<div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
@@ -1043,7 +1005,7 @@
 </span></span><span class="line"><span class="cl"><span class="n">Out</span><span class="p">[</span><span class="mi">5</span><span class="p">]:</span> <span class="p">[</span><span class="o">&lt;</span><span class="n">p</span> <span class="n">class</span><span class="o">=</span><span class="s2">&#34;story&#34;</span><span class="o">&gt;...&lt;/</span><span class="n">p</span><span class="o">&gt;</span><span class="p">]</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>通过 tag 标签逐层查找：</p>
-<div class="highlight" id="id-40"><div class="chroma">
+<div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -1065,7 +1027,7 @@
 </span></span><span class="line"><span class="cl"><span class="n">Out</span><span class="p">[</span><span class="mi">7</span><span class="p">]:</span> <span class="p">[</span><span class="o">&lt;</span><span class="n">title</span><span class="o">&gt;</span><span class="n">The</span> <span class="n">Dormouse</span><span class="s1">&#39;s story&lt;/title&gt;]</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>找到某个 tag 标签下的直接子标签：</p>
-<div class="highlight" id="id-41"><div class="chroma">
+<div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -1087,7 +1049,7 @@
 </span></span><span class="line"><span class="cl"> <span class="o">&lt;</span><span class="n">a</span> <span class="n">class</span><span class="o">=</span><span class="s2">&#34;sister&#34;</span> <span class="n">href</span><span class="o">=</span><span class="s2">&#34;http://example.com/tillie&#34;</span> <span class="nb">id</span><span class="o">=</span><span class="s2">&#34;link3&#34;</span><span class="o">&gt;</span><span class="n">Tillie</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span><span class="p">]</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>找到兄弟节点标签：</p>
-<div class="highlight" id="id-42"><div class="chroma">
+<div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -1107,7 +1069,7 @@
 </span></span><span class="line"><span class="cl"><span class="n">Out</span><span class="p">[</span><span class="mi">15</span><span class="p">]:</span> <span class="p">[</span><span class="o">&lt;</span><span class="n">a</span> <span class="n">class</span><span class="o">=</span><span class="s2">&#34;sister&#34;</span> <span class="n">href</span><span class="o">=</span><span class="s2">&#34;http://example.com/lacie&#34;</span> <span class="nb">id</span><span class="o">=</span><span class="s2">&#34;link2&#34;</span><span class="o">&gt;</span><span class="n">Lacie</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span><span class="p">]</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>通过 CSS 的类名查找：</p>
-<div class="highlight" id="id-43"><div class="chroma">
+<div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
@@ -1135,7 +1097,7 @@
 </span></span><span class="line"><span class="cl"> <span class="o">&lt;</span><span class="n">a</span> <span class="n">class</span><span class="o">=</span><span class="s2">&#34;sister&#34;</span> <span class="n">href</span><span class="o">=</span><span class="s2">&#34;http://example.com/tillie&#34;</span> <span class="nb">id</span><span class="o">=</span><span class="s2">&#34;link3&#34;</span><span class="o">&gt;</span><span class="n">Tillie</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span><span class="p">]</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>通过 tag 的 id 查找：</p>
-<div class="highlight" id="id-44"><div class="chroma">
+<div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -1151,7 +1113,7 @@
 </span></span><span class="line"><span class="cl"><span class="n">Out</span><span class="p">[</span><span class="mi">19</span><span class="p">]:</span> <span class="p">[</span><span class="o">&lt;</span><span class="n">a</span> <span class="n">class</span><span class="o">=</span><span class="s2">&#34;sister&#34;</span> <span class="n">href</span><span class="o">=</span><span class="s2">&#34;http://example.com/lacie&#34;</span> <span class="nb">id</span><span class="o">=</span><span class="s2">&#34;link2&#34;</span><span class="o">&gt;</span><span class="n">Lacie</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span><span class="p">]</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>通过是否存在某个属性来查找：</p>
-<div class="highlight" id="id-45"><div class="chroma">
+<div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -1167,7 +1129,7 @@
 </span></span><span class="line"><span class="cl"> <span class="o">&lt;</span><span class="n">a</span> <span class="n">class</span><span class="o">=</span><span class="s2">&#34;sister&#34;</span> <span class="n">href</span><span class="o">=</span><span class="s2">&#34;http://example.com/tillie&#34;</span> <span class="nb">id</span><span class="o">=</span><span class="s2">&#34;link3&#34;</span><span class="o">&gt;</span><span class="n">Tillie</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span><span class="p">]</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>通过属性的值来查找：</p>
-<div class="highlight" id="id-46"><div class="chroma">
+<div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
@@ -1201,16 +1163,19 @@
 </span></span><span class="line"><span class="cl"><span class="n">Out</span><span class="p">[</span><span class="mi">24</span><span class="p">]:</span> <span class="p">[</span><span class="o">&lt;</span><span class="n">a</span> <span class="n">class</span><span class="o">=</span><span class="s2">&#34;sister&#34;</span> <span class="n">href</span><span class="o">=</span><span class="s2">&#34;http://example.com/elsie&#34;</span> <span class="nb">id</span><span class="o">=</span><span class="s2">&#34;link1&#34;</span><span class="o">&gt;</span><span class="n">Elsie</span><span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span><span class="p">]</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>更多有关 CSS 选择器的内容，请参考<a href="https://www.w3school.com.cn/cssref/css_selectors.ASP"target="_blank" rel="external nofollow noopener noreferrer">CSS 选择器参考手册</a>。</p>
-<h2 id="爬取豆瓣电影-top250-海报" class="heading-element">
-  <a href="#%e7%88%ac%e5%8f%96%e8%b1%86%e7%93%a3%e7%94%b5%e5%bd%b1-top250-%e6%b5%b7%e6%8a%a5" class="heading-mark"></a>爬取豆瓣电影 TOP250 海报</h2><p>接下来，通过爬取豆瓣电影 TOP250 海报实践一下。访问<a href="https://movie.douban.com/top250"target="_blank" rel="external nofollow noopener noreferrer">豆瓣电影 Top 250</a></p>
-<p><img loading="lazy" src="/images/202110/2/3.png" alt="/images/202110/2/3.png" srcset="/images/202110/2/3.png?size=small, /images/202110/2/3.png?size=medium 1.5x, /images/202110/2/3.png?size=large 2x" data-title="/images/202110/2/3.png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></p>
+<h2 class="heading-element" id="爬取豆瓣电影-top250-海报"><span>爬取豆瓣电影 TOP250 海报</span>
+  <a href="#%e7%88%ac%e5%8f%96%e8%b1%86%e7%93%a3%e7%94%b5%e5%bd%b1-top250-%e6%b5%b7%e6%8a%a5" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>接下来，通过爬取豆瓣电影 TOP250 海报实践一下。访问<a href="https://movie.douban.com/top250"target="_blank" rel="external nofollow noopener noreferrer">豆瓣电影 Top 250</a></p>
+<p><img loading="lazy" src='/images/202110/2/3.png' alt="/images/202110/2/3.png"></p>
 <p>可以看到每部电影左侧都配有一张海报，我们的目的就是下载这些海报到本地。</p>
 <p>多看几页，就会发现每个页面的 URL 和页号是有关系的。</p>
-<p><img loading="lazy" src="/images/202110/2/4.png" alt="/images/202110/2/4.png" srcset="/images/202110/2/4.png?size=small, /images/202110/2/4.png?size=medium 1.5x, /images/202110/2/4.png?size=large 2x" data-title="/images/202110/2/4.png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></p>
+<p><img loading="lazy" src='/images/202110/2/4.png' alt="/images/202110/2/4.png"></p>
 <p>URL 中<code>start</code>这个参数的值等于<code>(页号 - 1) * 25</code>。接下来，再审查一下元素</p>
-<p><img loading="lazy" src="/images/202110/2/5.png" alt="/images/202110/2/5.png" srcset="/images/202110/2/5.png?size=small, /images/202110/2/5.png?size=medium 1.5x, /images/202110/2/5.png?size=large 2x" data-title="/images/202110/2/5.png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></p>
+<p><img loading="lazy" src='/images/202110/2/5.png' alt="/images/202110/2/5.png"></p>
 <p>可以发现海报的地址包含在<code>class</code>值为<code>pic</code>的<code>div</code>元素下，我们可以用<code>BeautifulSoup</code>的<code>select()</code>方法获取到<code>img</code>元素，再提取<code>src</code>属性。代码如下所示：</p>
-<div class="highlight" id="id-47"><div class="chroma">
+<div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
@@ -1346,9 +1311,9 @@
 </span></span><span class="line"><span class="cl">    <span class="n">main</span><span class="p">()</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>运行结果如下：</p>
-<p><img loading="lazy" src="/images/202110/2/6.png" alt="/images/202110/2/6.png" srcset="/images/202110/2/6.png?size=small, /images/202110/2/6.png?size=medium 1.5x, /images/202110/2/6.png?size=large 2x" data-title="/images/202110/2/6.png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></p>
+<p><img loading="lazy" src='/images/202110/2/6.png' alt="/images/202110/2/6.png"></p>
 <p>最后，可以将所有的海报拼接起来：</p>
-<div class="highlight" id="id-48"><div class="chroma">
+<div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
@@ -1412,13 +1377,19 @@
 </span></span><span class="line"><span class="cl">    <span class="n">final_image</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s2">&#34;</span><span class="si">{}</span><span class="s2">/</span><span class="si">{}</span><span class="s2">.jpg&#34;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">folder</span><span class="p">,</span> <span class="s2">&#34;final_image&#34;</span><span class="p">)))</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>得到：</p>
-<p><img loading="lazy" src="/images/202110/2/7.jpg" alt="/images/202110/2/7.jpg" srcset="/images/202110/2/7.jpg?size=small, /images/202110/2/7.jpg?size=medium 1.5x, /images/202110/2/7.jpg?size=large 2x" data-title="/images/202110/2/7.jpg" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></p>
-<h2 id="总结" class="heading-element">
-  <a href="#%e6%80%bb%e7%bb%93" class="heading-mark"></a>总结</h2><p>本文我们介绍了<code>BeautifulSoup</code>库的一些内容，它可以将 HTML/XML 文档进行解析，得到一个文档树</p>
-<p><img loading="lazy" src="/images/202110/2/2.png" alt="/images/202110/2/2.png" srcset="/images/202110/2/2.png?size=small, /images/202110/2/2.png?size=medium 1.5x, /images/202110/2/2.png?size=large 2x" data-title="/images/202110/2/2.png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></p>
+<p><img loading="lazy" src='/images/202110/2/7.jpg' alt="/images/202110/2/7.jpg"></p>
+<h2 class="heading-element" id="总结"><span>总结</span>
+  <a href="#%e6%80%bb%e7%bb%93" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>本文我们介绍了<code>BeautifulSoup</code>库的一些内容，它可以将 HTML/XML 文档进行解析，得到一个文档树</p>
+<p><img loading="lazy" src='/images/202110/2/2.png' alt="/images/202110/2/2.png"></p>
 <p>树中的每个节点都是<code>BeautifulSoup</code>四种对象中的一种。可以用<code>find_all()</code>或<code>select()</code>找到我们需要查找的节点。之后，可以通过节点的属性或者方法获取到我们需要的信息。</p>
-<h2 id="参考" class="heading-element">
-  <a href="#%e5%8f%82%e8%80%83" class="heading-mark"></a>参考</h2><ul>
+<h2 class="heading-element" id="参考"><span>参考</span>
+  <a href="#%e5%8f%82%e8%80%83" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><ul>
 <li><a href="https://www.crummy.com/software/BeautifulSoup/bs4/doc.zh/"target="_blank" rel="external nofollow noopener noreferrer">https://www.crummy.com/software/BeautifulSoup/bs4/doc.zh/</a></li>
 </ul></div><div class="post-footer" id="post-footer">
   <div class="post-info">
@@ -1426,14 +1397,14 @@
       <div class="post-info-mod">
         <span title="更新于 2021-11-08 08:36:00">更新于 2021-11-08&nbsp;</span>
       </div></div><div class="post-info-line">
-        <div class="post-info-md"></div>
+        <div class="post-info-md"><span><a href="vscode://file/D:%5chugo-blog%5candyfree96%5ccontent%5cposts%5cBeautifulSoup%e5%ba%93%e4%bd%bf%e7%94%a8.md" title="在编辑器中打开"target="_blank" rel="external nofollow noopener noreferrer" class="link-to-vscode">在编辑器中打开</a></span></div>
         <div class="post-info-share">
-          <span><a href="javascript:void(0);" title="分享到 Twitter" data-sharer="twitter" data-url="http://localhost:1313/beautifulsoup%E5%BA%93%E4%BD%BF%E7%94%A8/" data-title="BeautifulSoup库使用" data-via="IRONAnthony96" data-hashtags="Python,BeautifulSoup,解析器"><i class="fa-brands fa-twitter fa-fw" aria-hidden="true"></i></a>
+          <span><a href="javascript:void(0);" title="分享到 X" data-sharer="twitter" data-url="http://localhost:1313/beautifulsoup%E5%BA%93%E4%BD%BF%E7%94%A8/" data-title="BeautifulSoup库使用" data-via="IRONAnthony96" data-hashtags="Python,BeautifulSoup,解析器"><i class="fa-brands fa-x-twitter fa-fw" aria-hidden="true"></i></a>
   <a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="http://localhost:1313/beautifulsoup%E5%BA%93%E4%BD%BF%E7%94%A8/" data-hashtag="Python"><i class="fa-brands fa-facebook-square fa-fw" aria-hidden="true"></i></a>
   <a href="javascript:void(0);" title="分享到 WhatsApp" data-sharer="whatsapp" data-url="http://localhost:1313/beautifulsoup%E5%BA%93%E4%BD%BF%E7%94%A8/" data-title="BeautifulSoup库使用" data-web><i class="fa-brands fa-whatsapp fa-fw" aria-hidden="true"></i></a>
-  <a href="javascript:void(0);" title="分享到 Line" data-sharer="line" data-url="http://localhost:1313/beautifulsoup%E5%BA%93%E4%BD%BF%E7%94%A8/" data-title="BeautifulSoup库使用"><i data-svg-src="/lib/simple-icons/icons/line.min.svg" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 Line" data-sharer="line" data-url="http://localhost:1313/beautifulsoup%E5%BA%93%E4%BD%BF%E7%94%A8/" data-title="BeautifulSoup库使用"><svg class="icon" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>LINE</title><path d="M19.365 9.863c.349.0.63.285.63.631.0.345-.281.63-.63.63H17.61v1.125h1.755c.349.0.63.283.63.63.0.344-.281.629-.63.629h-2.386c-.345.0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63h2.386c.346.0.627.285.627.63.0.349-.281.63-.63.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211.0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346.0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195.0.375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345.0.63.285.63.63v4.771zm-5.741.0c0 .344-.282.629-.631.629-.345.0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63.346.0.628.285.628.63v4.771zm-2.466.629H4.917c-.345.0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348.0.63.285.63.63v4.141h1.756c.348.0.629.283.629.63.0.344-.282.629-.629.629M24 10.314C24 4.943 18.615.572 12 .572S0 4.943.0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314"/></svg></a>
   <a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="http://localhost:1313/beautifulsoup%E5%BA%93%E4%BD%BF%E7%94%A8/" data-title="BeautifulSoup库使用" data-image="/images/202110/2/luke-jones-JcEEIM963oM-unsplash.jpg"><i class="fa-brands fa-weibo fa-fw" aria-hidden="true"></i></a>
-  <a href="javascript:void(0);" title="分享到 Myspace" data-sharer="myspace" data-url="http://localhost:1313/beautifulsoup%E5%BA%93%E4%BD%BF%E7%94%A8/" data-title="BeautifulSoup库使用" data-description=""><i data-svg-src="/lib/simple-icons/icons/myspace.min.svg" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 Myspace" data-sharer="myspace" data-url="http://localhost:1313/beautifulsoup%E5%BA%93%E4%BD%BF%E7%94%A8/" data-title="BeautifulSoup库使用" data-description=""><svg class="icon" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>Myspace</title><path d="M19.802 12.274A3.811 3.811.0 0023.62 8.47c0-2.101-1.71-3.795-3.818-3.795a3.816 3.816.0 00-3.818 3.81 3.817 3.817.0 003.818 3.811zm-8.602.705a3.43 3.43.0 003.435-3.424A3.43 3.43.0 0011.2 6.13 3.44 3.44.0 007.764 9.566 3.436 3.436.0 0011.2 13zm-7.8.635c1.71.0 3.093-1.38 3.093-3.081.0-1.704-1.395-3.084-3.105-3.084A3.086 3.086.0 00.3 10.539c0 1.7 1.387 3.078 3.095 3.078zm0 .705c-1.96.0-3.4 1.717-3.4 3.495v1.196c0 .17.138.31.31.31h6.18a.31.31.0 00.309-.31v-1.196c0-1.779-1.437-3.5-3.398-3.5zm7.8-.56c-2.18.0-3.78 1.915-3.78 3.891v1.331c0 .188.156.344.345.344h6.87a.344.344.0 00.342-.344V17.65c0-1.976-1.598-3.891-3.777-3.891zm8.602-.617c-2.422.0-4.197 2.126-4.197 4.323v1.477c0 .21.172.381.382.381h7.63c.21.0.383-.171.383-.381v-1.477c-.001-2.197-1.776-4.323-4.198-4.323z"/></svg></a>
   <a href="javascript:void(0);" title="分享到 Blogger" data-sharer="blogger" data-url="http://localhost:1313/beautifulsoup%E5%BA%93%E4%BD%BF%E7%94%A8/" data-title="BeautifulSoup库使用" data-description=""><i class="fa-brands fa-blogger fa-fw" aria-hidden="true"></i></a>
   <a href="javascript:void(0);" title="分享到 Evernote" data-sharer="evernote" data-url="http://localhost:1313/beautifulsoup%E5%BA%93%E4%BD%BF%E7%94%A8/" data-title="BeautifulSoup库使用"><i class="fa-brands fa-evernote fa-fw" aria-hidden="true"></i></a>
   </span>
@@ -1445,29 +1416,26 @@
     <section>
       <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
     </section>
-  </div>
-
-  <div class="post-nav"><a href="/requests%E5%BA%93%E4%BD%BF%E7%94%A8/" class="post-nav-item" rel="prev" title="Requests库使用"><i class="fa-solid fa-angle-left fa-fw" aria-hidden="true"></i>Requests库使用</a>
-      <a href="/%E5%BF%AB%E4%B9%90%E7%9A%84linux%E5%91%BD%E4%BB%A4%E8%A1%8C/" class="post-nav-item" rel="next" title="快乐的Linux命令行">快乐的Linux命令行<i class="fa-solid fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
+  </div><div class="post-nav"><a href="/requests%E5%BA%93%E4%BD%BF%E7%94%A8/" class="post-nav-item" rel="prev" title="Requests库使用"><i class="fa-solid fa-angle-left fa-fw" aria-hidden="true"></i>Requests库使用</a><a href="/%E5%BF%AB%E4%B9%90%E7%9A%84linux%E5%91%BD%E4%BB%A4%E8%A1%8C/" class="post-nav-item" rel="next" title="快乐的Linux命令行">快乐的Linux命令行<i class="fa-solid fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
 </div>
 <div class="post-reward">
     <div class="comment">请作者喝杯咖啡!</div>
     <input type="checkbox" class="reward-input" name="reward" id="fi-reward" hidden />
-    <label class="reward-button" for="fi-reward">赞赏</label>
-    <div class="reward-ways" data-mode="static"><div><img loading="lazy" src="/reward/alipay.png" alt="AndyFree96 支付宝" data-title="AndyFree96 支付宝" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/><span data-animation>支付宝</span>
-          </div><div><img loading="lazy" src="/reward/wechatpay.png" alt="AndyFree96 微信" data-title="AndyFree96 微信" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/><span data-animation>微信</span>
+    <label class="reward-button" for="fi-reward"><i class="fa-solid fa-qrcode fa-fw" aria-hidden="true"></i>赞赏</label>
+    <div class="reward-ways" data-mode="static"><div><img src='/reward/alipay.png' alt="AndyFree96 支付宝"><span data-animation>支付宝</span>
+          </div><div><img src='/reward/wechatpay.png' alt="AndyFree96 微信"><span data-animation>微信</span>
           </div></div>
   </div></article>
 
   <aside class="toc" id="toc-auto" aria-label="目录"><h2 class="toc-title">目录&nbsp;<i class="toc-icon fa-solid fa-angle-down fa-fw" aria-hidden="true"></i></h2>
       <div class="toc-content" id="toc-content-auto"></div></aside></main><footer class="footer">
-    <div class="footer-container"><div class="footer-line powered">由 <a href="https://gohugo.io/" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.135.0"><img class="hugo-icon" src="/images/hugo.min.svg" alt="Hugo logo" /> Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/hugo-fixit/FixIt" target="_blank" rel="external" title="FixIt v0.3.2"><img class="fixit-icon" src="/images/fixit.min.svg" alt="FixIt logo" /> FixIt</a>
+    <div class="footer-container"><div class="footer-line powered">由 <a href="https://gohugo.io/" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.148.2"><img class="hugo-icon" src="/images/hugo.min.svg" alt="Hugo logo" /> Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/hugo-fixit/FixIt" target="_blank" rel="external" title="FixIt v0.3.20"><img class="fixit-icon" src="/images/fixit.min.svg" alt="FixIt logo" /> FixIt</a>
         </div><div class="footer-line copyright" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright fa-fw" aria-hidden="true"></i>
             <span itemprop="copyrightYear">2025</span><span class="author" itemprop="copyrightHolder">
               <a href="https://andyfree96.github.io/"target="_blank" rel="external nofollow noopener noreferrer">AndyFree96</a></span></div></div>
   </footer></div><div class="widgets"><div class="fixed-buttons animate__faster d-none"><div class="fixed-button back-to-top" role="button" aria-label="回到顶部"><i class="fa-solid fa-arrow-up fa-fw" aria-hidden="true"></i><span class="variant-numeric d-none">0%</span>
         </div></div><div id="mask"></div><div class="reading-progress-bar" style="left: 0;top: 0;"></div><noscript>
-    <div class="noscript-warning">FixIt 主题在启用 JavaScript 的情况下效果最佳。</div>
+    <div class="noscript-warning">该网站在启用 JavaScript 的情况下效果最佳。</div>
   </noscript>
-</div><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script src="/lib/sharer/sharer.min.js" async defer></script><script src="/lib/cookieconsent/cookieconsent.min.js" defer></script><script>window.config={"code":{"copyTitle":"复制到剪贴板","editLockTitle":"锁定可编辑代码块","editUnLockTitle":"解锁可编辑代码块","editable":true,"maxShownLines":10},"comment":{"enable":false},"cookieconsent":{"content":{"dismiss":"同意","link":"了解更多","message":"本网站使用 Cookies 来改善您的浏览体验。"},"enable":true,"palette":{"button":{"background":"#f0f0f0"},"popup":{"background":"#1aa3ff"}},"theme":"edgeless"}};</script><script src="/js/theme.min.js" defer></script></body>
+</div><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script src="/lib/sharer/sharer.min.js" async defer></script><script src="/lib/cookieconsent/cookieconsent.min.js" defer></script><script>window.config={"code":{"copyTitle":"复制到剪贴板","editLockTitle":"锁定可编辑代码块","editUnLockTitle":"解锁可编辑代码块","editable":true,"maxShownLines":10},"comment":{"enable":false},"cookieconsent":{"content":{"dismiss":"同意","link":"了解更多","message":"本网站使用 Cookies 来改善您的浏览体验。"},"enable":true,"palette":{"button":{"background":"#f0f0f0"},"popup":{"background":"#1aa3ff"}},"theme":"edgeless"},"version":"v0.3.20"};console.log('Page config:', window.config);</script><script src="/js/theme.min.js" defer></script></body>
 </html>

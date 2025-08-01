@@ -3,7 +3,7 @@
 
 在当今互联网环境中，保护网络隐私和确保数据安全变得尤为重要。ShadowsocksR（SSR）作为一种高效的代理工具，凭借其出色的加密性能和灵活的配置，成为了许多人突破网络限制、保护隐私的首选工具。本文将详细介绍如何在亚马逊云（AWS）平台上配置 ShadowsocksR，帮助你轻松搭建一个稳定的代理服务，以便在全球范围内实现安全的网络访问。
 
-&lt;!--more--&gt;
+<!--more-->
 
 ## 创建实例
 
@@ -100,9 +100,9 @@ sudo -i
 
 wget –no-check-certificate https://raw.githubusercontent.com/teddysun/shadowsocks_install/master/shadowsocks-all.sh
 
-chmod &#43;x shadowsocks-all.sh
+chmod +x shadowsocks-all.sh
 
-./shadowsocks-all.sh 2&gt;&amp;1 | tee shadowsocks-all.log
+./shadowsocks-all.sh 2>&1 | tee shadowsocks-all.log
 ```
 
 选择选项 2.`ShadowsocksR`，输入密码和端口，其他的选项默认就好。安装脚本运行结束后，会显示如下内容
@@ -118,13 +118,13 @@ vim /etc/shadowsocks-r/config.json
 按键盘上的字母`i`进行编辑文件。进行如下更改：
 
 ```Python
-&#34;protocol&#34;:&#34;origin&#34;
+"protocol":"origin"
 # 改为
-&#34;protocol&#34;:&#34;auth_sha1_v4&#34;
+"protocol":"auth_sha1_v4"
 
-&#34;obfs&#34;:&#34;plain&#34;
+"obfs":"plain"
 # 改为
-&#34;obfs&#34;:&#34;tls1.2_ticket_auth&#34;
+"obfs":"tls1.2_ticket_auth"
 ```
 
 按键盘左上角的`Esc`键，输入`:wq`保存更改并退出编辑。

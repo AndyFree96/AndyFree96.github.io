@@ -3,7 +3,7 @@
 
 在当今数据驱动的世界中，从大规模数据分析到精准预测模型，数据科学正在塑造我们的决策方式。而在众多数据科学工具中，R 凭借其强大的统计分析能力和丰富的社区资源，成为数据科学家和分析师的首选之一。那么，如何利用 R 优雅地解锁数据的潜力？让我们从基础开始，逐步探索 R 的神奇之处。
 
-&lt;!--more--&gt;
+<!--more-->
 
 ## 数据框和 Tibble
 
@@ -12,7 +12,7 @@
 在 R 语言中，对于不同的列可以包含不同数据类型的数据，我们可以用`data.frame()`函数创建数据框：
 
 ```R
-data &lt;- data.frame(col1, col2, col3,...)
+data <- data.frame(col1, col2, col3,...)
 ```
 
 其中的列向量`col1`、`col2`、`col3`等可为任何类型，比如字符型，数值型或逻辑型。每一列的名称可由函数`names()`指定。
@@ -20,11 +20,11 @@ data &lt;- data.frame(col1, col2, col3,...)
 我们来看一个例子：
 
 ```R
-patientID &lt;- c(1:4)
-age &lt;- c(25, 34, 28, 52)
-status &lt;- c(&#34;Poor&#34;, &#34;Improved&#34;, &#34;Excellent&#34;, &#34;Poor&#34;)
-diabetes &lt;- c(&#34;Type1&#34;, &#34;Type2&#34;, &#34;Type1&#34;, &#34;Type1&#34;)
-patientData &lt;- data.frame(patientID, age, diabetes, status)
+patientID <- c(1:4)
+age <- c(25, 34, 28, 52)
+status <- c("Poor", "Improved", "Excellent", "Poor")
+diabetes <- c("Type1", "Type2", "Type1", "Type1")
+patientData <- data.frame(patientID, age, diabetes, status)
 ```
 
 ![](/images/202411/2/1.png)
@@ -35,8 +35,8 @@ patientData &lt;- data.frame(patientID, age, diabetes, status)
 patientData[1] ## 选取第1列数据
 patientData[1:3] ## 选取第1,2,3列数据
 patientData[c(1,3)] ## 选取第1,3列数据
-patientData[&#34;age&#34;] ## 选取age列数据
-patientData[c(&#34;age&#34;, &#34;patientID&#34;)] ## 选取age列和patientID列数据
+patientData["age"] ## 选取age列数据
+patientData[c("age", "patientID")] ## 选取age列和patientID列数据
 patientData$age ## 选取age列数据
 ```
 
@@ -56,7 +56,7 @@ as_tibble(patientData)
 tibble(
     x = 1:5,
     y = 1,
-    z = x ^ 2 &#43; y ## 使用刚创建的变量x
+    z = x ^ 2 + y ## 使用刚创建的变量x
 )
 ```
 
@@ -66,8 +66,8 @@ tibble(
 
 ```R
 tribble(~x, ~y, ~z,
-        &#34;a&#34;, 1, 7,
-        &#34;b&#34;, 2, 3
+        "a", 1, 7,
+        "b", 2, 3
         )
 ```
 
@@ -86,7 +86,7 @@ tibble 的打印方法进行了优化，只显示前 10 行结果，并且列也
 可以明确使用`print()`函数来打印数据框，并控制打印的行数（n）和显示的宽度（width）。`width = Inf`可以显示出所有列：
 
 ```R
-nycflights13::flights %&gt;%
+nycflights13::flights %>%
   print(n = 10, width = Inf)
 ```
 
@@ -102,7 +102,7 @@ nycflights13::flights %&gt;%
 如果我们想提取单个变量，我们可以使用`$`和`[[]]`，`[[]]`可以按名称或位置提取变量，而`$`只能按名称提取。
 
 ```R
-df &lt;- tibble(
+df <- tibble(
     x = runif(5),
     y = rnorm(5)
 )
@@ -110,7 +110,7 @@ df &lt;- tibble(
 ## 按名称提取
 df$x
 
-df[[&#34;x&#34;]]
+df[["x"]]
 
 ## 按位置提取
 df[[1]]
@@ -119,9 +119,9 @@ df[[1]]
 要想在管道中使用这些提取操作，需要使用特殊的占位符`.`：
 
 ```R
-df %&gt;% .$x
+df %>% .$x
 
-df %&gt;% .[[&#34;x&#34;]]
+df %>% .[["x"]]
 ```
 
 与`data.frame`相比，tibble 更严格：它不能进行部分匹配，如果想要访问的列不存在，会产生一条警告信息。
@@ -146,9 +146,9 @@ EDA 期间的目标是获取对数据的理解。将问题作为指导调查研�
 上图为`Diamonds`数据集，其中：
 
 - `carat`表示克拉重量
-- `cut`表示切割（`Levels: Fair &lt; Good &lt; Very Good &lt; Premium &lt; Ideal`）
-- `color`表示成色（`Levels: D &lt; E &lt; F &lt; G &lt; H &lt; I &lt; J`）
-- `clarity`表示净度（`Levels: I1 &lt; SI2 &lt; SI1 &lt; VS2 &lt; VS1 &lt; VVS2 &lt; VVS1 &lt; IF`）
+- `cut`表示切割（`Levels: Fair < Good < Very Good < Premium < Ideal`）
+- `color`表示成色（`Levels: D < E < F < G < H < I < J`）
+- `clarity`表示净度（`Levels: I1 < SI2 < SI1 < VS2 < VS1 < VVS2 < VVS1 < IF`）
 - `depth`表示深度
 - `table`表示台面
 - `price`表示价格
@@ -169,7 +169,7 @@ EDA 期间的目标是获取对数据的理解。将问题作为指导调查研�
 
 ```R
 library(ggplot2)
-ggplot(data = diamonds) &#43;
+ggplot(data = diamonds) +
   geom_bar(mapping = aes(x = cut))
 ```
 
@@ -186,7 +186,7 @@ ggplot(data = diamonds) &#43;
 如果一个变量可以在无限大的有序集合中任意取值，那么这个变量就是连续变量。数值型和日期时间型变量就是连续变量的两个例子。要想表示连续变量的分布，可以使用直方图：
 
 ```R
-ggplot(data = diamonds) &#43;
+ggplot(data = diamonds) +
   geom_histogram(mapping = aes(x = carat), binwidth = 0.5)
 ```
 
@@ -199,8 +199,8 @@ ggplot(data = diamonds) &#43;
 直方图对 x 轴进行等宽分箱，然后使用条形的高度表示落入每个分箱的观测的数量。我们可以用`binwidth`参数来设定直方图中间隔的宽度，该参数用 x 轴变量的单位来度量的。不同的分箱宽度可以揭示不同的模式。比如，如果只考虑重量小于 3 克拉的钻石，并选择一个更小的分箱宽度，结果如下：
 
 ```R
-diamonds %&gt;% filter(carat &lt; 3) %&gt;%
-  ggplot(mapping = aes(x = carat)) &#43;
+diamonds %>% filter(carat < 3) %>%
+  ggplot(mapping = aes(x = carat)) +
   geom_histogram(binwidth = 0.1)
 ```
 
@@ -209,8 +209,8 @@ diamonds %&gt;% filter(carat &lt; 3) %&gt;%
 若想在一张图中叠加多个直方图，那么我们可以用`geom_freqploy()`函数来代替`geom_histogram()`函数，该函数使用的是折线图，相比一下更加容易理解：
 
 ```R
-diamonds %&gt;% filter(carat &lt; 3) %&gt;%
-  ggplot(mapping = aes(x = carat, color = cut)) &#43;
+diamonds %>% filter(carat < 3) %>%
+  ggplot(mapping = aes(x = carat, color = cut)) +
   geom_freqpoly(binwidth = 0.1)
 ```
 
@@ -227,8 +227,8 @@ diamonds %&gt;% filter(carat &lt; 3) %&gt;%
 - 有什么异常的模式吗？如何解释？
 
 ```R
-diamonds %&gt;% filter(carat &lt; 3) %&gt;%
-  ggplot(mapping = aes(x = carat)) &#43;
+diamonds %>% filter(carat < 3) %>%
+  ggplot(mapping = aes(x = carat)) +
   geom_histogram(binwidth = 0.01)
 ```
 
@@ -239,7 +239,7 @@ diamonds %&gt;% filter(carat &lt; 3) %&gt;%
 异常值是与众不同的观测或是模式之外的数据点。有时异常值是由于数据录入错误而产生的。若数据量比较大，有时很难在直方图上发现异常值。查看`Diamonds`数据集中 y 轴变量的分布，唯一能表示存在异常值的证据是 y 轴的取值范围出奇的宽：
 
 ```R
-ggplot(data = diamonds) &#43;
+ggplot(data = diamonds) +
   geom_histogram(mapping = aes(x = y), binwidth = 0.5)
 ```
 
@@ -248,8 +248,8 @@ ggplot(data = diamonds) &#43;
 由于正常值分箱中的观测值太多，以至于包括异常值的分箱高度太低，导致我们根本看不见。为了更容易发现异常值，我们可以使用`coord_cartesian()`函数将 y 轴靠近 0 的部分放大：
 
 ```R
-ggplot(data = diamonds) &#43;
-  geom_histogram(mapping = aes(x = y), binwidth = 0.5) &#43;
+ggplot(data = diamonds) +
+  geom_histogram(mapping = aes(x = y), binwidth = 0.5) +
   coord_cartesian(ylim = c(0, 50))
 ```
 
@@ -270,27 +270,27 @@ ggplot(data = diamonds) &#43;
 - 将带有可疑值的行全部丢弃
 
 ```R
-diamonds2 &lt;- diamonds %&gt;%
+diamonds2 <- diamonds %>%
   filter(between(y, 3, 20))
 ```
 
 - 使用缺失值代替异常值
 
 ```R
-diamonds2 &lt;- diamonds %&gt;%
-  mutate(y = ifelse(y &lt; 3 | y &gt; 20, NA, y))
+diamonds2 <- diamonds %>%
+  mutate(y = ifelse(y < 3 | y > 20, NA, y))
 ```
 
 有时会想弄清楚造成有缺失值的观测和没有缺失值的观测的原因。例如，在`nycflights::flights`中，`dep_time`变量中的缺失值表示航班取消了。我们比较一下已取消航班和未取消航班的计划出发时间。可以使用`is.na()`函数创建一个新变量来完成此操作：
 
 ```R
-nycflights13::flights %&gt;%
+nycflights13::flights %>%
   mutate(cancelled = is.na(dep_time),
          sched_hour = sched_dep_time %/% 100,
          sched_min = sched_dep_time %% 100,
-         sched_dep_time = sched_hour &#43; sched_min / 60
-         ) %&gt;%
-  ggplot(mapping = aes(x = sched_dep_time)) &#43;
+         sched_dep_time = sched_hour + sched_min / 60
+         ) %>%
+  ggplot(mapping = aes(x = sched_dep_time)) +
   geom_freqpoly(mapping = aes(color = cancelled),
                 binwidth = 1 / 4)
 ```
@@ -306,7 +306,7 @@ nycflights13::flights %&gt;%
 我们经常需要探索连续变量的分布，如果一组观测的数量明显少于其他组的话，就很难看出形状上的差别。例如，我们探索一下钻石价格是如何随着切割而变化的：
 
 ```R
-ggplot(data = diamonds, mapping = aes(x = price)) &#43;
+ggplot(data = diamonds, mapping = aes(x = price)) +
   geom_freqpoly(mapping = aes(color = cut), binwidth = 500)
 ```
 
@@ -315,7 +315,7 @@ ggplot(data = diamonds, mapping = aes(x = price)) &#43;
 很难看出分布上的区别，因为总体看来各组数量的差别太大了。为了让比较变得容易，需要改变 y 轴的显示内容，不再显示计数，而是显示密度。密度是对计数的标准化，这样每个频率多边形下边的面积都是 1：
 
 ```R
-ggplot(data = diamonds) &#43;
+ggplot(data = diamonds) +
   geom_freqpoly(mapping = aes(x = price, y = ..density.., color = cut),
                 binwidth = 500)
 ```
@@ -325,7 +325,7 @@ ggplot(data = diamonds) &#43;
 按分类变量的分组显示连续变量分布的另一种方式是使用箱线图。箱线图是对变量值分布的一种简单可视化表示。我们可以使用`geom_boxplot()`函数查看按切割分类的价格分布：
 
 ```R
-ggplot(data = diamonds) &#43;
+ggplot(data = diamonds) +
   geom_boxplot(mapping = aes(x = cut, y = price))
 ```
 
@@ -338,7 +338,7 @@ ggplot(data = diamonds) &#43;
 要想对两个分类变量间的相关变动进行可视化表示，需要计算出每个变量组合中的的观测数量，我们可以使用`geom_count()`函数完成这个任务：
 
 ```R
-ggplot(data = diamonds) &#43;
+ggplot(data = diamonds) +
   geom_count(mapping = aes(x = cut, y = color))
 ```
 
@@ -353,9 +353,9 @@ ggplot(data = diamonds) &#43;
 接着使用`geom_tile()`函数和填充图形属性进行可视化表示：
 
 ```R
-diamonds %&gt;%
-  count(color, cut) %&gt;%
-  ggplot(mapping = aes(x = color, y = cut)) &#43;
+diamonds %>%
+  count(color, cut) %>%
+  ggplot(mapping = aes(x = color, y = cut)) +
   geom_tile(mapping = aes(fill = n))
 ```
 
@@ -366,7 +366,7 @@ diamonds %&gt;%
 对于两个连续变量间的相关关系的可视化表示，我们可以使用`geom_point()`函数绘制散点图。例如，可以看到钻石的克拉重量和价格之间存在着指数关系：
 
 ```R
-ggplot(data = diamonds) &#43;
+ggplot(data = diamonds) +
   geom_point(mapping = aes(x = carat, y = price))
 ```
 
@@ -375,7 +375,7 @@ ggplot(data = diamonds) &#43;
 当数据量不断增加时，数据点会堆积在一片黑色区域中，我们可以使用`alpha`图形属性添加透明度：
 
 ```R
-ggplot(data = diamonds) &#43;
+ggplot(data = diamonds) +
   geom_point(mapping = aes(x = carat, y = price), alpha = 1 / 100)
 ```
 
@@ -386,16 +386,16 @@ ggplot(data = diamonds) &#43;
 `geom_bin2d()`和`geom_hex()`函数将坐标平面分为二维分箱，并使用一种填充颜色表示落入每个分箱的数据点。`geom_bin2d()`创建长方形分箱。`geom_hex()`创建六边形分箱。
 
 ```R
-ggplot(data = diamonds) &#43;
+ggplot(data = diamonds) +
   geom_bin2d(mapping = aes(x = carat, y = price))
 ```
 
 ![](/images/202411/1/22.png)
 
 ```R
-install.packages(&#34;hexbin&#34;)
+install.packages("hexbin")
 library(hexbin)
-ggplot(data = diamonds) &#43;
+ggplot(data = diamonds) +
   geom_hex(mapping = aes(x = carat, y = price))
 ```
 
@@ -404,8 +404,8 @@ ggplot(data = diamonds) &#43;
 另一种方式是对一个连续变量进行分箱，因此该连续变量的作用就相当于分类变量。之后就可以使用前面学过的对分类变量和连续变量的组合进行可视化的技术了。例如，可以对`carat`进行分箱，然后为每个组生成一个箱线图：
 
 ```R
-diamonds %&gt;% filter(carat &lt; 3) %&gt;%
-ggplot(mapping = aes(x = carat, y = price)) &#43;
+diamonds %>% filter(carat < 3) %>%
+ggplot(mapping = aes(x = carat, y = price)) +
   geom_boxplot(mapping = aes(group = cut_width(carat, 0.1)))
 ```
 
@@ -414,8 +414,8 @@ ggplot(mapping = aes(x = carat, y = price)) &#43;
 另一种方法是近似地显示每个分箱中数据点的数量，此时可以使用`cut_number()`函数：
 
 ```R
-diamonds %&gt;% filter(carat &lt; 3) %&gt;%
-  ggplot(mapping = aes(x = carat, y = price)) &#43;
+diamonds %>% filter(carat < 3) %>%
+  ggplot(mapping = aes(x = carat, y = price)) +
   geom_boxplot(mapping = aes(group = cut_number(carat, 20)))
 ```
 
@@ -432,7 +432,7 @@ diamonds %&gt;% filter(carat &lt; 3) %&gt;%
 
 | #   | 属性               | 数据类型 | 含义                                                                                     |
 | --- | ------------------ | -------- | ---------------------------------------------------------------------------------------- |
-| 1   | name               | Integer  | 演讲的正式名称（主要发言人&#43;标题）                                                        |
+| 1   | name               | Integer  | 演讲的正式名称（主要发言人+标题）                                                        |
 | 2   | title              | String   | 演讲的标题                                                                               |
 | 3   | description        | Integer  | 演讲内容                                                                                 |
 | 4   | main_speaker       | String   | 主要发言人                                                                               |
@@ -464,9 +464,9 @@ diamonds %&gt;% filter(carat &lt; 3) %&gt;%
 ```R
 library(readr)
 
-ted &lt;- read_csv(&#34;F:/data_science_datasets/tedtalk/ted_main.csv&#34;)
+ted <- read_csv("F:/data_science_datasets/tedtalk/ted_main.csv")
 
-transcript &lt;- read_csv(&#34;F:/data_science_datasets/tedtalk/transcripts.csv&#34;)
+transcript <- read_csv("F:/data_science_datasets/tedtalk/transcripts.csv")
 ```
 
 ![](/images/202411/3/1.png)
@@ -504,8 +504,8 @@ Data quality diagnosis：https://cran.r-project.org/web/packages/dlookr/vignette
 ```R
 library(anytime)
 
-ted$film_date &lt;- anydate(ted$film_date)
-ted$published_date &lt;- anydate(ted$published_date)
+ted$film_date <- anydate(ted$film_date)
+ted$published_date <- anydate(ted$published_date)
 ```
 
 #### 单个变量
@@ -515,17 +515,17 @@ ted$published_date &lt;- anydate(ted$published_date)
 对于单个分类变量，我们想知道`speaker_occupation`字段的情况，例如最热门的 10 个职业是什么？
 
 ```R
-occupation_df &lt;- as.data.frame(table(ted$speaker_occupation))
-colnames(occupation_df) &lt;- c(&#34;Occupation&#34;, &#34;Counts&#34;)
-occupation_df &lt;- arrange(occupation_df, desc(Counts))
-top_occupation_df &lt;- head(occupation_df, 10)
+occupation_df <- as.data.frame(table(ted$speaker_occupation))
+colnames(occupation_df) <- c("Occupation", "Counts")
+occupation_df <- arrange(occupation_df, desc(Counts))
+top_occupation_df <- head(occupation_df, 10)
 
-ggplot(data = top_occupation_df, mapping = aes(x = Occupation, y = Counts)) &#43;
+ggplot(data = top_occupation_df, mapping = aes(x = Occupation, y = Counts)) +
   geom_bar(mapping = aes(fill = Occupation),
-           stat = &#34;identity&#34;) &#43;
+           stat = "identity") +
   geom_text(mapping = aes(label = Counts), vjust = 1.6,
-            color = &#34;white&#34;, size = 3) &#43;
-  ggtitle(&#34;Occupations of Ted Speakers vs their Counts&#34;) &#43;
+            color = "white", size = 3) +
+  ggtitle("Occupations of Ted Speakers vs their Counts") +
   theme(axis.text.x=element_text(angle=45, hjust=1))
 ```
 
@@ -538,7 +538,7 @@ TED 最热门的 10 大职业如上图所示。
 对于单个连续变量，我们想知道`duration`字段的情况。
 
 ```R
-ggplot(data = ted) &#43;
+ggplot(data = ted) +
   geom_histogram(mapping = aes(x = duration), binwidth = 100)
 ```
 
@@ -553,12 +553,12 @@ ggplot(data = ted) &#43;
 `speaker_occupation`是分类变量，而`views`是连续变量，现在我们探索一下 10 大热门职业 TED 演讲的观看数量。
 
 ```R
-top_occupation_views &lt;- filter(ted, ted$speaker_occupation %in% top_occupation_df$Occupation)
+top_occupation_views <- filter(ted, ted$speaker_occupation %in% top_occupation_df$Occupation)
 ggplot(data = top_occupation_views, mapping = aes(x = speaker_occupation,
                                                   y = views,
-                                                  fill = speaker_occupation)) &#43;
-  geom_boxplot() &#43;
-  geom_jitter(shape=16, position=position_jitter(0.2), alpha = 0.1) &#43;
+                                                  fill = speaker_occupation)) +
+  geom_boxplot() +
+  geom_jitter(shape=16, position=position_jitter(0.2), alpha = 0.1) +
   theme(axis.text.x=element_text(angle=45, hjust=1))
 ```
 
@@ -571,15 +571,15 @@ ggplot(data = top_occupation_views, mapping = aes(x = speaker_occupation,
 接下来，我们探究一下`event`和`speaker_occupation`两个分类变量之间的关系。
 
 ```R
-event_df &lt;- as.data.frame(table(ted$event))
-colnames(event_df) &lt;- c(&#34;Event&#34;, &#34;Counts&#34;)
-event_df &lt;- arrange(event_df, desc(Counts))
-top_event_df &lt;- head(event_df, 10)
+event_df <- as.data.frame(table(ted$event))
+colnames(event_df) <- c("Event", "Counts")
+event_df <- arrange(event_df, desc(Counts))
+top_event_df <- head(event_df, 10)
 
-event_occupation_df &lt;- filter(ted, speaker_occupation %in% top_occupation_df$Occupation &amp;
+event_occupation_df <- filter(ted, speaker_occupation %in% top_occupation_df$Occupation &
                                 event %in% top_event_df$Event)
-ggplot(data = event_occupation_df) &#43;
-  geom_count(mapping = aes(x = event, y = speaker_occupation)) &#43;
+ggplot(data = event_occupation_df) +
+  geom_count(mapping = aes(x = event, y = speaker_occupation)) +
   theme(axis.text.x=element_text(angle=45, hjust=1))
 ```
 
@@ -590,7 +590,7 @@ ggplot(data = event_occupation_df) &#43;
 最后，我们查看一下`comments`和`views`两个连续变量之间的关系。
 
 ```R
-ggplot(data = ted) &#43;
+ggplot(data = ted) +
   geom_point(mapping = aes(x = views, y = comments))
 ```
 

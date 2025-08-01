@@ -3,7 +3,7 @@
 
 在人工智能飞速发展的时代，计算机视觉已成为一门热门技术，而 OpenCV（Open Source Computer Vision Library）则是实现这一技术的重要工具。作为一个开源的跨平台计算机视觉与机器学习软件库，OpenCV 拥有丰富的功能，涵盖从基础的图像处理到复杂的视觉算法实现。本文将带你一步步探索 OpenCV 的世界：从简单的图像操作入门，到实现高效的计算机视觉应用，无论你是初学者还是有经验的开发者，都能找到适合你的内容。准备好了吗？让我们一起开启 OpenCV 的奇妙旅程！
 
-&lt;!--more--&gt;
+<!--more-->
 
 ## 环境搭建
 
@@ -50,7 +50,7 @@
 
 ![](/images/202412/2/7.png)
 
-然后，找到【VC&#43;&#43; Directories】这一项，将其中的【Include Directories】和【Library Directories】两项的进行对应的添加。
+然后，找到【VC++ Directories】这一项，将其中的【Include Directories】和【Library Directories】两项的进行对应的添加。
 
 ![](/images/202412/2/8.png)
 
@@ -74,11 +74,11 @@
 
 这里我们做一个简单的示例，将一张本地的图片在窗口上显示出来，代码如下：
 
-```C&#43;&#43;
-#include &lt;iostream&gt;
-#include &lt;opencv2/core/core.hpp&gt;
-#include &lt;opencv2/highgui/highgui.hpp&gt;
-#include &lt;opencv2/imgproc.hpp&gt;
+```C++
+#include <iostream>
+#include <opencv2/core/core.hpp>
+#include <opencv2/highgui/highgui.hpp>
+#include <opencv2/imgproc.hpp>
 
 using namespace std;
 using namespace cv;
@@ -86,14 +86,14 @@ using namespace cv;
 
 int main()
 {
-	Mat image = imread(&#34;F:/avatar.jpeg&#34;);
+	Mat image = imread("F:/avatar.jpeg");
 	if (image.empty()) {
-		cout &lt;&lt; &#34;Could not open or find the image&#34; &lt;&lt; endl;
-		system(&#34;pause&#34;);
+		cout << "Could not open or find the image" << endl;
+		system("pause");
 		return -1;
 	}
 
-	String windowName = &#34;My Window&#34;;
+	String windowName = "My Window";
 	imshow(windowName, image);
 	waitKey(0);
 	return 0;
@@ -108,10 +108,10 @@ int main()
 
 OpenCV 库分为多个模块：opencv_core 模块包含库的核心功能，opencv_imgproc 模块包含主要的图像处理函数，opencv_highgui 模块提供读写图像和视频的函数以及一些用户交互函数，等等。在使用某个模块时，需要包含该模块对应的头文件。例如：
 
-```C&#43;&#43;
-#include &lt;opencv2/core.hpp&gt;
-#include &lt;opencv2/imgproc.hpp&gt;
-#include &lt;opencv2/highgui.hpp&gt;
+```C++
+#include <opencv2/core.hpp>
+#include <opencv2/imgproc.hpp>
+#include <opencv2/highgui.hpp>
 ```
 
 OpenCV 是用来处理图像的，接下来演示一下如何从文件中加载图像、在窗口中显示图像、使用处理函数再保存输出的图像。
@@ -122,36 +122,36 @@ OpenCV 是用来处理图像的，接下来演示一下如何从文件中加载�
 
 加载、显示图像的示例如下：
 
-```C&#43;&#43;
-#include &lt;opencv2/core.hpp&gt;
-#include &lt;opencv2/highgui.hpp&gt;
-#include &lt;opencv2/imgproc.hpp&gt;
-#include &lt;iostream&gt;
+```C++
+#include <opencv2/core.hpp>
+#include <opencv2/highgui.hpp>
+#include <opencv2/imgproc.hpp>
+#include <iostream>
 
 int main()
 {
 	cv::Mat image;
-	std::cout &lt;&lt; &#34;Image shape is : &#34; &lt;&lt; image.rows &lt;&lt; &#34; x &#34; &lt;&lt; image.cols &lt;&lt; std::endl;
-	image = cv::imread(&#34;F:/avatar.jpeg&#34;);
+	std::cout << "Image shape is : " << image.rows << " x " << image.cols << std::endl;
+	image = cv::imread("F:/avatar.jpeg");
 	if (image.empty()) {
-		std::cout &lt;&lt; &#34;Could not open or find the image&#34; &lt;&lt; std::endl;
+		std::cout << "Could not open or find the image" << std::endl;
 		return -1;
 	}
-	std::cout &lt;&lt; &#34;Image shape is : &#34; &lt;&lt; image.rows &lt;&lt; &#34; x &#34; &lt;&lt; image.cols &lt;&lt; std::endl;
-	cv::namedWindow(&#34;Window 1&#34;);
-	cv::imshow(&#34;Window 2&#34;, image);
+	std::cout << "Image shape is : " << image.rows << " x " << image.cols << std::endl;
+	cv::namedWindow("Window 1");
+	cv::imshow("Window 2", image);
 	cv::waitKey(0);
 	return 0;
 }
 ```
 
-在 OpenCV 的 C&#43;&#43; API 中，所有类和函数都在命名空间 cv 内定义。我们创建了一个`Mat`对象 image，其初始化尺寸为`cols=0, rows=0`，可以通过访问 image 对象的`cols`和`rows`属性来了解其尺寸。
+在 OpenCV 的 C++ API 中，所有类和函数都在命名空间 cv 内定义。我们创建了一个`Mat`对象 image，其初始化尺寸为`cols=0, rows=0`，可以通过访问 image 对象的`cols`和`rows`属性来了解其尺寸。
 
 通过调用`imread()`函数，传入图像路径字符串，该函数会读入一个图像，解码分别配内存并返回一个`Mat`对象。
 
 现在可以使用这副图像了，但是要先检查一下图像的读取是否正确（如果找不到文件、文件被破坏或者文件格式无法识别，就会发生错误）。可以使用`Mat`对象的`empty()`方法，如果没有分配图像数据该方法会返回`true`。
 
-接下来将该图像显示出来，可以用 highgui 模块的函数来实现。首先定义显示图像的窗口，然后让图像在指定的窗口中显示出来。`namedWindow(&#34;Window 1&#34;)`函数会创建一个名为`Window 1`的窗口。`imshow(&#34;Window 2&#34;, image)`会创建一个名为`Window 2`的窗口，并将`image`对象在其中显示。
+接下来将该图像显示出来，可以用 highgui 模块的函数来实现。首先定义显示图像的窗口，然后让图像在指定的窗口中显示出来。`namedWindow("Window 1")`函数会创建一个名为`Window 1`的窗口。`imshow("Window 2", image)`会创建一个名为`Window 2`的窗口，并将`image`对象在其中显示。
 
 因为是控制台程序，`main()`函数结束时会关闭，所以我们使用了一个额外的`highgui`函数，待用户按键后再结束程序。`waitKey(0)`函数传入正数表示等待的毫秒数，0 表示永远地等待按键。
 
@@ -161,7 +161,7 @@ int main()
 
 可以使用`flip()`函数将图像翻转，我们用一个新的矩阵存放翻转输出结果。
 
-```C&#43;&#43;
+```C++
 cv::Mat result;
 cv::flip(image, result, 1); // 0上下翻转; 正数左右翻转; 负数上下和左右翻转
 ```
@@ -172,7 +172,7 @@ OpenCV 提供了几个用于在图像上绘制形状和写入文本的函数。�
 
 我们来看一个绘制圆形的例子：
 
-```C&#43;&#43;
+```C++
 cv::circle(image, cv::Point(image.cols / 2, image.rows / 2), 65, 0, 3);
 ```
 
@@ -182,7 +182,7 @@ cv::circle(image, cv::Point(image.cols / 2, image.rows / 2), 65, 0, 3);
 
 又或者绘制一个矩形：
 
-```C&#43;&#43;
+```C++
 cv::rectangle(image, cv::Rect(10, 10, 25, 35), 0, 3);
 ```
 
@@ -198,7 +198,7 @@ cv::rectangle(image, cv::Rect(10, 10, 25, 35), 0, 3);
 
 新创建的`cv::Mat`对象默认大小为 0，但也可以指定初始大小，例如：
 
-```C&#43;&#43;
+```C++
 cv::Mat image1(240, 320, CV_8U, 100);
 ```
 
@@ -208,7 +208,7 @@ cv::Mat image1(240, 320, CV_8U, 100);
 
 例如创建一个彩色图像并用红色像素初始化：
 
-```C&#43;&#43;
+```C++
 // 创建一个红色图像
 // 通道次序是BGR
 cv::Mat image2(240, 320, CV_8UC3, cv::Scaler(0, 0, 255));
@@ -216,7 +216,7 @@ cv::Mat image2(240, 320, CV_8UC3, cv::Scaler(0, 0, 255));
 
 更多创建方式：
 
-```C&#43;&#43;
+```C++
 // 创建灰度图像
 cv::Mat image3(240, 320, CV_8U, cv::Scaler(100));
 
@@ -226,27 +226,27 @@ cv::Mat image4(cv::Size(240, 320), CV_8UC3);
 
 可以随时用`create()`方法分配或重新分配图像的数据块。如果图像已被分配，原来的内容会先被释放。如果新的尺寸和类型与原来相同，就不会重新分配内存：
 
-```C&#43;&#43;
+```C++
 image4.create(200, 200, CV_8U);
 ```
 
 `cv::Mat`实现了计数引用和浅复制。因此，当在两幅图像之间赋值时，图像数据并不会被复制，此时两幅图像都指向同一个内存块。
 
-```C&#43;&#43;
+```C++
 cv::Mat image4(image4);
 image1 = image3;
 ```
 
 如果要对图像内容做一个深复制，可以用`copyTo`方法，目标图像将会调用`create`方法。另一个生成图像副本的方法是`clone`，即创建一个完全相同的新图像：
 
-```C&#43;&#43;
+```C++
 image3.copyTo(image2);
 cv::Mat image6 = image3.clone();
 ```
 
 如果需要将一幅图像复制到另一幅图像中，且两者的数据类型不一定相同，那就可以使用`convertTo`方法。
 
-```C&#43;&#43;
+```C++
 image1.convertTo(image2, CV_32F, 1/255.0, 0.0);
 ```
 
@@ -254,38 +254,38 @@ image1.convertTo(image2, CV_32F, 1/255.0, 0.0);
 
 我们可以用如下方式定义一个感兴趣的区域（Region Of Interest, ROI）。
 
-```C&#43;&#43;
+```C++
 cv::Mat imageROI(image, cv::Rect(image.cols - logo.cols, image.rows - logo.rows,
     logo.cols, logo.rows));
 ```
 
 之后，将`logo`复制到`imageROI`，完整代码如下：
 
-```C&#43;&#43;
-#include &lt;opencv2/core.hpp&gt;
-#include &lt;opencv2/highgui.hpp&gt;
-#include &lt;opencv2/imgproc.hpp&gt;
-#include &lt;iostream&gt;
+```C++
+#include <opencv2/core.hpp>
+#include <opencv2/highgui.hpp>
+#include <opencv2/imgproc.hpp>
+#include <iostream>
 
 int main()
 {
 	cv::Mat image;
-	std::cout &lt;&lt; &#34;Image shape is : &#34; &lt;&lt; image.rows &lt;&lt; &#34; x &#34; &lt;&lt; image.cols &lt;&lt; std::endl;
-	image = cv::imread(&#34;F:/avatar.jpeg&#34;);
+	std::cout << "Image shape is : " << image.rows << " x " << image.cols << std::endl;
+	image = cv::imread("F:/avatar.jpeg");
 	if (image.empty()) {
-		std::cout &lt;&lt; &#34;Could not open or find the image&#34; &lt;&lt; std::endl;
+		std::cout << "Could not open or find the image" << std::endl;
 		return -1;
 	}
 	cv::Mat logo;
-	logo = cv::imread(&#34;F:/logo.png&#34;);
+	logo = cv::imread("F:/logo.png");
 	if (logo.empty()) {
-		std::cout &lt;&lt; &#34;Could not open or find the image&#34; &lt;&lt; std::endl;
+		std::cout << "Could not open or find the image" << std::endl;
 		return -1;
 	}
 	cv::Mat imageROI(image, cv::Rect(image.cols - logo.cols, image.rows - logo.rows,
 		logo.cols, logo.rows));
 	logo.copyTo(imageROI);
-	cv::imshow(&#34;Window 1&#34;, image);
+	cv::imshow("Window 1", image);
 	cv::waitKey(0);
 	return 0;
 }
@@ -297,7 +297,7 @@ int main()
 
 或者通过如下方式选取 ROI：
 
-```C&#43;&#43;
+```C++
 imageROI = image(cv::Range(image.rows-logo.rows, image.rows),cv::Range(image.cols-logo.cols, image.cols));
 ```
 

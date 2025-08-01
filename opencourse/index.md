@@ -19,9 +19,9 @@
 
 [Stanford CS107 Programming Paradigms 编程范式](https://www.bilibili.com/video/BV1Cx411S7HJ)
 
-&lt;!--
+<!--
 [清华大学 操作系统](https://www.xuetangx.com/course/THU08091000267/5883104)
---&gt;
+-->
 
 [清华大学 经济学原理](https://www.bilibili.com/video/BV1gt411g7RU)
 
@@ -68,6 +68,6 @@
 
 ---
 
-> 作者:   
+> 作者: <no value>  
 > URL: http://localhost:1313/opencourse/  
 

@@ -19,7 +19,7 @@
 
 ## 操作系统
 
-向勇 [操作系统](http://www.xuetangx.com/courses/course-v1:TsinghuaX&#43;30240243X_tv&#43;2015_T1/about)
+向勇 [操作系统](http://www.xuetangx.com/courses/course-v1:TsinghuaX+30240243X_tv+2015_T1/about)
 
 [6.828: Operating System Engineering](https://pdos.csail.mit.edu/6.828/2014/schedule.html)
 
@@ -71,9 +71,9 @@
 
 [Practical Programming in C](https://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-087-practical-programming-in-c-january-iap-2010/)
 
-[Introduction to C Memory Management and C&#43;&#43; Object-Oriented Programming](https://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-088-introduction-to-c-memory-management-and-c-object-oriented-programming-january-iap-2010/index.htm#features)
+[Introduction to C Memory Management and C++ Object-Oriented Programming](https://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-088-introduction-to-c-memory-management-and-c-object-oriented-programming-january-iap-2010/index.htm#features)
 
-[Let&#39;s Build a Simple Database](https://cstack.github.io/db_tutorial/)
+[Let's Build a Simple Database](https://cstack.github.io/db_tutorial/)
 
 [Tinyhttpd](https://github.com/EZLippi/Tinyhttpd): Tinyhttpd 是 J. David Blackstone 在 1999 年写的一个不到 500 行的超轻量型 Http Server，用来学习非常不错，可以帮助我们真正理解服务器程序的本质。
 
@@ -85,33 +85,33 @@
 
 [awesome-c](https://github.com/inputsh/awesome-c): Continuing the development of awesome-c list on GitHub
 
-## C&#43;&#43;
+## C++
 
-郑莉 [C&#43;&#43;语言程序设计基础](http://www.xuetangx.com/courses/course-v1:TsinghuaX&#43;00740043X_2015_T2&#43;sp/about) 和 [C&#43;&#43;语言程序设计进阶](http://www.xuetangx.com/courses/course-v1:TsinghuaX&#43;00740043_2x_2015_T2&#43;sp/about)
+郑莉 [C++语言程序设计基础](http://www.xuetangx.com/courses/course-v1:TsinghuaX+00740043X_2015_T2+sp/about) 和 [C++语言程序设计进阶](http://www.xuetangx.com/courses/course-v1:TsinghuaX+00740043_2x_2015_T2+sp/about)
 
-[CS106X: Programming Abstractions in C&#43;&#43;](http://web.stanford.edu/class/cs106x/index.html)
+[CS106X: Programming Abstractions in C++](http://web.stanford.edu/class/cs106x/index.html)
 
-[CS106B: Programming Abstractions in C&#43;&#43;](http://web.stanford.edu/class/archive/cs/cs106b/cs106b.1202/) [B 站](https://www.bilibili.com/video/av36351060)观看
+[CS106B: Programming Abstractions in C++](http://web.stanford.edu/class/archive/cs/cs106b/cs106b.1202/) [B 站](https://www.bilibili.com/video/av36351060)观看
 
-[muduo](https://github.com/chenshuo/muduo): Event-driven network library for multi-threaded Linux server in C&#43;&#43;11.
+[muduo](https://github.com/chenshuo/muduo): Event-driven network library for multi-threaded Linux server in C++11.
 
-[MyTinySTL](https://github.com/Alinshans/MyTinySTL): Achieve a tiny STL in C&#43;&#43;11.
+[MyTinySTL](https://github.com/Alinshans/MyTinySTL): Achieve a tiny STL in C++11.
 
-[musikcube](https://github.com/clangen/musikcube): a cross-platform, terminal-based music player, audio engine, metadata indexer, and server in c&#43;&#43;.
+[musikcube](https://github.com/clangen/musikcube): a cross-platform, terminal-based music player, audio engine, metadata indexer, and server in c++.
 
-[C&#43;&#43;](https://www.youtube.com/playlist?list=PLlrATfBNZ98dudnM48yfGUldqGD0S4FFb)
+[C++](https://www.youtube.com/playlist?list=PLlrATfBNZ98dudnM48yfGUldqGD0S4FFb)
 
-[跟侯捷学 C&#43;&#43;](https://mooc.study.163.com/smartSpec/detail/1001137001.htm): 系统学习 C&#43;&#43;知识体系。
+[跟侯捷学 C++](https://mooc.study.163.com/smartSpec/detail/1001137001.htm): 系统学习 C++知识体系。
 
-[sudoku](https://github.com/mayerui/sudoku): C&#43;&#43;实现的跨平台数独游戏，命令行操作易上手，可以在开发间隙用来放松身心。数百行代码，初学者也可以轻松掌握。
+[sudoku](https://github.com/mayerui/sudoku): C++实现的跨平台数独游戏，命令行操作易上手，可以在开发间隙用来放松身心。数百行代码，初学者也可以轻松掌握。
 
-[LearnCpp.com](https://www.learncpp.com/): LearnCpp.com is a free website devoted to teaching you how to program in C&#43;&#43;. Whether you’ve had any prior programming experience or not, the tutorials on this site will walk you through all the steps to write, compile, and debug your C&#43;&#43; programs, all with plenty of examples.
+[LearnCpp.com](https://www.learncpp.com/): LearnCpp.com is a free website devoted to teaching you how to program in C++. Whether you’ve had any prior programming experience or not, the tutorials on this site will walk you through all the steps to write, compile, and debug your C++ programs, all with plenty of examples.
 
 [Learn OpenGL](https://learnopengl.com/): Welcome to the online book for learning OpenGL! Whether you are trying to learn OpenGL for academic purposes, to pursue a career or simply looking for a hobby, this book will teach you the basics, the intermediate, and all the advanced knowledge using modern (core-profile) OpenGL. The aim of LearnOpenGL is to show you all there is to modern OpenGL in an easy-to-understand fashion with clear examples, while also providing a useful reference for later studies.
 
-[awesome-modern-cpp](https://github.com/rigtorp/awesome-modern-cpp): A collection of resources on modern C&#43;&#43;
+[awesome-modern-cpp](https://github.com/rigtorp/awesome-modern-cpp): A collection of resources on modern C++
 
-[Awesome C&#43;&#43;](https://project-awesome.org/fffaraz/awesome-cpp): A curated list of awesome C&#43;&#43; (or C) frameworks, libraries, resources, and shiny things. Inspired by awesome-... stuff.
+[Awesome C++](https://project-awesome.org/fffaraz/awesome-cpp): A curated list of awesome C++ (or C) frameworks, libraries, resources, and shiny things. Inspired by awesome-... stuff.
 
 ## C#
 
@@ -121,7 +121,7 @@
 
 [c9-python-getting-started](https://github.com/microsoft/c9-python-getting-started): Sample code for Channel 9 Python for Beginners course
 
-[计算机科学和 Python 编程导论](http://www.xuetangx.com/courses/course-v1:MITx&#43;6_00_1x&#43;sp/about)
+[计算机科学和 Python 编程导论](http://www.xuetangx.com/courses/course-v1:MITx+6_00_1x+sp/about)
 
 [CS 61A: Structure and Interpretation of Computer Programs](https://cs61a.org/)
 
@@ -137,7 +137,7 @@
 
 [you-get](https://github.com/soimort/you-get): ⏬ Dumb downloader that scrapes the web
 
-[scrapydweb](https://github.com/my8100/scrapydweb): Web app for Scrapyd cluster management, Scrapy log analysis &amp; visualization, Auto packaging, Timer tasks, Monitor &amp; Alert, and Mobile UI.
+[scrapydweb](https://github.com/my8100/scrapydweb): Web app for Scrapyd cluster management, Scrapy log analysis & visualization, Auto packaging, Timer tasks, Monitor & Alert, and Mobile UI.
 
 [manim](https://github.com/3b1b/manim): Animation engine for explanatory math videos
 
@@ -165,7 +165,7 @@
 
 [istock](https://github.com/kingschan1204/istock): 👉 一个基于 spring boot 实现的 java 股票爬虫(仅支持 A 股)，如果你 ❤️ 请 ⭐️ . V2 升级版正在开发中！
 
-[vhr](https://github.com/lenve/vhr): 微人事是一个前后端分离的人力资源管理系统，项目采用 SpringBoot&#43;Vue 开发。
+[vhr](https://github.com/lenve/vhr): 微人事是一个前后端分离的人力资源管理系统，项目采用 SpringBoot+Vue 开发。
 
 [toBeTopJavaer](https://github.com/hollischuang/toBeTopJavaer): To Be Top Javaer - Java 工程师成神之路
 
@@ -173,23 +173,23 @@
 
 [web](https://github.com/Huomen/web/tree/web-psql): 适合 java 新手入门练习的 java web 个人网站项目，目前主要维护 web-mysql 和 web-psql 两个分支。前台包括博客、代码库、文件下载、留言、登录注册、站内搜索、分类目录等功能，后台包括上传文件、博客、代码，编辑、删除文章，修改个人资料等功能，目前暂停开发新功能。
 
-[mall](https://github.com/macrozheng/mall): mall 项目是一套电商系统，包括前台商城系统及后台管理系统，基于 SpringBoot&#43;MyBatis 实现，采用 Docker 容器化部署。
+[mall](https://github.com/macrozheng/mall): mall 项目是一套电商系统，包括前台商城系统及后台管理系统，基于 SpringBoot+MyBatis 实现，采用 Docker 容器化部署。
 
 [halo](https://github.com/halo-dev/halo): ✍ Halo 一款现代化的个人独立博客系统
 
-[jblog](https://github.com/kingschan1204/jblog): 🔱 一个简洁漂亮的 java blog 👉 基于 Spring /MVC&#43; Hibernate &#43; MySQL &#43; Bootstrap &#43; freemarker
+[jblog](https://github.com/kingschan1204/jblog): 🔱 一个简洁漂亮的 java blog 👉 基于 Spring /MVC+ Hibernate + MySQL + Bootstrap + freemarker
 
 [SeimiCrawler](https://github.com/zhegexiaohuozi/SeimiCrawler): 一个简单、敏捷、分布式的支持 SpringBoot 的 Java 爬虫框架;An agile, distributed crawler framework.
 
 [spring-boot-examples](https://github.com/ityouknow/spring-boot-examples): Spring Boot 教程、技术栈示例代码，快速简单上手教程。
 
-[SpringAll](https://github.com/wuyouzhuguli/SpringAll): 循序渐进，学习 Spring Boot、Spring Boot &amp; Shiro、Spring Cloud、Spring Security &amp; Spring Security OAuth2，博客 Spring 系列源码。
+[SpringAll](https://github.com/wuyouzhuguli/SpringAll): 循序渐进，学习 Spring Boot、Spring Boot & Shiro、Spring Cloud、Spring Security & Spring Security OAuth2，博客 Spring 系列源码。
 
-[My-Blog](https://github.com/ZHENFENG13/My-Blog): 🌴:octocat:A simple &amp; beautiful blogging system implemented with spring-boot &amp; thymeleaf &amp; mybatis My Blog 是由 SpringBoot &#43; Mybatis &#43; Thymeleaf 等技术实现的 Java 博客系统，页面美观、功能齐全、部署简单及完善的代码，一定会给使用者无与伦比的体验
+[My-Blog](https://github.com/ZHENFENG13/My-Blog): 🌴:octocat:A simple & beautiful blogging system implemented with spring-boot & thymeleaf & mybatis My Blog 是由 SpringBoot + Mybatis + Thymeleaf 等技术实现的 Java 博客系统，页面美观、功能齐全、部署简单及完善的代码，一定会给使用者无与伦比的体验
 
 [jsoup](https://jsoup.org): Java HTML Parser
 
-[JavaGuide](https://github.com/Snailclimb/JavaGuide): 【Java 学习&#43;面试指南】 一份涵盖大部分 Java 程序员所需要掌握的核心知识。
+[JavaGuide](https://github.com/Snailclimb/JavaGuide): 【Java 学习+面试指南】 一份涵盖大部分 Java 程序员所需要掌握的核心知识。
 
 [MusicPlayer](https://github.com/Mpmart08/MusicPlayer): Desktop Music Player for Windows and Mac using JavaFX/Java 8
 
@@ -207,11 +207,11 @@
 
 [gogs](https://github.com/gogs/gogs): 用 Go 写的一款极易搭建的自助 Git 服务，支持所有平台。就像 GitLab 一样的服务，但是 GitLab 是基于 ruby 语言的。另外：完善的中文文档、支持 Go 语言支持的所有平台，包括 Linux、Mac OS X、Windows 以及 ARM 平台。
 
-[pan-light](https://github.com/peterq/pan-light): 百度网盘不限速客户端, golang &#43; qt5, 跨平台图形界面
+[pan-light](https://github.com/peterq/pan-light): 百度网盘不限速客户端, golang + qt5, 跨平台图形界面
 
 [unioffice](https://github.com/unidoc/unioffice): Pure go library for creating and processing Office Word (.docx), Excel (.xlsx) and Powerpoint (.pptx) documents.
 
-[geziyor](https://github.com/geziyor/geziyor): Geziyor, a fast web crawling &amp; scraping framework for Go. Supports JS rendering.
+[geziyor](https://github.com/geziyor/geziyor): Geziyor, a fast web crawling & scraping framework for Go. Supports JS rendering.
 
 [annie](https://github.com/iawia002/annie): 👾 Fast, simple and clean video downloader
 
@@ -235,7 +235,7 @@
 
 [R Graphics Cookbook, 2nd edition](https://r-graphics.org/): Welcome to the R Graphics Cookbook, a practical guide that provides more than 150 recipes to help you generate high-quality graphs quickly, without having to comb through all the details of R’s graphing systems. Each recipe tackles a specific problem with a solution you can apply to your own project, and includes a discussion of how and why the recipe works.
 
-[R for Excel Users](https://rstudio-conf-2020.github.io/r-for-excel/): This course is for Excel users who want to add or integrate R and RStudio into their existing data analysis toolkit. It is a friendly intro to becoming a modern R user, full of tidyverse, RMarkdown, GitHub, collaboration &amp; reproducibility.
+[R for Excel Users](https://rstudio-conf-2020.github.io/r-for-excel/): This course is for Excel users who want to add or integrate R and RStudio into their existing data analysis toolkit. It is a friendly intro to becoming a modern R user, full of tidyverse, RMarkdown, GitHub, collaboration & reproducibility.
 
 [李东风的主页](https://www.math.pku.edu.cn/teachers/lidf/)
 
@@ -269,11 +269,11 @@
 
 [request](https://github.com/request/request): 🏊🏾 Simplified HTTP request client.
 
-[vanillawebprojects](https://github.com/bradtraversy/vanillawebprojects): Mini projects built with HTML5, CSS &amp; JavaScript. No frameworks or libraries.
+[vanillawebprojects](https://github.com/bradtraversy/vanillawebprojects): Mini projects built with HTML5, CSS & JavaScript. No frameworks or libraries.
 
 [Learn-Vue-Source-Code](https://github.com/NLRX-WJC/Learn-Vue-Source-Code): 🔥 🔥 逐行剖析 Vue.js 源码 在线阅读地址https://nlrx-wjc.github.io/Learn-Vue-Source-Code/
 
-[100&#43; JavaScript Projects for Beginners!](https://jsbeginners.com/javascript-projects-for-beginners/): Do all 100&#43; of the listed JavaScript Projects for beginners that you&#39;ll find on this page.
+[100+ JavaScript Projects for Beginners!](https://jsbeginners.com/javascript-projects-for-beginners/): Do all 100+ of the listed JavaScript Projects for beginners that you'll find on this page.
 
 [javascript-algorithms](https://github.com/trekhleb/javascript-algorithms): 📝 Algorithms and data structures implemented in JavaScript with explanations and links to further readings
 
@@ -309,7 +309,7 @@
 
 [The Linux Command Line](http://billie66.github.io/TLCL/index.html)
 
-[Unix &amp; Linux 大学教程](https://book.douban.com/subject/4253716/)
+[Unix & Linux 大学教程](https://book.douban.com/subject/4253716/)
 
 [Linux Tutorial](https://ryanstutorials.net/linuxtutorial/)
 
@@ -337,7 +337,7 @@
 
 [Elasticsearch: 权威指南](https://www.elastic.co/guide/cn/elasticsearch/guide/current/index.html)
 
-## Data Structure &amp; Algorithms
+## Data Structure & Algorithms
 
 [What is your strategy for learning data structures and algorithms?](https://www.freecodecamp.org/forum/t/what-is-your-strategy-for-learning-data-structures-and-algorithms/86995/5)
 
@@ -351,7 +351,7 @@
 
 Stanford Algorithm [Part 1](https://www.youtube.com/playlist?list=PLXFMmlk03Dt7Q0xr1PIAriY5623cKiH7V) and [Part 2](https://www.youtube.com/playlist?list=PLXFMmlk03Dt5EMI2s2WQBsLsZl7A5HEK6)
 
-邓俊辉 [数据结构(上)](http://www.xuetangx.com/courses/course-v1:TsinghuaX&#43;30240184&#43;sp/about) 和 [数据结构(下)](http://www.xuetangx.com/courses/course-v1:TsinghuaX&#43;30240184_2X&#43;sp/about) [数据结构(C&#43;&#43;语言版)](https://dsa.cs.tsinghua.edu.cn/~deng/ds/dsacpp/index.htm)
+邓俊辉 [数据结构(上)](http://www.xuetangx.com/courses/course-v1:TsinghuaX+30240184+sp/about) 和 [数据结构(下)](http://www.xuetangx.com/courses/course-v1:TsinghuaX+30240184_2X+sp/about) [数据结构(C++语言版)](https://dsa.cs.tsinghua.edu.cn/~deng/ds/dsacpp/index.htm)
 
 陈越 何钦铭 [数据结构](https://www.icourse163.org/course/ZJU-93001)
 
@@ -383,7 +383,7 @@ Stanford Algorithm [Part 1](https://www.youtube.com/playlist?list=PLXFMmlk03Dt7Q
 
 [Intro to Inferential Statistics](https://classroom.udacity.com/courses/ud201)
 
-马昱春 [组合数学](http://www.xuetangx.com/courses/course-v1:TsinghuaX&#43;60240013X&#43;sp/about)
+马昱春 [组合数学](http://www.xuetangx.com/courses/course-v1:TsinghuaX+60240013X+sp/about)
 
 [Seeing Theory](https://seeing-theory.brown.edu/): A visual introduction to probability and statistics.
 
@@ -453,7 +453,7 @@ Stanford Algorithm [Part 1](https://www.youtube.com/playlist?list=PLXFMmlk03Dt7Q
 
 [DeepLearning-500-questions](https://github.com/scutan90/DeepLearning-500-questions): 深度学习 500 问，以问答形式对常用的概率知识、线性代数、机器学习、深度学习、计算机视觉等热点问题进行阐述，以帮助自己及有需要的读者。
 
-[MIT 6.S191 Introduction to Deep Learning](http://introtodeeplearning.com/): MIT&#39;s official introductory course on deep learning methods with applications in robotics, and more!
+[MIT 6.S191 Introduction to Deep Learning](http://introtodeeplearning.com/): MIT's official introductory course on deep learning methods with applications in robotics, and more!
 
 [Deep-Learning-Papers-Reading-Roadmap](https://github.com/floodsung/Deep-Learning-Papers-Reading-Roadmap): About Deep Learning papers reading roadmap for anyone who are eager to learn this amazing tech!
 
@@ -501,17 +501,17 @@ Stanford Algorithm [Part 1](https://www.youtube.com/playlist?list=PLXFMmlk03Dt7Q
 
 [The Cherno](https://www.youtube.com/user/TheChernoProject)
 
-[freeCodeCamp.org](https://www.youtube.com/channel/UC8butISFwT-Wl7EV0hUK0BQ): We&#39;re an open source community of busy people who learn to code and build projects for nonprofits.
+[freeCodeCamp.org](https://www.youtube.com/channel/UC8butISFwT-Wl7EV0hUK0BQ): We're an open source community of busy people who learn to code and build projects for nonprofits.
 
-[StatQuest with Josh Starmer](https://www.youtube.com/channel/UCtYLUTtgS3k1Fg4y5tAhLbw): Statistics, Machine Learning and Data Science can sometimes seem like very scary topics, but since each technique is really just a combination of small and simple steps, they are actually quite simple. My goal with StatQuest is to break down the major methodologies into easy to understand pieces. That said, I don&#39;t dumb down the material. Instead, I build up your understanding so that you are smarter.
+[StatQuest with Josh Starmer](https://www.youtube.com/channel/UCtYLUTtgS3k1Fg4y5tAhLbw): Statistics, Machine Learning and Data Science can sometimes seem like very scary topics, but since each technique is really just a combination of small and simple steps, they are actually quite simple. My goal with StatQuest is to break down the major methodologies into easy to understand pieces. That said, I don't dumb down the material. Instead, I build up your understanding so that you are smarter.
 
-[Numberphile](https://www.youtube.com/channel/UCoxcjq-8xIDTYp3uz647V5A): Videos about numbers - it&#39;s that simple.
+[Numberphile](https://www.youtube.com/channel/UCoxcjq-8xIDTYp3uz647V5A): Videos about numbers - it's that simple.
 
-[TED](https://www.youtube.com/channel/UCAuUUnT6oDeKwE6v1NGQxug): The TED Talks channel features the best talks and performances from the TED Conference, where the world&#39;s leading thinkers and doers give the talk of their lives in 18 minutes (or less). Look for talks on Technology, Entertainment and Design -- plus science, business, global issues, the arts and more. You&#39;re welcome to link to or embed these videos, forward them to others and share these ideas with people you know.
+[TED](https://www.youtube.com/channel/UCAuUUnT6oDeKwE6v1NGQxug): The TED Talks channel features the best talks and performances from the TED Conference, where the world's leading thinkers and doers give the talk of their lives in 18 minutes (or less). Look for talks on Technology, Entertainment and Design -- plus science, business, global issues, the arts and more. You're welcome to link to or embed these videos, forward them to others and share these ideas with people you know.
 
 [3Blue1Brown](https://www.youtube.com/channel/UCYO_jab_esuFRV4b17AJtAw): 3blue1brown, by Grant Sanderson, is some combination of math and entertainment, depending on your disposition. The goal is for explanations to be driven by animations and for difficult problems to be made simple with changes in perspective.
 
-[CrashCourse](https://www.youtube.com/user/crashcourse): Tons of awesome courses in one awesome channel! Nicole Sweeney teaches you sociology, Carrie Anne Philbin teaches you computer science, Craig Benzine teaches film history, and Mike Rugnetta is teaching mythology! Check out the playlists for past courses in physics, philosophy, games, economics, U.S. government and politics, astronomy, anatomy &amp; physiology, world history, biology, literature, ecology, chemistry, psychology, and U.S. history.
+[CrashCourse](https://www.youtube.com/user/crashcourse): Tons of awesome courses in one awesome channel! Nicole Sweeney teaches you sociology, Carrie Anne Philbin teaches you computer science, Craig Benzine teaches film history, and Mike Rugnetta is teaching mythology! Check out the playlists for past courses in physics, philosophy, games, economics, U.S. government and politics, astronomy, anatomy & physiology, world history, biology, literature, ecology, chemistry, psychology, and U.S. history.
 
 ## List
 
@@ -567,7 +567,7 @@ Stanford Algorithm [Part 1](https://www.youtube.com/playlist?list=PLXFMmlk03Dt7Q
 
 [mongoose](https://github.com/cesanta/mongoose): Embedded Web Server
 
-[xgboost](https://github.com/dmlc/xgboost): Scalable, Portable and Distributed Gradient Boosting (GBDT, GBRT or GBM) Library, for Python, R, Java, Scala, C&#43;&#43; and more. Runs on single machine, Hadoop, Spark, Dask, Flink and DataFlow
+[xgboost](https://github.com/dmlc/xgboost): Scalable, Portable and Distributed Gradient Boosting (GBDT, GBRT or GBM) Library, for Python, R, Java, Scala, C++ and more. Runs on single machine, Hadoop, Spark, Dask, Flink and DataFlow
 
 [darknet](https://github.com/pjreddie/darknet): Convolutional Neural Networks
 
@@ -581,7 +581,7 @@ Stanford Algorithm [Part 1](https://www.youtube.com/playlist?list=PLXFMmlk03Dt7Q
 
 [如何写一份有效的技术简历？](http://www.ruanyifeng.com/blog/2020/01/technical-resume.html)
 
-[CS-Notes](https://github.com/CyC2018/CS-Notes): 📚 技术面试必备基础知识、Leetcode、计算机操作系统、计算机网络、系统设计、Java、Python、C&#43;&#43;
+[CS-Notes](https://github.com/CyC2018/CS-Notes): 📚 技术面试必备基础知识、Leetcode、计算机操作系统、计算机网络、系统设计、Java、Python、C++
 
 ## 工作
 
@@ -617,7 +617,7 @@ Stanford Algorithm [Part 1](https://www.youtube.com/playlist?list=PLXFMmlk03Dt7Q
 
 [阿里云开发者社区](https://developer.aliyun.com)
 
-[Made With ML - Share what you&#39;ve made with ML](https://madewithml.com/)
+[Made With ML - Share what you've made with ML](https://madewithml.com/)
 
 [ZetCode](http://zetcode.com/all/)
 
@@ -637,7 +637,7 @@ Stanford Algorithm [Part 1](https://www.youtube.com/playlist?list=PLXFMmlk03Dt7Q
 
 [Analytics Vidhya](https://www.analyticsvidhya.com/blog/?utm_source=feed_navbar)
 
-[Stack Overflow - Where Developers Learn, Share, &amp; Build Careers](https://stackoverflow.com/)
+[Stack Overflow - Where Developers Learn, Share, & Build Careers](https://stackoverflow.com/)
 
 [纪录片天地](http://www.jlpcn.net)
 
@@ -668,6 +668,6 @@ Stanford Algorithm [Part 1](https://www.youtube.com/playlist?list=PLXFMmlk03Dt7Q
 
 ---
 
-> 作者:   
+> 作者: <no value>  
 > URL: http://localhost:1313/resource/  
 

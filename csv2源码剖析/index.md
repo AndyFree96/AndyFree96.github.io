@@ -1,16 +1,16 @@
-# csv2 源码剖析：轻量级 CSV 处理的高效之道
+# Csv2 源码剖析：轻量级 CSV 处理的高效之道
 
 
-&gt; 纸上得来终觉浅，绝知此事要躬行。——陆游《冬夜读书示子聿》
+> 纸上得来终觉浅，绝知此事要躬行。——陆游《冬夜读书示子聿》
 
-[csv2](https://github.com/p-ranav/csv2)是一个轻量级 C&#43;&#43; 库，用于将 CSV 文件解析为 C&#43;&#43; 中的 STL 容器。该库的主要功能是高效地处理 CSV 数据，简化了处理 CSV 文件的代码编写过程。以下是它的主要特性：
+[csv2](https://github.com/p-ranav/csv2)是一个轻量级 C++ 库，用于将 CSV 文件解析为 C++ 中的 STL 容器。该库的主要功能是高效地处理 CSV 数据，简化了处理 CSV 文件的代码编写过程。以下是它的主要特性：
 
-1. 简单易用：通过使用 STL 容器（如 std::vector 和 std::tuple），使得开发者能够轻松将 CSV 文件的内容转换为标准 C&#43;&#43; 数据结构。
-2. 依赖少：该库只有 C&#43;&#43;17 标准库的依赖，因此不需要额外的第三方库。
+1. 简单易用：通过使用 STL 容器（如 std::vector 和 std::tuple），使得开发者能够轻松将 CSV 文件的内容转换为标准 C++ 数据结构。
+2. 依赖少：该库只有 C++17 标准库的依赖，因此不需要额外的第三方库。
 3. 高效解析：该库采用高效的解析机制，支持处理大型 CSV 文件。
 4. 轻量级：代码库很小，适用于嵌入式或对依赖库要求较高的项目。
 
-&lt;!--more--&gt;
+<!--more-->
 
 ## 准备
 
@@ -34,20 +34,20 @@ reader.hpp 文件中主要定义了一个名为`Reader`的类。数据部分主�
 
 从文件中解析内容:
 
-```C&#43;&#43;
-#include &#34;csv2/reader.hpp&#34;
-#include &lt;string&gt;
+```C++
+#include "csv2/reader.hpp"
+#include <string>
 
 using namespace std;
 
 int main(){
-	csv2::Reader&lt;csv2::delimiter&lt;&#39;,&#39;&gt;,
-            csv2::quote_character&lt;&#39;&#34;&#39;&gt;,
-            csv2::first_row_is_header&lt;true&gt;,
-            csv2::trim_policy::trim_whitespace&gt; csv;
+	csv2::Reader<csv2::delimiter<','>,
+            csv2::quote_character<'"'>,
+            csv2::first_row_is_header<true>,
+            csv2::trim_policy::trim_whitespace> csv;
 
 
-    std::string content = &#34;Name, Age\nPeter, 12\nLucy, 78&#34;;
+    std::string content = "Name, Age\nPeter, 12\nLucy, 78";
     if(csv.parse(content)){
         const auto header = csv.header();
         for (const auto row: csv) {
@@ -55,9 +55,9 @@ int main(){
                 // Do something with cell value
                 std::string value;
                 cell.read_value(value);
-                cout &lt;&lt; value &lt;&lt; &#34; &#34;;
+                cout << value << " ";
             }
-            cout &lt;&lt; &#34;\n&#34;;
+            cout << "\n";
         }
     }
 }
@@ -66,28 +66,28 @@ int main(){
 
 从字符串中解析内容:
 
-```C&#43;&#43;
-#include &#34;csv2/reader.hpp&#34;
-#include &lt;string&gt;
+```C++
+#include "csv2/reader.hpp"
+#include <string>
 
 using namespace std;
 
 int main(){
-	csv2::Reader&lt;csv2::delimiter&lt;&#39;,&#39;&gt;,
-            csv2::quote_character&lt;&#39;&#34;&#39;&gt;,
-            csv2::first_row_is_header&lt;true&gt;,
-            csv2::trim_policy::trim_whitespace&gt; csv;
+	csv2::Reader<csv2::delimiter<','>,
+            csv2::quote_character<'"'>,
+            csv2::first_row_is_header<true>,
+            csv2::trim_policy::trim_whitespace> csv;
 
-    if(csv.mmap(&#34;demo.csv&#34;)){
+    if(csv.mmap("demo.csv")){
         const auto header = csv.header();
         for (const auto row: csv) {
             for (const auto cell: row) {
                 // Do something with cell value
                 std::string value;
                 cell.read_value(value);
-                cout &lt;&lt; value &lt;&lt; &#34; &#34;;
+                cout << value << " ";
             }
-            cout &lt;&lt; &#34;\n&#34;;
+            cout << "\n";
         }
     }
 }
@@ -120,7 +120,7 @@ Row 类的数据部分定义如下:
 
 和 Cell 类的定义大同小异。Row 类中还定义了另一个类 CellIterator:
 
-```C&#43;&#43;
+```C++
 class CellIterator {
       friend class Row;
       const char *buffer_;
@@ -134,8 +134,8 @@ class CellIterator {
           : buffer_(buffer), buffer_size_(buffer_size), start_(start), current_(start_), end_(end) {
       }
 
-      CellIterator &amp;operator&#43;&#43;() {
-        current_ &#43;= 1;
+      CellIterator &operator++() {
+        current_ += 1;
         return *this;
       }
 
@@ -148,9 +148,9 @@ class CellIterator {
 
         size_t last_quote_location = 0;
         bool quote_opened = false;
-        for (auto i = current_; i &lt; end_; i&#43;&#43;) {
+        for (auto i = current_; i < end_; i++) {
           current_ = i;
-          if (buffer_[i] == delimiter::value &amp;&amp; !quote_opened) {
+          if (buffer_[i] == delimiter::value && !quote_opened) {
             // actual delimiter
             // end of cell
             cell.end_ = current_;
@@ -164,24 +164,24 @@ class CellIterator {
                 last_quote_location = i;
               } else {
                 escaped = (last_quote_location == i - 1);
-                last_quote_location &#43;= (i - last_quote_location) * size_t(!escaped);
-                quote_opened = escaped || (buffer_[i &#43; 1] != delimiter::value);
+                last_quote_location += (i - last_quote_location) * size_t(!escaped);
+                quote_opened = escaped || (buffer_[i + 1] != delimiter::value);
               }
             }
           }
         }
-        cell.end_ = current_ &#43; 1;
+        cell.end_ = current_ + 1;
         return cell;
       }
 
-      bool operator!=(const CellIterator &amp;rhs) { return current_ != rhs.current_; }
+      bool operator!=(const CellIterator &rhs) { return current_ != rhs.current_; }
     };
 ```
 
 CellIterator 中定义了自增操作符、取值操作符和不等操作符。Iterator 必须实现这三个操作符:
 
-```C&#43;&#43;
-#include &lt;iostream&gt;
+```C++
+#include <iostream>
 
 using namespace std;
 
@@ -199,7 +199,7 @@ class Iter
     // these three methods form the basis of an iterator for use with
     // a range-based for loop
     bool
-    operator!= (const Iter&amp; other) const
+    operator!= (const Iter& other) const
     {
         return _pos != other._pos;
     }
@@ -208,12 +208,12 @@ class Iter
     // since it needs to use it
     int operator* () const;
 
-    const Iter&amp; operator&#43;&#43; ()
+    const Iter& operator++ ()
     {
-        &#43;&#43;_pos;
+        ++_pos;
         // although not strictly necessary for a range-based for loop
         // following the normal convention of returning a value from
-        // operator&#43;&#43; is a good idea.
+        // operator++ is a good idea.
         return *this;
     }
 
@@ -255,22 +255,22 @@ class IntVector
 int
 Iter::operator* () const
 {
-     return _p_vec-&gt;get( _pos );
+     return _p_vec->get( _pos );
 }
 
 // sample usage of the range-based for loop on IntVector
 int main()
 {
     IntVector v;
-    for ( int i = 0; i &lt; 100; i&#43;&#43; )
+    for ( int i = 0; i < 100; i++ )
     {
         v.set( i , i );
     }
-    for ( int i : v ) { cout &lt;&lt; i &lt;&lt; endl; }
+    for ( int i : v ) { cout << i << endl; }
 }
 ```
 
-C&#43;&#43; 11 range-based for loops: https://www.cprogramming.com/c&#43;&#43;11/c&#43;&#43;11-ranged-for-loop.html
+C++ 11 range-based for loops: https://www.cprogramming.com/c++11/c++11-ranged-for-loop.html
 
 还定义了`begin`和`end`两个方法用于返回`RowIterator`。
 
@@ -280,7 +280,7 @@ RowIterator 的定义和 CellIterator 的定义大致相同。
 
 ### mio.hpp
 
-mio.hpp 相比与其他三个文件的代码多了不少，也复杂了许多。文件一开始定义了`template &lt;access_mode AccessMode, typename ByteT&gt; struct basic_mmap`结构体，然后围绕这个结构体声明了一系列操作符:
+mio.hpp 相比与其他三个文件的代码多了不少，也复杂了许多。文件一开始定义了`template <access_mode AccessMode, typename ByteT> struct basic_mmap`结构体，然后围绕这个结构体声明了一系列操作符:
 
 ![](/images/202410/16/11.png)
 
@@ -300,9 +300,9 @@ mio.hpp 相比与其他三个文件的代码多了不少，也复杂了许多。
 
 ![](/images/202410/16/15.png)
 
-然后定义了`template &lt;typename String&gt; file_handle_type open_file`，`inline size_t query_file_size`和`inline mmap_context memory_map`函数，以及`struct mmap_context`结构体。之后，实现了许多在`template &lt;access_mode AccessMode, typename ByteT&gt; struct basic_mmap`声明的方法。
+然后定义了`template <typename String> file_handle_type open_file`，`inline size_t query_file_size`和`inline mmap_context memory_map`函数，以及`struct mmap_context`结构体。之后，实现了许多在`template <access_mode AccessMode, typename ByteT> struct basic_mmap`声明的方法。
 
-最后定义了`template &lt;access_mode AccessMode, typename ByteT&gt; class basic_shared_mmap`类。
+最后定义了`template <access_mode AccessMode, typename ByteT> class basic_shared_mmap`类。
 
 ### writer.hpp
 
@@ -310,24 +310,24 @@ writer.hpp 中包含将数据导出的功能。主要定义了两个方法:`writ
 
 例如，将数据写入到文件中:
 
-```C&#43;&#43;
-#include &lt;csv2/reader.hpp&gt;
-#include &lt;csv2/parameters.hpp&gt;
-#include &lt;csv2/mio.hpp&gt;
-#include &lt;csv2/writer.hpp&gt;
-#include &lt;iostream&gt;
-#include &lt;ostream&gt;
-#include &lt;vector&gt;
-#include &lt;string&gt;
+```C++
+#include <csv2/reader.hpp>
+#include <csv2/parameters.hpp>
+#include <csv2/mio.hpp>
+#include <csv2/writer.hpp>
+#include <iostream>
+#include <ostream>
+#include <vector>
+#include <string>
 
 using namespace csv2;
 using namespace std;
 
 int main() {
-	std::ofstream out(&#34;info.csv&#34;);
-	csv2::Writer&lt;csv2::delimiter&lt;&#39;,&#39;&gt;, std::ofstream&gt; writer(out);
-	std::vector&lt;std::string&gt; header = { &#34;Name&#34;, &#34;Age&#34; };
-	std::vector&lt;std::vector&lt;std::string&gt;&gt; content{ {&#34;Andy&#34;, &#34;19&#34;}, {&#34;Peter&#34;, &#34;21&#34;}, {&#34;Lucas&#34;, &#34;20&#34;} };
+	std::ofstream out("info.csv");
+	csv2::Writer<csv2::delimiter<','>, std::ofstream> writer(out);
+	std::vector<std::string> header = { "Name", "Age" };
+	std::vector<std::vector<std::string>> content{ {"Andy", "19"}, {"Peter", "21"}, {"Lucas", "20"} };
 	writer.write_row(header);
 	writer.write_rows(content);
 }
@@ -337,13 +337,13 @@ int main() {
 
 ### parameters.hpp
 
-首先，为了组织代码引入了`trim_policy`命名空间。 包含了`no_trimming`、`trim_characters`两个结构体，以及`using trim_whitespace = trim_characters&lt;&#39; &#39;, &#39;\t&#39;&gt;;`一句，于是给空白符`&#39; &#39;`和`&#39;\t&#39;`新的使用方式——`trim_whitespace`。需要注意的是，该标识符在`trim_policy`命名空间中。
+首先，为了组织代码引入了`trim_policy`命名空间。 包含了`no_trimming`、`trim_characters`两个结构体，以及`using trim_whitespace = trim_characters<' ', '\t'>;`一句，于是给空白符`' '`和`'\t'`新的使用方式——`trim_whitespace`。需要注意的是，该标识符在`trim_policy`命名空间中。
 
 ![](/images/202410/16/3.png)
 
 此外，还包含`delimiter`、`quote_character`以及`first_row_is_header`三个结构体，和之前不同的是它们在`csv2`命令空间中。
 
-整个文件的结构体里面的方法或数据都是`static`的，表示我们可以用`delimiter&lt;&#39;:&#39;&gt;::value`的方式直接获取里面的数据，而不用实例化（实例化从逻辑上好像也有一些问题，同样是用`:`作为分隔符却实例化了两个不同的对象，有点奇怪）。
+整个文件的结构体里面的方法或数据都是`static`的，表示我们可以用`delimiter<':'>::value`的方式直接获取里面的数据，而不用实例化（实例化从逻辑上好像也有一些问题，同样是用`:`作为分隔符却实例化了两个不同的对象，有点奇怪）。
 
 关于可变参数模板可看[知识点 5](#point-5)。
 
@@ -363,9 +363,9 @@ pair 的使用: https://cplusplus.com/reference/utility/pair/pair/
 
 mio.hpp 中有如下一段代码:
 
-```C&#43;&#43;
+```C++
 /**
- * Determines the operating system&#39;s page allocation granularity.
+ * Determines the operating system's page allocation granularity.
  *
  * On the first call to this function, it invokes the operating system specific syscall
  * to determine the page size, caches the value, and returns it. Any subsequent call to
@@ -375,7 +375,7 @@ inline size_t page_size() {
   static const size_t page_size = [] {
 #ifdef _WIN32
     SYSTEM_INFO SystemInfo;
-    GetSystemInfo(&amp;SystemInfo);
+    GetSystemInfo(&SystemInfo);
     return SystemInfo.dwAllocationGranularity;
 #else
     return sysconf(_SC_PAGE_SIZE);
@@ -398,9 +398,9 @@ mio.hpp 中有`static_assert`的写法。
 
 static_assert declaration: https://en.cppreference.com/w/cpp/language/static_assert
 
-Understanding static_assert in C&#43;&#43; 11: https://www.geeksforgeeks.org/understanding-static_assert-c-11/
+Understanding static_assert in C++ 11: https://www.geeksforgeeks.org/understanding-static_assert-c-11/
 
-### &lt;div id=&#34;point-4&#34; style=&#34;display: inline&#34;&gt;4. mmap&lt;/div&gt;
+### <div id="point-4" style="display: inline">4. mmap</div>
 
 mio.hpp 中的`memory_map`函数使用了`mmap`。
 
@@ -418,7 +418,7 @@ Memory Mapped I/O: https://www.cs.uleth.ca/~holzmann/C/system/mmap.html
 
 探索内存原理的内存映射文件: https://zhuanlan.zhihu.com/p/429987335
 
-File Mapping in C&#43;&#43; Applications: https://www.geeksforgeeks.org/file-mapping-in-cpp-applications/
+File Mapping in C++ Applications: https://www.geeksforgeeks.org/file-mapping-in-cpp-applications/
 
 File Mapping: https://learn.microsoft.com/en-us/windows/win32/memory/file-mapping
 
@@ -426,15 +426,15 @@ Mapping files into virtual memory in C on windows: https://stackoverflow.com/que
 
 示例代码:
 
-```C&#43;&#43;
-#include &lt;cstdio&gt;
-#include &lt;windows.h&gt;
-#include &lt;iostream&gt;
+```C++
+#include <cstdio>
+#include <windows.h>
+#include <iostream>
 
 using namespace std;
 
 int main(int argc, char* argv[]) {
-	const TCHAR* lpFileName = TEXT(&#34;hello.txt&#34;);
+	const TCHAR* lpFileName = TEXT("hello.txt");
 	HANDLE hFile;
 	HANDLE hMap;
 	LPVOID lpBasePtr;
@@ -448,18 +448,18 @@ int main(int argc, char* argv[]) {
 		FILE_ATTRIBUTE_NORMAL,                 // dwFlagsAndAttributes
 		0);                                    // hTemplateFile
 	if (hFile == INVALID_HANDLE_VALUE) {
-		fprintf(stderr, &#34;CreateFile failed with error %d\n&#34;, GetLastError());
+		fprintf(stderr, "CreateFile failed with error %d\n", GetLastError());
 		return 1;
 	}
 
-	if (!GetFileSizeEx(hFile, &amp;liFileSize)) {
-		fprintf(stderr, &#34;GetFileSize failed with error %d\n&#34;, GetLastError());
+	if (!GetFileSizeEx(hFile, &liFileSize)) {
+		fprintf(stderr, "GetFileSize failed with error %d\n", GetLastError());
 		CloseHandle(hFile);
 		return 1;
 	}
 
 	if (liFileSize.QuadPart == 0) {
-		fprintf(stderr, &#34;File is empty\n&#34;);
+		fprintf(stderr, "File is empty\n");
 		CloseHandle(hFile);
 		return 1;
 	}
@@ -472,7 +472,7 @@ int main(int argc, char* argv[]) {
 		0,                             // MaximumSizeLow
 		NULL);                         // Name
 	if (hMap == 0) {
-		fprintf(stderr, &#34;CreateFileMapping failed with error %d\n&#34;, GetLastError());
+		fprintf(stderr, "CreateFileMapping failed with error %d\n", GetLastError());
 		CloseHandle(hFile);
 		return 1;
 	}
@@ -484,7 +484,7 @@ int main(int argc, char* argv[]) {
 		0,                     // dwFileOffsetLow
 		0);                    // dwNumberOfBytesToMap
 	if (lpBasePtr == NULL) {
-		fprintf(stderr, &#34;MapViewOfFile failed with error %d\n&#34;, GetLastError());
+		fprintf(stderr, "MapViewOfFile failed with error %d\n", GetLastError());
 		CloseHandle(hMap);
 		CloseHandle(hFile);
 		return 1;
@@ -493,35 +493,35 @@ int main(int argc, char* argv[]) {
 	// Display file content as ASCII charaters
 	char* ptr = (char*)lpBasePtr;
 	LONGLONG i = liFileSize.QuadPart;
-	while (i-- &gt; 0) {
-		fputc(*ptr&#43;&#43;, stdout);
+	while (i-- > 0) {
+		fputc(*ptr++, stdout);
 	}
 
 	UnmapViewOfFile(lpBasePtr);
 	CloseHandle(hMap);
 	CloseHandle(hFile);
 
-	printf(&#34;\nDone\n&#34;);
+	printf("\nDone\n");
 }
 ```
 
-### &lt;div id=&#34;point-5&#34; style=&#34;display: inline&#34;&gt;5. 可变参数模板&lt;/div&gt;
+### <div id="point-5" style="display: inline">5. 可变参数模板</div>
 
 在 parameters.hpp 中使用了可变参数模板（Variadic Template Function）。
 
-[C&#43;&#43;11 – Variadic Template Function | Tutorial &amp; Examples](https://thispointer.com/c11-variadic-template-function-tutorial-examples/)
+[C++11 – Variadic Template Function | Tutorial & Examples](https://thispointer.com/c11-variadic-template-function-tutorial-examples/)
 
-```C&#43;&#43;
+```C++
 
-template&lt;typename T&gt;
+template<typename T>
 void logging(T t){
-    cout &lt;&lt; t;
-    cout &lt;&lt; &#34;\nLast Call\n&#34;;
+    cout << t;
+    cout << "\nLast Call\n";
 }
 
-template&lt;typename T, typename ... Args&gt;
+template<typename T, typename ... Args>
 void logging(T first, Args... args){
-    cout &lt;&lt; first &lt;&lt; &#34;, &#34;;
+    cout << first << ", ";
     logging(args...);
 }
 ```
@@ -550,13 +550,13 @@ reader.hpp 有默认模板参数的写法:
 
 ![](/images/202410/16/5.png)
 
-在 C&#43;&#43; 17 之前，如果不用任何模板参数且正常使用 Reader 类的话，需要使用如下语法:
+在 C++ 17 之前，如果不用任何模板参数且正常使用 Reader 类的话，需要使用如下语法:
 
-```C&#43;&#43;
-Reader&lt;&gt; reader;
+```C++
+Reader<> reader;
 ```
 
-将 CMakeLists.txt 中的 C&#43;&#43;版本由 14
+将 CMakeLists.txt 中的 C++版本由 14
 
 ```
 set(CMAKE_CXX_STANDARD 14)
@@ -570,40 +570,40 @@ set(CMAKE_CXX_STANDARD 17)
 
 即可用如下轻便的语法使用 Reader。
 
-```C&#43;&#43;
+```C++
 Reader reader;
 ```
 
-### &lt;div id=&#34;point-10&#34; style=&#34;display: inline&#34;&gt;10. std::forward&lt;/div&gt;
+### <div id="point-10" style="display: inline">10. std::forward</div>
 
 https://cplusplus.com/reference/utility/forward/
 
 通过使用`std::forward`函数可以根据实参调用不同的函数，如下面例子所示:
 
-```C&#43;&#43;
-#include &lt;utility&gt;      // std::forward
-#include &lt;iostream&gt;     // std::cout
+```C++
+#include <utility>      // std::forward
+#include <iostream>     // std::cout
 
 // function with lvalue and rvalue reference overloads:
-void overloaded (const int&amp; x) {std::cout &lt;&lt; &#34;[lvalue]&#34;;}
-void overloaded (int&amp;&amp; x) {std::cout &lt;&lt; &#34;[rvalue]&#34;;}
+void overloaded (const int& x) {std::cout << "[lvalue]";}
+void overloaded (int&& x) {std::cout << "[rvalue]";}
 
 // function template taking rvalue reference to deduced type:
-template &lt;class T&gt; void fn (T&amp;&amp; x) {
+template <class T> void fn (T&& x) {
   overloaded (x);                   // always an lvalue
-  overloaded (std::forward&lt;T&gt;(x));  // rvalue if argument is rvalue
+  overloaded (std::forward<T>(x));  // rvalue if argument is rvalue
 }
 
 int main () {
   int a;
 
-  std::cout &lt;&lt; &#34;calling fn with lvalue: &#34;;
+  std::cout << "calling fn with lvalue: ";
   fn (a);
-  std::cout &lt;&lt; &#39;\n&#39;;
+  std::cout << '\n';
 
-  std::cout &lt;&lt; &#34;calling fn with rvalue: &#34;;
+  std::cout << "calling fn with rvalue: ";
   fn (0);
-  std::cout &lt;&lt; &#39;\n&#39;;
+  std::cout << '\n';
 
   return 0;
 }

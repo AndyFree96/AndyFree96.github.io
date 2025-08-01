@@ -3,9 +3,9 @@
 
 ![](/page/eddie-junior-kZ7Mc7yo1-8-unsplash.jpg)
 
-{{&lt; admonition type=quote title=&#34;引用&#34; open=true &gt;}}
+{{< admonition type=quote title="引用" open=true >}}
 书籍是人类进步的阶梯。—— 高尔基
-{{&lt; /admonition &gt;}}
+{{< /admonition >}}
 
 ## 🎉 书籍集散地
 
@@ -39,381 +39,381 @@
 
 在这里，将与大家分享那些改变我思维、提升我能力的书籍。
 
-{{&lt; echarts &gt;}}{
-  &#34;tooltip&#34;: {
-    &#34;trigger&#34;: &#34;axis&#34;,
-    &#34;axisPointer&#34;: {
-      &#34;type&#34;: &#34;shadow&#34;
+{{< echarts >}}{
+  "tooltip": {
+    "trigger": "axis",
+    "axisPointer": {
+      "type": "shadow"
     }
   },
-  &#34;title&#34;: {
-    &#34;text&#34;: &#34;统计&#34;
+  "title": {
+    "text": "统计"
   },
-  &#34;legend&#34;: {
-    &#34;data&#34;: [
-      &#34;计算机&#34;,
-      &#34;文学&#34;,
-      &#34;传记&#34;,
-      &#34;经济&#34;,
-      &#34;饮食&#34;,
-      &#34;写作&#34;,
-      &#34;哲学&#34;,
-      &#34;政治&#34;,
-      &#34;电影&#34;,
-      &#34;历史&#34;,
-      &#34;理财&#34;,
-      &#34;数学&#34;
+  "legend": {
+    "data": [
+      "计算机",
+      "文学",
+      "传记",
+      "经济",
+      "饮食",
+      "写作",
+      "哲学",
+      "政治",
+      "电影",
+      "历史",
+      "理财",
+      "数学"
     ]
   },
-  &#34;toolbox&#34;: {
-    &#34;show&#34;: true,
-    &#34;orient&#34;: &#34;vertical&#34;,
-    &#34;left&#34;: &#34;right&#34;,
-    &#34;top&#34;: &#34;center&#34;,
-    &#34;feature&#34;: {
-      &#34;mark&#34;: {
-        &#34;show&#34;: true
+  "toolbox": {
+    "show": true,
+    "orient": "vertical",
+    "left": "right",
+    "top": "center",
+    "feature": {
+      "mark": {
+        "show": true
       },
-      &#34;dataView&#34;: {
-        &#34;show&#34;: true,
-        &#34;readOnly&#34;: false
+      "dataView": {
+        "show": true,
+        "readOnly": false
       },
-      &#34;magicType&#34;: {
-        &#34;show&#34;: true,
-        &#34;type&#34;: [
-          &#34;line&#34;,
-          &#34;bar&#34;,
-          &#34;stack&#34;
+      "magicType": {
+        "show": true,
+        "type": [
+          "line",
+          "bar",
+          "stack"
         ]
       },
-      &#34;restore&#34;: {
-        &#34;show&#34;: true
+      "restore": {
+        "show": true
       },
-      &#34;saveAsImage&#34;: {
-        &#34;show&#34;: true
+      "saveAsImage": {
+        "show": true
       }
     }
   },
-  &#34;xAxis&#34;: [
+  "xAxis": [
     {
-      &#34;type&#34;: &#34;category&#34;,
-      &#34;axisTick&#34;: {
-        &#34;show&#34;: false
+      "type": "category",
+      "axisTick": {
+        "show": false
       },
-      &#34;data&#34;: [
-        &#34;2024&#34;,
-        &#34;2025&#34;
+      "data": [
+        "2024",
+        "2025"
       ]
     }
   ],
-  &#34;yAxis&#34;: [
+  "yAxis": [
     {
-      &#34;type&#34;: &#34;value&#34;
+      "type": "value"
     }
   ],
-  &#34;series&#34;: [
+  "series": [
     {
-      &#34;name&#34;: &#34;计算机&#34;,
-      &#34;type&#34;: &#34;bar&#34;,
-      &#34;barGap&#34;: 0,
-      &#34;label&#34;: {
-        &#34;show&#34;: true,
-        &#34;position&#34;: &#34;insideBottom&#34;,
-        &#34;distance&#34;: 15,
-        &#34;align&#34;: &#34;left&#34;,
-        &#34;verticalAlign&#34;: &#34;middle&#34;,
-        &#34;rotate&#34;: 90,
-        &#34;formatter&#34;: &#34;{c}  {name|{a}}&#34;,
-        &#34;fontSize&#34;: 12,
-        &#34;rich&#34;: {
-          &#34;name&#34;: {}
+      "name": "计算机",
+      "type": "bar",
+      "barGap": 0,
+      "label": {
+        "show": true,
+        "position": "insideBottom",
+        "distance": 15,
+        "align": "left",
+        "verticalAlign": "middle",
+        "rotate": 90,
+        "formatter": "{c}  {name|{a}}",
+        "fontSize": 12,
+        "rich": {
+          "name": {}
         }
       },
-      &#34;emphasis&#34;: {
-        &#34;focus&#34;: &#34;series&#34;
+      "emphasis": {
+        "focus": "series"
       },
-      &#34;data&#34;: [
+      "data": [
         10,
         9
       ]
     },
     {
-      &#34;name&#34;: &#34;文学&#34;,
-      &#34;type&#34;: &#34;bar&#34;,
-      &#34;barGap&#34;: 0,
-      &#34;label&#34;: {
-        &#34;show&#34;: true,
-        &#34;position&#34;: &#34;insideBottom&#34;,
-        &#34;distance&#34;: 15,
-        &#34;align&#34;: &#34;left&#34;,
-        &#34;verticalAlign&#34;: &#34;middle&#34;,
-        &#34;rotate&#34;: 90,
-        &#34;formatter&#34;: &#34;{c}  {name|{a}}&#34;,
-        &#34;fontSize&#34;: 12,
-        &#34;rich&#34;: {
-          &#34;name&#34;: {}
+      "name": "文学",
+      "type": "bar",
+      "barGap": 0,
+      "label": {
+        "show": true,
+        "position": "insideBottom",
+        "distance": 15,
+        "align": "left",
+        "verticalAlign": "middle",
+        "rotate": 90,
+        "formatter": "{c}  {name|{a}}",
+        "fontSize": 12,
+        "rich": {
+          "name": {}
         }
       },
-      &#34;emphasis&#34;: {
-        &#34;focus&#34;: &#34;series&#34;
+      "emphasis": {
+        "focus": "series"
       },
-      &#34;data&#34;: [
+      "data": [
         2,
         0
       ]
     },
     {
-      &#34;name&#34;: &#34;传记&#34;,
-      &#34;type&#34;: &#34;bar&#34;,
-      &#34;barGap&#34;: 0,
-      &#34;label&#34;: {
-        &#34;show&#34;: true,
-        &#34;position&#34;: &#34;insideBottom&#34;,
-        &#34;distance&#34;: 15,
-        &#34;align&#34;: &#34;left&#34;,
-        &#34;verticalAlign&#34;: &#34;middle&#34;,
-        &#34;rotate&#34;: 90,
-        &#34;formatter&#34;: &#34;{c}  {name|{a}}&#34;,
-        &#34;fontSize&#34;: 12,
-        &#34;rich&#34;: {
-          &#34;name&#34;: {}
+      "name": "传记",
+      "type": "bar",
+      "barGap": 0,
+      "label": {
+        "show": true,
+        "position": "insideBottom",
+        "distance": 15,
+        "align": "left",
+        "verticalAlign": "middle",
+        "rotate": 90,
+        "formatter": "{c}  {name|{a}}",
+        "fontSize": 12,
+        "rich": {
+          "name": {}
         }
       },
-      &#34;emphasis&#34;: {
-        &#34;focus&#34;: &#34;series&#34;
+      "emphasis": {
+        "focus": "series"
       },
-      &#34;data&#34;: [
+      "data": [
         2,
         0
       ]
     },
     {
-      &#34;name&#34;: &#34;经济&#34;,
-      &#34;type&#34;: &#34;bar&#34;,
-      &#34;barGap&#34;: 0,
-      &#34;label&#34;: {
-        &#34;show&#34;: true,
-        &#34;position&#34;: &#34;insideBottom&#34;,
-        &#34;distance&#34;: 15,
-        &#34;align&#34;: &#34;left&#34;,
-        &#34;verticalAlign&#34;: &#34;middle&#34;,
-        &#34;rotate&#34;: 90,
-        &#34;formatter&#34;: &#34;{c}  {name|{a}}&#34;,
-        &#34;fontSize&#34;: 12,
-        &#34;rich&#34;: {
-          &#34;name&#34;: {}
+      "name": "经济",
+      "type": "bar",
+      "barGap": 0,
+      "label": {
+        "show": true,
+        "position": "insideBottom",
+        "distance": 15,
+        "align": "left",
+        "verticalAlign": "middle",
+        "rotate": 90,
+        "formatter": "{c}  {name|{a}}",
+        "fontSize": 12,
+        "rich": {
+          "name": {}
         }
       },
-      &#34;emphasis&#34;: {
-        &#34;focus&#34;: &#34;series&#34;
+      "emphasis": {
+        "focus": "series"
       },
-      &#34;data&#34;: [
+      "data": [
         2,
         0
       ]
     },
     {
-      &#34;name&#34;: &#34;饮食&#34;,
-      &#34;type&#34;: &#34;bar&#34;,
-      &#34;barGap&#34;: 0,
-      &#34;label&#34;: {
-        &#34;show&#34;: true,
-        &#34;position&#34;: &#34;insideBottom&#34;,
-        &#34;distance&#34;: 15,
-        &#34;align&#34;: &#34;left&#34;,
-        &#34;verticalAlign&#34;: &#34;middle&#34;,
-        &#34;rotate&#34;: 90,
-        &#34;formatter&#34;: &#34;{c}  {name|{a}}&#34;,
-        &#34;fontSize&#34;: 12,
-        &#34;rich&#34;: {
-          &#34;name&#34;: {}
+      "name": "饮食",
+      "type": "bar",
+      "barGap": 0,
+      "label": {
+        "show": true,
+        "position": "insideBottom",
+        "distance": 15,
+        "align": "left",
+        "verticalAlign": "middle",
+        "rotate": 90,
+        "formatter": "{c}  {name|{a}}",
+        "fontSize": 12,
+        "rich": {
+          "name": {}
         }
       },
-      &#34;emphasis&#34;: {
-        &#34;focus&#34;: &#34;series&#34;
+      "emphasis": {
+        "focus": "series"
       },
-      &#34;data&#34;: [
+      "data": [
         1,
         0
       ]
     },
     {
-      &#34;name&#34;: &#34;写作&#34;,
-      &#34;type&#34;: &#34;bar&#34;,
-      &#34;barGap&#34;: 0,
-      &#34;label&#34;: {
-        &#34;show&#34;: true,
-        &#34;position&#34;: &#34;insideBottom&#34;,
-        &#34;distance&#34;: 15,
-        &#34;align&#34;: &#34;left&#34;,
-        &#34;verticalAlign&#34;: &#34;middle&#34;,
-        &#34;rotate&#34;: 90,
-        &#34;formatter&#34;: &#34;{c}  {name|{a}}&#34;,
-        &#34;fontSize&#34;: 12,
-        &#34;rich&#34;: {
-          &#34;name&#34;: {}
+      "name": "写作",
+      "type": "bar",
+      "barGap": 0,
+      "label": {
+        "show": true,
+        "position": "insideBottom",
+        "distance": 15,
+        "align": "left",
+        "verticalAlign": "middle",
+        "rotate": 90,
+        "formatter": "{c}  {name|{a}}",
+        "fontSize": 12,
+        "rich": {
+          "name": {}
         }
       },
-      &#34;emphasis&#34;: {
-        &#34;focus&#34;: &#34;series&#34;
+      "emphasis": {
+        "focus": "series"
       },
-      &#34;data&#34;: [
+      "data": [
         1,
         0
       ]
     },
     {
-      &#34;name&#34;: &#34;哲学&#34;,
-      &#34;type&#34;: &#34;bar&#34;,
-      &#34;barGap&#34;: 0,
-      &#34;label&#34;: {
-        &#34;show&#34;: true,
-        &#34;position&#34;: &#34;insideBottom&#34;,
-        &#34;distance&#34;: 15,
-        &#34;align&#34;: &#34;left&#34;,
-        &#34;verticalAlign&#34;: &#34;middle&#34;,
-        &#34;rotate&#34;: 90,
-        &#34;formatter&#34;: &#34;{c}  {name|{a}}&#34;,
-        &#34;fontSize&#34;: 12,
-        &#34;rich&#34;: {
-          &#34;name&#34;: {}
+      "name": "哲学",
+      "type": "bar",
+      "barGap": 0,
+      "label": {
+        "show": true,
+        "position": "insideBottom",
+        "distance": 15,
+        "align": "left",
+        "verticalAlign": "middle",
+        "rotate": 90,
+        "formatter": "{c}  {name|{a}}",
+        "fontSize": 12,
+        "rich": {
+          "name": {}
         }
       },
-      &#34;emphasis&#34;: {
-        &#34;focus&#34;: &#34;series&#34;
+      "emphasis": {
+        "focus": "series"
       },
-      &#34;data&#34;: [
+      "data": [
         3,
         0
       ]
     },
     {
-      &#34;name&#34;: &#34;政治&#34;,
-      &#34;type&#34;: &#34;bar&#34;,
-      &#34;barGap&#34;: 0,
-      &#34;label&#34;: {
-        &#34;show&#34;: true,
-        &#34;position&#34;: &#34;insideBottom&#34;,
-        &#34;distance&#34;: 15,
-        &#34;align&#34;: &#34;left&#34;,
-        &#34;verticalAlign&#34;: &#34;middle&#34;,
-        &#34;rotate&#34;: 90,
-        &#34;formatter&#34;: &#34;{c}  {name|{a}}&#34;,
-        &#34;fontSize&#34;: 12,
-        &#34;rich&#34;: {
-          &#34;name&#34;: {}
+      "name": "政治",
+      "type": "bar",
+      "barGap": 0,
+      "label": {
+        "show": true,
+        "position": "insideBottom",
+        "distance": 15,
+        "align": "left",
+        "verticalAlign": "middle",
+        "rotate": 90,
+        "formatter": "{c}  {name|{a}}",
+        "fontSize": 12,
+        "rich": {
+          "name": {}
         }
       },
-      &#34;emphasis&#34;: {
-        &#34;focus&#34;: &#34;series&#34;
+      "emphasis": {
+        "focus": "series"
       },
-      &#34;data&#34;: [
+      "data": [
         1,
         0
       ]
     },
     {
-      &#34;name&#34;: &#34;电影&#34;,
-      &#34;type&#34;: &#34;bar&#34;,
-      &#34;barGap&#34;: 0,
-      &#34;label&#34;: {
-        &#34;show&#34;: true,
-        &#34;position&#34;: &#34;insideBottom&#34;,
-        &#34;distance&#34;: 15,
-        &#34;align&#34;: &#34;left&#34;,
-        &#34;verticalAlign&#34;: &#34;middle&#34;,
-        &#34;rotate&#34;: 90,
-        &#34;formatter&#34;: &#34;{c}  {name|{a}}&#34;,
-        &#34;fontSize&#34;: 12,
-        &#34;rich&#34;: {
-          &#34;name&#34;: {}
+      "name": "电影",
+      "type": "bar",
+      "barGap": 0,
+      "label": {
+        "show": true,
+        "position": "insideBottom",
+        "distance": 15,
+        "align": "left",
+        "verticalAlign": "middle",
+        "rotate": 90,
+        "formatter": "{c}  {name|{a}}",
+        "fontSize": 12,
+        "rich": {
+          "name": {}
         }
       },
-      &#34;emphasis&#34;: {
-        &#34;focus&#34;: &#34;series&#34;
+      "emphasis": {
+        "focus": "series"
       },
-      &#34;data&#34;: [
+      "data": [
         1,
         0
       ]
     },
     {
-      &#34;name&#34;: &#34;历史&#34;,
-      &#34;type&#34;: &#34;bar&#34;,
-      &#34;barGap&#34;: 0,
-      &#34;label&#34;: {
-        &#34;show&#34;: true,
-        &#34;position&#34;: &#34;insideBottom&#34;,
-        &#34;distance&#34;: 15,
-        &#34;align&#34;: &#34;left&#34;,
-        &#34;verticalAlign&#34;: &#34;middle&#34;,
-        &#34;rotate&#34;: 90,
-        &#34;formatter&#34;: &#34;{c}  {name|{a}}&#34;,
-        &#34;fontSize&#34;: 12,
-        &#34;rich&#34;: {
-          &#34;name&#34;: {}
+      "name": "历史",
+      "type": "bar",
+      "barGap": 0,
+      "label": {
+        "show": true,
+        "position": "insideBottom",
+        "distance": 15,
+        "align": "left",
+        "verticalAlign": "middle",
+        "rotate": 90,
+        "formatter": "{c}  {name|{a}}",
+        "fontSize": 12,
+        "rich": {
+          "name": {}
         }
       },
-      &#34;emphasis&#34;: {
-        &#34;focus&#34;: &#34;series&#34;
+      "emphasis": {
+        "focus": "series"
       },
-      &#34;data&#34;: [
+      "data": [
         2,
         0
       ]
     },
     {
-      &#34;name&#34;: &#34;理财&#34;,
-      &#34;type&#34;: &#34;bar&#34;,
-      &#34;barGap&#34;: 0,
-      &#34;label&#34;: {
-        &#34;show&#34;: true,
-        &#34;position&#34;: &#34;insideBottom&#34;,
-        &#34;distance&#34;: 15,
-        &#34;align&#34;: &#34;left&#34;,
-        &#34;verticalAlign&#34;: &#34;middle&#34;,
-        &#34;rotate&#34;: 90,
-        &#34;formatter&#34;: &#34;{c}  {name|{a}}&#34;,
-        &#34;fontSize&#34;: 12,
-        &#34;rich&#34;: {
-          &#34;name&#34;: {}
+      "name": "理财",
+      "type": "bar",
+      "barGap": 0,
+      "label": {
+        "show": true,
+        "position": "insideBottom",
+        "distance": 15,
+        "align": "left",
+        "verticalAlign": "middle",
+        "rotate": 90,
+        "formatter": "{c}  {name|{a}}",
+        "fontSize": 12,
+        "rich": {
+          "name": {}
         }
       },
-      &#34;emphasis&#34;: {
-        &#34;focus&#34;: &#34;series&#34;
+      "emphasis": {
+        "focus": "series"
       },
-      &#34;data&#34;: [
+      "data": [
         1,
         2
       ]
     },
     {
-      &#34;name&#34;: &#34;数学&#34;,
-      &#34;type&#34;: &#34;bar&#34;,
-      &#34;barGap&#34;: 0,
-      &#34;label&#34;: {
-        &#34;show&#34;: true,
-        &#34;position&#34;: &#34;insideBottom&#34;,
-        &#34;distance&#34;: 15,
-        &#34;align&#34;: &#34;left&#34;,
-        &#34;verticalAlign&#34;: &#34;middle&#34;,
-        &#34;rotate&#34;: 90,
-        &#34;formatter&#34;: &#34;{c}  {name|{a}}&#34;,
-        &#34;fontSize&#34;: 12,
-        &#34;rich&#34;: {
-          &#34;name&#34;: {}
+      "name": "数学",
+      "type": "bar",
+      "barGap": 0,
+      "label": {
+        "show": true,
+        "position": "insideBottom",
+        "distance": 15,
+        "align": "left",
+        "verticalAlign": "middle",
+        "rotate": 90,
+        "formatter": "{c}  {name|{a}}",
+        "fontSize": 12,
+        "rich": {
+          "name": {}
         }
       },
-      &#34;emphasis&#34;: {
-        &#34;focus&#34;: &#34;series&#34;
+      "emphasis": {
+        "focus": "series"
       },
-      &#34;data&#34;: [
+      "data": [
         0,
         4
       ]
     }
   ]
-}{{&lt; /echarts &gt;}}
+}{{< /echarts >}}
 
 ### 2024
 
@@ -421,11 +421,11 @@
 
 [JavaScript 高级程序设计 第 4 版](https://book.douban.com/subject/35175321/)
 
-[Unix&amp;Linux 大学教程](https://book.douban.com/subject/4253716/)
+[Unix&Linux 大学教程](https://book.douban.com/subject/4253716/)
 
 [学习 JavaScript 数据结构与算法 第 3 版](https://book.douban.com/subject/33441631/)
 
-[Hands-on Machine Learning with Scikit-Learn, Keras &amp; TensorFlow 2nd Edition](https://book.douban.com/subject/30310982/)
+[Hands-on Machine Learning with Scikit-Learn, Keras & TensorFlow 2nd Edition](https://book.douban.com/subject/30310982/)
 
 [编写可读代码的艺术](https://book.douban.com/subject/10797189/)
 
@@ -435,7 +435,7 @@
 
 [操作系统导论](https://book.douban.com/subject/33463930/)
 
-[C&#43;&#43;并发编程实战（第 2 版）](https://book.douban.com/subject/35653912/)
+[C++并发编程实战（第 2 版）](https://book.douban.com/subject/35653912/)
 
 [深入浅出面向对象分析与设计（中文版）](https://book.douban.com/subject/3530721/)
 
@@ -532,6 +532,6 @@
 
 ---
 
-> 作者:   
+> 作者: <no value>  
 > URL: http://localhost:1313/book/  
 

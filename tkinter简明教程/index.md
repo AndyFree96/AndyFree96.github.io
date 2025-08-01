@@ -3,7 +3,7 @@
 
 本文我们将学习如何使用`Tkinter`包编写一些图形用户界面程序。`Tkinter`是 Python 的一个标准包，因此我们并不需要安装它。我们将从创建一个窗口开始，然后我们在其之上加入一些小组件，比如按钮，复选框等，并使用它们的一些属性。话不多说，让我们开始吧！
 
-&lt;!--more--&gt;
+<!--more-->
 
 ## 创建一个窗口
 
@@ -13,7 +13,7 @@
 from tkinter import *
 
 window = Tk()
-window.title(&#34;First Window&#34;)
+window.title("First Window")
 window.mainloop()
 ```
 
@@ -28,7 +28,7 @@ window.mainloop()
 为了给之前的例子增加一个标签组件，我们可以使用`Label`类：
 
 ```Python
-lbl = Label(window, text=&#34;Hello&#34;)
+lbl = Label(window, text="Hello")
 ```
 
 我们可以通过`grid`函数设置其在窗口的位置：
@@ -43,8 +43,8 @@ lbl.grid(column=0, row=0)
 from tkinter import *
 
 window = Tk()
-window.title(&#34;First Window&#34;)
-lbl = Label(window, text=&#34;Hello&#34;)
+window.title("First Window")
+lbl = Label(window, text="Hello")
 lbl.grid(column=0, row=0)
 window.mainloop()
 ```
@@ -60,7 +60,7 @@ window.mainloop()
 我们可以使用`font`参数设置标签字体大小：
 
 ```Python
-lbl = Label(window, text=&#34;Hello&#34;, font=(&#34;Arial Bold&#34;, 50))
+lbl = Label(window, text="Hello", font=("Arial Bold", 50))
 ```
 
 ![](/images/202410/2/3.png)
@@ -74,7 +74,7 @@ lbl = Label(window, text=&#34;Hello&#34;, font=(&#34;Arial Bold&#34;, 50))
 我们可以用`geometry`函数来设置窗口大小：
 
 ```Python
-window.geometry(&#34;350x200&#34;)
+window.geometry("350x200")
 ```
 
 以上代码将会把窗口设置成 350 个像素宽，200 个像素高。
@@ -84,7 +84,7 @@ window.geometry(&#34;350x200&#34;)
 让我们给窗口增加一个按钮组件，它的创建和添加方式和标签组件差不多：
 
 ```Python
-btn = Button(window, text=&#34;Click Me&#34;)
+btn = Button(window, text="Click Me")
 btn.grid(column=1, row=0)
 ```
 
@@ -94,11 +94,11 @@ btn.grid(column=1, row=0)
 from tkinter import *
 
 window = Tk()
-window.title(&#34;First Window&#34;)
-window.geometry(&#34;350x200&#34;)
-lbl = Label(window, text=&#34;Hello&#34;)
+window.title("First Window")
+window.geometry("350x200")
+lbl = Label(window, text="Hello")
 lbl.grid(column=0, row=0)
-btn = Button(window, text=&#34;Click Me&#34;)
+btn = Button(window, text="Click Me")
 btn.grid(column=1, row=0)
 window.mainloop()
 ```
@@ -114,7 +114,7 @@ window.mainloop()
 我们可以用`bg`参数设置按钮或其他组件的背景色。
 
 ```Python
-btn = Button(window, text=&#34;Click Me&#34;, bg=&#34;orange&#34;, fg=&#34;red&#34;)
+btn = Button(window, text="Click Me", bg="orange", fg="red")
 ```
 
 ![](/images/202410/2/5.png)
@@ -127,13 +127,13 @@ btn = Button(window, text=&#34;Click Me&#34;, bg=&#34;orange&#34;, fg=&#34;red&#
 
 ```Python
 def clicked():
-    lbl.configure(text=&#34;Button was clicked!&#34;)
+    lbl.configure(text="Button was clicked!")
 ```
 
 然后，我们注明一下点击时要调用的函数：
 
 ```Python
-btn = Button(window, text=&#34;Click Me&#34;, command=clicked)
+btn = Button(window, text="Click Me", command=clicked)
 ```
 
 完整代码如下所示：
@@ -142,15 +142,15 @@ btn = Button(window, text=&#34;Click Me&#34;, command=clicked)
 from tkinter import *
 
 window = Tk()
-window.title(&#34;First Window&#34;)
-window.geometry(&#34;350x200&#34;)
-lbl = Label(window, text=&#34;Hello&#34;)
+window.title("First Window")
+window.geometry("350x200")
+lbl = Label(window, text="Hello")
 lbl.grid(column=0, row=0)
 
 def clicked():
-    lbl.configure(text=&#34;Button was clicked!&#34;)
+    lbl.configure(text="Button was clicked!")
 
-btn = Button(window, text=&#34;Click Me&#34;, command=clicked)
+btn = Button(window, text="Click Me", command=clicked)
 btn.grid(column=1, row=0)
 window.mainloop()
 ```
@@ -173,16 +173,16 @@ txt = Entry(window, width=10)
 from tkinter import *
 
 window = Tk()
-window.title(&#34;First Window&#34;)
-window.geometry(&#34;350x200&#34;)
-lbl = Label(window, text=&#34;Hello&#34;)
+window.title("First Window")
+window.geometry("350x200")
+lbl = Label(window, text="Hello")
 lbl.grid(column=0, row=0)
 txt = Entry(window, width=10)
 txt.grid(column=1, row=0)
 def clicked():
-    lbl.configure(text=&#34;Button was clicked!&#34;)
+    lbl.configure(text="Button was clicked!")
 
-btn = Button(window, text=&#34;Click Me&#34;, command=clicked)
+btn = Button(window, text="Click Me", command=clicked)
 btn.grid(column=2, row=0)
 window.mainloop()
 ```
@@ -195,7 +195,7 @@ window.mainloop()
 
 ```Python
 def clicked():
-    res = &#34;Welcome to &#34; &#43; txt.get()
+    res = "Welcome to " + txt.get()
     lbl.configure(text=res)
 ```
 
@@ -207,17 +207,17 @@ def clicked():
 from tkinter import *
 
 window = Tk()
-window.title(&#34;First Window&#34;)
-window.geometry(&#34;350x200&#34;)
-lbl = Label(window, text=&#34;Hello&#34;)
+window.title("First Window")
+window.geometry("350x200")
+lbl = Label(window, text="Hello")
 lbl.grid(column=0, row=0)
 txt = Entry(window, width=10)
 txt.grid(column=1, row=0)
 def clicked():
-    res = &#34;Welcome to &#34; &#43; txt.get()
+    res = "Welcome to " + txt.get()
     lbl.configure(text=res)
 
-btn = Button(window, text=&#34;Click Me&#34;, command=clicked)
+btn = Button(window, text="Click Me", command=clicked)
 btn.grid(column=2, row=0)
 window.mainloop()
 ```
@@ -254,10 +254,10 @@ from tkinter import *
 from tkinter.ttk import *
 
 window = Tk()
-window.title(&#34;First Window&#34;)
-window.geometry(&#34;350x200&#34;)
+window.title("First Window")
+window.geometry("350x200")
 combo = Combobox(window)
-combo[&#39;values&#39;] = (1,2,3,4,5,&#34;Text&#34;)
+combo['values'] = (1,2,3,4,5,"Text")
 combo.current(1)
 combo.grid(column=0, row=0)
 window.mainloop()
@@ -280,7 +280,7 @@ combo.get()
 我们可以用`Checkbutton`类来创建一个复选框组件：
 
 ```Python
-chk = Checkbutton(window, text=&#34;Choose&#34;)
+chk = Checkbutton(window, text="Choose")
 ```
 
 能通过传递值设置复选框的状态：
@@ -290,11 +290,11 @@ from tkinter import *
 from tkinter.ttk import *
 
 window = Tk()
-window.title(&#34;First Window&#34;)
-window.geometry(&#34;350x200&#34;)
+window.title("First Window")
+window.geometry("350x200")
 chk_state = BooleanVar()
 chk_state.set(True) # Set check state
-chk = Checkbutton(window, text=&#34;Choose&#34;, var=chk_state)
+chk = Checkbutton(window, text="Choose", var=chk_state)
 chk.grid(column=0, row=0)
 window.mainloop()
 ```
@@ -316,7 +316,7 @@ chk_state.set(0) # Uncheck
 添加单选框可以用`Radiobutton`类创建一个文本框：
 
 ```Python
-rad1 = Radiobutton(window, text=&#34;First&#34;, value=1)
+rad1 = Radiobutton(window, text="First", value=1)
 ```
 
 我们需要给每个单选框设置不同的值，否则会不起作用。
@@ -326,11 +326,11 @@ from tkinter import *
 from tkinter.ttk import *
 
 window = Tk()
-window.title(&#34;First Window&#34;)
-window.geometry(&#34;350x200&#34;)
-rad1 = Radiobutton(window, text=&#34;First&#34;, value=1)
-rad2 = Radiobutton(window, text=&#34;Second&#34;, value=2)
-rad3 = Radiobutton(window, text=&#34;Third&#34;, value=3)
+window.title("First Window")
+window.geometry("350x200")
+rad1 = Radiobutton(window, text="First", value=1)
+rad2 = Radiobutton(window, text="Second", value=2)
+rad3 = Radiobutton(window, text="Third", value=3)
 rad1.grid(column=0, row=0)
 rad2.grid(column=1, row=0)
 rad3.grid(column=2, row=0)
@@ -342,7 +342,7 @@ window.mainloop()
 当然，我们可以给这些单选框设置`command`参数指定一个函数，当用户点击它们时就会运行该函数。
 
 ```Python
-rad1 = Radiobutton(window, text=&#34;First&#34;, value=1, command=clicked)
+rad1 = Radiobutton(window, text="First", value=1, command=clicked)
 
 def clicked():
     # Do what you need
@@ -358,15 +358,15 @@ from tkinter import *
 from tkinter.ttk import *
 
 window = Tk()
-window.title(&#34;First Window&#34;)
+window.title("First Window")
 selected = IntVar()
-lbl = Label(window, text=&#34;Show Value&#34;)
-rad1 = Radiobutton(window, text=&#34;First&#34;, value=1, variable=selected)
-rad2 = Radiobutton(window, text=&#34;Second&#34;, value=2, variable=selected)
-rad3 = Radiobutton(window, text=&#34;Third&#34;, value=3, variable=selected)
+lbl = Label(window, text="Show Value")
+rad1 = Radiobutton(window, text="First", value=1, variable=selected)
+rad2 = Radiobutton(window, text="Second", value=2, variable=selected)
+rad3 = Radiobutton(window, text="Third", value=3, variable=selected)
 def clicked():
     lbl.configure(text=selected.get())
-btn = Button(window, text=&#34;Click Me&#34;, command=clicked)
+btn = Button(window, text="Click Me", command=clicked)
 rad1.grid(column=0, row=0)
 rad2.grid(column=1, row=0)
 rad3.grid(column=2, row=0)
@@ -395,8 +395,8 @@ from tkinter import *
 from tkinter import scrolledtext
 
 window = Tk()
-window.title(&#34;First Window&#34;)
-window.geometry(&#34;350x200&#34;)
+window.title("First Window")
+window.geometry("350x200")
 txt = scrolledtext.ScrolledText(window, width=40, height=10)
 txt.grid(column=0, row=0)
 window.mainloop()
@@ -407,7 +407,7 @@ window.mainloop()
 用以下方法可以在文本区中插入文本：
 
 ```Python
-txt.insert(INSERT, &#34;Text goes here&#34;)
+txt.insert(INSERT, "Text goes here")
 ```
 
 用以下方法可以将文本区中的文本删除：
@@ -422,7 +422,7 @@ txt.delete(1.0, END)
 
 ```Python
 from tkinter import messagebox
-messagebox.showinfo(&#34;Message title&#34;, &#34;Message content&#34;)
+messagebox.showinfo("Message title", "Message content")
 ```
 
 我们创建一个按钮，当它被点击时显示一个消息框：
@@ -432,11 +432,11 @@ from tkinter import *
 from tkinter import messagebox
 
 window = Tk()
-window.title(&#34;First Window&#34;)
-window.geometry(&#34;350x200&#34;)
+window.title("First Window")
+window.geometry("350x200")
 def clicked():
-    messagebox.showinfo(&#34;Message title&#34;, &#34;Message content&#34;)
-btn = Button(window, text=&#34;Click here&#34;, command=clicked)
+    messagebox.showinfo("Message title", "Message content")
+btn = Button(window, text="Click here", command=clicked)
 btn.grid(column=0, row=0)
 window.mainloop()
 ```
@@ -457,8 +457,8 @@ spin = Spinbox(window, from_=0, to=100)
 from tkinter import *
 
 window = Tk()
-window.title(&#34;First Window&#34;)
-window.geometry(&#34;350x200&#34;)
+window.title("First Window")
+window.geometry("350x200")
 spin = Spinbox(window, from_=0, to=100, width=5)
 spin.grid(column=0, row=0)
 window.mainloop()
@@ -472,8 +472,8 @@ window.mainloop()
 from tkinter import *
 
 window = Tk()
-window.title(&#34;First Window&#34;)
-window.geometry(&#34;350x200&#34;)
+window.title("First Window")
+window.geometry("350x200")
 spin = Spinbox(window, values=(3,8,11), width=5)
 spin.grid(column=0, row=0)
 window.mainloop()
@@ -505,7 +505,7 @@ bar = Progressbar(window, length=200)
 设置一下进度条的值：
 
 ```Python
-bar[&#39;value&#39;] = 70
+bar['value'] = 70
 ```
 
 改变进度条的颜色可以按如下步骤进行：
@@ -515,13 +515,13 @@ from tkinter import *
 from tkinter.ttk import Progressbar
 from tkinter import ttk
 window = Tk()
-window.title(&#34;First Window&#34;)
-window.geometry(&#39;350x200&#39;)
+window.title("First Window")
+window.geometry('350x200')
 style = ttk.Style()
-style.theme_use(&#39;default&#39;)
-style.configure(&#34;black.Horizontal.TProgressbar&#34;, background=&#39;black&#39;)
-bar = Progressbar(window, length=200, style=&#39;black.Horizontal.TProgressbar&#39;)
-bar[&#39;value&#39;] = 70
+style.theme_use('default')
+style.configure("black.Horizontal.TProgressbar", background='black')
+bar = Progressbar(window, length=200, style='black.Horizontal.TProgressbar')
+bar['value'] = 70
 bar.grid(column=0, row=0)
 window.mainloop()
 ```
@@ -548,7 +548,7 @@ files = filedialog.askopenfilenames()
 用`filetypes`参数指定文件对话框的文件类型，只需在元组中指定扩展名即可。
 
 ```Python
-file = filedialog.askopenfilename(filetypes = ((&#34;Text files&#34;,&#34;*.txt&#34;),(&#34;all files&#34;,&#34;*.*&#34;)))
+file = filedialog.askopenfilename(filetypes = (("Text files","*.txt"),("all files","*.*")))
 ```
 
 `askdirectory`函数可以让我们请求目录：
@@ -565,11 +565,11 @@ from tkinter import filedialog
 import os
 
 window = Tk()
-window.title(&#34;First Window&#34;)
-window.geometry(&#39;350x200&#39;)
+window.title("First Window")
+window.geometry('350x200')
 def clicked():
     file = filedialog.askopenfilenames(initialdir=os.path.dirname(__file__))
-btn = Button(window, text=&#34;Click Me&#34;, command=clicked)
+btn = Button(window, text="Click Me", command=clicked)
 btn.grid(column=0, row=0)
 window.mainloop()
 ```

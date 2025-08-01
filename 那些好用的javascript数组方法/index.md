@@ -3,12 +3,12 @@
 
 在用 JavaScript 编程时，我们会经常用到数组对象，本文我们就来盘点一下那些好用的数组方法吧！😁
 
-&lt;!--more--&gt;
+<!--more-->
 
 为了方便演示，我们先创建两个数组：
 
 ```JavaScript
-const a = [&#39;JavaScript&#39;, &#39;Php&#39;, &#39;Python&#39;, &#39;Ruby&#39;, &#39;C&#43;&#43;&#39;, &#39;Node.js&#39;, &#39;Java&#39;, &#39;C&#43;&#43;&#39;];
+const a = ['JavaScript', 'Php', 'Python', 'Ruby', 'C++', 'Node.js', 'Java', 'C++'];
 
 const b = [1, 3, 8, 16, 32, 48, 5];
 ```
@@ -19,8 +19,8 @@ const b = [1, 3, 8, 16, 32, 48, 5];
 
 ```JavaScript
 let result = true;
-for (let i = 0; i &lt; a.length; i&#43;&#43;&gt;){
-    if (a[i].length &lt;= 4){
+for (let i = 0; i < a.length; i++>){
+    if (a[i].length <= 4){
         result = false;
         break
     }
@@ -35,7 +35,7 @@ console.log(result);
 但用`for`循环的方式多少显得有些麻烦，我们可以更加简洁地得到结果，那就是使用`every()`方法。
 
 ```JavaScript
-a.every(word =&gt; word.length &gt; 4);
+a.every(word => word.length > 4);
 ```
 
 ![](/images/202402/4/2.png)
@@ -55,8 +55,8 @@ a.every(word =&gt; word.length &gt; 4);
 ```JavaScript
 let result = false;
 
-for (let i = 0; i &lt; b.length; i&#43;&#43;){
-    if (b[i] &gt; 10){
+for (let i = 0; i < b.length; i++){
+    if (b[i] > 10){
         result = true;
         break;
     }
@@ -68,7 +68,7 @@ console.log(result);
 我们还可以用`some()`方法，
 
 ```JavaScript
-b.some(elem =&gt; elem &gt; 10);
+b.some(elem => elem > 10);
 ```
 
 ![](/images/202402/4/4.png)
@@ -83,8 +83,8 @@ b.some(elem =&gt; elem &gt; 10);
 
 ```JavaScript
 let words = [];
-for (let i = 0; i &lt; a.length; i&#43;&#43;){
-    if (a[i].length &gt; 4){
+for (let i = 0; i < a.length; i++){
+    if (a[i].length > 4){
         words.push(a[i]);
     }
 }
@@ -96,7 +96,7 @@ console.log(words);
 但我们还是推荐更加简短的`filter()`方法，
 
 ```JavaScript
-a.filter(word =&gt; word.length &gt; 4);
+a.filter(word => word.length > 4);
 ```
 
 结果如下：
@@ -108,7 +108,7 @@ a.filter(word =&gt; word.length &gt; 4);
 接下来，我们来做另外一件事，那就是给数组`a`中的每个元素后追加一个字符串“ is awesome!”，我们可以怎么做呢？——用`map()`方法。
 
 ```JavaScript
-a.map(word =&gt; word &#43; &#34; is awesome!&#34;);
+a.map(word => word + " is awesome!");
 ```
 
 ![](/images/202402/4/7.png)
@@ -120,7 +120,7 @@ a.map(word =&gt; word &#43; &#34; is awesome!&#34;);
 首先我们可以用`filter()`方法进行筛选，然后用`map()`方法进行追加，最后用`forEach()`方法进行迭代打印输出。
 
 ```JavaScript
-a.filter(word =&gt; word.length &gt; 4).map(word =&gt; word &#43; &#34; is awesome!&#34;).forEach(word =&gt; console.log(word));
+a.filter(word => word.length > 4).map(word => word + " is awesome!").forEach(word => console.log(word));
 ```
 
 ![](/images/202402/4/8.png)
@@ -148,7 +148,7 @@ function reducer(accumulator, currentValue, currentIndex, array){}
 回到给数组`b`进行求和的问题，代码如下：
 
 ```JavaScript
-b.reduce((accu, curr) =&gt; accu &#43; curr);
+b.reduce((accu, curr) => accu + curr);
 ```
 
 ![](/images/202402/4/9.png)
@@ -160,13 +160,13 @@ b.reduce((accu, curr) =&gt; accu &#43; curr);
 当然，我们可以用之前学到过的`some()`方法，
 
 ```JavaScript
-a.some(word =&gt; word === &#39;Julia&#39;);
+a.some(word => word === 'Julia');
 ```
 
 但还是推荐使用`includes()`方法：
 
 ```JavaScript
-a.includes(&#39;Julia&#39;);
+a.includes('Julia');
 ```
 
 ![](/images/202402/4/10.png)
@@ -178,7 +178,7 @@ a.includes(&#39;Julia&#39;);
 `filter()`可以帮我们找到数组`b`中所有大于 8 的元素，但有时候我们要的不是所有，而是第一个。此时我们可以用`find()`方法。
 
 ```JavaScript
-b.find(elem =&gt; elem &gt; 8);
+b.find(elem => elem > 8);
 ```
 
 ![](/images/202402/4/11.png)
@@ -188,7 +188,7 @@ b.find(elem =&gt; elem &gt; 8);
 如果你对第一个元素（详见`find()`方法）不感兴趣，而是迫切想知道满足某条件的第一个元素的下标，那么可以用`findIndex()`方法。
 
 ```JavaScript
-b.findIndex(elem =&gt; elem &gt; 8);
+b.findIndex(elem => elem > 8);
 ```
 
 ![](/images/202402/4/12.png)

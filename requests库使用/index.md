@@ -5,7 +5,7 @@
 
 我们可以使用 Python 内置的 urllib 包来请求网络资源。它用起来比较麻烦，而且缺少很多实用的高级功能。本文我们将会介绍一个更加方便的 Python 第三方库——Requests 的使用。
 
-&lt;!--more--&gt;
+<!--more-->
 
 ## 安装 Requests
 
@@ -28,7 +28,7 @@ import requests
 然后获取某个网页。我们来获取 Github 的公共时间线：
 
 ```Python
-r = requests.get(&#39;https://api.github.com/events&#39;)
+r = requests.get('https://api.github.com/events')
 ```
 
 现在，有了一个名为`r`的`Response`的对象。我们可以从这个对象中获取所有我们想要的信息。
@@ -40,8 +40,8 @@ r = requests.get(&#39;https://api.github.com/events&#39;)
 ```Python
 import requests
 
-payload = {&#39;name&#39;:&#39;anthony&#39;, &#39;cat&#39;:&#39;ruby&#39;}
-r = requests.get(&#39;http://httpbin.org/get&#39;, params=payload)
+payload = {'name':'anthony', 'cat':'ruby'}
+r = requests.get('http://httpbin.org/get', params=payload)
 ```
 
 打印输出该 URL，能看到 URL 已被正确编码：
@@ -49,7 +49,7 @@ r = requests.get(&#39;http://httpbin.org/get&#39;, params=payload)
 ```Python
 print(r.url)
 
-# http://httpbin.org/get?name=anthony&amp;cat=ruby
+# http://httpbin.org/get?name=anthony&cat=ruby
 ```
 
 ## 响应内容
@@ -59,7 +59,7 @@ print(r.url)
 ```Python
 import requests
 
-r = requests.get(&#34;http://httpbin.org/get&#34;)
+r = requests.get("http://httpbin.org/get")
 print(r.text)
 ```
 
@@ -74,9 +74,9 @@ print(r.text)
 ```Python
 import requests
 
-r = requests.get(&#34;http://httpbin.org/get&#34;)
+r = requests.get("http://httpbin.org/get")
 print(r.encoding)
-r.encoding = &#39;utf-8&#39;
+r.encoding = 'utf-8'
 print(r.encoding)
 ```
 
@@ -93,7 +93,7 @@ import requests
 from PIL import Image
 from io import BytesIO
 
-r = requests.get(&#34;https://github.com/fluidicon.png&#34;)
+r = requests.get("https://github.com/fluidicon.png")
 im = Image.open(BytesIO(r.content))
 im.show()
 ```
@@ -108,8 +108,8 @@ im.show()
 import requests
 from pprint import pprint
 
-payload = {&#39;name&#39;:&#34;anthony&#34;, &#39;cat&#39;:&#39;ruby&#39;}
-r = requests.get(&#34;http://httpbin.org/get&#34;, params=payload)
+payload = {'name':"anthony", 'cat':'ruby'}
+r = requests.get("http://httpbin.org/get", params=payload)
 pprint(r.json())
 ```
 
@@ -123,8 +123,8 @@ pprint(r.json())
 import requests
 from pprint import pprint
 
-headers = {&#39;User-Agent&#39;: &#39;anthony-agent&#39;}
-r = requests.get(&#34;http://httpbin.org/get&#34;, headers=headers)
+headers = {'User-Agent': 'anthony-agent'}
+r = requests.get("http://httpbin.org/get", headers=headers)
 pprint(r.json())
 ```
 
@@ -139,8 +139,8 @@ pprint(r.json())
 ```Python
 import requests
 
-payload = {&#34;name&#34;:&#34;anthony&#34;, &#34;actor&#34;:&#34;peter&#34;}
-r = requests.post(&#34;http://httpbin.org/post&#34;, data=payload)
+payload = {"name":"anthony", "actor":"peter"}
+r = requests.post("http://httpbin.org/post", data=payload)
 print(r.text)
 ```
 
@@ -151,8 +151,8 @@ print(r.text)
 ```Python
 import requests
 
-payload = [(&#34;name&#34;,&#34;anthony&#34;), (&#34;actor&#34;,&#34;peter&#34;),(&#34;actor&#34;,&#39;marry&#39;)]
-r = requests.post(&#34;http://httpbin.org/post&#34;, data=payload)
+payload = [("name","anthony"), ("actor","peter"),("actor",'marry')]
+r = requests.post("http://httpbin.org/post", data=payload)
 print(r.text)
 ```
 
@@ -165,7 +165,7 @@ print(r.text)
 ```Python
 import requests
 
-r = requests.get(&#34;http://httpbin.org/get&#34;)
+r = requests.get("http://httpbin.org/get")
 print(r.status_code)
 
 # 200
@@ -184,7 +184,7 @@ r.status_code == requests.codes.ok
 ```bash
 In [1]: import requests
 
-In [2]: bad_r = requests.get(&#39;http://httpbin.org/status/404&#39;)
+In [2]: bad_r = requests.get('http://httpbin.org/status/404')
 
 In [3]: bad_r.status_code
 Out[3]: 404
@@ -192,13 +192,13 @@ Out[3]: 404
 In [4]: bad_r.raise_for_status()
 ---------------------------------------------------------------------------
 HTTPError                                 Traceback (most recent call last)
-&lt;ipython-input-4-cdf6910f7d4c&gt; in &lt;module&gt;()
-----&gt; 1 bad_r.raise_for_status()
+<ipython-input-4-cdf6910f7d4c> in <module>()
+----> 1 bad_r.raise_for_status()
 
 c:\python\lib\site-packages\requests\models.py in raise_for_status(self)
     927
     928         if http_error_msg:
---&gt; 929             raise HTTPError(http_error_msg, response=self)
+--> 929             raise HTTPError(http_error_msg, response=self)
     930
     931     def close(self):
 
@@ -219,7 +219,7 @@ In [6]: r.raise_for_status()
 
 ```bash
 In [7]: r.headers
-Out[7]: {&#39;Access-Control-Allow-Credentials&#39;: &#39;true&#39;, &#39;Access-Control-Allow-Origin&#39;: &#39;*&#39;, &#39;Content-Encoding&#39;: &#39;gzip&#39;, &#39;Content-Type&#39;: &#39;application/json&#39;, &#39;Date&#39;: &#39;Thu, 03 Oct 2019 07:11:16 GMT&#39;, &#39;Referrer-Policy&#39;: &#39;no-referrer-when-downgrade&#39;, &#39;Server&#39;: &#39;nginx&#39;, &#39;X-Content-Type-Options&#39;: &#39;nosniff&#39;, &#39;X-Frame-Options&#39;: &#39;DENY&#39;, &#39;X-XSS-Protection&#39;: &#39;1; mode=block&#39;, &#39;Content-Length&#39;: &#39;184&#39;, &#39;Connection&#39;: &#39;keep-alive&#39;}
+Out[7]: {'Access-Control-Allow-Credentials': 'true', 'Access-Control-Allow-Origin': '*', 'Content-Encoding': 'gzip', 'Content-Type': 'application/json', 'Date': 'Thu, 03 Oct 2019 07:11:16 GMT', 'Referrer-Policy': 'no-referrer-when-downgrade', 'Server': 'nginx', 'X-Content-Type-Options': 'nosniff', 'X-Frame-Options': 'DENY', 'X-XSS-Protection': '1; mode=block', 'Content-Length': '184', 'Connection': 'keep-alive'}
 ```
 
 ## Cookie
@@ -227,26 +227,26 @@ Out[7]: {&#39;Access-Control-Allow-Credentials&#39;: &#39;true&#39;, &#39;Access
 如果某个响应中包含一些 cookie，可以快速访问它们：
 
 ```bash
-In [19]: r = requests.get(&#39;https://www.baidu.com&#39;)
+In [19]: r = requests.get('https://www.baidu.com')
 
 In [20]: r.cookies
-Out[20]: &lt;RequestsCookieJar[Cookie(version=0, name=&#39;BDORZ&#39;, value=&#39;27315&#39;, port=None, port_specified=False, domain=&#39;.baidu.com&#39;, domain_specified=True, domain_initial_dot=True, path=&#39;/&#39;, path_specified=True, secure=False, expires=1570173564, discard=False, comment=None, comment_url=None, rest={}, rfc2109=False)]&gt;
+Out[20]: <RequestsCookieJar[Cookie(version=0, name='BDORZ', value='27315', port=None, port_specified=False, domain='.baidu.com', domain_specified=True, domain_initial_dot=True, path='/', path_specified=True, secure=False, expires=1570173564, discard=False, comment=None, comment_url=None, rest={}, rfc2109=False)]>
 
-In [21]: r.cookies[&#39;BDORZ&#39;]
-Out[21]: &#39;27315&#39;
+In [21]: r.cookies['BDORZ']
+Out[21]: '27315'
 ```
 
 要想发送 cookies 到服务器，可以使用`cookies`参数：
 
 ```bash
-In [27]: url = &#39;http://httpbin.org/cookies&#39;
+In [27]: url = 'http://httpbin.org/cookies'
 
-In [28]: cookies = dict(cookies_are=&#34;working&#34;)
+In [28]: cookies = dict(cookies_are="working")
 
 In [29]: r = requests.get(url, cookies=cookies)
 
 In [30]: r.json()
-Out[30]: {&#39;cookies&#39;: {&#39;cookies_are&#39;: &#39;working&#39;}}
+Out[30]: {'cookies': {'cookies_are': 'working'}}
 ```
 
 ## 超时
@@ -254,10 +254,10 @@ Out[30]: {&#39;cookies&#39;: {&#39;cookies_are&#39;: &#39;working&#39;}}
 可以告诉`Requests`在经过以`timeout`参数设定的秒数时间之后停止等待响应。
 
 ```bash
-&gt;&gt;&gt; requests.get(&#39;http://github.com&#39;, timeout=0.001)
+>>> requests.get('http://github.com', timeout=0.001)
 Traceback (most recent call last):
-  File &#34;&lt;stdin&gt;&#34;, line 1, in &lt;module&gt;
-requests.exceptions.Timeout: HTTPConnectionPool(host=&#39;github.com&#39;, port=80): Request timed out. (timeout=0.001)
+  File "<stdin>", line 1, in <module>
+requests.exceptions.Timeout: HTTPConnectionPool(host='github.com', port=80): Request timed out. (timeout=0.001)
 ```
 
 ## 错误与异常
@@ -280,10 +280,10 @@ requests.exceptions.Timeout: HTTPConnectionPool(host=&#39;github.com&#39;, port=
 import requests
 
 proxies = {
-    &#39;https&#39;: &#39;https://127.0.0.1:1080&#39;
+    'https': 'https://127.0.0.1:1080'
 }
 
-r = requests.get(&#39;https://www.google.com&#39;, proxies=proxies)
+r = requests.get('https://www.google.com', proxies=proxies)
 print(r.status_code)
 
 # 200
@@ -292,12 +292,12 @@ print(r.status_code)
 也可以通过环境变量`HTTP_PROXY`和`HTTPS_PROXY`来配置代理。
 
 ```bash
-$ export HTTP_PROXY=&#34;http://10.10.1.10:3128&#34;
-$ export HTTPS_PROXY=&#34;http://10.10.1.10:1080&#34;
+$ export HTTP_PROXY="http://10.10.1.10:3128"
+$ export HTTPS_PROXY="http://10.10.1.10:1080"
 
 $ python
-&gt;&gt;&gt; import requests
-&gt;&gt;&gt; requests.get(&#34;http://example.org&#34;)
+>>> import requests
+>>> requests.get("http://example.org")
 ```
 
 ## 参考

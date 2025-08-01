@@ -9,7 +9,7 @@
 
 - [2 Minute Papers](https://www.youtube.com/user/keeroyz) ，这是一个 YouTube 的频道，其会给出一些非常不错的和计算机相关的论文介绍，让你了解目前最有意思的一些科学突破，每次两分钟左右。
 - [Best Paper Awards in Computer Science](http://jeffhuang.com/best_paper_awards.html) ，从 1996 年以来，获奖的计算机科学方面的论文收集。
-- [Google Scholar](https://scholar.google.com/citations?view_op=top_venues&amp;hl=en&amp;vq=eng) ，Google 学术搜索（英语：Google Scholar）是一个可以免费搜索学术文章的网络搜索引擎，由计算机专家阿努拉格·阿查里雅（Anurag Acharya）开发。2004 年 11 月，Google 第一次发布了 Google 学术搜索的试用版。该项索引包括了世界上绝大部分出版的学术期刊。
+- [Google Scholar](https://scholar.google.com/citations?view_op=top_venues&hl=en&vq=eng) ，Google 学术搜索（英语：Google Scholar）是一个可以免费搜索学术文章的网络搜索引擎，由计算机专家阿努拉格·阿查里雅（Anurag Acharya）开发。2004 年 11 月，Google 第一次发布了 Google 学术搜索的试用版。该项索引包括了世界上绝大部分出版的学术期刊。
 - [Facebook](https://research.fb.com/publications/) ，Facebook 公司的论文。
 - [Research at Google](https://research.google.com/pubs/papers.html) ，Google 发布一些论文。
 - [Microsoft Research](http://research.microsoft.com/apps/catalog/default.aspx?t=publications) ，微软发布的论文。
@@ -26,9 +26,9 @@
 - [Lobste.rs tagged as PDF](https://lobste.rs/t/pdf) ，Lobsters 是一个聚焦于技术的社区，主要是链接聚合和对话题进行讨论。其中的 PDF 分类可以认为也是一个论文的集散地。
 - [Papers We Love](https://github.com/papers-we-love/papers-we-love) ，GitHub 上的一个近 3 万颗星的计算机科学方面的论文社区。
 
-{{&lt; admonition type=note title=&#34;注意&#34; open=true &gt;}}
+{{< admonition type=note title="注意" open=true >}}
 以上内容摘抄自[左耳朵耗子](https://coolshell.cn/)《左耳听风》专栏“技术资源集散地”一文
-{{&lt; /admonition &gt;}}
+{{< /admonition >}}
 
 ## ✨ 阅读清单
 
@@ -52,6 +52,6 @@
 
 ---
 
-> 作者:   
+> 作者: <no value>  
 > URL: http://localhost:1313/paper/  
 

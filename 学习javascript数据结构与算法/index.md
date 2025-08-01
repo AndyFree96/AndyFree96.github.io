@@ -3,7 +3,7 @@
 
 在计算机科学领域，数据结构和算法是开发高效程序的核心工具。无论你是初学者还是经验丰富的开发者，掌握这些概念都能帮助你构建更快、更稳定的应用程序。我们日常使用的软件，从搜索引擎到社交媒体，再到购物网站，无不依赖数据结构和算法的强大支持。一个好的数据结构可以优化存储和访问数据的方式，而高效的算法则可以显著提升任务的执行速度。
 
-&lt;!--more--&gt;
+<!--more-->
 
 ## 数组
 
@@ -17,13 +17,13 @@
 let daysOfWeek = new Array(); // {1}
 daysOfWeek = new Array(7); // {2}
 daysOfWeek = new Array(
-  &#39;Sunday&#39;,
-  &#39;Monday&#39;,
-  &#39;Tuesday&#39;,
-  &#39;Wednesday&#39;,
-  &#39;Thursday&#39;,
-  &#39;Friday&#39;,
-  &#39;Saturday&#39;
+  'Sunday',
+  'Monday',
+  'Tuesday',
+  'Wednesday',
+  'Thursday',
+  'Friday',
+  'Saturday'
 ); // {3}
 ```
 
@@ -35,13 +35,13 @@ daysOfWeek = new Array(
 let daysOfWeek = [];
 
 daysOfWeek = [
-  &#39;Sunday&#39;,
-  &#39;Monday&#39;,
-  &#39;Tuesday&#39;,
-  &#39;Wednesday&#39;,
-  &#39;Thursday&#39;,
-  &#39;Friday&#39;,
-  &#39;Saturday&#39;,
+  'Sunday',
+  'Monday',
+  'Tuesday',
+  'Wednesday',
+  'Thursday',
+  'Friday',
+  'Saturday',
 ];
 ```
 
@@ -54,7 +54,7 @@ daysOfWeek = [
 要访问数组中特定位置的元素，可以用中括号传递数值位置，得到想知道的值或者赋新的值。若想输出数组`daysOfWeek`中所有的元素，可以通过循环迭代数组、打印元素，如下所示：
 
 ```javascript
-for (let i = 0; i &lt; daysOfWeek.length; i&#43;&#43;) {
+for (let i = 0; i < daysOfWeek.length; i++) {
   console.log(daysOfWeek[i]);
 }
 ```
@@ -75,10 +75,10 @@ let numbers = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
 numbers[numbers.length] = 10;
 ```
 
-当然，也可以赋给下标为`numbers.length&#43;2`的元素，那么下标为`numbers.length`和`numbers.length&#43;1`就会为空：
+当然，也可以赋给下标为`numbers.length+2`的元素，那么下标为`numbers.length`和`numbers.length+1`就会为空：
 
 ```javascript
-numbers[numbers.length &#43; 2] = 10;
+numbers[numbers.length + 2] = 10;
 ```
 
 ![](/images/202312/15/2.png)
@@ -98,7 +98,7 @@ numbers.push(12, 13);
 
 ```javascript
 Array.prototype.insertFirstPosition = function (value) {
-  for (let i = this.length; i &gt;= 0; i--) {
+  for (let i = this.length; i >= 0; i--) {
     this[i] = this[i - 1];
   }
   this[0] = value;
@@ -171,8 +171,8 @@ JavaScript 中的数组有很多好用的方法，如下表所示：
 
 ```javascript
 let int16 = new Int16Array(16);
-for (let i = 0; i &lt; int16.length; i&#43;&#43;) {
-  int16[i] = i &#43; 1;
+for (let i = 0; i < int16.length; i++) {
+  int16[i] = i + 1;
 }
 ```
 
@@ -248,7 +248,7 @@ class Stack {
 
   push(element) {
     this.items[this.count] = element;
-    this.count&#43;&#43;;
+    this.count++;
   }
 
   size() {
@@ -296,7 +296,7 @@ console.log(Object.keys(stack)); // {2}
 console.log(stack.items); // {3}
 ```
 
-行`{1}`和行`{2}`的输出结果都是`[&#34;count&#34;, &#34;items&#34;]`。这表示`count`和`items`属性是公开的，我们可以像行`{3}`那样直接访问它们，并且可以对这两个属性赋予新的值。`Stack`类基于 ES6（ES2015）语法创建。ES6 类是基于原型的。虽然基于原型的类能节省内存空间并在扩展方面优与基于函数的类，但这种方式不能声明私有属性（变量）或方法。为了让用户只能访问我们在类中暴露的方法，下面来看看其他使用 JavaScript 来实现私有属性的方法。
+行`{1}`和行`{2}`的输出结果都是`["count", "items"]`。这表示`count`和`items`属性是公开的，我们可以像行`{3}`那样直接访问它们，并且可以对这两个属性赋予新的值。`Stack`类基于 ES6（ES2015）语法创建。ES6 类是基于原型的。虽然基于原型的类能节省内存空间并在扩展方面优与基于函数的类，但这种方式不能声明私有属性（变量）或方法。为了让用户只能访问我们在类中暴露的方法，下面来看看其他使用 JavaScript 来实现私有属性的方法。
 
 #### 下划线命名约定
 
@@ -318,7 +318,7 @@ class Stack {
 ES6 新增了一种叫做`Symbol`的基本类型，它是不可变的，可以用作对象的属性。
 
 ```javascript
-const _items = Symbol(&#39;stackItems&#39;);
+const _items = Symbol('stackItems');
 
 class Stack {
   constructor() {
@@ -374,14 +374,14 @@ class Stack {
 为了避免污染全局命名空间，我们可以参考[2](#refer-anchor-2)将整个实现封装在一个闭包中。
 
 ```javascript
-let Stack = (() =&gt; {
+let Stack = (() => {
   let map = new WeakMap();
   let _items = [];
   class Stack {
     constructor(...items) {
-      // let&#39;s store our items array inside the weakmap
+      // let's store our items array inside the weakmap
       map.set(this, []);
-      // let&#39;s get the items array from map, and store it in _items for easy access elsewhere
+      // let's get the items array from map, and store it in _items for easy access elsewhere
       _items = map.get(this);
 
       //if constructor receives any items, it should be stacked up
@@ -390,7 +390,7 @@ let Stack = (() =&gt; {
 
     push(...items) {
       //push item to the stack
-      items.forEach((item) =&gt; _items.push(item));
+      items.forEach((item) => _items.push(item));
       return _items;
     }
 
@@ -400,7 +400,7 @@ let Stack = (() =&gt; {
     }
 
     peek() {
-      // see what&#39;s the last item in stack
+      // see what's the last item in stack
       return _items[_items.length - 1];
     }
 
@@ -464,7 +464,7 @@ class Queue {
 
   enqueue(element) {
     this.items[this.count] = element;
-    this.count&#43;&#43;;
+    this.count++;
   }
 
   dequeue() {
@@ -473,7 +473,7 @@ class Queue {
     }
     const result = this.items[this.lowestCount];
     delete this.items[this.lowestCount];
-    this.lowestCount&#43;&#43;;
+    this.lowestCount++;
     return result;
   }
 
@@ -500,11 +500,11 @@ class Queue {
 
   toString() {
     if (this.isEmpty()) {
-      return &#39;&#39;;
+      return '';
     }
 
     let objString = `${this.items[this.lowestCount]}`;
-    for (let i = this.lowestCount &#43; 1; i &lt; this.count; i&#43;&#43;) {
+    for (let i = this.lowestCount + 1; i < this.count; i++) {
       objString = `${objString},${this.items[i]}`;
     }
     return objString;
@@ -524,8 +524,8 @@ console.log(queue.isEmpty()); // true
 添加一些元素：
 
 ```javascript
-queue.enqueue(&#39;ABC&#39;);
-queue.enqueue(&#39;CDE&#39;);
+queue.enqueue('ABC');
+queue.enqueue('CDE');
 console.log(queue.toString()); // ABC,CDE
 ```
 
@@ -576,14 +576,14 @@ class Deque {
   addFront(element) {
     if (this.isEmpty()) {
       this.addBack(element);
-    } else if (this.lowestCount &gt; 0) {
+    } else if (this.lowestCount > 0) {
       this.lowestCount--;
       this.items[this.lowestCount] = element;
     } else {
-      for (let i = this.count; i &gt; 0; i--) {
+      for (let i = this.count; i > 0; i--) {
         this.items[i] = this.items[i - 1];
       }
-      this.count&#43;&#43;;
+      this.count++;
       this.lowestCount = 0;
       this.items[0] = element;
     }
@@ -591,7 +591,7 @@ class Deque {
 
   addBack(element) {
     this.items[this.count] = element;
-    this.count&#43;&#43;;
+    this.count++;
   }
 
   removeFront() {
@@ -600,7 +600,7 @@ class Deque {
     }
     const result = this.items[this.lowestCount];
     delete this.items[this.lowestCount];
-    this.lowestCount&#43;&#43;;
+    this.lowestCount++;
     return result;
   }
 
@@ -644,10 +644,10 @@ class Deque {
 
   toString() {
     if (this.isEmpty()) {
-      return &#39;&#39;;
+      return '';
     }
     let objString = `${this.items[this.lowestCount]}`;
-    for (let i = this.lowestCount &#43; 1; i &lt; this.count; i&#43;&#43;) {
+    for (let i = this.lowestCount + 1; i < this.count; i++) {
       objString = `${objString},${this.items[i]}`;
     }
     return objString;
@@ -676,8 +676,8 @@ function hotPotato(elementsList, num) {
     queue.enqueue(elem);
   }
 
-  while (queue.size() &gt; 1) {
-    for (let i = 0; i &lt; num; i&#43;&#43;) {
+  while (queue.size() > 1) {
+    for (let i = 0; i < num; i++) {
       queue.enqueue(queue.dequeue());
     }
     elimitatedList.push(queue.dequeue());
@@ -689,9 +689,9 @@ function hotPotato(elementsList, num) {
   };
 }
 
-const names = [&#39;John&#39;, &#39;Jack&#39;, &#39;Camila&#39;, &#39;Ingrid&#39;, &#39;Carl&#39;];
+const names = ['John', 'Jack', 'Camila', 'Ingrid', 'Carl'];
 const result = hotPotato(names, 7);
-result.elimitated.forEach((name) =&gt;
+result.elimitated.forEach((name) =>
   console.log(`${name}在击鼓传花游戏中被淘汰`)
 );
 console.log(`胜利者: ${result.winner}`);
@@ -708,21 +708,21 @@ function palindromeChecker(aString) {
   if (
     aString === undefined ||
     aString === null ||
-    (aString !== null &amp;&amp; aString.length === 0)
+    (aString !== null && aString.length === 0)
   ) {
     return false;
   }
 
   const deque = new Deque();
-  const lowerString = aString.toLocaleLowerCase().split(&#39; &#39;).join(&#39;&#39;);
+  const lowerString = aString.toLocaleLowerCase().split(' ').join('');
   let isEqual = true;
   let firstChar, lastChar;
 
-  for (let i = 0; i &lt; lowerString.length; i&#43;&#43;) {
+  for (let i = 0; i < lowerString.length; i++) {
     deque.addBack(lowerString.charAt(i));
   }
 
-  while (deque.size() &gt; 1 &amp;&amp; isEqual) {
+  while (deque.size() > 1 && isEqual) {
     firstChar = deque.removeFront();
     lastChar = deque.removeBack();
     if (firstChar !== lastChar) {
@@ -733,9 +733,9 @@ function palindromeChecker(aString) {
   return isEqual;
 }
 
-console.log(palindromeChecker(&#39;a&#39;));
-console.log(palindromeChecker(&#39;abc cbd&#39;));
-console.log(palindromeChecker(&#39;abc cba&#39;));
+console.log(palindromeChecker('a'));
+console.log(palindromeChecker('abc cbd'));
+console.log(palindromeChecker('abc cba'));
 ```
 
 ![](/images/202312/20/2.png)
@@ -759,8 +759,8 @@ console.log(palindromeChecker(&#39;abc cba&#39;));
 现在开始实现，以下为`LinkedList`类的“骨架”。
 
 ```javascript
-import { defaultEquals } from &#39;../util.js&#39;;
-import { Node } from &#39;./models/linked-list-models.js&#39;;
+import { defaultEquals } from '../util.js';
+import { Node } from './models/linked-list-models.js';
 
 export default class LinkedList {
   constructor(equalsFn = defaultEquals) {
@@ -805,8 +805,8 @@ export class Node {
 | `toString()`                | 返回表示整个链表的字符串                                               |
 
 ```javascript
-import { defaultEquals } from &#39;../util.js&#39;;
-import { Node } from &#39;./models/linked-list-models.js&#39;;
+import { defaultEquals } from '../util.js';
+import { Node } from './models/linked-list-models.js';
 
 export default class LinkedList {
   constructor(equalsFn = defaultEquals) {
@@ -828,13 +828,13 @@ export default class LinkedList {
       // 将其next赋为新元素，建立链接
       current.next = node;
     }
-    this.count&#43;&#43;;
+    this.count++;
   }
 
   getElementAt(index) {
-    if (index &gt;= 0 &amp;&amp; index &lt; this.count) {
+    if (index >= 0 && index < this.count) {
       let node = this.head;
-      for (let i = 0; i &lt; index &amp;&amp; node !== null; i&#43;&#43;) {
+      for (let i = 0; i < index && node !== null; i++) {
         node = node.next;
       }
       return node;
@@ -844,7 +844,7 @@ export default class LinkedList {
 
   removeAt(index) {
     // 检查越界值
-    if (index &gt;= 0 &amp;&amp; index &lt; this.count) {
+    if (index >= 0 && index < this.count) {
       let current = this.head;
 
       // 移除第一项
@@ -862,7 +862,7 @@ export default class LinkedList {
   }
 
   insert(element, index) {
-    if (index &gt;= 0 &amp;&amp; index &lt;= this.count) {
+    if (index >= 0 && index <= this.count) {
       const node = new Node(element);
       if (index === 0) {
         const current = this.head;
@@ -874,7 +874,7 @@ export default class LinkedList {
         node.next = current;
         previous.next = node;
       }
-      this.count&#43;&#43;; // 更新链表长度
+      this.count++; // 更新链表长度
       return true;
     }
     return false;
@@ -882,7 +882,7 @@ export default class LinkedList {
 
   indexOf(element) {
     let current = this.head;
-    for (let i = 0; i &lt; this.count &amp;&amp; current !== null; i&#43;&#43;) {
+    for (let i = 0; i < this.count && current !== null; i++) {
       if (this.equalsFn(element, current.element)) {
         return i;
       }
@@ -910,11 +910,11 @@ export default class LinkedList {
 
   toString() {
     if (this.head === null) {
-      return &#39;&#39;;
+      return '';
     }
     let objString = `${this.head.element}`;
     let current = this.head.next;
-    for (let i = 1; i &lt; this.size() &amp;&amp; current !== null; i&#43;&#43;) {
+    for (let i = 1; i < this.size() && current !== null; i++) {
       objString = `${objString},${current.element}`;
       current = current.next;
     }
@@ -932,9 +932,9 @@ export default class LinkedList {
 先从实现`DoublyLinkedList`类开始。
 
 ```javascript
-import { defaultEquals } from &#39;../util.js&#39;;
-import { Node } from &#39;./models/linked-list-models.js&#39;;
-import LinkedList from &#39;./linked-list.js&#39;;
+import { defaultEquals } from '../util.js';
+import { Node } from './models/linked-list-models.js';
+import LinkedList from './linked-list.js';
 
 class DoublyNode extends Node {
   constructor(element, next, prev) {
@@ -954,9 +954,9 @@ class DoublyLinkedList extends LinkedList {
 由于双向链表中的节点中包含链向前一个元素的指针，以及表尾指针，我们将`insert`方法和`removeAt`方法改为如下形式：
 
 ```javascript
-import { defaultEquals } from &#39;../util.js&#39;;
-import { Node } from &#39;./models/linked-list-models.js&#39;;
-import LinkedList from &#39;./linked-list.js&#39;;
+import { defaultEquals } from '../util.js';
+import { Node } from './models/linked-list-models.js';
+import LinkedList from './linked-list.js';
 
 class DoublyNode extends Node {
   constructor(element, next, prev) {
@@ -972,7 +972,7 @@ class DoublyLinkedList extends LinkedList {
   }
 
   insert(element, index) {
-    if (index &gt;= 0 &amp;&amp; index &lt; this.count) {
+    if (index >= 0 && index < this.count) {
       const node = new DoublyNode(element);
       let current = this.head;
       if (index === 0) {
@@ -998,14 +998,14 @@ class DoublyLinkedList extends LinkedList {
         current.prev = node;
         node.prev = previous;
       }
-      this.count&#43;&#43;;
+      this.count++;
       return true;
     }
     return false;
   }
 
   removeAt(index) {
-    if (index &gt;= 0 &amp;&amp; index &lt; this.count) {
+    if (index >= 0 && index < this.count) {
       let current = this.head;
       if (index === 0) {
         this.head = current.next;
@@ -1039,8 +1039,8 @@ class DoublyLinkedList extends LinkedList {
 循环链表可以像链表一样只有单向引用，也可以像双向链表一样有双向引用。循环链表和链表之间唯一的区别在于，最后一个元素指向下一个元素的指针不是`null`，而是指向第一个元素（`head`）。
 
 ```javascript
-import { defaultEquals } from &#39;../util.js&#39;;
-import LinkedList from &#39;./linked-list.js&#39;;
+import { defaultEquals } from '../util.js';
+import LinkedList from './linked-list.js';
 
 class CircularLinkedList extends LinkedList {
   constructor(equalsFn = defaultEquals) {
@@ -1048,7 +1048,7 @@ class CircularLinkedList extends LinkedList {
   }
 
   insert(element, index) {
-    if (index &gt;= 0 &amp;&amp; index &lt;= this.count) {
+    if (index >= 0 && index <= this.count) {
       const node = new Node(element);
       let current = this.head;
       if (index === 0) {
@@ -1066,14 +1066,14 @@ class CircularLinkedList extends LinkedList {
         node.next = previous.next;
         previous.next = node;
       }
-      this.count&#43;&#43;;
+      this.count++;
       return true;
     }
     return false;
   }
 
   removeAt(index) {
-    if (index &gt;= 0 &amp;&amp; index &lt; this.count) {
+    if (index >= 0 && index < this.count) {
       let current = this.head;
       if (index === 0) {
         if (this.size() === 1) {
@@ -1103,8 +1103,8 @@ class CircularLinkedList extends LinkedList {
 有序链表是指保持元素有序的链表结构。除了使用排序算法之外，我们还可以将元素插入到正确的位置来保证链表的有序性。
 
 ```javascript
-import LinkedList from &#39;./linked-list.js&#39;;
-import { defaultEquals } from &#39;../util.js&#39;;
+import LinkedList from './linked-list.js';
+import { defaultEquals } from '../util.js';
 
 const Compare = {
   LESS_THAN: -1,
@@ -1115,7 +1115,7 @@ function defaultCompare(a, b) {
   if (a === b) {
     return 0;
   }
-  return a &lt; b ? Compare.LESS_THAN : Compare.BIGGER_THAN;
+  return a < b ? Compare.LESS_THAN : Compare.BIGGER_THAN;
 }
 
 class SortedLinkedList extends LinkedList {
@@ -1135,7 +1135,7 @@ class SortedLinkedList extends LinkedList {
   getIndexNextSortedElement(element) {
     let current = this.head;
     let i = 0;
-    for (; i &lt; this.size() &amp;&amp; current; i&#43;&#43;) {
+    for (; i < this.size() && current; i++) {
       const comp = this.compareFn(element, current.element);
       if (comp === Compare.LESS_THAN) {
         return i;
@@ -1152,7 +1152,7 @@ class SortedLinkedList extends LinkedList {
 我们可以使用`LinkedList`类及其变种作为内部的数据结构来创建其他数据结构，例如栈、队列和双向队列。本节，我们将学习怎样使用链表创建栈数据结构。
 
 ```javascript
-import LinkedList from &#39;./linked-list.js&#39;;
+import LinkedList from './linked-list.js';
 
 class StackLinkedList {
   constructor() {
@@ -1267,8 +1267,8 @@ class Set {
 ```javascript
 union(otherSet){
     const unionSet = new Set();
-    this.values().forEach(value =&gt; unionSet.add(value));
-    otherSet.values().forEach(value =&gt; unionSet.add(value));
+    this.values().forEach(value => unionSet.add(value));
+    otherSet.values().forEach(value => unionSet.add(value));
     return unionSet;
 }
 ```
@@ -1281,7 +1281,7 @@ union(otherSet){
 intersection(otherSet){
     const intersectionSet = new Set();
 
-    this.values().forEach(value =&gt; {
+    this.values().forEach(value => {
         if (otherSet.has(value)) {
             intersectionSet.add(value);
         }
@@ -1297,7 +1297,7 @@ intersection(otherSet){
 ```javascript
 difference(otherSet){
     const differenceSet = new Set();
-    this.values().forEach(value =&gt; {
+    this.values().forEach(value => {
         if (!otherSet.has(value)){
             differenceSet.add(value);
         }
@@ -1312,12 +1312,12 @@ difference(otherSet){
 
 ```javascript
 isSubsetOf(otherSet){
-    if (this.size() &gt; otherSet.size()){
+    if (this.size() > otherSet.size()){
         return false;
     }
 
     let isSubset = true;
-    this.values().forEach(value =&gt;{
+    this.values().forEach(value =>{
         if (!otherSet.has(value)){
             isSubset = false;
             return false;
@@ -1351,10 +1351,10 @@ setB.add(4);
 我们创建一个名为`union`的函数来返回包含`setA`和`setB`中所有元素的集合。
 
 ```javascript
-const union = (setA, setB) =&gt; {
+const union = (setA, setB) => {
   const unionAB = new Set();
-  setA.forEach((value) =&gt; unionAB.add(value));
-  setB.forEach((value) =&gt; unionAB.add(value));
+  setA.forEach((value) => unionAB.add(value));
+  setB.forEach((value) => unionAB.add(value));
   return unionAB;
 };
 ```
@@ -1364,9 +1364,9 @@ const union = (setA, setB) =&gt; {
 创建一个名为`intersection`的函数来返回`setA`和`setB`的共有元素集合。
 
 ```javascript
-const intersection = (setA, setB) =&gt; {
+const intersection = (setA, setB) => {
   const intersectionAB = new Set();
-  setA.forEach((value) =&gt; {
+  setA.forEach((value) => {
     if (setB.has(value)) {
       intersectionAB.add(value);
     }
@@ -1380,9 +1380,9 @@ const intersection = (setA, setB) =&gt; {
 创建一个名为`difference`的函数进行集合差集运算。
 
 ```javascript
-const difference = (setA, setB) =&gt; {
+const difference = (setA, setB) => {
   const differenceAB = new Set();
-  setA.forEach((value) =&gt; {
+  setA.forEach((value) => {
     if (!setB.has(value)) {
       differenceAB.add(value);
     }
@@ -1412,7 +1412,7 @@ ES6 的`Set`类支持向构造函数传入一个数组来初始化集合，我�
 交集运算如下：
 
 ```javascript
-[...setA].filter((item) =&gt; setB.has(item));
+[...setA].filter((item) => setB.has(item));
 ```
 
 ![](/images/202312/4/2.png)
@@ -1420,7 +1420,7 @@ ES6 的`Set`类支持向构造函数传入一个数组来初始化集合，我�
 最后，差集运算如下：
 
 ```javascript
-[...setA].filter((item) =&gt; !setB.has(item));
+[...setA].filter((item) => !setB.has(item));
 ```
 
 ![](/images/202312/4/3.png)
@@ -1438,7 +1438,7 @@ ES6 的`Set`类支持向构造函数传入一个数组来初始化集合，我�
 与`Set`类类似，ES6 同样包含一个`Map`类的实现，即我们所说的字典。我们将要实现的类将以 ES6 中`Map`类的实现为基础。以下为`Dictionary`类的定义：
 
 ```javascript
-import { defaultToString } from &#39;./util.js&#39;;
+import { defaultToString } from './util.js';
 
 export default class Dictionary {
   constructor(toStrFn = defaultToString) {
@@ -1453,10 +1453,10 @@ export default class Dictionary {
 ```javascript
 export function defaultToString(item) {
   if (item === null) {
-    return &#39;NULL&#39;;
+    return 'NULL';
   } else if (item === undefined) {
-    return &#39;UNDEFINED&#39;;
-  } else if (typeof item === &#39;string&#39; || item instanceof String) {
+    return 'UNDEFINED';
+  } else if (typeof item === 'string' || item instanceof String) {
     return `${item}`;
   }
   return item.toString();
@@ -1482,7 +1482,7 @@ export function defaultToString(item) {
 | `forEach(callbackFn)` | 迭代字典中所有的键值对。`callbakcFn`有两个参数：`key`和`value`。该方法可以在回到函数返回`false`时被中止 |
 
 ```javascript
-import { defaultToString } from &#39;./util.js&#39;;
+import { defaultToString } from './util.js';
 
 class ValuePair {
   constructor(key, value) {
@@ -1506,7 +1506,7 @@ export default class Dictionary {
   }
 
   set(key, value) {
-    if (key != null &amp;&amp; value != null) {
+    if (key != null && value != null) {
       const tableKey = this.toStrFn(key);
       this.table[tableKey] = new ValuePair(key, value);
       return true;
@@ -1532,16 +1532,16 @@ export default class Dictionary {
   }
 
   keys() {
-    return this.keyValues().map((valuePair) =&gt; valuePair.key);
+    return this.keyValues().map((valuePair) => valuePair.key);
   }
 
   values() {
-    return this.keyValues().map((valuePair) =&gt; valuePair.value);
+    return this.keyValues().map((valuePair) => valuePair.value);
   }
 
   forEach(callbackFn) {
     const valuePairs = this.keyValues();
-    for (let i = 0; i &lt; valuePairs.length; i&#43;&#43;) {
+    for (let i = 0; i < valuePairs.length; i++) {
       const result = callbackFn(valuePairs[i].key, valuePairs[i].value);
       if (result === false) {
         break;
@@ -1563,11 +1563,11 @@ export default class Dictionary {
 
   toString() {
     if (this.isEmpty()) {
-      return &#39;&#39;;
+      return '';
     }
     const valuePairs = this.keyValues();
     let objString = `${valuePairs[0].toString()}`;
-    for (let i = 1; i &lt; valuePairs.length; i&#43;&#43;) {
+    for (let i = 1; i < valuePairs.length; i++) {
       objString = `${objString},${valuePairs[i].toString()}`;
     }
     return objString;
@@ -1586,7 +1586,7 @@ export default class Dictionary {
 我们使用一个对象来表示该数据结构，和`Dictionary`类一样。
 
 ```javascript
-import { defaultToString } from &#39;./util.js&#39;;
+import { defaultToString } from './util.js';
 
 class ValuePair {
   constructor(key, value) {
@@ -1606,13 +1606,13 @@ export default class HashTable {
   }
 
   loseloseHashCode(key) {
-    if (typeof key === &#39;number&#39;) {
+    if (typeof key === 'number') {
       return key;
     }
     const tableKey = this.toStrFn(key);
     let hash = 0;
-    for (let i = 0; i &lt; tableKey.length; i&#43;&#43;) {
-      hash &#43;= tableKey.charCodeAt(i);
+    for (let i = 0; i < tableKey.length; i++) {
+      hash += tableKey.charCodeAt(i);
     }
     return hash % 37;
   }
@@ -1622,7 +1622,7 @@ export default class HashTable {
   }
 
   put(key, value) {
-    if (key != null &amp;&amp; value != null) {
+    if (key != null && value != null) {
       const position = this.hashCode(key);
       this.table[position] = new ValuePair(key, value);
       return true;
@@ -1660,8 +1660,8 @@ export default class HashTable {
 对于分离链接和线性探查来说，只需重写三个方法：`put`、`get`和`remove`。`HashTableSeparateChaining`类的定义如下：
 
 ```javascript
-import { defaultToString } from &#39;./util.js&#39;;
-import LinkedList from &#39;./linked-list.js&#39;;
+import { defaultToString } from './util.js';
+import LinkedList from './linked-list.js';
 
 class ValuePair {
   constructor(key, value) {
@@ -1681,13 +1681,13 @@ class HashTableSeparateChaining {
   }
 
   loseloseHashCode(key) {
-    if (typeof key === &#39;number&#39;) {
+    if (typeof key === 'number') {
       return key;
     }
     const tableKey = this.toStrFn(key);
     let hash = 0;
-    for (let i = 0; i &lt; tableKey.length; i&#43;&#43;) {
-      hash &#43;= tableKey.charCodeAt(i);
+    for (let i = 0; i < tableKey.length; i++) {
+      hash += tableKey.charCodeAt(i);
     }
     return hash % 37;
   }
@@ -1697,7 +1697,7 @@ class HashTableSeparateChaining {
   }
 
   put(key, value) {
-    if (key != null &amp;&amp; value != null) {
+    if (key != null && value != null) {
       const position = this.hashCode(key);
       if (this.table[position] == null) {
         this.table[position] = new LinkedList();
@@ -1711,7 +1711,7 @@ class HashTableSeparateChaining {
   get(key) {
     const position = this.hashCode(key);
     const linkedList = this.table[position];
-    if (linkedList != null &amp;&amp; !linkedList.isEmpty()) {
+    if (linkedList != null && !linkedList.isEmpty()) {
       let current = linkedList.getHead();
       while (current != null) {
         if (current.element.key === key) {
@@ -1726,7 +1726,7 @@ class HashTableSeparateChaining {
   remove(key) {
     const position = this.hashCode(key);
     const linkedList = this.table[position];
-    if (linkedList != null &amp;&amp; !linkedList.isEmpty()) {
+    if (linkedList != null && !linkedList.isEmpty()) {
       let current = linkedList.getHead();
       while (current != null) {
         if (current.element.key === key) {
@@ -1748,12 +1748,12 @@ class HashTableSeparateChaining {
 
 #### 线性探查
 
-另一种解决冲突的方法是线性探查，当想向表中某个位置添加一个新元素的时候，如果索引为`position`的位置已经被占据，就尝试`position&#43;1`的位置。如果`position&#43;1`的位置也被占据了，就尝试`position&#43;2`的位置，以此类推，直到在散列表中找到一个空闲位置。下图展现了这个过程：
+另一种解决冲突的方法是线性探查，当想向表中某个位置添加一个新元素的时候，如果索引为`position`的位置已经被占据，就尝试`position+1`的位置。如果`position+1`的位置也被占据了，就尝试`position+2`的位置，以此类推，直到在散列表中找到一个空闲位置。下图展现了这个过程：
 
 ![](/images/202312/6/3.png)
 
 ```javascript
-import { defaultToString } from &#39;./util.js&#39;;
+import { defaultToString } from './util.js';
 
 class ValuePair {
   constructor(key, value) {
@@ -1773,13 +1773,13 @@ export default class HashTableLinearProbing {
   }
 
   loseloseHashCode(key) {
-    if (typeof key === &#39;number&#39;) {
+    if (typeof key === 'number') {
       return key;
     }
     const tableKey = this.toStrFn(key);
     let hash = 0;
-    for (let i = 0; i &lt; tableKey.length; i&#43;&#43;) {
-      hash &#43;= tableKey.charCodeAt(i);
+    for (let i = 0; i < tableKey.length; i++) {
+      hash += tableKey.charCodeAt(i);
     }
     return hash % 37;
   }
@@ -1789,14 +1789,14 @@ export default class HashTableLinearProbing {
   }
 
   put(key, value) {
-    if (key != null &amp;&amp; value != null) {
+    if (key != null && value != null) {
       const position = this.hashCode(key);
       if (this.table[position] == null) {
         this.table[position] = new ValuePair(key, value);
       } else {
-        let index = position &#43; 1;
+        let index = position + 1;
         while (this.table[index] != null) {
-          index&#43;&#43;;
+          index++;
         }
         this.table[index] = new ValuePair(key, value);
       }
@@ -1811,11 +1811,11 @@ export default class HashTableLinearProbing {
       if (this.table[position].key === key) {
         return this.table[position].value;
       }
-      let index = position &#43; 1;
-      while (this.table[index] != null &amp;&amp; this.table[index].key !== key) {
-        index&#43;&#43;;
+      let index = position + 1;
+      while (this.table[index] != null && this.table[index].key !== key) {
+        index++;
       }
-      if (this.table[index] != null &amp;&amp; this.table[index].key === key) {
+      if (this.table[index] != null && this.table[index].key === key) {
         return this.table[index].value;
       }
     }
@@ -1824,15 +1824,15 @@ export default class HashTableLinearProbing {
 
   verifyRemoveSideEffect(key, removedPosition) {
     const hash = this.hashCode(key);
-    let index = removedPosition &#43; 1;
+    let index = removedPosition + 1;
     while (this.table[index] != null) {
       const posHash = this.hashCode(this.table[index].key);
-      if (posHash &lt;= hash || posHash &lt;= removedPosition) {
+      if (posHash <= hash || posHash <= removedPosition) {
         this.table[removedPosition] = this.table[index];
         delete this.table[index];
         removedPosition = index;
       }
-      index&#43;&#43;;
+      index++;
     }
   }
 
@@ -1844,11 +1844,11 @@ export default class HashTableLinearProbing {
         this.verifyRemoveSideEffect(key, position);
         return true;
       }
-      let index = position &#43; 1;
-      while (this.table[index] != null &amp;&amp; this.table[index].key !== key) {
-        index&#43;&#43;;
+      let index = position + 1;
+      while (this.table[index] != null && this.table[index].key !== key) {
+        index++;
       }
-      if (this.table[index] != null &amp;&amp; this.table[index].key === key) {
+      if (this.table[index] != null && this.table[index].key === key) {
         delete this.table[index];
         this.verifyRemoveSideEffect(key, index);
         return true;
@@ -1867,8 +1867,8 @@ export default class HashTableLinearProbing {
 djb2HashCode(key){
     const tableKey = this.toStrFn(key);
     let hash = 3851;
-    for (let i = 0; i &lt; tableKey.length; i&#43;&#43;){
-        hash = (hash * 33) &#43; tableKey.charCodeAt(i);
+    for (let i = 0; i < tableKey.length; i++){
+        hash = (hash * 33) + tableKey.charCodeAt(i);
     }
     return hash % 1013;
 }
@@ -1908,9 +1908,9 @@ function recursiveFunction2(someParam) {
 
 ```javascript
 function factorialIterative(number) {
-  if (number &lt; 0) return undefined;
+  if (number < 0) return undefined;
   let total = 1;
-  for (let n = number; n &gt; 1; n--) {
+  for (let n = number; n > 1; n--) {
     total *= n;
   }
   return total;
@@ -1935,20 +1935,20 @@ function factorial(n) {
 
 - 位置 0 的斐波那契数是 0
 - 位置 1 和 2 的斐波那契数是 1
-- 位置`n`（`n &gt; 2`）的斐波那契数是位置`n-1`斐波那契数加上位置`n-2`斐波那契数
+- 位置`n`（`n > 2`）的斐波那契数是位置`n-1`斐波那契数加上位置`n-2`斐波那契数
 
 我们用迭代的方法实现`fibonacci`函数：
 
 ```javascript
 function fibonacciIterative(n) {
-  if (n &lt; 1) return 0;
-  if (n &lt;= 2) return 1;
+  if (n < 1) return 0;
+  if (n <= 2) return 1;
 
   let fibNMinus2 = 0;
   let fibNMinus1 = 1;
   let fibN = n;
-  for (let i = 2; i &lt;= n; i&#43;&#43;) {
-    fibN = fibNMinus1 &#43; fibNMinus2;
+  for (let i = 2; i <= n; i++) {
+    fibN = fibNMinus1 + fibNMinus2;
     fibNMinus2 = fibNMinus1;
     fibNMinus1 = fibN;
   }
@@ -1960,9 +1960,9 @@ function fibonacciIterative(n) {
 
 ```javascript
 function fibonacci(n) {
-  if (n &lt; 1) return 0;
-  if (n &lt;= 2) return 1;
-  return fibonacci(n - 1) &#43; fibonacci(n - 2);
+  if (n < 1) return 0;
+  if (n <= 2) return 1;
+  return fibonacci(n - 1) + fibonacci(n - 2);
 }
 ```
 
@@ -1971,9 +1971,9 @@ function fibonacci(n) {
 ```javascript
 function fibonacciMemorization(n) {
   const memo = [0, 1];
-  const fibonacci = (n) =&gt; {
+  const fibonacci = (n) => {
     if (memo[n] != null) return memo[n];
-    return (memo[n] = fibonacci(n - 1) &#43; fibonacci(n - 2));
+    return (memo[n] = fibonacci(n - 1) + fibonacci(n - 2));
   };
   return fibonacci;
 }
@@ -1995,7 +1995,7 @@ JavaScript Object Prototypes: https://www.w3schools.com/js/js_object_prototypes.
 
 JavaScript Array Reference: https://www.w3schools.com/jsref/jsref_obj_array.asp
 
-20&#43; Array Coding Problems and Questions from Programming Interviews: https://medium.com/javarevisited/20-array-coding-problems-and-questions-from-programming-interviews-869b475b9121
+20+ Array Coding Problems and Questions from Programming Interviews: https://medium.com/javarevisited/20-array-coding-problems-and-questions-from-programming-interviews-869b475b9121
 
 Huge collection of Array Interview Questions: https://medium.com/techie-delight/huge-collection-of-array-interview-questions-e87ac7c34e62
 

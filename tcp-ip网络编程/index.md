@@ -3,7 +3,7 @@
 
 - **2024/1/17 更新**: 增加**进程间通信**
 
-&lt;!--more--&gt;
+<!--more-->
 
 ## 第 1 章 理解网络编程和套接字
 
@@ -47,15 +47,15 @@ Winsock 编程时必须首先调用`WSAStartup`函数，设置程序中用到的
 
 注销该库使用如下函数:
 
-```C&#43;&#43;
-##include &lt;iostream&gt;
-##include &lt;WinSock2.h&gt;
+```C++
+##include <iostream>
+##include <WinSock2.h>
 
 int main()
 {
  WSADATA wsaData;
- if (WSAStartup(MAKEWORD(2, 2), &amp;wsaData) != 0) {
-  std::cout &lt;&lt; &#34;WSAStartup ERROR!&#34; &lt;&lt; std::endl;
+ if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0) {
+  std::cout << "WSAStartup ERROR!" << std::endl;
  }
  WSACleanup();
  return 0;
@@ -69,7 +69,7 @@ int main()
 协议是计算机对话使用的通信规则。简而言之，协议就是为了完成数据交换而定好的约定。
 
 ```C
-##include &lt;sys/socket.h&gt;
+##include <sys/socket.h>
 
 int socket(int domain, int type, int protocol);
 
@@ -100,7 +100,7 @@ int socket(int domain, int type, int protocol);
 - 按序传输数据
 - 传输的数据不存在数据边界（Boundary）（比如，集满 100 个才打包一次）
 
-&gt; 存在数据边界意味着接收数据的次数应和传输次数相同。
+> 存在数据边界意味着接收数据的次数应和传输次数相同。
 
 传输端和接收端各有 1 名工人，意味着套接字连接必须一一对应。
 
@@ -125,7 +125,7 @@ int socket(int domain, int type, int protocol);
 
 前两个参数即可创建所需套接字。所以大部分情况下可以向第三个参数传递 0，除非遇到以下情况:
 
-&gt; 同一个协议族中存在多个传输方式相同的协议
+> 同一个协议族中存在多个传输方式相同的协议
 
 数据传输方式相同，但协议不同。此时需要通过第三个参数具体指定协议信息。
 
@@ -133,7 +133,7 @@ int socket(int domain, int type, int protocol);
 
 参数`PF_INET`指 IPv4 网络协议族，`SOCK_STREAM`是面向连接的数据传输。满足这两个条的协议只有`IPPROTO_TCP`，这种套接字称为 TCP 套接字。
 
-```C&#43;&#43;
+```C++
 int tcp_socket = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP);
 ```
 
@@ -141,7 +141,7 @@ int tcp_socket = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP);
 
 满足上述条件的协议只有`IPPROTO_UDP`，这种套接字称为 UDP 套接字。
 
-```C&#43;&#43;
+```C++
 int udp_socket = socket(PF_INET, SOCKET_STREAM, IPPROTO_UDP);
 ```
 
@@ -164,7 +164,7 @@ IP 是 Internet Protocol（网络协议）的简写，是为收发网络数据�
 
 ![](/images/202402/3/717720ccfbe784056763a16b6d4ace77_MD5.jpeg)
 
-&gt; 构建网络需要一种物理设备完成外网与本网主机之间的数据交换，这种设备便是路由器或交换机。它们也是一种计算机，只不过为了特殊目的而设计运行的，因而有了别名。我们可在自己的计算机中安装适当的软件，也可以将其作为交换机。交换机的功能比路由器简单一些，实际差别不大。
+> 构建网络需要一种物理设备完成外网与本网主机之间的数据交换，这种设备便是路由器或交换机。它们也是一种计算机，只不过为了特殊目的而设计运行的，因而有了别名。我们可在自己的计算机中安装适当的软件，也可以将其作为交换机。交换机的功能比路由器简单一些，实际差别不大。
 
 #### 网络地址分类与主机地址边界
 
@@ -186,7 +186,7 @@ IP 是 Internet Protocol（网络协议）的简写，是为收发网络数据�
 
 #### 表示 IPv4 地址的结构体
 
-```C&#43;&#43;
+```C++
 struct sockaddr_in {
   sa_family_t sin_family; // 地址族(Address Family)
   uint16_t sin_port; // 16位TCP/UDP端口号
@@ -197,7 +197,7 @@ struct sockaddr_in {
 
 `in_addr`定义如下:
 
-```C&#43;&#43;
+```C++
 struct in_addr {
   In_addr_t s_addr; // 32位IPv4地址
 };
@@ -223,8 +223,8 @@ CPU 向内存保存数据的方式有两种:
 ![](/images/202402/3/c82b23d25b4ea19ece000376952f7188_MD5.jpeg)
 
 ```c
-#include &lt;stdio.h&gt;
-#include &lt;arpa/inet.h&gt;
+#include <stdio.h>
+#include <arpa/inet.h>
 
 
 
@@ -244,13 +244,13 @@ int main(int argc, char *argv[]){
 
   net_addr = htonl(host_addr);
 
-  printf(&#34;Host ordered port : %#x \n&#34;, host_port);
+  printf("Host ordered port : %#x \n", host_port);
 
-  printf(&#34;Network ordered port : %#x \n&#34;, net_port);
+  printf("Network ordered port : %#x \n", net_port);
 
-  printf(&#34;Host ordered address : %#lx \n&#34;, host_addr);
+  printf("Host ordered address : %#lx \n", host_addr);
 
-  printf(&#34;Network ordered address : %#lx \n&#34;, net_addr);
+  printf("Network ordered address : %#lx \n", net_addr);
 
   return 0;
 
@@ -259,7 +259,7 @@ int main(int argc, char *argv[]){
 
 ![](/images/202402/3/c52d4349940012c9bec4877a5c811fc9_MD5.jpeg)
 
-&gt; 数据传输采用网络字节序，传输前会进行转换，接收数据也会进行转换，这个过程是自动的。除了向`sockaddr_in`结构体变量填充数据外，其他情况无需考虑字节序问题。
+> 数据传输采用网络字节序，传输前会进行转换，接收数据也会进行转换，这个过程是自动的。除了向`sockaddr_in`结构体变量填充数据外，其他情况无需考虑字节序问题。
 
 ### 网络地址的初始化与分配
 
@@ -267,8 +267,8 @@ int main(int argc, char *argv[]){
 
 使用`inet_addr`函数可以将字符串形式的 IP 地址转换为 32 为整型数据。
 
-```C&#43;&#43;
-##include&lt;arpa/inet.h&gt;
+```C++
+##include<arpa/inet.h>
 
 in_addr_t inet_addr(const char* string);
 // 成功返回32位大端序整型值，失败时返回INADDR_NONE。
@@ -318,8 +318,8 @@ TCP 可以在数据交换过程中确认对方已收到数据，并重传丢失�
 
 我们已调用`bind`函数给套接字分配了地址，接下来就要通过`listen`函数进入等待连接请求状态。**只有调用了`listen`函数**，客户端才能进入可发出连接请求的状态。这时客户端才能调用`connect`函数（若提前调用将发生错误）。
 
-```C&#43;&#43;
-##include &lt;sys/socket.h&gt;
+```C++
+##include <sys/socket.h>
 
 int listen(int sock, int backlog);
 
@@ -334,8 +334,8 @@ int listen(int sock, int backlog);
 
 服务器端套接字是做门卫的。如果与客户端的数据交换使用门卫，那谁来守门呢？因此需要另外一个套接字，但没必要亲自创建。`accpet`函数将自动创建套接字，并连接到发起请求的客户端。
 
-```C&#43;&#43;
-##include &lt;sys/socket.h&gt;
+```C++
+##include <sys/socket.h>
 
 int accpet(int sock, struct sockaddr* addr, socklen_t* addrlen);
 
@@ -353,8 +353,8 @@ int accpet(int sock, struct sockaddr* addr, socklen_t* addrlen);
 
 服务器调用`listen`函数后创建连接请求等待队列，之后客户端即可请求连接。通过如下函数即可发起请求连接:
 
-```C&#43;&#43;
-##include &lt;sys/socket.h&gt;
+```C++
+##include <sys/socket.h>
 
 int connect(int sock, struct sockaddr* servaddr, socklen_t addrlen);
 
@@ -371,7 +371,7 @@ int connect(int sock, struct sockaddr* servaddr, socklen_t addrlen);
 
 接收连接并不意味着服务器端调用`accpet`函数，其实是服务器端把连接请求信息记录到等待队列。因此`connect`函数返回后并不立即进行数据交换。
 
-&gt; 客户端套接字何时、何地、如何分配地址呢？调用`connect`函数时。操作系统，准确地说是在内核中。IP 用主机的 IP，端口随机。客户端的 IP 地址和端口在调用`connect`函数时自动分配，无需调用`bind`函数进行分配。
+> 客户端套接字何时、何地、如何分配地址呢？调用`connect`函数时。操作系统，准确地说是在内核中。IP 用主机的 IP，端口随机。客户端的 IP 地址和端口在调用`connect`函数时自动分配，无需调用`bind`函数进行分配。
 
 #### 基于 TCP 和服务器端/客户端函数调用关系
 
@@ -399,13 +399,13 @@ int connect(int sock, struct sockaddr* servaddr, socklen_t addrlen);
 
 #### 基于 Windows 的回声服务器端
 
-```C&#43;&#43;
+```C++
 
-##include &lt;iostream&gt;
-##include &lt;cstdlib&gt;
-##include &lt;cstring&gt;
-##include &lt;winsock2.h&gt;
-##include &lt;cstdio&gt;
+##include <iostream>
+##include <cstdlib>
+##include <cstring>
+##include <winsock2.h>
+##include <cstdio>
 
 ##define BUF_SIZE 1024
 
@@ -421,33 +421,33 @@ int main(int argc, char* argv[])
 
  SOCKADDR_IN serverAddr, clientAddr;
  if (argc != 2) {
-  printf(&#34;Usage : %s &lt;port&gt;\n&#34;, argv[0]);
+  printf("Usage : %s <port>\n", argv[0]);
   exit(1);
  }
 
- if (WSAStartup(MAKEWORD(2, 2), &amp;wsaData) != 0)
-  ErrorHandling(&#34;WSAStartup() error!&#34;);
+ if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0)
+  ErrorHandling("WSAStartup() error!");
  hServerSocket = socket(PF_INET, SOCK_STREAM, 0);
- if (hServerSocket == INVALID_SOCKET) ErrorHandling(&#34;socket() error!&#34;);
- memset(&amp;serverAddr, 0, sizeof(serverAddr));
+ if (hServerSocket == INVALID_SOCKET) ErrorHandling("socket() error!");
+ memset(&serverAddr, 0, sizeof(serverAddr));
  serverAddr.sin_family = AF_INET;
  serverAddr.sin_addr.s_addr = htonl(INADDR_ANY);
  serverAddr.sin_port = htons(atoi(argv[1]));
 
- if (bind(hServerSocket, (sockaddr*)&amp;serverAddr, sizeof(serverAddr)) == SOCKET_ERROR) {
-  ErrorHandling(&#34;bind() error!&#34;);
+ if (bind(hServerSocket, (sockaddr*)&serverAddr, sizeof(serverAddr)) == SOCKET_ERROR) {
+  ErrorHandling("bind() error!");
  }
 
  if (listen(hServerSocket, 5) == SOCKET_ERROR) {
-  ErrorHandling(&#34;listen() error!&#34;);
+  ErrorHandling("listen() error!");
  }
 
  clientAddrSize = sizeof(clientAddr);
 
- for (i = 0; i &lt; 5; i&#43;&#43;) {
-  hClientSocket = accept(hServerSocket, (sockaddr*)&amp;clientAddr, &amp;clientAddrSize);
-  if (hClientSocket == -1) ErrorHandling(&#34;accept() error!&#34;);
-  else std::cout &lt;&lt; &#34;Connected client &#34; &lt;&lt; i &#43; 1 &lt;&lt; &#34;\n&#34;;
+ for (i = 0; i < 5; i++) {
+  hClientSocket = accept(hServerSocket, (sockaddr*)&clientAddr, &clientAddrSize);
+  if (hClientSocket == -1) ErrorHandling("accept() error!");
+  else std::cout << "Connected client " << i + 1 << "\n";
   while ((strlen = recv(hClientSocket, message, BUF_SIZE, 0)) != 0) {
    send(hClientSocket, message, strlen, 0);
   }
@@ -464,19 +464,19 @@ int main(int argc, char* argv[])
 
 void ErrorHandling(const char* message) {
  fputs(message, stderr);
- fputc(&#39;\n&#39;, stderr);
+ fputc('\n', stderr);
  exit(1);
 }
 ```
 
 #### 基于 Windows 的回声客户端
 
-```C&#43;&#43;
-##include &lt;iostream&gt;
-##include &lt;cstdlib&gt;
-##include &lt;cstring&gt;
-##include &lt;winSock2.h&gt;
-##include &lt;cstdio&gt;
+```C++
+##include <iostream>
+##include <cstdlib>
+##include <cstring>
+##include <winSock2.h>
+##include <cstdio>
 
 ##pragma warning(disable:4996)
 ##define BUF_SIZE 1024
@@ -492,33 +492,33 @@ int main(int argc, char* argv[])
  SOCKADDR_IN serverAddr;
 
  if (argc != 3) {
-  printf(&#34;Usage : %s &lt;IP&gt; &lt;port&gt;\n&#34;, argv[0]);
+  printf("Usage : %s <IP> <port>\n", argv[0]);
   exit(1);
  }
 
- if (WSAStartup(MAKEWORD(2, 2), &amp;wsaData) != 0)
-  ErrorHandling(&#34;WSAStartup() error!&#34;);
+ if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0)
+  ErrorHandling("WSAStartup() error!");
 
  hSocket = socket(PF_INET, SOCK_STREAM, 0);
- if (hSocket == INVALID_SOCKET) ErrorHandling(&#34;socket() error&#34;);
- memset(&amp;serverAddr, 0, sizeof(serverAddr));
+ if (hSocket == INVALID_SOCKET) ErrorHandling("socket() error");
+ memset(&serverAddr, 0, sizeof(serverAddr));
  serverAddr.sin_family = AF_INET;
  serverAddr.sin_addr.s_addr = inet_addr(argv[1]);
  serverAddr.sin_port = htons(atoi(argv[2]));
 
- if (connect(hSocket, (sockaddr*)&amp;serverAddr, sizeof(serverAddr)) == SOCKET_ERROR) {
-  ErrorHandling(&#34;connect() error!&#34;);
+ if (connect(hSocket, (sockaddr*)&serverAddr, sizeof(serverAddr)) == SOCKET_ERROR) {
+  ErrorHandling("connect() error!");
  }
 
  while (1)
  {
-  fputs(&#34;Input message (Q to quit): &#34;, stdout);
+  fputs("Input message (Q to quit): ", stdout);
   fgets(message, BUF_SIZE, stdin);
-  if (!strcmp(message, &#34;q\n&#34;) || !strcmp(message, &#34;Q\n&#34;)) break;
+  if (!strcmp(message, "q\n") || !strcmp(message, "Q\n")) break;
   send(hSocket, message, strlen(message), 0);
   strLen = recv(hSocket, message, BUF_SIZE - 1, 0);
   message[strLen] = 0;
-  printf(&#34;Message from server : %s&#34;, message);
+  printf("Message from server : %s", message);
  }
  closesocket(hSocket);
  WSACleanup();
@@ -527,7 +527,7 @@ int main(int argc, char* argv[])
 
 void ErrorHandling(const char* message) {
  fputs(message, stderr);
- fputc(&#39;\n&#39;, stderr);
+ fputc('\n', stderr);
  exit(1);
 }
 ```
@@ -545,12 +545,12 @@ void ErrorHandling(const char* message) {
 ### 回声客户端的完美实现
 
 ```C
-##include &lt;stdio.h&gt;
-##include &lt;stdlib.h&gt;
-##include &lt;string.h&gt;
-##include &lt;unistd.h&gt;
-##include &lt;arpa/inet.h&gt;
-##include &lt;sys/socket.h&gt;
+##include <stdio.h>
+##include <stdlib.h>
+##include <string.h>
+##include <unistd.h>
+##include <arpa/inet.h>
+##include <sys/socket.h>
 
 ##define BUF_SIZE 1024
 
@@ -564,52 +564,52 @@ int main(int argc, char *argv[])
   struct sockaddr_in serv_addr;
   if (argc != 3)
   {
-    printf(&#34;Usage : %s &lt;IP&gt; &lt;port&gt; \n&#34;, argv[0]);
+    printf("Usage : %s <IP> <port> \n", argv[0]);
     exit(1);
   }
 
   sock = socket(PF_INET, SOCK_STREAM, 0);
   if (sock == -1)
   {
-    error_handling(&#34;socket() error&#34;);
+    error_handling("socket() error");
   }
 
-  memset(&amp;serv_addr, 0, sizeof(serv_addr));
+  memset(&serv_addr, 0, sizeof(serv_addr));
   serv_addr.sin_family = AF_INET;
   serv_addr.sin_addr.s_addr = inet_addr(argv[1]);
   serv_addr.sin_port = htons(atoi(argv[2]));
 
-  if (connect(sock, (struct sockaddr *)&amp;serv_addr, sizeof(serv_addr)) == -1)
+  if (connect(sock, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) == -1)
   {
-    error_handling(&#34;connect() error&#34;);
+    error_handling("connect() error");
   }
   else
   {
-    puts(&#34;connected....&#34;);
+    puts("connected....");
   }
 
   while (1)
   {
-    fputs(&#34;Input message (Q to quit): &#34;, stdout);
+    fputs("Input message (Q to quit): ", stdout);
     fgets(message, BUF_SIZE, stdin);
-    if (!strcmp(message, &#34;q\n&#34;) || !strcmp(message, &#34;Q\n&#34;))
+    if (!strcmp(message, "q\n") || !strcmp(message, "Q\n"))
     {
       break;
     }
 
     str_len = write(sock, message, strlen(message));
     recv_len = 0;
-    while (recv_len &lt; str_len)
+    while (recv_len < str_len)
     {
-      recv_cnt = read(sock, &amp;message[recv_len], BUF_SIZE - 1);
+      recv_cnt = read(sock, &message[recv_len], BUF_SIZE - 1);
       if (recv_cnt == -1)
       {
-        error_handling(&#34;read() error&#34;);
+        error_handling("read() error");
       }
-      recv_len &#43;= recv_cnt;
+      recv_len += recv_cnt;
     }
     message[recv_len] = 0;
-    printf(&#34;Message from server : %s&#34;, message);
+    printf("Message from server : %s", message);
   }
 
   close(sock);
@@ -620,7 +620,7 @@ int main(int argc, char *argv[])
 void error_handling(char *message)
 {
   fputs(message, stderr);
-  fputc(&#39;\n&#39;, stderr);
+  fputc('\n', stderr);
   exit(1);
 }
 ```
@@ -642,7 +642,7 @@ TCP 套接字的数据收发无边界。服务器端即使调用 1 次`write`函
 
 不会发生超过输入缓冲大小的数据传输，因为 TCP 会控制数据流。TCP 中有滑动窗口（Sliding Window）协议。数据收发也是如此，TCP 不会因为缓冲溢出而丢失数据。
 
-&gt; write 函数和 Windows 的 send 函数并不是在完成向对方主机的数据传输时返回，而是在数据移到输出缓冲时。TCP 会保证对输出缓冲数据的传输。
+> write 函数和 Windows 的 send 函数并不是在完成向对方主机的数据传输时返回，而是在数据移到输出缓冲时。TCP 会保证对输出缓冲数据的传输。
 
 #### TCP 内部工作原理 1：与对方套接字的连接
 
@@ -662,7 +662,7 @@ TCP 套接字从创建到消失分为以下 3 步。
 
 ![](/images/202402/3/bdd0559f68ad5b6822030de02ff6f2f4_MD5.jpeg)
 
-ACK 号 -&gt; SEQ 号 &#43; 传递字节数 &#43; 1
+ACK 号 -> SEQ 号 + 传递字节数 + 1
 
 #### TCP 内部工作原理 3：断开与套接字的连接
 
@@ -674,12 +674,12 @@ ACK 号 -&gt; SEQ 号 &#43; 传递字节数 &#43; 1
 
 服务器端`op_server.c`
 
-```C&#43;&#43;
-##include &lt;cstdio&gt;
-##include &lt;cstdlib&gt;
-##include &lt;iostream&gt;
-##include &lt;WinSock2.h&gt;
-##include &lt;cstring&gt;
+```C++
+##include <cstdio>
+##include <cstdlib>
+##include <iostream>
+##include <WinSock2.h>
+##include <cstring>
 
 ##define BUF_SIZE 1024
 ##define OPZS 4
@@ -698,38 +698,38 @@ int main(int argc, char* argv[]) {
 
 
  if (argc != 2) {
-  printf(&#34;Usage : %s &lt;port&gt;\n&#34;, argv[0]);
+  printf("Usage : %s <port>\n", argv[0]);
   exit(1);
  }
 
- if (WSAStartup(MAKEWORD(2, 2), &amp;wsData) != 0) ErrorHandling(&#34;WSAStartup() error!&#34;);
+ if (WSAStartup(MAKEWORD(2, 2), &wsData) != 0) ErrorHandling("WSAStartup() error!");
 
  serverSocket = socket(PF_INET, SOCK_STREAM, 0);
- if (serverSocket == INVALID_SOCKET) ErrorHandling(&#34;socket() error!&#34;);
- memset(&amp;serverAddr, 0, sizeof(serverAddr));
+ if (serverSocket == INVALID_SOCKET) ErrorHandling("socket() error!");
+ memset(&serverAddr, 0, sizeof(serverAddr));
  serverAddr.sin_family = PF_INET;
  serverAddr.sin_port = htons(atoi(argv[1]));
  serverAddr.sin_addr.s_addr = htonl(INADDR_ANY);
 
- if (bind(serverSocket, (SOCKADDR*)&amp;serverAddr, sizeof(serverAddr)) == SOCKET_ERROR)
-  ErrorHandling(&#34;bind() error!&#34;);
+ if (bind(serverSocket, (SOCKADDR*)&serverAddr, sizeof(serverAddr)) == SOCKET_ERROR)
+  ErrorHandling("bind() error!");
 
  if (listen(serverSocket, 5) == SOCKET_ERROR)
-  ErrorHandling(&#34;listen() error!&#34;);
+  ErrorHandling("listen() error!");
 
  clientAddrSize = sizeof(clientAddr);
 
- for (i = 0; i &lt; 5; i&#43;&#43;) {
+ for (i = 0; i < 5; i++) {
   opndCount = 0;
-  clientSocket = accept(serverSocket, (SOCKADDR*)&amp;clientAddr, &amp;clientAddrSize);
-  recv(clientSocket, (char*)&amp;opndCount, 1, 0);
+  clientSocket = accept(serverSocket, (SOCKADDR*)&clientAddr, &clientAddrSize);
+  recv(clientSocket, (char*)&opndCount, 1, 0);
   recvLen = 0;
-  while ((opndCount * OPZS &#43; 1) &gt; recvLen) {
+  while ((opndCount * OPZS + 1) > recvLen) {
    recvCount = recv(clientSocket, opinfo, BUF_SIZE - 1, 0);
-   recvLen &#43;= recvCount;
+   recvLen += recvCount;
   }
   result = calculate(opndCount, (int*)opinfo, opinfo[recvLen - 1]);
-  send(clientSocket, (char*)&amp;result, sizeof(result), 0);
+  send(clientSocket, (char*)&result, sizeof(result), 0);
   closesocket(clientSocket);
 
  }
@@ -742,22 +742,22 @@ int main(int argc, char* argv[]) {
 
 void ErrorHandling(const char* message) {
  fputs(message, stderr);
- fputc(&#39;\n&#39;, stderr);
+ fputc('\n', stderr);
  exit(1);
 }
 
 int calculate(int opnum, int opnds[], char op) {
  int result = opnds[0], i;
  switch (op) {
- case &#39;&#43;&#39;:
-  for (i = 1; i &lt; opnum; i&#43;&#43;) result &#43;= opnds[i];
+ case '+':
+  for (i = 1; i < opnum; i++) result += opnds[i];
   break;
- case &#39;-&#39;:
-  for (i = 1; i &lt; opnum; i&#43;&#43;) result -= opnds[i];
+ case '-':
+  for (i = 1; i < opnum; i++) result -= opnds[i];
   break;
 
- case &#39;*&#39;:
-  for (i = 1; i &lt; opnum; i&#43;&#43;) result *= opnds[i];
+ case '*':
+  for (i = 1; i < opnum; i++) result *= opnds[i];
   break;
  }
  return result;
@@ -766,11 +766,11 @@ int calculate(int opnum, int opnds[], char op) {
 
 客户端`op_client.c`
 
-```C&#43;&#43;
-##include &lt;iostream&gt;
-##include &lt;WinSock2.h&gt;
-##include &lt;cstdlib&gt;
-##include &lt;cstdio&gt;
+```C++
+##include <iostream>
+##include <WinSock2.h>
+##include <cstdlib>
+##include <cstdio>
 
 ##pragma warning(disable:4996)
 
@@ -790,41 +790,41 @@ int main(int argc, char* argv[])
 
 
  if (argc != 3) {
-  printf(&#34;Usage : %s &lt;IP&gt; &lt;port&gt;\n&#34;, argv[0]);
+  printf("Usage : %s <IP> <port>\n", argv[0]);
   exit(1);
  }
 
- if (WSAStartup(MAKEWORD(2, 2), &amp;wsData) != 0) {
-  ErrorHandling(&#34;WSAStartup() error!&#34;);
+ if (WSAStartup(MAKEWORD(2, 2), &wsData) != 0) {
+  ErrorHandling("WSAStartup() error!");
  }
 
  hSocket = socket(PF_INET, SOCK_STREAM, 0);
- if (hSocket == INVALID_SOCKET) ErrorHandling(&#34;socket() error!&#34;);
- memset(&amp;serverAddr, 0, sizeof(serverAddr));
+ if (hSocket == INVALID_SOCKET) ErrorHandling("socket() error!");
+ memset(&serverAddr, 0, sizeof(serverAddr));
  serverAddr.sin_addr.s_addr = inet_addr(argv[1]);
  serverAddr.sin_family = AF_INET;
  serverAddr.sin_port = htons(atoi(argv[2]));
 
- if (connect(hSocket, (SOCKADDR*)&amp;serverAddr, sizeof(serverAddr)) == SOCKET_ERROR)
-  ErrorHandling(&#34;socket() error!&#34;);
+ if (connect(hSocket, (SOCKADDR*)&serverAddr, sizeof(serverAddr)) == SOCKET_ERROR)
+  ErrorHandling("socket() error!");
  else
-  puts(&#34;Connected ......&#34;);
+  puts("Connected ......");
 
- fputs(&#34;Operand count : &#34;, stdout);
- scanf(&#34;%d&#34;, &amp;opndCount);
+ fputs("Operand count : ", stdout);
+ scanf("%d", &opndCount);
  opmsg[0] = (char)opndCount;
 
- for (i = 0; i &lt; opndCount; i&#43;&#43;) {
-  printf(&#34;Operand %d : &#34;, i &#43; 1);
-  scanf(&#34;%d&#34;, (int*)&amp;opmsg[i * OPSZ &#43; 1]);
+ for (i = 0; i < opndCount; i++) {
+  printf("Operand %d : ", i + 1);
+  scanf("%d", (int*)&opmsg[i * OPSZ + 1]);
  }
 
  fgetc(stdin);
- fputs(&#34;Operator : &#34;, stdout);
- scanf(&#34;%c&#34;, &amp;opmsg[opndCount * OPSZ &#43; 1]);
- send(hSocket, opmsg, opndCount * OPSZ &#43; 2, 0);
- recv(hSocket, (char*)&amp;result, RLT_SIZE, 0);
- printf(&#34;Operation result : %d \n&#34;, result);
+ fputs("Operator : ", stdout);
+ scanf("%c", &opmsg[opndCount * OPSZ + 1]);
+ send(hSocket, opmsg, opndCount * OPSZ + 2, 0);
+ recv(hSocket, (char*)&result, RLT_SIZE, 0);
+ printf("Operation result : %d \n", result);
  closesocket(hSocket);
  WSACleanup();
  return 0;
@@ -832,7 +832,7 @@ int main(int argc, char* argv[])
 
 void ErrorHandling(const char* message) {
  fputs(message, stderr);
- fputc(&#39;\n&#39;, stderr);
+ fputc('\n', stderr);
  exit(1);
 }
 
@@ -840,7 +840,7 @@ void ErrorHandling(const char* message) {
 
 ### 推荐
 
-File Transfer using TCP Socket in C: &lt;https://idiotdeveloper.com/file-transfer-using-tcp-socket-in-c/&gt;
+File Transfer using TCP Socket in C: <https://idiotdeveloper.com/file-transfer-using-tcp-socket-in-c/>
 
 ## 第 6 章 基于 UDP 的服务器端/客户端
 
@@ -866,8 +866,8 @@ UDP 程序中，调用`sendto`函数传输数据前应完成对套接字的地�
 
 ### 基于 Windows 实现
 
-```C&#43;&#43;
-##include &lt;winsock2.h&gt;
+```C++
+##include <winsock2.h>
 
 int sendto(SOCKET s, const char* buf, int len, int flags, const struct sockaddr* to, int tolen);
 // 成功返回传输的字节数，失败返回SOCKET_ERROR
@@ -891,8 +891,8 @@ int recvfrom(SOCKET s, char* buf, int len, int flag, struct sockaddr* from, int*
 
 `shutdown`函数可以用来关闭其中 1 个流。
 
-```C&#43;&#43;
-##include &lt;sys/socket.h&gt;
+```C++
+##include <sys/socket.h>
 
 int shutdown(int sock, int howto);
 
@@ -909,8 +909,8 @@ int shutdown(int sock, int howto);
 
 Windows 平台调用的`shutdown`函数传递的参数略有不同。
 
-```C&#43;&#43;
-##include &lt;winsock2.h&gt;
+```C++
+##include <winsock2.h>
 
 int shutdown(SOCKET sock, int howto);
 
@@ -927,10 +927,10 @@ int shutdown(SOCKET sock, int howto);
 
 服务器端`file_server_win.cpp`:
 
-```C&#43;&#43;
-##include &lt;WinSock2.h&gt;
-##include &lt;cstdio&gt;
-##include &lt;cstdlib&gt;
+```C++
+##include <WinSock2.h>
+##include <cstdio>
+##include <cstdlib>
 
 ##pragma warning(disable:4996)
 ##define BUF_SIZE 30
@@ -947,37 +947,37 @@ int main(int argc, char* argv[]) {
  int clientAddrSize;
 
  if (argc != 2) {
-  printf(&#34;Usage : %s &lt;port&gt;\n&#34;, argv[0]);
+  printf("Usage : %s <port>\n", argv[0]);
   exit(1);
  }
 
- if (WSAStartup(MAKEWORD(2, 2), &amp;wsaData) != 0) ErrorHandling(&#34;WSAStartup() error!&#34;);
+ if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0) ErrorHandling("WSAStartup() error!");
 
- fp = fopen(&#34;file_server_win.cpp&#34;, &#34;rb&#34;);
+ fp = fopen("file_server_win.cpp", "rb");
  serverSocket = socket(PF_INET, SOCK_STREAM, 0);
- memset(&amp;serverAddr, 0, sizeof(serverAddr));
+ memset(&serverAddr, 0, sizeof(serverAddr));
  serverAddr.sin_family = AF_INET;
  serverAddr.sin_addr.s_addr = htonl(INADDR_ANY);
  serverAddr.sin_port = htons(atoi(argv[1]));
 
- bind(serverSocket, (SOCKADDR*)&amp;serverAddr, sizeof(serverAddr));
+ bind(serverSocket, (SOCKADDR*)&serverAddr, sizeof(serverAddr));
  listen(serverSocket, 5);
 
  clientAddrSize = sizeof(clientAddr);
- clientSocket = accept(serverSocket, (SOCKADDR*)&amp;clientAddr, &amp;clientAddrSize);
+ clientSocket = accept(serverSocket, (SOCKADDR*)&clientAddr, &clientAddrSize);
 
  while (true) {
   readCount = fread((void*)buf, 1, BUF_SIZE, fp);
-  if (readCount &lt; BUF_SIZE) {
-   send(clientSocket, (char*)&amp;buf, readCount, 0);
+  if (readCount < BUF_SIZE) {
+   send(clientSocket, (char*)&buf, readCount, 0);
    break;
   }
-  send(clientSocket, (char*)&amp;buf, BUF_SIZE, 0);
+  send(clientSocket, (char*)&buf, BUF_SIZE, 0);
  }
 
  shutdown(clientSocket, SD_SEND);
  recv(clientSocket, (char*)buf, BUF_SIZE, 0);
- printf(&#34;Message from client : %s \n&#34;, buf);
+ printf("Message from client : %s \n", buf);
  fclose(fp);
  closesocket(clientSocket);
  closesocket(serverSocket);
@@ -988,18 +988,18 @@ int main(int argc, char* argv[]) {
 
 void ErrorHandling(const char* message) {
  fputs(message, stderr);
- fputc(&#39;\n&#39;, stderr);
+ fputc('\n', stderr);
  exit(1);
 }
 ```
 
 客户端`file_client_win.cpp`:
 
-```C&#43;&#43;
-##include &lt;iostream&gt;
-##include &lt;WinSock2.h&gt;
-##include &lt;cstdlib&gt;
-##include &lt;cstdio&gt;
+```C++
+##include <iostream>
+##include <WinSock2.h>
+##include <cstdlib>
+##include <cstdio>
 
 ##pragma warning(disable:4996)
 
@@ -1018,36 +1018,36 @@ int main(int argc, char* argv[])
 
 
  if (argc != 3) {
-  printf(&#34;Usage : %s &lt;IP&gt; &lt;port&gt;\n&#34;, argv[0]);
+  printf("Usage : %s <IP> <port>\n", argv[0]);
   exit(1);
  }
 
- if (WSAStartup(MAKEWORD(2, 2), &amp;wsData) != 0) {
-  ErrorHandling(&#34;WSAStartup() error!&#34;);
+ if (WSAStartup(MAKEWORD(2, 2), &wsData) != 0) {
+  ErrorHandling("WSAStartup() error!");
  }
 
- fp = fopen(&#34;receive.dat&#34;, &#34;wb&#34;);
+ fp = fopen("receive.dat", "wb");
 
 
  hSocket = socket(PF_INET, SOCK_STREAM, 0);
- if (hSocket == INVALID_SOCKET) ErrorHandling(&#34;socket() error!&#34;);
- memset(&amp;serverAddr, 0, sizeof(serverAddr));
+ if (hSocket == INVALID_SOCKET) ErrorHandling("socket() error!");
+ memset(&serverAddr, 0, sizeof(serverAddr));
  serverAddr.sin_addr.s_addr = inet_addr(argv[1]);
  serverAddr.sin_family = AF_INET;
  serverAddr.sin_port = htons(atoi(argv[2]));
 
- if (connect(hSocket, (SOCKADDR*)&amp;serverAddr, sizeof(serverAddr)) == SOCKET_ERROR)
-  ErrorHandling(&#34;socket() error!&#34;);
+ if (connect(hSocket, (SOCKADDR*)&serverAddr, sizeof(serverAddr)) == SOCKET_ERROR)
+  ErrorHandling("socket() error!");
  else
-  puts(&#34;Connected ......&#34;);
+  puts("Connected ......");
 
  while ((readCount = recv(hSocket, buf, BUF_SIZE, 0)) != 0)
  {
   fwrite((void*)buf, 1, readCount, fp);
  }
 
- puts(&#34;Received file data&#34;);
- send(hSocket, &#34;Thank you&#34;, 10, 0);
+ puts("Received file data");
+ send(hSocket, "Thank you", 10, 0);
  fclose(fp);
  closesocket(hSocket);
  WSACleanup();
@@ -1056,7 +1056,7 @@ int main(int argc, char* argv[])
 
 void ErrorHandling(const char* message) {
  fputs(message, stderr);
- fputc(&#39;\n&#39;, stderr);
+ fputc('\n', stderr);
  exit(1);
 }
 
@@ -1098,8 +1098,8 @@ DNS（Domain Name System，域名系统）是对 IP 地址和域名进行相互�
 
 #### 通过调用 fork 函数创建进程
 
-```C&#43;&#43;
-##include &lt;unistd.h&gt;
+```C++
+##include <unistd.h>
 
 pid_t fork(void);
 
@@ -1117,26 +1117,26 @@ pid_t fork(void);
 
 从上图可以看到，父进程调用`fork`函数的同时复制出子进程，并分别得到`fork`函数的返回值。在父进程和子进程中`gval`和`lval`互不影响。因此`fork`函数调用后分成了完全不同的进程，只是二者共享同一代码而已。
 
-```C&#43;&#43;
-##include &lt;stdio.h&gt;
-##include &lt;unistd.h&gt;
+```C++
+##include <stdio.h>
+##include <unistd.h>
 
 int gval = 10;
 
 int main(int argc, char* argv[]){
  pid_t pid;
  int lval = 20;
- gval&#43;&#43;, lval&#43;=5;
+ gval++, lval+=5;
 
  pid = fork();
  if (pid == 0)
-  gval &#43;= 2, lval &#43;= 2;
+  gval += 2, lval += 2;
  else
   gval -= 2, lval -= 2;
  if (pid == 0)
-  printf(&#34;Child Proc : [%d, %d] \n&#34;, gval, lval);
+  printf("Child Proc : [%d, %d] \n", gval, lval);
  else
-  printf(&#34;Parent Proc : [%d, %d] \n&#34;, gval, lval);
+  printf("Parent Proc : [%d, %d] \n", gval, lval);
  return 0;
 }
 ```
@@ -1160,22 +1160,22 @@ int main(int argc, char* argv[]){
 
 向`exit`函数传递的参数值和`main`函数的`return`语句返回的值都会传递给操作系统。而操作系统不会销毁子进程，直到把这些值传递给产生该子进程的父进程。处在这种状态下的进程就是僵尸进，将子进程变成僵尸进程的正是操作系统。那么如何销毁僵尸进程呢？向父进程传递`exit`函数的参数值或`return`的返回值即可。如何向父进程传递这些值呢？操作系统不会主动传递给父进程，只有父进程主动发起请求（函数调用）时，操作系统才会传递该值。换言之，如果父进程未主动要求获得子进程的结束状态值，操作系统将一直保存，并让子进程长时间处于僵尸进程状态。
 
-```C&#43;&#43;
-##include &lt;stdio.h&gt;
-##include &lt;unistd.h&gt;
+```C++
+##include <stdio.h>
+##include <unistd.h>
 
 int main(int argc, char* argv[]){
 
  pid_t pid = fork();
- if (pid == 0) puts(&#34;Child Process&#34;);
+ if (pid == 0) puts("Child Process");
  else {
-  printf(&#34;Child Process ID : %d \n&#34;, pid);
+  printf("Child Process ID : %d \n", pid);
   sleep(30); // Sleep 30 sec
  }
  if (pid == 0)
-  puts(&#34;End Child Process&#34;);
+  puts("End Child Process");
  else
-  puts(&#34;End Parent Process&#34;);
+  puts("End Parent Process");
  return 0;
 }
 ```
@@ -1186,8 +1186,8 @@ int main(int argc, char* argv[]){
 
 为了销毁子进程，父进程应主动请求获取子进程的返回值。发起请求的方法有两种，其中之一就是调用如下函数。
 
-```C&#43;&#43;
-##include &lt;sys/wait.h&gt;
+```C++
+##include <sys/wait.h>
 
 pid_t wait(int* statloc);
 // 成功返回终止的子进程ID，失败返回-1
@@ -1200,22 +1200,22 @@ pid_t wait(int* statloc);
 
 向`wait`函数传递变量`status`的地址时，调用`wait`函数后应编写如下代码:
 
-```C&#43;&#43;
+```C++
 if (WIFEXITED(status)) // 是正常终止吗？
 {
- puts(&#34;Normal termination!&#34;);
- printf(&#34;Child pass num: %d&#34;, WEXITSTATUS(status)); // 返回值是多少？
+ puts("Normal termination!");
+ printf("Child pass num: %d", WEXITSTATUS(status)); // 返回值是多少？
 }
 
 ```
 
 根据上述内容编写示例，此示例不会再让子进程变成僵尸进程。
 
-```C&#43;&#43;
-##include &lt;stdio.h&gt;
-##include &lt;stdlib.h&gt;
-##include &lt;unistd.h&gt;
-##include &lt;sys/wait.h&gt;
+```C++
+##include <stdio.h>
+##include <stdlib.h>
+##include <unistd.h>
+##include <sys/wait.h>
 
 int main(int argc, char* argv[]){
   int status;
@@ -1223,20 +1223,20 @@ int main(int argc, char* argv[]){
   if (pid == 0) {
     return 3;
   } else {
-    printf(&#34;Child PID %d \n&#34;, pid);
+    printf("Child PID %d \n", pid);
     pid = fork();
     if (pid == 0) {
       exit(7);
     }
     else {
-      printf(&#34;Child PID %d \n&#34;, pid);
-      wait(&amp;status);
+      printf("Child PID %d \n", pid);
+      wait(&status);
       if (WIFEXITED(status)){
-        printf(&#34;Child send one : %d\n&#34;, WEXITSTATUS(status));
+        printf("Child send one : %d\n", WEXITSTATUS(status));
       }
-      wait(&amp;status);
+      wait(&status);
       if (WIFEXITED(status)){
-        printf(&#34;Child send two : %d\n&#34;, WEXITSTATUS(status));
+        printf("Child send two : %d\n", WEXITSTATUS(status));
       }
       sleep(30);
     }
@@ -1253,8 +1253,8 @@ int main(int argc, char* argv[]){
 
 `wait`函数会引起程序阻塞，可以考虑调用`waitpid`函数。这是防止僵尸进程的第二种方法，也是防止阻塞的方法。
 
-```C&#43;&#43;
-##include &lt;sys/wait.h&gt;
+```C++
+##include <sys/wait.h>
 
 pid_t waitpid(pid_t pid, int* statloc, int options);
 // 成功返回终止的子进程ID（或0），失败返回-1
@@ -1265,11 +1265,11 @@ pid_t waitpid(pid_t pid, int* statloc, int options);
 
 示例如下:
 
-```C&#43;&#43;
-##include &lt;stdio.h&gt;
-##include &lt;stdlib.h&gt;
-##include &lt;unistd.h&gt;
-##include &lt;sys/wait.h&gt;
+```C++
+##include <stdio.h>
+##include <stdlib.h>
+##include <unistd.h>
+##include <sys/wait.h>
 
 int main(int argc, char *argv[])
 {
@@ -1282,15 +1282,15 @@ int main(int argc, char *argv[])
   }
   else
   {
-    while (!waitpid(-1, &amp;status, WNOHANG))
+    while (!waitpid(-1, &status, WNOHANG))
     {
       sleep(3);
-      puts(&#34;Sleep 3sec.&#34;);
+      puts("Sleep 3sec.");
     }
 
     if (WIFEXITED(status))
     {
-      printf(&#34;Child send %d \n&#34;, WEXITSTATUS(status));
+      printf("Child send %d \n", WEXITSTATUS(status));
     }
   }
   return 0;
@@ -1303,7 +1303,7 @@ int main(int argc, char *argv[])
 
 我们已经直到子进程的创建及销毁方法，但还有一个问题没解决。
 
-&gt; 子进程究竟何时终止？调用`waitpid`函数后要无休止地等待吗？
+> 子进程究竟何时终止？调用`waitpid`函数后要无休止地等待吗？
 
 父进程往往与子进程一样繁忙，因此不能只调用`waitpid`函数以等待子进程终止。
 
@@ -1317,8 +1317,8 @@ int main(int argc, char *argv[])
 
 信号注册函数，请求操作系统当子进程结束时调用某函数。
 
-```C&#43;&#43;
-##include &lt;signal&gt;
+```C++
+##include <signal>
 
 void (*signal(int signo, void(*func)(int)))(int)
 ```
@@ -1326,7 +1326,7 @@ void (*signal(int signo, void(*func)(int)))(int)
 上述函数的返回值类型为函数指针。第一个参数为特殊情况信息，第二个参数为特殊情况下将要调用的函数的地址值（指针）。发生第一个参数代表的情况时，调用第二个参数所指的函数。可以在`signal`函数中注册的部分特殊情况和对应常数如下:
 
 - `SIGALRM`: 已到通过调用`alarm`函数注册的时间
-- `SIGNIT`: 输入`CTRL &#43; C`
+- `SIGNIT`: 输入`CTRL + C`
 - `SIGCHLD`: 子进程终止
 
 比如，编写调用`signal`函数完成“子进程终止则调用 myChild 函数”的请求，语句如下:
@@ -1340,7 +1340,7 @@ signal(SIGCHILD, myChild);
 先介绍`alarm`函数。
 
 ```C
-##include &lt;unistd.h&gt;
+##include <unistd.h>
 
 unsigned int alarm(unsigned int seconds);
 
@@ -1352,21 +1352,21 @@ unsigned int alarm(unsigned int seconds);
 示例如下:
 
 ```C
-##include &lt;signal.h&gt;
-##include &lt;unistd.h&gt;
-##include &lt;stdio.h&gt;
+##include <signal.h>
+##include <unistd.h>
+##include <stdio.h>
 
 void timeout(int sig)
 {
   if (sig == SIGALRM)
-    puts(&#34;Time out!&#34;);
+    puts("Time out!");
   alarm(2);
 }
 
 void keycontrol(int sig)
 {
   if (sig == SIGINT)
-    puts(&#34;CTRL &#43; C pressed&#34;);
+    puts("CTRL + C pressed");
 }
 
 int main(int argc, char *argv[])
@@ -1375,9 +1375,9 @@ int main(int argc, char *argv[])
   signal(SIGALRM, timeout);
   signal(SIGINT, keycontrol);
   alarm(2);
-  for (i = 0; i &lt; 3; i&#43;&#43;)
+  for (i = 0; i < 3; i++)
   {
-    puts(&#34;wait...&#34;);
+    puts("wait...");
     sleep(100);
   }
   return 0;
@@ -1386,14 +1386,14 @@ int main(int argc, char *argv[])
 
 ![](/images/202402/3/74d9bdb4388e8b5d2e9eb4c59596193b_MD5.jpeg)
 
-发生信号时将唤醒由于调用`sleep`函数而进入阻塞状态的进程。调用函数的主体是操作系统，但进程处于睡眠状态无法调用函数。因此，产生信号时，为了调用信号处理器 ，将唤醒由于调用`sleep`函数而进入阻塞状态的进程。而且，进程一旦被唤醒，就不会再进入睡眠状态。即使还未到`sleep`函数中规定的时间也如此。所以上述示例运行不到 10 秒就会结束，连续输入`CTRL &#43; C`可能 1 秒都不到。
+发生信号时将唤醒由于调用`sleep`函数而进入阻塞状态的进程。调用函数的主体是操作系统，但进程处于睡眠状态无法调用函数。因此，产生信号时，为了调用信号处理器 ，将唤醒由于调用`sleep`函数而进入阻塞状态的进程。而且，进程一旦被唤醒，就不会再进入睡眠状态。即使还未到`sleep`函数中规定的时间也如此。所以上述示例运行不到 10 秒就会结束，连续输入`CTRL + C`可能 1 秒都不到。
 
 #### 利用 sigaction 函数进行信号处理
 
 `sigaction`函数类似于`signal`函数，且完全可以代替它，也更稳定。稳定的原因是`signal`函数在 UNIX 系列的不同操作系统中可能存在区别，但`sigaction`函数完全相同。
 
 ```C
-##include &lt;signal.h&gt;
+##include <signal.h>
 
 int sigaction(int signo, const struct sigaction* act, struct sigaction* oldact);
 
@@ -1412,15 +1412,15 @@ int sigaction(int signo, const struct sigaction* act, struct sigaction* oldact);
 示例如下:
 
 ```C
-##include &lt;signal.h&gt;
-##include &lt;stdio.h&gt;
-##include &lt;unistd.h&gt;
+##include <signal.h>
+##include <stdio.h>
+##include <unistd.h>
 
 void timeout(int sig)
 {
   if (sig == SIGALRM)
   {
-    puts(&#34;Time out!&#34;);
+    puts("Time out!");
   }
   alarm(2);
 }
@@ -1430,13 +1430,13 @@ int main(int argc, char *argv[])
   int i;
   struct sigaction act;
   act.sa_handler = timeout;
-  sigemptyset(&amp;act.sa_mask);
+  sigemptyset(&act.sa_mask);
   act.sa_flags = 0;
-  sigaction(SIGALRM, &amp;act, 0);
+  sigaction(SIGALRM, &act, 0);
   alarm(2);
-  for (i = 0; i &lt; 3; i&#43;&#43;)
+  for (i = 0; i < 3; i++)
   {
-    puts(&#34;wait...&#34;);
+    puts("wait...");
     sleep(100);
   }
   return 0;
@@ -1450,20 +1450,20 @@ int main(int argc, char *argv[])
 进程终止时将产生`SIGCHLD`信号。
 
 ```C
-##include &lt;stdio.h&gt;
-##include &lt;stdlib.h&gt;
-##include &lt;unistd.h&gt;
-##include &lt;signal.h&gt;
-##include &lt;sys/wait.h&gt;
+##include <stdio.h>
+##include <stdlib.h>
+##include <unistd.h>
+##include <signal.h>
+##include <sys/wait.h>
 
 void read_childproc(int sig)
 {
   int status;
-  pid_t pid = waitpid(-1, &amp;status, WNOHANG);
+  pid_t pid = waitpid(-1, &status, WNOHANG);
   if (WIFEXITED(status))
   {
-    printf(&#34;Removed proc id : %d\n&#34;, pid);
-    printf(&#34;Child send : %d \n&#34;, WEXITSTATUS(status));
+    printf("Removed proc id : %d\n", pid);
+    printf("Child send : %d \n", WEXITSTATUS(status));
   }
 }
 
@@ -1472,35 +1472,35 @@ int main(int argc, char *argv[])
   pid_t pid;
   struct sigaction act;
   act.sa_handler = read_childproc;
-  sigemptyset(&amp;act.sa_mask);
+  sigemptyset(&act.sa_mask);
   act.sa_flags = 0;
-  sigaction(SIGCHLD, &amp;act, 0);
+  sigaction(SIGCHLD, &act, 0);
 
   pid = fork();
   if (pid == 0) // 子进程执行区域
   {
-    puts(&#34;Hi! I am child process&#34;);
+    puts("Hi! I am child process");
     sleep(10);
     return 12;
   }
 
   else // 父进程执行区域
   {
-    printf(&#34;Child proc is : %d\n&#34;, pid);
+    printf("Child proc is : %d\n", pid);
     pid = fork();
     if (pid == 0) // 另一子进程执行区域
     {
-      puts(&#34;Hi! I am child process&#34;);
+      puts("Hi! I am child process");
       sleep(10);
       exit(24);
     }
     else
     {
       int i;
-      printf(&#34;Child proc is : %d\n&#34;, pid);
-      for (i = 0; i &lt; 5; i&#43;&#43;)
+      printf("Child proc is : %d\n", pid);
+      for (i = 0; i < 5; i++)
       {
-        puts(&#34;wait...&#34;);
+        puts("wait...");
         sleep(5);
       }
     }
@@ -1531,14 +1531,14 @@ int main(int argc, char *argv[])
 
 ```C
 // echo_mpserv.c
-##include &lt;stdio.h&gt;
-##include &lt;stdlib.h&gt;
-##include &lt;string.h&gt;
-##include &lt;unistd.h&gt;
-##include &lt;signal.h&gt;
-##include &lt;sys/wait.h&gt;
-##include &lt;arpa/inet.h&gt;
-##include &lt;sys/socket.h&gt;
+##include <stdio.h>
+##include <stdlib.h>
+##include <string.h>
+##include <unistd.h>
+##include <signal.h>
+##include <sys/wait.h>
+##include <arpa/inet.h>
+##include <sys/socket.h>
 
 ##define BUF_SIZE 30
 void error_handling(char *message);
@@ -1555,41 +1555,41 @@ int main(int argc, char *argv[])
   char buf[BUF_SIZE];
   if (argc != 2)
   {
-    printf(&#34;Usage : %s &lt;port&gt;\n&#34;, argv[0]);
+    printf("Usage : %s <port>\n", argv[0]);
     exit(1);
   }
 
   act.sa_handler = read_childproc;
-  sigemptyset(&amp;act.sa_mask);
+  sigemptyset(&act.sa_mask);
   act.sa_flags = 0;
-  state = sigaction(SIGCHLD, &amp;act, 0);
+  state = sigaction(SIGCHLD, &act, 0);
   serv_sock = socket(PF_INET, SOCK_STREAM, 0);
-  memset(&amp;serv_adr, 0, sizeof(serv_adr));
+  memset(&serv_adr, 0, sizeof(serv_adr));
   serv_adr.sin_family = AF_INET;
   serv_adr.sin_addr.s_addr = htonl(INADDR_ANY);
   serv_adr.sin_port = htons(atoi(argv[1]));
 
-  if (bind(serv_sock, (struct sockaddr *)&amp;serv_adr, sizeof(serv_adr)) == -1)
+  if (bind(serv_sock, (struct sockaddr *)&serv_adr, sizeof(serv_adr)) == -1)
   {
-    error_handling(&#34;bind() error&#34;);
+    error_handling("bind() error");
   }
 
   if (listen(serv_sock, 5) == -1)
   {
-    error_handling(&#34;listen() error&#34;);
+    error_handling("listen() error");
   }
 
   while (1)
   {
     adr_sz = sizeof(clnt_adr);
-    clnt_sock = accept(serv_sock, (struct sockaddr *)&amp;clnt_adr, &amp;adr_sz);
+    clnt_sock = accept(serv_sock, (struct sockaddr *)&clnt_adr, &adr_sz);
     if (clnt_sock == -1)
     {
       continue;
     }
     else
     {
-      puts(&#34;new client connected...&#34;);
+      puts("new client connected...");
     }
 
     pid = fork();
@@ -1607,7 +1607,7 @@ int main(int argc, char *argv[])
         write(clnt_sock, buf, str_len);
       }
       close(clnt_sock);
-      puts(&#34;client disconnected...&#34;);
+      puts("client disconnected...");
       return 0;
     }
     else
@@ -1623,14 +1623,14 @@ void read_childproc(int sig)
 {
   pid_t pid;
   int status;
-  pid = waitpid(-1, &amp;status, WNOHANG);
-  printf(&#34;removed proc id %d \n&#34;, pid);
+  pid = waitpid(-1, &status, WNOHANG);
+  printf("removed proc id %d \n", pid);
 }
 
 void error_handling(char *message)
 {
   fputs(message, stderr);
-  fputc(&#39;\n&#39;, stderr);
+  fputc('\n', stderr);
   exit(1);
 }
 ```
@@ -1641,7 +1641,7 @@ void error_handling(char *message)
 
 `echo_mpserv.c`中父进程将 2 个套接字（一个服务器端套接字，一个是与客户端连接的套接字）文件描述符复制给子进程。
 
-&gt; 只复制文件描述符吗？是否也复制了套接字？
+> 只复制文件描述符吗？是否也复制了套接字？
 
 调用`fork`函数时复制父进程的所有资源，但套接字并非进程所有——严格意义上说，套接字属于操作系统——只是进程拥有代表相应套接字的文件描述符。
 
@@ -1663,7 +1663,7 @@ void error_handling(char *message)
 
 已经实现的回声客户端的数据回声方式如下：
 
-&gt; 向服务器端传输数据，并等待服务器端回复。无条件等待，直到接受完服务器端的回声数据后，才能传输下一批数据。
+> 向服务器端传输数据，并等待服务器端回复。无条件等待，直到接受完服务器端的回声数据后，才能传输下一批数据。
 
 传输数据后需等待服务器端返回的数据，因为程序代码中重复调用了`read`和`write`函数。这么写的原因是，程序在 1 个进程中运行。现在可创建多个进程，因此可以分割数据收发过程。分割模型如下:
 
@@ -1681,12 +1681,12 @@ void error_handling(char *message)
 
 ```C
 // echo_mpclient.c
-##include &lt;stdio.h&gt;
-##include &lt;stdlib.h&gt;
-##include &lt;string.h&gt;
-##include &lt;unistd.h&gt;
-##include &lt;arpa/inet.h&gt;
-##include &lt;sys/socket.h&gt;
+##include <stdio.h>
+##include <stdlib.h>
+##include <string.h>
+##include <unistd.h>
+##include <arpa/inet.h>
+##include <sys/socket.h>
 
 ##define BUF_SIZE 30
 
@@ -1702,28 +1702,28 @@ int main(int argc, char *argv[])
   struct sockaddr_in serv_addr;
   if (argc != 3)
   {
-    printf(&#34;Usage : %s &lt;IP&gt; &lt;port&gt; \n&#34;, argv[0]);
+    printf("Usage : %s <IP> <port> \n", argv[0]);
     exit(1);
   }
 
   sock = socket(PF_INET, SOCK_STREAM, 0);
   if (sock == -1)
   {
-    error_handling(&#34;socket() error&#34;);
+    error_handling("socket() error");
   }
 
-  memset(&amp;serv_addr, 0, sizeof(serv_addr));
+  memset(&serv_addr, 0, sizeof(serv_addr));
   serv_addr.sin_family = AF_INET;
   serv_addr.sin_addr.s_addr = inet_addr(argv[1]);
   serv_addr.sin_port = htons(atoi(argv[2]));
 
-  if (connect(sock, (struct sockaddr *)&amp;serv_addr, sizeof(serv_addr)) == -1)
+  if (connect(sock, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) == -1)
   {
-    error_handling(&#34;connect() error&#34;);
+    error_handling("connect() error");
   }
   else
   {
-    puts(&#34;connected....&#34;);
+    puts("connected....");
   }
 
   pid = fork();
@@ -1743,7 +1743,7 @@ int main(int argc, char *argv[])
 void error_handling(char *message)
 {
   fputs(message, stderr);
-  fputc(&#39;\n&#39;, stderr);
+  fputc('\n', stderr);
   exit(1);
 }
 
@@ -1757,7 +1757,7 @@ void read_routine(int sock, char *buf)
       return;
     }
     buf[str_len] = 0;
-    printf(&#34;Message from server : %s&#34;, buf);
+    printf("Message from server : %s", buf);
   }
 }
 
@@ -1766,7 +1766,7 @@ void write_routine(int sock, char *buf)
   while (1)
   {
     fgets(buf, BUF_SIZE, stdin);
-    if (!strcmp(buf, &#34;q\n&#34;) || !strcmp(buf, &#34;Q\n&#34;))
+    if (!strcmp(buf, "q\n") || !strcmp(buf, "Q\n"))
     {
       shutdown(sock, SHUT_WR);
       return;
@@ -1793,7 +1793,7 @@ void write_routine(int sock, char *buf)
 为了完成进程间通信，需要创建管道。管道并非属于进程的资源，而是和套接字一样，属于操作系统（也就不是`fork`函数的复制对象）。所以，两个进程通过操作系统提供的内存空间进行通信。创建管道的函数如下:
 
 ```C
-##include &lt;unistd.h&gt;
+##include <unistd.h>
 
 int pipe(int filedes[2]);
 // 成功返回0，失败返回-1
@@ -1805,15 +1805,15 @@ int pipe(int filedes[2]);
 
 ```C
 // pipe1.c
-##include &lt;stdio.h&gt;
-##include &lt;unistd.h&gt;
+##include <stdio.h>
+##include <unistd.h>
 
 ##define BUF_SIZE 30
 
 int main(int argc, char *argv[])
 {
   int fds[2];
-  char str[] = &#34;Who are you?&#34;;
+  char str[] = "Who are you?";
   char buf[BUF_SIZE];
   pid_t pid;
 
@@ -1847,16 +1847,16 @@ int main(int argc, char *argv[])
 
 ```C
 // pipe2.c
-##include &lt;stdio.h&gt;
-##include &lt;unistd.h&gt;
+##include <stdio.h>
+##include <unistd.h>
 
 ##define BUF_SIZE 30
 
 int main(int argc, char *argv[])
 {
   int fds[2];
-  char str1[] = &#34;Who are you?&#34;;
-  char str2[] = &#34;Thank you for your message&#34;;
+  char str1[] = "Who are you?";
+  char str2[] = "Thank you for your message";
   char buf[BUF_SIZE];
   pid_t pid;
 
@@ -1867,12 +1867,12 @@ int main(int argc, char *argv[])
     write(fds[1], str1, sizeof(str1));
     sleep(2);
     read(fds[0], buf, BUF_SIZE);
-    printf(&#34;Child proc output : %s\n&#34;, buf);
+    printf("Child proc output : %s\n", buf);
   }
   else
   {
     read(fds[0], buf, BUF_SIZE);
-    printf(&#34;Parent proc output : %s\n&#34;, buf);
+    printf("Parent proc output : %s\n", buf);
     write(fds[1], str2, sizeof(str2));
     sleep(3);
   }
@@ -1892,16 +1892,16 @@ int main(int argc, char *argv[])
 ![](/images/202402/3/f3bf94d15e9109924750da60fd117215_MD5.jpeg)
 
 ```C
-##include &lt;stdio.h&gt;
-##include &lt;unistd.h&gt;
+##include <stdio.h>
+##include <unistd.h>
 
 ##define BUF_SIZE 30
 
 int main(int argc, char *argv[])
 {
   int fds1[2], fds2[2];
-  char str1[] = &#34;Who are you?&#34;;
-  char str2[] = &#34;Thank you for your message&#34;;
+  char str1[] = "Who are you?";
+  char str2[] = "Thank you for your message";
   char buf[BUF_SIZE];
   pid_t pid;
 
@@ -1912,12 +1912,12 @@ int main(int argc, char *argv[])
   {
     write(fds1[1], str1, sizeof(str1));
     read(fds2[0], buf, BUF_SIZE);
-    printf(&#34;Child proc output : %s\n&#34;, buf);
+    printf("Child proc output : %s\n", buf);
   }
   else
   {
     read(fds1[0], buf, BUF_SIZE);
-    printf(&#34;Parent proc output : %s\n&#34;, buf);
+    printf("Parent proc output : %s\n", buf);
     write(fds2[1], str2, sizeof(str2));
     sleep(3);
   }
@@ -1938,14 +1938,14 @@ int main(int argc, char *argv[])
 
 ```C
 // echo_storeserv.c
-##include &lt;stdio.h&gt;
-##include &lt;stdlib.h&gt;
-##include &lt;string.h&gt;
-##include &lt;unistd.h&gt;
-##include &lt;signal.h&gt;
-##include &lt;sys/wait.h&gt;
-##include &lt;arpa/inet.h&gt;
-##include &lt;sys/socket.h&gt;
+##include <stdio.h>
+##include <stdlib.h>
+##include <string.h>
+##include <unistd.h>
+##include <signal.h>
+##include <sys/wait.h>
+##include <arpa/inet.h>
+##include <sys/socket.h>
 
 ##define BUF_SIZE 30
 void error_handling(char *message);
@@ -1963,38 +1963,38 @@ int main(int argc, char *argv[])
   char buf[BUF_SIZE];
   if (argc != 2)
   {
-    printf(&#34;Usage : %s &lt;port&gt;\n&#34;, argv[0]);
+    printf("Usage : %s <port>\n", argv[0]);
     exit(1);
   }
 
   act.sa_handler = read_childproc;
-  sigemptyset(&amp;act.sa_mask);
+  sigemptyset(&act.sa_mask);
   act.sa_flags = 0;
-  state = sigaction(SIGCHLD, &amp;act, 0);
+  state = sigaction(SIGCHLD, &act, 0);
   serv_sock = socket(PF_INET, SOCK_STREAM, 0);
-  memset(&amp;serv_adr, 0, sizeof(serv_adr));
+  memset(&serv_adr, 0, sizeof(serv_adr));
   serv_adr.sin_family = AF_INET;
   serv_adr.sin_addr.s_addr = htonl(INADDR_ANY);
   serv_adr.sin_port = htons(atoi(argv[1]));
 
-  if (bind(serv_sock, (struct sockaddr *)&amp;serv_adr, sizeof(serv_adr)) == -1)
+  if (bind(serv_sock, (struct sockaddr *)&serv_adr, sizeof(serv_adr)) == -1)
   {
-    error_handling(&#34;bind() error&#34;);
+    error_handling("bind() error");
   }
 
   if (listen(serv_sock, 5) == -1)
   {
-    error_handling(&#34;listen() error&#34;);
+    error_handling("listen() error");
   }
 
   pipe(fds);
   pid = fork();
   if (pid == 0)
   {
-    FILE *fp = fopen(&#34;echomsg.txt&#34;, &#34;wt&#34;);
+    FILE *fp = fopen("echomsg.txt", "wt");
     char msgbuf[BUF_SIZE];
     int i, len;
-    for (i = 0; i &lt; 10; i&#43;&#43;)
+    for (i = 0; i < 10; i++)
     {
       len = read(fds[0], msgbuf, BUF_SIZE);
       fwrite((void *)msgbuf, 1, len, fp);
@@ -2006,14 +2006,14 @@ int main(int argc, char *argv[])
   while (1)
   {
     adr_sz = sizeof(clnt_adr);
-    clnt_sock = accept(serv_sock, (struct sockaddr *)&amp;clnt_adr, &amp;adr_sz);
+    clnt_sock = accept(serv_sock, (struct sockaddr *)&clnt_adr, &adr_sz);
     if (clnt_sock == -1)
     {
       continue;
     }
     else
     {
-      puts(&#34;new client connected...&#34;);
+      puts("new client connected...");
     }
 
     pid = fork();
@@ -2032,7 +2032,7 @@ int main(int argc, char *argv[])
         write(fds[1], buf, str_len);
       }
       close(clnt_sock);
-      puts(&#34;client disconnected...&#34;);
+      puts("client disconnected...");
       return 0;
     }
     else
@@ -2048,14 +2048,14 @@ void read_childproc(int sig)
 {
   pid_t pid;
   int status;
-  pid = waitpid(-1, &amp;status, WNOHANG);
-  printf(&#34;removed proc id %d \n&#34;, pid);
+  pid = waitpid(-1, &status, WNOHANG);
+  printf("removed proc id %d \n", pid);
 }
 
 void error_handling(char *message)
 {
   fputs(message, stderr);
-  fputc(&#39;\n&#39;, stderr);
+  fputc('\n', stderr);
   exit(1);
 }
 ```
@@ -2090,7 +2090,7 @@ void error_handling(char *message)
 
 ## 推荐
 
-Windows Sockets 2: &lt;https://learn.microsoft.com/en-us/windows/win32/api/_winsock/&gt;
+Windows Sockets 2: <https://learn.microsoft.com/en-us/windows/win32/api/_winsock/>
 
 《计算机网络 自顶向下》
 

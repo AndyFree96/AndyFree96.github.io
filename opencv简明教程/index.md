@@ -3,7 +3,7 @@
 
 无论我们想要学习如何将面部识别应用于视频流，还是用深度学习构建图像分类器，或者做其他一些有关图像识别的有趣项目，可能都会需要学一些 OpenCV 的知识，本文将做简单介绍。
 
-&lt;!--more--&gt;
+<!--more-->
 
 ## 加载和显示图像
 
@@ -14,8 +14,8 @@
 ```Python
 import cv2
 
-image = cv2.imread(&#39;demo.jpg&#39;)
-cv2.imshow(&#39;Image&#39;, image)
+image = cv2.imread('demo.jpg')
+cv2.imshow('Image', image)
 cv2.waitKey()
 ```
 
@@ -45,7 +45,7 @@ print(image.shape)
 
 ```Python
 B,G,R = image[320,15]
-print(&#39;B={}, G={}, R={}&#39;.format(B,G,R))
+print('B={}, G={}, R={}'.format(B,G,R))
 
 # B=150, G=172, R=197
 ```
@@ -55,7 +55,7 @@ print(&#39;B={}, G={}, R={}&#39;.format(B,G,R))
 ```Python
 image[320,15] = [52,26,16]
 B,G,R = image[320,15]
-print(&#39;B={}, G={}, R={}&#39;.format(B,G,R))
+print('B={}, G={}, R={}'.format(B,G,R))
 
 # B=52, G=26, R=16
 ```
@@ -67,10 +67,10 @@ print(&#39;B={}, G={}, R={}&#39;.format(B,G,R))
 ```Python
 import cv2
 
-image = cv2.imread(&#39;demo.jpg&#39;)
+image = cv2.imread('demo.jpg')
 head = image[27:124,159:260]
 image[200:297,299:400] = head
-cv2.imshow(&#39;New&#39;, image)
+cv2.imshow('New', image)
 cv2.waitKey()
 ```
 
@@ -85,9 +85,9 @@ OpenCV 提供的函数`cv2.resize()`可以改变图像的尺寸大小。
 ```
 import cv2
 
-image = cv2.imread(&#39;demo.jpg&#39;)
+image = cv2.imread('demo.jpg')
 resized = cv2.resize(image, (200,400))
-cv2.imshow(&#39;Image&#39;, resized)
+cv2.imshow('Image', resized)
 cv2.waitKey()
 ```
 
@@ -115,11 +115,11 @@ OpenCV 允许我们在任意地方进行旋转，于是旋转矩阵的形式应�
 ```Python
 import cv2
 
-image = cv2.imread(&#39;demo1.jpg&#39;)
+image = cv2.imread('demo1.jpg')
 rows,cols,depth = image.shape
 M = cv2.getRotationMatrix2D((rows // 2, cols // 2), 90, 1)
 dst = cv2.warpAffine(image,M,(cols,rows))
-cv2.imshow(&#39;Image&#39;, dst)
+cv2.imshow('Image', dst)
 cv2.waitKey()
 ```
 
@@ -136,9 +136,9 @@ cv2.waitKey()
 ```Python
 import cv2
 
-image = cv2.imread(&#39;demo1.jpg&#39;)
+image = cv2.imread('demo1.jpg')
 blurred = cv2.GaussianBlur(image, (11, 11), 0)
-cv2.imshow(&#39;Blurred&#39;, blurred)
+cv2.imshow('Blurred', blurred)
 cv2.waitKey()
 ```
 
@@ -155,10 +155,10 @@ cv2.waitKey()
 ```Python
 import cv2
 
-image = cv2.imread(&#39;demo.jpg&#39;)
+image = cv2.imread('demo.jpg')
 output = image.copy()
 cv2.rectangle(output, (163, 30), (244, 124), (0, 0, 255), 2)
-cv2.imshow(&#39;Rectangle&#39;, output)
+cv2.imshow('Rectangle', output)
 cv2.waitKey()
 ```
 
@@ -179,10 +179,10 @@ cv2.waitKey()
 ```Python
 import cv2
 
-image = cv2.imread(&#39;demo1.jpg&#39;)
+image = cv2.imread('demo1.jpg')
 output = image.copy()
 cv2.circle(output, (32, 25), 20, (255,0,0),-1)
-cv2.imshow(&#39;Circle&#39;, output)
+cv2.imshow('Circle', output)
 cv2.waitKey()
 ```
 
@@ -197,10 +197,10 @@ cv2.waitKey()
 ```Python
 import cv2
 
-image = cv2.imread(&#39;demo1.jpg&#39;)
+image = cv2.imread('demo1.jpg')
 output = image.copy()
 cv2.line(output, (35,25),(125,69),(255,0,0),5)
-cv2.imshow(&#39;Line&#39;, output)
+cv2.imshow('Line', output)
 cv2.waitKey()
 ```
 
@@ -215,11 +215,11 @@ cv2.waitKey()
 ```Python
 import cv2
 
-image = cv2.imread(&#39;demo.jpg&#39;)
+image = cv2.imread('demo.jpg')
 output = image.copy()
-cv2.putText(output, &#39;Sasaki Nozomi&#39;, (10, 25),
+cv2.putText(output, 'Sasaki Nozomi', (10, 25),
     cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
-cv2.imshow(&#39;Text&#39;, output)
+cv2.imshow('Text', output)
 cv2.waitKey()
 ```
 

@@ -3,7 +3,7 @@
 
 在数据科学和分析领域，图表不仅是展示数据的工具，更是讲故事的语言。Matplotlib 是 Python 中历史最悠久且功能最全面的绘图库。无论你是想画一个简单的折线图，还是需要定制复杂的多图布局，Matplotlib 都能满足你的需求。这篇文章将带你快速上手，学会用代码**画出**数据的价值。
 
-&lt;!--more--&gt;
+<!--more-->
 
 创建图与图表是很多分析项目中的一个重要步骤，它通常是项目开始时探索性数据分析（EDA）的一部分，或者在项目报告阶段向其他人介绍你的数据分析结果时使用。
 
@@ -20,10 +20,10 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
-plt.style.use(&#39;ggplot&#39;)
+plt.style.use('ggplot')
 %matplotlib inline
 
-data = pd.read_csv(&#39;../../Datasets/pokemon.csv&#39;)
+data = pd.read_csv('../../Datasets/pokemon.csv')
 data.head()
 ```
 
@@ -38,7 +38,7 @@ data.head()
 假如我们想查看一下每一代 Pokemon 的数量，并用条形图显示出来，该怎么办呢？
 
 ```Python
-generation = data[&#39;generation&#39;].value_counts()
+generation = data['generation'].value_counts()
 plt.bar(generation.index, generation.values)
 ```
 
@@ -49,9 +49,9 @@ plt.bar(generation.index, generation.values)
 如果我们想添加轴标签和标题的话，加上如下内容即可：
 
 ```Python
-plt.xlabel(&#39;generation&#39;)
-plt.ylabel(&#39;count&#39;)
-plt.title(&#39;Generation and Count&#39;)
+plt.xlabel('generation')
+plt.ylabel('count')
+plt.title('Generation and Count')
 ```
 
 ![](/images/202104/1/4.png)
@@ -60,7 +60,7 @@ plt.title(&#39;Generation and Count&#39;)
 
 ```Python
 for x,y in enumerate(generation.values):
-    plt.text(x&#43;1,y,&#39;%s&#39; % y,ha=&#39;center&#39;)
+    plt.text(x+1,y,'%s' % y,ha='center')
 ```
 
 ![](/images/202104/1/5.png)
@@ -68,7 +68,7 @@ for x,y in enumerate(generation.values):
 [matplotlib.pyplot.bar](https://matplotlib.org/api/_as_gen/matplotlib.pyplot.bar.html)函数详情：
 
 ```Python
-matplotlib.pyplot.bar(x, height, width=0.8, bottom=None, *, align=&#39;center&#39;, data=None, **kwargs)
+matplotlib.pyplot.bar(x, height, width=0.8, bottom=None, *, align='center', data=None, **kwargs)
 ```
 
 - x: 指定图形横轴坐标
@@ -83,14 +83,14 @@ matplotlib.pyplot.bar(x, height, width=0.8, bottom=None, *, align=&#39;center&#3
 知道了上述参数的含义之后，我们就可以对之前的图形进行小小的改动啦！
 
 ```Python
-generation = data[&#39;generation&#39;].value_counts()
-plt.bar(generation.index, generation.values, facecolor=&#39;orange&#39;,edgecolor=&#39;green&#39;, linewidth=2)
-plt.xlabel(&#39;generation&#39;)
-plt.ylabel(&#39;count&#39;)
-plt.title(&#39;Generation and Count&#39;)
+generation = data['generation'].value_counts()
+plt.bar(generation.index, generation.values, facecolor='orange',edgecolor='green', linewidth=2)
+plt.xlabel('generation')
+plt.ylabel('count')
+plt.title('Generation and Count')
 
 for x,y in enumerate(generation.values):
-    plt.text(x&#43;1,y,&#39;%s&#39; % y,ha=&#39;center&#39;)
+    plt.text(x+1,y,'%s' % y,ha='center')
 ```
 
 ![](/images/202104/1/12.png)
@@ -100,9 +100,9 @@ for x,y in enumerate(generation.values):
 箱线图一般用来展示数据的分布（如上下四分位数、中位数等），同时，也可以用来反映数据的异常情况。
 
 ```Python
-box = data[[&#39;defense&#39;,&#39;attack&#39;,&#39;hp&#39;]]
+box = data[['defense','attack','hp']]
 plt.boxplot(box.values)
-plt.setp(plt.gca(),xticklabels=[&#39;defense&#39;,&#39;attack&#39;,&#39;hp&#39;])
+plt.setp(plt.gca(),xticklabels=['defense','attack','hp'])
 ```
 
 ![](/images/202104/1/6.png)
@@ -141,12 +141,12 @@ matplotlib.pyplot.boxplot(x, notch=None, sym=None, vert=None, whis=None, positio
 我们不妨查看一下每一代 Pokemon 攻击力的走势，
 
 ```Python
-generation_attack = data.pivot(&#39;name&#39;, &#39;generation&#39;, &#39;attack&#39;).fillna(0)
+generation_attack = data.pivot('name', 'generation', 'attack').fillna(0)
 for col in generation_attack.columns:
-    gene = generation_attack[generation_attack[col] &gt; 0][col].sort_values()
+    gene = generation_attack[generation_attack[col] > 0][col].sort_values()
     plt.plot(range(gene.shape[0]),gene.values,label=col)
 plt.legend()
-plt.ylabel(&#39;Attack&#39;)
+plt.ylabel('Attack')
 ```
 
 ![](/images/202104/1/7.png)
@@ -168,9 +168,9 @@ matplotlib.pyplot.plot(*args, scalex=True, scaley=True, data=None, **kwargs)
 将防御力和攻击力用散点图绘制出来，
 
 ```Python
-plt.scatter(data[&#39;attack&#39;], data[&#39;defense&#39;])
-plt.xlabel(&#39;attck&#39;)
-plt.ylabel(&#39;defense&#39;)
+plt.scatter(data['attack'], data['defense'])
+plt.xlabel('attck')
+plt.ylabel('defense')
 ```
 
 ![](/images/202104/1/8.png)
@@ -197,9 +197,9 @@ matplotlib.pyplot.scatter(x, y, s=None, c=None, marker=None, cmap=None, norm=Non
 将防御力的分布用直方图绘制，
 
 ```Python
-plt.hist(data[&#39;defense&#39;],bins=25)
-plt.xlabel(&#39;Defense&#39;)
-plt.ylabel(&#39;Frequency&#39;)
+plt.hist(data['defense'],bins=25)
+plt.xlabel('Defense')
+plt.ylabel('Frequency')
 ```
 
 ![](/images/202104/1/9.png)
@@ -207,7 +207,7 @@ plt.ylabel(&#39;Frequency&#39;)
 [matplotlib.pyplot.hist](https://matplotlib.org/api/_as_gen/matplotlib.pyplot.hist.html)函数详情：
 
 ```Python
-matplotlib.pyplot.hist(x, bins=None, range=None, density=None, weights=None, cumulative=False, bottom=None, histtype=&#39;bar&#39;, align=&#39;mid&#39;, orientation=&#39;vertical&#39;, rwidth=None, log=False, color=None, label=None, stacked=False, normed=None)
+matplotlib.pyplot.hist(x, bins=None, range=None, density=None, weights=None, cumulative=False, bottom=None, histtype='bar', align='mid', orientation='vertical', rwidth=None, log=False, color=None, label=None, stacked=False, normed=None)
 ```
 
 - x: 指定每个 bin 分布的数据，对应 x 轴
@@ -230,10 +230,10 @@ matplotlib.pyplot.hist(x, bins=None, range=None, density=None, weights=None, cum
 接下来，我们可以看一下幻之宝可梦所占的比例，
 
 ```Python
-color = [&#34;aqua&#34;, &#34;orange&#34;]
-leg = [data[data[&#39;is_legendary&#39;] == 0].shape[0],data[data[&#39;is_legendary&#39;] == 1].shape[0]]
-legPie = plt.pie(leg,labels=[&#39;Non Legendary&#39;, &#39;Legendary&#39;],colors=color,shadow=True,
-                autopct=&#39;%1.1f%%&#39;,startangle=45,explode=(0,0.1))
+color = ["aqua", "orange"]
+leg = [data[data['is_legendary'] == 0].shape[0],data[data['is_legendary'] == 1].shape[0]]
+legPie = plt.pie(leg,labels=['Non Legendary', 'Legendary'],colors=color,shadow=True,
+                autopct='%1.1f%%',startangle=45,explode=(0,0.1))
 ```
 
 ![](/images/202104/1/10.png)
@@ -290,8 +290,8 @@ NBA 有一个官方统计网站`https://stats.nba.com/`，可以在该网站到�
 为了获取到`James Harden`在`2018-2019`赛季的投篮数据，可以使用以下地址：
 
 ```Python
-player_id = &#34;201935&#34;
-shot_chart_url = &#34;https://stats.nba.com/stats/shotchartdetail?CFID=33&amp;CFPARAMS=2018-19&amp;ContextFilter=&amp;ContextMeasure=FGA&amp;DateFrom=&amp;DateTo=&amp;GameID=&amp;GameSegment=&amp;LastNGames=0&amp;LeagueID=00&amp;Location=&amp;MeasureType=Base&amp;Month=0&amp;OpponentTeamID=0&amp;Outcome=&amp;PaceAdjust=N&amp;PerMode=PerGame&amp;Period=0&amp;PlayerID=&#34;&#43; player_id &#43; &#34;&amp;PlusMinus=N&amp;Position=&amp;Rank=N&amp;RookieYear=&amp;Season=2018-19&amp;SeasonSegment=&amp;SeasonType=Regular&#43;Season&amp;TeamID=0&amp;VsConference=&amp;VsDivision=&amp;mode=Advanced&amp;showDetails=0&amp;showShots=1&amp;showZones=0&amp;PlayerPosition=&#34;
+player_id = "201935"
+shot_chart_url = "https://stats.nba.com/stats/shotchartdetail?CFID=33&CFPARAMS=2018-19&ContextFilter=&ContextMeasure=FGA&DateFrom=&DateTo=&GameID=&GameSegment=&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PaceAdjust=N&PerMode=PerGame&Period=0&PlayerID="+ player_id + "&PlusMinus=N&Position=&Rank=N&RookieYear=&Season=2018-19&SeasonSegment=&SeasonType=Regular+Season&TeamID=0&VsConference=&VsDivision=&mode=Advanced&showDetails=0&showShots=1&showZones=0&PlayerPosition="
 ```
 
 其中`player_id`指的是球员的 ID，比如`James Harden`的 ID 就是`201935`。
@@ -307,20 +307,20 @@ shot_chart_url = &#34;https://stats.nba.com/stats/shotchartdetail?CFID=33&amp;CF
 接下来，我们可以使用[Requests](https://requests.readthedocs.io/en/latest/)包请求上述地址获取到数据：
 
 ```Pyhton
-headers = {&#39;User-Agent&#39;: &#34;Mozilla&#34;}
+headers = {'User-Agent': "Mozilla"}
 response = requests.get(shot_chart_url, headers=headers)
 ```
 
 请求返回的数据是 JSON 格式的，可以用`Pandas`创建一个`DataFrame`对象，方便后续处理。
 
 ```Python
-column_names = response.json()[&#39;resultSets&#39;][0][&#39;headers&#39;]
-shots = response.json()[&#39;resultSets&#39;][0][&#39;rowSet&#39;]
+column_names = response.json()['resultSets'][0]['headers']
+shots = response.json()['resultSets'][0]['rowSet']
 
 shot_df = pd.DataFrame(shots, columns=column_names)
 
 from IPython.display import display
-with pd.option_context(&#39;display.max_columns&#39;, None):
+with pd.option_context('display.max_columns', None):
     display(shot_df.head())
 ```
 
@@ -329,7 +329,7 @@ with pd.option_context(&#39;display.max_columns&#39;, None):
 以上便是`James Harden`在`2018-2019`赛季常规赛的投篮数据。其中`LOC_X`,`LOC_Y`就是出手位置，可以用散点图将其绘制出来：
 
 ```Python
-sns.set_style(&#34;white&#34;)
+sns.set_style("white")
 sns.set_color_codes()
 plt.figure(figsize=(12,11))
 plt.scatter(shot_df.LOC_X, shot_df.LOC_Y, alpha=0.3)
@@ -343,7 +343,7 @@ plt.show()
 ```Python
 from matplotlib.patches import Circle, Rectangle, Arc
 
-def draw_court(ax=None, color=&#39;black&#39;, lw=2, outer_lines=False):
+def draw_court(ax=None, color='black', lw=2, outer_lines=False):
     if ax is None:
         ax = plt.gca()
 
@@ -362,7 +362,7 @@ def draw_court(ax=None, color=&#39;black&#39;, lw=2, outer_lines=False):
                          linewidth=lw, color=color, fill=False)
 
     bottom_free_throw = Arc((0, 142.5), 120, 120, theta1=180, theta2=0,
-                            linewidth=lw, color=color, linestyle=&#39;dashed&#39;)
+                            linewidth=lw, color=color, linestyle='dashed')
 
     restricted = Arc((0, 0), 80, 80, theta1=0, theta2=180, linewidth=lw,
                      color=color)
@@ -434,9 +434,9 @@ ax.set_xlim(-250, 250)
 ax.set_ylim(422.5, -47.5)
 
 
-ax.set_xlabel(&#34;&#34;)
-ax.set_ylabel(&#34;&#34;)
-ax.tick_params(labelbottom=&#34;off&#34;, labelleft=&#34;off&#34;)
+ax.set_xlabel("")
+ax.set_ylabel("")
+ax.tick_params(labelbottom="off", labelleft="off")
 ```
 
 ![](/images/202104/2/7.png)
@@ -446,9 +446,9 @@ ax.tick_params(labelbottom=&#34;off&#34;, labelleft=&#34;off&#34;)
 值得注意的是，`shot_df`中有一列`SHOT_MADE_FLAG`代表的是是否投中（1 为投中，0 为未投中），我们可以查看一下投中出手位置的分布：
 
 ```Python
-made_df = shot_df[shot_df[&#39;SHOT_MADE_FLAG&#39;]==1]
+made_df = shot_df[shot_df['SHOT_MADE_FLAG']==1]
 
-joint_shot_chart = sns.jointplot(made_df.LOC_X, made_df.LOC_Y, space=0, alpha=0.5, color=&#39;r&#39;)
+joint_shot_chart = sns.jointplot(made_df.LOC_X, made_df.LOC_Y, space=0, alpha=0.5, color='r')
 joint_shot_chart.fig.set_size_inches(12,11)
 
 ax = joint_shot_chart.ax_joint
@@ -458,9 +458,9 @@ ax.set_xlim(-250, 250)
 ax.set_ylim(422.5, -47.5)
 
 
-ax.set_xlabel(&#34;&#34;)
-ax.set_ylabel(&#34;&#34;)
-ax.tick_params(labelbottom=&#34;off&#34;, labelleft=&#34;off&#34;)
+ax.set_xlabel("")
+ax.set_ylabel("")
+ax.tick_params(labelbottom="off", labelleft="off")
 ```
 
 ![](/images/202104/2/8.png)

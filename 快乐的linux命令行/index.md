@@ -1,11 +1,11 @@
 # 快乐的Linux命令行
 
 
-- **2024/11/12 更新**: [推荐](#推荐)增加**CLI tools you won&#39;t be able to live without 🔧**和**40 个超有趣的 Linux 命令行彩蛋和游戏**
+- **2024/11/12 更新**: [推荐](#推荐)增加**CLI tools you won't be able to live without 🔧**和**40 个超有趣的 Linux 命令行彩蛋和游戏**
 
 在现代操作系统中，图形用户界面 (GUI) 让我们与计算机的交互变得直观和简单。然而，对于许多开发者、系统管理员和技术爱好者而言，Linux 命令行仍然是最为强大且不可替代的工具。通过它，我们能够精准地控制系统资源、自动化复杂任务，并快速处理各种系统操作。与 GUI 不同，命令行的操作不依赖于鼠标或其他外部设备，只需键入一行命令，便可在数秒内完成从文件管理到网络配置、从进程控制到系统监控等一系列操作。正因为其高效、灵活和可扩展性，Linux 命令行成为了技术专家首选的工作方式之一。本文，我们将逐步探索 Linux 命令行的基础知识，了解一些常用的命令，以及如何利用这些命令高效管理系统。无论你是新手还是经验丰富的用户，掌握这些命令都会让你在 Linux 世界中如鱼得水。
 
-&lt;!--more--&gt;
+<!--more-->
 
 ## 1. 文件管理
 
@@ -42,7 +42,7 @@ find ~/work
 有时，我们会想在某个指定目录下搜索特定文件名，例如：
 
 ```
-sudo find /etc -name &#34;ssh_config&#34;
+sudo find /etc -name "ssh_config"
 ```
 
 ![](/images/202410/11/3.png)
@@ -52,7 +52,7 @@ sudo find /etc -name &#34;ssh_config&#34;
 如果想搜索系统中所有以`.config`为文件名结尾的文件的话，我们可以使用`*`通配符进行模糊搜索。
 
 ```
-sudo find / -name &#34;*.config&#34;
+sudo find / -name "*.config"
 ```
 
 ![](/images/202410/11/4.png)
@@ -62,7 +62,7 @@ sudo find / -name &#34;*.config&#34;
 通过`-maxdepth`和`-mindepth`选项可以分别指定搜索时的最大和最小深度。
 
 ```
-sudo find / -maxdepth 2 -name &#34;*.config&#34;
+sudo find / -maxdepth 2 -name "*.config"
 ```
 
 ![](/images/202410/11/5.png)
@@ -72,7 +72,7 @@ sudo find / -maxdepth 2 -name &#34;*.config&#34;
 通过使用或操作符可以组合搜索结果，该操作符如下例中所示，用`-o`或`-or`选项表示。
 
 ```
-sudo find / -maxdepth 2 -name &#34;*.config&#34; -o -name &#34;ssh&#34;
+sudo find / -maxdepth 2 -name "*.config" -o -name "ssh"
 ```
 
 ![](/images/202410/11/6.png)
@@ -85,7 +85,7 @@ sudo find / -maxdepth 2 -name &#34;*.config&#34; -o -name &#34;ssh&#34;
 
 #### 指定搜索文件大小
 
-通过`-size`选项，我们可以指定搜索文件大小。比如，`-size 10k`表示搜索大小为`10k`的文件，`-size &#43;10k`表示搜索大小超过`10k`的文件，`-size -10k`表示搜索大小少于`10k`的文件。
+通过`-size`选项，我们可以指定搜索文件大小。比如，`-size 10k`表示搜索大小为`10k`的文件，`-size +10k`表示搜索大小超过`10k`的文件，`-size -10k`表示搜索大小少于`10k`的文件。
 
 ![](/images/202410/11/8.png)
 
@@ -231,10 +231,10 @@ sudo apt install curl
 `curl`命令的语法如下：
 
 ```
-curl [options...] &lt;url&gt;
+curl [options...] <url>
 ```
 
-`&lt;url&gt;`表示 URL 是必须的，而`[options...]`表示选项可以有多个或者零个。如果不带任何选项，对应 URL 的资源数据会在标准输出设备中输出。例如：
+`<url>`表示 URL 是必须的，而`[options...]`表示选项可以有多个或者零个。如果不带任何选项，对应 URL 的资源数据会在标准输出设备中输出。例如：
 
 ```
 curl http://www.baidu.com
@@ -277,7 +277,7 @@ curl -O https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js -O https://
 HTTP 请求报文中有一个 User-Agent 头部字段，我们可以通过使用`-A`选项对其进行设置：
 
 ```
-curl -A &#34;andyfree&#34;
+curl -A "andyfree"
 ```
 
 ![](/images/202410/10/6.png)
@@ -456,7 +456,7 @@ sudo hostnamectl set-hostname lucas
 
 [Linux Commands Cheat Sheet](https://www.linuxtrainingacademy.com/linux-commands-cheat-sheet/)
 
-[CLI tools you won&#39;t be able to live without 🔧](https://dev.to/lissy93/cli-tools-you-cant-live-without-57f6)
+[CLI tools you won't be able to live without 🔧](https://dev.to/lissy93/cli-tools-you-cant-live-without-57f6)
 
 [40 个超有趣的 Linux 命令行彩蛋和游戏](https://www.cnblogs.com/alannever/p/12171599.html)
 

@@ -1,26 +1,18 @@
 <!DOCTYPE html>
-<html
-  itemscope
-  itemtype="http://schema.org/WebPage"
-  lang="zh-CN"
->
+<html itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
   <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
     
-    <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, maximum-scale=2"
-    />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
     <meta name="robots" content="noodp" />
-    <meta name="google-adsense-account" content="ca-pub-5868664387231059" />
-    <title>json-server源码剖析：快速构建REST API背后的原理 - 东尼的博客</title><meta name="author" content="AndyFree96">
-<meta name="author-link" content="https://andyfree96.github.io/">
-<meta name="description" content="在前端开发中，构建一套完整的后端接口往往耗时费力，而 json-server正是为了解决这一痛点而生。只需一个 JSON 文件，它就能快速生成一个 REST API 服务，被广泛用于前端开发、原型验证、接口测试等场景。本文将深入剖析 json-server的源码，一起理解它是如何工作的，并从中学习一些开发技巧。" /><meta name="keywords" content='Node.js, TypeScript, RESTful API, JSON Server' />
+    <title>Json-Server源码剖析：快速构建REST API背后的原理 - 东尼的博客</title><meta name="author" content="AndyFree96">
+<meta name="description" content="在前端开发中，构建一套完整的后端接口往往耗时费力，而 json-server正是为了解决这一痛点而生。只需一个 JSON 文件，它就能快速生成一个 REST API 服务，被广泛用于前端开发、原型验证、接口测试等场景。本文将深入剖析 json-server的源码，一起理解它是如何工作的，并从中学习一些开发技巧。
+"><meta name="keywords" content='Node.js, TypeScript, RESTful API, JSON Server'>
   <meta itemprop="name" content="json-server源码剖析：快速构建REST API背后的原理">
   <meta itemprop="description" content="在前端开发中，构建一套完整的后端接口往往耗时费力，而 json-server正是为了解决这一痛点而生。只需一个 JSON 文件，它就能快速生成一个 REST API 服务，被广泛用于前端开发、原型验证、接口测试等场景。本文将深入剖析 json-server的源码，一起理解它是如何工作的，并从中学习一些开发技巧。">
   <meta itemprop="datePublished" content="2025-07-31T16:47:36+08:00">
   <meta itemprop="dateModified" content="2025-07-31T16:47:36+08:00">
-  <meta itemprop="wordCount" content="5220">
+  <meta itemprop="wordCount" content="5271">
   <meta itemprop="keywords" content="Node.js,TypeScript,RESTful API,JSON Server"><meta property="og:url" content="http://localhost:1313/json-server%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/">
   <meta property="og:site_name" content="东尼的博客">
   <meta property="og:title" content="json-server源码剖析：快速构建REST API背后的原理">
@@ -39,10 +31,10 @@
   <meta name="twitter:title" content="json-server源码剖析：快速构建REST API背后的原理">
   <meta name="twitter:description" content="在前端开发中，构建一套完整的后端接口往往耗时费力，而 json-server正是为了解决这一痛点而生。只需一个 JSON 文件，它就能快速生成一个 REST API 服务，被广泛用于前端开发、原型验证、接口测试等场景。本文将深入剖析 json-server的源码，一起理解它是如何工作的，并从中学习一些开发技巧。">
       <meta name="twitter:site" content="@IRONAnthony96">
-<meta name="application-name" content="FixIt">
+<meta name="twitter:creator" content="@IRONAnthony96" /><meta name="application-name" content="FixIt">
 <meta name="apple-mobile-web-app-title" content="FixIt"><meta name="theme-color" data-light="#f8f8f8" data-dark="#252627" content="#f8f8f8"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" href="http://localhost:1313/json-server%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" /><link rel="prev" href="http://localhost:1313/%E7%94%A8powershell%E7%8E%A9%E8%BD%AC%E6%96%87%E4%BB%B6%E5%A4%84%E7%90%86/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" type="text/html" href="http://localhost:1313/json-server%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="json-server源码剖析：快速构建REST API背后的原理 - 东尼的博客" /><link rel="prev" type="text/html" href="http://localhost:1313/%E7%94%A8powershell%E7%8E%A9%E8%BD%AC%E6%96%87%E4%BB%B6%E5%A4%84%E7%90%86/" title="用PowerShell玩转文件处理" /><link rel="alternate" type="text/markdown" href="http://localhost:1313/json-server%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/index.md" title="json-server源码剖析：快速构建REST API背后的原理 - 东尼的博客"><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><script type="application/ld+json">
   {
@@ -53,7 +45,7 @@
     "mainEntityOfPage": {
       "@type": "WebPage",
       "@id": "http:\/\/localhost:1313\/json-server%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90\/"
-    },"genre": "posts","keywords": "Node.js, TypeScript, RESTful API, JSON Server","wordcount":  5220 ,
+    },"genre": "posts","keywords": "Node.js, TypeScript, RESTful API, JSON Server","wordcount":  5271 ,
     "url": "http:\/\/localhost:1313\/json-server%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90\/","datePublished": "2025-07-31T16:47:36+08:00","dateModified": "2025-07-31T16:47:36+08:00","publisher": {
       "@type": "Organization",
       "name": ""},"author": {
@@ -61,74 +53,21 @@
         "name": "AndyFree96"
       },"description": ""
   }
-  </script></head>
-  <body
-    data-header-desktop="sticky"
-    data-header-mobile="auto"
-  ><script>
-      (window.localStorage?.getItem("theme")
-        ? localStorage.getItem("theme") === "dark"
-        : "auto" === "auto"
-        ? window.matchMedia("(prefers-color-scheme: dark)").matches
-        : "auto" === "dark") &&
-        document.body.setAttribute("data-theme", "dark");
-    </script><div
-      class="wrapper"
-      data-page-style="normal"
-    ><header class="desktop animate__faster" id="header-desktop">
+  </script><script src="/js/head/color-scheme.min.js"></script></head>
+  <body data-header-desktop="sticky" data-header-mobile="auto"><div class="wrapper" data-page-style="normal"><header class="desktop animate__faster" id="header-desktop">
   <div class="header-wrapper">
     <div class="header-title">
       <a href="/" title="东尼的博客"><span class="header-title-text">东尼的博客</span></a><span class="header-subtitle"></span></div>
     <nav>
       <ul class="menu"><li class="menu-item">
-              <a
-                class="menu-link"
-                href="/posts/"
-                
-                
-              >📕 文章</a></li><li class="menu-item">
-              <a
-                class="menu-link"
-                href="/categories/"
-                
-                
-              >🧰 分类</a></li><li class="menu-item">
-              <a
-                class="menu-link"
-                href="/tags/"
-                
-                
-              >🔖 标签</a></li><li class="menu-item">
-              <a
-                class="menu-link"
-                href="/book"
-                
-                
-              >📚 书单</a></li><li class="menu-item">
-              <a
-                class="menu-link"
-                href="/paper"
-                
-                
-              >📝 论文</a></li><li class="menu-item">
-              <a
-                class="menu-link"
-                href="/opencourse"
-                
-                
-              >👨🏻‍💻 公开课</a></li><li class="menu-item">
-              <a
-                class="menu-link"
-                href="/resource"
-                
-                
-              >⚡️ 资源</a></li><li class="menu-item">
-              <a
-                class="menu-link"
-                href="/about"
-                
-                
-              >🙋🏻‍♂️ 关于</a></li><li class="menu-item delimiter"></li><li class="menu-item theme-switch" title="切换主题">
+              <a class="menu-link" href="/posts/">📕 文章</a></li><li class="menu-item">
+              <a class="menu-link" href="/categories/">🧰 分类</a></li><li class="menu-item">
+              <a class="menu-link" href="/tags/">🔖 标签</a></li><li class="menu-item">
+              <a class="menu-link" href="/book">📚 书单</a></li><li class="menu-item">
+              <a class="menu-link" href="/paper">📝 论文</a></li><li class="menu-item">
+              <a class="menu-link" href="/opencourse">👨🏻‍💻 公开课</a></li><li class="menu-item">
+              <a class="menu-link" href="/resource">⚡️ 资源</a></li><li class="menu-item">
+              <a class="menu-link" href="/about">🙋🏻‍♂️ 关于</a></li><li class="menu-item delimiter"></li><li class="menu-item theme-switch" title="切换主题">
           <i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i>
         </li></ul>
     </nav>
@@ -143,76 +82,18 @@
       </div>
     </div>
     <nav>
-      <ul class="menu" id="menu-mobile"><li
-              class="menu-item"
-            ><a
-                  class="menu-link"
-                  href="/posts/"
-                  
-                  
-                >📕 文章</a></li><li
-              class="menu-item"
-            ><a
-                  class="menu-link"
-                  href="/categories/"
-                  
-                  
-                >🧰 分类</a></li><li
-              class="menu-item"
-            ><a
-                  class="menu-link"
-                  href="/tags/"
-                  
-                  
-                >🔖 标签</a></li><li
-              class="menu-item"
-            ><a
-                  class="menu-link"
-                  href="/book"
-                  
-                  
-                >📚 书单</a></li><li
-              class="menu-item"
-            ><a
-                  class="menu-link"
-                  href="/paper"
-                  
-                  
-                >📝 论文</a></li><li
-              class="menu-item"
-            ><a
-                  class="menu-link"
-                  href="/opencourse"
-                  
-                  
-                >👨🏻‍💻 公开课</a></li><li
-              class="menu-item"
-            ><a
-                  class="menu-link"
-                  href="/resource"
-                  
-                  
-                >⚡️ 资源</a></li><li
-              class="menu-item"
-            ><a
-                  class="menu-link"
-                  href="/about"
-                  
-                  
-                >🙋🏻‍♂️ 关于</a></li><li class="menu-item menu-system">
+      <ul class="menu" id="menu-mobile"><li class="menu-item"><a class="menu-link" href="/posts/">📕 文章</a></li><li class="menu-item"><a class="menu-link" href="/categories/">🧰 分类</a></li><li class="menu-item"><a class="menu-link" href="/tags/">🔖 标签</a></li><li class="menu-item"><a class="menu-link" href="/book">📚 书单</a></li><li class="menu-item"><a class="menu-link" href="/paper">📝 论文</a></li><li class="menu-item"><a class="menu-link" href="/opencourse">👨🏻‍💻 公开课</a></li><li class="menu-item"><a class="menu-link" href="/resource">⚡️ 资源</a></li><li class="menu-item"><a class="menu-link" href="/about">🙋🏻‍♂️ 关于</a></li><li class="menu-item menu-system">
           <span class="menu-system-item theme-switch" title="切换主题"><i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i></span></li>
       </ul>
     </nav>
   </div>
-</header><main
-        class="container"
-      ><aside class="aside-collection animate__animated animate__fadeIn animate__faster" aria-label="合集"></aside>
+</header><main class="container"><aside class="aside-collection animate__animated animate__fadeIn animate__faster" aria-label="合集"></aside>
 
   <article class="page single">
-    <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span title="转载" class="icon-repost"><i class="fa-solid fa-share fa-fw" aria-hidden="true"></i></span><span>json-server源码剖析：快速构建REST API背后的原理</span>
+    <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span title="转载" class="icon-repost"><i class="fa-solid fa-share fa-fw" aria-hidden="true"></i></span><span>Json-Server源码剖析：快速构建REST API背后的原理</span>
       </h1></div><div class="post-meta">
-      <div class="post-meta-line"><span class="post-author"><a href="https://andyfree96.github.io/" title="作者"target="_blank" rel="external nofollow noopener noreferrer author" class="author"><img loading="lazy" src="/avatar/1.jpg" alt="AndyFree96" data-title="AndyFree96" class="avatar" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/>&nbsp;AndyFree96</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" class="post-category" title="分类 - 源码剖析"><i class="fa-regular fa-folder fa-fw" aria-hidden="true"></i> 源码剖析</a></span></div><div class="post-meta-line"><span title="发布于 2025-07-31 16:47:36"><i class="fa-solid fa-calendar-days fa-fw me-1" aria-hidden="true"></i><time datetime="2025-07-31">2025-07-31</time></span>&nbsp;<span title="5220 字"><i class="fa-solid fa-pencil-alt fa-fw me-1" aria-hidden="true"></i>约 5300 字</span>&nbsp;<span><i class="fa-regular fa-clock fa-fw me-1" aria-hidden="true"></i>预计阅读 11 分钟</span>&nbsp;</div>
-    </div><div class="featured-image"><img loading="lazy" src="/images/202507/2/danist-soh-p7kMu-QwI0M-unsplash.jpg" alt="/images/202507/2/danist-soh-p7kMu-QwI0M-unsplash.jpg" data-title="/images/202507/2/danist-soh-p7kMu-QwI0M-unsplash.jpg" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></div><div class="details toc" id="toc-static" data-kept="false">
+      <div class="post-meta-line"><span class="post-author"><a href="https://andyfree96.github.io/" title="作者"target="_blank" rel="external nofollow noopener noreferrer author" class="author"><img class="avatar" src='/avatar/1.jpg' alt="AndyFree96" height="16" width="16">&nbsp;AndyFree96</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" class="post-category" title="分类 - 源码剖析"><i class="fa-regular fa-folder fa-fw" aria-hidden="true"></i> 源码剖析</a></span></div><div class="post-meta-line"><span title="发布于 2025-07-31 16:47:36"><i class="fa-solid fa-calendar-days fa-fw me-1" aria-hidden="true"></i><time datetime="2025-07-31">2025-07-31</time></span>&nbsp;<span title="5271 字"><i class="fa-solid fa-pencil-alt fa-fw me-1" aria-hidden="true"></i>约 5300 字</span>&nbsp;<span><i class="fa-regular fa-clock fa-fw me-1" aria-hidden="true"></i>预计阅读 11 分钟</span>&nbsp;</div>
+    </div><div class="featured-image"><img src='/images/202507/2/danist-soh-p7kMu-QwI0M-unsplash.jpg' alt="/images/202507/2/danist-soh-p7kMu-QwI0M-unsplash.jpg"></div><div class="details toc" id="toc-static" data-kept="false">
         <div class="details-summary toc-title">
           <span>目录</span>
           <span><i class="details-icon fa-solid fa-angle-right" aria-hidden="true"></i></span>
@@ -229,14 +110,17 @@
     <li><a href="#命令行工具化如何实现像vite一样的-cli-启动">命令行工具化：如何实现像<code>vite</code>一样的 CLI 启动？</a></li>
     <li><a href="#数据持久化让-postputdelete-操作不再丢失">数据持久化：让 POST、PUT、DELETE 操作不再丢失</a></li>
     <li><a href="#热更新支持如何监听dbjson变化自动加载">热更新支持：如何监听<code>db.json</code>变化自动加载？</a></li>
-    <li><a href="#总结小而精的架构哲学">总结：小而精的架构哲学</a></li>
+    <li><a href="#小而精的架构哲学">小而精的架构哲学</a></li>
     <li><a href="#推荐">推荐</a></li>
   </ul>
 </nav></div>
       </div><div class="content" id="content"><p>在前端开发中，构建一套完整的后端接口往往耗时费力，而 <a href="https://github.com/typicode/json-server"target="_blank" rel="external nofollow noopener noreferrer">json-server</a>正是为了解决这一痛点而生。只需一个 JSON 文件，它就能快速生成一个 REST API 服务，被广泛用于前端开发、原型验证、接口测试等场景。本文将深入剖析 <a href="https://github.com/typicode/json-server"target="_blank" rel="external nofollow noopener noreferrer">json-server</a>的源码，一起理解它是如何工作的，并从中学习一些开发技巧。</p>
-<h2 id="一个简单但不完整的实现" class="heading-element">
-  <a href="#%e4%b8%80%e4%b8%aa%e7%ae%80%e5%8d%95%e4%bd%86%e4%b8%8d%e5%ae%8c%e6%95%b4%e7%9a%84%e5%ae%9e%e7%8e%b0" class="heading-mark"></a>一个简单但不完整的实现</h2><p>由于有一些 Express 的使用经验，在阅读了<a href="https://github.com/typicode/json-server"target="_blank" rel="external nofollow noopener noreferrer">json-server</a>的 README.md 介绍后，我的初始想法是将<code>db.json</code>文件加载然后遍历对象，将<code>key</code>作为路由的 Endpoint 即可，由于有了以下代码：</p>
-<div class="highlight" id="id-1"><div class="chroma">
+<h2 class="heading-element" id="一个简单但不完整的实现"><span>一个简单但不完整的实现</span>
+  <a href="#%e4%b8%80%e4%b8%aa%e7%ae%80%e5%8d%95%e4%bd%86%e4%b8%8d%e5%ae%8c%e6%95%b4%e7%9a%84%e5%ae%9e%e7%8e%b0" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>由于有一些 Express 的使用经验，在阅读了<a href="https://github.com/typicode/json-server"target="_blank" rel="external nofollow noopener noreferrer">json-server</a>的 README.md 介绍后，我的初始想法是将<code>db.json</code>文件加载然后遍历对象，将<code>key</code>作为路由的 Endpoint 即可，由于有了以下代码：</p>
+<div class="highlight" data-open="true"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">  1
 </span><span class="lnt">  2
@@ -442,19 +326,31 @@
 </span></span><span class="line"><span class="cl"><span class="nx">app</span><span class="p">.</span><span class="nx">listen</span><span class="p">(</span><span class="nx">PORT</span><span class="p">);</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p><code>npx tsx ./tiny.mjs</code>启动程序终端输出如下：</p>
-<p><img loading="lazy" src="/images/202507/2/2b8e7bed92eecfb6b6e58295c23aa7b8_MD5.jpeg" alt="/images/202507/2/2b8e7bed92eecfb6b6e58295c23aa7b8_MD5.jpeg" srcset="/images/202507/2/2b8e7bed92eecfb6b6e58295c23aa7b8_MD5.jpeg?size=small, /images/202507/2/2b8e7bed92eecfb6b6e58295c23aa7b8_MD5.jpeg?size=medium 1.5x, /images/202507/2/2b8e7bed92eecfb6b6e58295c23aa7b8_MD5.jpeg?size=large 2x" data-title="/images/202507/2/2b8e7bed92eecfb6b6e58295c23aa7b8_MD5.jpeg" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></p>
+<p><img loading="lazy" src='/images/202507/2/2b8e7bed92eecfb6b6e58295c23aa7b8_MD5.jpeg' alt="/images/202507/2/2b8e7bed92eecfb6b6e58295c23aa7b8_MD5.jpeg"></p>
 <p>访问上述 Endpoint 能够正常获取到数据，并支持<code>POST</code>、<code>DELETE</code>、<code>PUT</code>等操作，初步看起来颇有点<a href="https://github.com/typicode/json-server"target="_blank" rel="external nofollow noopener noreferrer">json-server</a>的味道。然而，实际使用中仍然存在以下几个问题：</p>
-<h3 id="问题-1启动方式不便" class="heading-element">
-  <a href="#%e9%97%ae%e9%a2%98-1%e5%90%af%e5%8a%a8%e6%96%b9%e5%bc%8f%e4%b8%8d%e4%be%bf" class="heading-mark"></a>问题 1：启动方式不便</h3><p>当前的启动方式是通过 <code>npx tsx ./tiny.mjs</code>，显然这并不方便作为一个 CLI 工具来使用。理想状态下，我们希望它能像 <code>vite</code> 那样，安装后通过一个命令（如 <code>tiny-server</code>）即可启动服务。</p>
-<h3 id="问题-2数据无法持久化" class="heading-element">
-  <a href="#%e9%97%ae%e9%a2%98-2%e6%95%b0%e6%8d%ae%e6%97%a0%e6%b3%95%e6%8c%81%e4%b9%85%e5%8c%96" class="heading-mark"></a>问题 2：数据无法持久化</h3><p>虽然可以对资源执行 <code>POST</code>、<code>PUT</code>、<code>DELETE</code> 操作，但这些变更不会被持久化保存。应用一旦重启，所有数据都会恢复为初始状态。</p>
-<h3 id="问题-3热更新缺失" class="heading-element">
-  <a href="#%e9%97%ae%e9%a2%98-3%e7%83%ad%e6%9b%b4%e6%96%b0%e7%bc%ba%e5%a4%b1" class="heading-mark"></a>问题 3：热更新缺失</h3><p>修改 <code>db.json</code> 文件后，当前服务不会感知到变更，也无法实时更新数据内容。这意味着我们需要手动重启服务，才能看到修改结果。</p>
+<h3 class="heading-element" id="问题-1启动方式不便"><span>问题 1：启动方式不便</span>
+  <a href="#%e9%97%ae%e9%a2%98-1%e5%90%af%e5%8a%a8%e6%96%b9%e5%bc%8f%e4%b8%8d%e4%be%bf" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p>当前的启动方式是通过 <code>npx tsx ./tiny.mjs</code>，显然这并不方便作为一个 CLI 工具来使用。理想状态下，我们希望它能像 <code>vite</code> 那样，安装后通过一个命令（如 <code>tiny-server</code>）即可启动服务。</p>
+<h3 class="heading-element" id="问题-2数据无法持久化"><span>问题 2：数据无法持久化</span>
+  <a href="#%e9%97%ae%e9%a2%98-2%e6%95%b0%e6%8d%ae%e6%97%a0%e6%b3%95%e6%8c%81%e4%b9%85%e5%8c%96" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p>虽然可以对资源执行 <code>POST</code>、<code>PUT</code>、<code>DELETE</code> 操作，但这些变更不会被持久化保存。应用一旦重启，所有数据都会恢复为初始状态。</p>
+<h3 class="heading-element" id="问题-3热更新缺失"><span>问题 3：热更新缺失</span>
+  <a href="#%e9%97%ae%e9%a2%98-3%e7%83%ad%e6%9b%b4%e6%96%b0%e7%bc%ba%e5%a4%b1" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p>修改 <code>db.json</code> 文件后，当前服务不会感知到变更，也无法实时更新数据内容。这意味着我们需要手动重启服务，才能看到修改结果。</p>
 <p>幸运的是，<a href="https://github.com/typicode/json-server"target="_blank" rel="external nofollow noopener noreferrer">json-server</a>在这几个方面都有成熟的实现。那么它是如何做到的？下面我们就带着这三个问题，一步步剖析<a href="https://github.com/typicode/json-server"target="_blank" rel="external nofollow noopener noreferrer">json-server</a>的源码，看看它是如何实现这些特性的。</p>
-<h2 id="命令行工具化如何实现像vite一样的-cli-启动" class="heading-element">
-  <a href="#%e5%91%bd%e4%bb%a4%e8%a1%8c%e5%b7%a5%e5%85%b7%e5%8c%96%e5%a6%82%e4%bd%95%e5%ae%9e%e7%8e%b0%e5%83%8fvite%e4%b8%80%e6%a0%b7%e7%9a%84-cli-%e5%90%af%e5%8a%a8" class="heading-mark"></a>命令行工具化：如何实现像<code>vite</code>一样的 CLI 启动？</h2><p>当前是通过<code>npx tsx ./tiny.mjs</code>启动服务，这种方式不适合作为常规 CLI 工具发布与使用。我们希望能通过<code>tiny-server</code>这样一个命令来直接运行项目，像<code>vite</code>一样方便。</p>
+<h2 class="heading-element" id="命令行工具化如何实现像vite一样的-cli-启动"><span>命令行工具化：如何实现像<code>vite</code>一样的 CLI 启动？</span>
+  <a href="#%e5%91%bd%e4%bb%a4%e8%a1%8c%e5%b7%a5%e5%85%b7%e5%8c%96%e5%a6%82%e4%bd%95%e5%ae%9e%e7%8e%b0%e5%83%8fvite%e4%b8%80%e6%a0%b7%e7%9a%84-cli-%e5%90%af%e5%8a%a8" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>当前是通过<code>npx tsx ./tiny.mjs</code>启动服务，这种方式不适合作为常规 CLI 工具发布与使用。我们希望能通过<code>tiny-server</code>这样一个命令来直接运行项目，像<code>vite</code>一样方便。</p>
 <p><a href="https://github.com/typicode/json-server"target="_blank" rel="external nofollow noopener noreferrer">json-server</a>是如何做到的？查看<code>package.json</code>文件，可以看到这段配置：</p>
-<div class="highlight" id="id-2"><div class="chroma">
+<div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -467,7 +363,7 @@
 </div>
 </div><p>这段配置的意思是：当用户安装<a href="https://github.com/typicode/json-server"target="_blank" rel="external nofollow noopener noreferrer">json-server</a>时（例如<code>npm install -g json-server</code>）,npm 会自动在系统的<code>PATH</code>中注册一个名为<code>json-server</code>的可执行命令，并将其映射到项目目录下的<code>lib/bin.js</code>脚本。</p>
 <p>然而，Clone 下来的源码中并没有<code>lib/bin.js</code>文件。查看<code>package.json</code>文件，可以看到这段配置：</p>
-<div class="highlight" id="id-3"><div class="chroma">
+<div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -479,17 +375,17 @@
 </span></span><span class="line"><span class="cl">  <span class="p">}</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>当运行<code>npm run build</code>时，npm 会执行对应的脚本命令：</p>
-<div class="highlight" id="id-4"><div class="chroma">
+<div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">rm -rf lib <span class="o">&amp;&amp;</span> tsc</span></span></code></pre></td></tr></table>
 </div>
-</div><p><code>rm -rf lib</code>会删除<code>lib</code>目录及其所有内容（如果存在）。<code>&amp;&amp;</code>是一个 Bash 连接符，表示其哪一个命令成功后再执行后一个。<code>tsc</code>会更具<code>tsconfig.json</code>把<code>src</code>目录中的<code>.ts</code>文件编译成<code>.js</code>文件，输出到<code>lib</code>目录（或者在<code>tsconfig</code>中设置的目录）。</p>
+</div><p><code>rm -rf lib</code>会删除<code>lib</code>目录及其所有内容（如果存在）。<code>&amp;&amp;</code>是一个 Bash 连接符，表示其哪一个命令成功后再执行后一个。<code>tsc</code>会根据<code>tsconfig.json</code>把<code>src</code>目录中的<code>.ts</code>文件编译成<code>.js</code>文件，输出到<code>lib</code>目录（或者在<code>tsconfig</code>中设置的目录）。</p>
 <p>执行<code>npm run build</code>生成<code>lib</code>目录中包含了<code>bin.js</code>文件。</p>
 <p><code>bin.js</code>顶部有以下<a href="https://www.wikiwand.com/en/articles/Shebang_%28Unix%29"target="_blank" rel="external nofollow noopener noreferrer">Shebang</a>：</p>
-<div class="highlight" id="id-5"><div class="chroma">
+<div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
@@ -497,7 +393,7 @@
 <pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1">#!/usr/bin/env node</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>这段代码让脚本可以在终端中直接作为命令运行，而不需要再手动用<code>node</code>或<code>npx</code>启动。<code>bin.js</code>由<code>src/bin.ts</code>编译生成（观察得到 😁）。根据前面的说明，当我们安装好<code>json-server</code>，执行<code>npx json-server db.json</code>命令时，其实就是在运行<code>src/bin.ts</code>文件。为了方便调试<code>src/bin.ts</code>文件，参考<a href="https://tsx.is/vscode"target="_blank" rel="external nofollow noopener noreferrer">VS Code debugging</a>进行配置，在项目根目录下<code>.vscode</code>下创建<code>launch.json</code>文件，粘贴如下内容：</p>
-<div class="highlight" id="id-6"><div class="chroma">
+<div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
@@ -579,7 +475,7 @@
 </div><p>正常配置好就可以在<code>src</code>目录下的<code>.ts</code>文件中打断点进行调试啦。</p>
 <p><code>src/bin.ts</code>首先定义了<code>help</code>和<code>args</code>两个函数，根据函数名和注释来看，<code>help</code>用于打印帮助信息，<code>args</code>用于解析命令行参数并返回一个包含<code>file</code>（文件名，类型为<code>string</code>）、<code>port</code>（端口号，类型为<code>number</code>）、<code>host</code>（主机，类型为<code>string</code>）和<code>static</code>（静态文件/目录，类型为<code>string[]</code>）。</p>
 <p><code>args</code>函数定义如下：</p>
-<div class="highlight" id="id-7"><div class="chroma">
+<div class="highlight" data-open="true"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
@@ -749,7 +645,7 @@
 </span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p><code>args</code>函数主要用了来自<code>node:util</code>内置模块的<a href="https://nodejs.org/api/util.html#utilparseargsconfig"target="_blank" rel="external nofollow noopener noreferrer"><code>parseArgs</code>函数</a>,让<code>npx tsx ./src/bin.ts</code>支持<code>--port</code>、<code>--host</code>，<code>--static</code>、<code>--help</code>、<code>--version</code>和<code>--watch</code>等选项，且允许位置参数(<code> allowPositionals: true</code>)，但位置参数最后只会返回一个：</p>
-<div class="highlight" id="id-8"><div class="chroma">
+<div class="highlight" data-open="true"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -767,7 +663,7 @@
 </span></span><span class="line"><span class="cl"><span class="p">};</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>当我们运行<code>npx tsx src/bin.ts</code>时，马上会执行这行代码：</p>
-<div class="highlight" id="id-9"><div class="chroma">
+<div class="highlight" data-open="true"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
@@ -775,9 +671,12 @@
 <pre tabindex="0" class="chroma"><code class="language-typescript" data-lang="typescript"><span class="line"><span class="cl"><span class="kr">const</span> <span class="p">{</span> <span class="nx">file</span><span class="p">,</span> <span class="nx">port</span><span class="p">,</span> <span class="nx">host</span><span class="p">,</span> <span class="kr">static</span><span class="o">:</span> <span class="nx">staticArr</span> <span class="p">}</span> <span class="o">=</span> <span class="nx">args</span><span class="p">();</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>接着会检测<code>file</code>是否存在，如果不存在的话直接退出。然后，判断<code>file</code>的内容是否为空，如果为空则在<code>file</code>中写入<code>{}</code>。之后<code>src/bin.ts</code>还做了 3 件事，分别是设置数据库、创建 REST API 应用以及监听文件的改变。</p>
-<h2 id="数据持久化让-postputdelete-操作不再丢失" class="heading-element">
-  <a href="#%e6%95%b0%e6%8d%ae%e6%8c%81%e4%b9%85%e5%8c%96%e8%ae%a9-postputdelete-%e6%93%8d%e4%bd%9c%e4%b8%8d%e5%86%8d%e4%b8%a2%e5%a4%b1" class="heading-mark"></a>数据持久化：让 POST、PUT、DELETE 操作不再丢失</h2><p>为了将数据持久化，<a href="https://github.com/typicode/json-server"target="_blank" rel="external nofollow noopener noreferrer">json-server</a>用了<a href="https://github.com/typicode/lowdb"target="_blank" rel="external nofollow noopener noreferrer">lowdb</a>数据库，可以让我们从繁琐的读写<code>db.json</code>中解脱出来。<code>src/bin.ts</code>文件中的如下代码用于设置数据库,：</p>
-<div class="highlight" id="id-10"><div class="chroma">
+<h2 class="heading-element" id="数据持久化让-postputdelete-操作不再丢失"><span>数据持久化：让 POST、PUT、DELETE 操作不再丢失</span>
+  <a href="#%e6%95%b0%e6%8d%ae%e6%8c%81%e4%b9%85%e5%8c%96%e8%ae%a9-postputdelete-%e6%93%8d%e4%bd%9c%e4%b8%8d%e5%86%8d%e4%b8%a2%e5%a4%b1" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>为了将数据持久化，<a href="https://github.com/typicode/json-server"target="_blank" rel="external nofollow noopener noreferrer">json-server</a>用了<a href="https://github.com/typicode/lowdb"target="_blank" rel="external nofollow noopener noreferrer">lowdb</a>数据库，可以让我们从繁琐的读写<code>db.json</code>中解脱出来。<code>src/bin.ts</code>文件中的如下代码用于设置数据库,：</p>
+<div class="highlight" data-open="true"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
@@ -884,13 +783,13 @@
 </span></span><span class="line"><span class="cl">  <span class="p">}</span>
 </span></span><span class="line"><span class="cl"><span class="p">};</span></span></span></code></pre></td></tr></table>
 </div>
-</div><p>短短的十几行代码已经用到了至少 3 中设计模式：策略模式（Strategy Pattern）、适配器模式（Adapter Pattern）和观察者模式（Observer Pattern）。</p>
-<p>策略模式目的是在运行时选择行为。这里通过文件扩展名（<code>.json5</code>或<code>.json</code>）决定使用不同的<code>adapter</code>，在运行时动态选择具体的解析策略。</p>
-<p>适配器模式目的是将一个接口转换为所期望的另一个接口。<code>DataFile&lt;Data&gt;</code>和<code>JSONFile&lt;Data&gt;</code>都实现<code>Adapter&lt;Data&gt;</code>接口。它们将底层文件读写（如 JSON、JSON5）都转换成统一的接口，供<code>Low</code>类使用。</p>
-<p>观察者模式目的是当被观察者状态变化时，通知所有注册的观察者。<code>Observer</code>对象通过注册回调函数监听数据的读取与写入事件。当数据库操作发生时，回调自动执行，实现“事件驱动”响应。<a href="https://github.com/typicode/lowdb"target="_blank" rel="external nofollow noopener noreferrer">lowdb</a>的 README.md 文件，有这样的描述：当调用<code>db.read()</code>时，会调用<code>adapter.read()</code>；当调用<code>db.write()</code>时，会调用<code>adapter.write()</code>。</p>
-<p><img loading="lazy" src="/images/202507/2/bb4209475193a5bec0c25709b87b54b0_MD5.jpeg" alt="/images/202507/2/bb4209475193a5bec0c25709b87b54b0_MD5.jpeg" srcset="/images/202507/2/bb4209475193a5bec0c25709b87b54b0_MD5.jpeg?size=small, /images/202507/2/bb4209475193a5bec0c25709b87b54b0_MD5.jpeg?size=medium 1.5x, /images/202507/2/bb4209475193a5bec0c25709b87b54b0_MD5.jpeg?size=large 2x" data-title="/images/202507/2/bb4209475193a5bec0c25709b87b54b0_MD5.jpeg" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></p>
+</div><p>短短的十几行代码已经用到了至少 3 中设计模式：<mark class="mark-primary">策略模式（Strategy Pattern）</mark>、<mark class="mark-primary">适配器模式（Adapter Pattern）</mark>和<mark class="mark-primary">观察者模式（Observer Pattern）</mark>。</p>
+<p><mark class="mark-primary">策略模式</mark>目的是在运行时选择行为。这里通过文件扩展名（<code>.json5</code>或<code>.json</code>）决定使用不同的<code>adapter</code>，在运行时动态选择具体的解析策略。</p>
+<p><mark class="mark-primary">适配器模式</mark>目的是将一个接口转换为所期望的另一个接口。<code>DataFile&lt;Data&gt;</code>和<code>JSONFile&lt;Data&gt;</code>都实现<code>Adapter&lt;Data&gt;</code>接口。它们将底层文件读写（如 JSON、JSON5）都转换成统一的接口，供<code>Low</code>类使用。</p>
+<p><mark class="mark-primary">观察者模式</mark>目的是当被观察者状态变化时，通知所有注册的观察者。<code>Observer</code>对象通过注册回调函数监听数据的读取与写入事件。当数据库操作发生时，回调自动执行，实现“事件驱动”响应。<a href="https://github.com/typicode/lowdb"target="_blank" rel="external nofollow noopener noreferrer">lowdb</a>的 README.md 文件，有这样的描述：当调用<code>db.read()</code>时，会调用<code>adapter.read()</code>；当调用<code>db.write()</code>时，会调用<code>adapter.write()</code>。</p>
+<p><img loading="lazy" src='/images/202507/2/bb4209475193a5bec0c25709b87b54b0_MD5.jpeg' alt="/images/202507/2/bb4209475193a5bec0c25709b87b54b0_MD5.jpeg"></p>
 <p><code>Adapter</code>接口原本只有<code>read</code>和<code>write</code>两个方法：</p>
-<div class="highlight" id="id-11"><div class="chroma">
+<div class="highlight" data-open="true"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -907,10 +806,9 @@
 </div>
 </div><p>为了不让<code>Observer</code>破环这种调用关系：</p>
 <blockquote>
-<p>当调用<code>db.read()</code>时，会调用<code>adapter.read()</code>；当调用<code>db.write()</code>时，会调用<code>adapter.write()</code>。</p>
-</blockquote>
+<p>当调用<code>db.read()</code>时，会调用<code>adapter.read()</code>；当调用<code>db.write()</code>时，会调用<code>adapter.write()</code>。</p></blockquote>
 <p><code>Observer</code>必定也需要有<code>read</code>和<code>write</code>方法。<code>src/observer.ts</code>的<code>Observer</code>类定义如下：</p>
-<div class="highlight" id="id-12"><div class="chroma">
+<div class="highlight" data-open="true"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
@@ -1006,9 +904,9 @@
 </span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p><code>Observer</code>类接受一个<code>Adapter</code>类实例作为参数，然后通过包装<code>read</code>和<code>write</code>方法，在它们的执行前后插入了自定义的钩子函数（<code>onReadStart</code>、<code>onReadEnd</code>等），<strong>相当于给原本的<code>Adapter</code>添加了“读写观察”功能</strong>，允许我们在读前、读后、写前和写后做一些想要的操作。体现了装饰器模式（Decorator Pattern）。装饰器模式允许在不改变原始对象结构的前提下，动态地给一个对象添加一些额外的功能。<code>observer.onWriteStart</code>和<code>observer.onWriteEnd</code>让变量<code>writing</code>记录了当前数据库是否处于写状态。<code>observer.onReadStart</code>和<code>observer.onReadEnd</code>通过比较 EndPoints 是否改变决定要不要重新在终端打印输出路由信息。</p>
-<p><img loading="lazy" src="/images/202507/2/ba70285955d98cd6c10aef3dd7597cad_MD5.jpeg" alt="/images/202507/2/ba70285955d98cd6c10aef3dd7597cad_MD5.jpeg" srcset="/images/202507/2/ba70285955d98cd6c10aef3dd7597cad_MD5.jpeg?size=small, /images/202507/2/ba70285955d98cd6c10aef3dd7597cad_MD5.jpeg?size=medium 1.5x, /images/202507/2/ba70285955d98cd6c10aef3dd7597cad_MD5.jpeg?size=large 2x" data-title="/images/202507/2/ba70285955d98cd6c10aef3dd7597cad_MD5.jpeg" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></p>
+<p><img loading="lazy" src='/images/202507/2/ba70285955d98cd6c10aef3dd7597cad_MD5.jpeg' alt="/images/202507/2/ba70285955d98cd6c10aef3dd7597cad_MD5.jpeg"></p>
 <p>到目前为止都没有涉及到<code>db.write</code>操作，那么会在哪儿呢？仔细分析一下就知道要在<code>POST</code>、<code>PUT</code>、<code>DELETE</code>等请求时进行<code>db.write</code>操作。而对应的路由定义在<code>src/app.ts</code>中：</p>
-<div class="highlight" id="id-13"><div class="chroma">
+<div class="highlight" data-open="true"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
@@ -1072,7 +970,7 @@
 </span></span><span class="line"><span class="cl"><span class="p">});</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>回调函数中都使用了<code>service</code>变量，而它是一个<code>Service</code>对象。我们随意查看一个上述代码使用到的<code>Serivce</code>方法，比如<code>create</code>方法（定义在<code>src/service.ts</code>中）：</p>
-<div class="highlight" id="id-14"><div class="chroma">
+<div class="highlight" data-open="true"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
@@ -1105,7 +1003,7 @@
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">    <span class="nx">name</span>: <span class="kt">string</span><span class="p">,</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">    <span class="nx">data</span>: <span class="kt">Omit</span><span class="p">&lt;</span><span class="nt">Item</span><span class="err">,</span> <span class="err">&#39;</span><span class="na">id</span><span class="err">&#39;</span><span class="p">&gt;</span> <span class="o">=</span> <span class="p">{},</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">data</span>: <span class="kt">Omit</span><span class="p">&lt;</span><span class="nt">Item</span><span class="p">,</span> <span class="s1">&#39;id&#39;</span><span class="p">&gt;</span> <span class="o">=</span> <span class="p">{},</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">  <span class="p">)</span><span class="o">:</span> <span class="nx">Promise</span><span class="p">&lt;</span><span class="nt">Item</span> <span class="err">|</span> <span class="na">undefined</span><span class="p">&gt;</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">
@@ -1128,11 +1026,14 @@
 </span></span><span class="line"><span class="cl">  <span class="p">}</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>可以看到确实调用了<code>db.write</code>方法。这种将路由回调函数逻辑简化，并将核心业务逻辑整合到<code>Service</code>类的做法值得学习与借鉴。</p>
-<h2 id="热更新支持如何监听dbjson变化自动加载" class="heading-element">
-  <a href="#%e7%83%ad%e6%9b%b4%e6%96%b0%e6%94%af%e6%8c%81%e5%a6%82%e4%bd%95%e7%9b%91%e5%90%acdbjson%e5%8f%98%e5%8c%96%e8%87%aa%e5%8a%a8%e5%8a%a0%e8%bd%bd" class="heading-mark"></a>热更新支持：如何监听<code>db.json</code>变化自动加载？</h2><p>如何支持热更新？答案是通过<a href="https://github.com/paulmillr/chokidar"target="_blank" rel="external nofollow noopener noreferrer">chokidar</a>的<code>watch</code>函数实现。</p>
-<p><img loading="lazy" src="/images/202507/2/1.png" alt="/images/202507/2/1.png" srcset="/images/202507/2/1.png?size=small, /images/202507/2/1.png?size=medium 1.5x, /images/202507/2/1.png?size=large 2x" data-title="/images/202507/2/1.png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></p>
+<h2 class="heading-element" id="热更新支持如何监听dbjson变化自动加载"><span>热更新支持：如何监听<code>db.json</code>变化自动加载？</span>
+  <a href="#%e7%83%ad%e6%9b%b4%e6%96%b0%e6%94%af%e6%8c%81%e5%a6%82%e4%bd%95%e7%9b%91%e5%90%acdbjson%e5%8f%98%e5%8c%96%e8%87%aa%e5%8a%a8%e5%8a%a0%e8%bd%bd" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>如何支持热更新？答案是通过<a href="https://github.com/paulmillr/chokidar"target="_blank" rel="external nofollow noopener noreferrer">chokidar</a>的<code>watch</code>函数实现。</p>
+<p><img loading="lazy" src='/images/202507/2/1.png' alt="/images/202507/2/1.png"></p>
 <p><code>src/bin.ts</code>有这么一段：</p>
-<div class="highlight" id="id-15"><div class="chroma">
+<div class="highlight" data-open="true"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
@@ -1168,17 +1069,18 @@
 </span></span><span class="line"><span class="cl"><span class="p">});</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p><code>watch(file)</code>会一直监视<code>file</code>文件（也就是<code>db.json</code>）。一旦文件有改变，<code>on('change', () =&gt; {...}</code>中的匿名函数就会被调用。首先会检查数据库没有在写入（即此时没有<code>POST</code>、<code>PUT</code>、<code>DELETE</code>等请求），没有写入的话就可以调用<code>db.read()</code>，毕竟文件改变了嘛 😂！</p>
-<h2 id="总结小而精的架构哲学" class="heading-element">
-  <a href="#%e6%80%bb%e7%bb%93%e5%b0%8f%e8%80%8c%e7%b2%be%e7%9a%84%e6%9e%b6%e6%9e%84%e5%93%b2%e5%ad%a6" class="heading-mark"></a>总结：小而精的架构哲学</h2><p>通过对 json-server 的源码剖析，我们看到它用极其简洁的代码，实现了一个功能完整、可扩展的 REST API 服务工具。它将<a href="https://github.com/tinyhttp/tinyhttp"target="_blank" rel="external nofollow noopener noreferrer">tinyhttp</a>的中间件机制、<a href="https://github.com/typicode/lowdb"target="_blank" rel="external nofollow noopener noreferrer">lowdb</a> 的轻量级持久化能力，以及清晰的模块划分巧妙结合，构建出一个可用于真实项目开发过程的“最小可用后端”。</p>
+<h2 class="heading-element" id="小而精的架构哲学"><span>小而精的架构哲学</span>
+  <a href="#%e5%b0%8f%e8%80%8c%e7%b2%be%e7%9a%84%e6%9e%b6%e6%9e%84%e5%93%b2%e5%ad%a6" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>通过对 json-server 的源码剖析，我们看到它用极其简洁的代码，实现了一个功能完整、可扩展的 REST API 服务工具。它将<a href="https://github.com/tinyhttp/tinyhttp"target="_blank" rel="external nofollow noopener noreferrer">tinyhttp</a>的中间件机制、<a href="https://github.com/typicode/lowdb"target="_blank" rel="external nofollow noopener noreferrer">lowdb</a> 的轻量级持久化能力，以及清晰的模块划分巧妙结合，构建出一个可用于真实项目开发过程的“最小可用后端”。</p>
 <p>这不仅是一个实用工具，更是一个学习<a href="https://github.com/tinyhttp/tinyhttp"target="_blank" rel="external nofollow noopener noreferrer">tinyhttp</a>项目架构、理解中间件机制、掌握 CLI 工具封装思路的优秀范本。</p>
 <div class="details admonition tip open">
-    <div class="details-summary admonition-title">
-      <i class="icon fa-solid fa-lightbulb fa-fw" aria-hidden="true"></i>提示<i class="details-icon fa-solid fa-angle-right fa-fw" aria-hidden="true"></i>
-    </div>
-    <div class="details-content">
-      <div class="admonition-content">它告诉我们：好的工具，不一定复杂；好的架构，往往“刚刚好”。</div>
-    </div>
+  <div class="details-summary admonition-title"><i class="icon fa-fw fa-regular fa-lightbulb" aria-hidden="true"></i>提示<i class="details-icon fa-solid fa-angle-right fa-fw" aria-hidden="true"></i></div>
+  <div class="details-content">
+    <div class="admonition-content">它告诉我们：好的工具，不一定复杂；好的架构，往往“刚刚好”。</div>
   </div>
+</div>
 <p>无论你是想复刻一个类似的 mock 服务，还是希望掌握 Node.js 项目的组织方式，<a href="https://github.com/typicode/json-server"target="_blank" rel="external nofollow noopener noreferrer">json-server</a> 都是一个值得深入阅读和借鉴的项目。</p>
 <p>如果你想进一步实践，可以尝试：</p>
 <ul>
@@ -1186,8 +1088,11 @@
 <li>用 Fastify 重构路由模块，对比性能</li>
 <li>替换 lowdb 为 SQLite，探索更强的数据库支持</li>
 </ul>
-<h2 id="推荐" class="heading-element">
-  <a href="#%e6%8e%a8%e8%8d%90" class="heading-mark"></a>推荐</h2><ul>
+<h2 class="heading-element" id="推荐"><span>推荐</span>
+  <a href="#%e6%8e%a8%e8%8d%90" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><ul>
 <li><a href="https://emojicombos.com/"target="_blank" rel="external nofollow noopener noreferrer">颜文字</a></li>
 <li><a href="https://blog.logrocket.com/creating-a-cli-tool-with-node-js/"target="_blank" rel="external nofollow noopener noreferrer">Creating a CLI tool with Node.js</a></li>
 <li><a href="https://older-posts.simonplend.com/command-line-argument-parsing-with-node-js-core/"target="_blank" rel="external nofollow noopener noreferrer">Command-line argument parsing with Node.js core</a></li>
@@ -1198,16 +1103,16 @@
       <div class="post-info-mod">
         <span title="更新于 2025-07-31 16:47:36">更新于 2025-07-31&nbsp;</span>
       </div></div><div class="post-info-line">
-        <div class="post-info-md"></div>
+        <div class="post-info-md"><span><a href="vscode://file/D:%5chugo-blog%5candyfree96%5ccontent%5cposts%5cjson-server%e6%ba%90%e7%a0%81%e5%89%96%e6%9e%90.md" title="在编辑器中打开"target="_blank" rel="external nofollow noopener noreferrer" class="link-to-vscode">在编辑器中打开</a></span></div>
         <div class="post-info-share">
-          <span><a href="javascript:void(0);" title="分享到 Twitter" data-sharer="twitter" data-url="http://localhost:1313/json-server%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="json-server源码剖析：快速构建REST API背后的原理" data-via="IRONAnthony96" data-hashtags="Node.js,TypeScript,RESTful API,JSON Server"><i class="fa-brands fa-twitter fa-fw" aria-hidden="true"></i></a>
+          <span><a href="javascript:void(0);" title="分享到 X" data-sharer="twitter" data-url="http://localhost:1313/json-server%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="Json-Server源码剖析：快速构建REST API背后的原理" data-via="IRONAnthony96" data-hashtags="Node.js,TypeScript,RESTful API,JSON Server"><i class="fa-brands fa-x-twitter fa-fw" aria-hidden="true"></i></a>
   <a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="http://localhost:1313/json-server%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-hashtag="Node.js"><i class="fa-brands fa-facebook-square fa-fw" aria-hidden="true"></i></a>
-  <a href="javascript:void(0);" title="分享到 WhatsApp" data-sharer="whatsapp" data-url="http://localhost:1313/json-server%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="json-server源码剖析：快速构建REST API背后的原理" data-web><i class="fa-brands fa-whatsapp fa-fw" aria-hidden="true"></i></a>
-  <a href="javascript:void(0);" title="分享到 Line" data-sharer="line" data-url="http://localhost:1313/json-server%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="json-server源码剖析：快速构建REST API背后的原理"><i data-svg-src="/lib/simple-icons/icons/line.min.svg" aria-hidden="true"></i></a>
-  <a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="http://localhost:1313/json-server%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="json-server源码剖析：快速构建REST API背后的原理" data-image="/images/202507/2/danist-soh-p7kMu-QwI0M-unsplash.jpg"><i class="fa-brands fa-weibo fa-fw" aria-hidden="true"></i></a>
-  <a href="javascript:void(0);" title="分享到 Myspace" data-sharer="myspace" data-url="http://localhost:1313/json-server%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="json-server源码剖析：快速构建REST API背后的原理" data-description=""><i data-svg-src="/lib/simple-icons/icons/myspace.min.svg" aria-hidden="true"></i></a>
-  <a href="javascript:void(0);" title="分享到 Blogger" data-sharer="blogger" data-url="http://localhost:1313/json-server%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="json-server源码剖析：快速构建REST API背后的原理" data-description=""><i class="fa-brands fa-blogger fa-fw" aria-hidden="true"></i></a>
-  <a href="javascript:void(0);" title="分享到 Evernote" data-sharer="evernote" data-url="http://localhost:1313/json-server%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="json-server源码剖析：快速构建REST API背后的原理"><i class="fa-brands fa-evernote fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 WhatsApp" data-sharer="whatsapp" data-url="http://localhost:1313/json-server%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="Json-Server源码剖析：快速构建REST API背后的原理" data-web><i class="fa-brands fa-whatsapp fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 Line" data-sharer="line" data-url="http://localhost:1313/json-server%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="Json-Server源码剖析：快速构建REST API背后的原理"><svg class="icon" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>LINE</title><path d="M19.365 9.863c.349.0.63.285.63.631.0.345-.281.63-.63.63H17.61v1.125h1.755c.349.0.63.283.63.63.0.344-.281.629-.63.629h-2.386c-.345.0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63h2.386c.346.0.627.285.627.63.0.349-.281.63-.63.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211.0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346.0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195.0.375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345.0.63.285.63.63v4.771zm-5.741.0c0 .344-.282.629-.631.629-.345.0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63.346.0.628.285.628.63v4.771zm-2.466.629H4.917c-.345.0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348.0.63.285.63.63v4.141h1.756c.348.0.629.283.629.63.0.344-.282.629-.629.629M24 10.314C24 4.943 18.615.572 12 .572S0 4.943.0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314"/></svg></a>
+  <a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="http://localhost:1313/json-server%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="Json-Server源码剖析：快速构建REST API背后的原理" data-image="/images/202507/2/danist-soh-p7kMu-QwI0M-unsplash.jpg"><i class="fa-brands fa-weibo fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 Myspace" data-sharer="myspace" data-url="http://localhost:1313/json-server%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="Json-Server源码剖析：快速构建REST API背后的原理" data-description=""><svg class="icon" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>Myspace</title><path d="M19.802 12.274A3.811 3.811.0 0023.62 8.47c0-2.101-1.71-3.795-3.818-3.795a3.816 3.816.0 00-3.818 3.81 3.817 3.817.0 003.818 3.811zm-8.602.705a3.43 3.43.0 003.435-3.424A3.43 3.43.0 0011.2 6.13 3.44 3.44.0 007.764 9.566 3.436 3.436.0 0011.2 13zm-7.8.635c1.71.0 3.093-1.38 3.093-3.081.0-1.704-1.395-3.084-3.105-3.084A3.086 3.086.0 00.3 10.539c0 1.7 1.387 3.078 3.095 3.078zm0 .705c-1.96.0-3.4 1.717-3.4 3.495v1.196c0 .17.138.31.31.31h6.18a.31.31.0 00.309-.31v-1.196c0-1.779-1.437-3.5-3.398-3.5zm7.8-.56c-2.18.0-3.78 1.915-3.78 3.891v1.331c0 .188.156.344.345.344h6.87a.344.344.0 00.342-.344V17.65c0-1.976-1.598-3.891-3.777-3.891zm8.602-.617c-2.422.0-4.197 2.126-4.197 4.323v1.477c0 .21.172.381.382.381h7.63c.21.0.383-.171.383-.381v-1.477c-.001-2.197-1.776-4.323-4.198-4.323z"/></svg></a>
+  <a href="javascript:void(0);" title="分享到 Blogger" data-sharer="blogger" data-url="http://localhost:1313/json-server%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="Json-Server源码剖析：快速构建REST API背后的原理" data-description=""><i class="fa-brands fa-blogger fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 Evernote" data-sharer="evernote" data-url="http://localhost:1313/json-server%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="Json-Server源码剖析：快速构建REST API背后的原理"><i class="fa-brands fa-evernote fa-fw" aria-hidden="true"></i></a>
   </span>
         </div>
       </div></div>
@@ -1217,28 +1122,26 @@
     <section>
       <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
     </section>
-  </div>
-
-  <div class="post-nav"><a href="/%E7%94%A8powershell%E7%8E%A9%E8%BD%AC%E6%96%87%E4%BB%B6%E5%A4%84%E7%90%86/" class="post-nav-item" rel="prev" title="用PowerShell玩转文件处理"><i class="fa-solid fa-angle-left fa-fw" aria-hidden="true"></i>用PowerShell玩转文件处理</a></div>
+  </div><div class="post-nav"><a href="/%E7%94%A8powershell%E7%8E%A9%E8%BD%AC%E6%96%87%E4%BB%B6%E5%A4%84%E7%90%86/" class="post-nav-item" rel="prev" title="用PowerShell玩转文件处理"><i class="fa-solid fa-angle-left fa-fw" aria-hidden="true"></i>用PowerShell玩转文件处理</a></div>
 </div>
 <div class="post-reward">
     <div class="comment">请作者喝杯咖啡!</div>
     <input type="checkbox" class="reward-input" name="reward" id="fi-reward" hidden />
-    <label class="reward-button" for="fi-reward">赞赏</label>
-    <div class="reward-ways" data-mode="static"><div><img loading="lazy" src="/reward/alipay.png" alt="AndyFree96 支付宝" data-title="AndyFree96 支付宝" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/><span data-animation>支付宝</span>
-          </div><div><img loading="lazy" src="/reward/wechatpay.png" alt="AndyFree96 微信" data-title="AndyFree96 微信" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/><span data-animation>微信</span>
+    <label class="reward-button" for="fi-reward"><i class="fa-solid fa-qrcode fa-fw" aria-hidden="true"></i>赞赏</label>
+    <div class="reward-ways" data-mode="static"><div><img src='/reward/alipay.png' alt="AndyFree96 支付宝"><span data-animation>支付宝</span>
+          </div><div><img src='/reward/wechatpay.png' alt="AndyFree96 微信"><span data-animation>微信</span>
           </div></div>
   </div></article>
 
   <aside class="toc" id="toc-auto" aria-label="目录"><h2 class="toc-title">目录&nbsp;<i class="toc-icon fa-solid fa-angle-down fa-fw" aria-hidden="true"></i></h2>
       <div class="toc-content" id="toc-content-auto"></div></aside></main><footer class="footer">
-    <div class="footer-container"><div class="footer-line powered">由 <a href="https://gohugo.io/" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.135.0"><img class="hugo-icon" src="/images/hugo.min.svg" alt="Hugo logo" /> Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/hugo-fixit/FixIt" target="_blank" rel="external" title="FixIt v0.3.2"><img class="fixit-icon" src="/images/fixit.min.svg" alt="FixIt logo" /> FixIt</a>
+    <div class="footer-container"><div class="footer-line powered">由 <a href="https://gohugo.io/" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.148.2"><img class="hugo-icon" src="/images/hugo.min.svg" alt="Hugo logo" /> Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/hugo-fixit/FixIt" target="_blank" rel="external" title="FixIt v0.3.20"><img class="fixit-icon" src="/images/fixit.min.svg" alt="FixIt logo" /> FixIt</a>
         </div><div class="footer-line copyright" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright fa-fw" aria-hidden="true"></i>
             <span itemprop="copyrightYear">2025</span><span class="author" itemprop="copyrightHolder">
               <a href="https://andyfree96.github.io/"target="_blank" rel="external nofollow noopener noreferrer">AndyFree96</a></span></div></div>
   </footer></div><div class="widgets"><div class="fixed-buttons animate__faster d-none"><div class="fixed-button back-to-top" role="button" aria-label="回到顶部"><i class="fa-solid fa-arrow-up fa-fw" aria-hidden="true"></i><span class="variant-numeric d-none">0%</span>
         </div></div><div id="mask"></div><div class="reading-progress-bar" style="left: 0;top: 0;"></div><noscript>
-    <div class="noscript-warning">FixIt 主题在启用 JavaScript 的情况下效果最佳。</div>
+    <div class="noscript-warning">该网站在启用 JavaScript 的情况下效果最佳。</div>
   </noscript>
-</div><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script src="/lib/sharer/sharer.min.js" async defer></script><script src="/lib/cookieconsent/cookieconsent.min.js" defer></script><script>window.config={"code":{"copyTitle":"复制到剪贴板","editLockTitle":"锁定可编辑代码块","editUnLockTitle":"解锁可编辑代码块","editable":true,"maxShownLines":10},"comment":{"enable":false},"cookieconsent":{"content":{"dismiss":"同意","link":"了解更多","message":"本网站使用 Cookies 来改善您的浏览体验。"},"enable":true,"palette":{"button":{"background":"#f0f0f0"},"popup":{"background":"#1aa3ff"}},"theme":"edgeless"},"data":{"id-1":{"data-open":true},"id-10":{"data-open":true},"id-11":{"data-open":true},"id-12":{"data-open":true},"id-13":{"data-open":true},"id-14":{"data-open":true},"id-15":{"data-open":true},"id-7":{"data-open":true},"id-8":{"data-open":true},"id-9":{"data-open":true}}};</script><script src="/js/theme.min.js" defer></script></body>
+</div><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script src="/lib/sharer/sharer.min.js" async defer></script><script src="/lib/cookieconsent/cookieconsent.min.js" defer></script><script>window.config={"code":{"copyTitle":"复制到剪贴板","editLockTitle":"锁定可编辑代码块","editUnLockTitle":"解锁可编辑代码块","editable":true,"maxShownLines":10},"comment":{"enable":false},"cookieconsent":{"content":{"dismiss":"同意","link":"了解更多","message":"本网站使用 Cookies 来改善您的浏览体验。"},"enable":true,"palette":{"button":{"background":"#f0f0f0"},"popup":{"background":"#1aa3ff"}},"theme":"edgeless"},"version":"v0.3.20"};console.log('Page config:', window.config);</script><script src="/js/theme.min.js" defer></script></body>
 </html>

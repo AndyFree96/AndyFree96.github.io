@@ -1,26 +1,18 @@
 <!DOCTYPE html>
-<html
-  itemscope
-  itemtype="http://schema.org/WebPage"
-  lang="zh-CN"
->
+<html itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
   <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
     
-    <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, maximum-scale=2"
-    />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
     <meta name="robots" content="noodp" />
-    <meta name="google-adsense-account" content="ca-pub-5868664387231059" />
     <title>用Keras搭建卷积神经网络 - 东尼的博客</title><meta name="author" content="AndyFree96">
-<meta name="author-link" content="https://andyfree96.github.io/">
-<meta name="description" content="在深度学习领域，卷积神经网络（CNN）已成为图像识别、目标检测、语音识别等任务的核心技术之一。Keras 作为一个高层次的神经网络 API，因其简洁易用而受到广泛欢迎。通过 Keras，我们可以快速搭建、训练并部署复杂的神经网络模型，而无需关注底层实现细节。本文我们将学习使用 Keras 一步一步搭建一个卷积神经网络。具体来说，我们将使用卷积神经网络对手写数字(MNIST 数据集)进行识别，并达到 99%以上的正确率。" /><meta name="keywords" content='Python, Keras, 深度学习, 卷积神经网络' />
+<meta name="description" content="在深度学习领域，卷积神经网络（CNN）已成为图像识别、目标检测、语音识别等任务的核心技术之一。Keras 作为一个高层次的神经网络 API，因其简洁易用而受到广泛欢迎。通过 Keras，我们可以快速搭建、训练并部署复杂的神经网络模型，而无需关注底层实现细节。本文我们将学习使用 Keras 一步一步搭建一个卷积神经网络。具体来说，我们将使用卷积神经网络对手写数字(MNIST 数据集)进行识别，并达到 99%以上的正确率。
+"><meta name="keywords" content='Python, Keras, 深度学习, 卷积神经网络'>
   <meta itemprop="name" content="用Keras搭建卷积神经网络">
   <meta itemprop="description" content="在深度学习领域，卷积神经网络（CNN）已成为图像识别、目标检测、语音识别等任务的核心技术之一。Keras 作为一个高层次的神经网络 API，因其简洁易用而受到广泛欢迎。通过 Keras，我们可以快速搭建、训练并部署复杂的神经网络模型，而无需关注底层实现细节。本文我们将学习使用 Keras 一步一步搭建一个卷积神经网络。具体来说，我们将使用卷积神经网络对手写数字(MNIST 数据集)进行识别，并达到 99%以上的正确率。">
   <meta itemprop="datePublished" content="2020-02-01T10:34:55+08:00">
   <meta itemprop="dateModified" content="2020-02-01T10:34:55+08:00">
-  <meta itemprop="wordCount" content="1690">
+  <meta itemprop="wordCount" content="1686">
   <meta itemprop="keywords" content="Python,Keras,深度学习,卷积神经网络"><meta property="og:url" content="http://localhost:1313/%E7%94%A8keras%E6%90%AD%E5%BB%BA%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/">
   <meta property="og:site_name" content="东尼的博客">
   <meta property="og:title" content="用Keras搭建卷积神经网络">
@@ -39,10 +31,10 @@
   <meta name="twitter:title" content="用Keras搭建卷积神经网络">
   <meta name="twitter:description" content="在深度学习领域，卷积神经网络（CNN）已成为图像识别、目标检测、语音识别等任务的核心技术之一。Keras 作为一个高层次的神经网络 API，因其简洁易用而受到广泛欢迎。通过 Keras，我们可以快速搭建、训练并部署复杂的神经网络模型，而无需关注底层实现细节。本文我们将学习使用 Keras 一步一步搭建一个卷积神经网络。具体来说，我们将使用卷积神经网络对手写数字(MNIST 数据集)进行识别，并达到 99%以上的正确率。">
       <meta name="twitter:site" content="@IRONAnthony96">
-<meta name="application-name" content="FixIt">
+<meta name="twitter:creator" content="@IRONAnthony96" /><meta name="application-name" content="FixIt">
 <meta name="apple-mobile-web-app-title" content="FixIt"><meta name="theme-color" data-light="#f8f8f8" data-dark="#252627" content="#f8f8f8"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" href="http://localhost:1313/%E7%94%A8keras%E6%90%AD%E5%BB%BA%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" /><link rel="prev" href="http://localhost:1313/git%E7%AE%80%E6%98%8E%E6%95%99%E7%A8%8B/" /><link rel="next" href="http://localhost:1313/google%E6%90%9C%E7%B4%A2%E9%82%A3%E4%BA%9B%E4%BA%8B%E5%84%BF/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" type="text/html" href="http://localhost:1313/%E7%94%A8keras%E6%90%AD%E5%BB%BA%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" title="用Keras搭建卷积神经网络 - 东尼的博客" /><link rel="prev" type="text/html" href="http://localhost:1313/git%E7%AE%80%E6%98%8E%E6%95%99%E7%A8%8B/" title="Git简明教程" /><link rel="next" type="text/html" href="http://localhost:1313/google%E6%90%9C%E7%B4%A2%E9%82%A3%E4%BA%9B%E4%BA%8B%E5%84%BF/" title="Google搜索那些事儿" /><link rel="alternate" type="text/markdown" href="http://localhost:1313/%E7%94%A8keras%E6%90%AD%E5%BB%BA%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/index.md" title="用Keras搭建卷积神经网络 - 东尼的博客"><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><script type="application/ld+json">
   {
@@ -53,7 +45,7 @@
     "mainEntityOfPage": {
       "@type": "WebPage",
       "@id": "http:\/\/localhost:1313\/%E7%94%A8keras%E6%90%AD%E5%BB%BA%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C\/"
-    },"genre": "posts","keywords": "Python, Keras, 深度学习, 卷积神经网络","wordcount":  1690 ,
+    },"genre": "posts","keywords": "Python, Keras, 深度学习, 卷积神经网络","wordcount":  1686 ,
     "url": "http:\/\/localhost:1313\/%E7%94%A8keras%E6%90%AD%E5%BB%BA%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C\/","datePublished": "2020-02-01T10:34:55+08:00","dateModified": "2020-02-01T10:34:55+08:00","publisher": {
       "@type": "Organization",
       "name": ""},"author": {
@@ -61,74 +53,21 @@
         "name": "AndyFree96"
       },"description": ""
   }
-  </script></head>
-  <body
-    data-header-desktop="sticky"
-    data-header-mobile="auto"
-  ><script>
-      (window.localStorage?.getItem("theme")
-        ? localStorage.getItem("theme") === "dark"
-        : "auto" === "auto"
-        ? window.matchMedia("(prefers-color-scheme: dark)").matches
-        : "auto" === "dark") &&
-        document.body.setAttribute("data-theme", "dark");
-    </script><div
-      class="wrapper"
-      data-page-style="normal"
-    ><header class="desktop animate__faster" id="header-desktop">
+  </script><script src="/js/head/color-scheme.min.js"></script></head>
+  <body data-header-desktop="sticky" data-header-mobile="auto"><div class="wrapper" data-page-style="normal"><header class="desktop animate__faster" id="header-desktop">
   <div class="header-wrapper">
     <div class="header-title">
       <a href="/" title="东尼的博客"><span class="header-title-text">东尼的博客</span></a><span class="header-subtitle"></span></div>
     <nav>
       <ul class="menu"><li class="menu-item">
-              <a
-                class="menu-link"
-                href="/posts/"
-                
-                
-              >📕 文章</a></li><li class="menu-item">
-              <a
-                class="menu-link"
-                href="/categories/"
-                
-                
-              >🧰 分类</a></li><li class="menu-item">
-              <a
-                class="menu-link"
-                href="/tags/"
-                
-                
-              >🔖 标签</a></li><li class="menu-item">
-              <a
-                class="menu-link"
-                href="/book"
-                
-                
-              >📚 书单</a></li><li class="menu-item">
-              <a
-                class="menu-link"
-                href="/paper"
-                
-                
-              >📝 论文</a></li><li class="menu-item">
-              <a
-                class="menu-link"
-                href="/opencourse"
-                
-                
-              >👨🏻‍💻 公开课</a></li><li class="menu-item">
-              <a
-                class="menu-link"
-                href="/resource"
-                
-                
-              >⚡️ 资源</a></li><li class="menu-item">
-              <a
-                class="menu-link"
-                href="/about"
-                
-                
-              >🙋🏻‍♂️ 关于</a></li><li class="menu-item delimiter"></li><li class="menu-item theme-switch" title="切换主题">
+              <a class="menu-link" href="/posts/">📕 文章</a></li><li class="menu-item">
+              <a class="menu-link" href="/categories/">🧰 分类</a></li><li class="menu-item">
+              <a class="menu-link" href="/tags/">🔖 标签</a></li><li class="menu-item">
+              <a class="menu-link" href="/book">📚 书单</a></li><li class="menu-item">
+              <a class="menu-link" href="/paper">📝 论文</a></li><li class="menu-item">
+              <a class="menu-link" href="/opencourse">👨🏻‍💻 公开课</a></li><li class="menu-item">
+              <a class="menu-link" href="/resource">⚡️ 资源</a></li><li class="menu-item">
+              <a class="menu-link" href="/about">🙋🏻‍♂️ 关于</a></li><li class="menu-item delimiter"></li><li class="menu-item theme-switch" title="切换主题">
           <i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i>
         </li></ul>
     </nav>
@@ -143,76 +82,18 @@
       </div>
     </div>
     <nav>
-      <ul class="menu" id="menu-mobile"><li
-              class="menu-item"
-            ><a
-                  class="menu-link"
-                  href="/posts/"
-                  
-                  
-                >📕 文章</a></li><li
-              class="menu-item"
-            ><a
-                  class="menu-link"
-                  href="/categories/"
-                  
-                  
-                >🧰 分类</a></li><li
-              class="menu-item"
-            ><a
-                  class="menu-link"
-                  href="/tags/"
-                  
-                  
-                >🔖 标签</a></li><li
-              class="menu-item"
-            ><a
-                  class="menu-link"
-                  href="/book"
-                  
-                  
-                >📚 书单</a></li><li
-              class="menu-item"
-            ><a
-                  class="menu-link"
-                  href="/paper"
-                  
-                  
-                >📝 论文</a></li><li
-              class="menu-item"
-            ><a
-                  class="menu-link"
-                  href="/opencourse"
-                  
-                  
-                >👨🏻‍💻 公开课</a></li><li
-              class="menu-item"
-            ><a
-                  class="menu-link"
-                  href="/resource"
-                  
-                  
-                >⚡️ 资源</a></li><li
-              class="menu-item"
-            ><a
-                  class="menu-link"
-                  href="/about"
-                  
-                  
-                >🙋🏻‍♂️ 关于</a></li><li class="menu-item menu-system">
+      <ul class="menu" id="menu-mobile"><li class="menu-item"><a class="menu-link" href="/posts/">📕 文章</a></li><li class="menu-item"><a class="menu-link" href="/categories/">🧰 分类</a></li><li class="menu-item"><a class="menu-link" href="/tags/">🔖 标签</a></li><li class="menu-item"><a class="menu-link" href="/book">📚 书单</a></li><li class="menu-item"><a class="menu-link" href="/paper">📝 论文</a></li><li class="menu-item"><a class="menu-link" href="/opencourse">👨🏻‍💻 公开课</a></li><li class="menu-item"><a class="menu-link" href="/resource">⚡️ 资源</a></li><li class="menu-item"><a class="menu-link" href="/about">🙋🏻‍♂️ 关于</a></li><li class="menu-item menu-system">
           <span class="menu-system-item theme-switch" title="切换主题"><i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i></span></li>
       </ul>
     </nav>
   </div>
-</header><main
-        class="container"
-      ><aside class="aside-collection animate__animated animate__fadeIn animate__faster" aria-label="合集"></aside>
+</header><main class="container"><aside class="aside-collection animate__animated animate__fadeIn animate__faster" aria-label="合集"></aside>
 
   <article class="page single">
     <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span title="转载" class="icon-repost"><i class="fa-solid fa-share fa-fw" aria-hidden="true"></i></span><span>用Keras搭建卷积神经网络</span>
       </h1></div><div class="post-meta">
-      <div class="post-meta-line"><span class="post-author"><a href="https://andyfree96.github.io/" title="作者"target="_blank" rel="external nofollow noopener noreferrer author" class="author"><img loading="lazy" src="/avatar/1.jpg" alt="AndyFree96" data-title="AndyFree96" class="avatar" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/>&nbsp;AndyFree96</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" class="post-category" title="分类 - 深度学习"><i class="fa-regular fa-folder fa-fw" aria-hidden="true"></i> 深度学习</a></span></div><div class="post-meta-line"><span title="发布于 2020-02-01 10:34:55"><i class="fa-solid fa-calendar-days fa-fw me-1" aria-hidden="true"></i><time datetime="2020-02-01">2020-02-01</time></span>&nbsp;<span title="1690 字"><i class="fa-solid fa-pencil-alt fa-fw me-1" aria-hidden="true"></i>约 1700 字</span>&nbsp;<span><i class="fa-regular fa-clock fa-fw me-1" aria-hidden="true"></i>预计阅读 4 分钟</span>&nbsp;</div>
-    </div><div class="featured-image"><img loading="lazy" src="/images/202002/1/wietse-jongsma-K_GLVR6O1ME-unsplash.jpg" alt="/images/202002/1/wietse-jongsma-K_GLVR6O1ME-unsplash.jpg" data-title="/images/202002/1/wietse-jongsma-K_GLVR6O1ME-unsplash.jpg" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></div><div class="details toc" id="toc-static" data-kept="false">
+      <div class="post-meta-line"><span class="post-author"><a href="https://andyfree96.github.io/" title="作者"target="_blank" rel="external nofollow noopener noreferrer author" class="author"><img class="avatar" src='/avatar/1.jpg' alt="AndyFree96" height="16" width="16">&nbsp;AndyFree96</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" class="post-category" title="分类 - 深度学习"><i class="fa-regular fa-folder fa-fw" aria-hidden="true"></i> 深度学习</a></span></div><div class="post-meta-line"><span title="发布于 2020-02-01 10:34:55"><i class="fa-solid fa-calendar-days fa-fw me-1" aria-hidden="true"></i><time datetime="2020-02-01">2020-02-01</time></span>&nbsp;<span title="1686 字"><i class="fa-solid fa-pencil-alt fa-fw me-1" aria-hidden="true"></i>约 1700 字</span>&nbsp;<span><i class="fa-regular fa-clock fa-fw me-1" aria-hidden="true"></i>预计阅读 4 分钟</span>&nbsp;</div>
+    </div><div class="featured-image"><img src='/images/202002/1/wietse-jongsma-K_GLVR6O1ME-unsplash.jpg' alt="/images/202002/1/wietse-jongsma-K_GLVR6O1ME-unsplash.jpg"></div><div class="details toc" id="toc-static" data-kept="false">
         <div class="details-summary toc-title">
           <span>目录</span>
           <span><i class="details-icon fa-solid fa-angle-right" aria-hidden="true"></i></span>
@@ -231,9 +112,9 @@
   </ul>
 </nav></div>
       </div><div class="content" id="content"><p>在深度学习领域，卷积神经网络（CNN）已成为图像识别、目标检测、语音识别等任务的核心技术之一。Keras 作为一个高层次的神经网络 API，因其简洁易用而受到广泛欢迎。通过 Keras，我们可以快速搭建、训练并部署复杂的神经网络模型，而无需关注底层实现细节。本文我们将学习使用 Keras 一步一步搭建一个卷积神经网络。具体来说，我们将使用卷积神经网络对手写数字(MNIST 数据集)进行识别，并达到 99%以上的正确率。</p>
-<p><img loading="lazy" src="/images/202002/1/1.png" alt="/images/202002/1/1.png" srcset="/images/202002/1/1.png?size=small, /images/202002/1/1.png?size=medium 1.5x, /images/202002/1/1.png?size=large 2x" data-title="/images/202002/1/1.png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></p>
+<p><img loading="lazy" src='/images/202002/1/1.png' alt="/images/202002/1/1.png"></p>
 <p>我们还将介绍<a href="https://colab.research.google.com/notebooks/welcome.ipynb#scrollTo=-Rh3-Vt9Nev9"target="_blank" rel="external nofollow noopener noreferrer">Colaboratory</a>——一个免费的 Jupyter notebook 环境，关键的是可以免费使用 GPU(学生党买不起呀)！</p>
-<p><img loading="lazy" src="/images/202002/1/2.png" alt="/images/202002/1/2.png" srcset="/images/202002/1/2.png?size=small, /images/202002/1/2.png?size=medium 1.5x, /images/202002/1/2.png?size=large 2x" data-title="/images/202002/1/2.png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></p>
+<p><img loading="lazy" src='/images/202002/1/2.png' alt="/images/202002/1/2.png"></p>
 <p><strong>为什么选择 Keras 呢？</strong></p>
 <p>主要是因为简单方便。更多细节请看：https://keras.io/</p>
 <p><strong>什么卷积神经网络？</strong></p>
@@ -242,32 +123,38 @@
 <p><a href="http://neuralnetworksanddeeplearning.com/"target="_blank" rel="external nofollow noopener noreferrer">Neural Networks and Deep Learning</a></p>
 <p><a href="http://cs231n.stanford.edu/"target="_blank" rel="external nofollow noopener noreferrer">CS231n: Convolutional Neural Networks for Visual Recognition</a></p>
 <p>下面就直接进入主题吧！</p>
-<h2 id="搭建环境" class="heading-element">
-  <a href="#%e6%90%ad%e5%bb%ba%e7%8e%af%e5%a2%83" class="heading-mark"></a>搭建环境</h2><p>如果想要在个人电脑上搭建的话，我们需要先安装好 Python，进入：https://www.python.org/</p>
-<p><img loading="lazy" src="/images/202002/1/3.png" alt="/images/202002/1/3.png" srcset="/images/202002/1/3.png?size=small, /images/202002/1/3.png?size=medium 1.5x, /images/202002/1/3.png?size=large 2x" data-title="/images/202002/1/3.png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></p>
+<h2 class="heading-element" id="搭建环境"><span>搭建环境</span>
+  <a href="#%e6%90%ad%e5%bb%ba%e7%8e%af%e5%a2%83" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>如果想要在个人电脑上搭建的话，我们需要先安装好 Python，进入：https://www.python.org/</p>
+<p><img loading="lazy" src='/images/202002/1/3.png' alt="/images/202002/1/3.png"></p>
 <p>下载安装就好。</p>
 <p>之后，打开终端输入<code>pip install -i https://pypi.douban.com/simple keras</code></p>
-<p><img loading="lazy" src="/images/202002/1/4.png" alt="/images/202002/1/4.png" srcset="/images/202002/1/4.png?size=small, /images/202002/1/4.png?size=medium 1.5x, /images/202002/1/4.png?size=large 2x" data-title="/images/202002/1/4.png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></p>
+<p><img loading="lazy" src='/images/202002/1/4.png' alt="/images/202002/1/4.png"></p>
 <p>输入以下命令可以确认正常安装：</p>
-<div class="highlight" id="id-1"><div class="chroma">
+<div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-Python" data-lang="Python"><span class="line"><span class="cl"><span class="n">python</span> <span class="o">-</span><span class="n">c</span> <span class="s2">&#34;import keras;print(keras.__version__)&#34;</span></span></span></code></pre></td></tr></table>
 </div>
-</div><p><img loading="lazy" src="/images/202002/1/5.png" alt="/images/202002/1/5.png" srcset="/images/202002/1/5.png?size=small, /images/202002/1/5.png?size=medium 1.5x, /images/202002/1/5.png?size=large 2x" data-title="/images/202002/1/5.png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></p>
+</div><p><img loading="lazy" src='/images/202002/1/5.png' alt="/images/202002/1/5.png"></p>
 <p>当然，如果想直接使用<a href="https://colab.research.google.com/notebooks/welcome.ipynb#scrollTo=-Rh3-Vt9Nev9"target="_blank" rel="external nofollow noopener noreferrer">Colaboratory</a>的话，直接打开你的<a href="https://drive.google.com"target="_blank" rel="external nofollow noopener noreferrer">Google 云端硬盘</a></p>
-<p><img loading="lazy" src="/images/202002/1/6.png" alt="/images/202002/1/6.png" srcset="/images/202002/1/6.png?size=small, /images/202002/1/6.png?size=medium 1.5x, /images/202002/1/6.png?size=large 2x" data-title="/images/202002/1/6.png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></p>
+<p><img loading="lazy" src='/images/202002/1/6.png' alt="/images/202002/1/6.png"></p>
 <p>为了方便起见，新建一个名为 Keras 的文件夹，进入 Keras 文件夹，单击鼠标右键</p>
-<p><img loading="lazy" src="/images/202002/1/7.png" alt="/images/202002/1/7.png" srcset="/images/202002/1/7.png?size=small, /images/202002/1/7.png?size=medium 1.5x, /images/202002/1/7.png?size=large 2x" data-title="/images/202002/1/7.png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></p>
+<p><img loading="lazy" src='/images/202002/1/7.png' alt="/images/202002/1/7.png"></p>
 <p>选择<code>Colaboratory</code>就可新建一个 Jupyter notebok 啦！</p>
 <p>如果没有看到<code>Colaboratory</code>这一项的话，就选择关联更多应用</p>
-<p><img loading="lazy" src="/images/202002/1/8.png" alt="/images/202002/1/8.png" srcset="/images/202002/1/8.png?size=small, /images/202002/1/8.png?size=medium 1.5x, /images/202002/1/8.png?size=large 2x" data-title="/images/202002/1/8.png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></p>
+<p><img loading="lazy" src='/images/202002/1/8.png' alt="/images/202002/1/8.png"></p>
 <p>搜索<code>Colaboratory</code>，并关联即可。</p>
-<h2 id="导入库和模块" class="heading-element">
-  <a href="#%e5%af%bc%e5%85%a5%e5%ba%93%e5%92%8c%e6%a8%a1%e5%9d%97" class="heading-mark"></a>导入库和模块</h2><p>我们导入<code>Sequential</code>模型(相当于放积木的桌子)</p>
-<div class="highlight" id="id-2"><div class="chroma">
+<h2 class="heading-element" id="导入库和模块"><span>导入库和模块</span>
+  <a href="#%e5%af%bc%e5%85%a5%e5%ba%93%e5%92%8c%e6%a8%a1%e5%9d%97" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>我们导入<code>Sequential</code>模型(相当于放积木的桌子)</p>
+<div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
@@ -275,7 +162,7 @@
 <pre tabindex="0" class="chroma"><code class="language-Python" data-lang="Python"><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">keras.models</span> <span class="kn">import</span> <span class="n">Sequential</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>接下来，我们导入各种层(各种形状各异积木)</p>
-<div class="highlight" id="id-3"><div class="chroma">
+<div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -285,16 +172,19 @@
 </span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">keras.layers</span> <span class="kn">import</span> <span class="n">Dense</span><span class="p">,</span> <span class="n">Flatten</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>最后，我们导入<code>to_categorical</code>函数，以便之后对数据进行转换</p>
-<div class="highlight" id="id-4"><div class="chroma">
+<div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-Python" data-lang="Python"><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">keras.utils</span> <span class="kn">import</span> <span class="n">to_categorical</span></span></span></code></pre></td></tr></table>
 </div>
-</div><h2 id="加载数据" class="heading-element">
-  <a href="#%e5%8a%a0%e8%bd%bd%e6%95%b0%e6%8d%ae" class="heading-mark"></a>加载数据</h2><p>MNIST 是一个非常有名的手写数字数据集，我们可以使用 Keras 轻松加载它。</p>
-<div class="highlight" id="id-5"><div class="chroma">
+</div><h2 class="heading-element" id="加载数据"><span>加载数据</span>
+  <a href="#%e5%8a%a0%e8%bd%bd%e6%95%b0%e6%8d%ae" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>MNIST 是一个非常有名的手写数字数据集，我们可以使用 Keras 轻松加载它。</p>
+<div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -306,7 +196,7 @@
 </span></span><span class="line"><span class="cl"><span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">),</span> <span class="p">(</span><span class="n">x_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">)</span> <span class="o">=</span> <span class="n">mnist</span><span class="o">.</span><span class="n">load_data</span><span class="p">()</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>查看一下训练集的大小</p>
-<div class="highlight" id="id-6"><div class="chroma">
+<div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -319,7 +209,7 @@
 </div>
 </div><p>可以看到 60000 个样本，它们都是 28 像素 x28 像素的。</p>
 <p>看一下这些手写数字长什么样</p>
-<div class="highlight" id="id-7"><div class="chroma">
+<div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -330,12 +220,15 @@
 </span></span><span class="line"><span class="cl">%matplotlib inline
 </span></span><span class="line"><span class="cl">plt.imshow(x_train[0])</span></span></code></pre></td></tr></table>
 </div>
-</div><p><img loading="lazy" src="/images/202002/1/10.png" alt="/images/202002/1/10.png" srcset="/images/202002/1/10.png?size=small, /images/202002/1/10.png?size=medium 1.5x, /images/202002/1/10.png?size=large 2x" data-title="/images/202002/1/10.png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></p>
-<h2 id="预处理数据" class="heading-element">
-  <a href="#%e9%a2%84%e5%a4%84%e7%90%86%e6%95%b0%e6%8d%ae" class="heading-mark"></a>预处理数据</h2><p>使用 Keras 是必须显式声明输入图像深度的尺寸。例如，具有所有 3 个 RGB 通道的全色图像的深度为 3。</p>
+</div><p><img loading="lazy" src='/images/202002/1/10.png' alt="/images/202002/1/10.png"></p>
+<h2 class="heading-element" id="预处理数据"><span>预处理数据</span>
+  <a href="#%e9%a2%84%e5%a4%84%e7%90%86%e6%95%b0%e6%8d%ae" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>使用 Keras 是必须显式声明输入图像深度的尺寸。例如，具有所有 3 个 RGB 通道的全色图像的深度为 3。</p>
 <p>我们的 MNIST 图像的深度为 1，但我们必须明确声明。</p>
 <p>也就是说，我们希望将数据集从形状<code>(n,rows,cols)</code>转换为<code>(n,rows,cols,channels)</code>。</p>
-<div class="highlight" id="id-8"><div class="chroma">
+<div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -349,7 +242,7 @@
 </span></span><span class="line"><span class="cl"><span class="n">x_test</span> <span class="o">=</span> <span class="n">x_test</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">x_test</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">img_x</span><span class="p">,</span> <span class="n">img_y</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>除此之外，我们将数据标准化一下：</p>
-<div class="highlight" id="id-9"><div class="chroma">
+<div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -363,7 +256,7 @@
 </span></span><span class="line"><span class="cl"><span class="n">x_test</span> <span class="o">/=</span> <span class="mi">255</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>之后，将标记值(y_train, y_test)转换为<code>One-Hot Encode</code>的形式，至于为什么要这么做？请查看：https://machinelearningmastery.com/why-one-hot-encode-data-in-machine-learning/</p>
-<div class="highlight" id="id-10"><div class="chroma">
+<div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -376,11 +269,14 @@
 </span></span><span class="line"><span class="cl"><span class="nb">print</span><span class="p">(</span><span class="n">y_train</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl"><span class="c1"># (60000, 10)</span></span></span></code></pre></td></tr></table>
 </div>
-</div><h2 id="定义模型结构" class="heading-element">
-  <a href="#%e5%ae%9a%e4%b9%89%e6%a8%a1%e5%9e%8b%e7%bb%93%e6%9e%84" class="heading-mark"></a>定义模型结构</h2><p>我们参照下图定义一个模型结构</p>
-<p><img loading="lazy" src="/images/202002/1/cnn-diagram.png" alt="/images/202002/1/cnn-diagram.png" srcset="/images/202002/1/cnn-diagram.png?size=small, /images/202002/1/cnn-diagram.png?size=medium 1.5x, /images/202002/1/cnn-diagram.png?size=large 2x" data-title="/images/202002/1/cnn-diagram.png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></p>
+</div><h2 class="heading-element" id="定义模型结构"><span>定义模型结构</span>
+  <a href="#%e5%ae%9a%e4%b9%89%e6%a8%a1%e5%9e%8b%e7%bb%93%e6%9e%84" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>我们参照下图定义一个模型结构</p>
+<p><img loading="lazy" src='/images/202002/1/cnn-diagram.png' alt="/images/202002/1/cnn-diagram.png"></p>
 <p>代码如下：</p>
-<div class="highlight" id="id-11"><div class="chroma">
+<div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -402,9 +298,12 @@
 </span></span><span class="line"><span class="cl"><span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dense</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;softmax&#39;</span><span class="p">))</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>是不是有点搭积木的既视感？</p>
-<h2 id="编译" class="heading-element">
-  <a href="#%e7%bc%96%e8%af%91" class="heading-mark"></a>编译</h2><p>现在，只需要编译模型，就可以开始训练了。当编译模型时，我们声明了损失函数和优化器（SGD，Adam 等）。</p>
-<div class="highlight" id="id-12"><div class="chroma">
+<h2 class="heading-element" id="编译"><span>编译</span>
+  <a href="#%e7%bc%96%e8%af%91" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>现在，只需要编译模型，就可以开始训练了。当编译模型时，我们声明了损失函数和优化器（SGD，Adam 等）。</p>
+<div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -416,9 +315,12 @@
 </span></span><span class="line"><span class="cl">              <span class="n">metrics</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;accuracy&#39;</span><span class="p">])</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>Keras 有很多<a href="https://keras.io/losses/"target="_blank" rel="external nofollow noopener noreferrer">损失函数</a>和<a href="https://keras.io/optimizers/"target="_blank" rel="external nofollow noopener noreferrer">优化器</a>供你选择。</p>
-<h2 id="训练" class="heading-element">
-  <a href="#%e8%ae%ad%e7%bb%83" class="heading-mark"></a>训练</h2><p>接下来，我们传入训练集进行训练</p>
-<div class="highlight" id="id-13"><div class="chroma">
+<h2 class="heading-element" id="训练"><span>训练</span>
+  <a href="#%e8%ae%ad%e7%bb%83" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>接下来，我们传入训练集进行训练</p>
+<div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
@@ -426,13 +328,16 @@
 <pre tabindex="0" class="chroma"><code class="language-Python" data-lang="Python"><span class="line"><span class="cl"><span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">128</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>以下是在<code>Colaboratory</code>上训练的过程</p>
-<p><img loading="lazy" src="/images/202002/1/11.png" alt="/images/202002/1/11.png" srcset="/images/202002/1/11.png?size=small, /images/202002/1/11.png?size=medium 1.5x, /images/202002/1/11.png?size=large 2x" data-title="/images/202002/1/11.png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></p>
+<p><img loading="lazy" src='/images/202002/1/11.png' alt="/images/202002/1/11.png"></p>
 <p>以下是在个人电脑上训练的过程</p>
-<p><img loading="lazy" src="/images/202002/1/12.png" alt="/images/202002/1/12.png" srcset="/images/202002/1/12.png?size=small, /images/202002/1/12.png?size=medium 1.5x, /images/202002/1/12.png?size=large 2x" data-title="/images/202002/1/12.png" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/></p>
+<p><img loading="lazy" src='/images/202002/1/12.png' alt="/images/202002/1/12.png"></p>
 <p>可以看到，花费的时间差别还是很大的！</p>
-<h2 id="评估模型" class="heading-element">
-  <a href="#%e8%af%84%e4%bc%b0%e6%a8%a1%e5%9e%8b" class="heading-mark"></a>评估模型</h2><p>最后，传入测试集对模型模型进行评估</p>
-<div class="highlight" id="id-14"><div class="chroma">
+<h2 class="heading-element" id="评估模型"><span>评估模型</span>
+  <a href="#%e8%af%84%e4%bc%b0%e6%a8%a1%e5%9e%8b" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>最后，传入测试集对模型模型进行评估</p>
+<div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -445,7 +350,7 @@
 </div>
 </div><p>准确率达到了%99 以上！</p>
 <p>完整代码如下：</p>
-<div class="highlight" id="id-15"><div class="chroma">
+<div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
@@ -538,8 +443,11 @@
 </span></span><span class="line"><span class="cl"><span class="n">score</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">x_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl"><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;acc&#39;</span><span class="p">,</span> <span class="n">score</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span></span></span></code></pre></td></tr></table>
 </div>
-</div><h2 id="参考" class="heading-element">
-  <a href="#%e5%8f%82%e8%80%83" class="heading-mark"></a>参考</h2><ul>
+</div><h2 class="heading-element" id="参考"><span>参考</span>
+  <a href="#%e5%8f%82%e8%80%83" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><ul>
 <li><a href="https://elitedatascience.com/keras-tutorial-deep-learning-in-python"target="_blank" rel="external nofollow noopener noreferrer">https://elitedatascience.com/keras-tutorial-deep-learning-in-python</a></li>
 <li><a href="http://adventuresinmachinelearning.com/keras-tutorial-cnn-11-lines/"target="_blank" rel="external nofollow noopener noreferrer">http://adventuresinmachinelearning.com/keras-tutorial-cnn-11-lines/</a></li>
 </ul></div><div class="post-footer" id="post-footer">
@@ -548,14 +456,14 @@
       <div class="post-info-mod">
         <span title="更新于 2020-02-01 10:34:55">更新于 2020-02-01&nbsp;</span>
       </div></div><div class="post-info-line">
-        <div class="post-info-md"></div>
+        <div class="post-info-md"><span><a href="vscode://file/D:%5chugo-blog%5candyfree96%5ccontent%5cposts%5c%e7%94%a8Keras%e6%90%ad%e5%bb%ba%e5%8d%b7%e7%a7%af%e7%a5%9e%e7%bb%8f%e7%bd%91%e7%bb%9c.md" title="在编辑器中打开"target="_blank" rel="external nofollow noopener noreferrer" class="link-to-vscode">在编辑器中打开</a></span></div>
         <div class="post-info-share">
-          <span><a href="javascript:void(0);" title="分享到 Twitter" data-sharer="twitter" data-url="http://localhost:1313/%E7%94%A8keras%E6%90%AD%E5%BB%BA%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" data-title="用Keras搭建卷积神经网络" data-via="IRONAnthony96" data-hashtags="Python,Keras,深度学习,卷积神经网络"><i class="fa-brands fa-twitter fa-fw" aria-hidden="true"></i></a>
+          <span><a href="javascript:void(0);" title="分享到 X" data-sharer="twitter" data-url="http://localhost:1313/%E7%94%A8keras%E6%90%AD%E5%BB%BA%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" data-title="用Keras搭建卷积神经网络" data-via="IRONAnthony96" data-hashtags="Python,Keras,深度学习,卷积神经网络"><i class="fa-brands fa-x-twitter fa-fw" aria-hidden="true"></i></a>
   <a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="http://localhost:1313/%E7%94%A8keras%E6%90%AD%E5%BB%BA%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" data-hashtag="Python"><i class="fa-brands fa-facebook-square fa-fw" aria-hidden="true"></i></a>
   <a href="javascript:void(0);" title="分享到 WhatsApp" data-sharer="whatsapp" data-url="http://localhost:1313/%E7%94%A8keras%E6%90%AD%E5%BB%BA%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" data-title="用Keras搭建卷积神经网络" data-web><i class="fa-brands fa-whatsapp fa-fw" aria-hidden="true"></i></a>
-  <a href="javascript:void(0);" title="分享到 Line" data-sharer="line" data-url="http://localhost:1313/%E7%94%A8keras%E6%90%AD%E5%BB%BA%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" data-title="用Keras搭建卷积神经网络"><i data-svg-src="/lib/simple-icons/icons/line.min.svg" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 Line" data-sharer="line" data-url="http://localhost:1313/%E7%94%A8keras%E6%90%AD%E5%BB%BA%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" data-title="用Keras搭建卷积神经网络"><svg class="icon" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>LINE</title><path d="M19.365 9.863c.349.0.63.285.63.631.0.345-.281.63-.63.63H17.61v1.125h1.755c.349.0.63.283.63.63.0.344-.281.629-.63.629h-2.386c-.345.0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63h2.386c.346.0.627.285.627.63.0.349-.281.63-.63.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211.0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346.0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195.0.375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345.0.63.285.63.63v4.771zm-5.741.0c0 .344-.282.629-.631.629-.345.0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63.346.0.628.285.628.63v4.771zm-2.466.629H4.917c-.345.0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348.0.63.285.63.63v4.141h1.756c.348.0.629.283.629.63.0.344-.282.629-.629.629M24 10.314C24 4.943 18.615.572 12 .572S0 4.943.0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314"/></svg></a>
   <a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="http://localhost:1313/%E7%94%A8keras%E6%90%AD%E5%BB%BA%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" data-title="用Keras搭建卷积神经网络" data-image="/images/202002/1/wietse-jongsma-K_GLVR6O1ME-unsplash.jpg"><i class="fa-brands fa-weibo fa-fw" aria-hidden="true"></i></a>
-  <a href="javascript:void(0);" title="分享到 Myspace" data-sharer="myspace" data-url="http://localhost:1313/%E7%94%A8keras%E6%90%AD%E5%BB%BA%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" data-title="用Keras搭建卷积神经网络" data-description=""><i data-svg-src="/lib/simple-icons/icons/myspace.min.svg" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 Myspace" data-sharer="myspace" data-url="http://localhost:1313/%E7%94%A8keras%E6%90%AD%E5%BB%BA%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" data-title="用Keras搭建卷积神经网络" data-description=""><svg class="icon" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>Myspace</title><path d="M19.802 12.274A3.811 3.811.0 0023.62 8.47c0-2.101-1.71-3.795-3.818-3.795a3.816 3.816.0 00-3.818 3.81 3.817 3.817.0 003.818 3.811zm-8.602.705a3.43 3.43.0 003.435-3.424A3.43 3.43.0 0011.2 6.13 3.44 3.44.0 007.764 9.566 3.436 3.436.0 0011.2 13zm-7.8.635c1.71.0 3.093-1.38 3.093-3.081.0-1.704-1.395-3.084-3.105-3.084A3.086 3.086.0 00.3 10.539c0 1.7 1.387 3.078 3.095 3.078zm0 .705c-1.96.0-3.4 1.717-3.4 3.495v1.196c0 .17.138.31.31.31h6.18a.31.31.0 00.309-.31v-1.196c0-1.779-1.437-3.5-3.398-3.5zm7.8-.56c-2.18.0-3.78 1.915-3.78 3.891v1.331c0 .188.156.344.345.344h6.87a.344.344.0 00.342-.344V17.65c0-1.976-1.598-3.891-3.777-3.891zm8.602-.617c-2.422.0-4.197 2.126-4.197 4.323v1.477c0 .21.172.381.382.381h7.63c.21.0.383-.171.383-.381v-1.477c-.001-2.197-1.776-4.323-4.198-4.323z"/></svg></a>
   <a href="javascript:void(0);" title="分享到 Blogger" data-sharer="blogger" data-url="http://localhost:1313/%E7%94%A8keras%E6%90%AD%E5%BB%BA%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" data-title="用Keras搭建卷积神经网络" data-description=""><i class="fa-brands fa-blogger fa-fw" aria-hidden="true"></i></a>
   <a href="javascript:void(0);" title="分享到 Evernote" data-sharer="evernote" data-url="http://localhost:1313/%E7%94%A8keras%E6%90%AD%E5%BB%BA%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" data-title="用Keras搭建卷积神经网络"><i class="fa-brands fa-evernote fa-fw" aria-hidden="true"></i></a>
   </span>
@@ -567,29 +475,26 @@
     <section>
       <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
     </section>
-  </div>
-
-  <div class="post-nav"><a href="/git%E7%AE%80%E6%98%8E%E6%95%99%E7%A8%8B/" class="post-nav-item" rel="prev" title="Git简明教程"><i class="fa-solid fa-angle-left fa-fw" aria-hidden="true"></i>Git简明教程</a>
-      <a href="/google%E6%90%9C%E7%B4%A2%E9%82%A3%E4%BA%9B%E4%BA%8B%E5%84%BF/" class="post-nav-item" rel="next" title="Google搜索那些事儿">Google搜索那些事儿<i class="fa-solid fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
+  </div><div class="post-nav"><a href="/git%E7%AE%80%E6%98%8E%E6%95%99%E7%A8%8B/" class="post-nav-item" rel="prev" title="Git简明教程"><i class="fa-solid fa-angle-left fa-fw" aria-hidden="true"></i>Git简明教程</a><a href="/google%E6%90%9C%E7%B4%A2%E9%82%A3%E4%BA%9B%E4%BA%8B%E5%84%BF/" class="post-nav-item" rel="next" title="Google搜索那些事儿">Google搜索那些事儿<i class="fa-solid fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
 </div>
 <div class="post-reward">
     <div class="comment">请作者喝杯咖啡!</div>
     <input type="checkbox" class="reward-input" name="reward" id="fi-reward" hidden />
-    <label class="reward-button" for="fi-reward">赞赏</label>
-    <div class="reward-ways" data-mode="static"><div><img loading="lazy" src="/reward/alipay.png" alt="AndyFree96 支付宝" data-title="AndyFree96 支付宝" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/><span data-animation>支付宝</span>
-          </div><div><img loading="lazy" src="/reward/wechatpay.png" alt="AndyFree96 微信" data-title="AndyFree96 微信" style="background: url(/images/loading.min.svg) no-repeat center;" onload="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}this.dataset.lazyloaded='';" onerror="this.title=this.dataset.title;for(const i of ['style', 'data-title','onerror','onload']){this.removeAttribute(i);}"/><span data-animation>微信</span>
+    <label class="reward-button" for="fi-reward"><i class="fa-solid fa-qrcode fa-fw" aria-hidden="true"></i>赞赏</label>
+    <div class="reward-ways" data-mode="static"><div><img src='/reward/alipay.png' alt="AndyFree96 支付宝"><span data-animation>支付宝</span>
+          </div><div><img src='/reward/wechatpay.png' alt="AndyFree96 微信"><span data-animation>微信</span>
           </div></div>
   </div></article>
 
   <aside class="toc" id="toc-auto" aria-label="目录"><h2 class="toc-title">目录&nbsp;<i class="toc-icon fa-solid fa-angle-down fa-fw" aria-hidden="true"></i></h2>
       <div class="toc-content" id="toc-content-auto"></div></aside></main><footer class="footer">
-    <div class="footer-container"><div class="footer-line powered">由 <a href="https://gohugo.io/" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.135.0"><img class="hugo-icon" src="/images/hugo.min.svg" alt="Hugo logo" /> Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/hugo-fixit/FixIt" target="_blank" rel="external" title="FixIt v0.3.2"><img class="fixit-icon" src="/images/fixit.min.svg" alt="FixIt logo" /> FixIt</a>
+    <div class="footer-container"><div class="footer-line powered">由 <a href="https://gohugo.io/" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.148.2"><img class="hugo-icon" src="/images/hugo.min.svg" alt="Hugo logo" /> Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/hugo-fixit/FixIt" target="_blank" rel="external" title="FixIt v0.3.20"><img class="fixit-icon" src="/images/fixit.min.svg" alt="FixIt logo" /> FixIt</a>
         </div><div class="footer-line copyright" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright fa-fw" aria-hidden="true"></i>
             <span itemprop="copyrightYear">2025</span><span class="author" itemprop="copyrightHolder">
               <a href="https://andyfree96.github.io/"target="_blank" rel="external nofollow noopener noreferrer">AndyFree96</a></span></div></div>
   </footer></div><div class="widgets"><div class="fixed-buttons animate__faster d-none"><div class="fixed-button back-to-top" role="button" aria-label="回到顶部"><i class="fa-solid fa-arrow-up fa-fw" aria-hidden="true"></i><span class="variant-numeric d-none">0%</span>
         </div></div><div id="mask"></div><div class="reading-progress-bar" style="left: 0;top: 0;"></div><noscript>
-    <div class="noscript-warning">FixIt 主题在启用 JavaScript 的情况下效果最佳。</div>
+    <div class="noscript-warning">该网站在启用 JavaScript 的情况下效果最佳。</div>
   </noscript>
-</div><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script src="/lib/sharer/sharer.min.js" async defer></script><script src="/lib/cookieconsent/cookieconsent.min.js" defer></script><script>window.config={"code":{"copyTitle":"复制到剪贴板","editLockTitle":"锁定可编辑代码块","editUnLockTitle":"解锁可编辑代码块","editable":true,"maxShownLines":10},"comment":{"enable":false},"cookieconsent":{"content":{"dismiss":"同意","link":"了解更多","message":"本网站使用 Cookies 来改善您的浏览体验。"},"enable":true,"palette":{"button":{"background":"#f0f0f0"},"popup":{"background":"#1aa3ff"}},"theme":"edgeless"}};</script><script src="/js/theme.min.js" defer></script></body>
+</div><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script src="/lib/sharer/sharer.min.js" async defer></script><script src="/lib/cookieconsent/cookieconsent.min.js" defer></script><script>window.config={"code":{"copyTitle":"复制到剪贴板","editLockTitle":"锁定可编辑代码块","editUnLockTitle":"解锁可编辑代码块","editable":true,"maxShownLines":10},"comment":{"enable":false},"cookieconsent":{"content":{"dismiss":"同意","link":"了解更多","message":"本网站使用 Cookies 来改善您的浏览体验。"},"enable":true,"palette":{"button":{"background":"#f0f0f0"},"popup":{"background":"#1aa3ff"}},"theme":"edgeless"},"version":"v0.3.20"};console.log('Page config:', window.config);</script><script src="/js/theme.min.js" defer></script></body>
 </html>

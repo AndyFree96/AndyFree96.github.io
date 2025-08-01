@@ -3,7 +3,7 @@
 
 众所周知，Pandas 是最受欢迎的 Python 数据科学与分析库。Numpy 用于较低级别的科学计算。Pandas 构建于 Numpy 之上，专为实际数据分析而设计。本文总结了一些常见、方便的功能。话不多说，让我们开始吧！
 
-&lt;!--more--&gt;
+<!--more-->
 
 ## 数据集
 
@@ -38,7 +38,7 @@ pd.DataFrame(dict) # From a dict, keys for columns names, values for data as lis
 具体来说，就是：
 
 ```Python
-dataURL = &#39;https://raw.githubusercontent.com/justmarkham/pandas-videos/master/data/imdb_1000.csv&#39;
+dataURL = 'https://raw.githubusercontent.com/justmarkham/pandas-videos/master/data/imdb_1000.csv'
 df = pd.read_csv(dataURL)
 df.head() # Prints first 5 rows of the DataFrame
 ```
@@ -75,7 +75,7 @@ df.idxmin() # Index of the highest value
 举个例子，在导入 IMDB 高分电影数据后统计一下每种电影类型的频数，我们就可以用:
 
 ```Python
-df[&#39;genre&#39;].value_counts()
+df['genre'].value_counts()
 ```
 
 ![每种电影类型的频数](/images/202101/1/2.png)
@@ -102,7 +102,7 @@ df.at[row_label, col_label] # Access a single value for row/column label pair
 实际上，我们拿到数据后，往往需要清理它。以下就是一些非常有用的方法：
 
 ```Python
-df.columns = [&#39;a&#39;, &#39;b&#39;, &#39;c&#39;] # Renames columns
+df.columns = ['a', 'b', 'c'] # Renames columns
 pd.isnull() # Checks for null values, return Boolean Array
 pd.notnull() # Opposite of pd.isnull()
 df.dropna() # Drops all rows that contain null values
@@ -111,12 +111,12 @@ df.dropna(axis=1, thresh=n) # Drops all rows hava less than non null values
 df.fillna(x) # Replaces all null values with x
 s.fillna(s.mean()) # Replaces all null values with the mean
 s.astype(float) # Converts the datatype of the series to float
-s.replace(1, &#39;one&#39;) # Replaces all values equal to 1 with &#39;one&#39;
-s.replace([1, 3], [&#39;one&#39;, &#39;three&#39;]) # Replace all 1 with &#39;one&#39; and 3 with &#39;three&#39;
-df.rename(columns=lambda x: x &#43; 1) # Mass renaming of columns
-df.rename(columns={&#39;old_name&#39;: &#39;new_name&#39;}) # Selective renaming
-df.set_index(&#39;column_one&#39;) # Changes the index
-df.rename(index=lambda x: x &#43; 1) # Mass renaming of index
+s.replace(1, 'one') # Replaces all values equal to 1 with 'one'
+s.replace([1, 3], ['one', 'three']) # Replace all 1 with 'one' and 3 with 'three'
+df.rename(columns=lambda x: x + 1) # Mass renaming of columns
+df.rename(columns={'old_name': 'new_name'}) # Selective renaming
+df.set_index('column_one') # Changes the index
+df.rename(index=lambda x: x + 1) # Mass renaming of index
 df.drop(labels) # Drop specified labels from rows or columns
 df.drop_duplicates(subset) # Return DataFrame with duplicate rows removed, optionally only considering certain columns
 ```
@@ -128,8 +128,8 @@ df.drop_duplicates(subset) # Return DataFrame with duplicate rows removed, optio
 一些对数据过滤、排序和分组的方法：
 
 ```Python
-df[df[col] &gt; 0.5] # Rows where the col column is greater than 0.5
-df[(df[col] &gt; 0.5) &amp; (df[col] &lt; 0.7)] # Rows where 0.5 &lt; col &lt; 0.7
+df[df[col] > 0.5] # Rows where the col column is greater than 0.5
+df[(df[col] > 0.5) & (df[col] < 0.7)] # Rows where 0.5 < col < 0.7
 df.sort_values(col1) # Sorts values by col1 in ascending order
 df.sort_values(col2, ascending=False) # Sorts values by col2 in descending order
 df.sort_values([col1, col2], ascending=[True, False]) # Sorts values by col1 in ascending order then col2 in descending order
@@ -167,7 +167,7 @@ df.to_clipboard() # Writes to the clipboard
 pd.concat([df1, df2], axis=1) # Adds the columns in df1 to the end of df2
 pd.merge(df11, df2) # SQL-style merges
 df1.append(df2) # Adds the rows in df1 to the end of df2 (columns should be identical)
-df1.join(df2,on=col1,how=&#39;inner&#39;) # SQL-style joins
+df1.join(df2,on=col1,how='inner') # SQL-style joins
 ```
 
 更多内容，请查看[Merge, join, and concatenate](http://pandas.pydata.org/pandas-docs/stable/merging.html)。
@@ -179,7 +179,7 @@ df1.join(df2,on=col1,how=&#39;inner&#39;) # SQL-style joins
 ```Python
 pd.DataFrame(np.random.rand(20,5)) # 5 columns and 20 rows of random floats
 pd.Series(my_list) # Create a series from an iterable my_list
-df.index = pd.data_range(&#39;1900/1/30&#39;, periods=df.shape[0]) # Add a date index
+df.index = pd.data_range('1900/1/30', periods=df.shape[0]) # Add a date index
 ```
 
 ## bitly_usagov 数据集分析
@@ -195,7 +195,7 @@ df.index = pd.data_range(&#39;1900/1/30&#39;, periods=df.shape[0]) # Add a date 
 ```Python
 import pandas as pd
 
-file_path = &#39;../../Datasets/bitly_usagov/example.txt&#39; # Local file path
+file_path = '../../Datasets/bitly_usagov/example.txt' # Local file path
 df = pd.read_json(file_path, lines=True)
 df.info()
 ```
@@ -207,7 +207,7 @@ df.info()
 `df`对象有一列名为`tz`，表示的是时区。我们可以对所有数据的时区进行统计，
 
 ```Python
-tz_counts = df[&#39;tz&#39;].value_counts()
+tz_counts = df['tz'].value_counts()
 tz_counts.head(10)
 ```
 
@@ -218,8 +218,8 @@ tz_counts.head(10)
 `fillna`函数可以替换缺失值（NA），而未知值（空字符串）则可以通过布尔数组索引进行替换：
 
 ```Python
-clean_tz = df[&#39;tz&#39;].fillna(&#39;Missing&#39;)
-clean_tz[clean_tz == &#39;&#39;] = &#39;Unknown&#39;
+clean_tz = df['tz'].fillna('Missing')
+clean_tz[clean_tz == ''] = 'Unknown'
 tz_counts = clean_tz.value_counts()
 ```
 
@@ -230,7 +230,7 @@ tz_counts = clean_tz.value_counts()
 `df`对象名为`a`的列中含有浏览器、设备、应用程序的相关信息，我们可以简单地将浏览器信息提取出来：
 
 ```Python
-df.a.str.split(&#39; &#39;).str.get(0).head(10)
+df.a.str.split(' ').str.get(0).head(10)
 ```
 
 ![](/images/202101/1/8.png)

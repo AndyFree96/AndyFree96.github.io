@@ -3,15 +3,15 @@
 
 我们经常说，Python 是一门**解释型语言**，但你知道它的解释器 CPython 究竟是如何工作的么？Python 的内存管理、字节码执行、垃圾回收……这些*幕后英雄*是如何协作的？在这篇文章中，我们将通过剖析 CPython 源码，一起探索 Python 的运行本质。
 
-&lt;!--more--&gt;
+<!--more-->
 
 ## 为什么阅读 CPython 源码？
 
 理由很简单！
 
-{{&lt; admonition type=note title=&#34;注意&#34; open=true &gt;}}
+{{< admonition type=note title="注意" open=true >}}
 只是想看看**成功且优秀的代码**是什么样的。
-{{&lt; /admonition &gt;}}
+{{< /admonition >}}
 
 **严谨的代码结构**：CPython 是由全球顶尖开发者共同维护的开源项目，其代码结构极为清晰。模块划分合理，功能边界明确，适合学习如何设计大规模软件系统。通过阅读，能学会如何平衡代码的灵活性和可维护性。
 

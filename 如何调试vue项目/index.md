@@ -3,7 +3,7 @@
 
 在开发 Vue 应用的过程中，调试是确保项目稳定性和高效性的关键步骤。无论是开发环境中的小问题，还是生产环境中的复杂 bug，合理的调试方法都能大大提升开发效率并减少错误发生的概率。本文将深入探讨 Vue 项目调试的常见技巧与工具，从基础的调试方法到进阶的技术方案，为开发者提供一个系统化的调试框架。通过合理的调试策略，开发者能够快速定位问题，并对症下药，确保项目的顺利进行。
 
-&lt;!--more--&gt;
+<!--more-->
 
 ## 调试准备
 
@@ -46,14 +46,14 @@ npm run dev
 
 ```json
 {
-  &#34;version&#34;: &#34;0.2.0&#34;,
-  &#34;configurations&#34;: [
+  "version": "0.2.0",
+  "configurations": [
     {
-      &#34;type&#34;: &#34;chrome&#34;,
-      &#34;request&#34;: &#34;launch&#34;,
-      &#34;name&#34;: &#34;Launch Chrome against localhost&#34;,
-      &#34;url&#34;: &#34;http://localhost:5173&#34;,
-      &#34;webRoot&#34;: &#34;${workspaceFolder}&#34;
+      "type": "chrome",
+      "request": "launch",
+      "name": "Launch Chrome against localhost",
+      "url": "http://localhost:5173",
+      "webRoot": "${workspaceFolder}"
     }
   ]
 }
