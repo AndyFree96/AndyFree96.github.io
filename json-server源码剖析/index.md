@@ -5,6 +5,10 @@
 
 <!--more-->
 
+{{< admonition >}}
+剖析的`json-server`版本为`v1.0.0-beta.3`。
+{{< /admonition >}}
+
 ## 一个简单但不完整的实现
 
 由于有一些 Express 的使用经验，在阅读了[json-server](https://github.com/typicode/json-server)的 README.md 介绍后，我的初始想法是将`db.json`文件加载然后遍历对象，将`key`作为路由的 Endpoint 即可，由于有了以下代码：
