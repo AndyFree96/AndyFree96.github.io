@@ -17,6 +17,8 @@ Example 1:
 
 > rotate 3 steps to the right: [5,6,7,1,2,3,4]
 
+<!--more-->
+
 Example 2:
 
 > Input: nums = [-1,-100,3,99], k = 2
@@ -30,8 +32,6 @@ Example 2:
 > rotate 2 steps to the right: [3,99,-1,-100]
 
 原题链接: https://leetcode.com/problems/rotate-array/description/
-
-<!--more-->
 
 给定一个数组，将其旋转的意思是：将数组左端移出的元素补充到数组右端。我们希望编写一个函数`rotate(arr,k,n)`，传入数组`arr`，数组长度`n`，旋转元素个数`k`，就可以得到数组旋转后的结果。
 
