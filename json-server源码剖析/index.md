@@ -585,5 +585,5 @@ watch(file).on('change', () => {
 ---
 
 > 作者: [AndyFree96](https://andyfree96.github.io/)  
-> URL: https://andyfree96.github.io/json-server%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/  
+> URL: http://localhost:1313/json-server%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/  
 
