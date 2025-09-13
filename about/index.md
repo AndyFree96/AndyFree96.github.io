@@ -3,7 +3,7 @@
 
 ![](/page/jean-carlo-emer--chlDlxLkw8-unsplash.jpg)
 
-大家好！我是**东东东尼君**，一个热爱学习和分享的技术探索者。在编程的世界里，我专注于 JavaScript、Node.js、C/C++ 和 Python，并且不断扩展自己的技能边界，从前端到后端，从数据分析到机器学习，力求通过技术创造更大的价值。
+大家好！我是**东东东尼君**，一个热爱学习和分享的技术探索者。在编程的世界里，我专注于 JavaScript、Node.js、C/C++和 Python，并且不断扩展自己的技能边界，从前端到后端，从数据分析到机器学习，力求通过技术创造更大的价值。
 
 ---
 
@@ -11,6 +11,8 @@
 
 为了持续提升自己的技术能力，我目前正在学习：
 
+- C#/.NET：深入理解 .NET 运行时、GC 机制、JIT/AOT、跨平台运行等核心原理，并结合 WPF、并行编程与系统开发实践，提升架构设计与性能优化能力。
+- Rust：学习 Rust 编程语言，掌握其核心概念、语法特性、标准库、生态系统等，并结合实际项目实践，提升开发效率与性能优化能力。
 - 并发编程：深入理解多线程编程模型及并发控制技术，提高系统性能与效率。
 - 操作系统原理：研究操作系统的核心概念，如进程管理、内存管理、文件系统等，以更好地理解底层系统架构。
 
@@ -91,10 +93,11 @@
 - [Speckyboy](https://speckyboy.com/)
 - [CODROPS](https://tympanus.net/codrops/)
 - [ultimatecourses](https://ultimatecourses.com/blog/)
+- [ByteHide ](https://www.bytehide.com/blog)
 
 
 ---
 
 > 作者: <no value>  
-> URL: http://localhost:1313/about/  
+> URL: https://andyfree96.github.io/about/  
 

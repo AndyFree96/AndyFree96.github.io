@@ -176,5 +176,5 @@ https://www.r-graph-gallery.com/330-bubble-map-with-ggplot2.html
 ---
 
 > 作者: [AndyFree96](https://andyfree96.github.io/)  
-> URL: http://localhost:1313/r%E8%AF%AD%E8%A8%80ggplot2%E6%B0%94%E6%B3%A1%E5%9C%B0%E5%9B%BE%E5%AE%9E%E6%88%98/  
+> URL: https://andyfree96.github.io/r%E8%AF%AD%E8%A8%80ggplot2%E6%B0%94%E6%B3%A1%E5%9C%B0%E5%9B%BE%E5%AE%9E%E6%88%98/  
 

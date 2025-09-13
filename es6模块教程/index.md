@@ -135,5 +135,5 @@ ES6 模块化给 JavaScript 带来了真正的“官方标准”，彻底摆脱�
 ---
 
 > 作者: [AndyFree96](https://andyfree96.github.io/)  
-> URL: http://localhost:1313/es6%E6%A8%A1%E5%9D%97%E6%95%99%E7%A8%8B/  
+> URL: https://andyfree96.github.io/es6%E6%A8%A1%E5%9D%97%E6%95%99%E7%A8%8B/  
 
