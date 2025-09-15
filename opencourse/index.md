@@ -69,5 +69,5 @@
 ---
 
 > 作者: <no value>  
-> URL: http://localhost:1487/opencourse/  
+> URL: https://andyfree96.github.io/opencourse/  
 
