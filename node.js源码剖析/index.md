@@ -7,6 +7,10 @@ Node.js 的诞生，让 JavaScript 从浏览器的专属语言，跃升为构建
 
 无论你是想提升对 Node.js 的理解，还是希望从源码中汲取工程设计的智慧，这都将是一次充满收获的技术旅程。准备好了吗？让我们从入口文件开始，走进 Node.js 的源码迷宫！
 
+## 在 Windows 平台下编译
+
+本文阅读的 Node.js 版本为 v24.8.0，可在[此处](https://github.com/nodejs/node/releases/tag/v24.8.0)下载。
+
 <!--more-->
 
 ## 参考
@@ -18,5 +22,5 @@ Node.js 的诞生，让 JavaScript 从浏览器的专属语言，跃升为构建
 ---
 
 > 作者: [AndyFree96](https://andyfree96.github.io/)  
-> URL: https://andyfree96.github.io/node.js%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/  
+> URL: http://localhost:1487/node.js%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/  
 
