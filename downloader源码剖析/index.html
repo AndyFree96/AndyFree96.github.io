@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+<html itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+    <meta name="robots" content="noodp" />
+    <title>Downloader源码剖析 - 东尼的博客</title><meta name="author" content="AndyFree96">
+<meta name="description" content="在开发日常工作中，文件下载看似是一个再普通不过的功能，但当下载规模扩大、速度需要优化、断点续传需要保证、并发控制需要精确、甚至要处理上百 GB 的大文件时，“下载器”就迅速从普通工具变成了一个考验系统设计能力的实战项目。Downloader 正是这样一个值得深入研究的优秀示例。它不仅实现了多线程下载、断点续传、分块合并、速度统计等核心功能，还在架构设计、并发模型、代码组织方式上体现了 C# 在现代并发场景下的最佳实践。对于正在学习 C# 并发编程、网络 IO、上位机开发的工程师来说，它几乎是一个“天然的进阶教材”。
+"><meta name="keywords" content='C#, 并发, 下载器'>
+  <meta itemprop="name" content="Downloader源码剖析">
+  <meta itemprop="description" content="在开发日常工作中，文件下载看似是一个再普通不过的功能，但当下载规模扩大、速度需要优化、断点续传需要保证、并发控制需要精确、甚至要处理上百 GB 的大文件时，“下载器”就迅速从普通工具变成了一个考验系统设计能力的实战项目。Downloader 正是这样一个值得深入研究的优秀示例。它不仅实现了多线程下载、断点续传、分块合并、速度统计等核心功能，还在架构设计、并发模型、代码组织方式上体现了 C# 在现代并发场景下的最佳实践。对于正在学习 C# 并发编程、网络 IO、上位机开发的工程师来说，它几乎是一个“天然的进阶教材”。">
+  <meta itemprop="datePublished" content="2025-12-21T18:40:36+08:00">
+  <meta itemprop="dateModified" content="2025-12-21T18:40:36+08:00">
+  <meta itemprop="wordCount" content="5998">
+  <meta itemprop="keywords" content="C#,并发,下载器"><meta property="og:url" content="http://localhost:1313/downloader%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/">
+  <meta property="og:site_name" content="东尼的博客">
+  <meta property="og:title" content="Downloader源码剖析">
+  <meta property="og:description" content="在开发日常工作中，文件下载看似是一个再普通不过的功能，但当下载规模扩大、速度需要优化、断点续传需要保证、并发控制需要精确、甚至要处理上百 GB 的大文件时，“下载器”就迅速从普通工具变成了一个考验系统设计能力的实战项目。Downloader 正是这样一个值得深入研究的优秀示例。它不仅实现了多线程下载、断点续传、分块合并、速度统计等核心功能，还在架构设计、并发模型、代码组织方式上体现了 C# 在现代并发场景下的最佳实践。对于正在学习 C# 并发编程、网络 IO、上位机开发的工程师来说，它几乎是一个“天然的进阶教材”。">
+  <meta property="og:locale" content="zh_CN">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2025-12-21T18:40:36+08:00">
+    <meta property="article:modified_time" content="2025-12-21T18:40:36+08:00">
+    <meta property="article:tag" content="C#">
+    <meta property="article:tag" content="并发">
+    <meta property="article:tag" content="下载器">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Downloader源码剖析">
+  <meta name="twitter:description" content="在开发日常工作中，文件下载看似是一个再普通不过的功能，但当下载规模扩大、速度需要优化、断点续传需要保证、并发控制需要精确、甚至要处理上百 GB 的大文件时，“下载器”就迅速从普通工具变成了一个考验系统设计能力的实战项目。Downloader 正是这样一个值得深入研究的优秀示例。它不仅实现了多线程下载、断点续传、分块合并、速度统计等核心功能，还在架构设计、并发模型、代码组织方式上体现了 C# 在现代并发场景下的最佳实践。对于正在学习 C# 并发编程、网络 IO、上位机开发的工程师来说，它几乎是一个“天然的进阶教材”。">
+      <meta name="twitter:site" content="@IRONAnthony96">
+<meta name="twitter:creator" content="@IRONAnthony96" /><meta name="application-name" content="FixIt">
+<meta name="apple-mobile-web-app-title" content="FixIt"><meta name="theme-color" data-light="#f8f8f8" data-dark="#252627" content="#f8f8f8"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" type="text/html" href="http://localhost:1313/downloader%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="Downloader源码剖析 - 东尼的博客" /><link rel="prev" type="text/html" href="http://localhost:1313/%E7%BC%96%E5%86%99%E5%8F%AF%E8%AF%BB%E4%BB%A3%E7%A0%81%E7%9A%84%E8%89%BA%E6%9C%AF/" title="编写可读代码的艺术" /><link rel="alternate" type="text/markdown" href="http://localhost:1313/downloader%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/index.md" title="Downloader源码剖析 - 东尼的博客"><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "BlogPosting",
+    "headline": "Downloader源码剖析",
+    "inLanguage": "zh-CN",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "http:\/\/localhost:1313\/downloader%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90\/"
+    },"genre": "posts","keywords": "C#, 并发, 下载器","wordcount":  5998 ,
+    "url": "http:\/\/localhost:1313\/downloader%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90\/","datePublished": "2025-12-21T18:40:36+08:00","dateModified": "2025-12-21T18:40:36+08:00","publisher": {
+      "@type": "Organization",
+      "name": ""},"author": {
+        "@type": "Person",
+        "name": "AndyFree96"
+      },"description": ""
+  }
+  </script><script src="/js/head/color-scheme.min.js"></script></head>
+  <body data-header-desktop="sticky" data-header-mobile="auto"><div class="wrapper" data-page-style="normal"><header class="desktop animate__faster" id="header-desktop">
+  <div class="header-wrapper">
+    <div class="header-title">
+      <a href="/" title="东尼的博客"><span class="header-title-text">东尼的博客</span></a><span class="header-subtitle"></span></div>
+    <nav>
+      <ul class="menu"><li class="menu-item">
+              <a class="menu-link" href="/posts/">📕 文章</a></li><li class="menu-item">
+              <a class="menu-link" href="/categories/">🧰 分类</a></li><li class="menu-item">
+              <a class="menu-link" href="/tags/">🔖 标签</a></li><li class="menu-item">
+              <a class="menu-link" href="/book">📚 书单</a></li><li class="menu-item">
+              <a class="menu-link" href="/paper">📝 论文</a></li><li class="menu-item">
+              <a class="menu-link" href="/opencourse">👨🏻‍💻 公开课</a></li><li class="menu-item">
+              <a class="menu-link" href="/resource">⚡️ 资源</a></li><li class="menu-item">
+              <a class="menu-link" href="/about">🙋🏻‍♂️ 关于</a></li><li class="menu-item delimiter"></li><li class="menu-item search" id="search-desktop">
+            <input type="text" placeholder="搜索文章标题或内容……" id="search-input-desktop">
+            <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+              <i class="fa-solid fa-search fa-fw" aria-hidden="true"></i>
+            </a>
+            <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+              <i class="fa-solid fa-times-circle fa-fw" aria-hidden="true"></i>
+            </a>
+            <span class="search-button search-loading" id="search-loading-desktop">
+              <i class="fa-solid fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+            </span>
+          </li><li class="menu-item theme-switch" title="切换主题">
+          <i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i>
+        </li></ul>
+    </nav>
+  </div>
+</header><header class="mobile animate__faster" id="header-mobile">
+  <div class="header-container">
+    <div class="header-wrapper">
+      <div class="header-title">
+        <a href="/" title="东尼的博客"><span class="header-title-text">东尼的博客</span></a><span class="header-subtitle"></span></div>
+      <div class="menu-toggle" id="menu-toggle-mobile">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+    <nav>
+      <ul class="menu" id="menu-mobile"><li class="search-wrapper">
+            <div class="search mobile" id="search-mobile">
+              <input type="text" placeholder="搜索文章标题或内容……" id="search-input-mobile">
+              <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                <i class="fa-solid fa-search fa-fw" aria-hidden="true"></i>
+              </a>
+              <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                <i class="fa-solid fa-times-circle fa-fw" aria-hidden="true"></i>
+              </a>
+              <span class="search-button search-loading" id="search-loading-mobile">
+                <i class="fa-solid fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+              </span>
+            </div>
+            <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+              取消
+            </a>
+          </li><li class="menu-item"><a class="menu-link" href="/posts/">📕 文章</a></li><li class="menu-item"><a class="menu-link" href="/categories/">🧰 分类</a></li><li class="menu-item"><a class="menu-link" href="/tags/">🔖 标签</a></li><li class="menu-item"><a class="menu-link" href="/book">📚 书单</a></li><li class="menu-item"><a class="menu-link" href="/paper">📝 论文</a></li><li class="menu-item"><a class="menu-link" href="/opencourse">👨🏻‍💻 公开课</a></li><li class="menu-item"><a class="menu-link" href="/resource">⚡️ 资源</a></li><li class="menu-item"><a class="menu-link" href="/about">🙋🏻‍♂️ 关于</a></li><li class="menu-item menu-system">
+          <span class="menu-system-item theme-switch" title="切换主题"><i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i></span></li>
+      </ul>
+    </nav>
+  </div>
+</header><div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+  </div>
+  <div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+  </div><main class="container"><aside class="aside-collection animate__animated animate__fadeIn animate__faster" aria-label="合集"></aside>
+
+  <article class="page single">
+    <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span title="转载" class="icon-repost"><i class="fa-solid fa-share fa-fw" aria-hidden="true"></i></span><span>Downloader源码剖析</span>
+      </h1></div><div class="post-meta">
+      <div class="post-meta-line"><span class="post-author"><a href="https://andyfree96.github.io/" title="作者"target="_blank" rel="external nofollow noopener noreferrer author" class="author"><img class="avatar" src='/avatar/1.jpg' alt="AndyFree96" height="16" width="16">&nbsp;AndyFree96</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" class="post-category" title="分类 - 源码剖析"><i class="fa-regular fa-folder fa-fw" aria-hidden="true"></i> 源码剖析</a></span></div><div class="post-meta-line"><span title="发布于 2025-12-21 18:40:36"><i class="fa-solid fa-calendar-days fa-fw me-1" aria-hidden="true"></i><time datetime="2025-12-21">2025-12-21</time></span>&nbsp;<span title="5998 字"><i class="fa-solid fa-pencil-alt fa-fw me-1" aria-hidden="true"></i>约 6000 字</span>&nbsp;<span><i class="fa-regular fa-clock fa-fw me-1" aria-hidden="true"></i>预计阅读 12 分钟</span>&nbsp;</div>
+    </div><div class="featured-image"><img src='/images/202512/1/roberto-shumski-a1QPssvpxyI-unsplash.jpg' alt="/images/202512/1/roberto-shumski-a1QPssvpxyI-unsplash.jpg"></div><div class="details toc" id="toc-static" data-kept="false">
+        <div class="details-summary toc-title">
+          <span>目录</span>
+          <span><i class="details-icon fa-solid fa-angle-right" aria-hidden="true"></i></span>
+        </div>
+        <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#概览">概览</a></li>
+    <li><a href="#downloadbuilder"><code>DownloadBuilder</code></a></li>
+    <li><a href="#download"><code>Download</code></a></li>
+    <li><a href="#downloadservice"><code>DownloadService</code></a></li>
+    <li><a href="#downloadpackage"><code>DownloadPackage</code></a></li>
+    <li><a href="#chunkhub"><code>ChunkHub</code></a></li>
+    <li><a href="#pausetokensource和pausetoken"><code>PauseTokenSource</code>和<code>PauseToken</code></a></li>
+    <li><a href="#concurrentpacketbuffert"><code>ConcurrentPacketBuffer&lt;T&gt;</code></a></li>
+    <li><a href="#concurrentstream"><code>ConcurrentStream</code></a></li>
+    <li><a href="#socketclient"><code>SocketClient</code></a></li>
+    <li><a href="#知识点">知识点</a>
+      <ul>
+        <li><a href="#field-和-property">Field 和 Property</a></li>
+        <li><a href="#正则表达式">正则表达式</a></li>
+      </ul>
+    </li>
+    <li><a href="#推荐">推荐</a></li>
+  </ul>
+</nav></div>
+      </div><div class="content" id="content"><p>在开发日常工作中，文件下载看似是一个再普通不过的功能，但当下载规模扩大、速度需要优化、断点续传需要保证、并发控制需要精确、甚至要处理上百 GB 的大文件时，“下载器”就迅速从普通工具变成了一个考验系统设计能力的实战项目。<a href="https://github.com/bezzad/Downloader"target="_blank" rel="external nofollow noopener noreferrer">Downloader</a> 正是这样一个值得深入研究的优秀示例。它不仅实现了多线程下载、断点续传、分块合并、速度统计等核心功能，还在架构设计、并发模型、代码组织方式上体现了 C# 在现代并发场景下的最佳实践。对于正在学习 C# 并发编程、网络 IO、上位机开发的工程师来说，它几乎是一个“天然的进阶教材”。</p>
+<h2 class="heading-element" id="概览"><span>概览</span>
+  <a href="#%e6%a6%82%e8%a7%88" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><ul>
+<li><code>DownloadBuilder</code>构建器用于创建<code>Download</code>实例。</li>
+<li><code>DownloadSerivce</code>下载引擎, 执行实际下载、派发事件, 被<code>Download</code>调用。</li>
+<li><code>Download</code>外部任务封装, 统一 API、事件、生命周期。</li>
+<li><code>DownloadPackage</code>是整个下载体系中的核心状态, 它相当于是 DownloadService 的&quot;心脏&quot;——负责记录任务当前的进度、文件分块、存储位置、状态等数据。</li>
+<li><code>ChunkHub</code>是整个系统中&quot;将下载任务拆解为可并行执行单元&quot;的关键调度组件, 类似管理员的角色。</li>
+<li><code>ConcurrentPacketBuffer&lt;T&gt;</code>是一个线程安全的&quot;数据包缓冲队列&quot;。</li>
+<li><code>ConcurrentStream</code>是一个不断吃<code>Packet</code>, 并把它写到文件里的后台线程。</li>
+</ul>
+<h2 class="heading-element" id="downloadbuilder"><span><code>DownloadBuilder</code></span>
+  <a href="#downloadbuilder" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p><code>DownloadBuilder</code>解耦配置构建逻辑。用户在使用下载器时往往需要传入很多参数:</p>
+<ul>
+<li>URL</li>
+<li>保存路径</li>
+<li>下载线程数</li>
+<li>回调事件</li>
+<li>缓冲区大小</li>
+<li>重试策略</li>
+<li>临时目录</li>
+</ul>
+<p>如果这些都堆在构造函数里, 代码就会变成:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-CSharp" data-lang="CSharp"><span class="line"><span class="cl"><span class="k">new</span> <span class="n">Download</span><span class="p">(</span><span class="s">&#34;url&#34;</span><span class="p">,</span> <span class="s">&#34;folder&#34;</span><span class="p">,</span> <span class="s">&#34;file&#34;</span><span class="p">,</span> <span class="n">config</span><span class="p">,</span> <span class="n">retryCount</span><span class="p">,</span> <span class="n">onProgress</span><span class="p">,</span> <span class="n">onError</span><span class="p">,</span> <span class="n">saveMode</span><span class="p">,</span> <span class="p">...)</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>不仅丑, 而且难以维护。通过<code>DownloadBuilder</code>, 可以这样写:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-CSharp" data-lang="CSharp"><span class="line"><span class="cl"><span class="kt">var</span> <span class="n">download</span> <span class="p">=</span> <span class="n">DownloadBuilder</span><span class="p">.</span><span class="n">New</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">    <span class="p">.</span><span class="n">WithUrl</span><span class="p">(</span><span class="s">&#34;https://example.com&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">.</span><span class="n">WithDirectory</span><span class="p">(</span><span class="s">&#34;Downloads&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">.</span><span class="n">WithFileName</span><span class="p">(</span><span class="s">&#34;file.zip&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">.</span><span class="n">WithConfiguration</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">.</span><span class="n">Build</span><span class="p">();</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>让配置步骤流式化, 避免构造函数爆炸, 方便默认值管理与参数验证。</p>
+<blockquote>
+<p>关键思想: 封装对象创建过程, 解耦复杂配置逻辑</p></blockquote>
+<h2 class="heading-element" id="download"><span><code>Download</code></span>
+  <a href="#download" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p><code>Download</code>: 抽象出&quot;下载任务&quot;这一层语义。</p>
+<p>开发者并不需要关心&quot;多线程下载&quot;、&ldquo;断点续传&quot;的底层逻辑。他们只想&quot;启动、暂停、继续、停止、订阅事件&rdquo;。于是<code>Download</code>就成了对外暴露的任务级封装:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-CSharp" data-lang="CSharp"><span class="line"><span class="cl"><span class="k">await</span> <span class="n">download</span><span class="p">.</span><span class="n">StartAsync</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="n">download</span><span class="p">.</span><span class="n">Pause</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="n">download</span><span class="p">.</span><span class="n">Resume</span><span class="p">();</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p><code>Downlad</code>自己不执行下载, 而是:</p>
+<ul>
+<li>委托给<code>_downloadService</code></li>
+<li>对外暴露事件</li>
+<li>管理生命周期</li>
+</ul>
+<h2 class="heading-element" id="downloadservice"><span><code>DownloadService</code></span>
+  <a href="#downloadservice" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p><code>DownloadService</code>: 执行核心逻辑, 单一职责。</p>
+<p>真正的下载过程涉及大量细节:</p>
+<ul>
+<li>创建 HTTP 请求</li>
+<li>计算分块</li>
+<li>并发下载</li>
+<li>写入文件流</li>
+<li>更新进度</li>
+<li>处理暂停/恢复/取消</li>
+<li>合并文件块</li>
+<li>派发事件</li>
+</ul>
+<p>这些都是复杂的业务逻辑, 如果直接暴露给外层, 维护成本极高。</p>
+<p>设计目的:</p>
+<ul>
+<li>把所有底层实现收拢到一个服务类</li>
+<li>隔离外部接口, 保证可替换性</li>
+<li>可扩展(例如未来改成 FTP 下载, 只要换个 Service)</li>
+</ul>
+<blockquote>
+<p>关键思想: 单一职责原则(SRP) + 依赖倒置原则(DIP)</p></blockquote>
+<h2 class="heading-element" id="downloadpackage"><span><code>DownloadPackage</code></span>
+  <a href="#downloadpackage" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>在整个层次结构里:</p>
+<p>DownloadBuilder → Download → DownloadService → DownloadPackage</p>
+<p>可以这样理解:</p>
+<ul>
+<li><code>DownloadService</code>是下载引擎</li>
+<li><code>DownloadPackage</code>是引擎内部的数据模型, 它记录了下载的&quot;实时状态&quot;和&quot;元信息&quot;</li>
+</ul>
+<p><code>DownloadPackage</code>就是任务快照(Task Snapshot), 它不是用来执行逻辑的, 而是用来保存下载任务的所有中间状态, 这样下载就可以被暂停、恢复、甚至断点续传。</p>
+<p>在<code>DownloadService</code>内部会有一个成员(继承自<code>AbstractDownloadService</code>):</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-CSharp" data-lang="CSharp"><span class="line"><span class="cl"><span class="kd">public</span> <span class="n">DownloadPackage</span> <span class="n">Package</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>执行下载时, <code>DownloadService</code>会:</p>
+<ol>
+<li>根据文件大小、线程数等配置划分多个<code>Chunk</code></li>
+<li>把每个<code>Chunk</code>对象放入<code>Package.Chunks</code></li>
+<li>每个线程下载自己的块并更新<code>Chunk.Position</code></li>
+<li><code>Package.ReceivedBytesSize</code>根据所有<code>Chunk.Position</code>汇总进度</li>
+<li>当下载完成时<code>Package.Status</code>被标记为<code>Completed</code></li>
+</ol>
+<p>外层<code>Download</code>通过:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-CSharp" data-lang="CSharp"><span class="line"><span class="cl"><span class="kd">public</span> <span class="kt">long</span> <span class="n">DownloadedFileSize</span> <span class="p">=&gt;</span> <span class="n">_downloadService</span><span class="p">?.</span><span class="n">Package</span><span class="p">?.</span><span class="n">ReceivedBytesSize</span> <span class="p">??</span> <span class="m">0</span><span class="p">;</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>来获取进度。</p>
+<h2 class="heading-element" id="chunkhub"><span><code>ChunkHub</code></span>
+  <a href="#chunkhub" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-CSharp" data-lang="CSharp"><span class="line"><span class="cl"><span class="cs">/// &lt;summary&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="cs">/// Sets the file chunks for the specified download package.</span>
+</span></span><span class="line"><span class="cl"><span class="cs">/// &lt;/summary&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="cs">/// &lt;param name=&#34;package&#34;&gt;The download package to set the chunks for.&lt;/param&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="kd">public</span> <span class="k">void</span> <span class="n">SetFileChunks</span><span class="p">(</span><span class="n">DownloadPackage</span> <span class="n">package</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Validate</span><span class="p">(</span><span class="n">package</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">package</span><span class="p">.</span><span class="n">Chunks</span> <span class="k">is</span> <span class="kc">null</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">package</span><span class="p">.</span><span class="n">Chunks</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Chunk</span><span class="p">[</span><span class="n">_chunkCount</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="p">&lt;</span> <span class="n">_chunkCount</span><span class="p">;</span> <span class="n">i</span><span class="p">++)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="kt">long</span> <span class="n">startPosition</span> <span class="p">=</span> <span class="n">_startOffset</span> <span class="p">+</span> <span class="p">(</span><span class="n">i</span> <span class="p">*</span> <span class="n">_chunkSize</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="kt">long</span> <span class="n">endPosition</span> <span class="p">=</span> <span class="n">startPosition</span> <span class="p">+</span> <span class="n">_chunkSize</span> <span class="p">-</span> <span class="m">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="n">package</span><span class="p">.</span><span class="n">Chunks</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="p">=</span> <span class="n">GetChunk</span><span class="p">(</span><span class="n">i</span><span class="p">.</span><span class="n">ToString</span><span class="p">(),</span> <span class="n">startPosition</span><span class="p">,</span> <span class="n">endPosition</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="n">package</span><span class="p">.</span><span class="n">Chunks</span><span class="p">.</span><span class="n">Last</span><span class="p">().</span><span class="n">End</span> <span class="p">+=</span> <span class="n">package</span><span class="p">.</span><span class="n">TotalFileSize</span> <span class="p">%</span> <span class="n">_chunkCount</span><span class="p">;</span> <span class="c1">// add remaining bytes to last chunk</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="k">else</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">package</span><span class="p">.</span><span class="n">Validate</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p><code>ChunkHub.SetFileChunks(DownloadPackage package)</code>会:</p>
+<ul>
+<li>读取配置, 决定块数和大小</li>
+<li>在<code>package.Chunks</code>中创建<code>Chunk</code>数组</li>
+<li>把最后一块字节数补齐(应对除不尽的情况)</li>
+<li>若已有块(断点续传情况), 则调用<code>package.Validate()</code>校验完整性</li>
+</ul>
+<p><code>DownloadPackage</code>只保存数据(状态), <code>ChunkHub</code>负责生成与维护这些块的逻辑。</p>
+<h2 class="heading-element" id="pausetokensource和pausetoken"><span><code>PauseTokenSource</code>和<code>PauseToken</code></span>
+  <a href="#pausetokensource%e5%92%8cpausetoken" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p><code>PauseTokenSource</code>有点像遥控器, 可以按&quot;暂停&quot;、&ldquo;继续&rdquo;。</p>
+<p><code>PauseToken</code>有点像电视机, 根据信号决定是否播放。</p>
+<p>所有电视(任务)拿的都是同一个信号源(同一个遥控器)。一按&quot;暂停&quot;, 所有电视都停了。再按&quot;继续&quot;, 所有电视都继续播放。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-CSharp" data-lang="CSharp"><span class="line"><span class="cl"><span class="kd">public</span> <span class="k">class</span> <span class="nc">PauseTokenSource</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">private</span> <span class="kd">volatile</span> <span class="n">TaskCompletionSource</span><span class="p">&lt;</span><span class="kt">bool</span><span class="p">&gt;</span> <span class="n">_tcsPaused</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">public</span> <span class="n">PauseToken</span> <span class="n">Token</span> <span class="p">=&gt;</span> <span class="k">new</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">public</span> <span class="kt">bool</span> <span class="n">IsPaused</span> <span class="p">=&gt;</span> <span class="n">_tcsPaused</span> <span class="p">!=</span> <span class="kc">null</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p><code>_tcsPaused</code>一个暂停信号, 当它存在时, 说明&quot;暂停中&quot;。当它为<code>null</code>时, 说明&quot;未暂停&quot;。
+<code>Token</code>用来发给电视(下载任务)的信号接收器。</p>
+<p>当按下&quot;暂停&quot;按钮时:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-CSharp" data-lang="CSharp"><span class="line"><span class="cl"><span class="kd">public</span> <span class="k">void</span> <span class="n">Pause</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Interlocked</span><span class="p">.</span><span class="n">CompareExchange</span><span class="p">(</span><span class="k">ref</span> <span class="n">_tcsPaused</span><span class="p">,</span> <span class="k">new</span> <span class="n">TaskCompletionSource</span><span class="p">&lt;</span><span class="kt">bool</span><span class="p">&gt;(),</span> <span class="kc">null</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>如果<code>_tcsPaused</code>现在是<code>null</code>(没有暂停), 就创建一个新的<code>TaskCompletionSource&lt;bool&gt;</code>(表示暂停任务还没结束)。
+<code>TaskCompletionSource</code>是个等待信号的容器, 还没完成的时候, 别人<code>await TaskCompletionSource.Task</code>会一直卡在那。
+一旦调用<code>SetResult(true)</code>, 所有在等待的任务都会醒来。所以这里其实就是:</p>
+<blockquote>
+<p>暂停 = 建立一个未完成的信号</p></blockquote>
+<p>当按下&quot;继续&quot;按钮时:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-CSharp" data-lang="CSharp"><span class="line"><span class="cl"><span class="kd">public</span> <span class="k">void</span> <span class="n">Resume</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">while</span> <span class="p">(</span><span class="kc">true</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">TaskCompletionSource</span><span class="p">&lt;</span><span class="kt">bool</span><span class="p">&gt;</span> <span class="n">tcs</span> <span class="p">=</span> <span class="n">_tcsPaused</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">tcs</span> <span class="p">==</span> <span class="kc">null</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="k">return</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">Interlocked</span><span class="p">.</span><span class="n">CompareExchange</span><span class="p">(</span><span class="k">ref</span> <span class="n">_tcsPaused</span><span class="p">,</span> <span class="kc">null</span><span class="p">,</span> <span class="n">tcs</span><span class="p">)</span> <span class="p">==</span> <span class="n">tcs</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">tcs</span><span class="p">.</span><span class="n">SetResult</span><span class="p">(</span><span class="kc">true</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="k">return</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>取出<code>_tscPaused</code>, 把它设为<code>null</code>(说明不再暂停), 调用<code>tsc.SetResult(true)</code>唤醒所有正在等待的任务。</p>
+<blockquote>
+<p>恢复 = 把信号改为完成状态, 所有挂起的任务立刻继续</p></blockquote>
+<p>任务是如何等待暂停的?</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-CSharp" data-lang="CSharp"><span class="line"><span class="cl"><span class="kd">internal</span> <span class="n">Task</span> <span class="n">WaitWhilePausedAsync</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">_tcsPaused</span><span class="p">?.</span><span class="n">Task</span> <span class="p">??</span> <span class="n">Task</span><span class="p">.</span><span class="n">FromResult</span><span class="p">(</span><span class="kc">true</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>如果<code>_tcsPaused</code>有值(说明暂停中), 就返回<code>_tcsPaused.Task</code>, 等它完成(即等待恢复信号); 返回一个&quot;已完成的任务&quot;, 直接继续执行。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-CSharp" data-lang="CSharp"><span class="line"><span class="cl"><span class="kd">public</span> <span class="k">record</span> <span class="nc">PauseToken</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">private</span> <span class="k">readonly</span> <span class="n">PauseTokenSource</span> <span class="n">_tokenSource</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">public</span> <span class="kt">bool</span> <span class="n">IsPaused</span> <span class="p">=&gt;</span> <span class="n">_tokenSource</span><span class="p">?.</span><span class="n">IsPaused</span> <span class="p">==</span> <span class="kc">true</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="kd">public</span> <span class="n">Task</span> <span class="n">WaitWhilePausedAsync</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">IsPaused</span>
+</span></span><span class="line"><span class="cl">            <span class="p">?</span> <span class="n">_tokenSource</span><span class="p">.</span><span class="n">WaitWhilePausedAsync</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">            <span class="p">:</span> <span class="n">Task</span><span class="p">.</span><span class="n">FromResult</span><span class="p">(</span><span class="kc">true</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p><code>PauseToken</code>(电视机端)其实什么都不控制, 只负责&quot;听信号&quot;:</p>
+<p>问<code>IsPaused</code>是不是暂停中? 如果暂停，就调用<code>WaitWhilePausedAsync()</code>等待; 如果没暂停，就直接继续。</p>
+<h2 class="heading-element" id="concurrentpacketbuffert"><span><code>ConcurrentPacketBuffer&lt;T&gt;</code></span>
+  <a href="#concurrentpacketbuffert" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>工作流:</p>
+<p>producer threads (N) → TryAdd(packet) → Queue → consumer thread (1) → callback(packet)</p>
+<p>写入端(TryAdd)不会自己写文件, 只会放入队列, 由消费者来消费。</p>
+<p>多个线程同时写入(下载线程), 一个后台线程负责消费(写文件)。</p>
+<h2 class="heading-element" id="concurrentstream"><span><code>ConcurrentStream</code></span>
+  <a href="#concurrentstream" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>它是一个&quot;包装流&quot;, 支持多线程写入、自动分块写入、自动后台写入。</p>
+<p>本质上它是: <strong>一个不断吃<code>Packet</code>，并把它写到文件里的后台线程</strong>。</p>
+<p>它包含：</p>
+<ul>
+<li>一个<code>ConcurrentPacketBuffer&lt;Packet&gt;</code></li>
+<li>一个<code>Watcher() </code>后台循环</li>
+<li><code>writeAsync</code>只是往<code>_inputBuffer</code>扔包</li>
+<li><code>Watcher</code>会不断从<code>_inputBuffer</code>取包，然后写入文件</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-CSharp" data-lang="CSharp"><span class="line"><span class="cl"><span class="kd">private</span> <span class="kd">async</span> <span class="n">Task</span> <span class="n">WritePacketOnFile</span><span class="p">(</span><span class="n">Packet</span> <span class="n">packet</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// seek with SeekOrigin.Begin is so faster than SeekOrigin.Current</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Seek</span><span class="p">(</span><span class="n">packet</span><span class="p">.</span><span class="n">Position</span><span class="p">,</span> <span class="n">SeekOrigin</span><span class="p">.</span><span class="n">Begin</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">await</span> <span class="n">Stream</span><span class="p">.</span><span class="n">WriteAsync</span><span class="p">(</span><span class="n">packet</span><span class="p">.</span><span class="n">Data</span><span class="p">).</span><span class="n">ConfigureAwait</span><span class="p">(</span><span class="kc">false</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">packet</span><span class="p">.</span><span class="n">Dispose</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>工作流:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">ConcurrentStream.WriteAsync()
+</span></span><span class="line"><span class="cl">      ↓
+</span></span><span class="line"><span class="cl">InputBuffer.TryAdd(Packet)
+</span></span><span class="line"><span class="cl">      ↓
+</span></span><span class="line"><span class="cl">ConcurrentStream 的 Watcher 循环 WaitTryTakeAsync() 取包
+</span></span><span class="line"><span class="cl">      ↓
+</span></span><span class="line"><span class="cl">WritePacketOnFile(packet)
+</span></span><span class="line"><span class="cl">      ↓
+</span></span><span class="line"><span class="cl">写入文件 / 内存流</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 class="heading-element" id="socketclient"><span><code>SocketClient</code></span>
+  <a href="#socketclient" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>从源码注释即可看到：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-csharp" data-lang="csharp"><span class="line"><span class="cl"><span class="cs">/// &lt;summary&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="cs">/// Represents a client for making HTTP requests.</span>
+</span></span><span class="line"><span class="cl"><span class="cs">/// &lt;/summary&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="kd">public</span> <span class="kd">partial</span> <span class="k">class</span> <span class="nc">SocketClient</span> <span class="p">:</span> <span class="n">IDisposable</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>该类用于发送 HTTP 请求。类的开头定义了一些<code>const</code>变量，尝试给<code>const</code>变量前增加<code>static</code>修饰符，结果发现是不允许的，详情可见<a href="https://stackoverflow.com/questions/408192/why-cant-i-have-public-static-const-string-s-stuff-in-my-class"target="_blank" rel="external nofollow noopener noreferrer">Why can&rsquo;t I have &ldquo;public static const string S = &ldquo;stuff&rdquo;; in my Class?</a>。</p>
+<p>为了高效使用网络，SocketClient 中配置了<code>SocketsHttpHandler</code>。相比于以前的<code>HttpClientHandler</code>提供了更高的性能和更多的自定义选项，尤其再多线程环境中，它的连接池管理和链接复用机制更加高效。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-csharp" data-lang="csharp"><span class="line"><span class="cl"><span class="kd">private</span> <span class="n">SocketsHttpHandler</span> <span class="n">GetSocketsHttpHandler</span><span class="p">(</span><span class="n">RequestConfiguration</span> <span class="n">config</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">SocketsHttpHandler</span> <span class="n">handler</span> <span class="p">=</span> <span class="k">new</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">AllowAutoRedirect</span> <span class="p">=</span> <span class="n">config</span><span class="p">.</span><span class="n">AllowAutoRedirect</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="n">MaxAutomaticRedirections</span> <span class="p">=</span> <span class="n">config</span><span class="p">.</span><span class="n">MaximumAutomaticRedirections</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="n">AutomaticDecompression</span> <span class="p">=</span> <span class="n">config</span><span class="p">.</span><span class="n">AutomaticDecompression</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="n">PreAuthenticate</span> <span class="p">=</span> <span class="n">config</span><span class="p">.</span><span class="n">PreAuthenticate</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="n">UseCookies</span> <span class="p">=</span> <span class="n">config</span><span class="p">.</span><span class="n">CookieContainer</span> <span class="p">!=</span> <span class="kc">null</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="n">UseProxy</span> <span class="p">=</span> <span class="n">config</span><span class="p">.</span><span class="n">Proxy</span> <span class="p">!=</span> <span class="kc">null</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="n">MaxConnectionsPerServer</span> <span class="p">=</span> <span class="m">1000</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="n">PooledConnectionIdleTimeout</span> <span class="p">=</span> <span class="n">config</span><span class="p">.</span><span class="n">KeepAliveTimeout</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="n">PooledConnectionLifetime</span> <span class="p">=</span> <span class="n">Timeout</span><span class="p">.</span><span class="n">InfiniteTimeSpan</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="n">EnableMultipleHttp2Connections</span> <span class="p">=</span> <span class="kc">true</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="n">ConnectTimeout</span> <span class="p">=</span> <span class="n">TimeSpan</span><span class="p">.</span><span class="n">FromMilliseconds</span><span class="p">(</span><span class="n">config</span><span class="p">.</span><span class="n">Timeout</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// Set up the SslClientAuthenticationOptions for custom certificate validation</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">config</span><span class="p">.</span><span class="n">ClientCertificates</span><span class="p">?.</span><span class="n">Count</span> <span class="p">&gt;</span> <span class="m">0</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">handler</span><span class="p">.</span><span class="n">SslOptions</span><span class="p">.</span><span class="n">ClientCertificates</span> <span class="p">=</span> <span class="n">config</span><span class="p">.</span><span class="n">ClientCertificates</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">handler</span><span class="p">.</span><span class="n">SslOptions</span><span class="p">.</span><span class="n">EnabledSslProtocols</span> <span class="p">=</span> <span class="n">SslProtocols</span><span class="p">.</span><span class="n">Tls13</span> <span class="p">|</span> <span class="n">SslProtocols</span><span class="p">.</span><span class="n">Tls12</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">handler</span><span class="p">.</span><span class="n">SslOptions</span><span class="p">.</span><span class="n">RemoteCertificateValidationCallback</span> <span class="p">=</span> <span class="n">ExceptionHelper</span><span class="p">.</span><span class="n">CertificateValidationCallBack</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// Configure keep-alive</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">config</span><span class="p">.</span><span class="n">KeepAlive</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">handler</span><span class="p">.</span><span class="n">KeepAlivePingTimeout</span> <span class="p">=</span> <span class="n">config</span><span class="p">.</span><span class="n">KeepAliveTimeout</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">handler</span><span class="p">.</span><span class="n">KeepAlivePingPolicy</span> <span class="p">=</span> <span class="n">HttpKeepAlivePingPolicy</span><span class="p">.</span><span class="n">WithActiveRequests</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// Configure credentials</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">config</span><span class="p">.</span><span class="n">Credentials</span> <span class="p">!=</span> <span class="kc">null</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">handler</span><span class="p">.</span><span class="n">Credentials</span> <span class="p">=</span> <span class="n">config</span><span class="p">.</span><span class="n">Credentials</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">handler</span><span class="p">.</span><span class="n">PreAuthenticate</span> <span class="p">=</span> <span class="n">config</span><span class="p">.</span><span class="n">PreAuthenticate</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// Configure cookies</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">handler</span><span class="p">.</span><span class="n">UseCookies</span> <span class="p">&amp;&amp;</span> <span class="n">config</span><span class="p">.</span><span class="n">CookieContainer</span> <span class="p">!=</span> <span class="kc">null</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">handler</span><span class="p">.</span><span class="n">CookieContainer</span> <span class="p">=</span> <span class="n">config</span><span class="p">.</span><span class="n">CookieContainer</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// Configure proxy</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">handler</span><span class="p">.</span><span class="n">UseProxy</span> <span class="p">&amp;&amp;</span> <span class="n">config</span><span class="p">.</span><span class="n">Proxy</span> <span class="p">!=</span> <span class="kc">null</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">handler</span><span class="p">.</span><span class="n">Proxy</span> <span class="p">=</span> <span class="n">config</span><span class="p">.</span><span class="n">Proxy</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    <span class="c1">// Add expect header</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(!</span><span class="kt">string</span><span class="p">.</span><span class="n">IsNullOrWhiteSpace</span><span class="p">(</span><span class="n">config</span><span class="p">.</span><span class="n">Expect</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">handler</span><span class="p">.</span><span class="n">Expect100ContinueTimeout</span> <span class="p">=</span> <span class="n">TimeSpan</span><span class="p">.</span><span class="n">FromSeconds</span><span class="p">(</span><span class="m">1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">handler</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p><code>AllowAutoRedirect</code>控制是否允许自动跟随 HTTP 重定向（例如 301、302 状态码）。如果设置为<code>true</code>，<code>HttpClient</code>会自动处理除雾器返回的重定向请求。如果设置为<code>false</code>，需要手动处理重定向。</p>
+<p><code>MaxAutomaticRedirections</code>限制<code>HttpClinet</code>在遇到重定向时最多跟随的次数。避免循环重定向或过多的重定向导致请求陷入死循环。一般情况下，默认值（50）就足够了，除非特殊场景下需要定义设置较小或较大的重定向次数。</p>
+<p><code>AutomaticDecompression</code>启用对 HTTP 响应内容的自动解压缩，支持<code>gzip</code>和<code>deflate</code>、<code>brotli</code>编码。启动自动解压可以减少网络带宽的使用，尤其是当服务器返回压缩数据时。默认情况下，<code>HttpClient</code>会自动解压这两种常见的编码。对于需要优化带宽的应用，启用自动解压缩是推荐的做法。</p>
+<p><code>PreAuthenticate</code>控制是否在请求头中自动包含认证信息（例如<code>Authorization</code>）。当<code>PreAuthenticate</code>为<code>true</code>时，<code>HttpClient</code>会在发送请求之前先发送认证信息，如果需要身份验证（例如基本认证）。如果请求需要身份认证，且希望提前处理认证，可以将此选项设置为<code>true</code>。</p>
+<p><code>UseCookies</code>启动或禁用 cookies 支持。当<code>UseCookies</code>为<code>true</code>时，<code>HttpClient</code>会自动处理<code>Set-Cookie</code>和<code>Cookie</code>头部，管理客户端的 cookies。如果不需要管理 cookies（例如某些无状态 API 请求），可以将其设置为<code>false</code>，以提高性能。</p>
+<p><code>UseProxy</code>控制是否启动代理。当<code>UseProxy</code>为<code>true</code>时，<code>HttpClient</code>会使用配置的代理服务器来发送请求。可以通过<code>Proxy</code>属性来设置代理服务器。如果在特定的网络环境中（例如公司网络）需要通过代理访问外部资源，设置<code>UseProxy</code>为<code>true</code>并配置代理服务器。</p>
+<p><code>MaxConnectionsPerServer</code>设置每个服务器的最大连接数。增加此值可以提高高并发请求的性能。在高并发环境中，增加此值（如设置为 1000）可以显著提高请求的处理能力。如果你的应用需要同时发送大量请求到同一个服务器，适当增加此值可以避免阻塞。</p>
+<p><code>PooledConnectionIdleTimeout</code>控制连接池中空闲连接的最大空闲时间。超过此时间后，连接将被关闭。此设置用于优化连接池的管理，避免长时间未使用的连接占用资源。根据实际情况设置空闲超时时间，确保连接池中不会有不必要的空闲连接。例如，若请求比较频繁，设置较长的超时时间会减少连接创建和销毁的开销。</p>
+<p><code>PooledConnectionLifetime</code>控制连接池中每个连接的最大生存时间。连接达到此时间后，将会被销毁。如果设置为<code>Timeout.InfiniteTimeSpan</code>，则表示连接永远不会因为超时而关闭。适用于需要长期保持连接的情况，但也可能导致连接池中的连接过多而影响性能。在需要保证连接复用且连接池容量较大的环境中，可以设置为<code>Timeout.InfiniteTimespan</code>。如果需要定期关闭过期连接，则可以设置一个适当的过期时间。</p>
+<p><code>EnableMultipleHttp2Connections</code>启用 HTTP/2 多连接支持。启动此选项可以允许一个服务器通过多个 HTTP/2 连接通信。HTTP/2 默认支持连接复用，但在高并发环境下，启用此选项可以进一步优化性能。如果应用程序需要支持 HTTP/2，并且在高并发请求时性能较差，可以尝试启用此选项来进一步优化。</p>
+<p><code>ConnectTimeout</code>设置连接超时时间，即尝试建立 TCP 连接时的最大等待时间。如果连接无法在此时间内建立，<code>HttpClient</code>将抛出<code>TaskCanceledException</code>。可以根据服务器响应的速度和网络延迟来调整此值。对于高延迟网络，可能需要增加超时，而对于低延迟本地网络，适当减少超时可以提高响应速度。</p>
+<p>这些配置项可以帮助你根据不同的需求调整 <code>SocketsHttpHandler</code> 的行为和性能。以下是一些常见的使用场景和建议的配置：</p>
+<ol>
+<li><strong>高并发请求</strong>：增加 <code>MaxConnectionsPerServer</code>、调整 <code>PooledConnectionIdleTimeout</code> 和 <code>PooledConnectionLifetime</code>。</li>
+<li><strong>长时间保持连接</strong>：将 <code>PooledConnectionLifetime</code> 设置为 <code>Timeout.InfiniteTimeSpan</code>，并设置合理的 <code>PooledConnectionIdleTimeout</code>。</li>
+<li><strong>重定向和认证控制</strong>：使用 <code>AllowAutoRedirect</code> 和 <code>PreAuthenticate</code> 来处理重定向和认证。</li>
+<li><strong>代理和 cookies 管理</strong>：根据实际网络环境启用代理和 cookies 支持。</li>
+<li><strong>性能优化</strong>：启用 <code>EnableMultipleHttp2Connections</code>、<code>AutomaticDecompression</code> 等选项来提高带宽利用率和连接效率。</li>
+</ol>
+<h2 class="heading-element" id="知识点"><span>知识点</span>
+  <a href="#%e7%9f%a5%e8%af%86%e7%82%b9" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><h3 class="heading-element" id="field-和-property"><span>Field 和 Property</span>
+  <a href="#field-%e5%92%8c-property" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p><a href="https://stackoverflow.com/questions/295104/what-is-the-difference-between-a-field-and-a-property"target="_blank" rel="external nofollow noopener noreferrer">What is the difference between a field and a property?</a></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c#" data-lang="c#"><span class="line"><span class="cl"><span class="kd">public</span> <span class="k">class</span> <span class="nc">MyClass</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// this is a field.  It is private to your class and stores the actual data.</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">private</span> <span class="kt">string</span> <span class="n">_myField</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// this is a property. When accessed it uses the underlying field,</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// but only exposes the contract, which will not be affected by the underlying field</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">public</span> <span class="kt">string</span> <span class="n">MyProperty</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">get</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="n">_myField</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="k">set</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">_myField</span> <span class="p">=</span> <span class="k">value</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// This is an AutoProperty (C# 3.0 and higher) - which is a shorthand syntax</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// used to generate a private field for you</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">public</span> <span class="kt">int</span> <span class="n">AnotherProperty</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p><a href="https://medium.com/@jordantkay/understanding-the-difference-between-properties-and-fields-in-c-e8ed7c2a0c3b"target="_blank" rel="external nofollow noopener noreferrer">Understanding the Difference Between Properties and Fields in C#</a></p>
+<p><img loading="lazy" src='/images/202512/1/5e0a190b6e39307a1d9f8fd36c759a5f_MD5.jpeg' alt="/images/202512/1/5e0a190b6e39307a1d9f8fd36c759a5f_MD5.jpeg"></p>
+<h3 class="heading-element" id="正则表达式"><span>正则表达式</span>
+  <a href="#%e6%ad%a3%e5%88%99%e8%a1%a8%e8%be%be%e5%bc%8f" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p><code>SocketClient</code> 类中包含了一个正则表达式的定义：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-csharp" data-lang="csharp"><span class="line"><span class="cl"><span class="na">[GeneratedRegex(@&#34;bytes\s*((?&lt;from&gt;\d*)\s*-\s*(?&lt;to&gt;\d*)|\*)\s*\/\s*(?&lt;size&gt;\d+|\*)&#34;, RegexOptions.Compiled)]</span>
+</span></span><span class="line"><span class="cl"><span class="kd">private</span> <span class="kd">static</span> <span class="kd">partial</span> <span class="n">Regex</span> <span class="n">RangePatternRegex</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">private</span> <span class="k">readonly</span> <span class="n">Regex</span> <span class="n">_contentRangePattern</span> <span class="p">=</span> <span class="n">RangePatternRegex</span><span class="p">();</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p><a href="https://code-maze.com/csharp-improve-performance-with-source-generated-regex/"target="_blank" rel="external nofollow noopener noreferrer">Improve Performance With Source-Generated RegEx in .NET</a>
+<a href="https://blog.nimblepros.com/blogs/using-generated-regex-attribute/"target="_blank" rel="external nofollow noopener noreferrer">Using the GeneratedRegexAttribute for your Regular Expressions</a></p>
+<p>可以参考如下代码进行性能测试，需要安装 BenchmarkDotNet。</p>
+<p>在项目中执行<code>dotnet add package BenchmarkDotNet</code>命令即可。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-csharp" data-lang="csharp"><span class="line"><span class="cl"><span class="k">using</span> <span class="nn">System</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">using</span> <span class="nn">System.Text.RegularExpressions</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">using</span> <span class="nn">BenchmarkDotNet.Attributes</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">using</span> <span class="nn">BenchmarkDotNet.Running</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">public</span> <span class="k">class</span> <span class="nc">RegexBenchmarks</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">private</span> <span class="kd">const</span> <span class="kt">string</span> <span class="n">Pattern</span> <span class="p">=</span> <span class="s">@&#34;bytes\s*((?&lt;from&gt;\d*)\s*-\s*(?&lt;to&gt;\d*)|\*)\s*\/\s*(?&lt;size&gt;\d+|\*)&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">private</span> <span class="kd">const</span> <span class="kt">string</span> <span class="n">TestString</span> <span class="p">=</span> <span class="s">&#34;bytes 0-499/1234&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 传统写法：运行时解析 + 编译</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">private</span> <span class="kd">static</span> <span class="k">readonly</span> <span class="n">Regex</span> <span class="n">OldRegex</span> <span class="p">=</span>
+</span></span><span class="line"><span class="cl">        <span class="k">new</span> <span class="n">Regex</span><span class="p">(</span><span class="n">Pattern</span><span class="p">,</span> <span class="n">RegexOptions</span><span class="p">.</span><span class="n">Compiled</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// 新写法：编译时生成代码</span>
+</span></span><span class="line"><span class="cl"><span class="na">    [GeneratedRegex(Pattern, RegexOptions.Compiled)]</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">partial</span> <span class="n">Regex</span> <span class="n">NewRegex</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="na">
+</span></span></span><span class="line"><span class="cl"><span class="na">    [Benchmark(Baseline = true)]</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">public</span> <span class="n">Match</span> <span class="n">OldRegexMatch</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">OldRegex</span><span class="p">.</span><span class="n">Match</span><span class="p">(</span><span class="n">TestString</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="na">
+</span></span></span><span class="line"><span class="cl"><span class="na">    [Benchmark]</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">public</span> <span class="n">Match</span> <span class="n">NewRegexMatch</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">NewRegex</span><span class="p">().</span><span class="n">Match</span><span class="p">(</span><span class="n">TestString</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">public</span> <span class="k">class</span> <span class="nc">Program</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">public</span> <span class="kd">static</span> <span class="k">void</span> <span class="n">Main</span><span class="p">(</span><span class="kt">string</span><span class="p">[]</span> <span class="n">args</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">BenchmarkRunner</span><span class="p">.</span><span class="n">Run</span><span class="p">&lt;</span><span class="n">RegexBenchmarks</span><span class="p">&gt;();</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>在终端执行<code>dotnet run -c release</code>命令即可。</p>
+<h2 class="heading-element" id="推荐"><span>推荐</span>
+  <a href="#%e6%8e%a8%e8%8d%90" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p><a href="https://khalidabuhakmeh.com/partial-range-http-requests-with-aspnet-core"target="_blank" rel="external nofollow noopener noreferrer">HTTP Range Requests and Partial Responses With ASP.NET Core</a>
+<a href="https://www.stevejgordon.co.uk/httpclient-connection-pooling-in-dotnet-core"target="_blank" rel="external nofollow noopener noreferrer">HTTPCLIENT CONNECTION POOLING IN .NET CORE</a>
+<a href="https://http.dev/headers"target="_blank" rel="external nofollow noopener noreferrer">HTTP Headers explained</a>: 丰富的 HTTP 相关资料
+<a href="https://regex-vis.com/"target="_blank" rel="external nofollow noopener noreferrer">Regex Vis</a>: 正则表达式可视化工具</p></div><div class="post-footer" id="post-footer">
+  <div class="post-info">
+    <div class="post-info-line">
+      <div class="post-info-mod">
+        <span title="更新于 2025-12-21 18:40:36">更新于 2025-12-21&nbsp;</span>
+      </div></div><div class="post-info-line">
+        <div class="post-info-md"><span><a href="vscode://file/D:%5chugo-blog%5candyfree96%5ccontent%5cposts%5cDownloader%e6%ba%90%e7%a0%81%e5%89%96%e6%9e%90.md" title="在编辑器中打开"target="_blank" rel="external nofollow noopener noreferrer" class="link-to-vscode">在编辑器中打开</a></span></div>
+        <div class="post-info-share">
+          <span><a href="javascript:void(0);" title="分享到 X" data-sharer="twitter" data-url="http://localhost:1313/downloader%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="Downloader源码剖析" data-via="IRONAnthony96" data-hashtags="C#,并发,下载器"><i class="fa-brands fa-x-twitter fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="http://localhost:1313/downloader%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-hashtag="C#"><i class="fa-brands fa-facebook-square fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 WhatsApp" data-sharer="whatsapp" data-url="http://localhost:1313/downloader%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="Downloader源码剖析" data-web><i class="fa-brands fa-whatsapp fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 Line" data-sharer="line" data-url="http://localhost:1313/downloader%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="Downloader源码剖析"><svg class="icon" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>LINE</title><path d="M19.365 9.863c.349.0.63.285.63.631.0.345-.281.63-.63.63H17.61v1.125h1.755c.349.0.63.283.63.63.0.344-.281.629-.63.629h-2.386c-.345.0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63h2.386c.346.0.627.285.627.63.0.349-.281.63-.63.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211.0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346.0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195.0.375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345.0.63.285.63.63v4.771zm-5.741.0c0 .344-.282.629-.631.629-.345.0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63.346.0.628.285.628.63v4.771zm-2.466.629H4.917c-.345.0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348.0.63.285.63.63v4.141h1.756c.348.0.629.283.629.63.0.344-.282.629-.629.629M24 10.314C24 4.943 18.615.572 12 .572S0 4.943.0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314"/></svg></a>
+  <a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="http://localhost:1313/downloader%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="Downloader源码剖析" data-image="/images/202512/1/roberto-shumski-a1QPssvpxyI-unsplash.jpg"><i class="fa-brands fa-weibo fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 Myspace" data-sharer="myspace" data-url="http://localhost:1313/downloader%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="Downloader源码剖析" data-description=""><svg class="icon" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>Myspace</title><path d="M19.802 12.274A3.811 3.811.0 0023.62 8.47c0-2.101-1.71-3.795-3.818-3.795a3.816 3.816.0 00-3.818 3.81 3.817 3.817.0 003.818 3.811zm-8.602.705a3.43 3.43.0 003.435-3.424A3.43 3.43.0 0011.2 6.13 3.44 3.44.0 007.764 9.566 3.436 3.436.0 0011.2 13zm-7.8.635c1.71.0 3.093-1.38 3.093-3.081.0-1.704-1.395-3.084-3.105-3.084A3.086 3.086.0 00.3 10.539c0 1.7 1.387 3.078 3.095 3.078zm0 .705c-1.96.0-3.4 1.717-3.4 3.495v1.196c0 .17.138.31.31.31h6.18a.31.31.0 00.309-.31v-1.196c0-1.779-1.437-3.5-3.398-3.5zm7.8-.56c-2.18.0-3.78 1.915-3.78 3.891v1.331c0 .188.156.344.345.344h6.87a.344.344.0 00.342-.344V17.65c0-1.976-1.598-3.891-3.777-3.891zm8.602-.617c-2.422.0-4.197 2.126-4.197 4.323v1.477c0 .21.172.381.382.381h7.63c.21.0.383-.171.383-.381v-1.477c-.001-2.197-1.776-4.323-4.198-4.323z"/></svg></a>
+  <a href="javascript:void(0);" title="分享到 Blogger" data-sharer="blogger" data-url="http://localhost:1313/downloader%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="Downloader源码剖析" data-description=""><i class="fa-brands fa-blogger fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 Evernote" data-sharer="evernote" data-url="http://localhost:1313/downloader%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="Downloader源码剖析"><i class="fa-brands fa-evernote fa-fw" aria-hidden="true"></i></a>
+  </span>
+        </div>
+      </div></div>
+
+  <div class="post-info-more">
+    <section class="post-tags"><i class="fa-solid fa-tags fa-fw me-1" aria-hidden="true"></i><a href="/tags/c%23/" class="post-tag" title="标签 - C#">C#</a><a href="/tags/%E5%B9%B6%E5%8F%91/" class="post-tag" title="标签 - 并发">并发</a><a href="/tags/%E4%B8%8B%E8%BD%BD%E5%99%A8/" class="post-tag" title="标签 - 下载器">下载器</a></section>
+    <section>
+      <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+    </section>
+  </div><div class="post-nav"><a href="/%E7%BC%96%E5%86%99%E5%8F%AF%E8%AF%BB%E4%BB%A3%E7%A0%81%E7%9A%84%E8%89%BA%E6%9C%AF/" class="post-nav-item" rel="prev" title="编写可读代码的艺术"><i class="fa-solid fa-angle-left fa-fw" aria-hidden="true"></i>编写可读代码的艺术</a></div>
+</div>
+<div class="post-reward">
+    <div class="comment">请作者喝杯咖啡!</div>
+    <input type="checkbox" class="reward-input" name="reward" id="fi-reward" hidden />
+    <label class="reward-button" for="fi-reward"><i class="fa-solid fa-qrcode fa-fw" aria-hidden="true"></i>赞赏</label>
+    <div class="reward-ways" data-mode="static"><div><img src='/reward/alipay.png' alt="AndyFree96 支付宝"><span data-animation>支付宝</span>
+          </div><div><img src='/reward/wechatpay.png' alt="AndyFree96 微信"><span data-animation>微信</span>
+          </div></div>
+  </div></article>
+
+  <aside class="toc" id="toc-auto" aria-label="目录"><h2 class="toc-title">目录&nbsp;<i class="toc-icon fa-solid fa-angle-down fa-fw" aria-hidden="true"></i></h2>
+      <div class="toc-content" id="toc-content-auto"></div></aside></main><footer class="footer">
+    <div class="footer-container"><div class="footer-line powered">由 <a href="https://gohugo.io/" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.148.2"><img class="hugo-icon" src="/images/hugo.min.svg" alt="Hugo logo" /> Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/hugo-fixit/FixIt" target="_blank" rel="external" title="FixIt v0.3.20"><img class="fixit-icon" src="/images/fixit.min.svg" alt="FixIt logo" /> FixIt</a>
+        </div><div class="footer-line copyright" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright fa-fw" aria-hidden="true"></i>
+            <span itemprop="copyrightYear">2025</span><span class="author" itemprop="copyrightHolder">
+              <a href="https://andyfree96.github.io/"target="_blank" rel="external nofollow noopener noreferrer">AndyFree96</a></span></div></div>
+  </footer></div><div class="widgets"><div class="fixed-buttons animate__faster d-none"><div class="fixed-button back-to-top" role="button" aria-label="回到顶部"><i class="fa-solid fa-arrow-up fa-fw" aria-hidden="true"></i><span class="variant-numeric d-none">0%</span>
+        </div></div><div id="mask"></div><div class="reading-progress-bar" style="left: 0;top: 0;"></div><noscript>
+    <div class="noscript-warning">该网站在启用 JavaScript 的情况下效果最佳。</div>
+  </noscript>
+</div><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script src="/lib/autocomplete/autocomplete.min.js" defer></script><script src="/lib/algoliasearch/algoliasearch-lite.umd.min.js" defer></script><script src="/lib/sharer/sharer.min.js" async defer></script><script src="/lib/cookieconsent/cookieconsent.min.js" defer></script><script>window.config={"code":{"copyTitle":"复制到剪贴板","editLockTitle":"锁定可编辑代码块","editUnLockTitle":"解锁可编辑代码块","editable":true,"maxShownLines":400},"comment":{"enable":false},"cookieconsent":{"content":{"dismiss":"同意","link":"了解更多","message":"本网站使用 Cookies 来改善您的浏览体验。"},"enable":true,"palette":{"button":{"background":"#f0f0f0"},"popup":{"background":"#1aa3ff"}},"theme":"edgeless"},"search":{"algoliaAppID":"DHCUNEPKLU","algoliaIndex":"index.zh-cn","algoliaSearchKey":"170eb85cc7a17333c7cccaf73fd8aa03","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":30,"type":"algolia"},"version":"v0.3.20"};console.log('Page config:', window.config);</script><script src="/js/theme.min.js" defer></script></body>
+</html>

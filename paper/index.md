@@ -36,7 +36,7 @@
 
 | #   | 标题                                                    | 年份 | 论文                                     | 代码                                                                     | 状态 |
 | :-- | :------------------------------------------------------ | :--- | :--------------------------------------- | :----------------------------------------------------------------------- | :--- |
-| 1   | You Only Look Once: Unified, Real-Time Object Detection | 2015 | [Link](https://arxiv.org/abs/1506.02640) | [Link](https://github.com/abeardear/pytorch-YOLO-v1)                     | ❎   |
+| 1   | You Only Look Once: Unified, Real-Time Object Detection | 2015 | [Link](https://arxiv.org/abs/1506.02640) | [Link](https://github.com/abeardear/pytorch-YOLO-v1)                     | ✅   |
 | 2   | YOLOv4: Optimal Speed and Accuracy of Object Detection  | 2020 | [Link](https://arxiv.org/abs/2004.10934) | [Link](https://github.com/AlexeyAB/darknet)                              | ❎   |
 | 3   | A Neural Algorithm of Artistic Style                    | 2015 | [Link](https://arxiv.org/abs/1508.06576) | [Link](https://github.com/Kautenja/a-neural-algorithm-of-artistic-style) | ❎   |
 
@@ -53,5 +53,5 @@
 ---
 
 > 作者: <no value>  
-> URL: https://andyfree96.github.io/paper/  
+> URL: http://localhost:1313/paper/  
 

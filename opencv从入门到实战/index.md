@@ -311,5 +311,5 @@ imageROI = image(cv::Range(image.rows-logo.rows, image.rows),cv::Range(image.col
 ---
 
 > 作者: [AndyFree96](https://andyfree96.github.io/)  
-> URL: https://andyfree96.github.io/opencv%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E5%AE%9E%E6%88%98/  
+> URL: http://localhost:1313/opencv%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E5%AE%9E%E6%88%98/  
 
