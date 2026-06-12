@@ -148,7 +148,7 @@ async function processFile(filePath, index = 1) {
 
 async function processFiles(filePath) {
   const tasks = Array.from({ length: TIMES }, (_, index) =>
-    limit(() => processFile(filePath, index))
+    limit(() => processFile(filePath, index)),
   );
   await Promise.all(tasks);
   console.log('所有文件处理完成');

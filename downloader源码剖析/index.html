@@ -1,41 +1,38 @@
 <!DOCTYPE html>
 <html itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
   <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
-    
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
     <meta name="robots" content="noodp" />
     <title>Downloader源码剖析 - 东尼的博客</title><meta name="author" content="AndyFree96">
 <meta name="description" content="在开发日常工作中，文件下载看似是一个再普通不过的功能，但当下载规模扩大、速度需要优化、断点续传需要保证、并发控制需要精确、甚至要处理上百 GB 的大文件时，“下载器”就迅速从普通工具变成了一个考验系统设计能力的实战项目。Downloader 正是这样一个值得深入研究的优秀示例。它不仅实现了多线程下载、断点续传、分块合并、速度统计等核心功能，还在架构设计、并发模型、代码组织方式上体现了 C# 在现代并发场景下的最佳实践。对于正在学习 C# 并发编程、网络 IO、上位机开发的工程师来说，它几乎是一个“天然的进阶教材”。
 "><meta name="keywords" content='C#, 并发, 下载器'>
-  <meta itemprop="name" content="Downloader源码剖析">
-  <meta itemprop="description" content="在开发日常工作中，文件下载看似是一个再普通不过的功能，但当下载规模扩大、速度需要优化、断点续传需要保证、并发控制需要精确、甚至要处理上百 GB 的大文件时，“下载器”就迅速从普通工具变成了一个考验系统设计能力的实战项目。Downloader 正是这样一个值得深入研究的优秀示例。它不仅实现了多线程下载、断点续传、分块合并、速度统计等核心功能，还在架构设计、并发模型、代码组织方式上体现了 C# 在现代并发场景下的最佳实践。对于正在学习 C# 并发编程、网络 IO、上位机开发的工程师来说，它几乎是一个“天然的进阶教材”。">
-  <meta itemprop="datePublished" content="2025-12-21T18:40:36+08:00">
-  <meta itemprop="dateModified" content="2025-12-21T18:40:36+08:00">
-  <meta itemprop="wordCount" content="5998">
-  <meta itemprop="keywords" content="C#,并发,下载器"><meta property="og:url" content="http://localhost:1313/downloader%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/">
-  <meta property="og:site_name" content="东尼的博客">
-  <meta property="og:title" content="Downloader源码剖析">
-  <meta property="og:description" content="在开发日常工作中，文件下载看似是一个再普通不过的功能，但当下载规模扩大、速度需要优化、断点续传需要保证、并发控制需要精确、甚至要处理上百 GB 的大文件时，“下载器”就迅速从普通工具变成了一个考验系统设计能力的实战项目。Downloader 正是这样一个值得深入研究的优秀示例。它不仅实现了多线程下载、断点续传、分块合并、速度统计等核心功能，还在架构设计、并发模型、代码组织方式上体现了 C# 在现代并发场景下的最佳实践。对于正在学习 C# 并发编程、网络 IO、上位机开发的工程师来说，它几乎是一个“天然的进阶教材”。">
-  <meta property="og:locale" content="zh_CN">
-  <meta property="og:type" content="article">
-    <meta property="article:section" content="posts">
-    <meta property="article:published_time" content="2025-12-21T18:40:36+08:00">
-    <meta property="article:modified_time" content="2025-12-21T18:40:36+08:00">
-    <meta property="article:tag" content="C#">
-    <meta property="article:tag" content="并发">
-    <meta property="article:tag" content="下载器">
+	<meta itemprop="name" content="Downloader源码剖析">
+	<meta itemprop="description" content="在开发日常工作中，文件下载看似是一个再普通不过的功能，但当下载规模扩大、速度需要优化、断点续传需要保证、并发控制需要精确、甚至要处理上百 GB 的大文件时，“下载器”就迅速从普通工具变成了一个考验系统设计能力的实战项目。Downloader 正是这样一个值得深入研究的优秀示例。它不仅实现了多线程下载、断点续传、分块合并、速度统计等核心功能，还在架构设计、并发模型、代码组织方式上体现了 C# 在现代并发场景下的最佳实践。对于正在学习 C# 并发编程、网络 IO、上位机开发的工程师来说，它几乎是一个“天然的进阶教材”。">
+	<meta itemprop="datePublished" content="2025-12-21T18:40:36+08:00">
+	<meta itemprop="dateModified" content="2025-12-21T18:40:36+08:00">
+	<meta itemprop="wordCount" content="5998">
+	<meta itemprop="keywords" content="C#,并发,下载器"><meta property="og:url" content="http://localhost:1313/downloader%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/">
+	<meta property="og:site_name" content="东尼的博客">
+	<meta property="og:title" content="Downloader源码剖析">
+	<meta property="og:description" content="在开发日常工作中，文件下载看似是一个再普通不过的功能，但当下载规模扩大、速度需要优化、断点续传需要保证、并发控制需要精确、甚至要处理上百 GB 的大文件时，“下载器”就迅速从普通工具变成了一个考验系统设计能力的实战项目。Downloader 正是这样一个值得深入研究的优秀示例。它不仅实现了多线程下载、断点续传、分块合并、速度统计等核心功能，还在架构设计、并发模型、代码组织方式上体现了 C# 在现代并发场景下的最佳实践。对于正在学习 C# 并发编程、网络 IO、上位机开发的工程师来说，它几乎是一个“天然的进阶教材”。">
+	<meta property="og:locale" content="zh_CN">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="posts">
+		<meta property="article:published_time" content="2025-12-21T18:40:36+08:00">
+		<meta property="article:modified_time" content="2025-12-21T18:40:36+08:00">
+		<meta property="article:tag" content="C#">
+		<meta property="article:tag" content="并发">
+		<meta property="article:tag" content="下载器">
 
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Downloader源码剖析">
-  <meta name="twitter:description" content="在开发日常工作中，文件下载看似是一个再普通不过的功能，但当下载规模扩大、速度需要优化、断点续传需要保证、并发控制需要精确、甚至要处理上百 GB 的大文件时，“下载器”就迅速从普通工具变成了一个考验系统设计能力的实战项目。Downloader 正是这样一个值得深入研究的优秀示例。它不仅实现了多线程下载、断点续传、分块合并、速度统计等核心功能，还在架构设计、并发模型、代码组织方式上体现了 C# 在现代并发场景下的最佳实践。对于正在学习 C# 并发编程、网络 IO、上位机开发的工程师来说，它几乎是一个“天然的进阶教材”。">
-      <meta name="twitter:site" content="@IRONAnthony96">
-<meta name="twitter:creator" content="@IRONAnthony96" /><meta name="application-name" content="FixIt">
-<meta name="apple-mobile-web-app-title" content="FixIt"><meta name="theme-color" data-light="#f8f8f8" data-dark="#252627" content="#f8f8f8"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+  <meta name="twitter:description" content="在开发日常工作中，文件下载看似是一个再普通不过的功能，但当下载规模扩大、速度需要优化、断点续传需要保证、并发控制需要精确、甚至要处理上百 GB 的大文件时，“下载器”就迅速从普通工具变成了一个考验系统设计能力的实战项目。Downloader 正是这样一个值得深入研究的优秀示例。它不仅实现了多线程下载、断点续传、分块合并、速度统计等核心功能，还在架构设计、并发模型、代码组织方式上体现了 C# 在现代并发场景下的最佳实践。对于正在学习 C# 并发编程、网络 IO、上位机开发的工程师来说，它几乎是一个“天然的进阶教材”。"><meta name="twitter:creator" content="@IRONAnthony96"><meta name="application-name" content="FixIt">
+<meta name="apple-mobile-web-app-title" content="FixIt"><meta name="theme-color" data-light="#f6f8fa" data-dark="#151b23" content="#f6f8fa"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" type="text/html" href="http://localhost:1313/downloader%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="Downloader源码剖析 - 东尼的博客" /><link rel="prev" type="text/html" href="http://localhost:1313/%E7%BC%96%E5%86%99%E5%8F%AF%E8%AF%BB%E4%BB%A3%E7%A0%81%E7%9A%84%E8%89%BA%E6%9C%AF/" title="编写可读代码的艺术" /><link rel="next" type="text/html" href="http://localhost:1313/c%23%E4%B8%AD%E7%9A%84nameof%E8%BF%90%E7%AE%97%E7%AC%A6/" title="C#中的nameof运算符" /><link rel="alternate" type="text/markdown" href="http://localhost:1313/downloader%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/index.md" title="Downloader源码剖析 - 东尼的博客"><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" type="text/html" href="http://localhost:1313/downloader%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="Downloader源码剖析 - 东尼的博客" /><link rel="prev" type="text/html" href="http://localhost:1313/%E7%BC%96%E5%86%99%E5%8F%AF%E8%AF%BB%E4%BB%A3%E7%A0%81%E7%9A%84%E8%89%BA%E6%9C%AF/" title="编写可读代码的艺术" /><link rel="next" type="text/html" href="http://localhost:1313/c%23%E4%B8%AD%E7%9A%84nameof%E8%BF%90%E7%AE%97%E7%AC%A6/" title="C#中的nameof运算符" /><link rel="alternate" type="text/markdown" href="http://localhost:1313/downloader%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/index.md" title="Downloader源码剖析 - 东尼的博客"><link rel="stylesheet" href="/css/config.css"><link rel="stylesheet" href="/css/main.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
-    <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><script type="application/ld+json">
+    <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><link rel="preload" href="/js/main.js" as="script"><script type="application/ld+json">
   {
     "@context": "http://schema.org",
     "@type": "BlogPosting",
@@ -52,11 +49,11 @@
         "name": "AndyFree96"
       },"description": ""
   }
-  </script><script src="/js/head/color-scheme.min.js"></script></head>
-  <body data-header-desktop="sticky" data-header-mobile="auto"><div class="wrapper" data-page-style="normal"><header class="desktop animate__faster" id="header-desktop">
+  </script><script src="/js/head/color-scheme.js"></script></head>
+  <body data-instant-intensity="viewport" data-header-desktop="sticky" data-header-mobile="auto"><div class="wrapper" data-page-style="normal"><header class="desktop animate__faster" id="header-desktop">
   <div class="header-wrapper">
     <div class="header-title">
-      <a href="/" title="东尼的博客"><span class="header-title-text">东尼的博客</span></a><span class="header-subtitle"></span></div>
+      <a href="/" title="东尼的博客" class="header-title-link"><span class="header-title-text">东尼的博客</span></a><span class="header-subtitle"></span></div>
     <nav>
       <ul class="menu"><li class="menu-item">
               <a class="menu-link" href="/posts/">📕 文章</a></li><li class="menu-item">
@@ -65,20 +62,21 @@
               <a class="menu-link" href="/book">📚 书单</a></li><li class="menu-item">
               <a class="menu-link" href="/paper">📝 论文</a></li><li class="menu-item">
               <a class="menu-link" href="/opencourse">👨🏻‍💻 公开课</a></li><li class="menu-item">
+              <a class="menu-link" href="/filmtv">🎞️ 影视</a></li><li class="menu-item">
               <a class="menu-link" href="/resource">⚡️ 资源</a></li><li class="menu-item">
               <a class="menu-link" href="/about">🙋🏻‍♂️ 关于</a></li><li class="menu-item delimiter"></li><li class="menu-item search" id="search-desktop">
-            <input type="text" placeholder="搜索文章标题或内容……" id="search-input-desktop">
-            <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
-              <i class="fa-solid fa-search fa-fw" aria-hidden="true"></i>
+            <input type="text" placeholder="搜索文章标题或内容……" id="search-input-desktop" tabindex="-1">
+            <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索" aria-controls="search-dropdown-desktop" aria-expanded="false">
+              <i class="fa-solid fa-search" aria-hidden="true"></i>
             </a>
             <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
-              <i class="fa-solid fa-times-circle fa-fw" aria-hidden="true"></i>
+              <i class="fa-solid fa-times-circle" aria-hidden="true"></i>
             </a>
             <span class="search-button search-loading" id="search-loading-desktop">
-              <i class="fa-solid fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+              <i class="fa-solid fa-spinner fa-spin" aria-hidden="true"></i>
             </span>
-          </li><li class="menu-item theme-switch" title="切换主题">
-          <i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i>
+          </li><li class="menu-item theme-switch-item">
+          <button type="button" class="theme-switch" aria-label="切换主题" title="切换主题"><i class="fa-solid fa-adjust" aria-hidden="true"></i></button>
         </li></ul>
     </nav>
   </div>
@@ -86,30 +84,30 @@
   <div class="header-container">
     <div class="header-wrapper">
       <div class="header-title">
-        <a href="/" title="东尼的博客"><span class="header-title-text">东尼的博客</span></a><span class="header-subtitle"></span></div>
-      <div class="menu-toggle" id="menu-toggle-mobile">
+        <a href="/" title="东尼的博客" class="header-title-link"><span class="header-title-text">东尼的博客</span></a><span class="header-subtitle"></span></div>
+      <button type="button" class="theme-switch" aria-label="切换主题"><i class="fa-solid fa-adjust" aria-hidden="true"></i></button>
+      <button type="button" class="menu-toggle" id="menu-toggle-mobile" aria-controls="menu-mobile" aria-expanded="false" aria-labelledby="menu-mobile">
         <span></span><span></span><span></span>
-      </div>
+      </button>
     </div>
     <nav>
       <ul class="menu" id="menu-mobile"><li class="search-wrapper">
             <div class="search mobile" id="search-mobile">
               <input type="text" placeholder="搜索文章标题或内容……" id="search-input-mobile">
-              <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
-                <i class="fa-solid fa-search fa-fw" aria-hidden="true"></i>
+              <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索" aria-controls="search-dropdown-mobile" aria-expanded="false">
+                <i class="fa-solid fa-search" aria-hidden="true"></i>
               </a>
               <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
-                <i class="fa-solid fa-times-circle fa-fw" aria-hidden="true"></i>
+                <i class="fa-solid fa-times-circle" aria-hidden="true"></i>
               </a>
               <span class="search-button search-loading" id="search-loading-mobile">
-                <i class="fa-solid fa-spinner fa-fw fa-spin" aria-hidden="true"></i>
+                <i class="fa-solid fa-spinner fa-spin" aria-hidden="true"></i>
               </span>
             </div>
             <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
               取消
             </a>
-          </li><li class="menu-item"><a class="menu-link" href="/posts/">📕 文章</a></li><li class="menu-item"><a class="menu-link" href="/categories/">🧰 分类</a></li><li class="menu-item"><a class="menu-link" href="/tags/">🔖 标签</a></li><li class="menu-item"><a class="menu-link" href="/book">📚 书单</a></li><li class="menu-item"><a class="menu-link" href="/paper">📝 论文</a></li><li class="menu-item"><a class="menu-link" href="/opencourse">👨🏻‍💻 公开课</a></li><li class="menu-item"><a class="menu-link" href="/resource">⚡️ 资源</a></li><li class="menu-item"><a class="menu-link" href="/about">🙋🏻‍♂️ 关于</a></li><li class="menu-item menu-system">
-          <span class="menu-system-item theme-switch" title="切换主题"><i class="fa-solid fa-adjust fa-fw" aria-hidden="true"></i></span></li>
+          </li><li class="menu-item"><a class="menu-link" href="/posts/">📕 文章</a></li><li class="menu-item"><a class="menu-link" href="/categories/">🧰 分类</a></li><li class="menu-item"><a class="menu-link" href="/tags/">🔖 标签</a></li><li class="menu-item"><a class="menu-link" href="/book">📚 书单</a></li><li class="menu-item"><a class="menu-link" href="/paper">📝 论文</a></li><li class="menu-item"><a class="menu-link" href="/opencourse">👨🏻‍💻 公开课</a></li><li class="menu-item"><a class="menu-link" href="/filmtv">🎞️ 影视</a></li><li class="menu-item"><a class="menu-link" href="/resource">⚡️ 资源</a></li><li class="menu-item"><a class="menu-link" href="/about">🙋🏻‍♂️ 关于</a></li><li class="menu-item menu-system"></li>
       </ul>
     </nav>
   </div>
@@ -118,13 +116,13 @@
   </div>
   <div class="search-dropdown mobile">
     <div id="search-dropdown-mobile"></div>
-  </div><main class="container"><aside class="aside-collection animate__animated animate__fadeIn animate__faster" aria-label="合集"></aside>
+  </div><main class="fi-container"><aside class="aside-collection animate__animated animate__fadeIn animate__faster" aria-label="合集"></aside>
 
   <article class="page single">
-    <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span title="转载" class="icon-repost"><i class="fa-solid fa-share fa-fw" aria-hidden="true"></i></span><span>Downloader源码剖析</span>
+    <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span title="转载" class="icon-repost"><i class="fa-solid fa-share" aria-hidden="true"></i></span><span>Downloader源码剖析</span>
       </h1></div><div class="post-meta">
-      <div class="post-meta-line"><span class="post-author"><a href="https://andyfree96.github.io/" title="作者"target="_blank" rel="external nofollow noopener noreferrer author" class="author"><img class="avatar" src='/avatar/1.jpg' alt="AndyFree96" height="16" width="16">&nbsp;AndyFree96</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" class="post-category" title="分类 - 源码剖析"><i class="fa-regular fa-folder fa-fw" aria-hidden="true"></i> 源码剖析</a></span></div><div class="post-meta-line"><span title="发布于 2025-12-21 18:40:36"><i class="fa-solid fa-calendar-days fa-fw me-1" aria-hidden="true"></i><time datetime="2025-12-21">2025-12-21</time></span>&nbsp;<span title="5998 字"><i class="fa-solid fa-pencil-alt fa-fw me-1" aria-hidden="true"></i>约 6000 字</span>&nbsp;<span><i class="fa-regular fa-clock fa-fw me-1" aria-hidden="true"></i>预计阅读 12 分钟</span>&nbsp;</div>
-    </div><div class="featured-image"><img src='/images/202512/1/roberto-shumski-a1QPssvpxyI-unsplash.jpg' alt="/images/202512/1/roberto-shumski-a1QPssvpxyI-unsplash.jpg"></div><div class="details toc" id="toc-static" data-kept="false">
+      <div class="post-meta-line"><span class="post-author"><a href="https://andyfree96.github.io/" title="作者" target="_blank" rel="author external nofollow noopener noreferrer" class="author"><img class="avatar" src='/avatar/1.jpg' alt="AndyFree96" height="16" width="16">&nbsp;AndyFree96</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" class="post-category" title="分类 - 源码剖析"><i class="fa-regular fa-folder" aria-hidden="true"></i> 源码剖析</a></span></div><div class="post-meta-line"><span title="发布于 2025-12-21 18:40:36"><i class="fa-solid fa-calendar-days me-1" aria-hidden="true"></i><time datetime="2025-12-21">2025-12-21</time></span>&nbsp;<span title="5998 字"><i class="fa-solid fa-pencil-alt me-1" aria-hidden="true"></i>约 6000 字</span>&nbsp;<span><i class="fa-regular fa-clock me-1" aria-hidden="true"></i>预计阅读 12 分钟</span>&nbsp;</div>
+    </div><div class="featured-image"><img loading="eager" src='/images/202512/1/roberto-shumski-a1QPssvpxyI-unsplash.jpg' sizes="(max-width: 680px) 100vw, (max-width: 960px) 80vw, (max-width: 1440px) 56vw, 800px" alt="/images/202512/1/roberto-shumski-a1QPssvpxyI-unsplash.jpg"></div><div class="details toc" id="toc-static" data-kept="false">
         <div class="details-summary toc-title">
           <span>目录</span>
           <span><i class="details-icon fa-solid fa-angle-right" aria-hidden="true"></i></span>
@@ -150,7 +148,7 @@
     <li><a href="#推荐">推荐</a></li>
   </ul>
 </nav></div>
-      </div><div class="content" id="content"><p>在开发日常工作中，文件下载看似是一个再普通不过的功能，但当下载规模扩大、速度需要优化、断点续传需要保证、并发控制需要精确、甚至要处理上百 GB 的大文件时，“下载器”就迅速从普通工具变成了一个考验系统设计能力的实战项目。<a href="https://github.com/bezzad/Downloader"target="_blank" rel="external nofollow noopener noreferrer">Downloader</a> 正是这样一个值得深入研究的优秀示例。它不仅实现了多线程下载、断点续传、分块合并、速度统计等核心功能，还在架构设计、并发模型、代码组织方式上体现了 C# 在现代并发场景下的最佳实践。对于正在学习 C# 并发编程、网络 IO、上位机开发的工程师来说，它几乎是一个“天然的进阶教材”。</p>
+      </div><div class="content" id="content"><p>在开发日常工作中，文件下载看似是一个再普通不过的功能，但当下载规模扩大、速度需要优化、断点续传需要保证、并发控制需要精确、甚至要处理上百 GB 的大文件时，“下载器”就迅速从普通工具变成了一个考验系统设计能力的实战项目。<a href="https://github.com/bezzad/Downloader" target="_blank" rel="external nofollow noopener noreferrer">Downloader<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> 正是这样一个值得深入研究的优秀示例。它不仅实现了多线程下载、断点续传、分块合并、速度统计等核心功能，还在架构设计、并发模型、代码组织方式上体现了 C# 在现代并发场景下的最佳实践。对于正在学习 C# 并发编程、网络 IO、上位机开发的工程师来说，它几乎是一个“天然的进阶教材”。</p>
 <h2 class="heading-element" id="概览"><span>概览</span>
   <a href="#%e6%a6%82%e8%a7%88" class="heading-mark">
     <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
@@ -179,16 +177,16 @@
 <li>临时目录</li>
 </ul>
 <p>如果这些都堆在构造函数里, 代码就会变成:</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-csharp"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-CSharp" data-lang="CSharp"><span class="line"><span class="cl"><span class="k">new</span> <span class="n">Download</span><span class="p">(</span><span class="s">&#34;url&#34;</span><span class="p">,</span> <span class="s">&#34;folder&#34;</span><span class="p">,</span> <span class="s">&#34;file&#34;</span><span class="p">,</span> <span class="n">config</span><span class="p">,</span> <span class="n">retryCount</span><span class="p">,</span> <span class="n">onProgress</span><span class="p">,</span> <span class="n">onError</span><span class="p">,</span> <span class="n">saveMode</span><span class="p">,</span> <span class="p">...)</span></span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-CSharp" data-lang="CSharp"><span class="line"><span class="cl"><span class="k">new</span> <span class="n">Download</span><span class="p">(</span><span class="s">&#34;url&#34;</span><span class="p">,</span> <span class="s">&#34;folder&#34;</span><span class="p">,</span> <span class="s">&#34;file&#34;</span><span class="p">,</span> <span class="n">config</span><span class="p">,</span> <span class="n">retryCount</span><span class="p">,</span> <span class="n">onProgress</span><span class="p">,</span> <span class="n">onError</span><span class="p">,</span> <span class="n">saveMode</span><span class="p">,</span> <span class="p">...)</span></span></span></code></pre></td></tr></table></div>
 </div>
 </div><p>不仅丑, 而且难以维护。通过<code>DownloadBuilder</code>, 可以这样写:</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-csharp"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
@@ -202,19 +200,20 @@
 </span></span><span class="line"><span class="cl">    <span class="p">.</span><span class="n">WithDirectory</span><span class="p">(</span><span class="s">&#34;Downloads&#34;</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">    <span class="p">.</span><span class="n">WithFileName</span><span class="p">(</span><span class="s">&#34;file.zip&#34;</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">    <span class="p">.</span><span class="n">WithConfiguration</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">    <span class="p">.</span><span class="n">Build</span><span class="p">();</span></span></span></code></pre></td></tr></table>
+</span></span><span class="line"><span class="cl">    <span class="p">.</span><span class="n">Build</span><span class="p">();</span></span></span></code></pre></td></tr></table></div>
 </div>
 </div><p>让配置步骤流式化, 避免构造函数爆炸, 方便默认值管理与参数验证。</p>
 <blockquote>
-<p>关键思想: 封装对象创建过程, 解耦复杂配置逻辑</p></blockquote>
+<p>关键思想: 封装对象创建过程, 解耦复杂配置逻辑</p>
+</blockquote>
 <h2 class="heading-element" id="download"><span><code>Download</code></span>
   <a href="#download" class="heading-mark">
     <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
   </a>
 </h2><p><code>Download</code>: 抽象出&quot;下载任务&quot;这一层语义。</p>
 <p>开发者并不需要关心&quot;多线程下载&quot;、&ldquo;断点续传&quot;的底层逻辑。他们只想&quot;启动、暂停、继续、停止、订阅事件&rdquo;。于是<code>Download</code>就成了对外暴露的任务级封装:</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-csharp"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
@@ -222,7 +221,7 @@
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-CSharp" data-lang="CSharp"><span class="line"><span class="cl"><span class="k">await</span> <span class="n">download</span><span class="p">.</span><span class="n">StartAsync</span><span class="p">();</span>
 </span></span><span class="line"><span class="cl"><span class="n">download</span><span class="p">.</span><span class="n">Pause</span><span class="p">();</span>
-</span></span><span class="line"><span class="cl"><span class="n">download</span><span class="p">.</span><span class="n">Resume</span><span class="p">();</span></span></span></code></pre></td></tr></table>
+</span></span><span class="line"><span class="cl"><span class="n">download</span><span class="p">.</span><span class="n">Resume</span><span class="p">();</span></span></span></code></pre></td></tr></table></div>
 </div>
 </div><p><code>Downlad</code>自己不执行下载, 而是:</p>
 <ul>
@@ -254,7 +253,8 @@
 <li>可扩展(例如未来改成 FTP 下载, 只要换个 Service)</li>
 </ul>
 <blockquote>
-<p>关键思想: 单一职责原则(SRP) + 依赖倒置原则(DIP)</p></blockquote>
+<p>关键思想: 单一职责原则(SRP) + 依赖倒置原则(DIP)</p>
+</blockquote>
 <h2 class="heading-element" id="downloadpackage"><span><code>DownloadPackage</code></span>
   <a href="#downloadpackage" class="heading-mark">
     <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
@@ -268,12 +268,12 @@
 </ul>
 <p><code>DownloadPackage</code>就是任务快照(Task Snapshot), 它不是用来执行逻辑的, 而是用来保存下载任务的所有中间状态, 这样下载就可以被暂停、恢复、甚至断点续传。</p>
 <p>在<code>DownloadService</code>内部会有一个成员(继承自<code>AbstractDownloadService</code>):</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-csharp"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-CSharp" data-lang="CSharp"><span class="line"><span class="cl"><span class="kd">public</span> <span class="n">DownloadPackage</span> <span class="n">Package</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span></span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-CSharp" data-lang="CSharp"><span class="line"><span class="cl"><span class="kd">public</span> <span class="n">DownloadPackage</span> <span class="n">Package</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span></span></span></code></pre></td></tr></table></div>
 </div>
 </div><p>执行下载时, <code>DownloadService</code>会:</p>
 <ol>
@@ -284,20 +284,20 @@
 <li>当下载完成时<code>Package.Status</code>被标记为<code>Completed</code></li>
 </ol>
 <p>外层<code>Download</code>通过:</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-csharp"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-CSharp" data-lang="CSharp"><span class="line"><span class="cl"><span class="kd">public</span> <span class="kt">long</span> <span class="n">DownloadedFileSize</span> <span class="p">=&gt;</span> <span class="n">_downloadService</span><span class="p">?.</span><span class="n">Package</span><span class="p">?.</span><span class="n">ReceivedBytesSize</span> <span class="p">??</span> <span class="m">0</span><span class="p">;</span></span></span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-CSharp" data-lang="CSharp"><span class="line"><span class="cl"><span class="kd">public</span> <span class="kt">long</span> <span class="n">DownloadedFileSize</span> <span class="p">=&gt;</span> <span class="n">_downloadService</span><span class="p">?.</span><span class="n">Package</span><span class="p">?.</span><span class="n">ReceivedBytesSize</span> <span class="p">??</span> <span class="m">0</span><span class="p">;</span></span></span></code></pre></td></tr></table></div>
 </div>
 </div><p>来获取进度。</p>
 <h2 class="heading-element" id="chunkhub"><span><code>ChunkHub</code></span>
   <a href="#chunkhub" class="heading-mark">
     <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
   </a>
-</h2><div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
+</h2><div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-csharp"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
@@ -345,7 +345,7 @@
 </span></span><span class="line"><span class="cl">    <span class="p">{</span>
 </span></span><span class="line"><span class="cl">        <span class="n">package</span><span class="p">.</span><span class="n">Validate</span><span class="p">();</span>
 </span></span><span class="line"><span class="cl">    <span class="p">}</span>
-</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div><button type="button" class="code-expand-btn" aria-label="展开或折叠代码块"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></button>
 </div>
 </div><p><code>ChunkHub.SetFileChunks(DownloadPackage package)</code>会:</p>
 <ul>
@@ -362,8 +362,8 @@
 </h2><p><code>PauseTokenSource</code>有点像遥控器, 可以按&quot;暂停&quot;、&ldquo;继续&rdquo;。</p>
 <p><code>PauseToken</code>有点像电视机, 根据信号决定是否播放。</p>
 <p>所有电视(任务)拿的都是同一个信号源(同一个遥控器)。一按&quot;暂停&quot;, 所有电视都停了。再按&quot;继续&quot;, 所有电视都继续播放。</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-csharp"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
@@ -377,13 +377,13 @@
 </span></span><span class="line"><span class="cl">    <span class="kd">private</span> <span class="kd">volatile</span> <span class="n">TaskCompletionSource</span><span class="p">&lt;</span><span class="kt">bool</span><span class="p">&gt;</span> <span class="n">_tcsPaused</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">    <span class="kd">public</span> <span class="n">PauseToken</span> <span class="n">Token</span> <span class="p">=&gt;</span> <span class="k">new</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">    <span class="kd">public</span> <span class="kt">bool</span> <span class="n">IsPaused</span> <span class="p">=&gt;</span> <span class="n">_tcsPaused</span> <span class="p">!=</span> <span class="kc">null</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div>
 </div>
 </div><p><code>_tcsPaused</code>一个暂停信号, 当它存在时, 说明&quot;暂停中&quot;。当它为<code>null</code>时, 说明&quot;未暂停&quot;。
 <code>Token</code>用来发给电视(下载任务)的信号接收器。</p>
 <p>当按下&quot;暂停&quot;按钮时:</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-csharp"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
@@ -393,16 +393,17 @@
 <pre tabindex="0" class="chroma"><code class="language-CSharp" data-lang="CSharp"><span class="line"><span class="cl"><span class="kd">public</span> <span class="k">void</span> <span class="n">Pause</span><span class="p">()</span>
 </span></span><span class="line"><span class="cl"><span class="p">{</span>
 </span></span><span class="line"><span class="cl">    <span class="n">Interlocked</span><span class="p">.</span><span class="n">CompareExchange</span><span class="p">(</span><span class="k">ref</span> <span class="n">_tcsPaused</span><span class="p">,</span> <span class="k">new</span> <span class="n">TaskCompletionSource</span><span class="p">&lt;</span><span class="kt">bool</span><span class="p">&gt;(),</span> <span class="kc">null</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div>
 </div>
 </div><p>如果<code>_tcsPaused</code>现在是<code>null</code>(没有暂停), 就创建一个新的<code>TaskCompletionSource&lt;bool&gt;</code>(表示暂停任务还没结束)。
 <code>TaskCompletionSource</code>是个等待信号的容器, 还没完成的时候, 别人<code>await TaskCompletionSource.Task</code>会一直卡在那。
 一旦调用<code>SetResult(true)</code>, 所有在等待的任务都会醒来。所以这里其实就是:</p>
 <blockquote>
-<p>暂停 = 建立一个未完成的信号</p></blockquote>
+<p>暂停 = 建立一个未完成的信号</p>
+</blockquote>
 <p>当按下&quot;继续&quot;按钮时:</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-csharp"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
@@ -434,14 +435,15 @@
 </span></span><span class="line"><span class="cl">            <span class="k">return</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">        <span class="p">}</span>
 </span></span><span class="line"><span class="cl">    <span class="p">}</span>
-</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div><button type="button" class="code-expand-btn" aria-label="展开或折叠代码块"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></button>
 </div>
 </div><p>取出<code>_tscPaused</code>, 把它设为<code>null</code>(说明不再暂停), 调用<code>tsc.SetResult(true)</code>唤醒所有正在等待的任务。</p>
 <blockquote>
-<p>恢复 = 把信号改为完成状态, 所有挂起的任务立刻继续</p></blockquote>
+<p>恢复 = 把信号改为完成状态, 所有挂起的任务立刻继续</p>
+</blockquote>
 <p>任务是如何等待暂停的?</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-csharp"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
@@ -451,11 +453,11 @@
 <pre tabindex="0" class="chroma"><code class="language-CSharp" data-lang="CSharp"><span class="line"><span class="cl"><span class="kd">internal</span> <span class="n">Task</span> <span class="n">WaitWhilePausedAsync</span><span class="p">()</span>
 </span></span><span class="line"><span class="cl"><span class="p">{</span>
 </span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">_tcsPaused</span><span class="p">?.</span><span class="n">Task</span> <span class="p">??</span> <span class="n">Task</span><span class="p">.</span><span class="n">FromResult</span><span class="p">(</span><span class="kc">true</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div>
 </div>
 </div><p>如果<code>_tcsPaused</code>有值(说明暂停中), 就返回<code>_tcsPaused.Task</code>, 等它完成(即等待恢复信号); 返回一个&quot;已完成的任务&quot;, 直接继续执行。</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-csharp"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
@@ -481,7 +483,7 @@
 </span></span><span class="line"><span class="cl">            <span class="p">?</span> <span class="n">_tokenSource</span><span class="p">.</span><span class="n">WaitWhilePausedAsync</span><span class="p">()</span>
 </span></span><span class="line"><span class="cl">            <span class="p">:</span> <span class="n">Task</span><span class="p">.</span><span class="n">FromResult</span><span class="p">(</span><span class="kc">true</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">    <span class="p">}</span>
-</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div><button type="button" class="code-expand-btn" aria-label="展开或折叠代码块"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></button>
 </div>
 </div><p><code>PauseToken</code>(电视机端)其实什么都不控制, 只负责&quot;听信号&quot;:</p>
 <p>问<code>IsPaused</code>是不是暂停中? 如果暂停，就调用<code>WaitWhilePausedAsync()</code>等待; 如果没暂停，就直接继续。</p>
@@ -506,8 +508,8 @@
 <li><code>writeAsync</code>只是往<code>_inputBuffer</code>扔包</li>
 <li><code>Watcher</code>会不断从<code>_inputBuffer</code>取包，然后写入文件</li>
 </ul>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-csharp"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
@@ -523,11 +525,11 @@
 </span></span><span class="line"><span class="cl">    <span class="n">Seek</span><span class="p">(</span><span class="n">packet</span><span class="p">.</span><span class="n">Position</span><span class="p">,</span> <span class="n">SeekOrigin</span><span class="p">.</span><span class="n">Begin</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">    <span class="k">await</span> <span class="n">Stream</span><span class="p">.</span><span class="n">WriteAsync</span><span class="p">(</span><span class="n">packet</span><span class="p">.</span><span class="n">Data</span><span class="p">).</span><span class="n">ConfigureAwait</span><span class="p">(</span><span class="kc">false</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">    <span class="n">packet</span><span class="p">.</span><span class="n">Dispose</span><span class="p">();</span>
-</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div>
 </div>
 </div><p>工作流:</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-fallback"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
@@ -547,15 +549,15 @@
 </span></span><span class="line"><span class="cl">      ↓
 </span></span><span class="line"><span class="cl">WritePacketOnFile(packet)
 </span></span><span class="line"><span class="cl">      ↓
-</span></span><span class="line"><span class="cl">写入文件 / 内存流</span></span></code></pre></td></tr></table>
+</span></span><span class="line"><span class="cl">写入文件 / 内存流</span></span></code></pre></td></tr></table></div>
 </div>
 </div><h2 class="heading-element" id="socketclient"><span><code>SocketClient</code></span>
   <a href="#socketclient" class="heading-mark">
     <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
   </a>
 </h2><p>从源码注释即可看到：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-csharp"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
@@ -565,12 +567,12 @@
 <pre tabindex="0" class="chroma"><code class="language-csharp" data-lang="csharp"><span class="line"><span class="cl"><span class="cs">/// &lt;summary&gt;</span>
 </span></span><span class="line"><span class="cl"><span class="cs">/// Represents a client for making HTTP requests.</span>
 </span></span><span class="line"><span class="cl"><span class="cs">/// &lt;/summary&gt;</span>
-</span></span><span class="line"><span class="cl"><span class="kd">public</span> <span class="kd">partial</span> <span class="k">class</span> <span class="nc">SocketClient</span> <span class="p">:</span> <span class="n">IDisposable</span></span></span></code></pre></td></tr></table>
+</span></span><span class="line"><span class="cl"><span class="kd">public</span> <span class="kd">partial</span> <span class="k">class</span> <span class="nc">SocketClient</span> <span class="p">:</span> <span class="n">IDisposable</span></span></span></code></pre></td></tr></table></div>
 </div>
-</div><p>该类用于发送 HTTP 请求。类的开头定义了一些<code>const</code>变量，尝试给<code>const</code>变量前增加<code>static</code>修饰符，结果发现是不允许的，详情可见<a href="https://stackoverflow.com/questions/408192/why-cant-i-have-public-static-const-string-s-stuff-in-my-class"target="_blank" rel="external nofollow noopener noreferrer">Why can&rsquo;t I have &ldquo;public static const string S = &ldquo;stuff&rdquo;; in my Class?</a>。</p>
+</div><p>该类用于发送 HTTP 请求。类的开头定义了一些<code>const</code>变量，尝试给<code>const</code>变量前增加<code>static</code>修饰符，结果发现是不允许的，详情可见<a href="https://stackoverflow.com/questions/408192/why-cant-i-have-public-static-const-string-s-stuff-in-my-class" target="_blank" rel="external nofollow noopener noreferrer">Why can&rsquo;t I have &ldquo;public static const string S = &ldquo;stuff&rdquo;; in my Class?<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>。</p>
 <p>为了高效使用网络，SocketClient 中配置了<code>SocketsHttpHandler</code>。相比于以前的<code>HttpClientHandler</code>提供了更高的性能和更多的自定义选项，尤其再多线程环境中，它的连接池管理和链接复用机制更加高效。</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-csharp"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
@@ -690,7 +692,7 @@
 </span></span><span class="line"><span class="cl">    <span class="p">}</span>
 </span></span><span class="line"><span class="cl">    
 </span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">handler</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div><button type="button" class="code-expand-btn" aria-label="展开或折叠代码块"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></button>
 </div>
 </div><p><code>AllowAutoRedirect</code>控制是否允许自动跟随 HTTP 重定向（例如 301、302 状态码）。如果设置为<code>true</code>，<code>HttpClient</code>会自动处理除雾器返回的重定向请求。如果设置为<code>false</code>，需要手动处理重定向。</p>
 <p><code>MaxAutomaticRedirections</code>限制<code>HttpClinet</code>在遇到重定向时最多跟随的次数。避免循环重定向或过多的重定向导致请求陷入死循环。一般情况下，默认值（50）就足够了，除非特殊场景下需要定义设置较小或较大的重定向次数。</p>
@@ -719,9 +721,9 @@
   <a href="#field-%e5%92%8c-property" class="heading-mark">
     <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
   </a>
-</h3><p><a href="https://stackoverflow.com/questions/295104/what-is-the-difference-between-a-field-and-a-property"target="_blank" rel="external nofollow noopener noreferrer">What is the difference between a field and a property?</a></p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
+</h3><p><a href="https://stackoverflow.com/questions/295104/what-is-the-difference-between-a-field-and-a-property" target="_blank" rel="external nofollow noopener noreferrer">What is the difference between a field and a property?<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-c#"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
@@ -769,17 +771,17 @@
 </span></span><span class="line"><span class="cl">    <span class="c1">// This is an AutoProperty (C# 3.0 and higher) - which is a shorthand syntax</span>
 </span></span><span class="line"><span class="cl">    <span class="c1">// used to generate a private field for you</span>
 </span></span><span class="line"><span class="cl">    <span class="kd">public</span> <span class="kt">int</span> <span class="n">AnotherProperty</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
-</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div><button type="button" class="code-expand-btn" aria-label="展开或折叠代码块"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></button>
 </div>
-</div><p><a href="https://medium.com/@jordantkay/understanding-the-difference-between-properties-and-fields-in-c-e8ed7c2a0c3b"target="_blank" rel="external nofollow noopener noreferrer">Understanding the Difference Between Properties and Fields in C#</a></p>
+</div><p><a href="https://medium.com/@jordantkay/understanding-the-difference-between-properties-and-fields-in-c-e8ed7c2a0c3b" target="_blank" rel="external nofollow noopener noreferrer">Understanding the Difference Between Properties and Fields in C#<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></p>
 <p><img loading="lazy" src='/images/202512/1/5e0a190b6e39307a1d9f8fd36c759a5f_MD5.jpeg' alt="/images/202512/1/5e0a190b6e39307a1d9f8fd36c759a5f_MD5.jpeg"></p>
 <h3 class="heading-element" id="正则表达式"><span>正则表达式</span>
   <a href="#%e6%ad%a3%e5%88%99%e8%a1%a8%e8%be%be%e5%bc%8f" class="heading-mark">
     <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
   </a>
 </h3><p><code>SocketClient</code> 类中包含了一个正则表达式的定义：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-csharp"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="1" style="--fi-max-shown-lines:10;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
@@ -789,14 +791,14 @@
 <pre tabindex="0" class="chroma"><code class="language-csharp" data-lang="csharp"><span class="line"><span class="cl"><span class="na">[GeneratedRegex(@&#34;bytes\s*((?&lt;from&gt;\d*)\s*-\s*(?&lt;to&gt;\d*)|\*)\s*\/\s*(?&lt;size&gt;\d+|\*)&#34;, RegexOptions.Compiled)]</span>
 </span></span><span class="line"><span class="cl"><span class="kd">private</span> <span class="kd">static</span> <span class="kd">partial</span> <span class="n">Regex</span> <span class="n">RangePatternRegex</span><span class="p">();</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="kd">private</span> <span class="k">readonly</span> <span class="n">Regex</span> <span class="n">_contentRangePattern</span> <span class="p">=</span> <span class="n">RangePatternRegex</span><span class="p">();</span></span></span></code></pre></td></tr></table>
+</span></span><span class="line"><span class="cl"><span class="kd">private</span> <span class="k">readonly</span> <span class="n">Regex</span> <span class="n">_contentRangePattern</span> <span class="p">=</span> <span class="n">RangePatternRegex</span><span class="p">();</span></span></span></code></pre></td></tr></table></div>
 </div>
-</div><p><a href="https://code-maze.com/csharp-improve-performance-with-source-generated-regex/"target="_blank" rel="external nofollow noopener noreferrer">Improve Performance With Source-Generated RegEx in .NET</a>
-<a href="https://blog.nimblepros.com/blogs/using-generated-regex-attribute/"target="_blank" rel="external nofollow noopener noreferrer">Using the GeneratedRegexAttribute for your Regular Expressions</a></p>
+</div><p><a href="https://code-maze.com/csharp-improve-performance-with-source-generated-regex/" target="_blank" rel="external nofollow noopener noreferrer">Improve Performance With Source-Generated RegEx in .NET<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>
+<a href="https://blog.nimblepros.com/blogs/using-generated-regex-attribute/" target="_blank" rel="external nofollow noopener noreferrer">Using the GeneratedRegexAttribute for your Regular Expressions<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></p>
 <p>可以参考如下代码进行性能测试，需要安装 BenchmarkDotNet。</p>
 <p>在项目中执行<code>dotnet add package BenchmarkDotNet</code>命令即可。</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-csharp"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="10" data-line-digit="2" style="--fi-max-shown-lines:10;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
@@ -874,7 +876,7 @@
 </span></span><span class="line"><span class="cl">    <span class="p">{</span>
 </span></span><span class="line"><span class="cl">        <span class="n">BenchmarkRunner</span><span class="p">.</span><span class="n">Run</span><span class="p">&lt;</span><span class="n">RegexBenchmarks</span><span class="p">&gt;();</span>
 </span></span><span class="line"><span class="cl">    <span class="p">}</span>
-</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div><button type="button" class="code-expand-btn" aria-label="展开或折叠代码块"><i class="fa-solid fa-angles-down" aria-hidden="true"></i></button>
 </div>
 </div><p>在终端执行<code>dotnet run -c release</code>命令即可。</p>
 <h2 class="heading-element" id="推荐"><span>推荐</span>
@@ -882,55 +884,78 @@
     <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
   </a>
 </h2><ul>
-<li><a href="https://khalidabuhakmeh.com/partial-range-http-requests-with-aspnet-core"target="_blank" rel="external nofollow noopener noreferrer">HTTP Range Requests and Partial Responses With ASP.NET Core</a></li>
-<li><a href="https://www.stevejgordon.co.uk/httpclient-connection-pooling-in-dotnet-core"target="_blank" rel="external nofollow noopener noreferrer">HTTPCLIENT CONNECTION POOLING IN .NET CORE</a></li>
-<li><a href="https://http.dev/headers"target="_blank" rel="external nofollow noopener noreferrer">HTTP Headers explained</a>: 丰富的 HTTP 相关资料</li>
-<li><a href="https://regex-vis.com/"target="_blank" rel="external nofollow noopener noreferrer">Regex Vis</a>: 正则表达式可视化工具</li>
+<li><a href="https://khalidabuhakmeh.com/partial-range-http-requests-with-aspnet-core" target="_blank" rel="external nofollow noopener noreferrer">HTTP Range Requests and Partial Responses With ASP.NET Core<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></li>
+<li><a href="https://www.stevejgordon.co.uk/httpclient-connection-pooling-in-dotnet-core" target="_blank" rel="external nofollow noopener noreferrer">HTTPCLIENT CONNECTION POOLING IN .NET CORE<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></li>
+<li><a href="https://http.dev/headers" target="_blank" rel="external nofollow noopener noreferrer">HTTP Headers explained<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>: 丰富的 HTTP 相关资料</li>
+<li><a href="https://regex-vis.com/" target="_blank" rel="external nofollow noopener noreferrer">Regex Vis<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>: 正则表达式可视化工具</li>
 </ul></div><div class="post-footer" id="post-footer">
   <div class="post-info">
     <div class="post-info-line">
-      <div class="post-info-mod">
-        <span title="更新于 2025-12-21 18:40:36">更新于 2025-12-21&nbsp;</span>
+      <div class="post-info-mod"><span title="更新于 2025-12-21 18:40:36">更新于 2025-12-21&nbsp;</span>
       </div></div><div class="post-info-line">
-        <div class="post-info-md"><span><a href="vscode://file/D:%5chugo-blog%5candyfree96%5ccontent%5cposts%5cDownloader%e6%ba%90%e7%a0%81%e5%89%96%e6%9e%90.md" title="在编辑器中打开"target="_blank" rel="external nofollow noopener noreferrer" class="link-to-vscode">在编辑器中打开</a></span></div>
+        <div class="post-info-md"><span><a href="vscode://file/D:\hugo-blog\andyfree96\content\posts\Downloader源码剖析.md" title="在编辑器中打开" class="link-to-vscode">在编辑器中打开</a></span></div>
         <div class="post-info-share">
-          <span><a href="javascript:void(0);" title="分享到 X" data-sharer="twitter" data-url="http://localhost:1313/downloader%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="Downloader源码剖析" data-via="IRONAnthony96" data-hashtags="C#,并发,下载器"><i class="fa-brands fa-x-twitter fa-fw" aria-hidden="true"></i></a>
-  <a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="http://localhost:1313/downloader%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-hashtag="C#"><i class="fa-brands fa-facebook-square fa-fw" aria-hidden="true"></i></a>
-  <a href="javascript:void(0);" title="分享到 WhatsApp" data-sharer="whatsapp" data-url="http://localhost:1313/downloader%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="Downloader源码剖析" data-web><i class="fa-brands fa-whatsapp fa-fw" aria-hidden="true"></i></a>
+          <span><a href="javascript:void(0);" title="分享到 X" data-sharer="twitter" data-url="http://localhost:1313/downloader%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="Downloader源码剖析" data-via="IRONAnthony96" data-hashtags="C#,并发,下载器"><i class="fa-brands fa-x-twitter" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="http://localhost:1313/downloader%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-hashtag="C#"><i class="fa-brands fa-facebook-square" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 WhatsApp" data-sharer="whatsapp" data-url="http://localhost:1313/downloader%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="Downloader源码剖析" data-web><i class="fa-brands fa-whatsapp" aria-hidden="true"></i></a>
   <a href="javascript:void(0);" title="分享到 Line" data-sharer="line" data-url="http://localhost:1313/downloader%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="Downloader源码剖析"><svg class="icon" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>LINE</title><path d="M19.365 9.863c.349.0.63.285.63.631.0.345-.281.63-.63.63H17.61v1.125h1.755c.349.0.63.283.63.63.0.344-.281.629-.63.629h-2.386c-.345.0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63h2.386c.346.0.627.285.627.63.0.349-.281.63-.63.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211.0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346.0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195.0.375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345.0.63.285.63.63v4.771zm-5.741.0c0 .344-.282.629-.631.629-.345.0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63.346.0.628.285.628.63v4.771zm-2.466.629H4.917c-.345.0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348.0.63.285.63.63v4.141h1.756c.348.0.629.283.629.63.0.344-.282.629-.629.629M24 10.314C24 4.943 18.615.572 12 .572S0 4.943.0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314"/></svg></a>
-  <a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="http://localhost:1313/downloader%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="Downloader源码剖析" data-image="/images/202512/1/roberto-shumski-a1QPssvpxyI-unsplash.jpg"><i class="fa-brands fa-weibo fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="http://localhost:1313/downloader%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="Downloader源码剖析" data-image="/images/202512/1/roberto-shumski-a1QPssvpxyI-unsplash.jpg"><i class="fa-brands fa-weibo" aria-hidden="true"></i></a>
   <a href="javascript:void(0);" title="分享到 Myspace" data-sharer="myspace" data-url="http://localhost:1313/downloader%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="Downloader源码剖析" data-description=""><svg class="icon" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>Myspace</title><path d="M19.802 12.274A3.811 3.811.0 0023.62 8.47c0-2.101-1.71-3.795-3.818-3.795a3.816 3.816.0 00-3.818 3.81 3.817 3.817.0 003.818 3.811zm-8.602.705a3.43 3.43.0 003.435-3.424A3.43 3.43.0 0011.2 6.13 3.44 3.44.0 007.764 9.566 3.436 3.436.0 0011.2 13zm-7.8.635c1.71.0 3.093-1.38 3.093-3.081.0-1.704-1.395-3.084-3.105-3.084A3.086 3.086.0 00.3 10.539c0 1.7 1.387 3.078 3.095 3.078zm0 .705c-1.96.0-3.4 1.717-3.4 3.495v1.196c0 .17.138.31.31.31h6.18a.31.31.0 00.309-.31v-1.196c0-1.779-1.437-3.5-3.398-3.5zm7.8-.56c-2.18.0-3.78 1.915-3.78 3.891v1.331c0 .188.156.344.345.344h6.87a.344.344.0 00.342-.344V17.65c0-1.976-1.598-3.891-3.777-3.891zm8.602-.617c-2.422.0-4.197 2.126-4.197 4.323v1.477c0 .21.172.381.382.381h7.63c.21.0.383-.171.383-.381v-1.477c-.001-2.197-1.776-4.323-4.198-4.323z"/></svg></a>
-  <a href="javascript:void(0);" title="分享到 Blogger" data-sharer="blogger" data-url="http://localhost:1313/downloader%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="Downloader源码剖析" data-description=""><i class="fa-brands fa-blogger fa-fw" aria-hidden="true"></i></a>
-  <a href="javascript:void(0);" title="分享到 Evernote" data-sharer="evernote" data-url="http://localhost:1313/downloader%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="Downloader源码剖析"><i class="fa-brands fa-evernote fa-fw" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 Blogger" data-sharer="blogger" data-url="http://localhost:1313/downloader%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="Downloader源码剖析" data-description=""><i class="fa-brands fa-blogger" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 Evernote" data-sharer="evernote" data-url="http://localhost:1313/downloader%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="Downloader源码剖析"><i class="fa-brands fa-evernote" aria-hidden="true"></i></a>
   </span>
         </div>
       </div></div>
 
   <div class="post-info-more">
-    <section class="post-tags"><i class="fa-solid fa-tags fa-fw me-1" aria-hidden="true"></i><a href="/tags/c%23/" class="post-tag" title="标签 - C#">C#</a><a href="/tags/%E5%B9%B6%E5%8F%91/" class="post-tag" title="标签 - 并发">并发</a><a href="/tags/%E4%B8%8B%E8%BD%BD%E5%99%A8/" class="post-tag" title="标签 - 下载器">下载器</a></section>
-    <section>
-      <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+    <section class="post-tags"><i class="fa-solid fa-tags me-1" aria-hidden="true"></i><a href="/tags/c%23/" class="post-tag" title="标签 - C#">C#</a><a href="/tags/%E5%B9%B6%E5%8F%91/" class="post-tag" title="标签 - 并发">并发</a><a href="/tags/%E4%B8%8B%E8%BD%BD%E5%99%A8/" class="post-tag" title="标签 - 下载器">下载器</a></section>
+    <section><span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
     </section>
-  </div><div class="post-nav"><a href="/%E7%BC%96%E5%86%99%E5%8F%AF%E8%AF%BB%E4%BB%A3%E7%A0%81%E7%9A%84%E8%89%BA%E6%9C%AF/" class="post-nav-item" rel="prev" title="编写可读代码的艺术"><i class="fa-solid fa-angle-left fa-fw" aria-hidden="true"></i>编写可读代码的艺术</a><a href="/c%23%E4%B8%AD%E7%9A%84nameof%E8%BF%90%E7%AE%97%E7%AC%A6/" class="post-nav-item" rel="next" title="C#中的nameof运算符">C#中的nameof运算符<i class="fa-solid fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
+  </div><div class="post-nav"><a href="/%E7%BC%96%E5%86%99%E5%8F%AF%E8%AF%BB%E4%BB%A3%E7%A0%81%E7%9A%84%E8%89%BA%E6%9C%AF/" class="post-nav-item" rel="prev" title="编写可读代码的艺术"><i class="fa-solid fa-angle-left" aria-hidden="true"></i>编写可读代码的艺术</a><a href="/c%23%E4%B8%AD%E7%9A%84nameof%E8%BF%90%E7%AE%97%E7%AC%A6/" class="post-nav-item" rel="next" title="C#中的nameof运算符">C#中的nameof运算符<i class="fa-solid fa-angle-right" aria-hidden="true"></i></a></div>
 </div>
 <div class="post-reward">
     <div class="comment">请作者喝杯咖啡!</div>
     <input type="checkbox" class="reward-input" name="reward" id="fi-reward" hidden />
-    <label class="reward-button" for="fi-reward"><i class="fa-solid fa-qrcode fa-fw" aria-hidden="true"></i>赞赏</label>
+    <label class="reward-button" for="fi-reward"><i class="fa-solid fa-qrcode" aria-hidden="true"></i>赞赏</label>
     <div class="reward-ways" data-mode="static"><div><img src='/reward/alipay.png' alt="AndyFree96 支付宝"><span data-animation>支付宝</span>
           </div><div><img src='/reward/wechatpay.png' alt="AndyFree96 微信"><span data-animation>微信</span>
           </div></div>
   </div></article>
 
-  <aside class="toc" id="toc-auto" aria-label="目录"><h2 class="toc-title">目录&nbsp;<i class="toc-icon fa-solid fa-angle-down fa-fw" aria-hidden="true"></i></h2>
-      <div class="toc-content" id="toc-content-auto"></div></aside></main><footer class="footer">
-    <div class="footer-container"><div class="footer-line powered">由 <a href="https://gohugo.io/" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.148.2"><img class="hugo-icon" src="/images/hugo.min.svg" alt="Hugo logo" /> Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/hugo-fixit/FixIt" target="_blank" rel="external" title="FixIt v0.3.20"><img class="fixit-icon" src="/images/fixit.min.svg" alt="FixIt logo" /> FixIt</a>
-        </div><div class="footer-line copyright" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright fa-fw" aria-hidden="true"></i>
+  <aside class="toc" id="toc-auto" aria-label="目录"><h2 class="toc-title">目录&nbsp;<i class="toc-icon fa-solid fa-angle-down" aria-hidden="true"></i></h2>
+      <div class="toc-content" id="toc-content-auto"></div></aside><dialog id="toc-dialog" aria-labelledby="toc-dialog-title" role="dialog" closedby="any">
+      <button type="button" class="toc-close-btn" aria-label="Close Table of Contents"><i class="fa-solid fa-xmark fa-lg" aria-hidden="true"></i></button>
+      <div class="toc">
+        <h2 class="toc-title" id="toc-dialog-title">目录</h2>
+        <div class="toc-content" id="toc-content-drawer"><nav >
+  <ul>
+    <li><a href="#概览">概览</a></li>
+    <li><a href="#downloadbuilder"><code>DownloadBuilder</code></a></li>
+    <li><a href="#download"><code>Download</code></a></li>
+    <li><a href="#downloadservice"><code>DownloadService</code></a></li>
+    <li><a href="#downloadpackage"><code>DownloadPackage</code></a></li>
+    <li><a href="#chunkhub"><code>ChunkHub</code></a></li>
+    <li><a href="#pausetokensource和pausetoken"><code>PauseTokenSource</code>和<code>PauseToken</code></a></li>
+    <li><a href="#concurrentpacketbuffert"><code>ConcurrentPacketBuffer&lt;T&gt;</code></a></li>
+    <li><a href="#concurrentstream"><code>ConcurrentStream</code></a></li>
+    <li><a href="#socketclient"><code>SocketClient</code></a></li>
+    <li><a href="#知识点">知识点</a>
+      <ul>
+        <li><a href="#field-和-property">Field 和 Property</a></li>
+        <li><a href="#正则表达式">正则表达式</a></li>
+      </ul>
+    </li>
+    <li><a href="#推荐">推荐</a></li>
+  </ul>
+</nav></div>
+      </div>
+    </dialog></main><footer class="footer">
+    <div class="footer-container"><div class="footer-line powered">由 <a href="https://gohugo.io/" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.163.1">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/hugo-fixit/FixIt" target="_blank" rel="external" title="FixIt v1.0.0-mq99hlzg">FixIt</a>
+        </div><div class="footer-line copyright" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright" aria-hidden="true"></i>
             <span itemprop="copyrightYear">2026</span><span class="author" itemprop="copyrightHolder">
-              <a href="https://andyfree96.github.io/"target="_blank" rel="external nofollow noopener noreferrer">AndyFree96</a></span></div></div>
-  </footer></div><div class="widgets"><div class="fixed-buttons animate__faster d-none"><div class="fixed-button back-to-top" role="button" aria-label="回到顶部"><i class="fa-solid fa-arrow-up fa-fw" aria-hidden="true"></i><span class="variant-numeric d-none">0%</span>
-        </div></div><div id="mask"></div><div class="reading-progress-bar" style="left: 0;top: 0;"></div><noscript>
+              <a href="https://andyfree96.github.io/" target="_blank" rel="external nofollow noopener noreferrer">AndyFree96</a></span></div></div>
+  </footer></div><div class="widgets"><div class="fixed-buttons"><button type="button" class="fixed-button back-to-top animate__faster d-none" aria-label="回到顶部"><i class="fa-solid fa-arrow-up" aria-hidden="true"></i></button><button type="button" id="toc-drawer-button" class="fixed-button toc-drawer-button d-none" aria-label="目录" aria-controls="toc-dialog" aria-expanded="false"><i class="fa-solid fa-bars" aria-hidden="true"></i></button></div><div id="mask"></div><div class="reading-progress-bar" style="left: 0;top: 0;"></div><noscript>
     <div class="noscript-warning">该网站在启用 JavaScript 的情况下效果最佳。</div>
   </noscript>
-</div><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script src="/lib/autocomplete/autocomplete.min.js" defer></script><script src="/lib/algoliasearch/algoliasearch-lite.umd.min.js" defer></script><script src="/lib/sharer/sharer.min.js" async defer></script><script src="/lib/cookieconsent/cookieconsent.min.js" defer></script><script>window.config={"code":{"copyTitle":"复制到剪贴板","editLockTitle":"锁定可编辑代码块","editUnLockTitle":"解锁可编辑代码块","editable":true,"maxShownLines":400},"comment":{"enable":false},"cookieconsent":{"content":{"dismiss":"同意","link":"了解更多","message":"本网站使用 Cookies 来改善您的浏览体验。"},"enable":true,"palette":{"button":{"background":"#f0f0f0"},"popup":{"background":"#1aa3ff"}},"theme":"edgeless"},"search":{"algoliaAppID":"DHCUNEPKLU","algoliaIndex":"index.zh-cn","algoliaSearchKey":"170eb85cc7a17333c7cccaf73fd8aa03","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":30,"type":"algolia"},"version":"v0.3.20"};console.log('Page config:', window.config);</script><script src="/js/theme.min.js" defer></script></body>
+</div><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script src="/lib/autocomplete/autocomplete.min.js" defer></script><script src="/lib/algoliasearch/browser.umd.js" defer></script><script src="/lib/sharer/sharer.min.js" async defer></script><script src="/lib/cookieconsent/cookieconsent.min.js" defer></script><script src="/js/lib/cookieconsent.js" defer></script><script src="/lib/cell-tooltip/cell-tooltip.umd.js" defer></script><script src="/js/config/39ffea9d53e5c82645fbc6063eed6d67.js" defer></script><script src="/js/lib/file-tree.js" defer></script><script src="/js/main.js" defer></script></body>
 </html>

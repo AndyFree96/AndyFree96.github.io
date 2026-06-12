@@ -532,6 +532,6 @@
 
 ---
 
-> 作者: <no value>  
+> 作者: [AndyFree96](https://andyfree96.github.io/)  
 > URL: http://localhost:1313/book/  
 

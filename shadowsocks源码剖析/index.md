@@ -273,15 +273,11 @@ fd = 5
 
 ```
 fd 5
-
  |
  +--- socket
-
         |
         +--- IP地址
-
         +--- 端口
-
         +--- 缓冲区
 ```
 
@@ -427,7 +423,6 @@ Relay阶段已经完全脱离Socks5协议。Socks5到`05 00 00 01 00 00 00 00 10
 ```
 INIT
  |
-
 SOCKS5握手
  |
 解析目标地址
@@ -537,7 +532,7 @@ git checkout remotes/origin/master
 
 ### 调试
 
-若想在VS Code中调试，可以新建`.vscode/launch.json`文件，添加如下内容：
+若想在VS Code中调试，可以新建.vscode/launch.json文件，添加如下内容：
 
 ```json
 {
@@ -555,9 +550,7 @@ git checkout remotes/origin/master
 }
 ```
 
-但最推荐的调试方式是：print + 日志 + 抓包，可能比单步调试更适合网络项目。由于经常要修改print + 日志输出的内容。我们可以使用[nodemon](https://nodemon.io/)进行代码热重载。
-
-添加配置文件`nodemonlocal.json`：
+但最推荐的调试方式是：print + 日志 + 抓包（可能比单步调试更适合网络项目）。由于经常要修改print + 日志输出的内容。我们可以使用[nodemon](https://nodemon.io/)进行代码热重载。添加配置文件`nodemonlocal.json`：
 
 ```json
 {
@@ -567,7 +560,7 @@ git checkout remotes/origin/master
 }
 ```
 
-终端运行如下命令即可：
+在终端执行如下命令即可：
 
 ```bash
 nodemon --config nodemonlocal.json
@@ -575,7 +568,7 @@ nodemon --config nodemonlocal.json
 
 ## 总结
 
-阅读 Shadowsocks 源码最大的价值，不是学习如何实现一个代理。而是理解一个高性能网络程序如何工作。
+阅读 Shadowsocks 源码最大的价值，不是学习如何实现一个代理，而是理解一个高性能网络程序如何工作。
 
 从一个 socket 开始：
 
@@ -593,6 +586,8 @@ nodemon --config nodemonlocal.json
 [SOCKS Protocol Version 5](https://datatracker.ietf.org/doc/html/rfc1928)
 
 [理解socks5协议的工作过程和协议细节](https://wiyi.org/socks5-protocol-in-deep.html)
+
+[写给非专业人士看的 Shadowsocks 简介](https://vc2tea.com/whats-shadowsocks/)
 
 
 ---
