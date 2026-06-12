@@ -7,22 +7,19 @@
     <meta name="robots" content="noodp" />
     <title>Shadowsocks源码剖析 - 东尼的博客</title><meta name="author" content="AndyFree96">
 <meta name="description" content="前言很多人第一次接触 Shadowsocks，只把它当作一个代理工具。但是从源码角度看，Shadowsocks 是一个非常适合学习网络编程的项目。它代码量不大，却包含了现代网络服务端开发中的很多核心思想：
-Socks5 协议解析 Socket 编程 非阻塞 IO Reactor 事件模型 epoll/kqueue/select 状态机设计 TCP Relay 转发 UDP Relay 加密通信 阅读 Shadowsocks 源码，可以帮助我们理解一个代理程序从建立连接，到数据转发，再到连接关闭的完整过程。
-本文以 Python 版 Shadowsocks 为例，分析它内部的设计。
+Socks5 协议解析 Socket 编程 非阻塞 IO Reactor 事件模型 epoll/kqueue/select 状态机设计 TCP Relay 转发 UDP Relay 加密通信 阅读 Shadowsocks 源码，可以帮助我们理解一个代理程序从建立连接，到数据转发，再到连接关闭的完整过程。本文以 Python 版 Shadowsocks 为例，分析它内部的设计。
 "><meta name="keywords" content='网络编程, 非阻塞IO, 源码剖析'>
   <meta itemprop="name" content="Shadowsocks源码剖析">
   <meta itemprop="description" content="前言很多人第一次接触 Shadowsocks，只把它当作一个代理工具。但是从源码角度看，Shadowsocks 是一个非常适合学习网络编程的项目。它代码量不大，却包含了现代网络服务端开发中的很多核心思想：
-Socks5 协议解析 Socket 编程 非阻塞 IO Reactor 事件模型 epoll/kqueue/select 状态机设计 TCP Relay 转发 UDP Relay 加密通信 阅读 Shadowsocks 源码，可以帮助我们理解一个代理程序从建立连接，到数据转发，再到连接关闭的完整过程。
-本文以 Python 版 Shadowsocks 为例，分析它内部的设计。">
+Socks5 协议解析 Socket 编程 非阻塞 IO Reactor 事件模型 epoll/kqueue/select 状态机设计 TCP Relay 转发 UDP Relay 加密通信 阅读 Shadowsocks 源码，可以帮助我们理解一个代理程序从建立连接，到数据转发，再到连接关闭的完整过程。本文以 Python 版 Shadowsocks 为例，分析它内部的设计。">
   <meta itemprop="datePublished" content="2026-06-12T14:47:56+08:00">
   <meta itemprop="dateModified" content="2026-06-12T14:47:56+08:00">
-  <meta itemprop="wordCount" content="3072">
+  <meta itemprop="wordCount" content="3296">
   <meta itemprop="keywords" content="网络编程,非阻塞IO,源码剖析"><meta property="og:url" content="http://localhost:1313/shadowsocks%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/">
   <meta property="og:site_name" content="东尼的博客">
   <meta property="og:title" content="Shadowsocks源码剖析">
   <meta property="og:description" content="前言很多人第一次接触 Shadowsocks，只把它当作一个代理工具。但是从源码角度看，Shadowsocks 是一个非常适合学习网络编程的项目。它代码量不大，却包含了现代网络服务端开发中的很多核心思想：
-Socks5 协议解析 Socket 编程 非阻塞 IO Reactor 事件模型 epoll/kqueue/select 状态机设计 TCP Relay 转发 UDP Relay 加密通信 阅读 Shadowsocks 源码，可以帮助我们理解一个代理程序从建立连接，到数据转发，再到连接关闭的完整过程。
-本文以 Python 版 Shadowsocks 为例，分析它内部的设计。">
+Socks5 协议解析 Socket 编程 非阻塞 IO Reactor 事件模型 epoll/kqueue/select 状态机设计 TCP Relay 转发 UDP Relay 加密通信 阅读 Shadowsocks 源码，可以帮助我们理解一个代理程序从建立连接，到数据转发，再到连接关闭的完整过程。本文以 Python 版 Shadowsocks 为例，分析它内部的设计。">
   <meta property="og:locale" content="zh_CN">
   <meta property="og:type" content="article">
     <meta property="article:section" content="posts">
@@ -35,8 +32,7 @@ Socks5 协议解析 Socket 编程 非阻塞 IO Reactor 事件模型 epoll/kqueue
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Shadowsocks源码剖析">
   <meta name="twitter:description" content="前言很多人第一次接触 Shadowsocks，只把它当作一个代理工具。但是从源码角度看，Shadowsocks 是一个非常适合学习网络编程的项目。它代码量不大，却包含了现代网络服务端开发中的很多核心思想：
-Socks5 协议解析 Socket 编程 非阻塞 IO Reactor 事件模型 epoll/kqueue/select 状态机设计 TCP Relay 转发 UDP Relay 加密通信 阅读 Shadowsocks 源码，可以帮助我们理解一个代理程序从建立连接，到数据转发，再到连接关闭的完整过程。
-本文以 Python 版 Shadowsocks 为例，分析它内部的设计。">
+Socks5 协议解析 Socket 编程 非阻塞 IO Reactor 事件模型 epoll/kqueue/select 状态机设计 TCP Relay 转发 UDP Relay 加密通信 阅读 Shadowsocks 源码，可以帮助我们理解一个代理程序从建立连接，到数据转发，再到连接关闭的完整过程。本文以 Python 版 Shadowsocks 为例，分析它内部的设计。">
       <meta name="twitter:site" content="@IRONAnthony96">
 <meta name="twitter:creator" content="@IRONAnthony96" /><meta name="application-name" content="FixIt">
 <meta name="apple-mobile-web-app-title" content="FixIt"><meta name="theme-color" data-light="#f8f8f8" data-dark="#252627" content="#f8f8f8"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
@@ -52,7 +48,7 @@ Socks5 协议解析 Socket 编程 非阻塞 IO Reactor 事件模型 epoll/kqueue
     "mainEntityOfPage": {
       "@type": "WebPage",
       "@id": "http:\/\/localhost:1313\/shadowsocks%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90\/"
-    },"genre": "posts","keywords": "网络编程, 非阻塞IO, 源码剖析","wordcount":  3072 ,
+    },"genre": "posts","keywords": "网络编程, 非阻塞IO, 源码剖析","wordcount":  3296 ,
     "url": "http:\/\/localhost:1313\/shadowsocks%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90\/","datePublished": "2026-06-12T14:47:56+08:00","dateModified": "2026-06-12T14:47:56+08:00","publisher": {
       "@type": "Organization",
       "name": ""},"author": {
@@ -143,7 +139,7 @@ Socks5 协议解析 Socket 编程 非阻塞 IO Reactor 事件模型 epoll/kqueue
   <article class="page single">
     <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span title="转载" class="icon-repost"><i class="fa-solid fa-share fa-fw" aria-hidden="true"></i></span><span>Shadowsocks源码剖析</span>
       </h1><p class="single-subtitle animate__animated animate__fadeIn">一个轻量级代理工具背后的网络编程设计</p></div><div class="post-meta">
-      <div class="post-meta-line"><span class="post-author"><a href="https://andyfree96.github.io/" title="作者"target="_blank" rel="external nofollow noopener noreferrer author" class="author"><img class="avatar" src='/avatar/1.jpg' alt="AndyFree96" height="16" width="16">&nbsp;AndyFree96</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" class="post-category" title="分类 - 源码剖析"><i class="fa-regular fa-folder fa-fw" aria-hidden="true"></i> 源码剖析</a></span></div><div class="post-meta-line"><span title="发布于 2026-06-12 14:47:56"><i class="fa-solid fa-calendar-days fa-fw me-1" aria-hidden="true"></i><time datetime="2026-06-12">2026-06-12</time></span>&nbsp;<span title="3072 字"><i class="fa-solid fa-pencil-alt fa-fw me-1" aria-hidden="true"></i>约 3100 字</span>&nbsp;<span><i class="fa-regular fa-clock fa-fw me-1" aria-hidden="true"></i>预计阅读 7 分钟</span>&nbsp;</div>
+      <div class="post-meta-line"><span class="post-author"><a href="https://andyfree96.github.io/" title="作者"target="_blank" rel="external nofollow noopener noreferrer author" class="author"><img class="avatar" src='/avatar/1.jpg' alt="AndyFree96" height="16" width="16">&nbsp;AndyFree96</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" class="post-category" title="分类 - 源码剖析"><i class="fa-regular fa-folder fa-fw" aria-hidden="true"></i> 源码剖析</a></span></div><div class="post-meta-line"><span title="发布于 2026-06-12 14:47:56"><i class="fa-solid fa-calendar-days fa-fw me-1" aria-hidden="true"></i><time datetime="2026-06-12">2026-06-12</time></span>&nbsp;<span title="3296 字"><i class="fa-solid fa-pencil-alt fa-fw me-1" aria-hidden="true"></i>约 3300 字</span>&nbsp;<span><i class="fa-regular fa-clock fa-fw me-1" aria-hidden="true"></i>预计阅读 7 分钟</span>&nbsp;</div>
     </div><div class="featured-image"><img src='/images/202606/1/shubham-dhage-v-PEtZBLA0s-unsplash.jpg' alt="/images/202606/1/shubham-dhage-v-PEtZBLA0s-unsplash.jpg"></div><div class="details toc" id="toc-static" data-kept="false">
         <div class="details-summary toc-title">
           <span>目录</span>
@@ -171,6 +167,12 @@ Socks5 协议解析 Socket 编程 非阻塞 IO Reactor 事件模型 epoll/kqueue
     </li>
     <li><a href="#为什么需要状态机">为什么需要状态机？</a></li>
     <li><a href="#tcp-relay数据转发">TCP Relay数据转发</a></li>
+    <li><a href="#补充">补充</a>
+      <ul>
+        <li><a href="#切换到最新代码">切换到最新代码</a></li>
+        <li><a href="#调试">调试</a></li>
+      </ul>
+    </li>
     <li><a href="#总结">总结</a></li>
     <li><a href="#推荐">推荐</a></li>
   </ul>
@@ -191,29 +193,8 @@ Socks5 协议解析 Socket 编程 非阻塞 IO Reactor 事件模型 epoll/kqueue
 <li>UDP Relay</li>
 <li>加密通信</li>
 </ul>
-<p>阅读 Shadowsocks 源码，可以帮助我们理解一个代理程序从建立连接，到数据转发，再到连接关闭的完整过程。</p>
-<p>本文以 Python 版 Shadowsocks 为例，分析它内部的设计。</p>
-<p>为切换到最新代码，可依次执行下列命令：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span><span class="lnt">6
-</span><span class="lnt">7
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">git clone https://github.com/shadowsocks/shadowsocks
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="nb">cd</span> shadowsocks
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">git branch -a
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">git checkout remotes/origin/master</span></span></code></pre></td></tr></table>
-</div>
-</div><h2 class="heading-element" id="shadowsocks整体架构"><span>Shadowsocks整体架构</span>
+<p>阅读 Shadowsocks 源码，可以帮助我们理解一个代理程序从建立连接，到数据转发，再到连接关闭的完整过程。本文以 Python 版 Shadowsocks 为例，分析它内部的设计。</p>
+<h2 class="heading-element" id="shadowsocks整体架构"><span>Shadowsocks整体架构</span>
   <a href="#shadowsocks%e6%95%b4%e4%bd%93%e6%9e%b6%e6%9e%84" class="heading-mark">
     <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
   </a>
@@ -823,37 +804,19 @@ Socks5 协议解析 Socket 编程 非阻塞 IO Reactor 事件模型 epoll/kqueue
 </span><span class="lnt">10
 </span><span class="lnt">11
 </span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span><span class="lnt">15
-</span><span class="lnt">16
-</span><span class="lnt">17
-</span><span class="lnt">18
-</span><span class="lnt">19
-</span><span class="lnt">20
-</span><span class="lnt">21
 </span></code></pre></td>
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">INIT
-</span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"> |
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">SOCKS5握手
-</span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"> |
-</span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">解析目标地址
-</span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"> |
-</span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">连接远程服务器
-</span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"> |
-</span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">数据转发
-</span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"> |
-</span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">关闭</span></span></code></pre></td></tr></table>
 </div>
 </div><p>因为网络程序本质上不是“函数调用流程”，而是“异步事件流”，状态机是用来把这种混乱的时间顺序“结构化”的工具。状态机将流程拆成“阶段”：</p>
@@ -945,26 +908,18 @@ Socks5 协议解析 Socket 编程 非阻塞 IO Reactor 事件模型 epoll/kqueue
 </span><span class="lnt">11
 </span><span class="lnt">12
 </span><span class="lnt">13
-</span><span class="lnt">14
-</span><span class="lnt">15
-</span><span class="lnt">16
-</span><span class="lnt">17
 </span></code></pre></td>
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">Browser
-</span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">   |
 </span></span><span class="line"><span class="cl">   |
 </span></span><span class="line"><span class="cl"> Local Proxy
-</span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">   |
 </span></span><span class="line"><span class="cl">   |
 </span></span><span class="line"><span class="cl"> Encrypt
-</span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">   |
 </span></span><span class="line"><span class="cl">   |
 </span></span><span class="line"><span class="cl"> Remote Server
-</span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">   |
 </span></span><span class="line"><span class="cl">   |
 </span></span><span class="line"><span class="cl"> Target</span></span></code></pre></td></tr></table>
@@ -989,23 +944,108 @@ Socks5 协议解析 Socket 编程 非阻塞 IO Reactor 事件模型 epoll/kqueue
 </span><span class="lnt">3
 </span><span class="lnt">4
 </span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">remote
+</span></span><span class="line"><span class="cl">   |
+</span></span><span class="line"><span class="cl">decrypt
+</span></span><span class="line"><span class="cl">   |
+</span></span><span class="line"><span class="cl">client</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 class="heading-element" id="补充"><span>补充</span>
+  <a href="#%e8%a1%a5%e5%85%85" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><h3 class="heading-element" id="切换到最新代码"><span>切换到最新代码</span>
+  <a href="#%e5%88%87%e6%8d%a2%e5%88%b0%e6%9c%80%e6%96%b0%e4%bb%a3%e7%a0%81" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p>如要切换Shadowsocks到最新代码，可依次执行下列命令：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
 </span><span class="lnt">6
 </span><span class="lnt">7
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">remote
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">git clone https://github.com/shadowsocks/shadowsocks
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">   |
-</span></span><span class="line"><span class="cl">decrypt
+</span></span><span class="line"><span class="cl"><span class="nb">cd</span> shadowsocks
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">   |
-</span></span><span class="line"><span class="cl">client</span></span></code></pre></td></tr></table>
+</span></span><span class="line"><span class="cl">git branch -a
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">git checkout remotes/origin/master</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 class="heading-element" id="调试"><span>调试</span>
+  <a href="#%e8%b0%83%e8%af%95" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p>若想在VS Code中调试，可以新建<code>.vscode/launch.json</code>文件，添加如下内容：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;version&#34;</span><span class="p">:</span> <span class="s2">&#34;0.2.0&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;configurations&#34;</span><span class="p">:</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;name&#34;</span><span class="p">:</span> <span class="s2">&#34;shadowsocks-local&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;type&#34;</span><span class="p">:</span> <span class="s2">&#34;debugpy&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;request&#34;</span><span class="p">:</span> <span class="s2">&#34;launch&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;module&#34;</span><span class="p">:</span> <span class="s2">&#34;shadowsocks.local&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;console&#34;</span><span class="p">:</span> <span class="s2">&#34;integratedTerminal&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;args&#34;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&#34;-c&#34;</span><span class="p">,</span> <span class="s2">&#34;config.json&#34;</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>但最推荐的调试方式是：print + 日志 + 抓包，可能比单步调试更适合网络项目。由于经常要修改print + 日志输出的内容。我们可以使用<a href="https://nodemon.io/"target="_blank" rel="external nofollow noopener noreferrer">nodemon</a>进行代码热重载。</p>
+<p>添加配置文件<code>nodemonlocal.json</code>：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;watch&#34;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&#34;shadowsocks&#34;</span><span class="p">],</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;ext&#34;</span><span class="p">:</span> <span class="s2">&#34;py&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;exec&#34;</span><span class="p">:</span> <span class="s2">&#34;python -m shadowsocks.local -c config.json&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>终端运行如下命令即可：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">nodemon --config nodemonlocal.json</span></span></code></pre></td></tr></table>
 </div>
 </div><h2 class="heading-element" id="总结"><span>总结</span>
   <a href="#%e6%80%bb%e7%bb%93" class="heading-mark">
     <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
   </a>
-</h2><p>阅读 Shadowsocks 源码最大的价值，不是学习如何实现一个代理。而是理解：一个高性能网络程序如何工作。</p>
+</h2><p>阅读 Shadowsocks 源码最大的价值，不是学习如何实现一个代理。而是理解一个高性能网络程序如何工作。</p>
 <p>从一个 socket 开始：</p>
 <ul>
 <li>创建连接</li>

@@ -15,23 +15,9 @@
 - UDP Relay
 - 加密通信
 
-阅读 Shadowsocks 源码，可以帮助我们理解一个代理程序从建立连接，到数据转发，再到连接关闭的完整过程。
-
-本文以 Python 版 Shadowsocks 为例，分析它内部的设计。
+阅读 Shadowsocks 源码，可以帮助我们理解一个代理程序从建立连接，到数据转发，再到连接关闭的完整过程。本文以 Python 版 Shadowsocks 为例，分析它内部的设计。
 
 <!--more-->
-
-为切换到最新代码，可依次执行下列命令：
-
-```bash
-git clone https://github.com/shadowsocks/shadowsocks
-
-cd shadowsocks
-
-git branch -a
-
-git checkout remotes/origin/master
-```
 
 ## Shadowsocks整体架构
 
@@ -440,25 +426,16 @@ Relay阶段已经完全脱离Socks5协议。Socks5到`05 00 00 01 00 00 00 00 10
 
 ```
 INIT
-
  |
 
 SOCKS5握手
-
  |
-
 解析目标地址
-
  |
-
 连接远程服务器
-
  |
-
 数据转发
-
  |
-
 关闭
 ```
 
@@ -510,19 +487,15 @@ def handle(sock):
 
 ```
 Browser
-
    |
    |
  Local Proxy
-
    |
    |
  Encrypt
-
    |
    |
  Remote Server
-
    |
    |
  Target
@@ -540,17 +513,69 @@ remote.send(data)
 
 ```
 remote
-
    |
 decrypt
-
    |
 client
 ```
 
+## 补充
+
+### 切换到最新代码
+
+如要切换Shadowsocks到最新代码，可依次执行下列命令：
+
+```bash
+git clone https://github.com/shadowsocks/shadowsocks
+
+cd shadowsocks
+
+git branch -a
+
+git checkout remotes/origin/master
+```
+
+### 调试
+
+若想在VS Code中调试，可以新建`.vscode/launch.json`文件，添加如下内容：
+
+```json
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "shadowsocks-local",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "shadowsocks.local",
+      "console": "integratedTerminal",
+      "args": ["-c", "config.json"]
+    }
+  ]
+}
+```
+
+但最推荐的调试方式是：print + 日志 + 抓包，可能比单步调试更适合网络项目。由于经常要修改print + 日志输出的内容。我们可以使用[nodemon](https://nodemon.io/)进行代码热重载。
+
+添加配置文件`nodemonlocal.json`：
+
+```json
+{
+  "watch": ["shadowsocks"],
+  "ext": "py",
+  "exec": "python -m shadowsocks.local -c config.json"
+}
+```
+
+终端运行如下命令即可：
+
+```bash
+nodemon --config nodemonlocal.json
+```
+
 ## 总结
 
-阅读 Shadowsocks 源码最大的价值，不是学习如何实现一个代理。而是理解：一个高性能网络程序如何工作。
+阅读 Shadowsocks 源码最大的价值，不是学习如何实现一个代理。而是理解一个高性能网络程序如何工作。
 
 从一个 socket 开始：
 
