@@ -12,8 +12,8 @@
 <meta name="description" content="安东尼的博客，分享生活中的一些有意思的事儿！">
   <meta itemprop="name" content="东尼的博客">
   <meta itemprop="description" content="安东尼的博客，分享生活中的一些有意思的事儿！">
-  <meta itemprop="datePublished" content="2026-03-16T22:09:54+08:00">
-  <meta itemprop="dateModified" content="2026-03-16T22:09:54+08:00"><meta property="og:url" content="http://localhost:1313/">
+  <meta itemprop="datePublished" content="2026-06-12T14:47:56+08:00">
+  <meta itemprop="dateModified" content="2026-06-12T14:47:56+08:00"><meta property="og:url" content="http://localhost:1313/">
   <meta property="og:site_name" content="东尼的博客">
   <meta property="og:title" content="东尼的博客">
   <meta property="og:description" content="安东尼的博客，分享生活中的一些有意思的事儿！">
@@ -112,6 +112,28 @@
     </a><a href="/index.xml" title="RSS"target="_blank" rel="external nofollow noopener noreferrer me"><i class="fa-solid fa-rss fa-fw" aria-hidden="true"></i>
     </a></div></div>
 <article class="single summary" itemscope itemtype="http://schema.org/Article"><div class="featured-image-preview">
+      <a href="/shadowsocks%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" aria-label="Shadowsocks源码剖析"><img loading="eager" src='/images/202606/1/shubham-dhage-v-PEtZBLA0s-unsplash.jpg' sizes="(max-width: 680px) 100vw, (max-width: 960px) 80vw, (max-width: 1440px) 56vw, 800px" alt="Featured image for Shadowsocks源码剖析" height="240" width="800"></a>
+    </div><h2 class="single-title" itemprop="name headline"><span title="转载" class="icon-repost"><i class="fa-solid fa-share fa-fw" aria-hidden="true"></i></span><a href="/shadowsocks%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/">Shadowsocks源码剖析</a>
+  </h2><div class="post-meta"><span class="post-author"><a href="https://andyfree96.github.io/" title="作者"target="_blank" rel="external nofollow noopener noreferrer author" class="author"><img class="avatar" src='/avatar/1.jpg' alt="AndyFree96" height="16" width="16">&nbsp;AndyFree96</a></span>&nbsp;<span class="post-publish" title='2026-06-12 14:47:56'>发布于 <time datetime="2026-06-12">2026-06-12</time></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" class="post-category" title="分类 - 源码剖析"><i class="fa-regular fa-folder fa-fw" aria-hidden="true"></i> 源码剖析</a></span></div><div class="content"><h3 class="heading-element" id="前言"><span>前言</span>
+  <a href="#%e5%89%8d%e8%a8%80" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p>很多人第一次接触 Shadowsocks，只把它当作一个代理工具。但是从源码角度看，Shadowsocks 是一个非常适合学习网络编程的项目。它代码量不大，却包含了现代网络服务端开发中的很多核心思想：</p>
+<ul>
+<li>Socks5 协议解析</li>
+<li>Socket 编程</li>
+<li>非阻塞 IO</li>
+<li>Reactor 事件模型</li>
+<li>epoll/kqueue/select</li>
+<li>状态机设计</li>
+<li>TCP Relay 转发</li>
+<li>UDP Relay</li>
+<li>加密通信</li>
+</ul>
+<p>阅读 Shadowsocks 源码，可以帮助我们理解一个代理程序从建立连接，到数据转发，再到连接关闭的完整过程。</p>
+<p>本文以 Python 版 Shadowsocks 为例，分析它内部的设计。</p></div><div class="post-footer">
+    <a href="/shadowsocks%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/">阅读全文</a><div class="post-tags"><i class="fa-solid fa-tags fa-fw me-1" aria-hidden="true"></i><a href='/tags/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/' class="post-tag">网络编程</a><a href='/tags/%E9%9D%9E%E9%98%BB%E5%A1%9Eio/' class="post-tag">非阻塞IO</a><a href='/tags/%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/' class="post-tag">源码剖析</a></div></div>
+</article><article class="single summary" itemscope itemtype="http://schema.org/Article"><div class="featured-image-preview">
       <a href="/%E4%BB%8E%E6%89%A7%E8%A1%8C%E4%B8%8A%E4%B8%8B%E6%96%87%E7%90%86%E8%A7%A3javascript%E5%8F%98%E9%87%8F%E6%8F%90%E5%8D%87/" aria-label="从执行上下文理解JavaScript变量提升"><img loading="eager" src='/images/202603/1/zhiyuan-sun-a_7NwraYpbI-unsplash.jpg' sizes="(max-width: 680px) 100vw, (max-width: 960px) 80vw, (max-width: 1440px) 56vw, 800px" alt="Featured image for 从执行上下文理解JavaScript变量提升" height="240" width="800"></a>
     </div><h2 class="single-title" itemprop="name headline"><span title="转载" class="icon-repost"><i class="fa-solid fa-share fa-fw" aria-hidden="true"></i></span><a href="/%E4%BB%8E%E6%89%A7%E8%A1%8C%E4%B8%8A%E4%B8%8B%E6%96%87%E7%90%86%E8%A7%A3javascript%E5%8F%98%E9%87%8F%E6%8F%90%E5%8D%87/">从执行上下文理解JavaScript变量提升</a>
   </h2><div class="post-meta"><span class="post-author"><a href="https://andyfree96.github.io/" title="作者"target="_blank" rel="external nofollow noopener noreferrer author" class="author"><img class="avatar" src='/avatar/1.jpg' alt="AndyFree96" height="16" width="16">&nbsp;AndyFree96</a></span>&nbsp;<span class="post-publish" title='2026-03-16 22:09:54'>发布于 <time datetime="2026-03-16">2026-03-16</time></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/javascript/" class="post-category" title="分类 - JavaScript"><i class="fa-regular fa-folder fa-fw" aria-hidden="true"></i> JavaScript</a></span></div><div class="content"><p>在学习 JavaScript 的过程中，我们可能会遇到一个经典问题：</p>
@@ -276,11 +298,6 @@
 <li><strong>2024/1/17 更新</strong>: 增加<strong>进程间通信</strong></li>
 </ul></div><div class="post-footer">
     <a href="/tcp-ip%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/">阅读全文</a><div class="post-tags"><i class="fa-solid fa-tags fa-fw me-1" aria-hidden="true"></i><a href='/tags/tcp/ip/' class="post-tag">TCP/IP</a><a href='/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/' class="post-tag">计算机网络</a><a href='/tags/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/' class="post-tag">网络编程</a><a href='/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/' class="post-tag">读书笔记</a></div></div>
-</article><article class="single summary" itemscope itemtype="http://schema.org/Article"><div class="featured-image-preview">
-      <a href="/%E5%AD%A6%E4%B9%A0javascript%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" aria-label="学习JavaScript数据结构与算法"><img loading="eager" src='/images/202312/15/charlotte-harrison-eHAo0YfERRI-unsplash.jpg' sizes="(max-width: 680px) 100vw, (max-width: 960px) 80vw, (max-width: 1440px) 56vw, 800px" alt="Featured image for 学习JavaScript数据结构与算法" height="240" width="800"></a>
-    </div><h2 class="single-title" itemprop="name headline"><span title="转载" class="icon-repost"><i class="fa-solid fa-share fa-fw" aria-hidden="true"></i></span><a href="/%E5%AD%A6%E4%B9%A0javascript%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/">学习JavaScript数据结构与算法</a>
-  </h2><div class="post-meta"><span class="post-author"><a href="https://andyfree96.github.io/" title="作者"target="_blank" rel="external nofollow noopener noreferrer author" class="author"><img class="avatar" src='/avatar/1.jpg' alt="AndyFree96" height="16" width="16">&nbsp;AndyFree96</a></span>&nbsp;<span class="post-publish" title='2023-12-13 13:27:09'>发布于 <time datetime="2023-12-13">2023-12-13</time></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E7%BB%86%E8%AF%BB%E7%BB%8F%E5%85%B8/" class="post-category" title="分类 - 细读经典"><i class="fa-regular fa-folder fa-fw" aria-hidden="true"></i> 细读经典</a></span></div><div class="content"><p>在计算机科学领域，数据结构和算法是开发高效程序的核心工具。无论你是初学者还是经验丰富的开发者，掌握这些概念都能帮助你构建更快、更稳定的应用程序。我们日常使用的软件，从搜索引擎到社交媒体，再到购物网站，无不依赖数据结构和算法的强大支持。一个好的数据结构可以优化存储和访问数据的方式，而高效的算法则可以显著提升任务的执行速度。</p></div><div class="post-footer">
-    <a href="/%E5%AD%A6%E4%B9%A0javascript%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/">阅读全文</a><div class="post-tags"><i class="fa-solid fa-tags fa-fw me-1" aria-hidden="true"></i><a href='/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/' class="post-tag">数据结构</a><a href='/tags/%E7%AE%97%E6%B3%95/' class="post-tag">算法</a><a href='/tags/javascript/' class="post-tag">JavaScript</a><a href='/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/' class="post-tag">学习笔记</a></div></div>
 </article><ul class="pagination"><li class="page-item active">
           <span class="page-link">
             <a href="/">1</a>
