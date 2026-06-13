@@ -49,6 +49,14 @@
 | 3   | Bigtable: A Distributed Storage System for Structured Data | 2006 | [Link](https://static.googleusercontent.com/media/research.google.com/en//archive/bigtable-osdi06.pdf) | 无   | ❎   |
 | 4   | Why Functional Programming Matters                         | 1990 | [Link](https://www.cs.utexas.edu/~shmat/courses/cs345/whyfp.pdf)                                       | 无   | ❎   |
 
+### 2026
+
+| #   | 标题                                                       | 年份 | 论文                                                     | 代码 | 状态 |
+| :-- | :--------------------------------------------------------- | :--- | :------------------------------------------------------- | :--- | :--- |
+| 1   | The Log-Structured Merge-Tree (LSM-Tree)                   | 1996 | [Link](https://www.cs.umb.edu/~poneil/lsmtree.pdf)       | 无   | ❎   |
+| 2   | The Ubiquitous B-Tree                                      | 1979 | [Link](https://dl.acm.org/doi/pdf/10.1145/356770.356776) | 无   | ❎   |
+| 3   | Space/time trade-offs in hash coding with allowable errors | 1970 | [Link](https://dl.acm.org/doi/pdf/10.1145/362686.362692) | 无   | ❎   |
+
 
 ---
 

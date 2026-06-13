@@ -293,7 +293,7 @@ epoll.register(fd)
 
 使用Shadowsocks时，我们通常会在浏览器配置代理：
 
-![图1 浏览器代理配置](/images/202606/1/2.png)
+![图1 浏览器代理配置](/images/202606/1/2.png '图1 浏览器代理配置')
 
 但浏览器的通信请求会很多，为了方便查看交互过程，我们可以使用如下命令：
 
@@ -303,7 +303,7 @@ curl --socks5 127.0.0.1:1080 http://www.baidu.com
 
 交互过程如下：
 
-![图2 交互过程](/images/202606/1/1.png)
+![图2 交互过程](/images/202606/1/1.png '图2 交互过程')
 
 整个过程如[理解socks5协议的工作过程和协议细节](https://wiyi.org/socks5-protocol-in-deep.html)所述可分为3个阶段：握手阶段、请求阶段、Relay阶段。
 
