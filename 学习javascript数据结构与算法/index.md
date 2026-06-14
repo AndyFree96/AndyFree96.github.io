@@ -23,7 +23,7 @@ daysOfWeek = new Array(
   'Wednesday',
   'Thursday',
   'Friday',
-  'Saturday'
+  'Saturday',
 ); // {3}
 ```
 
@@ -692,7 +692,7 @@ function hotPotato(elementsList, num) {
 const names = ['John', 'Jack', 'Camila', 'Ingrid', 'Carl'];
 const result = hotPotato(names, 7);
 result.elimitated.forEach((name) =>
-  console.log(`${name}在击鼓传花游戏中被淘汰`)
+  console.log(`${name}在击鼓传花游戏中被淘汰`),
 );
 console.log(`胜利者: ${result.winner}`);
 ```

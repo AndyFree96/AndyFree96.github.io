@@ -8,8 +8,16 @@
     <language>zh-CN</language>
     <managingEditor>anthonyfree96@gmail.com (AndyFree96)</managingEditor>
     <webMaster>anthonyfree96@gmail.com (AndyFree96)</webMaster>
-    <lastBuildDate>Fri, 12 Jun 2026 14:47:56 +0800</lastBuildDate>
+    <lastBuildDate>Sun, 14 Jun 2026 10:15:17 +0800</lastBuildDate>
     <atom:link href="http://localhost:1313/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>C#高效编程 改进C#代码的50个行之有效的办法</title>
+      <link>http://localhost:1313/c%23%E9%AB%98%E6%95%88%E7%BC%96%E7%A8%8B/</link>
+      <pubDate>Sun, 14 Jun 2026 10:15:17 +0800</pubDate><author>anthonyfree96@gmail.com (AndyFree96)</author>
+      <guid>http://localhost:1313/c%23%E9%AB%98%E6%95%88%E7%BC%96%E7%A8%8B/</guid>
+      <category domain="http://localhost:1313/categories/%E7%BB%86%E8%AF%BB%E7%BB%8F%E5%85%B8/">细读经典</category>
+      <description>&lt;p&gt;在软件开发过程中，写出“能运行”的代码并不难，真正困难的是写出一段&lt;strong&gt;容易理解、容易维护、容易扩展，并且能够长期稳定运行的代码&lt;/strong&gt;。随着项目规模不断扩大，代码往往会经历这样的变化。&lt;/p&gt;&#xA;&lt;p&gt;最初，一个类可能只有几十行。逻辑简单，修改起来非常直接；但随着需求不断增加，功能不断堆叠，代码开始出现越来越多的问题：&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;一个方法越来越长，承担了太多职责；&lt;/li&gt;&#xA;&lt;li&gt;类之间的依赖越来越复杂，修改地方可能影响多个模块；&lt;/li&gt;&#xA;&lt;li&gt;重复代码不断出现，导致维护成本增加；&lt;/li&gt;&#xA;&lt;li&gt;异常处理、资源释放、性能优化等细节容易被忽略；&lt;/li&gt;&#xA;&lt;li&gt;新成员接手代码时，需要花费大量时间理解历史逻辑。&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;p&gt;这些问题并不是因为开发者能力不足，而是因为&lt;strong&gt;代码质量需要持续演进&lt;/strong&gt;。C# 作为一门成熟的面向对象语言，提供了大量语言特性帮助我们编写更优雅、更安全的代码，例如泛型、委托、Lambda、LINQ、异步编程、特性(Attribute)、模式匹配等。但如果只是掌握语法，而没有形成良好的编程习惯，很容易写出“看起来能工作，但长期维护困难”的代码。&lt;/p&gt;&#xA;&lt;p&gt;&lt;a href=&#34;https://book.douban.com/subject/5360961/&#34; target=&#34;_blank&#34; rel=&#34;external nofollow noopener noreferrer&#34;&gt;《C# 高效编程：改进 C# 代码的 50 个有效办法 第2版》&lt;i class=&#34;fa-solid fa-external-link-alt fa-xs ms-1 text-secondary&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;&lt;/a&gt;这本书并不是单纯讲解 C# 语法，而是从工程实践角度，总结了大量能够改善代码质量的技巧和原则。&lt;/p&gt;&#xA;&lt;p&gt;这些建议覆盖了多个方面：&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;如何正确设计类型和接口；&lt;/li&gt;&#xA;&lt;li&gt;如何减少代码耦合；&lt;/li&gt;&#xA;&lt;li&gt;如何利用 C# 特性提升表达能力；&lt;/li&gt;&#xA;&lt;li&gt;如何处理异常、资源和状态；&lt;/li&gt;&#xA;&lt;li&gt;如何编写更高性能、更可靠的程序。&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;p&gt;接下来，我会结合书中的实践建议，并加入自己在项目开发中的理解，对这些技巧进行整理，希望能够帮助自己，也帮助更多 C# 开发者写出更加健壮、优雅的代码。&lt;/p&gt;</description>
+    </item>
     <item>
       <title>Shadowsocks源码剖析</title>
       <link>http://localhost:1313/shadowsocks%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/</link>
@@ -17,6 +25,22 @@
       <guid>http://localhost:1313/shadowsocks%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/</guid>
       <category domain="http://localhost:1313/categories/%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/">源码剖析</category>
       <description>&lt;h2 class=&#34;heading-element&#34; id=&#34;前言&#34;&gt;&lt;span&gt;前言&lt;/span&gt;&#xD;&#xA;  &lt;a href=&#34;#%e5%89%8d%e8%a8%80&#34; class=&#34;heading-mark&#34;&gt;&#xD;&#xA;    &lt;svg class=&#34;octicon octicon-link&#34; viewBox=&#34;0 0 16 16&#34; version=&#34;1.1&#34; width=&#34;16&#34; height=&#34;16&#34; aria-hidden=&#34;true&#34;&gt;&lt;path d=&#34;m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z&#34;&gt;&lt;/path&gt;&lt;/svg&gt;&#xD;&#xA;  &lt;/a&gt;&#xD;&#xA;&lt;/h2&gt;&lt;p&gt;很多人第一次接触 Shadowsocks，只把它当作一个代理工具。但是从源码角度看，Shadowsocks 是一个非常适合学习网络编程的项目。它代码量不大，却包含了现代网络服务端开发中的很多核心思想：&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;Socks5 协议解析&lt;/li&gt;&#xA;&lt;li&gt;Socket 编程&lt;/li&gt;&#xA;&lt;li&gt;非阻塞 IO&lt;/li&gt;&#xA;&lt;li&gt;Reactor 事件模型&lt;/li&gt;&#xA;&lt;li&gt;epoll/kqueue/select&lt;/li&gt;&#xA;&lt;li&gt;状态机设计&lt;/li&gt;&#xA;&lt;li&gt;TCP Relay 转发&lt;/li&gt;&#xA;&lt;li&gt;UDP Relay&lt;/li&gt;&#xA;&lt;li&gt;加密通信&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;p&gt;阅读 Shadowsocks 源码，可以帮助我们理解一个代理程序从建立连接，到数据转发，再到连接关闭的完整过程。本文以 Python 版 Shadowsocks 为例，分析它内部的设计。&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Node.js 源码剖析：非阻塞世界的引擎密码</title>
+      <link>http://localhost:1313/node.js%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/</link>
+      <pubDate>Tue, 02 Jun 2026 11:33:50 +0800</pubDate><author>anthonyfree96@gmail.com (AndyFree96)</author>
+      <guid>http://localhost:1313/node.js%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/</guid>
+      <category domain="http://localhost:1313/categories/%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/">源码剖析</category>
+      <description>&lt;p&gt;Node.js 的诞生，让 JavaScript 从浏览器的专属语言，跃升为构建高性能服务器的利器。凭借事件驱动的架构和非阻塞 I/O 特性，Node.js 成为现代网络应用开发中的重要基石。然而，当你写下 &lt;code&gt;http.createServer&lt;/code&gt;时，是否好奇过这些简单的 API 背后究竟发生了什么？&lt;/p&gt;&#xA;&lt;p&gt;本篇文章将带你深入 Node.js 的源码世界，揭开其核心模块、事件循环、异步模型和底层实现的神秘面纱。从 libuv 的非阻塞 I/O，到 V8 引擎对 JavaScript 的极速解析，我们将从代码的视角探索 Node.js 是如何在性能与灵活性之间找到绝佳平衡的。&lt;/p&gt;&#xA;&lt;p&gt;无论你是想提升对 Node.js 的理解，还是希望从源码中汲取工程设计的智慧，这都将是一次充满收获的技术旅程。准备好了吗？让我们从入口文件开始，走进 Node.js 的源码迷宫！&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>CPython 源码剖析：Python 运行的奥秘</title>
+      <link>http://localhost:1313/cpython%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/</link>
+      <pubDate>Wed, 27 May 2026 10:29:07 +0800</pubDate><author>anthonyfree96@gmail.com (AndyFree96)</author>
+      <guid>http://localhost:1313/cpython%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/</guid>
+      <category domain="http://localhost:1313/categories/%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/">源码剖析</category>
+      <description>&lt;p&gt;我们经常说，Python 是一门&lt;strong&gt;解释型语言&lt;/strong&gt;，但你知道它的解释器 CPython 究竟是如何工作的么？Python 的内存管理、字节码执行、垃圾回收……这些&lt;em&gt;幕后英雄&lt;/em&gt;是如何协作的？在这篇文章中，我们将通过剖析 CPython 源码，一起探索 Python 的运行本质。&lt;/p&gt;</description>
     </item>
     <item>
       <title>从执行上下文理解JavaScript变量提升</title>
@@ -121,22 +145,6 @@
       <guid>http://localhost:1313/%E7%94%A8powershell%E7%8E%A9%E8%BD%AC%E6%96%87%E4%BB%B6%E5%A4%84%E7%90%86/</guid>
       <category domain="http://localhost:1313/categories/powershell/">PowerShell</category>
       <description>&lt;p&gt;PowerShell 是一个功能强大的自动化脚本平台，不仅可以管理系统和服务，还可以轻松高效地处理各种文件操作。无论你是系统管理员、开发者，还是数据分析师，掌握 PowerShell 的文件处理能力都能让你的工作事半功倍。本文将带你系统性地了解如何用 PowerShell 玩转文件处理，从基础操作到进阶技巧，让你轻松驾驭文件的读取、修改、管理与批处理任务。&lt;/p&gt;</description>
-    </item>
-    <item>
-      <title>Node.js 源码剖析：非阻塞世界的引擎密码</title>
-      <link>http://localhost:1313/node.js%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/</link>
-      <pubDate>Fri, 27 Jun 2025 11:33:50 +0800</pubDate><author>anthonyfree96@gmail.com (AndyFree96)</author>
-      <guid>http://localhost:1313/node.js%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/</guid>
-      <category domain="http://localhost:1313/categories/%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/">源码剖析</category>
-      <description>&lt;p&gt;Node.js 的诞生，让 JavaScript 从浏览器的专属语言，跃升为构建高性能服务器的利器。凭借事件驱动的架构和非阻塞 I/O 特性，Node.js 成为现代网络应用开发中的重要基石。然而，当你写下 &lt;code&gt;http.createServer&lt;/code&gt;时，是否好奇过这些简单的 API 背后究竟发生了什么？&lt;/p&gt;&#xA;&lt;p&gt;本篇文章将带你深入 Node.js 的源码世界，揭开其核心模块、事件循环、异步模型和底层实现的神秘面纱。从 libuv 的非阻塞 I/O，到 V8 引擎对 JavaScript 的极速解析，我们将从代码的视角探索 Node.js 是如何在性能与灵活性之间找到绝佳平衡的。&lt;/p&gt;&#xA;&lt;p&gt;无论你是想提升对 Node.js 的理解，还是希望从源码中汲取工程设计的智慧，这都将是一次充满收获的技术旅程。准备好了吗？让我们从入口文件开始，走进 Node.js 的源码迷宫！&lt;/p&gt;</description>
-    </item>
-    <item>
-      <title>CPython 源码剖析：Python 运行的奥秘</title>
-      <link>http://localhost:1313/cpython%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/</link>
-      <pubDate>Wed, 27 Nov 2024 10:29:07 +0800</pubDate><author>anthonyfree96@gmail.com (AndyFree96)</author>
-      <guid>http://localhost:1313/cpython%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/</guid>
-      <category domain="http://localhost:1313/categories/%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/">源码剖析</category>
-      <description>&lt;p&gt;我们经常说，Python 是一门&lt;strong&gt;解释型语言&lt;/strong&gt;，但你知道它的解释器 CPython 究竟是如何工作的么？Python 的内存管理、字节码执行、垃圾回收……这些&lt;em&gt;幕后英雄&lt;/em&gt;是如何协作的？在这篇文章中，我们将通过剖析 CPython 源码，一起探索 Python 的运行本质。&lt;/p&gt;</description>
     </item>
     <item>
       <title>csv2 源码剖析：轻量级 CSV 处理的高效之道</title>
@@ -287,7 +295,7 @@
       <link>http://localhost:1313/tkinter%E7%AE%80%E6%98%8E%E6%95%99%E7%A8%8B/</link>
       <pubDate>Tue, 30 Jul 2019 16:28:59 +0800</pubDate><author>anthonyfree96@gmail.com (AndyFree96)</author>
       <guid>http://localhost:1313/tkinter%E7%AE%80%E6%98%8E%E6%95%99%E7%A8%8B/</guid>
-      <category domain="http://localhost:1313/categories/tkinter/">Tkinter</category>
+      <category domain="http://localhost:1313/categories/python/">Python</category>
       <description>&lt;p&gt;本文我们将学习如何使用&lt;code&gt;Tkinter&lt;/code&gt;包编写一些图形用户界面程序。&lt;code&gt;Tkinter&lt;/code&gt;是 Python 的一个标准包，因此我们并不需要安装它。我们将从创建一个窗口开始，然后我们在其之上加入一些小组件，比如按钮，复选框等，并使用它们的一些属性。话不多说，让我们开始吧！&lt;/p&gt;</description>
     </item>
     <item>

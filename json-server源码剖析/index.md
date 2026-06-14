@@ -111,7 +111,7 @@ console.log(chalk.bold('Endpoints:'));
 console.log(
   routes
     .map((route) => `${chalk.gray(baseUrl)}/${chalk.blue(route)}`)
-    .join('\n')
+    .join('\n'),
 );
 app.listen(PORT);
 ```
@@ -178,12 +178,6 @@ rm -rf lib && tsc
 
 ```json
 {
-  // Use IntelliSense to learn about possible attributes.
-
-  // Hover to view descriptions of existing attributes.
-
-  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
-
   "version": "0.2.0",
 
   "configurations": [
@@ -202,15 +196,9 @@ rm -rf lib && tsc
 
       "internalConsoleOptions": "neverOpen",
 
-      "args": ["${workspaceFolder}/fixtures/db.json"], // Files to exclude from debugger (e.g. call stack)
+      "args": ["${workspaceFolder}/fixtures/db.json"],
 
-      "skipFiles": [
-        // Node.js internal core modules
-
-        "<node_internals>/**", // Ignore all dependencies (optional)
-
-        "${workspaceFolder}/node_modules/**"
-      ]
+      "skipFiles": ["<node_internals>/**", "${workspaceFolder}/node_modules/**"]
     }
   ]
 }
@@ -267,8 +255,8 @@ function args(): {
       const pkg = JSON.parse(
         readFileSync(
           fileURLToPath(new URL('../package.json', import.meta.url)),
-          'utf-8'
-        )
+          'utf-8',
+        ),
       ) as PackageJson;
       console.log(pkg.version);
       process.exit();
@@ -277,8 +265,8 @@ function args(): {
     if (values.watch) {
       console.log(
         chalk.yellow(
-          '--watch/-w can be omitted, JSON Server 1+ watches for file changes by default'
-        )
+          '--watch/-w can be omitted, JSON Server 1+ watches for file changes by default',
+        ),
       );
     }
 
@@ -296,7 +284,7 @@ function args(): {
   } catch (e) {
     if ((e as NodeJS.ErrnoException).code === 'ERR_PARSE_ARGS_UNKNOWN_OPTION') {
       console.log(
-        chalk.red((e as NodeJS.ErrnoException).message.split('.')[0])
+        chalk.red((e as NodeJS.ErrnoException).message.split('.')[0]),
       );
       help();
       process.exit(1);
@@ -544,7 +532,7 @@ watch(file).on('change', () => {
     db.read().catch((e) => {
       if (e instanceof SyntaxError) {
         return console.log(
-          chalk.red(['', `Error parsing ${file}`, e.message].join('\n'))
+          chalk.red(['', `Error parsing ${file}`, e.message].join('\n')),
         );
       }
 

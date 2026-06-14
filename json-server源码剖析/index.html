@@ -117,15 +117,7 @@
   </div>
   <div class="search-dropdown mobile">
     <div id="search-dropdown-mobile"></div>
-  </div><main class="fi-container"><aside class="aside-collection animate__animated animate__fadeIn animate__faster" aria-label="合集"><div class="details related-details open">
-      <div class="details-summary related-summary">
-        <i class="fa-solid fa-fire fa-fade text-danger" aria-hidden="true"></i>
-        <span class="related-title">相关内容</span><i class="details-icon fa-solid fa-angle-right" aria-hidden="true"></i></div>
-      <div class="details-content related-content">
-        <ul class="related-list"><li class="related-item">
-              <a href="/node.js%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="Node.js 源码剖析：非阻塞世界的引擎密码">Node.js 源码剖析：非阻塞世界的引擎密码</a></li></ul>
-      </div>
-    </div></aside>
+  </div><main class="fi-container"><aside class="aside-collection animate__animated animate__fadeIn animate__faster" aria-label="合集"></aside>
 
   <article class="page single">
     <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span title="转载" class="icon-repost"><i class="fa-solid fa-share" aria-hidden="true"></i></span><span>json-server源码剖析：快速构建REST API背后的原理</span>
@@ -364,7 +356,7 @@
 </span></span><span class="line"><span class="cl"><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span>
 </span></span><span class="line"><span class="cl">  <span class="nx">routes</span>
 </span></span><span class="line"><span class="cl">    <span class="p">.</span><span class="nx">map</span><span class="p">((</span><span class="nx">route</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="sb">`</span><span class="si">${</span><span class="nx">chalk</span><span class="p">.</span><span class="nx">gray</span><span class="p">(</span><span class="nx">baseUrl</span><span class="p">)</span><span class="si">}</span><span class="sb">/</span><span class="si">${</span><span class="nx">chalk</span><span class="p">.</span><span class="nx">blue</span><span class="p">(</span><span class="nx">route</span><span class="p">)</span><span class="si">}</span><span class="sb">`</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">    <span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="s1">&#39;\n&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="s1">&#39;\n&#39;</span><span class="p">),</span>
 </span></span><span class="line"><span class="cl"><span class="p">);</span>
 </span></span><span class="line"><span class="cl"><span class="nx">app</span><span class="p">.</span><span class="nx">listen</span><span class="p">(</span><span class="nx">PORT</span><span class="p">);</span></span></span></code></pre></td></tr></table></div>
 </div>
@@ -414,7 +406,7 @@
 <pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1">#!/usr/bin/env node</span></span></span></code></pre></td></tr></table></div>
 </div>
 </div><p>这段代码让脚本可以在终端中直接作为命令运行，而不需要再手动用<code>node</code>或<code>npx</code>启动。<code>bin.js</code>由<code>src/bin.ts</code>编译生成（观察得到 😁）。根据前面的说明，当我们安装好<code>json-server</code>，执行<code>npx json-server db.json</code>命令时，其实就是在运行<code>src/bin.ts</code>文件。为了方便调试<code>src/bin.ts</code>文件，参考<a href="https://tsx.is/vscode" target="_blank" rel="external nofollow noopener noreferrer">VS Code debugging<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>进行配置，在项目根目录下<code>.vscode</code>下创建<code>launch.json</code>文件，粘贴如下内容：</p>
-<json-viewer value="&#34;{\r\n  // Use IntelliSense to learn about possible attributes.\r\n\r\n  // Hover to view descriptions of existing attributes.\r\n\r\n  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387\r\n\r\n  \&#34;version\&#34;: \&#34;0.2.0\&#34;,\r\n\r\n  \&#34;configurations\&#34;: [\r\n    {\r\n      \&#34;type\&#34;: \&#34;node\&#34;,\r\n\r\n      \&#34;request\&#34;: \&#34;launch\&#34;,\r\n\r\n      \&#34;name\&#34;: \&#34;tsx\&#34;,\r\n\r\n      \&#34;program\&#34;: \&#34;${workspaceFolder}/src/bin.ts\&#34;,\r\n\r\n      \&#34;runtimeExecutable\&#34;: \&#34;tsx\&#34;,\r\n\r\n      \&#34;console\&#34;: \&#34;integratedTerminal\&#34;,\r\n\r\n      \&#34;internalConsoleOptions\&#34;: \&#34;neverOpen\&#34;,\r\n\r\n      \&#34;args\&#34;: [\&#34;${workspaceFolder}/fixtures/db.json\&#34;], // Files to exclude from debugger (e.g. call stack)\r\n\r\n      \&#34;skipFiles\&#34;: [\r\n        // Node.js internal core modules\r\n\r\n        \&#34;\u003cnode_internals\u003e/**\&#34;, // Ignore all dependencies (optional)\r\n\r\n        \&#34;${workspaceFolder}/node_modules/**\&#34;\r\n      ]\r\n    }\r\n  ]\r\n}&#34;" expand-depth="6" boxed copyable="{&#34;copiedText&#34;:&#34;已复制&#34;,&#34;copyText&#34;:&#34;复制&#34;}"></json-viewer><p>正常配置好就可以在<code>src</code>目录下的<code>.ts</code>文件中打断点进行调试啦。</p>
+<json-viewer value="&#34;{\r\n  \&#34;version\&#34;: \&#34;0.2.0\&#34;,\r\n\r\n  \&#34;configurations\&#34;: [\r\n    {\r\n      \&#34;type\&#34;: \&#34;node\&#34;,\r\n\r\n      \&#34;request\&#34;: \&#34;launch\&#34;,\r\n\r\n      \&#34;name\&#34;: \&#34;tsx\&#34;,\r\n\r\n      \&#34;program\&#34;: \&#34;${workspaceFolder}/src/bin.ts\&#34;,\r\n\r\n      \&#34;runtimeExecutable\&#34;: \&#34;tsx\&#34;,\r\n\r\n      \&#34;console\&#34;: \&#34;integratedTerminal\&#34;,\r\n\r\n      \&#34;internalConsoleOptions\&#34;: \&#34;neverOpen\&#34;,\r\n\r\n      \&#34;args\&#34;: [\&#34;${workspaceFolder}/fixtures/db.json\&#34;],\r\n\r\n      \&#34;skipFiles\&#34;: [\&#34;\u003cnode_internals\u003e/**\&#34;, \&#34;${workspaceFolder}/node_modules/**\&#34;]\r\n    }\r\n  ]\r\n}&#34;" expand-depth="6" boxed copyable="{&#34;copiedText&#34;:&#34;已复制&#34;,&#34;copyText&#34;:&#34;复制&#34;}"></json-viewer><p>正常配置好就可以在<code>src</code>目录下的<code>.ts</code>文件中打断点进行调试啦。</p>
 <p><code>src/bin.ts</code>首先定义了<code>help</code>和<code>args</code>两个函数，根据函数名和注释来看，<code>help</code>用于打印帮助信息，<code>args</code>用于解析命令行参数并返回一个包含<code>file</code>（文件名，类型为<code>string</code>）、<code>port</code>（端口号，类型为<code>number</code>）、<code>host</code>（主机，类型为<code>string</code>）和<code>static</code>（静态文件/目录，类型为<code>string[]</code>）。</p>
 <p><code>args</code>函数定义如下：</p>
 <div class="code-block highlight" data-mode="classic" data-copyable="true" data-open="true"><div class="chroma">
@@ -547,8 +539,8 @@
 </span></span><span class="line"><span class="cl">      <span class="kr">const</span> <span class="nx">pkg</span> <span class="o">=</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span>
 </span></span><span class="line"><span class="cl">        <span class="nx">readFileSync</span><span class="p">(</span>
 </span></span><span class="line"><span class="cl">          <span class="nx">fileURLToPath</span><span class="p">(</span><span class="k">new</span> <span class="nx">URL</span><span class="p">(</span><span class="s1">&#39;../package.json&#39;</span><span class="p">,</span> <span class="kr">import</span><span class="p">.</span><span class="nx">meta</span><span class="p">.</span><span class="nx">url</span><span class="p">)),</span>
-</span></span><span class="line"><span class="cl">          <span class="s1">&#39;utf-8&#39;</span>
-</span></span><span class="line"><span class="cl">        <span class="p">)</span>
+</span></span><span class="line"><span class="cl">          <span class="s1">&#39;utf-8&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="p">),</span>
 </span></span><span class="line"><span class="cl">      <span class="p">)</span> <span class="kr">as</span> <span class="nx">PackageJson</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">pkg</span><span class="p">.</span><span class="nx">version</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">      <span class="nx">process</span><span class="p">.</span><span class="nx">exit</span><span class="p">();</span>
@@ -557,8 +549,8 @@
 </span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="nx">values</span><span class="p">.</span><span class="nx">watch</span><span class="p">)</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span>
 </span></span><span class="line"><span class="cl">        <span class="nx">chalk</span><span class="p">.</span><span class="nx">yellow</span><span class="p">(</span>
-</span></span><span class="line"><span class="cl">          <span class="s1">&#39;--watch/-w can be omitted, JSON Server 1+ watches for file changes by default&#39;</span>
-</span></span><span class="line"><span class="cl">        <span class="p">)</span>
+</span></span><span class="line"><span class="cl">          <span class="s1">&#39;--watch/-w can be omitted, JSON Server 1+ watches for file changes by default&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="p">),</span>
 </span></span><span class="line"><span class="cl">      <span class="p">);</span>
 </span></span><span class="line"><span class="cl">    <span class="p">}</span>
 </span></span><span class="line"><span class="cl">
@@ -576,7 +568,7 @@
 </span></span><span class="line"><span class="cl">  <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">((</span><span class="nx">e</span> <span class="kr">as</span> <span class="nx">NodeJS</span><span class="p">.</span><span class="nx">ErrnoException</span><span class="p">).</span><span class="nx">code</span> <span class="o">===</span> <span class="s1">&#39;ERR_PARSE_ARGS_UNKNOWN_OPTION&#39;</span><span class="p">)</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span>
-</span></span><span class="line"><span class="cl">        <span class="nx">chalk</span><span class="p">.</span><span class="nx">red</span><span class="p">((</span><span class="nx">e</span> <span class="kr">as</span> <span class="nx">NodeJS</span><span class="p">.</span><span class="nx">ErrnoException</span><span class="p">).</span><span class="nx">message</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">chalk</span><span class="p">.</span><span class="nx">red</span><span class="p">((</span><span class="nx">e</span> <span class="kr">as</span> <span class="nx">NodeJS</span><span class="p">.</span><span class="nx">ErrnoException</span><span class="p">).</span><span class="nx">message</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]),</span>
 </span></span><span class="line"><span class="cl">      <span class="p">);</span>
 </span></span><span class="line"><span class="cl">      <span class="nx">help</span><span class="p">();</span>
 </span></span><span class="line"><span class="cl">      <span class="nx">process</span><span class="p">.</span><span class="nx">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
@@ -1002,7 +994,7 @@
 </span></span><span class="line"><span class="cl">    <span class="nx">db</span><span class="p">.</span><span class="nx">read</span><span class="p">().</span><span class="k">catch</span><span class="p">((</span><span class="nx">e</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">      <span class="k">if</span> <span class="p">(</span><span class="nx">e</span> <span class="k">instanceof</span> <span class="nx">SyntaxError</span><span class="p">)</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span>
-</span></span><span class="line"><span class="cl">          <span class="nx">chalk</span><span class="p">.</span><span class="nx">red</span><span class="p">([</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="sb">`Error parsing </span><span class="si">${</span><span class="nx">file</span><span class="si">}</span><span class="sb">`</span><span class="p">,</span> <span class="nx">e</span><span class="p">.</span><span class="nx">message</span><span class="p">].</span><span class="nx">join</span><span class="p">(</span><span class="s1">&#39;\n&#39;</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">          <span class="nx">chalk</span><span class="p">.</span><span class="nx">red</span><span class="p">([</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="sb">`Error parsing </span><span class="si">${</span><span class="nx">file</span><span class="si">}</span><span class="sb">`</span><span class="p">,</span> <span class="nx">e</span><span class="p">.</span><span class="nx">message</span><span class="p">].</span><span class="nx">join</span><span class="p">(</span><span class="s1">&#39;\n&#39;</span><span class="p">)),</span>
 </span></span><span class="line"><span class="cl">        <span class="p">);</span>
 </span></span><span class="line"><span class="cl">      <span class="p">}</span>
 </span></span><span class="line"><span class="cl">
@@ -1039,10 +1031,7 @@
 <li><a href="https://blog.logrocket.com/creating-a-cli-tool-with-node-js/" target="_blank" rel="external nofollow noopener noreferrer">Creating a CLI tool with Node.js<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></li>
 <li><a href="https://older-posts.simonplend.com/command-line-argument-parsing-with-node-js-core/" target="_blank" rel="external nofollow noopener noreferrer">Command-line argument parsing with Node.js core<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></li>
 <li><a href="https://blog.logrocket.com/tinyhttp-vs-express-js-comparing-node-js-frameworks/" target="_blank" rel="external nofollow noopener noreferrer">tinyhttp vs. Express.js: Comparing Node.js frameworks<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></li>
-</ul></div><hr class="awesome-hr" />
-    <h2 id="see-also">相关内容</h2>
-    <ul><li>
-          <a href="/node.js%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="Node.js 源码剖析：非阻塞世界的引擎密码">Node.js 源码剖析：非阻塞世界的引擎密码</a></li></ul><div class="post-footer" id="post-footer">
+</ul></div><div class="post-footer" id="post-footer">
   <div class="post-info">
     <div class="post-info-line">
       <div class="post-info-mod"><span title="更新于 2025-07-31 16:47:36">更新于 2025-07-31&nbsp;</span>
