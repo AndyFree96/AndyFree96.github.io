@@ -5,17 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
     <meta name="robots" content="noodp" />
     <title>R语言ggplot2气泡地图实战 - 东尼的博客</title><meta name="author" content="AndyFree96">
-<meta name="description" content="在数据可视化中，气泡地图（Bubble Map）[primary]是一种直观表现地理信息的方法，既能展示地理位置，也能通过气泡的大小和颜色体现数据的数量和类别。本文将带你用 R 语言 &#43; ggplot2 从零开始绘制一张漂亮的气泡地图。
+<meta name="description" content="在数据可视化中，气泡地图（Bubble Map）[secondary]是一种直观表现地理信息的方法，既能展示地理位置，也能通过气泡的大小和颜色体现数据的数量和类别。本文将带你用 R 语言 &#43; ggplot2 从零开始绘制一张漂亮的气泡地图。
 "><meta name="keywords" content='数据科学, 数据可视化, R, ggplot2'>
 	<meta itemprop="name" content="R语言ggplot2气泡地图实战">
-	<meta itemprop="description" content="在数据可视化中，气泡地图（Bubble Map）[primary]是一种直观表现地理信息的方法，既能展示地理位置，也能通过气泡的大小和颜色体现数据的数量和类别。本文将带你用 R 语言 &#43; ggplot2 从零开始绘制一张漂亮的气泡地图。">
+	<meta itemprop="description" content="在数据可视化中，气泡地图（Bubble Map）[secondary]是一种直观表现地理信息的方法，既能展示地理位置，也能通过气泡的大小和颜色体现数据的数量和类别。本文将带你用 R 语言 &#43; ggplot2 从零开始绘制一张漂亮的气泡地图。">
 	<meta itemprop="datePublished" content="2025-08-12T06:17:21+08:00">
 	<meta itemprop="dateModified" content="2025-08-12T06:17:21+08:00">
-	<meta itemprop="wordCount" content="1093">
+	<meta itemprop="wordCount" content="1095">
 	<meta itemprop="keywords" content="数据科学,数据可视化,R,ggplot2"><meta property="og:url" content="http://localhost:1313/r%E8%AF%AD%E8%A8%80ggplot2%E6%B0%94%E6%B3%A1%E5%9C%B0%E5%9B%BE%E5%AE%9E%E6%88%98/">
 	<meta property="og:site_name" content="东尼的博客">
 	<meta property="og:title" content="R语言ggplot2气泡地图实战">
-	<meta property="og:description" content="在数据可视化中，气泡地图（Bubble Map）[primary]是一种直观表现地理信息的方法，既能展示地理位置，也能通过气泡的大小和颜色体现数据的数量和类别。本文将带你用 R 语言 &#43; ggplot2 从零开始绘制一张漂亮的气泡地图。">
+	<meta property="og:description" content="在数据可视化中，气泡地图（Bubble Map）[secondary]是一种直观表现地理信息的方法，既能展示地理位置，也能通过气泡的大小和颜色体现数据的数量和类别。本文将带你用 R 语言 &#43; ggplot2 从零开始绘制一张漂亮的气泡地图。">
 	<meta property="og:locale" content="zh_CN">
 	<meta property="og:type" content="article">
 		<meta property="article:section" content="posts">
@@ -28,7 +28,7 @@
 
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="R语言ggplot2气泡地图实战">
-  <meta name="twitter:description" content="在数据可视化中，气泡地图（Bubble Map）[primary]是一种直观表现地理信息的方法，既能展示地理位置，也能通过气泡的大小和颜色体现数据的数量和类别。本文将带你用 R 语言 &#43; ggplot2 从零开始绘制一张漂亮的气泡地图。"><meta name="twitter:creator" content="@IRONAnthony96"><meta name="application-name" content="FixIt">
+  <meta name="twitter:description" content="在数据可视化中，气泡地图（Bubble Map）[secondary]是一种直观表现地理信息的方法，既能展示地理位置，也能通过气泡的大小和颜色体现数据的数量和类别。本文将带你用 R 语言 &#43; ggplot2 从零开始绘制一张漂亮的气泡地图。"><meta name="twitter:creator" content="@IRONAnthony96"><meta name="application-name" content="FixIt">
 <meta name="apple-mobile-web-app-title" content="FixIt"><meta name="theme-color" data-light="#f6f8fa" data-dark="#151b23" content="#f6f8fa"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" type="text/html" href="http://localhost:1313/r%E8%AF%AD%E8%A8%80ggplot2%E6%B0%94%E6%B3%A1%E5%9C%B0%E5%9B%BE%E5%AE%9E%E6%88%98/" title="R语言ggplot2气泡地图实战 - 东尼的博客" /><link rel="prev" type="text/html" href="http://localhost:1313/%E5%A6%82%E4%BD%95%E6%9F%A5%E7%9C%8Bpowershell%E7%9A%84%E7%89%88%E6%9C%AC/" title="如何查看PowerShell的版本" /><link rel="next" type="text/html" href="http://localhost:1313/rotate-array/" title="189. Rotate Array" /><link rel="alternate" type="text/markdown" href="http://localhost:1313/r%E8%AF%AD%E8%A8%80ggplot2%E6%B0%94%E6%B3%A1%E5%9C%B0%E5%9B%BE%E5%AE%9E%E6%88%98/index.md" title="R语言ggplot2气泡地图实战 - 东尼的博客"><link rel="stylesheet" href="/css/config.css"><link rel="stylesheet" href="/css/main.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
@@ -42,7 +42,7 @@
     "mainEntityOfPage": {
       "@type": "WebPage",
       "@id": "http:\/\/localhost:1313\/r%E8%AF%AD%E8%A8%80ggplot2%E6%B0%94%E6%B3%A1%E5%9C%B0%E5%9B%BE%E5%AE%9E%E6%88%98\/"
-    },"genre": "posts","keywords": "数据科学, 数据可视化, R, ggplot2","wordcount":  1093 ,
+    },"genre": "posts","keywords": "数据科学, 数据可视化, R, ggplot2","wordcount":  1095 ,
     "url": "http:\/\/localhost:1313\/r%E8%AF%AD%E8%A8%80ggplot2%E6%B0%94%E6%B3%A1%E5%9C%B0%E5%9B%BE%E5%AE%9E%E6%88%98\/","datePublished": "2025-08-12T06:17:21+08:00","dateModified": "2025-08-12T06:17:21+08:00","publisher": {
       "@type": "Organization",
       "name": ""},"author": {
@@ -132,7 +132,7 @@
   <article class="page single">
     <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span title="转载" class="icon-repost"><i class="fa-solid fa-share" aria-hidden="true"></i></span><span>R语言ggplot2气泡地图实战</span>
       </h1></div><div class="post-meta">
-      <div class="post-meta-line"><span class="post-author"><a href="https://andyfree96.github.io/" title="作者" target="_blank" rel="author external nofollow noopener noreferrer" class="author"><img class="avatar" src='/avatar/1.jpg' alt="AndyFree96" height="16" width="16">&nbsp;AndyFree96</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E6%95%B0%E6%8D%AE%E7%A7%91%E5%AD%A6/" class="post-category" title="分类 - 数据科学"><i class="fa-regular fa-folder" aria-hidden="true"></i> 数据科学</a></span></div><div class="post-meta-line"><span title="发布于 2025-08-12 06:17:21"><i class="fa-solid fa-calendar-days me-1" aria-hidden="true"></i><time datetime="2025-08-12">2025-08-12</time></span>&nbsp;<span title="1093 字"><i class="fa-solid fa-pencil-alt me-1" aria-hidden="true"></i>约 1100 字</span>&nbsp;<span><i class="fa-regular fa-clock me-1" aria-hidden="true"></i>预计阅读 3 分钟</span>&nbsp;</div>
+      <div class="post-meta-line"><span class="post-author"><a href="https://andyfree96.github.io/" title="作者" target="_blank" rel="author external nofollow noopener noreferrer" class="author"><img class="avatar" src='/avatar/1.jpg' alt="AndyFree96" height="16" width="16">&nbsp;AndyFree96</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E6%95%B0%E6%8D%AE%E7%A7%91%E5%AD%A6/" class="post-category" title="分类 - 数据科学"><i class="fa-regular fa-folder" aria-hidden="true"></i> 数据科学</a></span></div><div class="post-meta-line"><span title="发布于 2025-08-12 06:17:21"><i class="fa-solid fa-calendar-days me-1" aria-hidden="true"></i><time datetime="2025-08-12">2025-08-12</time></span>&nbsp;<span title="1095 字"><i class="fa-solid fa-pencil-alt me-1" aria-hidden="true"></i>约 1100 字</span>&nbsp;<span><i class="fa-regular fa-clock me-1" aria-hidden="true"></i>预计阅读 3 分钟</span>&nbsp;</div>
     </div><div class="featured-image"><img loading="eager" src='/images/202508/2/ryunosuke-kikuno-YY4pTQhcw6Q-unsplash.jpg' sizes="(max-width: 680px) 100vw, (max-width: 960px) 80vw, (max-width: 1440px) 56vw, 800px" alt="/images/202508/2/ryunosuke-kikuno-YY4pTQhcw6Q-unsplash.jpg"></div><div class="details toc" id="toc-static" data-kept="false">
         <div class="details-summary toc-title">
           <span>目录</span>
@@ -149,7 +149,7 @@
     <li><a href="#参考">参考</a></li>
   </ul>
 </nav></div>
-      </div><div class="content" id="content"><p>在数据可视化中，<mark class="mark-primary">气泡地图（Bubble Map）</mark>是一种直观表现地理信息的方法，既能展示地理位置，也能通过气泡的大小和颜色体现数据的数量和类别。本文将带你用 R 语言 + ggplot2 从零开始绘制一张漂亮的气泡地图。</p>
+      </div><div class="content" id="content"><p>在数据可视化中，<mark class="mark-secondary">气泡地图（Bubble Map）</mark>是一种直观表现地理信息的方法，既能展示地理位置，也能通过气泡的大小和颜色体现数据的数量和类别。本文将带你用 R 语言 + ggplot2 从零开始绘制一张漂亮的气泡地图。</p>
 <p>气泡地图以一个地图轮廓为背景，用附着在地图上的气泡来反映数据的大小。气泡地图可以直观地反应国家或地区的相关数据指标大小和分布情况。</p>
 <p>气泡地图的输入通常包含两部分：</p>
 <ul>
