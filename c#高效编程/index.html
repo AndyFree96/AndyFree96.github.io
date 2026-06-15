@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
     <meta name="robots" content="noodp" />
-    <title>C#高效编程 改进C#代码的50个行之有效的办法 - 东尼的博客</title><meta name="author" content="AndyFree96">
+    <title>C#高效编程 改进C#代码的50个行之有效的办法 第2版 (Bill Wagner) - 东尼的博客</title><meta name="author" content="AndyFree96">
 <meta name="description" content="在软件开发过程中，写出“能运行”的代码并不难，真正困难的是写出一段容易理解、容易维护、容易扩展，并且能够长期稳定运行的代码。随着项目规模不断扩大，代码往往会经历这样的变化。
 最初，一个类可能只有几十行。逻辑简单，修改起来非常直接；但随着需求不断增加，功能不断堆叠，代码开始出现越来越多的问题：
 一个方法越来越长，承担了太多职责； 类之间的依赖越来越复杂，修改地方可能影响多个模块； 重复代码不断出现，导致维护成本增加； 异常处理、资源释放、性能优化等细节容易被忽略； 新成员接手代码时，需要花费大量时间理解历史逻辑。 这些问题并不是因为开发者能力不足，而是因为代码质量需要持续演进。C# 作为一门成熟的面向对象语言，提供了大量语言特性帮助我们编写更优雅、更安全的代码，例如泛型、委托、Lambda、LINQ、异步编程、特性(Attribute)、模式匹配等。但如果只是掌握语法，而没有形成良好的编程习惯，很容易写出“看起来能工作，但长期维护困难”的代码。
@@ -12,7 +12,7 @@
 这些建议覆盖了多个方面：
 如何正确设计类型和接口； 如何减少代码耦合； 如何利用 C# 特性提升表达能力； 如何处理异常、资源和状态； 如何编写更高性能、更可靠的程序。 接下来，我会结合书中的实践建议，并加入自己在项目开发中的理解，对这些技巧进行整理，希望能够帮助自己，也帮助更多 C# 开发者写出更加健壮、优雅的代码。
 "><meta name="keywords" content='C#, 高效编程, 计算机'>
-	<meta itemprop="name" content="C#高效编程 改进C#代码的50个行之有效的办法">
+	<meta itemprop="name" content="C#高效编程 改进C#代码的50个行之有效的办法 第2版 (Bill Wagner)">
 	<meta itemprop="description" content="在软件开发过程中，写出“能运行”的代码并不难，真正困难的是写出一段容易理解、容易维护、容易扩展，并且能够长期稳定运行的代码。随着项目规模不断扩大，代码往往会经历这样的变化。
 最初，一个类可能只有几十行。逻辑简单，修改起来非常直接；但随着需求不断增加，功能不断堆叠，代码开始出现越来越多的问题：
 一个方法越来越长，承担了太多职责； 类之间的依赖越来越复杂，修改地方可能影响多个模块； 重复代码不断出现，导致维护成本增加； 异常处理、资源释放、性能优化等细节容易被忽略； 新成员接手代码时，需要花费大量时间理解历史逻辑。 这些问题并不是因为开发者能力不足，而是因为代码质量需要持续演进。C# 作为一门成熟的面向对象语言，提供了大量语言特性帮助我们编写更优雅、更安全的代码，例如泛型、委托、Lambda、LINQ、异步编程、特性(Attribute)、模式匹配等。但如果只是掌握语法，而没有形成良好的编程习惯，很容易写出“看起来能工作，但长期维护困难”的代码。
@@ -24,7 +24,7 @@
 	<meta itemprop="wordCount" content="2323">
 	<meta itemprop="keywords" content="C#,高效编程,计算机"><meta property="og:url" content="http://localhost:1313/c%23%E9%AB%98%E6%95%88%E7%BC%96%E7%A8%8B/">
 	<meta property="og:site_name" content="东尼的博客">
-	<meta property="og:title" content="C#高效编程 改进C#代码的50个行之有效的办法">
+	<meta property="og:title" content="C#高效编程 改进C#代码的50个行之有效的办法 第2版 (Bill Wagner)">
 	<meta property="og:description" content="在软件开发过程中，写出“能运行”的代码并不难，真正困难的是写出一段容易理解、容易维护、容易扩展，并且能够长期稳定运行的代码。随着项目规模不断扩大，代码往往会经历这样的变化。
 最初，一个类可能只有几十行。逻辑简单，修改起来非常直接；但随着需求不断增加，功能不断堆叠，代码开始出现越来越多的问题：
 一个方法越来越长，承担了太多职责； 类之间的依赖越来越复杂，修改地方可能影响多个模块； 重复代码不断出现，导致维护成本增加； 异常处理、资源释放、性能优化等细节容易被忽略； 新成员接手代码时，需要花费大量时间理解历史逻辑。 这些问题并不是因为开发者能力不足，而是因为代码质量需要持续演进。C# 作为一门成熟的面向对象语言，提供了大量语言特性帮助我们编写更优雅、更安全的代码，例如泛型、委托、Lambda、LINQ、异步编程、特性(Attribute)、模式匹配等。但如果只是掌握语法，而没有形成良好的编程习惯，很容易写出“看起来能工作，但长期维护困难”的代码。
@@ -42,7 +42,7 @@
 		<meta property="article:tag" content="计算机">
 
   <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="C#高效编程 改进C#代码的50个行之有效的办法">
+  <meta name="twitter:title" content="C#高效编程 改进C#代码的50个行之有效的办法 第2版 (Bill Wagner)">
   <meta name="twitter:description" content="在软件开发过程中，写出“能运行”的代码并不难，真正困难的是写出一段容易理解、容易维护、容易扩展，并且能够长期稳定运行的代码。随着项目规模不断扩大，代码往往会经历这样的变化。
 最初，一个类可能只有几十行。逻辑简单，修改起来非常直接；但随着需求不断增加，功能不断堆叠，代码开始出现越来越多的问题：
 一个方法越来越长，承担了太多职责； 类之间的依赖越来越复杂，修改地方可能影响多个模块； 重复代码不断出现，导致维护成本增加； 异常处理、资源释放、性能优化等细节容易被忽略； 新成员接手代码时，需要花费大量时间理解历史逻辑。 这些问题并不是因为开发者能力不足，而是因为代码质量需要持续演进。C# 作为一门成熟的面向对象语言，提供了大量语言特性帮助我们编写更优雅、更安全的代码，例如泛型、委托、Lambda、LINQ、异步编程、特性(Attribute)、模式匹配等。但如果只是掌握语法，而没有形成良好的编程习惯，很容易写出“看起来能工作，但长期维护困难”的代码。
@@ -51,13 +51,13 @@
 如何正确设计类型和接口； 如何减少代码耦合； 如何利用 C# 特性提升表达能力； 如何处理异常、资源和状态； 如何编写更高性能、更可靠的程序。 接下来，我会结合书中的实践建议，并加入自己在项目开发中的理解，对这些技巧进行整理，希望能够帮助自己，也帮助更多 C# 开发者写出更加健壮、优雅的代码。"><meta name="twitter:creator" content="@IRONAnthony96"><meta name="application-name" content="FixIt">
 <meta name="apple-mobile-web-app-title" content="FixIt"><meta name="theme-color" data-light="#f6f8fa" data-dark="#151b23" content="#f6f8fa"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" type="text/html" href="http://localhost:1313/c%23%E9%AB%98%E6%95%88%E7%BC%96%E7%A8%8B/" title="C#高效编程 改进C#代码的50个行之有效的办法 - 东尼的博客" /><link rel="prev" type="text/html" href="http://localhost:1313/filmtv/" title="影视" /><link rel="next" type="text/html" href="http://localhost:1313/%E6%9C%BA%E7%94%B5%E4%B8%80%E4%BD%93%E5%8C%96%E5%AE%9E%E7%94%A8%E6%89%8B%E5%86%8C/" title="机电一体化实用手册" /><link rel="alternate" type="text/markdown" href="http://localhost:1313/c%23%E9%AB%98%E6%95%88%E7%BC%96%E7%A8%8B/index.md" title="C#高效编程 改进C#代码的50个行之有效的办法 - 东尼的博客"><link rel="stylesheet" href="/css/config.css"><link rel="stylesheet" href="/css/main.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" type="text/html" href="http://localhost:1313/c%23%E9%AB%98%E6%95%88%E7%BC%96%E7%A8%8B/" title="C#高效编程 改进C#代码的50个行之有效的办法 第2版 (Bill Wagner) - 东尼的博客" /><link rel="prev" type="text/html" href="http://localhost:1313/filmtv/" title="影视" /><link rel="next" type="text/html" href="http://localhost:1313/%E6%9C%BA%E7%94%B5%E4%B8%80%E4%BD%93%E5%8C%96%E5%AE%9E%E7%94%A8%E6%89%8B%E5%86%8C/" title="机电一体化实用手册 第2版 (三浦宏文)" /><link rel="alternate" type="text/markdown" href="http://localhost:1313/c%23%E9%AB%98%E6%95%88%E7%BC%96%E7%A8%8B/index.md" title="C#高效编程 改进C#代码的50个行之有效的办法 第2版 (Bill Wagner) - 东尼的博客"><link rel="stylesheet" href="/css/config.css"><link rel="stylesheet" href="/css/main.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><link rel="preload" href="/js/main.js" as="script"><script type="application/ld+json">
   {
     "@context": "http://schema.org",
     "@type": "BlogPosting",
-    "headline": "C#高效编程 改进C#代码的50个行之有效的办法",
+    "headline": "C#高效编程 改进C#代码的50个行之有效的办法 第2版 (Bill Wagner)",
     "inLanguage": "zh-CN",
     "mainEntityOfPage": {
       "@type": "WebPage",
@@ -143,17 +143,17 @@
         <span class="related-title">相关内容</span><i class="details-icon fa-solid fa-angle-right" aria-hidden="true"></i></div>
       <div class="details-content related-content">
         <ul class="related-list"><li class="related-item">
-              <a href="/%E7%BC%96%E5%86%99%E5%8F%AF%E8%AF%BB%E4%BB%A3%E7%A0%81%E7%9A%84%E8%89%BA%E6%9C%AF/" title="编写可读代码的艺术">编写可读代码的艺术</a></li><li class="related-item">
-              <a href="/tcp-ip%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" title="TCP/IP网络编程">TCP/IP网络编程</a></li><li class="related-item">
-              <a href="/%E5%AD%A6%E4%B9%A0javascript%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" title="学习JavaScript数据结构与算法">学习JavaScript数据结构与算法</a></li><li class="related-item">
-              <a href="/%E6%B7%B1%E5%85%A5%E8%A7%A3%E6%9E%90css/" title="深入解析CSS">深入解析CSS</a></li><li class="related-item">
+              <a href="/%E7%BC%96%E5%86%99%E5%8F%AF%E8%AF%BB%E4%BB%A3%E7%A0%81%E7%9A%84%E8%89%BA%E6%9C%AF/" title="编写可读代码的艺术 (Dustin Boswell &amp; Trevor Foucher)">编写可读代码的艺术 (Dustin Boswell &amp; Trevor Foucher)</a></li><li class="related-item">
+              <a href="/tcp-ip%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" title="TCP/IP网络编程 (尹圣雨)">TCP/IP网络编程 (尹圣雨)</a></li><li class="related-item">
+              <a href="/%E5%AD%A6%E4%B9%A0javascript%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" title="学习JavaScript数据结构与算法 第3版 (Loiane Groner)">学习JavaScript数据结构与算法 第3版 (Loiane Groner)</a></li><li class="related-item">
+              <a href="/%E6%B7%B1%E5%85%A5%E8%A7%A3%E6%9E%90css/" title="深入解析CSS (Keith J. Grant)">深入解析CSS (Keith J. Grant)</a></li><li class="related-item">
               <a href="/c%23%E4%B8%AD%E7%9A%84nameof%E8%BF%90%E7%AE%97%E7%AC%A6/" title="C#中的nameof运算符">C#中的nameof运算符</a></li><li class="related-item">
               <a href="/downloader%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="Downloader源码剖析">Downloader源码剖析</a></li></ul>
       </div>
     </div></aside>
 
   <article class="page single">
-    <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span title="转载" class="icon-repost"><i class="fa-solid fa-share" aria-hidden="true"></i></span><span>C#高效编程 改进C#代码的50个行之有效的办法</span>
+    <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span title="转载" class="icon-repost"><i class="fa-solid fa-share" aria-hidden="true"></i></span><span>C#高效编程 改进C#代码的50个行之有效的办法 第2版 (Bill Wagner)</span>
       </h1></div><div class="post-meta">
       <div class="post-meta-line"><span class="post-author"><a href="https://andyfree96.github.io/" title="作者" target="_blank" rel="author external nofollow noopener noreferrer" class="author"><img class="avatar" src='/avatar/1.jpg' alt="AndyFree96" height="16" width="16">&nbsp;AndyFree96</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E4%B9%A6%E7%B1%8D%E7%A0%94%E8%AF%BB/" class="post-category" title="分类 - 书籍研读"><i class="fa-regular fa-folder" aria-hidden="true"></i> 书籍研读</a></span></div><div class="post-meta-line"><span title="发布于 2026-06-14 10:15:17"><i class="fa-solid fa-calendar-days me-1" aria-hidden="true"></i><time datetime="2026-06-14">2026-06-14</time></span>&nbsp;<span title="2323 字"><i class="fa-solid fa-pencil-alt me-1" aria-hidden="true"></i>约 2400 字</span>&nbsp;<span><i class="fa-regular fa-clock me-1" aria-hidden="true"></i>预计阅读 5 分钟</span>&nbsp;</div>
     </div><div class="featured-image"><img loading="eager" src='/images/202606/3/jean-carlo-emer-QDEXHid5sAM-unsplash.jpg' sizes="(max-width: 680px) 100vw, (max-width: 960px) 80vw, (max-width: 1440px) 56vw, 800px" alt="/images/202606/3/jean-carlo-emer-QDEXHid5sAM-unsplash.jpg"></div><div class="details toc" id="toc-static" data-kept="false">
@@ -675,10 +675,10 @@
 </h2><p><a href="https://book.douban.com/subject/5360961/" target="_blank" rel="external nofollow noopener noreferrer">C#高效编程 改进C#代码的50个行之有效的办法(第2版)<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></p></div><hr class="awesome-hr" />
     <h2 id="see-also">相关内容</h2>
     <ul><li>
-          <a href="/%E7%BC%96%E5%86%99%E5%8F%AF%E8%AF%BB%E4%BB%A3%E7%A0%81%E7%9A%84%E8%89%BA%E6%9C%AF/" title="编写可读代码的艺术">编写可读代码的艺术</a></li><li>
-          <a href="/tcp-ip%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" title="TCP/IP网络编程">TCP/IP网络编程</a></li><li>
-          <a href="/%E5%AD%A6%E4%B9%A0javascript%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" title="学习JavaScript数据结构与算法">学习JavaScript数据结构与算法</a></li><li>
-          <a href="/%E6%B7%B1%E5%85%A5%E8%A7%A3%E6%9E%90css/" title="深入解析CSS">深入解析CSS</a></li><li>
+          <a href="/%E7%BC%96%E5%86%99%E5%8F%AF%E8%AF%BB%E4%BB%A3%E7%A0%81%E7%9A%84%E8%89%BA%E6%9C%AF/" title="编写可读代码的艺术 (Dustin Boswell &amp; Trevor Foucher)">编写可读代码的艺术 (Dustin Boswell &amp; Trevor Foucher)</a></li><li>
+          <a href="/tcp-ip%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" title="TCP/IP网络编程 (尹圣雨)">TCP/IP网络编程 (尹圣雨)</a></li><li>
+          <a href="/%E5%AD%A6%E4%B9%A0javascript%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" title="学习JavaScript数据结构与算法 第3版 (Loiane Groner)">学习JavaScript数据结构与算法 第3版 (Loiane Groner)</a></li><li>
+          <a href="/%E6%B7%B1%E5%85%A5%E8%A7%A3%E6%9E%90css/" title="深入解析CSS (Keith J. Grant)">深入解析CSS (Keith J. Grant)</a></li><li>
           <a href="/c%23%E4%B8%AD%E7%9A%84nameof%E8%BF%90%E7%AE%97%E7%AC%A6/" title="C#中的nameof运算符">C#中的nameof运算符</a></li><li>
           <a href="/downloader%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="Downloader源码剖析">Downloader源码剖析</a></li></ul><div class="post-footer" id="post-footer">
   <div class="post-info">
@@ -687,9 +687,9 @@
       </div></div><div class="post-info-line">
         <div class="post-info-md"><span><a href="vscode://file/D:\hugo-blog\andyfree96\content\posts\C#高效编程.md" title="在编辑器中打开" class="link-to-vscode">在编辑器中打开</a></span></div>
         <div class="post-info-share">
-          <span><a href="javascript:void(0);" title="分享到 X" data-sharer="twitter" data-url="http://localhost:1313/c%23%E9%AB%98%E6%95%88%E7%BC%96%E7%A8%8B/" data-title="C#高效编程 改进C#代码的50个行之有效的办法" data-via="IRONAnthony96" data-hashtags="C#,高效编程,读书笔记,计算机"><i class="fa-brands fa-x-twitter" aria-hidden="true"></i></a>
+          <span><a href="javascript:void(0);" title="分享到 X" data-sharer="twitter" data-url="http://localhost:1313/c%23%E9%AB%98%E6%95%88%E7%BC%96%E7%A8%8B/" data-title="C#高效编程 改进C#代码的50个行之有效的办法 第2版 (Bill Wagner)" data-via="IRONAnthony96" data-hashtags="C#,高效编程,读书笔记,计算机"><i class="fa-brands fa-x-twitter" aria-hidden="true"></i></a>
   <a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="http://localhost:1313/c%23%E9%AB%98%E6%95%88%E7%BC%96%E7%A8%8B/" data-hashtag="C#"><i class="fa-brands fa-facebook-square" aria-hidden="true"></i></a>
-  <a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="http://localhost:1313/c%23%E9%AB%98%E6%95%88%E7%BC%96%E7%A8%8B/" data-title="C#高效编程 改进C#代码的50个行之有效的办法" data-image="/images/202606/3/jean-carlo-emer-QDEXHid5sAM-unsplash.jpg"><i class="fa-brands fa-weibo" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="http://localhost:1313/c%23%E9%AB%98%E6%95%88%E7%BC%96%E7%A8%8B/" data-title="C#高效编程 改进C#代码的50个行之有效的办法 第2版 (Bill Wagner)" data-image="/images/202606/3/jean-carlo-emer-QDEXHid5sAM-unsplash.jpg"><i class="fa-brands fa-weibo" aria-hidden="true"></i></a>
   </span>
         </div>
       </div></div>
@@ -698,7 +698,7 @@
     <section class="post-tags"><i class="fa-solid fa-tags me-1" aria-hidden="true"></i><a href="/tags/c%23/" class="post-tag" title="标签 - C#">C#</a><a href="/tags/%E9%AB%98%E6%95%88%E7%BC%96%E7%A8%8B/" class="post-tag" title="标签 - 高效编程">高效编程</a><a href="/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" class="post-tag" title="标签 - 读书笔记">读书笔记</a><a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA/" class="post-tag" title="标签 - 计算机">计算机</a></section>
     <section><span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
     </section>
-  </div><div class="post-nav"><a href="/shadowsocks%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" class="post-nav-item" rel="prev" title="Shadowsocks源码剖析"><i class="fa-solid fa-angle-left" aria-hidden="true"></i>Shadowsocks源码剖析</a><a href="/%E6%9C%BA%E7%94%B5%E4%B8%80%E4%BD%93%E5%8C%96%E5%AE%9E%E7%94%A8%E6%89%8B%E5%86%8C/" class="post-nav-item" rel="next" title="机电一体化实用手册">机电一体化实用手册<i class="fa-solid fa-angle-right" aria-hidden="true"></i></a></div>
+  </div><div class="post-nav"><a href="/shadowsocks%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" class="post-nav-item" rel="prev" title="Shadowsocks源码剖析"><i class="fa-solid fa-angle-left" aria-hidden="true"></i>Shadowsocks源码剖析</a><a href="/%E6%9C%BA%E7%94%B5%E4%B8%80%E4%BD%93%E5%8C%96%E5%AE%9E%E7%94%A8%E6%89%8B%E5%86%8C/" class="post-nav-item" rel="next" title="机电一体化实用手册 第2版 (三浦宏文)">机电一体化实用手册 第2版 (三浦宏文)<i class="fa-solid fa-angle-right" aria-hidden="true"></i></a></div>
 </div>
 <div class="post-reward">
     <div class="comment">请作者喝杯咖啡!</div>

@@ -1,4 +1,4 @@
-# 机器视觉算法与应用
+# 机器视觉算法与应用 第2版 (Carsten Steger)
 
 
 ## 1. 简介 (Introduction)
