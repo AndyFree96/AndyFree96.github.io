@@ -5,17 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
     <meta name="robots" content="noodp" />
     <title>机器视觉算法与应用 第2版 (Carsten Steger) - 东尼的博客</title><meta name="author" content="AndyFree96">
-<meta name="description" content="1. 简介 (Introduction)开发机器视觉系统的团队需要机械工程、电子工程、光学工程及软件工程多方面的经验。
+<meta name="description" content="在工业自动化设备开发过程中，机器视觉往往是决定设备精度和稳定性的关键环节。很多时候，我们面对一个视觉检测需求，第一反应可能是：“有没有一个现成的算子可以解决？”。边缘检测、模板匹配、Blob分析……这些算法在 Halcon、OpenCV 等视觉库中已经被封装得非常方便。但随着项目复杂度提升，真正困难的问题逐渐浮现：
+为什么这个场景应该选择这种算法？ 为什么换一种光源，算法效果会完全不同？ 为什么同样的模板匹配，在不同工位、不同角度、不同产品公差下稳定性差异巨大？ 这些问题本质上不是“会不会调用算子”，而是是否建立了完整的机器视觉算法体系。
+《机器视觉算法与应用（第2版）》由 Carsten Steger（MVTec 联合创始人） 等人编写，是工业机器视觉领域非常经典的一本参考书。它没有简单罗列各种视觉算法，而是从图像形成、特征提取、定位、测量、识别等角度，系统介绍机器视觉中常见问题背后的数学原理和工程方法,这篇文章记录阅读过程中的一些理解和总结，希望通过这个过程，把零散的视觉知识，逐步整理成一套可以用于实际设备开发的“认知框架”。。
 "><meta name="keywords" content='机器视觉算法, 机器视觉应用'>
 	<meta itemprop="name" content="机器视觉算法与应用 第2版 (Carsten Steger)">
-	<meta itemprop="description" content="1. 简介 (Introduction)开发机器视觉系统的团队需要机械工程、电子工程、光学工程及软件工程多方面的经验。">
+	<meta itemprop="description" content="在工业自动化设备开发过程中，机器视觉往往是决定设备精度和稳定性的关键环节。很多时候，我们面对一个视觉检测需求，第一反应可能是：“有没有一个现成的算子可以解决？”。边缘检测、模板匹配、Blob分析……这些算法在 Halcon、OpenCV 等视觉库中已经被封装得非常方便。但随着项目复杂度提升，真正困难的问题逐渐浮现：
+为什么这个场景应该选择这种算法？ 为什么换一种光源，算法效果会完全不同？ 为什么同样的模板匹配，在不同工位、不同角度、不同产品公差下稳定性差异巨大？ 这些问题本质上不是“会不会调用算子”，而是是否建立了完整的机器视觉算法体系。
+《机器视觉算法与应用（第2版）》由 Carsten Steger（MVTec 联合创始人） 等人编写，是工业机器视觉领域非常经典的一本参考书。它没有简单罗列各种视觉算法，而是从图像形成、特征提取、定位、测量、识别等角度，系统介绍机器视觉中常见问题背后的数学原理和工程方法,这篇文章记录阅读过程中的一些理解和总结，希望通过这个过程，把零散的视觉知识，逐步整理成一套可以用于实际设备开发的“认知框架”。。">
 	<meta itemprop="datePublished" content="2026-06-15T16:24:32+08:00">
 	<meta itemprop="dateModified" content="2026-06-15T16:24:32+08:00">
-	<meta itemprop="wordCount" content="3646">
+	<meta itemprop="wordCount" content="4379">
 	<meta itemprop="keywords" content="机器视觉算法,机器视觉应用"><meta property="og:url" content="http://localhost:1313/%E6%9C%BA%E5%99%A8%E8%A7%86%E8%A7%89%E7%AE%97%E6%B3%95%E4%B8%8E%E5%BA%94%E7%94%A8/">
 	<meta property="og:site_name" content="东尼的博客">
 	<meta property="og:title" content="机器视觉算法与应用 第2版 (Carsten Steger)">
-	<meta property="og:description" content="1. 简介 (Introduction)开发机器视觉系统的团队需要机械工程、电子工程、光学工程及软件工程多方面的经验。">
+	<meta property="og:description" content="在工业自动化设备开发过程中，机器视觉往往是决定设备精度和稳定性的关键环节。很多时候，我们面对一个视觉检测需求，第一反应可能是：“有没有一个现成的算子可以解决？”。边缘检测、模板匹配、Blob分析……这些算法在 Halcon、OpenCV 等视觉库中已经被封装得非常方便。但随着项目复杂度提升，真正困难的问题逐渐浮现：
+为什么这个场景应该选择这种算法？ 为什么换一种光源，算法效果会完全不同？ 为什么同样的模板匹配，在不同工位、不同角度、不同产品公差下稳定性差异巨大？ 这些问题本质上不是“会不会调用算子”，而是是否建立了完整的机器视觉算法体系。
+《机器视觉算法与应用（第2版）》由 Carsten Steger（MVTec 联合创始人） 等人编写，是工业机器视觉领域非常经典的一本参考书。它没有简单罗列各种视觉算法，而是从图像形成、特征提取、定位、测量、识别等角度，系统介绍机器视觉中常见问题背后的数学原理和工程方法,这篇文章记录阅读过程中的一些理解和总结，希望通过这个过程，把零散的视觉知识，逐步整理成一套可以用于实际设备开发的“认知框架”。。">
 	<meta property="og:locale" content="zh_CN">
 	<meta property="og:type" content="article">
 		<meta property="article:section" content="posts">
@@ -27,7 +33,9 @@
 
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="机器视觉算法与应用 第2版 (Carsten Steger)">
-  <meta name="twitter:description" content="1. 简介 (Introduction)开发机器视觉系统的团队需要机械工程、电子工程、光学工程及软件工程多方面的经验。"><meta name="twitter:creator" content="@IRONAnthony96"><meta name="application-name" content="FixIt">
+  <meta name="twitter:description" content="在工业自动化设备开发过程中，机器视觉往往是决定设备精度和稳定性的关键环节。很多时候，我们面对一个视觉检测需求，第一反应可能是：“有没有一个现成的算子可以解决？”。边缘检测、模板匹配、Blob分析……这些算法在 Halcon、OpenCV 等视觉库中已经被封装得非常方便。但随着项目复杂度提升，真正困难的问题逐渐浮现：
+为什么这个场景应该选择这种算法？ 为什么换一种光源，算法效果会完全不同？ 为什么同样的模板匹配，在不同工位、不同角度、不同产品公差下稳定性差异巨大？ 这些问题本质上不是“会不会调用算子”，而是是否建立了完整的机器视觉算法体系。
+《机器视觉算法与应用（第2版）》由 Carsten Steger（MVTec 联合创始人） 等人编写，是工业机器视觉领域非常经典的一本参考书。它没有简单罗列各种视觉算法，而是从图像形成、特征提取、定位、测量、识别等角度，系统介绍机器视觉中常见问题背后的数学原理和工程方法,这篇文章记录阅读过程中的一些理解和总结，希望通过这个过程，把零散的视觉知识，逐步整理成一套可以用于实际设备开发的“认知框架”。。"><meta name="twitter:creator" content="@IRONAnthony96"><meta name="application-name" content="FixIt">
 <meta name="apple-mobile-web-app-title" content="FixIt"><meta name="theme-color" data-light="#f6f8fa" data-dark="#151b23" content="#f6f8fa"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" type="text/html" href="http://localhost:1313/%E6%9C%BA%E5%99%A8%E8%A7%86%E8%A7%89%E7%AE%97%E6%B3%95%E4%B8%8E%E5%BA%94%E7%94%A8/" title="机器视觉算法与应用 第2版 (Carsten Steger) - 东尼的博客" /><link rel="prev" type="text/html" href="http://localhost:1313/%E6%9C%BA%E7%94%B5%E4%B8%80%E4%BD%93%E5%8C%96%E5%AE%9E%E7%94%A8%E6%89%8B%E5%86%8C/" title="机电一体化实用手册 第2版 (三浦宏文)" /><link rel="alternate" type="text/markdown" href="http://localhost:1313/%E6%9C%BA%E5%99%A8%E8%A7%86%E8%A7%89%E7%AE%97%E6%B3%95%E4%B8%8E%E5%BA%94%E7%94%A8/index.md" title="机器视觉算法与应用 第2版 (Carsten Steger) - 东尼的博客"><link rel="stylesheet" href="/css/config.css"><link rel="stylesheet" href="/css/main.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
@@ -41,7 +49,7 @@
     "mainEntityOfPage": {
       "@type": "WebPage",
       "@id": "http:\/\/localhost:1313\/%E6%9C%BA%E5%99%A8%E8%A7%86%E8%A7%89%E7%AE%97%E6%B3%95%E4%B8%8E%E5%BA%94%E7%94%A8\/"
-    },"genre": "posts","keywords": "视觉算法, 读书笔记, 机器视觉","wordcount":  3646 ,
+    },"genre": "posts","keywords": "视觉算法, 读书笔记, 机器视觉","wordcount":  4379 ,
     "url": "http:\/\/localhost:1313\/%E6%9C%BA%E5%99%A8%E8%A7%86%E8%A7%89%E7%AE%97%E6%B3%95%E4%B8%8E%E5%BA%94%E7%94%A8\/","datePublished": "2026-06-15T16:24:32+08:00","dateModified": "2026-06-15T16:24:32+08:00","publisher": {
       "@type": "Organization",
       "name": ""},"author": {
@@ -134,7 +142,7 @@
   <article class="page single">
     <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span title="转载" class="icon-repost"><i class="fa-solid fa-share" aria-hidden="true"></i></span><span>机器视觉算法与应用 第2版 (Carsten Steger)</span>
       </h1></div><div class="post-meta">
-      <div class="post-meta-line"><span class="post-author"><a href="https://andyfree96.github.io/" title="作者" target="_blank" rel="author external nofollow noopener noreferrer" class="author"><img class="avatar" src='/avatar/1.jpg' alt="AndyFree96" height="16" width="16">&nbsp;AndyFree96</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E4%B9%A6%E7%B1%8D%E7%A0%94%E8%AF%BB/" class="post-category" title="分类 - 书籍研读"><i class="fa-regular fa-folder" aria-hidden="true"></i> 书籍研读</a></span></div><div class="post-meta-line"><span title="发布于 2026-06-15 16:24:32"><i class="fa-solid fa-calendar-days me-1" aria-hidden="true"></i><time datetime="2026-06-15">2026-06-15</time></span>&nbsp;<span title="3646 字"><i class="fa-solid fa-pencil-alt me-1" aria-hidden="true"></i>约 3700 字</span>&nbsp;<span><i class="fa-regular fa-clock me-1" aria-hidden="true"></i>预计阅读 8 分钟</span>&nbsp;</div>
+      <div class="post-meta-line"><span class="post-author"><a href="https://andyfree96.github.io/" title="作者" target="_blank" rel="author external nofollow noopener noreferrer" class="author"><img class="avatar" src='/avatar/1.jpg' alt="AndyFree96" height="16" width="16">&nbsp;AndyFree96</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E4%B9%A6%E7%B1%8D%E7%A0%94%E8%AF%BB/" class="post-category" title="分类 - 书籍研读"><i class="fa-regular fa-folder" aria-hidden="true"></i> 书籍研读</a></span></div><div class="post-meta-line"><span title="发布于 2026-06-15 16:24:32"><i class="fa-solid fa-calendar-days me-1" aria-hidden="true"></i><time datetime="2026-06-15">2026-06-15</time></span>&nbsp;<span title="4379 字"><i class="fa-solid fa-pencil-alt me-1" aria-hidden="true"></i>约 4400 字</span>&nbsp;<span><i class="fa-regular fa-clock me-1" aria-hidden="true"></i>预计阅读 9 分钟</span>&nbsp;</div>
     </div><div class="featured-image"><img loading="eager" src='/images/202606/5/microsoft-copilot-8UnGiO4yesk-unsplash.jpg' sizes="(max-width: 680px) 100vw, (max-width: 960px) 80vw, (max-width: 1440px) 56vw, 800px" alt="/images/202606/5/microsoft-copilot-8UnGiO4yesk-unsplash.jpg"></div><div class="details toc" id="toc-static" data-kept="false">
         <div class="details-summary toc-title">
           <span>目录</span>
@@ -186,7 +194,7 @@
         <li><a href="#36-形态学-morphology">3.6 形态学 (Morphology)</a></li>
         <li><a href="#37-边缘提取-edge-extraction">3.7 边缘提取 (Edge Extraction)</a></li>
         <li><a href="#38-几何基元的分割和拟合-segmentation-and-fitting-of-geometric-primitives">3.8 几何基元的分割和拟合 (Segmentation and Fitting of Geometric Primitives)</a></li>
-        <li><a href="#39-摄像机标定-camera-calibration">3.9 摄像机标定 (Camera Calibration)</a></li>
+        <li><a href="#39-相机标定-camera-calibration">3.9 相机标定 (Camera Calibration)</a></li>
         <li><a href="#310-三维重构-3d-reconstruction">3.10 三维重构 (3D Reconstruction)</a></li>
         <li><a href="#311-模板匹配-template-matching">3.11 模板匹配 (Template Matching)</a></li>
         <li><a href="#312-三维物体识别-3d-object-recognition">3.12 三维物体识别 (3D Object Recognition)</a></li>
@@ -216,7 +224,15 @@
     <li><a href="#参考">参考</a></li>
   </ul>
 </nav></div>
-      </div><div class="content" id="content"><h2 class="heading-element" id="1-简介-introduction"><span>1. 简介 (Introduction)</span>
+      </div><div class="content" id="content"><p>在工业自动化设备开发过程中，机器视觉往往是决定设备精度和稳定性的关键环节。很多时候，我们面对一个视觉检测需求，第一反应可能是：“有没有一个现成的算子可以解决？”。边缘检测、模板匹配、Blob分析……这些算法在 Halcon、OpenCV 等视觉库中已经被封装得非常方便。但随着项目复杂度提升，真正困难的问题逐渐浮现：</p>
+<ul>
+<li>为什么这个场景应该选择这种算法？</li>
+<li>为什么换一种光源，算法效果会完全不同？</li>
+<li>为什么同样的模板匹配，在不同工位、不同角度、不同产品公差下稳定性差异巨大？</li>
+</ul>
+<p>这些问题本质上不是“会不会调用算子”，而是是否建立了完整的机器视觉算法体系。</p>
+<p><a href="https://book.douban.com/subject/34790232/" target="_blank" rel="external nofollow noopener noreferrer">《机器视觉算法与应用（第2版）》<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>由 Carsten Steger（<a href="https://www.mvtec.com/research-teaching/publications" target="_blank" rel="external nofollow noopener noreferrer">MVTec<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> 联合创始人） 等人编写，是工业机器视觉领域非常经典的一本参考书。它没有简单罗列各种视觉算法，而是从图像形成、特征提取、定位、测量、识别等角度，系统介绍机器视觉中常见问题背后的数学原理和工程方法,这篇文章记录阅读过程中的一些理解和总结，希望通过这个过程，把零散的视觉知识，逐步整理成一套可以用于实际设备开发的“认知框架”。。</p>
+<h2 class="heading-element" id="1-简介-introduction"><span>1. 简介 (Introduction)</span>
   <a href="#1-%e7%ae%80%e4%bb%8b-introduction" class="heading-mark">
     <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
   </a>
@@ -256,12 +272,8 @@
 <p>发生在<strong>金属或绝缘材料（如玻璃或塑料）表面的反射使光线产生部分偏振</strong>。偏振的产生源于漫反射和镜面反射，但实际上主要是由镜面反射决定的。</p>
 <p>通常黑色的物体能吸收大量的光。吸收就是入射光在物理内部被转换成热。假定落在一个物体上的光为<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>I</mi></mrow><annotation encoding="application/x-tex">I</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.07847em;">I</span></span></span></span>，反射光为<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>R</mi></mrow><annotation encoding="application/x-tex">R</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.00773em;">R</span></span></span></span>，透射光为<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>T</mi></mrow><annotation encoding="application/x-tex">T</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">T</span></span></span></span>，吸收为<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>A</mi></mrow><annotation encoding="application/x-tex">A</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal">A</span></span></span></span>。更具能量守恒定律<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>I</mi><mo>=</mo><mi>R</mi><mo>+</mo><mi>T</mi><mo>+</mo><mi>A</mi></mrow><annotation encoding="application/x-tex"> I = R + T + A</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.07847em;">I</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal">A</span></span></span></span>。</p>
 <p>除镜面反射外，上述各个特性均取决于投射到物体的光的波长。<strong>不透明物体特有的颜色就是由与波长相关的漫反射以及吸收决定的。而透明物体的颜色是与波长相关的透射决定的。</strong></p>
-<blockquote>
 <p>漫反射的意思是：光被物体表明“打散”，往各个方向乱弹，这样你从任何角度都能看到它。</p>
-</blockquote>
-<blockquote>
 <p>物体之所以只吸收某些颜色、反射某些颜色，是因为它内部的结构“只对特定颜色的光有反应”。物体不是“空的”，里面有原子，原子里面有电子。电子不是随便动 的，它们只愿意对某些特定“音调”的光产生反应。当某种颜色光照过来，如果这个颜色的能量刚好符合电子“能接收的频率”，电子就会把光的能量吃掉，变成自己的能量（振动、发热等），这就叫吸收。被吸收的光不会再出来，我们眼睛就看不到它。例如，一个绿色的物体。<strong>主要吸收</strong>非绿色光，但不是100%吸收。绿色光只是反射更多。所以我们会看到绿色增强。</p>
-</blockquote>
 <p><img loading="lazy" src='/images/202606/5/0568f16b7668e35e9208bfd975c00271_MD5.jpeg' alt="/images/202606/5/0568f16b7668e35e9208bfd975c00271_MD5.jpeg"></p>
 <h4 class="heading-element" id="214-利用照明的光谱-using-the-spectral-composition-of-the-illumination"><span>2.1.4 利用照明的光谱 (Using the Spectral Composition of the Illumination)</span>
   <a href="#214-%e5%88%a9%e7%94%a8%e7%85%a7%e6%98%8e%e7%9a%84%e5%85%89%e8%b0%b1-using-the-spectral-composition-of-the-illumination" class="heading-mark">
@@ -278,16 +290,16 @@
   </a>
 </h4><p>在有效利用照明中光谱成分的同时，照明的方向性通常也可以用在机器视觉中来增强被测物的必要特征。</p>
 <p>谈到反向性，有两种效果。一方面，光源可以是<strong>漫射（diffuse）或直射的(directed)</strong>。漫射时，光在各个方向的强度几乎是一样的。</p>
-<p><a href="https://www.baslerweb.cn/zh-cn/shop/light-dome-50od-blue/" target="_blank" rel="external nofollow noopener noreferrer">https://www.baslerweb.cn/zh-cn/shop/light-dome-50od-blue/<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></p>
-<p><img loading="lazy" src='/images/202606/5/519223c95b960a8d6a0a7937b1123578_MD5.jpeg' alt="/images/202606/5/519223c95b960a8d6a0a7937b1123578_MD5.jpeg"></p>
+<p><a href="https://www.baslerweb.cn/zh-cn/shop/light-dome-50od-blue/" target="_blank" rel="external nofollow noopener noreferrer"><figure><img loading="lazy" src='/images/202606/5/519223c95b960a8d6a0a7937b1123578_MD5.jpeg' alt="Light Dome-500D-Blue"><figcaption class="image-caption">Light Dome-500D-Blue</figcaption>
+  </figure><i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></p>
 <p>通过切换<a href="https://www.jialiauto.com/sy" target="_blank" rel="external nofollow noopener noreferrer">苏州嘉励<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>官网中英文语言选项，diffuse指的是应该就是中文语境下的无影光。</p>
 <p>直射时，光源发出的光集中在非常窄的空间范围内。在特定情况下，光源仅发出单向平行光，称作平行光照明。平行光照明与远心镜头（见2.2.4节）的原理是相同的。</p>
-<p><span style="background:#fff88f">通过下图就可以理解什么是漫射啦！</span></p>
+<p><ins>可看下图理解什么是漫射</ins></p>
 <p><a href="https://www.iqsdirectory.com/articles/machine-vision-system.html" target="_blank" rel="external nofollow noopener noreferrer">Machine Vision Systems: Types, Functions and Applications<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></p>
 <p><img loading="lazy" src='/images/202606/5/c3ab8fec44504431233a80f4879b078c_MD5.jpeg' alt="/images/202606/5/c3ab8fec44504431233a80f4879b078c_MD5.jpeg"></p>
 <p><a href="https://digitaledition.qualitymag.com/march-2021/vs-machine-vision-101/" target="_blank" rel="external nofollow noopener noreferrer">LEARN HOW TO CHOOSE A LIGHT SOURCE TO TAKE ADVANTAGE OF THE CHARACTERISTICS THAT CREATE CONTRAST.<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></p>
 <p><img loading="lazy" src='/images/202606/5/8c5978924867d94d8df26532db8fdd29_MD5.jpeg' alt="/images/202606/5/8c5978924867d94d8df26532db8fdd29_MD5.jpeg"></p>
-<p><span style="background:#d4b106">推荐阅读</span><a href="https://advancedillumination.com/a-practical-guide-to-machine-vision-lighting/" target="_blank" rel="external nofollow noopener noreferrer">A PRACTICAL GUIDE TO MACHINE VISION LIGHTING<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>、<a href="https://advancedillumination.com/lighting-education/lighting-technique-diffuse-illumination/" target="_blank" rel="external nofollow noopener noreferrer">Lighting Technique: Diffuse Illumination<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>以及<a href="https://flexbitautomation.com/machine-vision-system-introduction/" target="_blank" rel="external nofollow noopener noreferrer">Machine vision system introduction<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>。</p>
+<p><ins>推荐阅读</ins><a href="https://advancedillumination.com/a-practical-guide-to-machine-vision-lighting/" target="_blank" rel="external nofollow noopener noreferrer">A PRACTICAL GUIDE TO MACHINE VISION LIGHTING<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>、<a href="https://advancedillumination.com/lighting-education/lighting-technique-diffuse-illumination/" target="_blank" rel="external nofollow noopener noreferrer">Lighting Technique: Diffuse Illumination<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>以及<a href="https://flexbitautomation.com/machine-vision-system-introduction/" target="_blank" rel="external nofollow noopener noreferrer">Machine vision system introduction<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>。</p>
 <p>另一方面，光源与相机和被测物的相对位置也是非常重要的。如果光源与相机位于被测物的同一侧，我们称作正面光（front light），通常也叫入射光（incident light）。如果光源与相机
 位于被测物量测，此时的光称作背光（back light），特别是当被测物是透明物体时，称作透射光（transmitted light）。</p>
 <p><img loading="lazy" src='/images/202606/5/208e98508bafe8156f812e61ad73ab80_MD5.jpeg' alt="/images/202606/5/208e98508bafe8156f812e61ad73ab80_MD5.jpeg"></p>
@@ -323,7 +335,7 @@
   <a href="#22-%e9%95%9c%e5%a4%b4-lenses" class="heading-mark">
     <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
   </a>
-</h3><p>镜头是一种光学设备用于聚集光线在数字传感器上成像，以得到被测物的细节。</p>
+</h3><p>镜头是一种光学设备用于聚集光线在数字传感器上成像。<mark class="mark-secondary">作用是产生锐利的图像，以得到被测物的细节</mark>。本节将讨论使用不同镜头产生不同的成像成像几何，同时将讲述镜头的主要像差，像差会影响图像质量，就可能会影响<a href="#3-机器视觉算法-machine-vision-algorithms">第3章</a>所讲述的一些算法的精度。</p>
 <h4 class="heading-element" id="221-针孔相机-pinhole-cameras"><span>2.2.1 针孔相机 (Pinhole Cameras)</span>
   <a href="#221-%e9%92%88%e5%ad%94%e7%9b%b8%e6%9c%ba-pinhole-cameras" class="heading-mark">
     <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
@@ -339,15 +351,17 @@
     <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
   </a>
 </h4><p>针孔相机这种简单模型不能很对真实的镜头建模。因为只有极少量光线能够到达像平面。必须用非常长的曝光时间以得到亮度足够的图像。</p>
-<blockquote>
-<p>针孔相机只有一个极小的孔，光几乎进不来，所以成像非常暗；真实镜头是用透镜把大量光线“收集并汇聚”到像面上的，亮度完全不是一个量级（一扇窗）。</p>
-</blockquote>
-<p><strong>镜头是用来“收集光线”的</strong>。曝光 = 让传感器“接光多久 + 接多少光”。</p>
-<h3 class="heading-element" id="23-相机-cameras"><span>2.3 相机 (Cameras)</span>
+<div class="details admonition tip open disabled">
+    <div class="details-summary admonition-title"><i class="icon fa-regular fa-lightbulb" aria-hidden="true"></i>提示</div><div class="details-content">
+      <div class="admonition-content"><p>针孔相机只有一个极小的孔，光几乎进不来，所以成像非常暗；真实镜头是用透镜把大量光线“收集并汇聚”到像面上的，亮度完全不是一个量级（一扇窗）。
+<strong>镜头是用来“收集光线”的</strong>。曝光 = 让传感器“接光多久 + 接多少光”。</p></div>
+    </div>
+</div><h3 class="heading-element" id="23-相机-cameras"><span>2.3 相机 (Cameras)</span>
   <a href="#23-%e7%9b%b8%e6%9c%ba-cameras" class="heading-mark">
     <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
   </a>
-</h3><h3 class="heading-element" id="24-相机-计算机接口-camera-computer-interfaces"><span>2.4 相机-计算机接口 (Camera-Computer Interfaces)</span>
+</h3><p>相机的作用是将通过镜头聚焦于像平面的光线生成图像。相机中最重要的组成部分是数字传感器。本节将主要讨论CCD（charge-coupled device）和CMOS（complementary metal-oxide semiconductor）两种重要的传感器技术。二者的主要区别是从芯片中读出数据的方式即读出结构不同。</p>
+<h3 class="heading-element" id="24-相机-计算机接口-camera-computer-interfaces"><span>2.4 相机-计算机接口 (Camera-Computer Interfaces)</span>
   <a href="#24-%e7%9b%b8%e6%9c%ba-%e8%ae%a1%e7%ae%97%e6%9c%ba%e6%8e%a5%e5%8f%a3-camera-computer-interfaces" class="heading-mark">
     <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
   </a>
@@ -355,14 +369,13 @@
   <a href="#3-%e6%9c%ba%e5%99%a8%e8%a7%86%e8%a7%89%e7%ae%97%e6%b3%95-machine-vision-algorithms" class="heading-mark">
     <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
   </a>
-</h2><p>为了突出感兴趣物体，光源经常是至关重要的。
-为了在恰当时刻用正确的曝光来拍摄一副图像，带有外触发功能的图像卡和摄像机就是解决问题的关键。
-为了获取清晰且没有畸变的图像，镜头就变得很重要。</p>
+</h2><p>为了<mark class="mark-secondary">突出感兴趣物体</mark>，<ins>光源</ins>经常是至关重要的。为了在<mark class="mark-secondary">恰当时刻用正确的曝光来拍摄一副图像</mark>，带有外触发功能的<ins>图像卡</ins>和<ins>相机</ins>就是解决问题的关键。为了<mark class="mark-secondary">获取清晰且没有畸变的图像</mark>，<ins>镜头</ins>就变得很重要。</p>
 <h3 class="heading-element" id="31-基本数据结构-fundamental-data-structures"><span>3.1 基本数据结构 (Fundamental Data Structures)</span>
   <a href="#31-%e5%9f%ba%e6%9c%ac%e6%95%b0%e6%8d%ae%e7%bb%93%e6%9e%84-fundamental-data-structures" class="heading-mark">
     <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
   </a>
-</h3><h3 class="heading-element" id="32-图像增强-image-enhancement"><span>3.2 图像增强 (Image Enhancement)</span>
+</h3><p>图像、区域和亚像素轮廓。</p>
+<h3 class="heading-element" id="32-图像增强-image-enhancement"><span>3.2 图像增强 (Image Enhancement)</span>
   <a href="#32-%e5%9b%be%e5%83%8f%e5%a2%9e%e5%bc%ba-image-enhancement" class="heading-mark">
     <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
   </a>
@@ -400,8 +413,8 @@
   <a href="#38-%e5%87%a0%e4%bd%95%e5%9f%ba%e5%85%83%e7%9a%84%e5%88%86%e5%89%b2%e5%92%8c%e6%8b%9f%e5%90%88-segmentation-and-fitting-of-geometric-primitives" class="heading-mark">
     <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
   </a>
-</h3><h3 class="heading-element" id="39-摄像机标定-camera-calibration"><span>3.9 摄像机标定 (Camera Calibration)</span>
-  <a href="#39-%e6%91%84%e5%83%8f%e6%9c%ba%e6%a0%87%e5%ae%9a-camera-calibration" class="heading-mark">
+</h3><h3 class="heading-element" id="39-相机标定-camera-calibration"><span>3.9 相机标定 (Camera Calibration)</span>
+  <a href="#39-%e7%9b%b8%e6%9c%ba%e6%a0%87%e5%ae%9a-camera-calibration" class="heading-mark">
     <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
   </a>
 </h3><h3 class="heading-element" id="310-三维重构-3d-reconstruction"><span>3.10 三维重构 (3D Reconstruction)</span>
@@ -580,7 +593,7 @@
         <li><a href="#36-形态学-morphology">3.6 形态学 (Morphology)</a></li>
         <li><a href="#37-边缘提取-edge-extraction">3.7 边缘提取 (Edge Extraction)</a></li>
         <li><a href="#38-几何基元的分割和拟合-segmentation-and-fitting-of-geometric-primitives">3.8 几何基元的分割和拟合 (Segmentation and Fitting of Geometric Primitives)</a></li>
-        <li><a href="#39-摄像机标定-camera-calibration">3.9 摄像机标定 (Camera Calibration)</a></li>
+        <li><a href="#39-相机标定-camera-calibration">3.9 相机标定 (Camera Calibration)</a></li>
         <li><a href="#310-三维重构-3d-reconstruction">3.10 三维重构 (3D Reconstruction)</a></li>
         <li><a href="#311-模板匹配-template-matching">3.11 模板匹配 (Template Matching)</a></li>
         <li><a href="#312-三维物体识别-3d-object-recognition">3.12 三维物体识别 (3D Object Recognition)</a></li>

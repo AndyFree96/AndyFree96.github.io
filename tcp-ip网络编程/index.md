@@ -1,7 +1,12 @@
 # TCP/IP网络编程 (尹圣雨)
 
 
-- **2024/1/17 更新**: 增加**进程间通信**
+```timeline
+events:
+  - timestamp: 2024-01-17T14:50:19+08:00
+    content: ":tada: 更新: 增加[进程间通信](#第-11-章-进程间通信)"
+    type: danger
+```
 
 <!--more-->
 
@@ -2098,7 +2103,7 @@ Windows Sockets 2: <https://learn.microsoft.com/en-us/windows/win32/api/_winsock
 
 ## 参考
 
-《TCP/IP 网络编程》
+[TCP/IP网络编程](https://book.douban.com/subject/25911735/)
 
 
 ---

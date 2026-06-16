@@ -2079,7 +2079,7 @@ Recursion Practice Problems with Solutions: https://www.techiedelight.com/recurs
 
 ## 参考
 
-- 《学习 JavaScript 数据结构与算法》第 3 版
+[学习JavaScript数据结构与算法（第3版）](https://book.douban.com/subject/33441631/)
 
 
 ---

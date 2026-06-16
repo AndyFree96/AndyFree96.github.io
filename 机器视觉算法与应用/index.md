@@ -1,13 +1,23 @@
 # 机器视觉算法与应用 第2版 (Carsten Steger)
 
 
+在工业自动化设备开发过程中，机器视觉往往是决定设备精度和稳定性的关键环节。很多时候，我们面对一个视觉检测需求，第一反应可能是：“有没有一个现成的算子可以解决？”。边缘检测、模板匹配、Blob分析……这些算法在 Halcon、OpenCV 等视觉库中已经被封装得非常方便。但随着项目复杂度提升，真正困难的问题逐渐浮现：
+
+- 为什么这个场景应该选择这种算法？
+- 为什么换一种光源，算法效果会完全不同？
+- 为什么同样的模板匹配，在不同工位、不同角度、不同产品公差下稳定性差异巨大？
+
+这些问题本质上不是“会不会调用算子”，而是是否建立了完整的机器视觉算法体系。
+
+[《机器视觉算法与应用（第2版）》](https://book.douban.com/subject/34790232/)由 Carsten Steger（[MVTec](https://www.mvtec.com/research-teaching/publications) 联合创始人） 等人编写，是工业机器视觉领域非常经典的一本参考书。它没有简单罗列各种视觉算法，而是从图像形成、特征提取、定位、测量、识别等角度，系统介绍机器视觉中常见问题背后的数学原理和工程方法,这篇文章记录阅读过程中的一些理解和总结，希望通过这个过程，把零散的视觉知识，逐步整理成一套可以用于实际设备开发的“认知框架”。。
+
+<!--more-->
+
 ## 1. 简介 (Introduction)
 
 ![](/images/202606/5/d068b02bd5746849ceffae9b0b92c79f_MD5.jpeg)
 
 开发机器视觉系统的团队需要++机械工程、电子工程、光学工程及软件工程多方面的经验++。
-
-<!--more-->
 
 ## 2. 图像采集 (Image Acquistion)
 
@@ -40,9 +50,9 @@
 
 除镜面反射外，上述各个特性均取决于投射到物体的光的波长。**不透明物体特有的颜色就是由与波长相关的漫反射以及吸收决定的。而透明物体的颜色是与波长相关的透射决定的。**
 
-> 漫反射的意思是：光被物体表明“打散”，往各个方向乱弹，这样你从任何角度都能看到它。
+漫反射的意思是：光被物体表明“打散”，往各个方向乱弹，这样你从任何角度都能看到它。
 
-> 物体之所以只吸收某些颜色、反射某些颜色，是因为它内部的结构“只对特定颜色的光有反应”。物体不是“空的”，里面有原子，原子里面有电子。电子不是随便动 的，它们只愿意对某些特定“音调”的光产生反应。当某种颜色光照过来，如果这个颜色的能量刚好符合电子“能接收的频率”，电子就会把光的能量吃掉，变成自己的能量（振动、发热等），这就叫吸收。被吸收的光不会再出来，我们眼睛就看不到它。例如，一个绿色的物体。**主要吸收**非绿色光，但不是100%吸收。绿色光只是反射更多。所以我们会看到绿色增强。
+物体之所以只吸收某些颜色、反射某些颜色，是因为它内部的结构“只对特定颜色的光有反应”。物体不是“空的”，里面有原子，原子里面有电子。电子不是随便动 的，它们只愿意对某些特定“音调”的光产生反应。当某种颜色光照过来，如果这个颜色的能量刚好符合电子“能接收的频率”，电子就会把光的能量吃掉，变成自己的能量（振动、发热等），这就叫吸收。被吸收的光不会再出来，我们眼睛就看不到它。例如，一个绿色的物体。**主要吸收**非绿色光，但不是100%吸收。绿色光只是反射更多。所以我们会看到绿色增强。
 
 ![](/images/202606/5/0568f16b7668e35e9208bfd975c00271_MD5.jpeg)
 
@@ -64,15 +74,13 @@
 
 谈到反向性，有两种效果。一方面，光源可以是**漫射（diffuse）或直射的(directed)**。漫射时，光在各个方向的强度几乎是一样的。
 
-https://www.baslerweb.cn/zh-cn/shop/light-dome-50od-blue/
-
-![](/images/202606/5/519223c95b960a8d6a0a7937b1123578_MD5.jpeg)
+[![Light Dome-500D-Blue](/images/202606/5/519223c95b960a8d6a0a7937b1123578_MD5.jpeg 'Light Dome-500D-Blue')](https://www.baslerweb.cn/zh-cn/shop/light-dome-50od-blue/)
 
 通过切换[苏州嘉励](https://www.jialiauto.com/sy)官网中英文语言选项，diffuse指的是应该就是中文语境下的无影光。
 
 直射时，光源发出的光集中在非常窄的空间范围内。在特定情况下，光源仅发出单向平行光，称作平行光照明。平行光照明与远心镜头（见2.2.4节）的原理是相同的。
 
-<span style="background:#fff88f">通过下图就可以理解什么是漫射啦！</span>
+++可看下图理解什么是漫射++
 
 [Machine Vision Systems: Types, Functions and Applications](https://www.iqsdirectory.com/articles/machine-vision-system.html)
 
@@ -82,7 +90,7 @@ https://www.baslerweb.cn/zh-cn/shop/light-dome-50od-blue/
 
 ![](/images/202606/5/8c5978924867d94d8df26532db8fdd29_MD5.jpeg)
 
-<span style="background:#d4b106">推荐阅读</span>[A PRACTICAL GUIDE TO MACHINE VISION LIGHTING](https://advancedillumination.com/a-practical-guide-to-machine-vision-lighting/)、[Lighting Technique: Diffuse Illumination](https://advancedillumination.com/lighting-education/lighting-technique-diffuse-illumination/)以及[Machine vision system introduction](https://flexbitautomation.com/machine-vision-system-introduction/)。
+++推荐阅读++[A PRACTICAL GUIDE TO MACHINE VISION LIGHTING](https://advancedillumination.com/a-practical-guide-to-machine-vision-lighting/)、[Lighting Technique: Diffuse Illumination](https://advancedillumination.com/lighting-education/lighting-technique-diffuse-illumination/)以及[Machine vision system introduction](https://flexbitautomation.com/machine-vision-system-introduction/)。
 
 另一方面，光源与相机和被测物的相对位置也是非常重要的。如果光源与相机位于被测物的同一侧，我们称作正面光（front light），通常也叫入射光（incident light）。如果光源与相机
 位于被测物量测，此时的光称作背光（back light），特别是当被测物是透明物体时，称作透射光（transmitted light）。
@@ -116,7 +124,7 @@ https://www.baslerweb.cn/zh-cn/shop/light-dome-50od-blue/
 
 ### 2.2 镜头 (Lenses)
 
-镜头是一种光学设备用于聚集光线在数字传感器上成像，以得到被测物的细节。
+镜头是一种光学设备用于聚集光线在数字传感器上成像。==作用是产生锐利的图像，以得到被测物的细节==[secondary]。本节将讨论使用不同镜头产生不同的成像成像几何，同时将讲述镜头的主要像差，像差会影响图像质量，就可能会影响[第3章](#3-机器视觉算法-machine-vision-algorithms)所讲述的一些算法的精度。
 
 #### 2.2.1 针孔相机 (Pinhole Cameras)
 
@@ -132,21 +140,23 @@ $$y^{\prime} = y\frac{c}{a} \tag{2.2}$$
 
 针孔相机这种简单模型不能很对真实的镜头建模。因为只有极少量光线能够到达像平面。必须用非常长的曝光时间以得到亮度足够的图像。
 
+> [!TIP] 提示
 > 针孔相机只有一个极小的孔，光几乎进不来，所以成像非常暗；真实镜头是用透镜把大量光线“收集并汇聚”到像面上的，亮度完全不是一个量级（一扇窗）。
-
-**镜头是用来“收集光线”的**。曝光 = 让传感器“接光多久 + 接多少光”。
+> **镜头是用来“收集光线”的**。曝光 = 让传感器“接光多久 + 接多少光”。
 
 ### 2.3 相机 (Cameras)
+
+相机的作用是将通过镜头聚焦于像平面的光线生成图像。相机中最重要的组成部分是数字传感器。本节将主要讨论CCD（charge-coupled device）和CMOS（complementary metal-oxide semiconductor）两种重要的传感器技术。二者的主要区别是从芯片中读出数据的方式即读出结构不同。
 
 ### 2.4 相机-计算机接口 (Camera-Computer Interfaces)
 
 ## 3. 机器视觉算法 (Machine Vision Algorithms)
 
-为了突出感兴趣物体，光源经常是至关重要的。
-为了在恰当时刻用正确的曝光来拍摄一副图像，带有外触发功能的图像卡和摄像机就是解决问题的关键。
-为了获取清晰且没有畸变的图像，镜头就变得很重要。
+为了==突出感兴趣物体==[secondary]，++光源++经常是至关重要的。为了在==恰当时刻用正确的曝光来拍摄一副图像==[secondary]，带有外触发功能的++图像卡++和++相机++就是解决问题的关键。为了==获取清晰且没有畸变的图像==[secondary]，++镜头++就变得很重要。
 
 ### 3.1 基本数据结构 (Fundamental Data Structures)
+
+图像、区域和亚像素轮廓。
 
 ### 3.2 图像增强 (Image Enhancement)
 
@@ -176,7 +186,7 @@ $$y^{\prime} = y\frac{c}{a} \tag{2.2}$$
 
 ### 3.8 几何基元的分割和拟合 (Segmentation and Fitting of Geometric Primitives)
 
-### 3.9 摄像机标定 (Camera Calibration)
+### 3.9 相机标定 (Camera Calibration)
 
 ### 3.10 三维重构 (3D Reconstruction)
 

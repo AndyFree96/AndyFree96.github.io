@@ -1,13 +1,20 @@
 # Git简明教程
 
 
+```timeline
+events:
+  - timestamp: 2026-06-16T13:31:19+08:00
+    content: ":tada: 更新: [推荐](#推荐)增加阮一峰老师两篇关于Git的文章[Git分支管理策略](https://www.runyifeng.com/blog/2012/07/git.html)和[Git使用规范流程](https://www.ruanyifeng.com/blog/2015/08/git-use-process.html)以及另外一篇[Git之GitFlow工作流](https://blog.csdn.net/sunyctf/article/details/130587970)"
+    type: danger
+```
+
 版本控制软件能够让我们拍摄处于可行状态下的项目的快照。更改项目（比如实现新功能）后，如果项目不能正常运行，可以恢复到前一个可行状态。通过版本控制软件，我们可以无顾忌地改进项目，不再需要担心项目因为自己犯了错而遭到破坏。对于大型项目而言，这显得尤为重要。对小项目来说，这也是大有益处的。
 
 <!--more-->
 
 ## 安装 Git
 
-要在 Windows 系统中安装 Git，访问 https://git-scm.com/downloads
+要在 Windows 系统中安装 Git，到[官网](https://git-scm.com/downloads)下载即可。
 
 ![](/images/201911/1/1.png)
 
@@ -176,15 +183,21 @@ Git 注意到我们修改了`hello_world.py`。我们可以提交所做的修改
 
 ## 推荐
 
-最后，推荐一个网站 Learn Git Branching：https://learngitbranching.js.org/
+推荐一个网站 [Learn Git Branching](https://learngitbranching.js.org/)
 
 ![](/images/201911/1/21.png)
 
 以闯关+可视化的形式学习 Git 相关知识。
 
+[Git分支管理策略](https://www.runyifeng.com/blog/2012/07/git.html)：如何管理分支。
+
+[Git使用规范流程](https://www.ruanyifeng.com/blog/2015/08/git-use-process.html)：如何规范使用Git。
+
+[Git之GitFlow工作流](https://blog.csdn.net/sunyctf/article/details/130587970)
+
 ## 参考
 
-- https://book.douban.com/subject/26829016/
+[Python编程](https://book.douban.com/subject/26829016/)
 
 
 ---
