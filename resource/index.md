@@ -1,4 +1,4 @@
-# 资源
+# 资源库
 
 
 ![](/page/octavian-dan-b21Ty33CqVs-unsplash.jpg)
@@ -650,6 +650,82 @@ Stanford Algorithm [Part 1](https://www.youtube.com/playlist?list=PLXFMmlk03Dt7Q
 [MIT OpenCourseWare | Free Online Course Materials](https://ocw.mit.edu/index.htm)
 
 [Github](https://github.com/)
+
+## 🚀 推荐的博主
+
+在这个信息爆炸的时代，找到一些有价值的博主，能够为我们提供深刻的见解与启发，是一种难得的幸运。以下是一些我一直关注的博主，他们的内容不仅拓宽了我的视野，也让我在不同领域中受益匪浅。如果你也对这些话题感兴趣，欢迎一起探索他们的精彩世界。
+
+- [陈硕的 Blog](https://www.cnblogs.com/Solstice)
+- [酷 壳 – CoolShell](https://coolshell.cn/)
+- [阮一峰的网络日志](https://www.ruanyifeng.com/blog/)
+- [张鑫旭](https://www.zhangxinxu.com/)
+- [数据库内核月报](http://mysql.taobao.org/monthly/)
+- [Glow 技术团队博客](https://tech.glowing.com/cn/)
+- [美团技术团队](https://tech.meituan.com/)
+- [廖雪峰的官方网站](https://liaoxuefeng.com/)
+- [谢乾坤 | Kingname](https://kingname.info/)
+- [云风的 BLOG](https://blog.codingnow.com/)
+- [Barret 李靖](https://www.barretlee.com/entry/)
+- [我爱自然语言处理](https://www.52nlp.cn/)
+- [Netflix Tech Blog](https://netflixtechblog.com/)
+- [Google Research Blog](https://research.google/blog/)
+- [Skywind（林伟）](https://skywind.me/blog/)
+- [囧克斯 勾三股四](https://jiongks.name/)
+- [Reimu's blog](https://blog.k8s.li/)
+- [weirane's blog](https://blog.ruo-chen.wang/)
+- [Beyond the Void](https://byvoid.com)
+- [MacTalk-池建强的随想录](https://macshuo.com/)
+- [凹凸实验室](https://aotu.io/)
+- [web.dev](https://web.dev/blog/)
+- [DIYgod](https://diygod.cc/)
+- [Lil'Log](https://lilianweng.github.io/)
+- [ruder.io](https://www.ruder.io/)
+- [Machine Learning Mastery](https://machinelearningmastery.com/blog/)
+- [PyImageSearch](https://pyimagesearch.com/blog/)
+- [Stack Abuse](https://stackabuse.com/)
+- [Real Python](https://realpython.com/)
+- [JavaScript Today](https://javascripttoday.com/)
+- [Meeting C++](https://www.meetingcpp.com/blog/blogroll/)
+- [Fluent{C++}](https://www.fluentcpp.com/)
+- [C++ Stories](https://www.cppstories.com/)
+- [Sutterʼs Mill](https://herbsutter.com/)
+- [Modernes C++](https://www.modernescpp.com/)
+- [C++ Tips of the Week](https://abseil.io/tips/)
+- [C++ Team Blog](https://devblogs.microsoft.com/cppblog/)
+- [Scott Brady's Blog](https://www.scottbrady91.com/)
+- [Code with Steve](https://www.stevejgordon.co.uk/)
+- [Dev To](https://dev.to/)
+- [CSS-Tricks](https://css-tricks.com/)
+- [Smashing Magazine](https://www.smashingmagazine.com/)
+- [overreacted](https://overreacted.io/)
+- [Speckyboy](https://speckyboy.com/)
+- [CODROPS](https://tympanus.net/codrops/)
+- [ultimatecourses](https://ultimatecourses.com/blog/)
+- [ByteHide ](https://www.bytehide.com/blog)
+
+## 播客
+
+| 名称                                                                                                | 语言 |         方向         |
+| :-------------------------------------------------------------------------------------------------- | :--- | :------------------: |
+| [Software Engineering Radio](https://se-radio.net/)                                                 | 英文 |       软件工程       |
+| [The Changelog](https://changelog.com/podcast)                                                      | 英文 |   开源、开发者生态   |
+| [Syntax](https://syntax.fm/)                                                                        | 英文 |       前端工程       |
+| [Developer Tea](https://developertea.com/)                                                          | 英文 |       工程成长       |
+| [Lex Fridman Podcast](https://lexfridman.com/podcast/)                                              | 英文 |   AI、机器人、科学   |
+| [Practical AI](https://practicalai.show/)                                                           | 英文 |     AI 工程落地      |
+| [The TWIML AI Podcast](https://twimlai.com/podcast/twimlai)                                         | 英文 |        ML/AI         |
+| [Latent Space](https://www.latent.space/podcast)                                                    | 英文 |    AI Engineering    |
+| [Acquired](https://www.acquired.fm/)                                                                | 英文 |    科技公司发展史    |
+| [Founders](https://www.founderspodcast.com/)                                                        | 英文 |      创业者历史      |
+| [Invest Like the Best](https://colossus.com/series/invest-like-the-best/)                           | 英文 | 投资、企业、技术趋势 |
+| [The Amp Hour Electronics Podcast](https://theamphour.com/)                                         | 英文 |  电子工程、硬件开发  |
+| [Embedded.fm](https://embedded.fm/)                                                                 | 英文 |   嵌入式、硬件工程   |
+| [EETimes On Air](https://www.youtube.com/playlist?list=PL40wCgbP6rqGhDEMjuKOUB7o_jB62Np38)          | 英文 |   半导体、电子产业   |
+| [声东击西](https://etw.fm/)                                                                         | 中文 |   科技、社会、趋势   |
+| [不合时宜](https://www.buheshiyi.com/)                                                              | 中文 |       深度访谈       |
+| [忽左忽右](https://podcasts.apple.com/cn/podcast/%E5%BF%BD%E5%B7%A6%E5%BF%BD%E5%8F%B3/id1493503146) | 中文 |      历史、人文      |
+| [知行小酒馆](https://www.xiaoyuzhoufm.com/podcast/6013f9f58e2f7ee375cf4216)                         | 中文 |      商业、产业      |
+| [Hardcore History](https://www.dancarlin.com/hardcore-history-series/)                              | 英文 |  史诗级长篇叙事历史  |
 
 ## 其它
 
