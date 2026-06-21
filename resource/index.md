@@ -53,7 +53,7 @@
 
 [Implementing a Regular Expression Engine](https://deniskyashif.com/2019/02/17/implementing-a-regular-expression-engine/)
 
-[自己动手写编译器](https://pandolia.net/tinyc/index.html): 本书将介绍一个非常简单的编译器（ TinyC 编译器）的实现，用简单和易于实现的实例来描述基本的编译原理及过程，希望能为学习编译原理的读者提供一些参考。
+[自己动手写编译器](https://pandolia.net/tinyc/index.html): 本书将介绍一个非常简单的编译器（ TinyC 编译器）的实现，用简单和易于实现的实例来描述基本的编译原理及过程，希望能为学习编译原理的读者提供一些参考
 
 ## 密码学
 
@@ -75,9 +75,9 @@
 
 [Let's Build a Simple Database](https://cstack.github.io/db_tutorial/)
 
-[Tinyhttpd](https://github.com/EZLippi/Tinyhttpd): Tinyhttpd 是 J. David Blackstone 在 1999 年写的一个不到 500 行的超轻量型 Http Server，用来学习非常不错，可以帮助我们真正理解服务器程序的本质。
+[Tinyhttpd](https://github.com/EZLippi/Tinyhttpd): Tinyhttpd 是 J. David Blackstone 在 1999 年写的一个不到 500 行的超轻量型 Http Server，用来学习非常不错，可以帮助我们真正理解服务器程序的本质
 
-[json-tutorial](https://github.com/miloyip/json-tutorial): 从零开始的 JSON 库教程。
+[json-tutorial](https://github.com/miloyip/json-tutorial): 从零开始的 JSON 库教程
 
 [project-based-tutorials-in-c](https://github.com/rby90/project-based-tutorials-in-c): A curated list of project-based tutorials in C
 
@@ -101,9 +101,9 @@
 
 [C++](https://www.youtube.com/playlist?list=PLlrATfBNZ98dudnM48yfGUldqGD0S4FFb)
 
-[跟侯捷学 C++](https://mooc.study.163.com/smartSpec/detail/1001137001.htm): 系统学习 C++知识体系。
+[跟侯捷学 C++](https://mooc.study.163.com/smartSpec/detail/1001137001.htm): 系统学习 C++知识体系
 
-[sudoku](https://github.com/mayerui/sudoku): C++实现的跨平台数独游戏，命令行操作易上手，可以在开发间隙用来放松身心。数百行代码，初学者也可以轻松掌握。
+[sudoku](https://github.com/mayerui/sudoku): C++实现的跨平台数独游戏，命令行操作易上手，可以在开发间隙用来放松身心。数百行代码，初学者也可以轻松掌握
 
 [LearnCpp.com](https://www.learncpp.com/): LearnCpp.com is a free website devoted to teaching you how to program in C++. Whether you’ve had any prior programming experience or not, the tutorials on this site will walk you through all the steps to write, compile, and debug your C++ programs, all with plenty of examples.
 
@@ -129,9 +129,9 @@
 
 [Let’s Build A Simple Interpreter](https://ruslanspivak.com/archives.html)
 
-[httpstat](https://github.com/reorx/httpstat): httpstat 美化了 curl 的结果，使得结果更加可读。
+[httpstat](https://github.com/reorx/httpstat): httpstat 美化了 curl 的结果，使得结果更加可读
 
-[reddit](https://github.com/reddit-archive/reddit): [reddit](https://www.reddit.com/) 网站的源码。
+[reddit](https://github.com/reddit-archive/reddit): [reddit](https://www.reddit.com/) 网站的源码
 
 [500lines](https://github.com/aosabook/500lines): 500 Lines or Less.
 
@@ -145,9 +145,9 @@
 
 [wttr.in](https://github.com/chubin/wttr.in): ⛅️ The right way to check the weather https://wttr.in
 
-[spug](https://github.com/openspug/spug): 开源运维平台：面向中小型企业设计的轻量级无 Agent 的自动化运维平台，整合了主机管理、主机批量执行、主机在线终端、文件在线上传下载、应用发布部署、在线任务计划、配置中心、监控、报警等一系列功能。
+[spug](https://github.com/openspug/spug): 开源运维平台：面向中小型企业设计的轻量级无 Agent 的自动化运维平台，整合了主机管理、主机批量执行、主机在线终端、文件在线上传下载、应用发布部署、在线任务计划、配置中心、监控、报警等一系列功能
 
-[learn_python3_spider](https://github.com/wistbean/learn_python3_spider): python 爬虫教程系列、从 0 到 1 学习 python 爬虫，包括浏览器抓包，手机 APP 抓包，如 fiddler、mitmproxy，各种爬虫涉及的模块的使用，如：requests、beautifulSoup、selenium、appium、scrapy 等，以及 IP 代理，验证码识别，Mysql，MongoDB 数据库的 python 使用，多线程多进程爬虫的使用，css 爬虫加密逆向破解，JS 爬虫逆向，分布式爬虫，爬虫项目实战实例等。
+[learn_python3_spider](https://github.com/wistbean/learn_python3_spider): python 爬虫教程系列、从 0 到 1 学习 python 爬虫，包括浏览器抓包，手机 APP 抓包，如 fiddler、mitmproxy，各种爬虫涉及的模块的使用，如：requests、beautifulSoup、selenium、appium、scrapy 等，以及 IP 代理，验证码识别，Mysql，MongoDB 数据库的 python 使用，多线程多进程爬虫的使用，css 爬虫加密逆向破解，JS 爬虫逆向，分布式爬虫，爬虫项目实战实例等
 
 ## Java
 
@@ -165,15 +165,15 @@
 
 [istock](https://github.com/kingschan1204/istock): 👉 一个基于 spring boot 实现的 java 股票爬虫(仅支持 A 股)，如果你 ❤️ 请 ⭐️ . V2 升级版正在开发中！
 
-[vhr](https://github.com/lenve/vhr): 微人事是一个前后端分离的人力资源管理系统，项目采用 SpringBoot+Vue 开发。
+[vhr](https://github.com/lenve/vhr): 微人事是一个前后端分离的人力资源管理系统，项目采用 SpringBoot+Vue 开发
 
 [toBeTopJavaer](https://github.com/hollischuang/toBeTopJavaer): To Be Top Javaer - Java 工程师成神之路
 
 [tech-weekly](https://github.com/mercyblitz/tech-weekly): 小马哥技术周报
 
-[web](https://github.com/Huomen/web/tree/web-psql): 适合 java 新手入门练习的 java web 个人网站项目，目前主要维护 web-mysql 和 web-psql 两个分支。前台包括博客、代码库、文件下载、留言、登录注册、站内搜索、分类目录等功能，后台包括上传文件、博客、代码，编辑、删除文章，修改个人资料等功能，目前暂停开发新功能。
+[web](https://github.com/Huomen/web/tree/web-psql): 适合 java 新手入门练习的 java web 个人网站项目，目前主要维护 web-mysql 和 web-psql 两个分支。前台包括博客、代码库、文件下载、留言、登录注册、站内搜索、分类目录等功能，后台包括上传文件、博客、代码，编辑、删除文章，修改个人资料等功能，目前暂停开发新功能
 
-[mall](https://github.com/macrozheng/mall): mall 项目是一套电商系统，包括前台商城系统及后台管理系统，基于 SpringBoot+MyBatis 实现，采用 Docker 容器化部署。
+[mall](https://github.com/macrozheng/mall): mall 项目是一套电商系统，包括前台商城系统及后台管理系统，基于 SpringBoot+MyBatis 实现，采用 Docker 容器化部署
 
 [halo](https://github.com/halo-dev/halo): ✍ Halo 一款现代化的个人独立博客系统
 
@@ -181,21 +181,21 @@
 
 [SeimiCrawler](https://github.com/zhegexiaohuozi/SeimiCrawler): 一个简单、敏捷、分布式的支持 SpringBoot 的 Java 爬虫框架;An agile, distributed crawler framework.
 
-[spring-boot-examples](https://github.com/ityouknow/spring-boot-examples): Spring Boot 教程、技术栈示例代码，快速简单上手教程。
+[spring-boot-examples](https://github.com/ityouknow/spring-boot-examples): Spring Boot 教程、技术栈示例代码，快速简单上手教程
 
-[SpringAll](https://github.com/wuyouzhuguli/SpringAll): 循序渐进，学习 Spring Boot、Spring Boot & Shiro、Spring Cloud、Spring Security & Spring Security OAuth2，博客 Spring 系列源码。
+[SpringAll](https://github.com/wuyouzhuguli/SpringAll): 循序渐进，学习 Spring Boot、Spring Boot & Shiro、Spring Cloud、Spring Security & Spring Security OAuth2，博客 Spring 系列源码
 
 [My-Blog](https://github.com/ZHENFENG13/My-Blog): 🌴:octocat:A simple & beautiful blogging system implemented with spring-boot & thymeleaf & mybatis My Blog 是由 SpringBoot + Mybatis + Thymeleaf 等技术实现的 Java 博客系统，页面美观、功能齐全、部署简单及完善的代码，一定会给使用者无与伦比的体验
 
 [jsoup](https://jsoup.org): Java HTML Parser
 
-[JavaGuide](https://github.com/Snailclimb/JavaGuide): 【Java 学习+面试指南】 一份涵盖大部分 Java 程序员所需要掌握的核心知识。
+[JavaGuide](https://github.com/Snailclimb/JavaGuide): 【Java 学习+面试指南】 一份涵盖大部分 Java 程序员所需要掌握的核心知识
 
 [MusicPlayer](https://github.com/Mpmart08/MusicPlayer): Desktop Music Player for Windows and Mac using JavaFX/Java 8
 
-[giffun](https://github.com/guolindev/giffun): 一款开源的 GIF 在线分享 App，乐趣就要和世界分享。
+[giffun](https://github.com/guolindev/giffun): 一款开源的 GIF 在线分享 App，乐趣就要和世界分享
 
-[symphony](https://github.com/88250/symphony): 🎶 A modern community (forum/BBS/SNS/blog) platform implemented in Java. 一款用 Java 实现的现代化社区（论坛/BBS/社交网络/博客）平台。
+[symphony](https://github.com/88250/symphony): 🎶 A modern community (forum/BBS/SNS/blog) platform implemented in Java. 一款用 Java 实现的现代化社区（论坛/BBS/社交网络/博客）平台
 
 [cim](https://github.com/crossoverJie/cim): 📲cim(cross IM) 适用于开发者的分布式即时通讯系统
 
@@ -205,7 +205,7 @@
 
 [Learn Go Programming - Golang Tutorial for Beginners](https://www.youtube.com/watch?v=YS4e4q9oBaU)
 
-[gogs](https://github.com/gogs/gogs): 用 Go 写的一款极易搭建的自助 Git 服务，支持所有平台。就像 GitLab 一样的服务，但是 GitLab 是基于 ruby 语言的。另外：完善的中文文档、支持 Go 语言支持的所有平台，包括 Linux、Mac OS X、Windows 以及 ARM 平台。
+[gogs](https://github.com/gogs/gogs): 用 Go 写的一款极易搭建的自助 Git 服务，支持所有平台。就像 GitLab 一样的服务，但是 GitLab 是基于 ruby 语言的。另外：完善的中文文档、支持 Go 语言支持的所有平台，包括 Linux、Mac OS X、Windows 以及 ARM 平台
 
 [pan-light](https://github.com/peterq/pan-light): 百度网盘不限速客户端, golang + qt5, 跨平台图形界面
 
@@ -323,11 +323,11 @@
 
 [Google 开源项目风格指南](https://zh-google-styleguide.readthedocs.io/en/latest/contents/)
 
-[Learning-SICP](https://github.com/DeathKing/Learning-SICP): MIT 视频公开课《计算机程序的构造和解释》中文化项目及课程学习资料搜集。
+[Learning-SICP](https://github.com/DeathKing/Learning-SICP): MIT 视频公开课《计算机程序的构造和解释》中文化项目及课程学习资料搜集
 
 ## 提问
 
-[提問的智慧](https://github.com/ryanhanwu/How-To-Ask-Questions-The-Smart-Way): 本文原文由知名 Hacker Eric S. Raymond 所撰寫，教你如何正確的提出技術問題並獲得你滿意的答案。
+[提問的智慧](https://github.com/ryanhanwu/How-To-Ask-Questions-The-Smart-Way): 本文原文由知名 Hacker Eric S. Raymond 所撰寫，教你如何正確的提出技術問題並獲得你滿意的答案
 
 ## 游戏
 
@@ -451,7 +451,7 @@ Stanford Algorithm [Part 1](https://www.youtube.com/playlist?list=PLXFMmlk03Dt7Q
 
 [Keras and Convolutional Neural Networks (CNNs)](https://www.pyimagesearch.com/2018/04/16/keras-and-convolutional-neural-networks-cnns/)
 
-[DeepLearning-500-questions](https://github.com/scutan90/DeepLearning-500-questions): 深度学习 500 问，以问答形式对常用的概率知识、线性代数、机器学习、深度学习、计算机视觉等热点问题进行阐述，以帮助自己及有需要的读者。
+[DeepLearning-500-questions](https://github.com/scutan90/DeepLearning-500-questions): 深度学习 500 问，以问答形式对常用的概率知识、线性代数、机器学习、深度学习、计算机视觉等热点问题进行阐述，以帮助自己及有需要的读者
 
 [MIT 6.S191 Introduction to Deep Learning](http://introtodeeplearning.com/): MIT's official introductory course on deep learning methods with applications in robotics, and more!
 
@@ -533,7 +533,7 @@ Stanford Algorithm [Part 1](https://www.youtube.com/playlist?list=PLXFMmlk03Dt7Q
 
 [Spring Boot 学习资料汇总](http://www.ityouknow.com/springboot/2015/12/30/springboot-collect.html)
 
-[SpringBoot-Labs](https://github.com/YunaiV/SpringBoot-Labs): 一个涵盖六个专栏：Spring Boot 2.X、Spring Cloud、Spring Cloud Alibaba、Dubbo、分布式消息队列、分布式事务的仓库。
+[SpringBoot-Labs](https://github.com/YunaiV/SpringBoot-Labs): 一个涵盖六个专栏：Spring Boot 2.X、Spring Cloud、Spring Cloud Alibaba、Dubbo、分布式消息队列、分布式事务的仓库
 
 [ultimate-coding-resources](https://github.com/PizzaPokerGuy/ultimate-coding-resources): A collection of the best resources for programming, web development, computer science and more.
 
@@ -550,6 +550,8 @@ Stanford Algorithm [Part 1](https://www.youtube.com/playlist?list=PLXFMmlk03Dt7Q
 [build-your-own-x](https://github.com/danistefanovic/build-your-own-x): 🤓 Build your own (insert technology here) ⭐⭐⭐⭐⭐
 
 [awesome-competitive-programming](https://github.com/lnishan/awesome-competitive-programming): 💎 A curated list of awesome Competitive Programming, Algorithm and Data Structure resources
+
+[Best-websites-a-programmer-should-visit](https://github.com/sdmg15/Best-websites-a-programmer-should-visit):🔗 Some useful websites for programmers.
 
 ## 开源书籍
 
@@ -577,7 +579,7 @@ Stanford Algorithm [Part 1](https://www.youtube.com/playlist?list=PLXFMmlk03Dt7Q
 
 ## Interview
 
-[interview_internal_reference](https://github.com/0voice/interview_internal_reference): 2019 年最新总结，阿里，腾讯，百度，美团，头条等技术面试题目，以及答案，专家出题人分析汇总。
+[interview_internal_reference](https://github.com/0voice/interview_internal_reference): 2019 年最新总结，阿里，腾讯，百度，美团，头条等技术面试题目，以及答案，专家出题人分析汇总
 
 [如何写一份有效的技术简历？](http://www.ruanyifeng.com/blog/2020/01/technical-resume.html)
 
@@ -653,7 +655,7 @@ Stanford Algorithm [Part 1](https://www.youtube.com/playlist?list=PLXFMmlk03Dt7Q
 
 ## 🚀 推荐的博主
 
-在这个信息爆炸的时代，找到一些有价值的博主，能够为我们提供深刻的见解与启发，是一种难得的幸运。以下是一些我一直关注的博主，他们的内容不仅拓宽了我的视野，也让我在不同领域中受益匪浅。如果你也对这些话题感兴趣，欢迎一起探索他们的精彩世界。
+在这个信息爆炸的时代，找到一些有价值的博主，能够为我们提供深刻的见解与启发，是一种难得的幸运。以下是一些我一直关注的博主，他们的内容不仅拓宽了我的视野，也让我在不同领域中受益匪浅。如果你也对这些话题感兴趣，欢迎一起探索他们的精彩世界
 
 - [陈硕的 Blog](https://www.cnblogs.com/Solstice)
 - [酷 壳 – CoolShell](https://coolshell.cn/)
@@ -702,6 +704,29 @@ Stanford Algorithm [Part 1](https://www.youtube.com/playlist?list=PLXFMmlk03Dt7Q
 - [CODROPS](https://tympanus.net/codrops/)
 - [ultimatecourses](https://ultimatecourses.com/blog/)
 - [ByteHide ](https://www.bytehide.com/blog)
+- [Jiajun 的技术笔记](https://jiajunhuang.com/): 毕业于软件工程专业。在分布式和高并发方面有一些粗浅的经验。工作上大多使用Golang、Python和  JavaScript，业余玩玩  C语言、Rust和Haskell，爱折腾，啥事都想搞个清楚，喜欢钻研底层。知其然也想知其所以然
+- [Zgao's blog](https://zgao.top/): 信息安全方面
+- [draven.co](https://draven.co/): 《Go 语言设计与实现》作者的博客
+- [liuchuo](https://www.liuchuo.net/): PAT|蓝桥|LeetCode 刷题
+- [Ying](https://izualzhy.cn/): 源码剖析和读书
+- [richelf.tech](https://richelf.tech/): 研究领域为计算机视觉与海洋科学的交叉领域
+- [李文周的博客](https://www.liwenzhou.com/): Go 语言学习
+- [二丫讲梵](https://wiki.eryajf.net/): 博客内有丰富的学习资源，维护着一个周刊（主要专注于 Golang）
+- [Josh W Comeau](https://www.joshwcomeau.com/): Web开发
+- [TkDodo's blog](https://tkdodo.eu/blog/): Web开发
+- [Anthony Fu](https://antfu.me/): Web开发者、开源达人
+- [FrontendJoy](https://www.frontendjoy.com/): Learn how to go from stuck junior to senior frontend engineer—even without a CS degree
+- [被删的前端游乐场](https://godbasin.github.io/front-end-playground/): 前端领域、Vue 学习、小程序学习
+- [Dave Ceddia](https://daveceddia.com/)
+- [阿秀](https://interviewguide.cn/)
+- [鹤啸九天](https://wqw547243068.github.io/archive/)
+- [高見龍](https://kaochenlong.com/about):開發者 / 講師 / 作者 / 貓奴，愛玩愛現，喜愛非主流的新玩具，从他录制的[即將失傳的古老技藝 Vim](https://www.youtube.com/playlist?list=PLBd8JGCAcUAH56L2CYF7SmWJYKwHQYUDI)接触到这位开发者的，貌似每年他都会参加[iT 邦幫忙](https://ithelp.ithome.com.tw/)的铁人赛，比如 2023 年发布的是[Vite 原始碼解讀](https://ithelp.ithome.com.tw/users/20065770/ironman/6302)，2024 年发布的是[為你自己讀 CPython 原始碼](https://ithelp.ithome.com.tw/users/20065770/ironman/7541)
+- [七的博客](https://www.sunjianrong.com/): 使用 JavaScript 语言实现迷你版本的编译器
+- [Platformatic](https://blog.platformatic.dev/)
+- [JoshWComeau](https://www.joshwcomeau.com/): Web开发
+- [LogRocket](https://blog.logrocket.com/)
+- [AppSignal Blog](https://blog.appsignal.com/)
+- [Jenuel Dev Blogs](https://blog.jenuel.dev/)
 
 ## 播客
 
@@ -727,11 +752,42 @@ Stanford Algorithm [Part 1](https://www.youtube.com/playlist?list=PLXFMmlk03Dt7Q
 | [知行小酒馆](https://www.xiaoyuzhoufm.com/podcast/6013f9f58e2f7ee375cf4216)                         | 中文 |      商业、产业      |
 | [Hardcore History](https://www.dancarlin.com/hardcore-history-series/)                              | 英文 |  史诗级长篇叙事历史  |
 
+## 开发者
+
+- [Sindre Sorhus](https://github.com/sindresorhus): NPM 包扛把子！
+- [woai3c（谭光志）](https://github.com/woai3c)
+- [0voice](https://github.com/orgs/0voice/repositories)
+- [布客飞龙](https://github.com/wizardforcel)
+- [0xJacky](https://github.com/0xJacky): 推荐阅读其博客
+- [tw93](https://github.com/tw93): 开源、前端、AI
+- [fengyun.rui](https://github.com/rfyiamcool): 专注于源码分析与 Go 语言
+- [二丫讲梵](https://github.com/eryajf): 专注于 Go 语言
+- [TJ Holowaychuk](https://github.com/tj) - koa, mocha, express 等项目作者
+- [Luke Edwards](https://github.com/lukeed) - polka, uvu, klona 等项目作者
+- [Egoist](https://github.com/egoist) - poi, cac, saber 等项目作者
+- [Hiroki Osame](https://github.com/privatenumber) - esbuild-loader, vue-2-3 等项目作者
+
+## AI
+
+- [Simon Willison’s Weblog](https://simonwillison.net/)
+- [Trending Papers - Hugging Face](https://huggingface.co/papers/trending)
+- [OpenAI Blog](https://openai.com/blog): OpenAI 的官方博客
+- [Google Blog](https://blog.research.google/): Google AI 团队的官方博客
+- [Deepmind Blog](https://deepmind.google/discover/blog/): DeepMind 的官方博客
+- [Meta Blog](https://ai.meta.com/blog/): Facebook AI 团队的官方博客
+- [Nvidia Blog](https://blogs.nvidia.com/blog/category/deep-learning/): 英伟达公司的官方 AI 博客
+- [Microsoft Blog](https://blogs.microsoft.com/): 微软公司的官方 AI 博客
+- [Jason Brownlee](https://machinelearningmastery.com/): Jason Brownlee 的博客
+- [Andrej Karpathy blog](https://karpathy.github.io/): Andrej Karpathy的博客
+- [Li'Log:lilian](https://lilianweng.github.io/): 基本上可以把一个领域，系统的梳理清楚。通俗易懂，深入浅出!
+- [GitHub Trending](https://github.com/trending): Github 热榜!
+- [Sebastian Raschka, LLM Research Engineer | Sebastian Raschka, PhD](https://sebastianraschka.com/): LLM研究者，the author of [Build a Large Language Model From Scratch (Sebastian Raschka)](https://sebastianraschka.com/llms-from-scratch/).
+
 ## 其它
 
-[Student-resources](https://github.com/ivmm/Student-resources): 本文介绍的是利用学生身份可以享受到的相关学生优惠权益，但也希望各位享受权利的同时不要忘记自己的义务，不要售卖、转手自己的学生优惠资格，使得其他同学无法受益。
+[Student-resources](https://github.com/ivmm/Student-resources): 本文介绍的是利用学生身份可以享受到的相关学生优惠权益，但也希望各位享受权利的同时不要忘记自己的义务，不要售卖、转手自己的学生优惠资格，使得其他同学无法受益
 
-[from_coder_to_expert](https://github.com/0voice/from_coder_to_expert): 从程序员到 CTO，从专业走向卓越，分享大牛企业内部 pdf 与 PPT。
+[from_coder_to_expert](https://github.com/0voice/from_coder_to_expert): 从程序员到 CTO，从专业走向卓越，分享大牛企业内部 pdf 与 PPT
 
 [Web-Series](https://github.com/wx-chevalier/Web-Series): 📚 现代 Web 开发，现代 Web 开发导论 | 基础篇 | 进阶篇 | 架构优化篇 | React 篇 | Vue 篇
 

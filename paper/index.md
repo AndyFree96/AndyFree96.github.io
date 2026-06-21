@@ -30,6 +30,8 @@
 以上内容摘抄自[左耳朵耗子](https://coolshell.cn/)《左耳听风》专栏“技术资源集散地”一文
 {{< /admonition >}}
 
+[Cool Papers - Immersive Paper Discover](https://papers.cool/): 苏剑林大佬开发的一个论文网站
+
 ## ✨ 阅读清单
 
 ### 2024
