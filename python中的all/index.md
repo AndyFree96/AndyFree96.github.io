@@ -1,4 +1,4 @@
-# Python中的all：模块公开API设计的关键工具
+# Python中的__all__：模块公开API设计的关键工具
 
 
 在Python项目中，我们经常会看到类似这样的代码：
@@ -119,7 +119,7 @@ from calculate import *
 _calculate() #可以
 ```
 
-```__all__`优先级高于`_`规则。
+`__all__`优先级高于`_`规则。
 
 ## 为什么大型项目需要`__all__`
 
@@ -163,18 +163,19 @@ __all__ = [ "Camera", "CameraFactory" ]
 Python项目经常这样组织：
 
 {{< file-tree >}}
+
 - name: vision
   type: dir
   children:
-    - name: __init__.py
-      type: file
-    - name: camera.py
-      type: file
-    - name: calibration.py
-      type: file
-    - name: matcher.py
-      type: file
-{{< /file-tree >}}
+  - name: "__init__.py"
+    type: file
+  - name: camera.py
+    type: file
+  - name: calibration.py
+    type: file
+  - name: matcher.py
+    type: file
+    {{< /file-tree >}}
 
 ```python {name="camera.py"}
 __all__ = [ "Camera" ]
@@ -192,8 +193,8 @@ class CameraDebugTool:
 然后：
 
 ```python {name="vision/__init__.py"}
-from .camera import Camera 
-from .calibration import Calibration 
+from .camera import Camera
+from .calibration import Calibration
 
 __all__ = [ "Camera", "Calibration" ]
 ```
