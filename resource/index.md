@@ -704,7 +704,7 @@ Stanford Algorithm [Part 1](https://www.youtube.com/playlist?list=PLXFMmlk03Dt7Q
 - [CODROPS](https://tympanus.net/codrops/)
 - [ultimatecourses](https://ultimatecourses.com/blog/)
 - [ByteHide ](https://www.bytehide.com/blog)
-- [Jiajun 的技术笔记](https://jiajunhuang.com/): 毕业于软件工程专业。在分布式和高并发方面有一些粗浅的经验。工作上大多使用Golang、Python和  JavaScript，业余玩玩  C语言、Rust和Haskell，爱折腾，啥事都想搞个清楚，喜欢钻研底层。知其然也想知其所以然
+- [Jiajun 的技术笔记](https://jiajunhuang.com/): 使用Golang、Python和  JavaScript，业余玩玩  C语言、Rust和Haskell.
 - [Zgao's blog](https://zgao.top/): 信息安全方面
 - [draven.co](https://draven.co/): 《Go 语言设计与实现》作者的博客
 - [liuchuo](https://www.liuchuo.net/): PAT|蓝桥|LeetCode 刷题
