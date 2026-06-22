@@ -1,4 +1,4 @@
-# 快乐的Linux命令行
+# 有意思的Linux命令行
 
 
 - **2024/11/12 更新**: [推荐](#推荐)增加**CLI tools you won't be able to live without 🔧**和**40 个超有趣的 Linux 命令行彩蛋和游戏**

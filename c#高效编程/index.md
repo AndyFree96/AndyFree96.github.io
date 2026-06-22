@@ -279,6 +279,138 @@ int[] foo = [.. (from n in Enumerable.Range(0, 100) select n * n)];
 
 ## 第2章 .NET资源管理
 
+### 条目12 推荐使用初始化器而不是赋值语句
+
+随着时间推移，成员变量增加，构造函数个数也会不停增加。预防的办法就是，在声明变量时（静态和实例变量）就进行初始化，而不是在每个构造函数中进行。
+
+```c#
+public class MyClass {
+  private List<string> labels = new();
+}
+```
+
+++初始化器生成的代码会在构造函数代码运行前执行++。初始化器将在执行基类构造函数之前执行，其顺序与类中成员变量声明的顺序保持一致。
+
+```c#
+namespace Item12
+{
+
+    public class Animal {
+        private string name = InitName();
+        private string type = InitType();
+
+        public Animal() {
+            Console.WriteLine("Animal构造函数");
+        }
+
+        private static string InitName()
+        {
+            Console.WriteLine("Animal字段初始化Name执行");
+            return "A";
+        }
+
+        private static string InitType()
+        {
+            Console.WriteLine("Animal字段初始化Type执行");
+            return "B";
+        }
+    }
+
+    public class Dog : Animal {
+        private int age = InitAge();
+
+        public Dog()
+        {
+            Console.WriteLine("Dog构造函数");
+        }
+
+        private static int InitAge()
+        {
+            Console.WriteLine("Dog字段初始化Age执行");
+            return 10;
+        }
+    }
+
+
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            Animal animal = new Dog();
+        }
+    }
+}
+
+```
+
+结果如下：
+
+![初始化器和构造函数执行顺序](/images/202606/3/1.png '初始化器和构造函数执行顺序')
+
+如下3种情况应该避免使用初始化器。
+
+1. 想要初始化对象为0或`null`时。
+2. 需要对同一个变量执行不同的初始化方式。
+3. 将初始化代码放在构造函数中方便异常处理。初始化器无法用`try`包裹。对象初始化器执行的过程中发生的所有异常都会被传递到对象之外。在类的内部无法尝试修复。
+
+综上，若是所有的构造函数都要将某个成员变量初始化成同一个值，那么应该使用初始化器语法。
+
+### 条目13 正确地初始化静态成员变量
+
+若只是为了给某个静态成员分配空间，不妨使用初始化器语法。若是要以更复杂的逻辑来初始化静态成员变量，则可以使用静态构造函数。
+
+```c#
+namespace Item13
+{
+    class Test
+    {
+        private static int a = InitA();
+
+        private static int b = InitB();
+
+
+        static Test()
+        {
+            Console.WriteLine("Static Constructor");
+        }
+
+
+        public static void Run()
+        {
+            Console.WriteLine("Run");
+        }
+
+
+        static int InitA()
+        {
+            Console.WriteLine("Init A");
+            return 1;
+        }
+
+
+        static int InitB()
+        {
+            Console.WriteLine("Init B");
+            return 2;
+        }
+    }
+
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+
+            Test.Run();
+        }
+    }
+}
+
+```
+
+结果如下：
+
+![静态初始化器和静态构造函数执行顺序](/images/202606/3/2.png '静态初始化器和静态构造函数执行顺序')
+
 ## 第3章 使用C#表达设计
 
 ## 第4章 使用框架

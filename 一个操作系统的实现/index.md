@@ -1,11 +1,11 @@
-# 一个操作系统的实现
+# Orange'S 一个操作系统的实现 (于渊)
 
 
 操作系统（Operating System）是现代计算机系统的核心，它管理着硬件资源，调度应用程序运行，并为用户提供友好的交互界面。尽管我们每天都在使用各种操作系统，如 Windows、Linux、macOS 等，但其背后的设计与实现却常常被视为复杂而深奥的技术领域。然而，实现一个简单的操作系统并非遥不可及。通过深入了解操作系统的基本原理——如进程管理、内存管理、文件系统和设备驱动，我们可以循序渐进地从零开始构建一个微型操作系统。这不仅能加深对计算机系统的理解，还能让你体验到亲手编写底层代码的乐趣。在这篇文章中，我们将从最基础的引导程序开始，逐步构建一个简单的操作系统雏形。
 
-&lt;!--more--&gt;
+<!--more-->
 
-## 环境搭建
+## 0. 环境搭建
 
 本节主要介绍在 Ubuntu 系统下的环境搭建。
 
@@ -47,13 +47,13 @@ sudo apt-get install vgabios bochs bochs-x bximage
 sudo apt-get install nasm
 ```
 
-## 引导程序
+## 1. 引导程序
 
 完成了环境搭建后，我们可以从引导程序开始。
 
 代码如下：
 
-```
+```asm
 	org 07c00h	; 程序加载到7c00处
 	mov ax, cs
 	mov ds, ax
@@ -71,7 +71,7 @@ DispStr:
 	int 10h	; 10h号中断
 	ret
 
-BootMessage:	db &#34;Hello, OS world!&#34;
+BootMessage:	db "Hello, OS world!"
 times 510-($-$$) db 0	; 用0填充剩余空间, 使生成的二进制代码恰好为512字节
 dw 0xaa55		; 结束标志
 ```
@@ -104,7 +104,7 @@ dd if=boot.bin of=a.img bs=512 count=1 conv=notrunc
 
 接下来，我们需要编写一下 Bochs 的配置文件。为什么需要配置文件？因为需要告诉 Bochs，我们希望的虚拟机是什么样的。例如，内存多大、软盘映像和硬盘映像都是哪些文件等内容。下面就是一个配置文件的例子：
 
-```
+```asm
 # how much memory the emulated machine will have
 megs: 32
 
@@ -186,7 +186,7 @@ bochs -f a.config
 代码中的`$`表示当前行被汇编后的地址。我们可以把生成的二进制代码文件反汇编看看：
 
 ```
-ndisasm -o 0x7c00 boot.bin &gt;&gt; disboot.asm
+ndisasm -o 0x7c00 boot.bin >> disboot.asm
 ```
 
 打开 disboot.asm 可以看到：
@@ -201,9 +201,32 @@ ndisasm -o 0x7c00 boot.bin &gt;&gt; disboot.asm
 00007C09 EBFE   jmp short 0x7c09
 ```
 
-`$`在这里的意思就是`0x7c09`。
+对比：
 
-`$$`表示什么呢？它表示一个节（section）的开始处被汇编后的地址。这里，我们的程序只有 1 个节。故`$$`实际上就表示程序被编译后的开始地址，也就是`0x7c00`。
+```asm
+org 07c00h	; 程序加载到7c00处
+	mov ax, cs
+	mov ds, ax
+	mov es, ax
+	call DispStr	; 调用显示字符串例程
+	jmp $		; 无限循环
+
+DispStr:
+	mov ax, BootMessage
+	mov bp, ax	; ES:BP = 串地址
+	mov cx, 16	; CX = 串长度
+	mov ax, 1301h	; AH = 13, AL = 01
+	mov bx, 000ch	; 页号为0(BH = 0), 黑底红字(BL = 0c, 高亮)
+	mov dl, 0
+	int 10h	; 10h号中断
+	ret
+
+BootMessage:	db "Hello, OS world!"
+times 510-($-$$) db 0	; 用0填充剩余空间, 使生成的二进制代码恰好为512字节
+dw 0xaa55		; 结束标志
+```
+
+我们就会知道：`$`在这里的是`0x7c09`。`$$`表示什么呢？它表示一个节（section）的开始处被汇编后的地址。这里，我们的程序只有 1 个节。故`$$`实际上就表示程序被编译后的开始地址，也就是`0x7c00`。
 
 `$-$$`表示本行距离程序开始处的相对距离。`times 510-($-$$) db 0`表示将 0 这个字节重复`510-($-$$)`遍，也就是在剩下的空间中不停地填充 0，直到程序有 510 个字节。加上结束标志`0xAA55`占用的 2 个字节，恰好是 512 字节。
 
@@ -215,11 +238,11 @@ ndisasm -o 0x7c00 boot.bin &gt;&gt; disboot.asm
 
 ## 参考
 
-- 《ORANGE&#39;S: 一个操作系统的实现》
+[ORANGE'S 一个操作系统的实现](https://book.douban.com/subject/3735649/)
 
 
 ---
 
 > 作者: [AndyFree96](https://andyfree96.github.io/)  
-> URL: https://andyfree96.github.io/%E4%B8%80%E4%B8%AA%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%AE%9E%E7%8E%B0/  
+> URL: http://localhost:1313/%E4%B8%80%E4%B8%AA%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%AE%9E%E7%8E%B0/  
 

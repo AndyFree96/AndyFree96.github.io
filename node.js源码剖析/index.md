@@ -27,7 +27,7 @@ vcbuild.bat
 
 编译完成后，在 `out\Release` 目录下可以找到编译好的 Node.js 可执行文件。
 
-![](/images/202506/1/1.png)
+![](/images/202606/2/1.png)
 
 在命令行中执行以下命令验证是否编译成功：
 

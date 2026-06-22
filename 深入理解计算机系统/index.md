@@ -1,8 +1,11 @@
-# 深入理解计算机系统
+# 深入理解计算机系统 第3版 (Randal E. Bryant / David O'Hallaron)
 
 
-&lt;!--more--&gt;
+<!--more-->
 
+## 参考
+
+[深入理解计算机系统 (第3版)](https://book.douban.com/subject/26912767/)
 
 ---
 
