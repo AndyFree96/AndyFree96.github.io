@@ -479,9 +479,11 @@ pnpm add turbo -D
 }
 ```
 
-## 推荐
+## 参考
 
 [使用pnpm构建高效Monorepo：从零到一的完整指南](https://blog.csdn.net/duduanwang/article/details/155460239)
+
+[How to Configure ESLint and Prettier for TypeScript](https://oneuptime.com/blog/post/2026-02-03-eslint-prettier-typescript/view)
 
 
 ---
