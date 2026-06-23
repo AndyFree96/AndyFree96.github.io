@@ -11,7 +11,7 @@
 	<meta itemprop="description" content="如果你刚开始接触TypeScript，很容易停留在“写类型&#43;tsc编译”的阶段。但在真实工程中，TypeScript从来不是一个“语言孤岛”，而是一整套工程体系。本文会带你从零搭建一个项目模板，覆盖完整工具链。">
 	<meta itemprop="datePublished" content="2026-06-23T21:08:39+08:00">
 	<meta itemprop="dateModified" content="2026-06-23T21:08:39+08:00">
-	<meta itemprop="wordCount" content="1183">
+	<meta itemprop="wordCount" content="1213">
 	<meta itemprop="keywords" content="TypeScript,Node.js,前端工程化,Web开发,开发工具链,代码规范"><meta property="og:url" content="http://localhost:1313/%E4%BB%8E%E9%9B%B6%E6%90%AD%E5%BB%BAtypescript%E5%B7%A5%E7%A8%8B/">
 	<meta property="og:site_name" content="东尼的博客">
 	<meta property="og:title" content="从零搭建TypeScript工程">
@@ -44,7 +44,7 @@
     "mainEntityOfPage": {
       "@type": "WebPage",
       "@id": "http:\/\/localhost:1313\/%E4%BB%8E%E9%9B%B6%E6%90%AD%E5%BB%BAtypescript%E5%B7%A5%E7%A8%8B\/"
-    },"genre": "posts","keywords": "TypeScript, Node.js, 前端工程化, Web开发, 开发工具链, 代码规范","wordcount":  1183 ,
+    },"genre": "posts","keywords": "TypeScript, Node.js, 前端工程化, Web开发, 开发工具链, 代码规范","wordcount":  1213 ,
     "url": "http:\/\/localhost:1313\/%E4%BB%8E%E9%9B%B6%E6%90%AD%E5%BB%BAtypescript%E5%B7%A5%E7%A8%8B\/","datePublished": "2026-06-23T21:08:39+08:00","dateModified": "2026-06-23T21:08:39+08:00","publisher": {
       "@type": "Organization",
       "name": ""},"author": {
@@ -135,7 +135,7 @@
   <article class="page single">
     <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span title="转载" class="icon-repost"><i class="fa-solid fa-share" aria-hidden="true"></i></span><span>从零搭建TypeScript工程</span>
       </h1></div><div class="post-meta">
-      <div class="post-meta-line"><span class="post-author"><a href="https://andyfree96.github.io/" title="作者" target="_blank" rel="author external nofollow noopener noreferrer" class="author"><img class="avatar" src='/avatar/1.jpg' alt="AndyFree96" height="16" width="16">&nbsp;AndyFree96</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E5%89%8D%E7%AB%AF%E5%B7%A5%E7%A8%8B%E5%8C%96/" class="post-category" title="分类 - 前端工程化"><i class="fa-regular fa-folder" aria-hidden="true"></i> 前端工程化</a></span></div><div class="post-meta-line"><span title="发布于 2026-06-23 21:08:39"><i class="fa-solid fa-calendar-days me-1" aria-hidden="true"></i><time datetime="2026-06-23">2026-06-23</time></span>&nbsp;<span title="1183 字"><i class="fa-solid fa-pencil-alt me-1" aria-hidden="true"></i>约 1200 字</span>&nbsp;<span><i class="fa-regular fa-clock me-1" aria-hidden="true"></i>预计阅读 3 分钟</span>&nbsp;</div>
+      <div class="post-meta-line"><span class="post-author"><a href="https://andyfree96.github.io/" title="作者" target="_blank" rel="author external nofollow noopener noreferrer" class="author"><img class="avatar" src='/avatar/1.jpg' alt="AndyFree96" height="16" width="16">&nbsp;AndyFree96</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E5%89%8D%E7%AB%AF%E5%B7%A5%E7%A8%8B%E5%8C%96/" class="post-category" title="分类 - 前端工程化"><i class="fa-regular fa-folder" aria-hidden="true"></i> 前端工程化</a></span></div><div class="post-meta-line"><span title="发布于 2026-06-23 21:08:39"><i class="fa-solid fa-calendar-days me-1" aria-hidden="true"></i><time datetime="2026-06-23">2026-06-23</time></span>&nbsp;<span title="1213 字"><i class="fa-solid fa-pencil-alt me-1" aria-hidden="true"></i>约 1300 字</span>&nbsp;<span><i class="fa-regular fa-clock me-1" aria-hidden="true"></i>预计阅读 3 分钟</span>&nbsp;</div>
     </div><div class="featured-image"><img loading="eager" src='/images/202606/11/barney-goodman-wut8LONuFHE-unsplash.jpg' sizes="(max-width: 680px) 100vw, (max-width: 960px) 80vw, (max-width: 1440px) 56vw, 800px" alt="/images/202606/11/barney-goodman-wut8LONuFHE-unsplash.jpg"></div><div class="details toc" id="toc-static" data-kept="false">
         <div class="details-summary toc-title">
           <span>目录</span>
@@ -186,6 +186,7 @@
         <li><a href="#107-使用turborepo">10.7 使用Turborepo</a></li>
       </ul>
     </li>
+    <li><a href="#推荐">推荐</a></li>
   </ul>
 </nav></div>
       </div><div class="content" id="content"><p>如果你刚开始接触<a href="https://www.typescriptlang.org/" target="_blank" rel="external nofollow noopener noreferrer">TypeScript<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>，很容易停留在“写类型+tsc编译”的阶段。但在真实工程中，TypeScript从来不是一个“语言孤岛”，而是一整套工程体系。本文会带你从零搭建一个项目模板，覆盖完整工具链。</p>
@@ -672,7 +673,11 @@
 </div>
 </div><p><code>turbo.json</code></p>
 <json-viewer value="&#34;{\r\n  \&#34;pipeline\&#34;: {\r\n    \&#34;build\&#34;: {\r\n      \&#34;dependsOn\&#34;: [\&#34;^build\&#34;],\r\n      \&#34;outputs\&#34;: [\&#34;dist/**\&#34;]\r\n    },\r\n    \&#34;lint\&#34;: {},\r\n    \&#34;test\&#34;: {}\r\n  }\r\n}&#34;" expand-depth="6" boxed copyable="{&#34;copiedText&#34;:&#34;已复制&#34;,&#34;copyText&#34;:&#34;复制&#34;}"></json-viewer><p><code>package.json</code></p>
-<json-viewer value="&#34;{\r\n  \&#34;scripts\&#34;: {\r\n    \&#34;build\&#34;: \&#34;turbo run build\&#34;,\r\n    \&#34;dev\&#34;: \&#34;turbo run dev\&#34;,\r\n    \&#34;lint\&#34;: \&#34;turbo run lint\&#34;,\r\n    \&#34;test\&#34;: \&#34;turbo run test\&#34;\r\n  }\r\n}&#34;" expand-depth="6" boxed copyable="{&#34;copiedText&#34;:&#34;已复制&#34;,&#34;copyText&#34;:&#34;复制&#34;}"></json-viewer></div><hr class="awesome-hr" />
+<json-viewer value="&#34;{\r\n  \&#34;scripts\&#34;: {\r\n    \&#34;build\&#34;: \&#34;turbo run build\&#34;,\r\n    \&#34;dev\&#34;: \&#34;turbo run dev\&#34;,\r\n    \&#34;lint\&#34;: \&#34;turbo run lint\&#34;,\r\n    \&#34;test\&#34;: \&#34;turbo run test\&#34;\r\n  }\r\n}&#34;" expand-depth="6" boxed copyable="{&#34;copiedText&#34;:&#34;已复制&#34;,&#34;copyText&#34;:&#34;复制&#34;}"></json-viewer><h2 class="heading-element" id="推荐"><span>推荐</span>
+  <a href="#%e6%8e%a8%e8%8d%90" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p><a href="https://blog.csdn.net/duduanwang/article/details/155460239" target="_blank" rel="external nofollow noopener noreferrer">使用pnpm构建高效Monorepo：从零到一的完整指南<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></p></div><hr class="awesome-hr" />
     <h2 id="see-also">相关内容</h2>
     <ul><li>
           <a href="/json-server%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="json-server源码剖析：快速构建REST API背后的原理">json-server源码剖析：快速构建REST API背后的原理</a></li><li>
@@ -757,6 +762,7 @@
         <li><a href="#107-使用turborepo">10.7 使用Turborepo</a></li>
       </ul>
     </li>
+    <li><a href="#推荐">推荐</a></li>
   </ul>
 </nav></div>
       </div>

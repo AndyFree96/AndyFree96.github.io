@@ -479,6 +479,10 @@ pnpm add turbo -D
 }
 ```
 
+## 推荐
+
+[使用pnpm构建高效Monorepo：从零到一的完整指南](https://blog.csdn.net/duduanwang/article/details/155460239)
+
 
 ---
 
