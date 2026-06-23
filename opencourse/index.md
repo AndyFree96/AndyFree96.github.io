@@ -65,6 +65,11 @@
 
 [南政法大学 法律基础](https://www.bilibili.com/video/BV1FD4y1B786)
 
+### 2026 
+
+[CS 61A: Structure and Interpretation of Computer Programs](https://cs61a.org/)
+
+[操作系统 蒋炎岩](https://jyywiki.cn/)
 
 ---
 

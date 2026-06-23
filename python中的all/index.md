@@ -36,7 +36,7 @@ __all__ = [
 
 例如：
 
-```python {name="math_utils.py"}
+```python {title="math_utils.py"}
 __all__ = ["add", "VERSION"]
 
 def add(a, b):
@@ -52,7 +52,7 @@ _debug = True
 
 其他地方：
 
-```python {name="main.py"}
+```python {title="main.py"}
 from math_utils import *
 
 print(add(5, 3)) # 可以
@@ -67,7 +67,7 @@ print(_debug) # 不存在
 
 如果没有定义`__all__`：
 
-```python {name="math_utils.py"}
+```python {title="math_utils.py"}
 def add(a, b):
     return a + b
 
@@ -87,7 +87,7 @@ _debug = True
 
 例如：
 
-```python {name="camera.py"}
+```python {title="camera.py"}
 class Camera:
     def start(self):
         pass
@@ -104,7 +104,7 @@ class _CameraWorker:
 
 可以。例如：
 
-```python {name="calculate.py"}
+```python {title="calculate.py"}
 __all__ = ["_calculate"]
 
 
@@ -113,7 +113,7 @@ def _calculate():
 
 ```
 
-```python {name="main.py"}
+```python {title="main.py"}
 from calculate import *
 
 _calculate() #可以
@@ -125,7 +125,7 @@ _calculate() #可以
 
 小项目可能感觉不到价值。但在大型工程中，一个模块可能包含：
 
-```python {name="camera.py"}
+```python {title="camera.py"}
 class Camera:
     def start(self):
         pass
@@ -152,7 +152,7 @@ def _debug():
 
 如果没有管理，用户不知道哪些是稳定API，哪些只是内部实现。例如：`from camera import *`可能导入几十个东西。这会导致命名污染、API不稳定、重构困难等问题。而使用：
 
-```python {name="camera.py"}
+```python {title="camera.py"}
 __all__ = [ "Camera", "CameraFactory" ]
 ```
 
@@ -177,7 +177,7 @@ Python项目经常这样组织：
     type: file
     {{< /file-tree >}}
 
-```python {name="camera.py"}
+```python {title="camera.py"}
 __all__ = [ "Camera" ]
 
 class Camera:
@@ -192,7 +192,7 @@ class CameraDebugTool:
 
 然后：
 
-```python {name="vision/__init__.py"}
+```python {title="vision/__init__.py"}
 from .camera import Camera
 from .calibration import Calibration
 

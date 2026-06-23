@@ -5,15 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
     <meta name="robots" content="noodp" />
     <title>Effective Python 第2版 (Brett Slatkin) - 东尼的博客</title><meta name="author" content="AndyFree96">
-<meta name="description" content="安东尼的博客，分享生活中的一些有意思的事儿！"><meta name="keywords" content='Python思维, 代码风格, 数据类型, 函数设计, 闭包, 装饰器, 接口设计, 元编程'>
+<meta name="description" content="作为一名开发者，学习一门语言通常会经历几个阶段。最开始，我们关注的是：“这个功能怎么实现？”然后逐渐编程：“这个实现是否合理？”再进一步：“这个设计能否支撑未来几年的维护？”Python也是如此。初学阶段，我们学习变量、函数、类、模块，然后利用框架和库快速完成需求。但真正进入工程开发后，会遇到更多问题：
+为什么有些代码难以测试？ 为什么简单的修改会影响到整个系统？ 为什么别人写的代码看起来更自然？ 为什么同样的功能，有些实现更加高效？ 这些问题的答案，往往隐藏在语言细节和工程实践中，Effective Python 编写高质量 Python 代码的 90 个有效方法便是一份Python工程实践指南。
+"><meta name="keywords" content='Python思维, 代码风格, 数据类型, 函数设计, 闭包, 装饰器, 接口设计, 元编程'>
 	<meta itemprop="name" content="Effective Python 第2版 (Brett Slatkin)">
-	<meta itemprop="description" content="安东尼的博客，分享生活中的一些有意思的事儿！">
+	<meta itemprop="description" content="作为一名开发者，学习一门语言通常会经历几个阶段。最开始，我们关注的是：“这个功能怎么实现？”然后逐渐编程：“这个实现是否合理？”再进一步：“这个设计能否支撑未来几年的维护？”Python也是如此。初学阶段，我们学习变量、函数、类、模块，然后利用框架和库快速完成需求。但真正进入工程开发后，会遇到更多问题：
+为什么有些代码难以测试？ 为什么简单的修改会影响到整个系统？ 为什么别人写的代码看起来更自然？ 为什么同样的功能，有些实现更加高效？ 这些问题的答案，往往隐藏在语言细节和工程实践中，Effective Python 编写高质量 Python 代码的 90 个有效方法便是一份Python工程实践指南。">
 	<meta itemprop="datePublished" content="2026-06-22T14:43:01+08:00">
 	<meta itemprop="dateModified" content="2026-06-22T14:43:01+08:00">
+	<meta itemprop="wordCount" content="1198">
 	<meta itemprop="keywords" content="Python思维,代码风格,数据类型,函数设计,闭包,装饰器,接口设计,元编程"><meta property="og:url" content="http://localhost:1313/effective-python/">
 	<meta property="og:site_name" content="东尼的博客">
 	<meta property="og:title" content="Effective Python 第2版 (Brett Slatkin)">
-	<meta property="og:description" content="安东尼的博客，分享生活中的一些有意思的事儿！">
+	<meta property="og:description" content="作为一名开发者，学习一门语言通常会经历几个阶段。最开始，我们关注的是：“这个功能怎么实现？”然后逐渐编程：“这个实现是否合理？”再进一步：“这个设计能否支撑未来几年的维护？”Python也是如此。初学阶段，我们学习变量、函数、类、模块，然后利用框架和库快速完成需求。但真正进入工程开发后，会遇到更多问题：
+为什么有些代码难以测试？ 为什么简单的修改会影响到整个系统？ 为什么别人写的代码看起来更自然？ 为什么同样的功能，有些实现更加高效？ 这些问题的答案，往往隐藏在语言细节和工程实践中，Effective Python 编写高质量 Python 代码的 90 个有效方法便是一份Python工程实践指南。">
 	<meta property="og:locale" content="zh_CN">
 	<meta property="og:type" content="article">
 		<meta property="article:section" content="posts">
@@ -28,10 +33,11 @@
 
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Effective Python 第2版 (Brett Slatkin)">
-  <meta name="twitter:description" content="安东尼的博客，分享生活中的一些有意思的事儿！"><meta name="twitter:creator" content="@IRONAnthony96"><meta name="application-name" content="FixIt">
+  <meta name="twitter:description" content="作为一名开发者，学习一门语言通常会经历几个阶段。最开始，我们关注的是：“这个功能怎么实现？”然后逐渐编程：“这个实现是否合理？”再进一步：“这个设计能否支撑未来几年的维护？”Python也是如此。初学阶段，我们学习变量、函数、类、模块，然后利用框架和库快速完成需求。但真正进入工程开发后，会遇到更多问题：
+为什么有些代码难以测试？ 为什么简单的修改会影响到整个系统？ 为什么别人写的代码看起来更自然？ 为什么同样的功能，有些实现更加高效？ 这些问题的答案，往往隐藏在语言细节和工程实践中，Effective Python 编写高质量 Python 代码的 90 个有效方法便是一份Python工程实践指南。"><meta name="twitter:creator" content="@IRONAnthony96"><meta name="application-name" content="FixIt">
 <meta name="apple-mobile-web-app-title" content="FixIt"><meta name="theme-color" data-light="#f6f8fa" data-dark="#151b23" content="#f6f8fa"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" type="text/html" href="http://localhost:1313/effective-python/" title="Effective Python 第2版 (Brett Slatkin) - 东尼的博客" /><link rel="prev" type="text/html" href="http://localhost:1313/%E6%B5%81%E7%95%85%E7%9A%84python/" title="流畅的Python 第2版 (Luciano Ramalho)" /><link rel="alternate" type="text/markdown" href="http://localhost:1313/effective-python/index.md" title="Effective Python 第2版 (Brett Slatkin) - 东尼的博客"><link rel="stylesheet" href="/css/config.css"><link rel="stylesheet" href="/css/main.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" type="text/html" href="http://localhost:1313/effective-python/" title="Effective Python 第2版 (Brett Slatkin) - 东尼的博客" /><link rel="prev" type="text/html" href="http://localhost:1313/%E6%B5%81%E7%95%85%E7%9A%84python/" title="流畅的Python 第2版 (Luciano Ramalho)" /><link rel="next" type="text/html" href="http://localhost:1313/cs61a-structure-and-interpretation-of-computer-programs/" title="CS61A： Structure and Interpretation of Computer Programs" /><link rel="alternate" type="text/markdown" href="http://localhost:1313/effective-python/index.md" title="Effective Python 第2版 (Brett Slatkin) - 东尼的博客"><link rel="stylesheet" href="/css/config.css"><link rel="stylesheet" href="/css/main.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><link rel="preload" href="/js/main.js" as="script"><script type="application/ld+json">
   {
@@ -42,7 +48,7 @@
     "mainEntityOfPage": {
       "@type": "WebPage",
       "@id": "http:\/\/localhost:1313\/effective-python\/"
-    },"genre": "posts","keywords": "Python思维, 代码风格, 数据类型, 函数设计, 闭包, 装饰器, 接口设计, 元编程, 读书笔记, 计算机","wordcount":  0 ,
+    },"genre": "posts","keywords": "Python思维, 代码风格, 数据类型, 函数设计, 闭包, 装饰器, 接口设计, 元编程, 读书笔记, 计算机","wordcount":  1198 ,
     "url": "http:\/\/localhost:1313\/effective-python\/","datePublished": "2026-06-22T14:43:01+08:00","dateModified": "2026-06-22T14:43:01+08:00","publisher": {
       "@type": "Organization",
       "name": ""},"author": {
@@ -138,9 +144,105 @@
 
   <article class="page single">
     <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span title="转载" class="icon-repost"><i class="fa-solid fa-share" aria-hidden="true"></i></span><span>Effective Python 第2版 (Brett Slatkin)</span>
-      </h1></div><div class="post-meta">
-      <div class="post-meta-line"><span class="post-author"><a href="https://andyfree96.github.io/" title="作者" target="_blank" rel="author external nofollow noopener noreferrer" class="author"><img class="avatar" src='/avatar/1.jpg' alt="AndyFree96" height="16" width="16">&nbsp;AndyFree96</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E4%B9%A6%E7%B1%8D%E7%A0%94%E8%AF%BB/" class="post-category" title="分类 - 书籍研读"><i class="fa-regular fa-folder" aria-hidden="true"></i> 书籍研读</a></span></div><div class="post-meta-line"><span title="发布于 2026-06-22 14:43:01"><i class="fa-solid fa-calendar-days me-1" aria-hidden="true"></i><time datetime="2026-06-22">2026-06-22</time></span>&nbsp;<span title="0 字"><i class="fa-solid fa-pencil-alt me-1" aria-hidden="true"></i>约 100 字</span>&nbsp;<span><i class="fa-regular fa-clock me-1" aria-hidden="true"></i>预计阅读 0 分钟</span>&nbsp;</div>
-    </div><div class="featured-image"><img loading="eager" src='/images/202606/9/tim-mossholder-o5v99bErX9Q-unsplash.jpg' sizes="(max-width: 680px) 100vw, (max-width: 960px) 80vw, (max-width: 1440px) 56vw, 800px" alt="/images/202606/9/tim-mossholder-o5v99bErX9Q-unsplash.jpg"></div><div class="content" id="content"></div><hr class="awesome-hr" />
+      </h1><p class="single-subtitle animate__animated animate__fadeIn">编写高质量 Python 代码的 90 个有效方法</p></div><div class="post-meta">
+      <div class="post-meta-line"><span class="post-author"><a href="https://andyfree96.github.io/" title="作者" target="_blank" rel="author external nofollow noopener noreferrer" class="author"><img class="avatar" src='/avatar/1.jpg' alt="AndyFree96" height="16" width="16">&nbsp;AndyFree96</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E4%B9%A6%E7%B1%8D%E7%A0%94%E8%AF%BB/" class="post-category" title="分类 - 书籍研读"><i class="fa-regular fa-folder" aria-hidden="true"></i> 书籍研读</a></span></div><div class="post-meta-line"><span title="发布于 2026-06-22 14:43:01"><i class="fa-solid fa-calendar-days me-1" aria-hidden="true"></i><time datetime="2026-06-22">2026-06-22</time></span>&nbsp;<span title="1198 字"><i class="fa-solid fa-pencil-alt me-1" aria-hidden="true"></i>约 1200 字</span>&nbsp;<span><i class="fa-regular fa-clock me-1" aria-hidden="true"></i>预计阅读 3 分钟</span>&nbsp;</div>
+    </div><div class="featured-image"><img loading="eager" src='/images/202606/9/tim-mossholder-o5v99bErX9Q-unsplash.jpg' sizes="(max-width: 680px) 100vw, (max-width: 960px) 80vw, (max-width: 1440px) 56vw, 800px" alt="/images/202606/9/tim-mossholder-o5v99bErX9Q-unsplash.jpg"></div><div class="details toc" id="toc-static" data-kept="false">
+        <div class="details-summary toc-title">
+          <span>目录</span>
+          <span><i class="details-icon fa-solid fa-angle-right" aria-hidden="true"></i></span>
+        </div>
+        <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#第-1-章-培养-pythonic-思维">第 1 章 培养 Pythonic 思维</a>
+      <ul>
+        <li><a href="#第-10-条-用赋值表达式减少重复代码">第 10 条 用赋值表达式减少重复代码</a></li>
+      </ul>
+    </li>
+    <li><a href="#第-2-章-列表与字典">第 2 章 列表与字典</a>
+      <ul>
+        <li><a href="#第-11-条-学会对序列做切片">第 11 条 学会对序列做切片</a></li>
+        <li><a href="#第-12-条-不要在切片里同时指定起止下标与步进">第 12 条 不要在切片里同时指定起止下标与步进</a></li>
+      </ul>
+    </li>
+    <li><a href="#第-9-章-测试与调试">第 9 章 测试与调试</a>
+      <ul>
+        <li><a href="#第-80-条-考虑用-pdb-做交互调试">第 80 条 考虑用 pdb 做交互调试</a></li>
+      </ul>
+    </li>
+    <li><a href="#参考">参考</a></li>
+  </ul>
+</nav></div>
+      </div><div class="content" id="content"><p>作为一名开发者，学习一门语言通常会经历几个阶段。最开始，我们关注的是：“这个功能怎么实现？”然后逐渐编程：“这个实现是否合理？”再进一步：“这个设计能否支撑未来几年的维护？”Python也是如此。初学阶段，我们学习变量、函数、类、模块，然后利用框架和库快速完成需求。但真正进入工程开发后，会遇到更多问题：</p>
+<ul>
+<li>为什么有些代码难以测试？</li>
+<li>为什么简单的修改会影响到整个系统？</li>
+<li>为什么别人写的代码看起来更自然？</li>
+<li>为什么同样的功能，有些实现更加高效？</li>
+</ul>
+<p>这些问题的答案，往往隐藏在语言细节和工程实践中，<a href="https://book.douban.com/subject/35334595/" target="_blank" rel="external nofollow noopener noreferrer">Effective Python 编写高质量 Python 代码的 90 个有效方法<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>便是一份Python工程实践指南。</p>
+<h2 class="heading-element" id="第-1-章-培养-pythonic-思维"><span>第 1 章 培养 Pythonic 思维</span>
+  <a href="#%e7%ac%ac-1-%e7%ab%a0-%e5%9f%b9%e5%85%bb-pythonic-%e6%80%9d%e7%bb%b4" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><h3 class="heading-element" id="第-10-条-用赋值表达式减少重复代码"><span>第 10 条 用赋值表达式减少重复代码</span>
+  <a href="#%e7%ac%ac-10-%e6%9d%a1-%e7%94%a8%e8%b5%8b%e5%80%bc%e8%a1%a8%e8%be%be%e5%bc%8f%e5%87%8f%e5%b0%91%e9%87%8d%e5%a4%8d%e4%bb%a3%e7%a0%81" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><h2 class="heading-element" id="第-2-章-列表与字典"><span>第 2 章 列表与字典</span>
+  <a href="#%e7%ac%ac-2-%e7%ab%a0-%e5%88%97%e8%a1%a8%e4%b8%8e%e5%ad%97%e5%85%b8" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><h3 class="heading-element" id="第-11-条-学会对序列做切片"><span>第 11 条 学会对序列做切片</span>
+  <a href="#%e7%ac%ac-11-%e6%9d%a1-%e5%ad%a6%e4%bc%9a%e5%af%b9%e5%ba%8f%e5%88%97%e5%81%9a%e5%88%87%e7%89%87" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p><code>list</code>、<code>str</code>与<code>bytes</code>都可以获取原序列的某个子集（即切片）。凡是实现了<code>__getitem__</code>与<code>__setitem__</code>两个特殊方法的类都可以切割[第 43 条 自定义的容器类型应该从 collections.abc 继](#第 43 条 自定义的容器类型应该从 collections.abc 继承)。</p>
+<p>切割时所用的下标可以越界，但直接访问列表却不行，会让程序抛出异常。</p>
+<p>切割出来的列表是一份全新的列表。如果元素是<strong>非引用类型</strong>，则不会影响到原列表。</p>
+<p>把切片放在赋值符号的左侧可以将原列表中这段范围内的元素用赋值符号右侧的元素替换掉，但可能会改变原列表的长度。</p>
+<h3 class="heading-element" id="第-12-条-不要在切片里同时指定起止下标与步进"><span>第 12 条 不要在切片里同时指定起止下标与步进</span>
+  <a href="#%e7%ac%ac-12-%e6%9d%a1-%e4%b8%8d%e8%a6%81%e5%9c%a8%e5%88%87%e7%89%87%e9%87%8c%e5%90%8c%e6%97%b6%e6%8c%87%e5%ae%9a%e8%b5%b7%e6%ad%a2%e4%b8%8b%e6%a0%87%e4%b8%8e%e6%ad%a5%e8%bf%9b" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p>不要把起止下标与步进值同时写在切片里。如果必须指定步进，尽量采用正数，且把起止下标都留空。若必须同时使用步进值与起止下标，应该分成两次来写。</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-python"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">x</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">,</span> <span class="s1">&#39;e&#39;</span><span class="p">,</span> <span class="s1">&#39;f&#39;</span><span class="p">,</span> <span class="s1">&#39;g&#39;</span><span class="p">,</span> <span class="s1">&#39;h&#39;</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">y</span> <span class="o">=</span> <span class="n">x</span><span class="p">[::</span><span class="mi">2</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">z</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>若程序没有那么多时间或内存分两步操作，可改用 itertools 模块中的 islice 方法[第36条 考虑用itertools拼装迭代器与生成器](#第36条 考虑用itertools拼装迭代器与生成器)，其起止位置与步进值不能是负数。</p>
+<h2 class="heading-element" id="第-9-章-测试与调试"><span>第 9 章 测试与调试</span>
+  <a href="#%e7%ac%ac-9-%e7%ab%a0-%e6%b5%8b%e8%af%95%e4%b8%8e%e8%b0%83%e8%af%95" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><h3 class="heading-element" id="第-80-条-考虑用-pdb-做交互调试"><span>第 80 条 考虑用 pdb 做交互调试</span>
+  <a href="#%e7%ac%ac-80-%e6%9d%a1-%e8%80%83%e8%99%91%e7%94%a8-pdb-%e5%81%9a%e4%ba%a4%e4%ba%92%e8%b0%83%e8%af%95" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p>Python 内置的<code>breakpint</code>函数可以用来触发调试器。该函数的效果与先引入内置的 pdb 模块然后运行<code>set_trace</code>函数效果是一样的。</p>
+<p>一旦运行<code>breakpoint</code>函数，程序会在即将执行下一条语句的地方暂停，运行 Python 程序的终端窗口会进入交互调试界面。</p>
+<p><figure><img loading="lazy" src='/images/202606/9/da0a2dadb95f8901c0eb4aa08e95d720_MD5.jpeg' alt="PDB交互调试界面"><figcaption class="image-caption">PDB交互调试界面</figcaption>
+  </figure></p>
+<p><ins>事后调试（post-mortem debugging）</ins>，当发现程序抛出异常并崩溃后，想通过调试器看到抛出异常的那一刻究竟是什么样的。大概率此时我们也不确定应该在哪里调用<code>breakpoint</code>函数。</p>
+<p>此时可以运行<code>python -m pdb -c continue &lt;program_path&gt;</code>命令，会让 pdb 在启动受测程序之后立刻向前推进，直到遇到断点或出现异常为止。</p>
+<p>还有一种方法触发事后调试机制，就是先在普通的 Python 解释器里执行受测代码，待遇到未被捕获的异常后，再引入 pdb 模块并调用其<code>pm</code>函数（<code>import pdb; pdb.pm()</code>）。</p>
+<p><figure><img loading="lazy" src='/images/202606/9/4b37e8df33feee46bd11aee07e750d6c_MD5.jpeg' alt="出现未捕获异常后进入PDB"><figcaption class="image-caption">出现未捕获异常后进入PDB</figcaption>
+  </figure></p>
+<h2 class="heading-element" id="参考"><span>参考</span>
+  <a href="#%e5%8f%82%e8%80%83" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p><a href="https://book.douban.com/subject/35334595/" target="_blank" rel="external nofollow noopener noreferrer">Effective Python 编写高质量 Python 代码的 90 个有效方法<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></p></div><hr class="awesome-hr" />
     <h2 id="see-also">相关内容</h2>
     <ul><li>
           <a href="/%E6%B5%81%E7%95%85%E7%9A%84python/" title="流畅的Python 第2版 (Luciano Ramalho)">流畅的Python 第2版 (Luciano Ramalho)</a></li><li>
@@ -170,7 +272,7 @@
     <section class="post-tags"><i class="fa-solid fa-tags me-1" aria-hidden="true"></i><a href="/tags/python%E6%80%9D%E7%BB%B4/" class="post-tag" title="标签 - Python思维">Python思维</a><a href="/tags/%E4%BB%A3%E7%A0%81%E9%A3%8E%E6%A0%BC/" class="post-tag" title="标签 - 代码风格">代码风格</a><a href="/tags/%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/" class="post-tag" title="标签 - 数据类型">数据类型</a><a href="/tags/%E5%87%BD%E6%95%B0%E8%AE%BE%E8%AE%A1/" class="post-tag" title="标签 - 函数设计">函数设计</a><a href="/tags/%E9%97%AD%E5%8C%85/" class="post-tag" title="标签 - 闭包">闭包</a><a href="/tags/%E8%A3%85%E9%A5%B0%E5%99%A8/" class="post-tag" title="标签 - 装饰器">装饰器</a><a href="/tags/%E6%8E%A5%E5%8F%A3%E8%AE%BE%E8%AE%A1/" class="post-tag" title="标签 - 接口设计">接口设计</a><a href="/tags/%E5%85%83%E7%BC%96%E7%A8%8B/" class="post-tag" title="标签 - 元编程">元编程</a><a href="/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" class="post-tag" title="标签 - 读书笔记">读书笔记</a><a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA/" class="post-tag" title="标签 - 计算机">计算机</a></section>
     <section><span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
     </section>
-  </div><div class="post-nav"><a href="/%E6%B5%81%E7%95%85%E7%9A%84python/" class="post-nav-item" rel="prev" title="流畅的Python 第2版 (Luciano Ramalho)"><i class="fa-solid fa-angle-left" aria-hidden="true"></i>流畅的Python 第2版 (Luciano Ramalho)</a></div>
+  </div><div class="post-nav"><a href="/%E6%B5%81%E7%95%85%E7%9A%84python/" class="post-nav-item" rel="prev" title="流畅的Python 第2版 (Luciano Ramalho)"><i class="fa-solid fa-angle-left" aria-hidden="true"></i>流畅的Python 第2版 (Luciano Ramalho)</a><a href="/cs61a-structure-and-interpretation-of-computer-programs/" class="post-nav-item" rel="next" title="CS61A： Structure and Interpretation of Computer Programs">CS61A： Structure and Interpretation of Computer Programs<i class="fa-solid fa-angle-right" aria-hidden="true"></i></a></div>
 </div>
 <div class="post-reward">
     <div class="comment">请作者喝杯咖啡!</div>
@@ -181,12 +283,39 @@
           </div></div>
   </div></article>
 
-  <aside class="toc" id="toc-auto" aria-label="目录"></aside></main><footer class="footer">
+  <aside class="toc" id="toc-auto" aria-label="目录"><h2 class="toc-title">目录&nbsp;<i class="toc-icon fa-solid fa-angle-down" aria-hidden="true"></i></h2>
+      <div class="toc-content" id="toc-content-auto"></div></aside><dialog id="toc-dialog" aria-labelledby="toc-dialog-title" role="dialog" closedby="any">
+      <button type="button" class="toc-close-btn" aria-label="Close Table of Contents"><i class="fa-solid fa-xmark fa-lg" aria-hidden="true"></i></button>
+      <div class="toc">
+        <h2 class="toc-title" id="toc-dialog-title">目录</h2>
+        <div class="toc-content" id="toc-content-drawer"><nav >
+  <ul>
+    <li><a href="#第-1-章-培养-pythonic-思维">第 1 章 培养 Pythonic 思维</a>
+      <ul>
+        <li><a href="#第-10-条-用赋值表达式减少重复代码">第 10 条 用赋值表达式减少重复代码</a></li>
+      </ul>
+    </li>
+    <li><a href="#第-2-章-列表与字典">第 2 章 列表与字典</a>
+      <ul>
+        <li><a href="#第-11-条-学会对序列做切片">第 11 条 学会对序列做切片</a></li>
+        <li><a href="#第-12-条-不要在切片里同时指定起止下标与步进">第 12 条 不要在切片里同时指定起止下标与步进</a></li>
+      </ul>
+    </li>
+    <li><a href="#第-9-章-测试与调试">第 9 章 测试与调试</a>
+      <ul>
+        <li><a href="#第-80-条-考虑用-pdb-做交互调试">第 80 条 考虑用 pdb 做交互调试</a></li>
+      </ul>
+    </li>
+    <li><a href="#参考">参考</a></li>
+  </ul>
+</nav></div>
+      </div>
+    </dialog></main><footer class="footer">
     <div class="footer-container"><div class="footer-line powered">由 <a href="https://gohugo.io/" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.163.1">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/hugo-fixit/FixIt" target="_blank" rel="external" title="FixIt v1.0.0-mq99hlzg">FixIt</a>
         </div><div class="footer-line copyright" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright" aria-hidden="true"></i>
             <span itemprop="copyrightYear">2019 - 2026</span><span class="author" itemprop="copyrightHolder">
               <a href="https://andyfree96.github.io/" target="_blank" rel="external nofollow noopener noreferrer">AndyFree96</a></span></div></div>
-  </footer></div><div class="widgets"><div class="fixed-buttons"><button type="button" class="fixed-button back-to-top animate__faster d-none" aria-label="回到顶部"><i class="fa-solid fa-arrow-up" aria-hidden="true"></i></button></div><div id="mask"></div><div class="reading-progress-bar" style="left: 0;top: 0;"></div><noscript>
+  </footer></div><div class="widgets"><div class="fixed-buttons"><button type="button" class="fixed-button back-to-top animate__faster d-none" aria-label="回到顶部"><i class="fa-solid fa-arrow-up" aria-hidden="true"></i></button><button type="button" id="toc-drawer-button" class="fixed-button toc-drawer-button d-none" aria-label="目录" aria-controls="toc-dialog" aria-expanded="false"><i class="fa-solid fa-bars" aria-hidden="true"></i></button></div><div id="mask"></div><div class="reading-progress-bar" style="left: 0;top: 0;"></div><noscript>
     <div class="noscript-warning">该网站在启用 JavaScript 的情况下效果最佳。</div>
   </noscript>
 </div><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script src="/lib/autocomplete/autocomplete.min.js" defer></script><script src="/lib/algoliasearch/browser.umd.js" defer></script><script src="/lib/sharer/sharer.min.js" async defer></script><script src="/lib/cookieconsent/cookieconsent.min.js" defer></script><script src="/js/lib/cookieconsent.js" defer></script><script src="/lib/cell-tooltip/cell-tooltip.umd.js" defer></script><script src="/js/config/13284384e71c4d860a8ede5b7e7b0725.js" defer></script><script src="/js/lib/file-tree.js" defer></script><script src="/js/main.js" defer></script></body>

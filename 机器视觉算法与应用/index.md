@@ -160,6 +160,14 @@ $$y^{\prime} = y\frac{c}{a} \tag{2.2}$$
 
 ### 3.2 图像增强 (Image Enhancement)
 
+#### 3.2.1 灰度值变换 (Gray Value Transformations)
+
+#### 3.2.2 辐射标定 (Radiometric Calibration)
+
+#### 3.2.3 图像平滑 (Image Smoothing)
+
+#### 3.2.4 傅里叶变换 (Fourier Transform)
+
 尽管我们尽力来选择最佳的硬件设置，但是有时图像还是不够好。
 
 ### 3.3 几何变换 (Geometric Transformations)
@@ -167,6 +175,12 @@ $$y^{\prime} = y\frac{c}{a} \tag{2.2}$$
 在许多应用中，并不能保证被测物在图像中总是处于同样的位置和方向。所以，检测算法必须能够应对这种位置的变化。因此，首先要解决的问题就是检测出被测物的物质和方向，即被测物的位姿。
 
 本节中我们先假设位姿已知。此时，调整物体到检测所需位姿的最简单方法就是对ROI的位姿进行适当的调整。
+
+#### 3.3.1 仿射变换 (Affine Transformations)
+
+#### 3.3.2 图像变换 (Image Transformations)
+
+#### 3.3.3 投影图像变换 (Projective Image Transformations)
 
 #### 3.3.4 极坐标变换 (Polar Transformations)
 
@@ -176,21 +190,75 @@ $$y^{\prime} = y\frac{c}{a} \tag{2.2}$$
 
 ### 3.4 图像分割 (Image Segmentation)
 
-为得到图像中的物体信息，必须进行图像分割，即提取图像中与感兴趣物体相对应的那些区域。描述得更正式些，分割操作以一幅图像作为输入而返回一个或多个区域或亚像素轮廓作为输出。
+为得到图像中的物体信息，必须进行图像分割，即提取图像中与感兴趣物体相对应的那些区域。描述得更正
+式些，分割操作以一幅图像作为输入而返回一个或多个区域或亚像素轮廓作为输出。
+
+#### 3.4.1 阈值分割 (Thresholding)
+
+#### 3.4.2 提取连通区域 (Extraction of Connected Components)
+
+#### 3.4.3 亚像素精度阈值分割 (Subpixel-Precise Thresholding)
 
 ### 3.5 特征提取 (Feature Extraction)
 
+#### 3.5.1 区域特征 (Region Features)
+
+#### 3.5.2 灰度值特征 (Gray Value Features)
+
+#### 3.5.3 轮廓特征 (Contour Features)
+
 ### 3.6 形态学 (Morphology)
+
+#### 3.6.1 区域形态学 (Region Morphology)
+
+#### 3.6.2 灰度值形态学 (Gray Value Morphology)
 
 ### 3.7 边缘提取 (Edge Extraction)
 
+#### 3.7.1 边缘定义 (Definition of Edges)
+
+#### 3.7.2 一维边缘提取 (1D Edge Extraction)
+
+#### 3.7.3 二维边缘提取 (1D Edge Extraction)
+
+#### 3.7.4 边缘的准确度和精确度 (Accuracy and Precision of Edges)
+
 ### 3.8 几何基元的分割和拟合 (Segmentation and Fitting of Geometric Primitives)
 
+#### 3.8.1 直线拟合 (Fitting Lines)
+#### 3.8.2 圆拟合 (Fitting Circles)
+
+#### 3.8.3 椭圆拟合 (Fitting Ellipses)
+
+#### 3.8.4 轮廓分割 (Segmentation of Contours)
+
 ### 3.9 相机标定 (Camera Calibration)
+
+#### 3.9.1 普通镜头与面阵相机组成的相机模型 (Camera Models for Area Scan Cameras with Regular Lenses)
+
+#### 3.9.2 倾斜镜头和面阵相机组成的相机模型 (Camera Models for Area Scan Cameras with Tilt Lenses)
+
+#### 3.9.3 线阵相机的相机模型 (Camera Models for Line Scan Cameras)
+
+#### 3.9.4 标定过程 (Calibration Process)
+
+#### 3.9.5 从单幅图像中提取世界坐标 (World Coordinates from Single Images)
+
+#### 3.9.6 相机参数的准确度 (Accuracy of the Camera Parameters)
 
 ### 3.10 三维重构 (3D Reconstruction)
 
 ### 3.11 模板匹配 (Template Matching)
+
+#### 3.11.1 基于灰度值的模板匹配 (Gray-Value-Based Template Matching)
+
+#### 3.11.2 使用图形金字塔进行匹配 (Matching Using Image Pyramids)
+
+#### 3.11.3 基于灰度的亚像素精度匹配 (Subpixel-Accurate Gray-Value-Based Matching)
+
+#### 3.11.4 带旋转和缩放的模板匹配 (Template Maching with Rotations and Scalings)
+
+#### 3.11.5 鲁棒性强的模板匹配算法 (Robust Template Matching)
 
 ### 3.12 三维物体识别 (3D Object Recognition)
 
@@ -198,11 +266,35 @@ $$y^{\prime} = y\frac{c}{a} \tag{2.2}$$
 
 ### 3.14 光学字符识别 (Optical Character Recognition)
 
+#### 3.14.1 字符分割 (Character Segmentation)
+
+#### 3.14.2 特征提取 (Feature Extraction)
+
+### 3.15 分类 (Classification)
+
+#### 3.15.1 决策理论 (Decision Theory)
+
+#### 3.15.2 基于估计概率的分类器 (Classifiers Based on Estimating Class Probabilities)
+
+#### 3.15.3 基于构造分离超曲面的分类器 (Classifiers Based on Constructing Separating Hypersurfaces)
+
+#### 3.15.4 使用分类器用于OCR的例子 (Example of Using Classifiers for OCR)
+
 ### 3.15 分类 (Classification)
 
 ## 4. 机器视觉应用 (Machine Vision Applications)
 
 ### 4.1 半导体晶片切割 (Wafer Diciing)
+
+半导体晶片通常含有多个矩形栅格排列的芯片。为了得到每一片芯片，需要在芯片间的空隙处切割。由于空隙通常小于100μm，为了保证在切割过程中不损坏芯片，需要在切割过程中精确定位。
+
+该应用使用的算法：
+
+- 快速傅里叶变换
+- 相关
+- 基于形状的模板匹配
+
+![图4.1 晶片图像](/images/202606/5/wafer_dies.png "图4.1 晶片图像。芯片水平对齐排列在矩形栅格上")
 
 ### 4.2 序列号读取 (Reading of Serial Numbers)
 

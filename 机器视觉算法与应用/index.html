@@ -15,7 +15,7 @@
 《机器视觉算法与应用（第2版）》由 Carsten Steger（MVTec 联合创始人） 等人编写，是工业机器视觉领域非常经典的一本参考书。它没有简单罗列各种视觉算法，而是从图像形成、特征提取、定位、测量、识别等角度，系统介绍机器视觉中常见问题背后的数学原理和工程方法,这篇文章记录阅读过程中的一些理解和总结，希望通过这个过程，把零散的视觉知识，逐步整理成一套可以用于实际设备开发的“认知框架”。。">
 	<meta itemprop="datePublished" content="2026-06-15T16:24:32+08:00">
 	<meta itemprop="dateModified" content="2026-06-15T16:24:32+08:00">
-	<meta itemprop="wordCount" content="4379">
+	<meta itemprop="wordCount" content="4981">
 	<meta itemprop="keywords" content="机器视觉算法,机器视觉应用"><meta property="og:url" content="http://localhost:1313/%E6%9C%BA%E5%99%A8%E8%A7%86%E8%A7%89%E7%AE%97%E6%B3%95%E4%B8%8E%E5%BA%94%E7%94%A8/">
 	<meta property="og:site_name" content="东尼的博客">
 	<meta property="og:title" content="机器视觉算法与应用 第2版 (Carsten Steger)">
@@ -49,7 +49,7 @@
     "mainEntityOfPage": {
       "@type": "WebPage",
       "@id": "http:\/\/localhost:1313\/%E6%9C%BA%E5%99%A8%E8%A7%86%E8%A7%89%E7%AE%97%E6%B3%95%E4%B8%8E%E5%BA%94%E7%94%A8\/"
-    },"genre": "posts","keywords": "视觉算法, 读书笔记, 机器视觉","wordcount":  4379 ,
+    },"genre": "posts","keywords": "视觉算法, 读书笔记, 机器视觉","wordcount":  4981 ,
     "url": "http:\/\/localhost:1313\/%E6%9C%BA%E5%99%A8%E8%A7%86%E8%A7%89%E7%AE%97%E6%B3%95%E4%B8%8E%E5%BA%94%E7%94%A8\/","datePublished": "2026-06-15T16:24:32+08:00","dateModified": "2026-06-15T16:24:32+08:00","publisher": {
       "@type": "Organization",
       "name": ""},"author": {
@@ -146,7 +146,7 @@
   <article class="page single">
     <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span title="转载" class="icon-repost"><i class="fa-solid fa-share" aria-hidden="true"></i></span><span>机器视觉算法与应用 第2版 (Carsten Steger)</span>
       </h1></div><div class="post-meta">
-      <div class="post-meta-line"><span class="post-author"><a href="https://andyfree96.github.io/" title="作者" target="_blank" rel="author external nofollow noopener noreferrer" class="author"><img class="avatar" src='/avatar/1.jpg' alt="AndyFree96" height="16" width="16">&nbsp;AndyFree96</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E4%B9%A6%E7%B1%8D%E7%A0%94%E8%AF%BB/" class="post-category" title="分类 - 书籍研读"><i class="fa-regular fa-folder" aria-hidden="true"></i> 书籍研读</a></span></div><div class="post-meta-line"><span title="发布于 2026-06-15 16:24:32"><i class="fa-solid fa-calendar-days me-1" aria-hidden="true"></i><time datetime="2026-06-15">2026-06-15</time></span>&nbsp;<span title="4379 字"><i class="fa-solid fa-pencil-alt me-1" aria-hidden="true"></i>约 4400 字</span>&nbsp;<span><i class="fa-regular fa-clock me-1" aria-hidden="true"></i>预计阅读 9 分钟</span>&nbsp;</div>
+      <div class="post-meta-line"><span class="post-author"><a href="https://andyfree96.github.io/" title="作者" target="_blank" rel="author external nofollow noopener noreferrer" class="author"><img class="avatar" src='/avatar/1.jpg' alt="AndyFree96" height="16" width="16">&nbsp;AndyFree96</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E4%B9%A6%E7%B1%8D%E7%A0%94%E8%AF%BB/" class="post-category" title="分类 - 书籍研读"><i class="fa-regular fa-folder" aria-hidden="true"></i> 书籍研读</a></span></div><div class="post-meta-line"><span title="发布于 2026-06-15 16:24:32"><i class="fa-solid fa-calendar-days me-1" aria-hidden="true"></i><time datetime="2026-06-15">2026-06-15</time></span>&nbsp;<span title="4981 字"><i class="fa-solid fa-pencil-alt me-1" aria-hidden="true"></i>约 5000 字</span>&nbsp;<span><i class="fa-regular fa-clock me-1" aria-hidden="true"></i>预计阅读 10 分钟</span>&nbsp;</div>
     </div><div class="featured-image"><img loading="eager" src='/images/202606/5/microsoft-copilot-8UnGiO4yesk-unsplash.jpg' sizes="(max-width: 680px) 100vw, (max-width: 960px) 80vw, (max-width: 1440px) 56vw, 800px" alt="/images/202606/5/microsoft-copilot-8UnGiO4yesk-unsplash.jpg"></div><div class="details toc" id="toc-static" data-kept="false">
         <div class="details-summary toc-title">
           <span>目录</span>
@@ -187,24 +187,95 @@
     <li><a href="#3-机器视觉算法-machine-vision-algorithms">3. 机器视觉算法 (Machine Vision Algorithms)</a>
       <ul>
         <li><a href="#31-基本数据结构-fundamental-data-structures">3.1 基本数据结构 (Fundamental Data Structures)</a></li>
-        <li><a href="#32-图像增强-image-enhancement">3.2 图像增强 (Image Enhancement)</a></li>
+        <li><a href="#32-图像增强-image-enhancement">3.2 图像增强 (Image Enhancement)</a>
+          <ul>
+            <li><a href="#321-灰度值变换-gray-value-transformations">3.2.1 灰度值变换 (Gray Value Transformations)</a></li>
+            <li><a href="#322-辐射标定-radiometric-calibration">3.2.2 辐射标定 (Radiometric Calibration)</a></li>
+            <li><a href="#323-图像平滑-image-smoothing">3.2.3 图像平滑 (Image Smoothing)</a></li>
+            <li><a href="#324-傅里叶变换-fourier-transform">3.2.4 傅里叶变换 (Fourier Transform)</a></li>
+          </ul>
+        </li>
         <li><a href="#33-几何变换-geometric-transformations">3.3 几何变换 (Geometric Transformations)</a>
           <ul>
+            <li><a href="#331-仿射变换-affine-transformations">3.3.1 仿射变换 (Affine Transformations)</a></li>
+            <li><a href="#332-图像变换-image-transformations">3.3.2 图像变换 (Image Transformations)</a></li>
+            <li><a href="#333-投影图像变换-projective-image-transformations">3.3.3 投影图像变换 (Projective Image Transformations)</a></li>
             <li><a href="#334-极坐标变换-polar-transformations">3.3.4 极坐标变换 (Polar Transformations)</a></li>
           </ul>
         </li>
-        <li><a href="#34-图像分割-image-segmentation">3.4 图像分割 (Image Segmentation)</a></li>
-        <li><a href="#35-特征提取-feature-extraction">3.5 特征提取 (Feature Extraction)</a></li>
-        <li><a href="#36-形态学-morphology">3.6 形态学 (Morphology)</a></li>
-        <li><a href="#37-边缘提取-edge-extraction">3.7 边缘提取 (Edge Extraction)</a></li>
-        <li><a href="#38-几何基元的分割和拟合-segmentation-and-fitting-of-geometric-primitives">3.8 几何基元的分割和拟合 (Segmentation and Fitting of Geometric Primitives)</a></li>
-        <li><a href="#39-相机标定-camera-calibration">3.9 相机标定 (Camera Calibration)</a></li>
+        <li><a href="#34-图像分割-image-segmentation">3.4 图像分割 (Image Segmentation)</a>
+          <ul>
+            <li><a href="#341-阈值分割-thresholding">3.4.1 阈值分割 (Thresholding)</a></li>
+            <li><a href="#342-提取连通区域-extraction-of-connected-components">3.4.2 提取连通区域 (Extraction of Connected Components)</a></li>
+            <li><a href="#343-亚像素精度阈值分割-subpixel-precise-thresholding">3.4.3 亚像素精度阈值分割 (Subpixel-Precise Thresholding)</a></li>
+          </ul>
+        </li>
+        <li><a href="#35-特征提取-feature-extraction">3.5 特征提取 (Feature Extraction)</a>
+          <ul>
+            <li><a href="#351-区域特征-region-features">3.5.1 区域特征 (Region Features)</a></li>
+            <li><a href="#352-灰度值特征-gray-value-features">3.5.2 灰度值特征 (Gray Value Features)</a></li>
+            <li><a href="#353-轮廓特征-contour-features">3.5.3 轮廓特征 (Contour Features)</a></li>
+          </ul>
+        </li>
+        <li><a href="#36-形态学-morphology">3.6 形态学 (Morphology)</a>
+          <ul>
+            <li><a href="#361-区域形态学-region-morphology">3.6.1 区域形态学 (Region Morphology)</a></li>
+            <li><a href="#362-灰度值形态学-gray-value-morphology">3.6.2 灰度值形态学 (Gray Value Morphology)</a></li>
+          </ul>
+        </li>
+        <li><a href="#37-边缘提取-edge-extraction">3.7 边缘提取 (Edge Extraction)</a>
+          <ul>
+            <li><a href="#371-边缘定义-definition-of-edges">3.7.1 边缘定义 (Definition of Edges)</a></li>
+            <li><a href="#372-一维边缘提取-1d-edge-extraction">3.7.2 一维边缘提取 (1D Edge Extraction)</a></li>
+            <li><a href="#373-二维边缘提取-1d-edge-extraction">3.7.3 二维边缘提取 (1D Edge Extraction)</a></li>
+            <li><a href="#374-边缘的准确度和精确度-accuracy-and-precision-of-edges">3.7.4 边缘的准确度和精确度 (Accuracy and Precision of Edges)</a></li>
+          </ul>
+        </li>
+        <li><a href="#38-几何基元的分割和拟合-segmentation-and-fitting-of-geometric-primitives">3.8 几何基元的分割和拟合 (Segmentation and Fitting of Geometric Primitives)</a>
+          <ul>
+            <li><a href="#381-直线拟合-fitting-lines">3.8.1 直线拟合 (Fitting Lines)</a></li>
+            <li><a href="#382-圆拟合-fitting-circles">3.8.2 圆拟合 (Fitting Circles)</a></li>
+            <li><a href="#383-椭圆拟合-fitting-ellipses">3.8.3 椭圆拟合 (Fitting Ellipses)</a></li>
+            <li><a href="#384-轮廓分割-segmentation-of-contours">3.8.4 轮廓分割 (Segmentation of Contours)</a></li>
+          </ul>
+        </li>
+        <li><a href="#39-相机标定-camera-calibration">3.9 相机标定 (Camera Calibration)</a>
+          <ul>
+            <li><a href="#391-普通镜头与面阵相机组成的相机模型-camera-models-for-area-scan-cameras-with-regular-lenses">3.9.1 普通镜头与面阵相机组成的相机模型 (Camera Models for Area Scan Cameras with Regular Lenses)</a></li>
+            <li><a href="#392-倾斜镜头和面阵相机组成的相机模型-camera-models-for-area-scan-cameras-with-tilt-lenses">3.9.2 倾斜镜头和面阵相机组成的相机模型 (Camera Models for Area Scan Cameras with Tilt Lenses)</a></li>
+            <li><a href="#393-线阵相机的相机模型-camera-models-for-line-scan-cameras">3.9.3 线阵相机的相机模型 (Camera Models for Line Scan Cameras)</a></li>
+            <li><a href="#394-标定过程-calibration-process">3.9.4 标定过程 (Calibration Process)</a></li>
+            <li><a href="#395-从单幅图像中提取世界坐标-world-coordinates-from-single-images">3.9.5 从单幅图像中提取世界坐标 (World Coordinates from Single Images)</a></li>
+            <li><a href="#396-相机参数的准确度-accuracy-of-the-camera-parameters">3.9.6 相机参数的准确度 (Accuracy of the Camera Parameters)</a></li>
+          </ul>
+        </li>
         <li><a href="#310-三维重构-3d-reconstruction">3.10 三维重构 (3D Reconstruction)</a></li>
-        <li><a href="#311-模板匹配-template-matching">3.11 模板匹配 (Template Matching)</a></li>
+        <li><a href="#311-模板匹配-template-matching">3.11 模板匹配 (Template Matching)</a>
+          <ul>
+            <li><a href="#3111-基于灰度值的模板匹配-gray-value-based-template-matching">3.11.1 基于灰度值的模板匹配 (Gray-Value-Based Template Matching)</a></li>
+            <li><a href="#3112-使用图形金字塔进行匹配-matching-using-image-pyramids">3.11.2 使用图形金字塔进行匹配 (Matching Using Image Pyramids)</a></li>
+            <li><a href="#3113-基于灰度的亚像素精度匹配-subpixel-accurate-gray-value-based-matching">3.11.3 基于灰度的亚像素精度匹配 (Subpixel-Accurate Gray-Value-Based Matching)</a></li>
+            <li><a href="#3114-带旋转和缩放的模板匹配-template-maching-with-rotations-and-scalings">3.11.4 带旋转和缩放的模板匹配 (Template Maching with Rotations and Scalings)</a></li>
+            <li><a href="#3115-鲁棒性强的模板匹配算法-robust-template-matching">3.11.5 鲁棒性强的模板匹配算法 (Robust Template Matching)</a></li>
+          </ul>
+        </li>
         <li><a href="#312-三维物体识别-3d-object-recognition">3.12 三维物体识别 (3D Object Recognition)</a></li>
         <li><a href="#313-手眼标定-hand-eye-calibration">3.13 手眼标定 (Hand-Eye Calibration)</a></li>
-        <li><a href="#314-光学字符识别-optical-character-recognition">3.14 光学字符识别 (Optical Character Recognition)</a></li>
-        <li><a href="#315-分类-classification">3.15 分类 (Classification)</a></li>
+        <li><a href="#314-光学字符识别-optical-character-recognition">3.14 光学字符识别 (Optical Character Recognition)</a>
+          <ul>
+            <li><a href="#3141-字符分割-character-segmentation">3.14.1 字符分割 (Character Segmentation)</a></li>
+            <li><a href="#3142-特征提取-feature-extraction">3.14.2 特征提取 (Feature Extraction)</a></li>
+          </ul>
+        </li>
+        <li><a href="#315-分类-classification">3.15 分类 (Classification)</a>
+          <ul>
+            <li><a href="#3151-决策理论-decision-theory">3.15.1 决策理论 (Decision Theory)</a></li>
+            <li><a href="#3152-基于估计概率的分类器-classifiers-based-on-estimating-class-probabilities">3.15.2 基于估计概率的分类器 (Classifiers Based on Estimating Class Probabilities)</a></li>
+            <li><a href="#3153-基于构造分离超曲面的分类器-classifiers-based-on-constructing-separating-hypersurfaces">3.15.3 基于构造分离超曲面的分类器 (Classifiers Based on Constructing Separating Hypersurfaces)</a></li>
+            <li><a href="#3154-使用分类器用于ocr的例子-example-of-using-classifiers-for-ocr">3.15.4 使用分类器用于OCR的例子 (Example of Using Classifiers for OCR)</a></li>
+          </ul>
+        </li>
+        <li><a href="#315-分类-classification-1">3.15 分类 (Classification)</a></li>
       </ul>
     </li>
     <li><a href="#4-机器视觉应用-machine-vision-applications">4. 机器视觉应用 (Machine Vision Applications)</a>
@@ -383,14 +454,42 @@
   <a href="#32-%e5%9b%be%e5%83%8f%e5%a2%9e%e5%bc%ba-image-enhancement" class="heading-mark">
     <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
   </a>
-</h3><p>尽管我们尽力来选择最佳的硬件设置，但是有时图像还是不够好。</p>
+</h3><h4 class="heading-element" id="321-灰度值变换-gray-value-transformations"><span>3.2.1 灰度值变换 (Gray Value Transformations)</span>
+  <a href="#321-%e7%81%b0%e5%ba%a6%e5%80%bc%e5%8f%98%e6%8d%a2-gray-value-transformations" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h4><h4 class="heading-element" id="322-辐射标定-radiometric-calibration"><span>3.2.2 辐射标定 (Radiometric Calibration)</span>
+  <a href="#322-%e8%be%90%e5%b0%84%e6%a0%87%e5%ae%9a-radiometric-calibration" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h4><h4 class="heading-element" id="323-图像平滑-image-smoothing"><span>3.2.3 图像平滑 (Image Smoothing)</span>
+  <a href="#323-%e5%9b%be%e5%83%8f%e5%b9%b3%e6%bb%91-image-smoothing" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h4><h4 class="heading-element" id="324-傅里叶变换-fourier-transform"><span>3.2.4 傅里叶变换 (Fourier Transform)</span>
+  <a href="#324-%e5%82%85%e9%87%8c%e5%8f%b6%e5%8f%98%e6%8d%a2-fourier-transform" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h4><p>尽管我们尽力来选择最佳的硬件设置，但是有时图像还是不够好。</p>
 <h3 class="heading-element" id="33-几何变换-geometric-transformations"><span>3.3 几何变换 (Geometric Transformations)</span>
   <a href="#33-%e5%87%a0%e4%bd%95%e5%8f%98%e6%8d%a2-geometric-transformations" class="heading-mark">
     <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
   </a>
 </h3><p>在许多应用中，并不能保证被测物在图像中总是处于同样的位置和方向。所以，检测算法必须能够应对这种位置的变化。因此，首先要解决的问题就是检测出被测物的物质和方向，即被测物的位姿。</p>
 <p>本节中我们先假设位姿已知。此时，调整物体到检测所需位姿的最简单方法就是对ROI的位姿进行适当的调整。</p>
-<h4 class="heading-element" id="334-极坐标变换-polar-transformations"><span>3.3.4 极坐标变换 (Polar Transformations)</span>
+<h4 class="heading-element" id="331-仿射变换-affine-transformations"><span>3.3.1 仿射变换 (Affine Transformations)</span>
+  <a href="#331-%e4%bb%bf%e5%b0%84%e5%8f%98%e6%8d%a2-affine-transformations" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h4><h4 class="heading-element" id="332-图像变换-image-transformations"><span>3.3.2 图像变换 (Image Transformations)</span>
+  <a href="#332-%e5%9b%be%e5%83%8f%e5%8f%98%e6%8d%a2-image-transformations" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h4><h4 class="heading-element" id="333-投影图像变换-projective-image-transformations"><span>3.3.3 投影图像变换 (Projective Image Transformations)</span>
+  <a href="#333-%e6%8a%95%e5%bd%b1%e5%9b%be%e5%83%8f%e5%8f%98%e6%8d%a2-projective-image-transformations" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h4><h4 class="heading-element" id="334-极坐标变换-polar-transformations"><span>3.3.4 极坐标变换 (Polar Transformations)</span>
   <a href="#334-%e6%9e%81%e5%9d%90%e6%a0%87%e5%8f%98%e6%8d%a2-polar-transformations" class="heading-mark">
     <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
   </a>
@@ -400,28 +499,117 @@
   <a href="#34-%e5%9b%be%e5%83%8f%e5%88%86%e5%89%b2-image-segmentation" class="heading-mark">
     <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
   </a>
-</h3><p>为得到图像中的物体信息，必须进行图像分割，即提取图像中与感兴趣物体相对应的那些区域。描述得更正式些，分割操作以一幅图像作为输入而返回一个或多个区域或亚像素轮廓作为输出。</p>
-<h3 class="heading-element" id="35-特征提取-feature-extraction"><span>3.5 特征提取 (Feature Extraction)</span>
+</h3><p>为得到图像中的物体信息，必须进行图像分割，即提取图像中与感兴趣物体相对应的那些区域。描述得更正
+式些，分割操作以一幅图像作为输入而返回一个或多个区域或亚像素轮廓作为输出。</p>
+<h4 class="heading-element" id="341-阈值分割-thresholding"><span>3.4.1 阈值分割 (Thresholding)</span>
+  <a href="#341-%e9%98%88%e5%80%bc%e5%88%86%e5%89%b2-thresholding" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h4><h4 class="heading-element" id="342-提取连通区域-extraction-of-connected-components"><span>3.4.2 提取连通区域 (Extraction of Connected Components)</span>
+  <a href="#342-%e6%8f%90%e5%8f%96%e8%bf%9e%e9%80%9a%e5%8c%ba%e5%9f%9f-extraction-of-connected-components" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h4><h4 class="heading-element" id="343-亚像素精度阈值分割-subpixel-precise-thresholding"><span>3.4.3 亚像素精度阈值分割 (Subpixel-Precise Thresholding)</span>
+  <a href="#343-%e4%ba%9a%e5%83%8f%e7%b4%a0%e7%b2%be%e5%ba%a6%e9%98%88%e5%80%bc%e5%88%86%e5%89%b2-subpixel-precise-thresholding" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h4><h3 class="heading-element" id="35-特征提取-feature-extraction"><span>3.5 特征提取 (Feature Extraction)</span>
   <a href="#35-%e7%89%b9%e5%be%81%e6%8f%90%e5%8f%96-feature-extraction" class="heading-mark">
     <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
   </a>
-</h3><h3 class="heading-element" id="36-形态学-morphology"><span>3.6 形态学 (Morphology)</span>
+</h3><h4 class="heading-element" id="351-区域特征-region-features"><span>3.5.1 区域特征 (Region Features)</span>
+  <a href="#351-%e5%8c%ba%e5%9f%9f%e7%89%b9%e5%be%81-region-features" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h4><h4 class="heading-element" id="352-灰度值特征-gray-value-features"><span>3.5.2 灰度值特征 (Gray Value Features)</span>
+  <a href="#352-%e7%81%b0%e5%ba%a6%e5%80%bc%e7%89%b9%e5%be%81-gray-value-features" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h4><h4 class="heading-element" id="353-轮廓特征-contour-features"><span>3.5.3 轮廓特征 (Contour Features)</span>
+  <a href="#353-%e8%bd%ae%e5%bb%93%e7%89%b9%e5%be%81-contour-features" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h4><h3 class="heading-element" id="36-形态学-morphology"><span>3.6 形态学 (Morphology)</span>
   <a href="#36-%e5%bd%a2%e6%80%81%e5%ad%a6-morphology" class="heading-mark">
     <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
   </a>
-</h3><h3 class="heading-element" id="37-边缘提取-edge-extraction"><span>3.7 边缘提取 (Edge Extraction)</span>
+</h3><h4 class="heading-element" id="361-区域形态学-region-morphology"><span>3.6.1 区域形态学 (Region Morphology)</span>
+  <a href="#361-%e5%8c%ba%e5%9f%9f%e5%bd%a2%e6%80%81%e5%ad%a6-region-morphology" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h4><h4 class="heading-element" id="362-灰度值形态学-gray-value-morphology"><span>3.6.2 灰度值形态学 (Gray Value Morphology)</span>
+  <a href="#362-%e7%81%b0%e5%ba%a6%e5%80%bc%e5%bd%a2%e6%80%81%e5%ad%a6-gray-value-morphology" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h4><h3 class="heading-element" id="37-边缘提取-edge-extraction"><span>3.7 边缘提取 (Edge Extraction)</span>
   <a href="#37-%e8%be%b9%e7%bc%98%e6%8f%90%e5%8f%96-edge-extraction" class="heading-mark">
     <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
   </a>
-</h3><h3 class="heading-element" id="38-几何基元的分割和拟合-segmentation-and-fitting-of-geometric-primitives"><span>3.8 几何基元的分割和拟合 (Segmentation and Fitting of Geometric Primitives)</span>
+</h3><h4 class="heading-element" id="371-边缘定义-definition-of-edges"><span>3.7.1 边缘定义 (Definition of Edges)</span>
+  <a href="#371-%e8%be%b9%e7%bc%98%e5%ae%9a%e4%b9%89-definition-of-edges" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h4><h4 class="heading-element" id="372-一维边缘提取-1d-edge-extraction"><span>3.7.2 一维边缘提取 (1D Edge Extraction)</span>
+  <a href="#372-%e4%b8%80%e7%bb%b4%e8%be%b9%e7%bc%98%e6%8f%90%e5%8f%96-1d-edge-extraction" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h4><h4 class="heading-element" id="373-二维边缘提取-1d-edge-extraction"><span>3.7.3 二维边缘提取 (1D Edge Extraction)</span>
+  <a href="#373-%e4%ba%8c%e7%bb%b4%e8%be%b9%e7%bc%98%e6%8f%90%e5%8f%96-1d-edge-extraction" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h4><h4 class="heading-element" id="374-边缘的准确度和精确度-accuracy-and-precision-of-edges"><span>3.7.4 边缘的准确度和精确度 (Accuracy and Precision of Edges)</span>
+  <a href="#374-%e8%be%b9%e7%bc%98%e7%9a%84%e5%87%86%e7%a1%ae%e5%ba%a6%e5%92%8c%e7%b2%be%e7%a1%ae%e5%ba%a6-accuracy-and-precision-of-edges" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h4><h3 class="heading-element" id="38-几何基元的分割和拟合-segmentation-and-fitting-of-geometric-primitives"><span>3.8 几何基元的分割和拟合 (Segmentation and Fitting of Geometric Primitives)</span>
   <a href="#38-%e5%87%a0%e4%bd%95%e5%9f%ba%e5%85%83%e7%9a%84%e5%88%86%e5%89%b2%e5%92%8c%e6%8b%9f%e5%90%88-segmentation-and-fitting-of-geometric-primitives" class="heading-mark">
     <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
   </a>
-</h3><h3 class="heading-element" id="39-相机标定-camera-calibration"><span>3.9 相机标定 (Camera Calibration)</span>
+</h3><h4 class="heading-element" id="381-直线拟合-fitting-lines"><span>3.8.1 直线拟合 (Fitting Lines)</span>
+  <a href="#381-%e7%9b%b4%e7%ba%bf%e6%8b%9f%e5%90%88-fitting-lines" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h4><h4 class="heading-element" id="382-圆拟合-fitting-circles"><span>3.8.2 圆拟合 (Fitting Circles)</span>
+  <a href="#382-%e5%9c%86%e6%8b%9f%e5%90%88-fitting-circles" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h4><h4 class="heading-element" id="383-椭圆拟合-fitting-ellipses"><span>3.8.3 椭圆拟合 (Fitting Ellipses)</span>
+  <a href="#383-%e6%a4%ad%e5%9c%86%e6%8b%9f%e5%90%88-fitting-ellipses" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h4><h4 class="heading-element" id="384-轮廓分割-segmentation-of-contours"><span>3.8.4 轮廓分割 (Segmentation of Contours)</span>
+  <a href="#384-%e8%bd%ae%e5%bb%93%e5%88%86%e5%89%b2-segmentation-of-contours" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h4><h3 class="heading-element" id="39-相机标定-camera-calibration"><span>3.9 相机标定 (Camera Calibration)</span>
   <a href="#39-%e7%9b%b8%e6%9c%ba%e6%a0%87%e5%ae%9a-camera-calibration" class="heading-mark">
     <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
   </a>
-</h3><h3 class="heading-element" id="310-三维重构-3d-reconstruction"><span>3.10 三维重构 (3D Reconstruction)</span>
+</h3><h4 class="heading-element" id="391-普通镜头与面阵相机组成的相机模型-camera-models-for-area-scan-cameras-with-regular-lenses"><span>3.9.1 普通镜头与面阵相机组成的相机模型 (Camera Models for Area Scan Cameras with Regular Lenses)</span>
+  <a href="#391-%e6%99%ae%e9%80%9a%e9%95%9c%e5%a4%b4%e4%b8%8e%e9%9d%a2%e9%98%b5%e7%9b%b8%e6%9c%ba%e7%bb%84%e6%88%90%e7%9a%84%e7%9b%b8%e6%9c%ba%e6%a8%a1%e5%9e%8b-camera-models-for-area-scan-cameras-with-regular-lenses" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h4><h4 class="heading-element" id="392-倾斜镜头和面阵相机组成的相机模型-camera-models-for-area-scan-cameras-with-tilt-lenses"><span>3.9.2 倾斜镜头和面阵相机组成的相机模型 (Camera Models for Area Scan Cameras with Tilt Lenses)</span>
+  <a href="#392-%e5%80%be%e6%96%9c%e9%95%9c%e5%a4%b4%e5%92%8c%e9%9d%a2%e9%98%b5%e7%9b%b8%e6%9c%ba%e7%bb%84%e6%88%90%e7%9a%84%e7%9b%b8%e6%9c%ba%e6%a8%a1%e5%9e%8b-camera-models-for-area-scan-cameras-with-tilt-lenses" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h4><h4 class="heading-element" id="393-线阵相机的相机模型-camera-models-for-line-scan-cameras"><span>3.9.3 线阵相机的相机模型 (Camera Models for Line Scan Cameras)</span>
+  <a href="#393-%e7%ba%bf%e9%98%b5%e7%9b%b8%e6%9c%ba%e7%9a%84%e7%9b%b8%e6%9c%ba%e6%a8%a1%e5%9e%8b-camera-models-for-line-scan-cameras" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h4><h4 class="heading-element" id="394-标定过程-calibration-process"><span>3.9.4 标定过程 (Calibration Process)</span>
+  <a href="#394-%e6%a0%87%e5%ae%9a%e8%bf%87%e7%a8%8b-calibration-process" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h4><h4 class="heading-element" id="395-从单幅图像中提取世界坐标-world-coordinates-from-single-images"><span>3.9.5 从单幅图像中提取世界坐标 (World Coordinates from Single Images)</span>
+  <a href="#395-%e4%bb%8e%e5%8d%95%e5%b9%85%e5%9b%be%e5%83%8f%e4%b8%ad%e6%8f%90%e5%8f%96%e4%b8%96%e7%95%8c%e5%9d%90%e6%a0%87-world-coordinates-from-single-images" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h4><h4 class="heading-element" id="396-相机参数的准确度-accuracy-of-the-camera-parameters"><span>3.9.6 相机参数的准确度 (Accuracy of the Camera Parameters)</span>
+  <a href="#396-%e7%9b%b8%e6%9c%ba%e5%8f%82%e6%95%b0%e7%9a%84%e5%87%86%e7%a1%ae%e5%ba%a6-accuracy-of-the-camera-parameters" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h4><h3 class="heading-element" id="310-三维重构-3d-reconstruction"><span>3.10 三维重构 (3D Reconstruction)</span>
   <a href="#310-%e4%b8%89%e7%bb%b4%e9%87%8d%e6%9e%84-3d-reconstruction" class="heading-mark">
     <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
   </a>
@@ -429,7 +617,27 @@
   <a href="#311-%e6%a8%a1%e6%9d%bf%e5%8c%b9%e9%85%8d-template-matching" class="heading-mark">
     <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
   </a>
-</h3><h3 class="heading-element" id="312-三维物体识别-3d-object-recognition"><span>3.12 三维物体识别 (3D Object Recognition)</span>
+</h3><h4 class="heading-element" id="3111-基于灰度值的模板匹配-gray-value-based-template-matching"><span>3.11.1 基于灰度值的模板匹配 (Gray-Value-Based Template Matching)</span>
+  <a href="#3111-%e5%9f%ba%e4%ba%8e%e7%81%b0%e5%ba%a6%e5%80%bc%e7%9a%84%e6%a8%a1%e6%9d%bf%e5%8c%b9%e9%85%8d-gray-value-based-template-matching" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h4><h4 class="heading-element" id="3112-使用图形金字塔进行匹配-matching-using-image-pyramids"><span>3.11.2 使用图形金字塔进行匹配 (Matching Using Image Pyramids)</span>
+  <a href="#3112-%e4%bd%bf%e7%94%a8%e5%9b%be%e5%bd%a2%e9%87%91%e5%ad%97%e5%a1%94%e8%bf%9b%e8%a1%8c%e5%8c%b9%e9%85%8d-matching-using-image-pyramids" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h4><h4 class="heading-element" id="3113-基于灰度的亚像素精度匹配-subpixel-accurate-gray-value-based-matching"><span>3.11.3 基于灰度的亚像素精度匹配 (Subpixel-Accurate Gray-Value-Based Matching)</span>
+  <a href="#3113-%e5%9f%ba%e4%ba%8e%e7%81%b0%e5%ba%a6%e7%9a%84%e4%ba%9a%e5%83%8f%e7%b4%a0%e7%b2%be%e5%ba%a6%e5%8c%b9%e9%85%8d-subpixel-accurate-gray-value-based-matching" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h4><h4 class="heading-element" id="3114-带旋转和缩放的模板匹配-template-maching-with-rotations-and-scalings"><span>3.11.4 带旋转和缩放的模板匹配 (Template Maching with Rotations and Scalings)</span>
+  <a href="#3114-%e5%b8%a6%e6%97%8b%e8%bd%ac%e5%92%8c%e7%bc%a9%e6%94%be%e7%9a%84%e6%a8%a1%e6%9d%bf%e5%8c%b9%e9%85%8d-template-maching-with-rotations-and-scalings" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h4><h4 class="heading-element" id="3115-鲁棒性强的模板匹配算法-robust-template-matching"><span>3.11.5 鲁棒性强的模板匹配算法 (Robust Template Matching)</span>
+  <a href="#3115-%e9%b2%81%e6%a3%92%e6%80%a7%e5%bc%ba%e7%9a%84%e6%a8%a1%e6%9d%bf%e5%8c%b9%e9%85%8d%e7%ae%97%e6%b3%95-robust-template-matching" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h4><h3 class="heading-element" id="312-三维物体识别-3d-object-recognition"><span>3.12 三维物体识别 (3D Object Recognition)</span>
   <a href="#312-%e4%b8%89%e7%bb%b4%e7%89%a9%e4%bd%93%e8%af%86%e5%88%ab-3d-object-recognition" class="heading-mark">
     <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
   </a>
@@ -441,8 +649,36 @@
   <a href="#314-%e5%85%89%e5%ad%a6%e5%ad%97%e7%ac%a6%e8%af%86%e5%88%ab-optical-character-recognition" class="heading-mark">
     <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
   </a>
-</h3><h3 class="heading-element" id="315-分类-classification"><span>3.15 分类 (Classification)</span>
+</h3><h4 class="heading-element" id="3141-字符分割-character-segmentation"><span>3.14.1 字符分割 (Character Segmentation)</span>
+  <a href="#3141-%e5%ad%97%e7%ac%a6%e5%88%86%e5%89%b2-character-segmentation" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h4><h4 class="heading-element" id="3142-特征提取-feature-extraction"><span>3.14.2 特征提取 (Feature Extraction)</span>
+  <a href="#3142-%e7%89%b9%e5%be%81%e6%8f%90%e5%8f%96-feature-extraction" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h4><h3 class="heading-element" id="315-分类-classification"><span>3.15 分类 (Classification)</span>
   <a href="#315-%e5%88%86%e7%b1%bb-classification" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><h4 class="heading-element" id="3151-决策理论-decision-theory"><span>3.15.1 决策理论 (Decision Theory)</span>
+  <a href="#3151-%e5%86%b3%e7%ad%96%e7%90%86%e8%ae%ba-decision-theory" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h4><h4 class="heading-element" id="3152-基于估计概率的分类器-classifiers-based-on-estimating-class-probabilities"><span>3.15.2 基于估计概率的分类器 (Classifiers Based on Estimating Class Probabilities)</span>
+  <a href="#3152-%e5%9f%ba%e4%ba%8e%e4%bc%b0%e8%ae%a1%e6%a6%82%e7%8e%87%e7%9a%84%e5%88%86%e7%b1%bb%e5%99%a8-classifiers-based-on-estimating-class-probabilities" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h4><h4 class="heading-element" id="3153-基于构造分离超曲面的分类器-classifiers-based-on-constructing-separating-hypersurfaces"><span>3.15.3 基于构造分离超曲面的分类器 (Classifiers Based on Constructing Separating Hypersurfaces)</span>
+  <a href="#3153-%e5%9f%ba%e4%ba%8e%e6%9e%84%e9%80%a0%e5%88%86%e7%a6%bb%e8%b6%85%e6%9b%b2%e9%9d%a2%e7%9a%84%e5%88%86%e7%b1%bb%e5%99%a8-classifiers-based-on-constructing-separating-hypersurfaces" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h4><h4 class="heading-element" id="3154-使用分类器用于ocr的例子-example-of-using-classifiers-for-ocr"><span>3.15.4 使用分类器用于OCR的例子 (Example of Using Classifiers for OCR)</span>
+  <a href="#3154-%e4%bd%bf%e7%94%a8%e5%88%86%e7%b1%bb%e5%99%a8%e7%94%a8%e4%ba%8eocr%e7%9a%84%e4%be%8b%e5%ad%90-example-of-using-classifiers-for-ocr" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h4><h3 class="heading-element" id="315-分类-classification-1"><span>3.15 分类 (Classification)</span>
+  <a href="#315-%e5%88%86%e7%b1%bb-classification-1" class="heading-mark">
     <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
   </a>
 </h3><h2 class="heading-element" id="4-机器视觉应用-machine-vision-applications"><span>4. 机器视觉应用 (Machine Vision Applications)</span>
@@ -453,7 +689,16 @@
   <a href="#41-%e5%8d%8a%e5%af%bc%e4%bd%93%e6%99%b6%e7%89%87%e5%88%87%e5%89%b2-wafer-diciing" class="heading-mark">
     <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
   </a>
-</h3><h3 class="heading-element" id="42-序列号读取-reading-of-serial-numbers"><span>4.2 序列号读取 (Reading of Serial Numbers)</span>
+</h3><p>半导体晶片通常含有多个矩形栅格排列的芯片。为了得到每一片芯片，需要在芯片间的空隙处切割。由于空隙通常小于100μm，为了保证在切割过程中不损坏芯片，需要在切割过程中精确定位。</p>
+<p>该应用使用的算法：</p>
+<ul>
+<li>快速傅里叶变换</li>
+<li>相关</li>
+<li>基于形状的模板匹配</li>
+</ul>
+<p><figure><img loading="lazy" src='/images/202606/5/wafer_dies.png' alt="图4.1 晶片图像"><figcaption class="image-caption">图4.1 晶片图像。芯片水平对齐排列在矩形栅格上</figcaption>
+  </figure></p>
+<h3 class="heading-element" id="42-序列号读取-reading-of-serial-numbers"><span>4.2 序列号读取 (Reading of Serial Numbers)</span>
   <a href="#42-%e5%ba%8f%e5%88%97%e5%8f%b7%e8%af%bb%e5%8f%96-reading-of-serial-numbers" class="heading-mark">
     <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
   </a>
@@ -590,24 +835,95 @@
     <li><a href="#3-机器视觉算法-machine-vision-algorithms">3. 机器视觉算法 (Machine Vision Algorithms)</a>
       <ul>
         <li><a href="#31-基本数据结构-fundamental-data-structures">3.1 基本数据结构 (Fundamental Data Structures)</a></li>
-        <li><a href="#32-图像增强-image-enhancement">3.2 图像增强 (Image Enhancement)</a></li>
+        <li><a href="#32-图像增强-image-enhancement">3.2 图像增强 (Image Enhancement)</a>
+          <ul>
+            <li><a href="#321-灰度值变换-gray-value-transformations">3.2.1 灰度值变换 (Gray Value Transformations)</a></li>
+            <li><a href="#322-辐射标定-radiometric-calibration">3.2.2 辐射标定 (Radiometric Calibration)</a></li>
+            <li><a href="#323-图像平滑-image-smoothing">3.2.3 图像平滑 (Image Smoothing)</a></li>
+            <li><a href="#324-傅里叶变换-fourier-transform">3.2.4 傅里叶变换 (Fourier Transform)</a></li>
+          </ul>
+        </li>
         <li><a href="#33-几何变换-geometric-transformations">3.3 几何变换 (Geometric Transformations)</a>
           <ul>
+            <li><a href="#331-仿射变换-affine-transformations">3.3.1 仿射变换 (Affine Transformations)</a></li>
+            <li><a href="#332-图像变换-image-transformations">3.3.2 图像变换 (Image Transformations)</a></li>
+            <li><a href="#333-投影图像变换-projective-image-transformations">3.3.3 投影图像变换 (Projective Image Transformations)</a></li>
             <li><a href="#334-极坐标变换-polar-transformations">3.3.4 极坐标变换 (Polar Transformations)</a></li>
           </ul>
         </li>
-        <li><a href="#34-图像分割-image-segmentation">3.4 图像分割 (Image Segmentation)</a></li>
-        <li><a href="#35-特征提取-feature-extraction">3.5 特征提取 (Feature Extraction)</a></li>
-        <li><a href="#36-形态学-morphology">3.6 形态学 (Morphology)</a></li>
-        <li><a href="#37-边缘提取-edge-extraction">3.7 边缘提取 (Edge Extraction)</a></li>
-        <li><a href="#38-几何基元的分割和拟合-segmentation-and-fitting-of-geometric-primitives">3.8 几何基元的分割和拟合 (Segmentation and Fitting of Geometric Primitives)</a></li>
-        <li><a href="#39-相机标定-camera-calibration">3.9 相机标定 (Camera Calibration)</a></li>
+        <li><a href="#34-图像分割-image-segmentation">3.4 图像分割 (Image Segmentation)</a>
+          <ul>
+            <li><a href="#341-阈值分割-thresholding">3.4.1 阈值分割 (Thresholding)</a></li>
+            <li><a href="#342-提取连通区域-extraction-of-connected-components">3.4.2 提取连通区域 (Extraction of Connected Components)</a></li>
+            <li><a href="#343-亚像素精度阈值分割-subpixel-precise-thresholding">3.4.3 亚像素精度阈值分割 (Subpixel-Precise Thresholding)</a></li>
+          </ul>
+        </li>
+        <li><a href="#35-特征提取-feature-extraction">3.5 特征提取 (Feature Extraction)</a>
+          <ul>
+            <li><a href="#351-区域特征-region-features">3.5.1 区域特征 (Region Features)</a></li>
+            <li><a href="#352-灰度值特征-gray-value-features">3.5.2 灰度值特征 (Gray Value Features)</a></li>
+            <li><a href="#353-轮廓特征-contour-features">3.5.3 轮廓特征 (Contour Features)</a></li>
+          </ul>
+        </li>
+        <li><a href="#36-形态学-morphology">3.6 形态学 (Morphology)</a>
+          <ul>
+            <li><a href="#361-区域形态学-region-morphology">3.6.1 区域形态学 (Region Morphology)</a></li>
+            <li><a href="#362-灰度值形态学-gray-value-morphology">3.6.2 灰度值形态学 (Gray Value Morphology)</a></li>
+          </ul>
+        </li>
+        <li><a href="#37-边缘提取-edge-extraction">3.7 边缘提取 (Edge Extraction)</a>
+          <ul>
+            <li><a href="#371-边缘定义-definition-of-edges">3.7.1 边缘定义 (Definition of Edges)</a></li>
+            <li><a href="#372-一维边缘提取-1d-edge-extraction">3.7.2 一维边缘提取 (1D Edge Extraction)</a></li>
+            <li><a href="#373-二维边缘提取-1d-edge-extraction">3.7.3 二维边缘提取 (1D Edge Extraction)</a></li>
+            <li><a href="#374-边缘的准确度和精确度-accuracy-and-precision-of-edges">3.7.4 边缘的准确度和精确度 (Accuracy and Precision of Edges)</a></li>
+          </ul>
+        </li>
+        <li><a href="#38-几何基元的分割和拟合-segmentation-and-fitting-of-geometric-primitives">3.8 几何基元的分割和拟合 (Segmentation and Fitting of Geometric Primitives)</a>
+          <ul>
+            <li><a href="#381-直线拟合-fitting-lines">3.8.1 直线拟合 (Fitting Lines)</a></li>
+            <li><a href="#382-圆拟合-fitting-circles">3.8.2 圆拟合 (Fitting Circles)</a></li>
+            <li><a href="#383-椭圆拟合-fitting-ellipses">3.8.3 椭圆拟合 (Fitting Ellipses)</a></li>
+            <li><a href="#384-轮廓分割-segmentation-of-contours">3.8.4 轮廓分割 (Segmentation of Contours)</a></li>
+          </ul>
+        </li>
+        <li><a href="#39-相机标定-camera-calibration">3.9 相机标定 (Camera Calibration)</a>
+          <ul>
+            <li><a href="#391-普通镜头与面阵相机组成的相机模型-camera-models-for-area-scan-cameras-with-regular-lenses">3.9.1 普通镜头与面阵相机组成的相机模型 (Camera Models for Area Scan Cameras with Regular Lenses)</a></li>
+            <li><a href="#392-倾斜镜头和面阵相机组成的相机模型-camera-models-for-area-scan-cameras-with-tilt-lenses">3.9.2 倾斜镜头和面阵相机组成的相机模型 (Camera Models for Area Scan Cameras with Tilt Lenses)</a></li>
+            <li><a href="#393-线阵相机的相机模型-camera-models-for-line-scan-cameras">3.9.3 线阵相机的相机模型 (Camera Models for Line Scan Cameras)</a></li>
+            <li><a href="#394-标定过程-calibration-process">3.9.4 标定过程 (Calibration Process)</a></li>
+            <li><a href="#395-从单幅图像中提取世界坐标-world-coordinates-from-single-images">3.9.5 从单幅图像中提取世界坐标 (World Coordinates from Single Images)</a></li>
+            <li><a href="#396-相机参数的准确度-accuracy-of-the-camera-parameters">3.9.6 相机参数的准确度 (Accuracy of the Camera Parameters)</a></li>
+          </ul>
+        </li>
         <li><a href="#310-三维重构-3d-reconstruction">3.10 三维重构 (3D Reconstruction)</a></li>
-        <li><a href="#311-模板匹配-template-matching">3.11 模板匹配 (Template Matching)</a></li>
+        <li><a href="#311-模板匹配-template-matching">3.11 模板匹配 (Template Matching)</a>
+          <ul>
+            <li><a href="#3111-基于灰度值的模板匹配-gray-value-based-template-matching">3.11.1 基于灰度值的模板匹配 (Gray-Value-Based Template Matching)</a></li>
+            <li><a href="#3112-使用图形金字塔进行匹配-matching-using-image-pyramids">3.11.2 使用图形金字塔进行匹配 (Matching Using Image Pyramids)</a></li>
+            <li><a href="#3113-基于灰度的亚像素精度匹配-subpixel-accurate-gray-value-based-matching">3.11.3 基于灰度的亚像素精度匹配 (Subpixel-Accurate Gray-Value-Based Matching)</a></li>
+            <li><a href="#3114-带旋转和缩放的模板匹配-template-maching-with-rotations-and-scalings">3.11.4 带旋转和缩放的模板匹配 (Template Maching with Rotations and Scalings)</a></li>
+            <li><a href="#3115-鲁棒性强的模板匹配算法-robust-template-matching">3.11.5 鲁棒性强的模板匹配算法 (Robust Template Matching)</a></li>
+          </ul>
+        </li>
         <li><a href="#312-三维物体识别-3d-object-recognition">3.12 三维物体识别 (3D Object Recognition)</a></li>
         <li><a href="#313-手眼标定-hand-eye-calibration">3.13 手眼标定 (Hand-Eye Calibration)</a></li>
-        <li><a href="#314-光学字符识别-optical-character-recognition">3.14 光学字符识别 (Optical Character Recognition)</a></li>
-        <li><a href="#315-分类-classification">3.15 分类 (Classification)</a></li>
+        <li><a href="#314-光学字符识别-optical-character-recognition">3.14 光学字符识别 (Optical Character Recognition)</a>
+          <ul>
+            <li><a href="#3141-字符分割-character-segmentation">3.14.1 字符分割 (Character Segmentation)</a></li>
+            <li><a href="#3142-特征提取-feature-extraction">3.14.2 特征提取 (Feature Extraction)</a></li>
+          </ul>
+        </li>
+        <li><a href="#315-分类-classification">3.15 分类 (Classification)</a>
+          <ul>
+            <li><a href="#3151-决策理论-decision-theory">3.15.1 决策理论 (Decision Theory)</a></li>
+            <li><a href="#3152-基于估计概率的分类器-classifiers-based-on-estimating-class-probabilities">3.15.2 基于估计概率的分类器 (Classifiers Based on Estimating Class Probabilities)</a></li>
+            <li><a href="#3153-基于构造分离超曲面的分类器-classifiers-based-on-constructing-separating-hypersurfaces">3.15.3 基于构造分离超曲面的分类器 (Classifiers Based on Constructing Separating Hypersurfaces)</a></li>
+            <li><a href="#3154-使用分类器用于ocr的例子-example-of-using-classifiers-for-ocr">3.15.4 使用分类器用于OCR的例子 (Example of Using Classifiers for OCR)</a></li>
+          </ul>
+        </li>
+        <li><a href="#315-分类-classification-1">3.15 分类 (Classification)</a></li>
       </ul>
     </li>
     <li><a href="#4-机器视觉应用-machine-vision-applications">4. 机器视觉应用 (Machine Vision Applications)</a>
