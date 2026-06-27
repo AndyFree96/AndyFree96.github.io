@@ -15,5 +15,5 @@
 ---
 
 > 作者: [AndyFree96](https://andyfree96.github.io/)  
-> URL: http://localhost:1313/cs61a-structure-and-interpretation-of-computer-programs/  
+> URL: https://andyfree96.github.io/cs61a-structure-and-interpretation-of-computer-programs/  
 

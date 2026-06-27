@@ -1,770 +1,555 @@
-<!DOCTYPE html>
-<html itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
-  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
-    <meta name="robots" content="noodp" />
-    <title>launch-editor源码剖析：快速打开编辑器的实现原理 - 东尼的博客</title><meta name="author" content="AndyFree96">
-<meta name="description" content="在阅读 Vite 源码的过程中，我注意到一个有趣的依赖 —— launch-editor。起初只是随手点开，结果却发现它正是支撑起「浏览器报错信息 → 一键跳转到编辑器」这一开发体验的核心工具。其实，我们在使用 Vite、Vue CLI 等工具的时候，不止一次用过这个功能：报错时点击链接，代码编辑器立刻打开到对应的文件和行号。背后的关键实现，正是 launch-editor。
-"><meta name="keywords" content='launch-editor, 源码剖析'>
-	<meta itemprop="name" content="launch-editor源码剖析：快速打开编辑器的实现原理">
-	<meta itemprop="description" content="在阅读 Vite 源码的过程中，我注意到一个有趣的依赖 —— launch-editor。起初只是随手点开，结果却发现它正是支撑起「浏览器报错信息 → 一键跳转到编辑器」这一开发体验的核心工具。其实，我们在使用 Vite、Vue CLI 等工具的时候，不止一次用过这个功能：报错时点击链接，代码编辑器立刻打开到对应的文件和行号。背后的关键实现，正是 launch-editor。">
-	<meta itemprop="datePublished" content="2025-09-11T22:39:22+08:00">
-	<meta itemprop="dateModified" content="2025-09-11T22:39:22+08:00">
-	<meta itemprop="wordCount" content="2847">
-	<meta itemprop="keywords" content="launch-editor,源码剖析"><meta property="og:url" content="http://localhost:1313/launch-editor%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/">
-	<meta property="og:site_name" content="东尼的博客">
-	<meta property="og:title" content="launch-editor源码剖析：快速打开编辑器的实现原理">
-	<meta property="og:description" content="在阅读 Vite 源码的过程中，我注意到一个有趣的依赖 —— launch-editor。起初只是随手点开，结果却发现它正是支撑起「浏览器报错信息 → 一键跳转到编辑器」这一开发体验的核心工具。其实，我们在使用 Vite、Vue CLI 等工具的时候，不止一次用过这个功能：报错时点击链接，代码编辑器立刻打开到对应的文件和行号。背后的关键实现，正是 launch-editor。">
-	<meta property="og:locale" content="zh_CN">
-	<meta property="og:type" content="article">
-		<meta property="article:section" content="posts">
-		<meta property="article:published_time" content="2025-09-11T22:39:22+08:00">
-		<meta property="article:modified_time" content="2025-09-11T22:39:22+08:00">
-		<meta property="article:tag" content="Node.js">
-		<meta property="article:tag" content="Launch-Editor">
-
-  <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="launch-editor源码剖析：快速打开编辑器的实现原理">
-  <meta name="twitter:description" content="在阅读 Vite 源码的过程中，我注意到一个有趣的依赖 —— launch-editor。起初只是随手点开，结果却发现它正是支撑起「浏览器报错信息 → 一键跳转到编辑器」这一开发体验的核心工具。其实，我们在使用 Vite、Vue CLI 等工具的时候，不止一次用过这个功能：报错时点击链接，代码编辑器立刻打开到对应的文件和行号。背后的关键实现，正是 launch-editor。"><meta name="twitter:creator" content="@IRONAnthony96"><meta name="application-name" content="FixIt">
-<meta name="apple-mobile-web-app-title" content="FixIt"><meta name="theme-color" data-light="#f6f8fa" data-dark="#151b23" content="#f6f8fa"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" type="text/html" href="http://localhost:1313/launch-editor%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="launch-editor源码剖析：快速打开编辑器的实现原理 - 东尼的博客" /><link rel="prev" type="text/html" href="http://localhost:1313/es6%E6%A8%A1%E5%9D%97%E6%95%99%E7%A8%8B/" title="ES6模块教程" /><link rel="next" type="text/html" href="http://localhost:1313/%E7%BC%96%E5%86%99%E5%8F%AF%E8%AF%BB%E4%BB%A3%E7%A0%81%E7%9A%84%E8%89%BA%E6%9C%AF/" title="编写可读代码的艺术 (Dustin Boswell &amp; Trevor Foucher)" /><link rel="alternate" type="text/markdown" href="http://localhost:1313/launch-editor%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/index.md" title="launch-editor源码剖析：快速打开编辑器的实现原理 - 东尼的博客"><link rel="stylesheet" href="/css/config.css"><link rel="stylesheet" href="/css/main.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
-    <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
-    <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><link rel="preload" href="/js/main.js" as="script"><script type="application/ld+json">
-  {
-    "@context": "http://schema.org",
-    "@type": "BlogPosting",
-    "headline": "launch-editor源码剖析：快速打开编辑器的实现原理",
-    "inLanguage": "zh-CN",
-    "mainEntityOfPage": {
-      "@type": "WebPage",
-      "@id": "http:\/\/localhost:1313\/launch-editor%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90\/"
-    },"genre": "posts","keywords": "Node.js, launch-editor","wordcount":  2847 ,
-    "url": "http:\/\/localhost:1313\/launch-editor%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90\/","datePublished": "2025-09-11T22:39:22+08:00","dateModified": "2025-09-11T22:39:22+08:00","publisher": {
-      "@type": "Organization",
-      "name": ""},"author": {
-        "@type": "Person",
-        "name": "AndyFree96"
-      },"description": ""
-  }
-  </script><script src="/js/head/color-scheme.js"></script></head>
-  <body data-instant-intensity="viewport" data-header-desktop="sticky" data-header-mobile="auto"><div class="wrapper" data-page-style="normal"><header class="desktop animate__faster" id="header-desktop">
-  <div class="header-wrapper">
-    <div class="header-title">
-      <a href="/" title="东尼的博客" class="header-title-link"><span class="header-title-text">东尼的博客</span></a><span class="header-subtitle"></span></div>
-    <nav>
-      <ul class="menu"><li class="menu-item">
-              <a class="menu-link" href="/posts/">📕 文章</a></li><li class="menu-item">
-              <a class="menu-link" href="/categories/">🧰 分类</a></li><li class="menu-item">
-              <a class="menu-link" href="/tags/">🔖 标签</a></li><li class="menu-item">
-              <a class="menu-link" href="/book">📚 书单</a></li><li class="menu-item">
-              <a class="menu-link" href="/paper">📝 论文</a></li><li class="menu-item">
-              <a class="menu-link" href="/opencourse">👨🏻‍💻 公开课</a></li><li class="menu-item">
-              <a class="menu-link" href="/filmtv">🎞️ 影视</a></li><li class="menu-item">
-              <a class="menu-link" href="/resource">⚡️ 资源库</a></li><li class="menu-item">
-              <a class="menu-link" href="/projects">⭐ 开源</a></li><li class="menu-item">
-              <a class="menu-link" href="/about">🙋🏻‍♂️ 关于</a></li><li class="menu-item delimiter"></li><li class="menu-item search" id="search-desktop">
-            <input type="text" placeholder="搜索文章标题或内容……" id="search-input-desktop" tabindex="-1">
-            <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索" aria-controls="search-dropdown-desktop" aria-expanded="false">
-              <i class="fa-solid fa-search" aria-hidden="true"></i>
-            </a>
-            <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
-              <i class="fa-solid fa-times-circle" aria-hidden="true"></i>
-            </a>
-            <span class="search-button search-loading" id="search-loading-desktop">
-              <i class="fa-solid fa-spinner fa-spin" aria-hidden="true"></i>
-            </span>
-          </li><li class="menu-item theme-switch-item">
-          <button type="button" class="theme-switch" aria-label="切换主题" title="切换主题"><i class="fa-solid fa-adjust" aria-hidden="true"></i></button>
-        </li></ul>
-    </nav>
-  </div>
-</header><header class="mobile animate__faster" id="header-mobile">
-  <div class="header-container">
-    <div class="header-wrapper">
-      <div class="header-title">
-        <a href="/" title="东尼的博客" class="header-title-link"><span class="header-title-text">东尼的博客</span></a><span class="header-subtitle"></span></div>
-      <button type="button" class="theme-switch" aria-label="切换主题"><i class="fa-solid fa-adjust" aria-hidden="true"></i></button>
-      <button type="button" class="menu-toggle" id="menu-toggle-mobile" aria-controls="menu-mobile" aria-expanded="false" aria-labelledby="menu-mobile">
-        <span></span><span></span><span></span>
-      </button>
-    </div>
-    <nav>
-      <ul class="menu" id="menu-mobile"><li class="search-wrapper">
-            <div class="search mobile" id="search-mobile">
-              <input type="text" placeholder="搜索文章标题或内容……" id="search-input-mobile">
-              <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索" aria-controls="search-dropdown-mobile" aria-expanded="false">
-                <i class="fa-solid fa-search" aria-hidden="true"></i>
-              </a>
-              <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
-                <i class="fa-solid fa-times-circle" aria-hidden="true"></i>
-              </a>
-              <span class="search-button search-loading" id="search-loading-mobile">
-                <i class="fa-solid fa-spinner fa-spin" aria-hidden="true"></i>
-              </span>
-            </div>
-            <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
-              取消
-            </a>
-          </li><li class="menu-item"><a class="menu-link" href="/posts/">📕 文章</a></li><li class="menu-item"><a class="menu-link" href="/categories/">🧰 分类</a></li><li class="menu-item"><a class="menu-link" href="/tags/">🔖 标签</a></li><li class="menu-item"><a class="menu-link" href="/book">📚 书单</a></li><li class="menu-item"><a class="menu-link" href="/paper">📝 论文</a></li><li class="menu-item"><a class="menu-link" href="/opencourse">👨🏻‍💻 公开课</a></li><li class="menu-item"><a class="menu-link" href="/filmtv">🎞️ 影视</a></li><li class="menu-item"><a class="menu-link" href="/resource">⚡️ 资源库</a></li><li class="menu-item"><a class="menu-link" href="/projects">⭐ 开源</a></li><li class="menu-item"><a class="menu-link" href="/about">🙋🏻‍♂️ 关于</a></li><li class="menu-item menu-system"></li>
-      </ul>
-    </nav>
-  </div>
-</header><div class="search-dropdown desktop">
-    <div id="search-dropdown-desktop"></div>
-  </div>
-  <div class="search-dropdown mobile">
-    <div id="search-dropdown-mobile"></div>
-  </div><main class="fi-container"><aside class="aside-collection animate__animated animate__fadeIn animate__faster" aria-label="合集"></aside>
-
-  <article class="page single">
-    <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span title="转载" class="icon-repost"><i class="fa-solid fa-share" aria-hidden="true"></i></span><span>launch-editor源码剖析：快速打开编辑器的实现原理</span>
-      </h1></div><div class="post-meta">
-      <div class="post-meta-line"><span class="post-author"><a href="https://andyfree96.github.io/" title="作者" target="_blank" rel="author external nofollow noopener noreferrer" class="author"><img class="avatar" src='/avatar/1.jpg' alt="AndyFree96" height="16" width="16">&nbsp;AndyFree96</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" class="post-category" title="分类 - 源码剖析"><i class="fa-regular fa-folder" aria-hidden="true"></i> 源码剖析</a></span></div><div class="post-meta-line"><span title="发布于 2025-09-11 22:39:22"><i class="fa-solid fa-calendar-days me-1" aria-hidden="true"></i><time datetime="2025-09-11">2025-09-11</time></span>&nbsp;<span title="2847 字"><i class="fa-solid fa-pencil-alt me-1" aria-hidden="true"></i>约 2900 字</span>&nbsp;<span><i class="fa-regular fa-clock me-1" aria-hidden="true"></i>预计阅读 6 分钟</span>&nbsp;</div>
-    </div><div class="featured-image"><img loading="eager" src='/images/202509/1/k-k-Y0DTcx1pGpc-unsplash.jpg' sizes="(max-width: 680px) 100vw, (max-width: 960px) 80vw, (max-width: 1440px) 56vw, 800px" alt="/images/202509/1/k-k-Y0DTcx1pGpc-unsplash.jpg"></div><div class="content" id="content"><p>在阅读 Vite 源码的过程中，我注意到一个有趣的依赖 —— launch-editor。起初只是随手点开，结果却发现它正是支撑起「浏览器报错信息 → 一键跳转到编辑器」这一开发体验的核心工具。其实，我们在使用 Vite、Vue CLI 等工具的时候，不止一次用过这个功能：报错时点击链接，代码编辑器立刻打开到对应的文件和行号。背后的关键实现，正是 launch-editor。</p>
-<div class="details admonition note open">
-    <div class="details-summary admonition-title"><i class="icon fa-solid fa-pencil-alt" aria-hidden="true"></i>注意<i class="details-icon fa-solid fa-angle-right" aria-hidden="true"></i></div><div class="details-content">
-      <div class="admonition-content">Vite 提交号为: <code>3676da5bc5b2b69b28619b8521fca94d30468fe5</code>。<code>launch-editor-middleware</code>版本为<code>2.10.0</code>，<code>launch-editor</code>版本为<code>2.10.0</code>。</div>
-    </div>
-</div>
-<p><code>vite</code>项目的<code>vite/packages/vite/src/node/server/index.ts</code>文件中有这么一句：</p>
-<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
-<div class="code-header language-ts"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-ts" data-lang="ts"><span class="line"><span class="cl"><span class="c1">// open in editor support
-</span></span></span><span class="line"><span class="cl"><span class="nx">middlewares</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="s1">&#39;/__open-in-editor&#39;</span><span class="p">,</span> <span class="nx">launchEditorMiddleware</span><span class="p">());</span></span></span></code></pre></td></tr></table></div>
-</div>
-</div><p>也就是使用了<code>launch-editor-middleware</code>中间件，它会监听<code>/__open-in-editor</code>路径，并将请求转发给<code>launch-editor</code>模块。启动了 vite 应用后，我们在浏览器中如下访问：</p>
-<p><code>http://locahost:5173/__open-in-editor?file=package.json:9</code></p>
-<p><code>launch-editor-middleware</code>模块的源码位于<code>vite/packages/vite/node_modules/launch-editor-middleware/index.js</code>，它主要做了两件事：</p>
-<ol>
-<li>解析请求参数，获取文件路径和行号</li>
-<li>调用<code>launch-editor</code>模块，打开编辑器并跳转到相应的文件和行号</li>
-</ol>
-<p><code>index.js</code>具体代码如下：</p>
-<div class="code-block highlight" data-mode="classic" data-copyable="true" title="index.js"><div class="chroma">
-<div class="code-header language-js"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i><span class="title-inner">index.js</span></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="2" style="--fi-max-shown-lines:400;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span><span class="lnt">15
-</span><span class="lnt">16
-</span><span class="lnt">17
-</span><span class="lnt">18
-</span><span class="lnt">19
-</span><span class="lnt">20
-</span><span class="lnt">21
-</span><span class="lnt">22
-</span><span class="lnt">23
-</span><span class="lnt">24
-</span><span class="lnt">25
-</span><span class="lnt">26
-</span><span class="lnt">27
-</span><span class="lnt">28
-</span><span class="lnt">29
-</span><span class="lnt">30
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="line"><span class="cl"><span class="kr">const</span> <span class="nx">url</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;url&#39;</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl"><span class="kr">const</span> <span class="nx">path</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;path&#39;</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl"><span class="kr">const</span> <span class="nx">launch</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;launch-editor&#39;</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">(</span><span class="nx">specifiedEditor</span><span class="p">,</span> <span class="nx">srcRoot</span><span class="p">,</span> <span class="nx">onErrorCallback</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">  <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">specifiedEditor</span> <span class="o">===</span> <span class="s1">&#39;function&#39;</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="nx">onErrorCallback</span> <span class="o">=</span> <span class="nx">specifiedEditor</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">    <span class="nx">specifiedEditor</span> <span class="o">=</span> <span class="kc">undefined</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">  <span class="p">}</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">  <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">srcRoot</span> <span class="o">===</span> <span class="s1">&#39;function&#39;</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="nx">onErrorCallback</span> <span class="o">=</span> <span class="nx">srcRoot</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">    <span class="nx">srcRoot</span> <span class="o">=</span> <span class="kc">undefined</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">  <span class="p">}</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">  <span class="nx">srcRoot</span> <span class="o">=</span> <span class="nx">srcRoot</span> <span class="o">||</span> <span class="nx">process</span><span class="p">.</span><span class="nx">cwd</span><span class="p">();</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">  <span class="k">return</span> <span class="kd">function</span> <span class="nx">launchEditorMiddleware</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="kr">const</span> <span class="p">{</span> <span class="nx">file</span> <span class="p">}</span> <span class="o">=</span> <span class="nx">url</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">req</span><span class="p">.</span><span class="nx">url</span><span class="p">,</span> <span class="kc">true</span><span class="p">).</span><span class="nx">query</span> <span class="o">||</span> <span class="p">{};</span>
-</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">file</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">      <span class="nx">res</span><span class="p">.</span><span class="nx">statusCode</span> <span class="o">=</span> <span class="mi">500</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">      <span class="nx">res</span><span class="p">.</span><span class="nx">end</span><span class="p">(</span>
-</span></span><span class="line"><span class="cl">        <span class="sb">`launch-editor-middleware: required query param &#34;file&#34; is missing.`</span>
-</span></span><span class="line"><span class="cl">      <span class="p">);</span>
-</span></span><span class="line"><span class="cl">    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">      <span class="nx">launch</span><span class="p">(</span><span class="nx">path</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="nx">srcRoot</span><span class="p">,</span> <span class="nx">file</span><span class="p">),</span> <span class="nx">specifiedEditor</span><span class="p">,</span> <span class="nx">onErrorCallback</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">      <span class="nx">res</span><span class="p">.</span><span class="nx">end</span><span class="p">();</span>
-</span></span><span class="line"><span class="cl">    <span class="p">}</span>
-</span></span><span class="line"><span class="cl">  <span class="p">};</span>
-</span></span><span class="line"><span class="cl"><span class="p">};</span></span></span></code></pre></td></tr></table></div>
-</div>
-</div><p><code>launch-editor-middleware</code>使用的<code>launch-editor</code>包位于<code>vite/node_modules/.pnpm/launch-editor@2.10.0/node_modules/launch-editor</code>。</p>
-<p>我很好奇的是<code>launch-editor</code>是如何确定用哪个编辑器打开文件和行号的呢？答案可以在<code>vite/node_modules/.pnpm/launch-editor@2.10.0/node_modules/launch-editor/guess.js</code>中找到。</p>
-<div class="code-block highlight" data-mode="classic" data-copyable="true" title="guess.js"><div class="chroma">
-<div class="code-header language-js"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i><span class="title-inner">guess.js</span></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="3" style="--fi-max-shown-lines:400;--fi-line-digit:3;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">  1
-</span><span class="lnt">  2
-</span><span class="lnt">  3
-</span><span class="lnt">  4
-</span><span class="lnt">  5
-</span><span class="lnt">  6
-</span><span class="lnt">  7
-</span><span class="lnt">  8
-</span><span class="lnt">  9
-</span><span class="lnt"> 10
-</span><span class="lnt"> 11
-</span><span class="lnt"> 12
-</span><span class="lnt"> 13
-</span><span class="lnt"> 14
-</span><span class="lnt"> 15
-</span><span class="lnt"> 16
-</span><span class="lnt"> 17
-</span><span class="lnt"> 18
-</span><span class="lnt"> 19
-</span><span class="lnt"> 20
-</span><span class="lnt"> 21
-</span><span class="lnt"> 22
-</span><span class="lnt"> 23
-</span><span class="lnt"> 24
-</span><span class="lnt"> 25
-</span><span class="lnt"> 26
-</span><span class="lnt"> 27
-</span><span class="lnt"> 28
-</span><span class="lnt"> 29
-</span><span class="lnt"> 30
-</span><span class="lnt"> 31
-</span><span class="lnt"> 32
-</span><span class="lnt"> 33
-</span><span class="lnt"> 34
-</span><span class="lnt"> 35
-</span><span class="lnt"> 36
-</span><span class="lnt"> 37
-</span><span class="lnt"> 38
-</span><span class="lnt"> 39
-</span><span class="lnt"> 40
-</span><span class="lnt"> 41
-</span><span class="lnt"> 42
-</span><span class="lnt"> 43
-</span><span class="lnt"> 44
-</span><span class="lnt"> 45
-</span><span class="lnt"> 46
-</span><span class="lnt"> 47
-</span><span class="lnt"> 48
-</span><span class="lnt"> 49
-</span><span class="lnt"> 50
-</span><span class="lnt"> 51
-</span><span class="lnt"> 52
-</span><span class="lnt"> 53
-</span><span class="lnt"> 54
-</span><span class="lnt"> 55
-</span><span class="lnt"> 56
-</span><span class="lnt"> 57
-</span><span class="lnt"> 58
-</span><span class="lnt"> 59
-</span><span class="lnt"> 60
-</span><span class="lnt"> 61
-</span><span class="lnt"> 62
-</span><span class="lnt"> 63
-</span><span class="lnt"> 64
-</span><span class="lnt"> 65
-</span><span class="lnt"> 66
-</span><span class="lnt"> 67
-</span><span class="lnt"> 68
-</span><span class="lnt"> 69
-</span><span class="lnt"> 70
-</span><span class="lnt"> 71
-</span><span class="lnt"> 72
-</span><span class="lnt"> 73
-</span><span class="lnt"> 74
-</span><span class="lnt"> 75
-</span><span class="lnt"> 76
-</span><span class="lnt"> 77
-</span><span class="lnt"> 78
-</span><span class="lnt"> 79
-</span><span class="lnt"> 80
-</span><span class="lnt"> 81
-</span><span class="lnt"> 82
-</span><span class="lnt"> 83
-</span><span class="lnt"> 84
-</span><span class="lnt"> 85
-</span><span class="lnt"> 86
-</span><span class="lnt"> 87
-</span><span class="lnt"> 88
-</span><span class="lnt"> 89
-</span><span class="lnt"> 90
-</span><span class="lnt"> 91
-</span><span class="lnt"> 92
-</span><span class="lnt"> 93
-</span><span class="lnt"> 94
-</span><span class="lnt"> 95
-</span><span class="lnt"> 96
-</span><span class="lnt"> 97
-</span><span class="lnt"> 98
-</span><span class="lnt"> 99
-</span><span class="lnt">100
-</span><span class="lnt">101
-</span><span class="lnt">102
-</span><span class="lnt">103
-</span><span class="lnt">104
-</span><span class="lnt">105
-</span><span class="lnt">106
-</span><span class="lnt">107
-</span><span class="lnt">108
-</span><span class="lnt">109
-</span><span class="lnt">110
-</span><span class="lnt">111
-</span><span class="lnt">112
-</span><span class="lnt">113
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="line"><span class="cl"><span class="kr">const</span> <span class="nx">path</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;path&#39;</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl"><span class="kr">const</span> <span class="nx">shellQuote</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;shell-quote&#39;</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl"><span class="kr">const</span> <span class="nx">childProcess</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;child_process&#39;</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="c1">// Map from full process name to binary that starts the process
-</span></span></span><span class="line"><span class="cl"><span class="c1">// We can&#39;t just re-use full process name, because it will spawn a new instance
-</span></span></span><span class="line"><span class="cl"><span class="c1">// of the app every time
-</span></span></span><span class="line"><span class="cl"><span class="kr">const</span> <span class="nx">COMMON_EDITORS_MACOS</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./editor-info/macos&#39;</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl"><span class="kr">const</span> <span class="nx">COMMON_EDITORS_LINUX</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./editor-info/linux&#39;</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl"><span class="kr">const</span> <span class="nx">COMMON_EDITORS_WIN</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./editor-info/windows&#39;</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="kd">function</span> <span class="nx">guessEditor</span><span class="p">(</span><span class="nx">specifiedEditor</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">  <span class="k">if</span> <span class="p">(</span><span class="nx">specifiedEditor</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="nx">shellQuote</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">specifiedEditor</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">  <span class="p">}</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">  <span class="k">if</span> <span class="p">(</span><span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">LAUNCH_EDITOR</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="p">[</span><span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">LAUNCH_EDITOR</span><span class="p">];</span>
-</span></span><span class="line"><span class="cl">  <span class="p">}</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">  <span class="k">if</span> <span class="p">(</span><span class="nx">process</span><span class="p">.</span><span class="nx">versions</span><span class="p">.</span><span class="nx">webcontainer</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="p">[</span><span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">EDITOR</span> <span class="o">||</span> <span class="s1">&#39;code&#39;</span><span class="p">];</span>
-</span></span><span class="line"><span class="cl">  <span class="p">}</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">  <span class="c1">// We can find out which editor is currently running by:
-</span></span></span><span class="line"><span class="cl">  <span class="c1">// `ps x` on macOS and Linux
-</span></span></span><span class="line"><span class="cl">  <span class="c1">// `Get-Process` on Windows
-</span></span></span><span class="line"><span class="cl">  <span class="k">try</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="nx">process</span><span class="p">.</span><span class="nx">platform</span> <span class="o">===</span> <span class="s1">&#39;darwin&#39;</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">      <span class="kr">const</span> <span class="nx">output</span> <span class="o">=</span> <span class="nx">childProcess</span>
-</span></span><span class="line"><span class="cl">        <span class="p">.</span><span class="nx">execSync</span><span class="p">(</span><span class="s1">&#39;ps x -o comm=&#39;</span><span class="p">,</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">          <span class="nx">stdio</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;pipe&#39;</span><span class="p">,</span> <span class="s1">&#39;pipe&#39;</span><span class="p">,</span> <span class="s1">&#39;ignore&#39;</span><span class="p">],</span>
-</span></span><span class="line"><span class="cl">        <span class="p">})</span>
-</span></span><span class="line"><span class="cl">        <span class="p">.</span><span class="nx">toString</span><span class="p">();</span>
-</span></span><span class="line"><span class="cl">      <span class="kr">const</span> <span class="nx">processNames</span> <span class="o">=</span> <span class="nb">Object</span><span class="p">.</span><span class="nx">keys</span><span class="p">(</span><span class="nx">COMMON_EDITORS_MACOS</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">      <span class="kr">const</span> <span class="nx">processList</span> <span class="o">=</span> <span class="nx">output</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="s1">&#39;\n&#39;</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">      <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">processNames</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">        <span class="kr">const</span> <span class="nx">processName</span> <span class="o">=</span> <span class="nx">processNames</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>
-</span></span><span class="line"><span class="cl">        <span class="c1">// Find editor by exact match.
-</span></span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="nx">processList</span><span class="p">.</span><span class="nx">includes</span><span class="p">(</span><span class="nx">processName</span><span class="p">))</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">          <span class="k">return</span> <span class="p">[</span><span class="nx">COMMON_EDITORS_MACOS</span><span class="p">[</span><span class="nx">processName</span><span class="p">]];</span>
-</span></span><span class="line"><span class="cl">        <span class="p">}</span>
-</span></span><span class="line"><span class="cl">        <span class="kr">const</span> <span class="nx">processNameWithoutApplications</span> <span class="o">=</span> <span class="nx">processName</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span>
-</span></span><span class="line"><span class="cl">          <span class="s1">&#39;/Applications&#39;</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">          <span class="s1">&#39;&#39;</span>
-</span></span><span class="line"><span class="cl">        <span class="p">);</span>
-</span></span><span class="line"><span class="cl">        <span class="c1">// Find editor installation not in /Applications.
-</span></span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="nx">output</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="nx">processNameWithoutApplications</span><span class="p">)</span> <span class="o">!==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">          <span class="c1">// Use the CLI command if one is specified
-</span></span></span><span class="line"><span class="cl">          <span class="k">if</span> <span class="p">(</span><span class="nx">processName</span> <span class="o">!==</span> <span class="nx">COMMON_EDITORS_MACOS</span><span class="p">[</span><span class="nx">processName</span><span class="p">])</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="p">[</span><span class="nx">COMMON_EDITORS_MACOS</span><span class="p">[</span><span class="nx">processName</span><span class="p">]];</span>
-</span></span><span class="line"><span class="cl">          <span class="p">}</span>
-</span></span><span class="line"><span class="cl">          <span class="c1">// Use a partial match to find the running process path.  If one is found, use the
-</span></span></span><span class="line"><span class="cl">          <span class="c1">// existing path since it can be running from anywhere.
-</span></span></span><span class="line"><span class="cl">          <span class="kr">const</span> <span class="nx">runningProcess</span> <span class="o">=</span> <span class="nx">processList</span><span class="p">.</span><span class="nx">find</span><span class="p">((</span><span class="nx">procName</span><span class="p">)</span> <span class="p">=&gt;</span>
-</span></span><span class="line"><span class="cl">            <span class="nx">procName</span><span class="p">.</span><span class="nx">endsWith</span><span class="p">(</span><span class="nx">processNameWithoutApplications</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">          <span class="p">);</span>
-</span></span><span class="line"><span class="cl">          <span class="k">if</span> <span class="p">(</span><span class="nx">runningProcess</span> <span class="o">!==</span> <span class="kc">undefined</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="p">[</span><span class="nx">runningProcess</span><span class="p">];</span>
-</span></span><span class="line"><span class="cl">          <span class="p">}</span>
-</span></span><span class="line"><span class="cl">        <span class="p">}</span>
-</span></span><span class="line"><span class="cl">      <span class="p">}</span>
-</span></span><span class="line"><span class="cl">    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">process</span><span class="p">.</span><span class="nx">platform</span> <span class="o">===</span> <span class="s1">&#39;win32&#39;</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">      <span class="kr">const</span> <span class="nx">output</span> <span class="o">=</span> <span class="nx">childProcess</span>
-</span></span><span class="line"><span class="cl">        <span class="p">.</span><span class="nx">execSync</span><span class="p">(</span>
-</span></span><span class="line"><span class="cl">          <span class="s1">&#39;powershell -NoProfile -Command &#34;&#39;</span> <span class="o">+</span>
-</span></span><span class="line"><span class="cl">            <span class="s1">&#39;[Console]::OutputEncoding=[Text.Encoding]::UTF8;&#39;</span> <span class="o">+</span>
-</span></span><span class="line"><span class="cl">            <span class="s1">&#39;Get-CimInstance -Query \\&#34;select executablepath from win32_process where executablepath is not null\\&#34; | % { $_.ExecutablePath }&#39;</span> <span class="o">+</span>
-</span></span><span class="line"><span class="cl">            <span class="s1">&#39;&#34;&#39;</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">          <span class="p">{</span>
-</span></span><span class="line"><span class="cl">            <span class="nx">stdio</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;pipe&#39;</span><span class="p">,</span> <span class="s1">&#39;pipe&#39;</span><span class="p">,</span> <span class="s1">&#39;ignore&#39;</span><span class="p">],</span>
-</span></span><span class="line"><span class="cl">          <span class="p">}</span>
-</span></span><span class="line"><span class="cl">        <span class="p">)</span>
-</span></span><span class="line"><span class="cl">        <span class="p">.</span><span class="nx">toString</span><span class="p">();</span>
-</span></span><span class="line"><span class="cl">      <span class="kr">const</span> <span class="nx">runningProcesses</span> <span class="o">=</span> <span class="nx">output</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="s1">&#39;\r\n&#39;</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">      <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">runningProcesses</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">        <span class="kr">const</span> <span class="nx">fullProcessPath</span> <span class="o">=</span> <span class="nx">runningProcesses</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">trim</span><span class="p">();</span>
-</span></span><span class="line"><span class="cl">        <span class="kr">const</span> <span class="nx">shortProcessName</span> <span class="o">=</span> <span class="nx">path</span><span class="p">.</span><span class="nx">basename</span><span class="p">(</span><span class="nx">fullProcessPath</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="nx">COMMON_EDITORS_WIN</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="nx">shortProcessName</span><span class="p">)</span> <span class="o">!==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">          <span class="k">return</span> <span class="p">[</span><span class="nx">fullProcessPath</span><span class="p">];</span>
-</span></span><span class="line"><span class="cl">        <span class="p">}</span>
-</span></span><span class="line"><span class="cl">      <span class="p">}</span>
-</span></span><span class="line"><span class="cl">    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">process</span><span class="p">.</span><span class="nx">platform</span> <span class="o">===</span> <span class="s1">&#39;linux&#39;</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">      <span class="c1">// --no-heading No header line
-</span></span></span><span class="line"><span class="cl">      <span class="c1">// x List all processes owned by you
-</span></span></span><span class="line"><span class="cl">      <span class="c1">// -o comm Need only names column
-</span></span></span><span class="line"><span class="cl">      <span class="kr">const</span> <span class="nx">output</span> <span class="o">=</span> <span class="nx">childProcess</span>
-</span></span><span class="line"><span class="cl">        <span class="p">.</span><span class="nx">execSync</span><span class="p">(</span><span class="s1">&#39;ps x --no-heading -o comm --sort=comm&#39;</span><span class="p">,</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">          <span class="nx">stdio</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;pipe&#39;</span><span class="p">,</span> <span class="s1">&#39;pipe&#39;</span><span class="p">,</span> <span class="s1">&#39;ignore&#39;</span><span class="p">],</span>
-</span></span><span class="line"><span class="cl">        <span class="p">})</span>
-</span></span><span class="line"><span class="cl">        <span class="p">.</span><span class="nx">toString</span><span class="p">();</span>
-</span></span><span class="line"><span class="cl">      <span class="kr">const</span> <span class="nx">processNames</span> <span class="o">=</span> <span class="nb">Object</span><span class="p">.</span><span class="nx">keys</span><span class="p">(</span><span class="nx">COMMON_EDITORS_LINUX</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">      <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">processNames</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">        <span class="kr">const</span> <span class="nx">processName</span> <span class="o">=</span> <span class="nx">processNames</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>
-</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="nx">output</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="nx">processName</span><span class="p">)</span> <span class="o">!==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">          <span class="k">return</span> <span class="p">[</span><span class="nx">COMMON_EDITORS_LINUX</span><span class="p">[</span><span class="nx">processName</span><span class="p">]];</span>
-</span></span><span class="line"><span class="cl">        <span class="p">}</span>
-</span></span><span class="line"><span class="cl">      <span class="p">}</span>
-</span></span><span class="line"><span class="cl">    <span class="p">}</span>
-</span></span><span class="line"><span class="cl">  <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">ignoreError</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="c1">// Ignore...
-</span></span></span><span class="line"><span class="cl">  <span class="p">}</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">  <span class="c1">// Last resort, use old skool env vars
-</span></span></span><span class="line"><span class="cl">  <span class="k">if</span> <span class="p">(</span><span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">VISUAL</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="p">[</span><span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">VISUAL</span><span class="p">];</span>
-</span></span><span class="line"><span class="cl">  <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">EDITOR</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="p">[</span><span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">EDITOR</span><span class="p">];</span>
-</span></span><span class="line"><span class="cl">  <span class="p">}</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">  <span class="k">return</span> <span class="p">[</span><span class="kc">null</span><span class="p">];</span>
-</span></span><span class="line"><span class="cl"><span class="p">};</span></span></span></code></pre></td></tr></table></div>
-</div>
-</div><p>如果用户调用函数时显式指定了编辑器<code>specifiedEditor</code>，则直接使用该编辑器。如果没有指定，则尝试使用环境变量<code>LAUNCH_EDITOR</code>。如果当前运行在<a href="https://stackblitz.com/edit/webcontainers-akbduvna?file=index.js" target="_blank" rel="external nofollow noopener noreferrer">StackBlitz WebContainer<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>这类环境中，就优先使用<code>EDITOR</code>环境变量，否则默认用<code>code</code>（VS Code 的命令函启动命令）。</p>
-<p>如果以上情况都不满足，会根据<code>process.platform</code>来判断当前系统，分别进行处理。这里主要看在 Windows 系统下的处理方式：</p>
-<div class="code-block highlight" data-mode="classic" data-copyable="true" title="guess.js"><div class="chroma">
-<div class="code-header language-js"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i><span class="title-inner">guess.js</span></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="2" style="--fi-max-shown-lines:400;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span><span class="lnt">15
-</span><span class="lnt">16
-</span><span class="lnt">17
-</span><span class="lnt">18
-</span><span class="lnt">19
-</span><span class="lnt">20
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="line"><span class="cl"><span class="kr">const</span> <span class="nx">output</span> <span class="o">=</span> <span class="nx">childProcess</span>
-</span></span><span class="line"><span class="cl">  <span class="p">.</span><span class="nx">execSync</span><span class="p">(</span>
-</span></span><span class="line"><span class="cl">    <span class="s1">&#39;powershell -NoProfile -Command &#34;&#39;</span> <span class="o">+</span>
-</span></span><span class="line"><span class="cl">      <span class="s1">&#39;[Console]::OutputEncoding=[Text.Encoding]::UTF8;&#39;</span> <span class="o">+</span>
-</span></span><span class="line"><span class="cl">      <span class="s1">&#39;Get-CimInstance -Query \\&#34;select executablepath from win32_process where executablepath is not null\\&#34; | % { $_.ExecutablePath }&#39;</span> <span class="o">+</span>
-</span></span><span class="line"><span class="cl">      <span class="s1">&#39;&#34;&#39;</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">    <span class="p">{</span>
-</span></span><span class="line"><span class="cl">      <span class="nx">stdio</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;pipe&#39;</span><span class="p">,</span> <span class="s1">&#39;pipe&#39;</span><span class="p">,</span> <span class="s1">&#39;ignore&#39;</span><span class="p">],</span>
-</span></span><span class="line"><span class="cl">    <span class="p">}</span>
-</span></span><span class="line"><span class="cl">  <span class="p">)</span>
-</span></span><span class="line"><span class="cl">  <span class="p">.</span><span class="nx">toString</span><span class="p">();</span>
-</span></span><span class="line"><span class="cl"><span class="kr">const</span> <span class="nx">runningProcesses</span> <span class="o">=</span> <span class="nx">output</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="s1">&#39;\r\n&#39;</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl"><span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">runningProcesses</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">  <span class="kr">const</span> <span class="nx">fullProcessPath</span> <span class="o">=</span> <span class="nx">runningProcesses</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">trim</span><span class="p">();</span>
-</span></span><span class="line"><span class="cl">  <span class="kr">const</span> <span class="nx">shortProcessName</span> <span class="o">=</span> <span class="nx">path</span><span class="p">.</span><span class="nx">basename</span><span class="p">(</span><span class="nx">fullProcessPath</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">  <span class="k">if</span> <span class="p">(</span><span class="nx">COMMON_EDITORS_WIN</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="nx">shortProcessName</span><span class="p">)</span> <span class="o">!==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="p">[</span><span class="nx">fullProcessPath</span><span class="p">];</span>
-</span></span><span class="line"><span class="cl">  <span class="p">}</span>
-</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div>
-</div>
-</div><p><code>powershell -NoProfile -Command</code>调用 PowerShell 执行一段命令，不加载用户配置文件（<code>-NoProfile</code>，保证执行环境干净）。</p>
-<p><code>[Console]::OutputEncoding=[Text.Encoding]::UTF8;</code>设置控制台输出为<code>UTF-8</code>编码，避免中文或路径中的特殊字符乱码。</p>
-<p><code>Get-CimInstance -Query &quot;select executablepath from win32_process where executablepath is not null&quot; | % { $_.ExecutablePath }&quot;</code>查询所有正在运行的进程，取出它们的<code>ExecutablePath</code>属性。</p>
-<p><img loading="lazy" src='/images/202509/1/1.png' alt="/images/202509/1/1.png"></p>
-<p>得到的输出是一堆路径，如上图所示。<code>const runningProcesses = output.split('\r\n')</code>按行分割成数组，每个元素就是一个进程的完整路径。</p>
-<div class="code-block highlight" data-mode="classic" data-copyable="true" title="guess.js"><div class="chroma">
-<div class="code-header language-js"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i><span class="title-inner">guess.js</span></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span><span class="lnt">6
-</span><span class="lnt">7
-</span><span class="lnt">8
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="line"><span class="cl"><span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">runningProcesses</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">  <span class="kr">const</span> <span class="nx">fullProcessPath</span> <span class="o">=</span> <span class="nx">runningProcesses</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">trim</span><span class="p">();</span>
-</span></span><span class="line"><span class="cl">  <span class="kr">const</span> <span class="nx">shortProcessName</span> <span class="o">=</span> <span class="nx">path</span><span class="p">.</span><span class="nx">basename</span><span class="p">(</span><span class="nx">fullProcessPath</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">  <span class="k">if</span> <span class="p">(</span><span class="nx">COMMON_EDITORS_WIN</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="nx">shortProcessName</span><span class="p">)</span> <span class="o">!==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="p">[</span><span class="nx">fullProcessPath</span><span class="p">];</span>
-</span></span><span class="line"><span class="cl">  <span class="p">}</span>
-</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div>
-</div>
-</div><p><code>path.basename(fullProcessPath)</code>只取出文件名，例如<code>Code.exe</code>,<code>atom.exe</code>等。<code>COMMON_EDITORS_WIN</code>是一个数组，里面包含了常见的编辑器。具体如下：</p>
-<div class="code-block highlight" data-mode="classic" data-copyable="true" title="windows.js"><div class="chroma">
-<div class="code-header language-js"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i><span class="title-inner">windows.js</span></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="2" style="--fi-max-shown-lines:400;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span><span class="lnt">15
-</span><span class="lnt">16
-</span><span class="lnt">17
-</span><span class="lnt">18
-</span><span class="lnt">19
-</span><span class="lnt">20
-</span><span class="lnt">21
-</span><span class="lnt">22
-</span><span class="lnt">23
-</span><span class="lnt">24
-</span><span class="lnt">25
-</span><span class="lnt">26
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="line"><span class="cl"><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">[</span>
-</span></span><span class="line"><span class="cl">  <span class="s1">&#39;Brackets.exe&#39;</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">  <span class="s1">&#39;Code.exe&#39;</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">  <span class="s1">&#39;Code - Insiders.exe&#39;</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">  <span class="s1">&#39;VSCodium.exe&#39;</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">  <span class="s1">&#39;Cursor.exe&#39;</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">  <span class="s1">&#39;atom.exe&#39;</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">  <span class="s1">&#39;sublime_text.exe&#39;</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">  <span class="s1">&#39;notepad++.exe&#39;</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">  <span class="s1">&#39;clion.exe&#39;</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">  <span class="s1">&#39;clion64.exe&#39;</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">  <span class="s1">&#39;idea.exe&#39;</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">  <span class="s1">&#39;idea64.exe&#39;</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">  <span class="s1">&#39;phpstorm.exe&#39;</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">  <span class="s1">&#39;phpstorm64.exe&#39;</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">  <span class="s1">&#39;pycharm.exe&#39;</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">  <span class="s1">&#39;pycharm64.exe&#39;</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">  <span class="s1">&#39;rubymine.exe&#39;</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">  <span class="s1">&#39;rubymine64.exe&#39;</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">  <span class="s1">&#39;webstorm.exe&#39;</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">  <span class="s1">&#39;webstorm64.exe&#39;</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">  <span class="s1">&#39;goland.exe&#39;</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">  <span class="s1">&#39;goland64.exe&#39;</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">  <span class="s1">&#39;rider.exe&#39;</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">  <span class="s1">&#39;rider64.exe&#39;</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl"><span class="p">];</span></span></span></code></pre></td></tr></table></div>
-</div>
-</div><p>如果发现运行中的进程里有匹配的，就直接返回它的完整路径，方便后面去调用。最后，如果以上都不满足，则返回<code>null</code>，表示没有找到合适的编辑器。至此，我们知道了是如何确定用哪个编辑器。那么不同编辑器又是如何打开文件并跳转到相应的行号的呢？答案就在<code>vite/node_modules/.pnpm/launch-editor@2.10.0/node_modules/launch-editor/get-args.js</code>中。</p>
-<div class="code-block highlight" data-mode="classic" data-copyable="true" title="get-args.js"><div class="chroma">
-<div class="code-header language-js"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i><span class="title-inner">get-args.js</span></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="2" style="--fi-max-shown-lines:400;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span><span class="lnt">15
-</span><span class="lnt">16
-</span><span class="lnt">17
-</span><span class="lnt">18
-</span><span class="lnt">19
-</span><span class="lnt">20
-</span><span class="lnt">21
-</span><span class="lnt">22
-</span><span class="lnt">23
-</span><span class="lnt">24
-</span><span class="lnt">25
-</span><span class="lnt">26
-</span><span class="lnt">27
-</span><span class="lnt">28
-</span><span class="lnt">29
-</span><span class="lnt">30
-</span><span class="lnt">31
-</span><span class="lnt">32
-</span><span class="lnt">33
-</span><span class="lnt">34
-</span><span class="lnt">35
-</span><span class="lnt">36
-</span><span class="lnt">37
-</span><span class="lnt">38
-</span><span class="lnt">39
-</span><span class="lnt">40
-</span><span class="lnt">41
-</span><span class="lnt">42
-</span><span class="lnt">43
-</span><span class="lnt">44
-</span><span class="lnt">45
-</span><span class="lnt">46
-</span><span class="lnt">47
-</span><span class="lnt">48
-</span><span class="lnt">49
-</span><span class="lnt">50
-</span><span class="lnt">51
-</span><span class="lnt">52
-</span><span class="lnt">53
-</span><span class="lnt">54
-</span><span class="lnt">55
-</span><span class="lnt">56
-</span><span class="lnt">57
-</span><span class="lnt">58
-</span><span class="lnt">59
-</span><span class="lnt">60
-</span><span class="lnt">61
-</span><span class="lnt">62
-</span><span class="lnt">63
-</span><span class="lnt">64
-</span><span class="lnt">65
-</span><span class="lnt">66
-</span><span class="lnt">67
-</span><span class="lnt">68
-</span><span class="lnt">69
-</span><span class="lnt">70
-</span><span class="lnt">71
-</span><span class="lnt">72
-</span><span class="lnt">73
-</span><span class="lnt">74
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="line"><span class="cl"><span class="kr">const</span> <span class="nx">path</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;path&#39;</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="c1">// normalize file/line numbers into command line args for specific editors
-</span></span></span><span class="line"><span class="cl"><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="kd">function</span> <span class="nx">getArgumentsForPosition</span><span class="p">(</span>
-</span></span><span class="line"><span class="cl">  <span class="nx">editor</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">  <span class="nx">fileName</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">  <span class="nx">lineNumber</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">  <span class="nx">columnNumber</span> <span class="o">=</span> <span class="mi">1</span>
-</span></span><span class="line"><span class="cl"><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">  <span class="kr">const</span> <span class="nx">editorBasename</span> <span class="o">=</span> <span class="nx">path</span><span class="p">.</span><span class="nx">basename</span><span class="p">(</span><span class="nx">editor</span><span class="p">).</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/\.(exe|cmd|bat)$/i</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">  <span class="k">switch</span> <span class="p">(</span><span class="nx">editorBasename</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="k">case</span> <span class="s1">&#39;atom&#39;</span><span class="o">:</span>
-</span></span><span class="line"><span class="cl">    <span class="k">case</span> <span class="s1">&#39;Atom&#39;</span><span class="o">:</span>
-</span></span><span class="line"><span class="cl">    <span class="k">case</span> <span class="s1">&#39;Atom Beta&#39;</span><span class="o">:</span>
-</span></span><span class="line"><span class="cl">    <span class="k">case</span> <span class="s1">&#39;subl&#39;</span><span class="o">:</span>
-</span></span><span class="line"><span class="cl">    <span class="k">case</span> <span class="s1">&#39;sublime&#39;</span><span class="o">:</span>
-</span></span><span class="line"><span class="cl">    <span class="k">case</span> <span class="s1">&#39;sublime_text&#39;</span><span class="o">:</span>
-</span></span><span class="line"><span class="cl">    <span class="k">case</span> <span class="s1">&#39;wstorm&#39;</span><span class="o">:</span>
-</span></span><span class="line"><span class="cl">    <span class="k">case</span> <span class="s1">&#39;charm&#39;</span><span class="o">:</span>
-</span></span><span class="line"><span class="cl">    <span class="k">case</span> <span class="s1">&#39;zed&#39;</span><span class="o">:</span>
-</span></span><span class="line"><span class="cl">      <span class="k">return</span> <span class="p">[</span><span class="sb">`</span><span class="si">${</span><span class="nx">fileName</span><span class="si">}</span><span class="sb">:</span><span class="si">${</span><span class="nx">lineNumber</span><span class="si">}</span><span class="sb">:</span><span class="si">${</span><span class="nx">columnNumber</span><span class="si">}</span><span class="sb">`</span><span class="p">];</span>
-</span></span><span class="line"><span class="cl">    <span class="k">case</span> <span class="s1">&#39;notepad++&#39;</span><span class="o">:</span>
-</span></span><span class="line"><span class="cl">      <span class="k">return</span> <span class="p">[</span><span class="s1">&#39;-n&#39;</span> <span class="o">+</span> <span class="nx">lineNumber</span><span class="p">,</span> <span class="s1">&#39;-c&#39;</span> <span class="o">+</span> <span class="nx">columnNumber</span><span class="p">,</span> <span class="nx">fileName</span><span class="p">];</span>
-</span></span><span class="line"><span class="cl">    <span class="k">case</span> <span class="s1">&#39;vim&#39;</span><span class="o">:</span>
-</span></span><span class="line"><span class="cl">    <span class="k">case</span> <span class="s1">&#39;mvim&#39;</span><span class="o">:</span>
-</span></span><span class="line"><span class="cl">      <span class="k">return</span> <span class="p">[</span><span class="sb">`+call cursor(</span><span class="si">${</span><span class="nx">lineNumber</span><span class="si">}</span><span class="sb">, </span><span class="si">${</span><span class="nx">columnNumber</span><span class="si">}</span><span class="sb">)`</span><span class="p">,</span> <span class="nx">fileName</span><span class="p">];</span>
-</span></span><span class="line"><span class="cl">    <span class="k">case</span> <span class="s1">&#39;joe&#39;</span><span class="o">:</span>
-</span></span><span class="line"><span class="cl">    <span class="k">case</span> <span class="s1">&#39;gvim&#39;</span><span class="o">:</span>
-</span></span><span class="line"><span class="cl">      <span class="k">return</span> <span class="p">[</span><span class="s1">&#39;+&#39;</span> <span class="o">+</span> <span class="sb">`</span><span class="si">${</span><span class="nx">lineNumber</span><span class="si">}</span><span class="sb">`</span><span class="p">,</span> <span class="nx">fileName</span><span class="p">];</span>
-</span></span><span class="line"><span class="cl">    <span class="k">case</span> <span class="s1">&#39;emacs&#39;</span><span class="o">:</span>
-</span></span><span class="line"><span class="cl">    <span class="k">case</span> <span class="s1">&#39;emacsclient&#39;</span><span class="o">:</span>
-</span></span><span class="line"><span class="cl">      <span class="k">return</span> <span class="p">[</span><span class="sb">`+</span><span class="si">${</span><span class="nx">lineNumber</span><span class="si">}</span><span class="sb">:</span><span class="si">${</span><span class="nx">columnNumber</span><span class="si">}</span><span class="sb">`</span><span class="p">,</span> <span class="nx">fileName</span><span class="p">];</span>
-</span></span><span class="line"><span class="cl">    <span class="k">case</span> <span class="s1">&#39;rmate&#39;</span><span class="o">:</span>
-</span></span><span class="line"><span class="cl">    <span class="k">case</span> <span class="s1">&#39;mate&#39;</span><span class="o">:</span>
-</span></span><span class="line"><span class="cl">    <span class="k">case</span> <span class="s1">&#39;mine&#39;</span><span class="o">:</span>
-</span></span><span class="line"><span class="cl">      <span class="k">return</span> <span class="p">[</span><span class="s1">&#39;--line&#39;</span><span class="p">,</span> <span class="nx">lineNumber</span><span class="p">,</span> <span class="nx">fileName</span><span class="p">];</span>
-</span></span><span class="line"><span class="cl">    <span class="k">case</span> <span class="s1">&#39;code&#39;</span><span class="o">:</span>
-</span></span><span class="line"><span class="cl">    <span class="k">case</span> <span class="s1">&#39;Code&#39;</span><span class="o">:</span>
-</span></span><span class="line"><span class="cl">    <span class="k">case</span> <span class="s1">&#39;code-insiders&#39;</span><span class="o">:</span>
-</span></span><span class="line"><span class="cl">    <span class="k">case</span> <span class="s1">&#39;Code - Insiders&#39;</span><span class="o">:</span>
-</span></span><span class="line"><span class="cl">    <span class="k">case</span> <span class="s1">&#39;codium&#39;</span><span class="o">:</span>
-</span></span><span class="line"><span class="cl">    <span class="k">case</span> <span class="s1">&#39;cursor&#39;</span><span class="o">:</span>
-</span></span><span class="line"><span class="cl">    <span class="k">case</span> <span class="s1">&#39;vscodium&#39;</span><span class="o">:</span>
-</span></span><span class="line"><span class="cl">    <span class="k">case</span> <span class="s1">&#39;VSCodium&#39;</span><span class="o">:</span>
-</span></span><span class="line"><span class="cl">      <span class="k">return</span> <span class="p">[</span><span class="s1">&#39;-r&#39;</span><span class="p">,</span> <span class="s1">&#39;-g&#39;</span><span class="p">,</span> <span class="sb">`</span><span class="si">${</span><span class="nx">fileName</span><span class="si">}</span><span class="sb">:</span><span class="si">${</span><span class="nx">lineNumber</span><span class="si">}</span><span class="sb">:</span><span class="si">${</span><span class="nx">columnNumber</span><span class="si">}</span><span class="sb">`</span><span class="p">];</span>
-</span></span><span class="line"><span class="cl">    <span class="k">case</span> <span class="s1">&#39;appcode&#39;</span><span class="o">:</span>
-</span></span><span class="line"><span class="cl">    <span class="k">case</span> <span class="s1">&#39;clion&#39;</span><span class="o">:</span>
-</span></span><span class="line"><span class="cl">    <span class="k">case</span> <span class="s1">&#39;clion64&#39;</span><span class="o">:</span>
-</span></span><span class="line"><span class="cl">    <span class="k">case</span> <span class="s1">&#39;idea&#39;</span><span class="o">:</span>
-</span></span><span class="line"><span class="cl">    <span class="k">case</span> <span class="s1">&#39;idea64&#39;</span><span class="o">:</span>
-</span></span><span class="line"><span class="cl">    <span class="k">case</span> <span class="s1">&#39;phpstorm&#39;</span><span class="o">:</span>
-</span></span><span class="line"><span class="cl">    <span class="k">case</span> <span class="s1">&#39;phpstorm64&#39;</span><span class="o">:</span>
-</span></span><span class="line"><span class="cl">    <span class="k">case</span> <span class="s1">&#39;pycharm&#39;</span><span class="o">:</span>
-</span></span><span class="line"><span class="cl">    <span class="k">case</span> <span class="s1">&#39;pycharm64&#39;</span><span class="o">:</span>
-</span></span><span class="line"><span class="cl">    <span class="k">case</span> <span class="s1">&#39;rubymine&#39;</span><span class="o">:</span>
-</span></span><span class="line"><span class="cl">    <span class="k">case</span> <span class="s1">&#39;rubymine64&#39;</span><span class="o">:</span>
-</span></span><span class="line"><span class="cl">    <span class="k">case</span> <span class="s1">&#39;webstorm&#39;</span><span class="o">:</span>
-</span></span><span class="line"><span class="cl">    <span class="k">case</span> <span class="s1">&#39;webstorm64&#39;</span><span class="o">:</span>
-</span></span><span class="line"><span class="cl">    <span class="k">case</span> <span class="s1">&#39;goland&#39;</span><span class="o">:</span>
-</span></span><span class="line"><span class="cl">    <span class="k">case</span> <span class="s1">&#39;goland64&#39;</span><span class="o">:</span>
-</span></span><span class="line"><span class="cl">    <span class="k">case</span> <span class="s1">&#39;rider&#39;</span><span class="o">:</span>
-</span></span><span class="line"><span class="cl">    <span class="k">case</span> <span class="s1">&#39;rider64&#39;</span><span class="o">:</span>
-</span></span><span class="line"><span class="cl">      <span class="k">return</span> <span class="p">[</span><span class="s1">&#39;--line&#39;</span><span class="p">,</span> <span class="nx">lineNumber</span><span class="p">,</span> <span class="s1">&#39;--column&#39;</span><span class="p">,</span> <span class="nx">columnNumber</span><span class="p">,</span> <span class="nx">fileName</span><span class="p">];</span>
-</span></span><span class="line"><span class="cl">  <span class="p">}</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">  <span class="k">if</span> <span class="p">(</span><span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">LAUNCH_EDITOR</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="p">[</span><span class="nx">fileName</span><span class="p">,</span> <span class="nx">lineNumber</span><span class="p">,</span> <span class="nx">columnNumber</span><span class="p">];</span>
-</span></span><span class="line"><span class="cl">  <span class="p">}</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">  <span class="c1">// For all others, drop the lineNumber until we have
-</span></span></span><span class="line"><span class="cl">  <span class="c1">// a mapping above, since providing the lineNumber incorrectly
-</span></span></span><span class="line"><span class="cl">  <span class="c1">// can result in errors or confusing behavior.
-</span></span></span><span class="line"><span class="cl">  <span class="k">return</span> <span class="p">[</span><span class="nx">fileName</span><span class="p">];</span>
-</span></span><span class="line"><span class="cl"><span class="p">};</span></span></span></code></pre></td></tr></table></div>
-</div>
-</div><p>每个编辑器的命令行参数都不太一样，这里只是列出了一些常见的编辑器的命令行参数。比如，对于 VS Code，它需要<code>-r -g</code>选项，以及<code>fileName:lineNumber:columnNumber</code>格式的参数。</p></div><div class="post-footer" id="post-footer">
-  <div class="post-info">
-    <div class="post-info-line">
-      <div class="post-info-mod"><span title="更新于 2025-09-11 22:39:22">更新于 2025-09-11&nbsp;</span>
-      </div></div><div class="post-info-line">
-        <div class="post-info-md"><span><a href="vscode://file/D:\hugo-blog\andyfree96\content\posts\launch-editor源码剖析.md" title="在编辑器中打开" class="link-to-vscode">在编辑器中打开</a></span></div>
-        <div class="post-info-share">
-          <span><a href="javascript:void(0);" title="分享到 X" data-sharer="twitter" data-url="http://localhost:1313/launch-editor%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="launch-editor源码剖析：快速打开编辑器的实现原理" data-via="IRONAnthony96" data-hashtags="Node.js,launch-editor"><i class="fa-brands fa-x-twitter" aria-hidden="true"></i></a>
-  <a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="http://localhost:1313/launch-editor%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-hashtag="Node.js"><i class="fa-brands fa-facebook-square" aria-hidden="true"></i></a>
-  <a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="http://localhost:1313/launch-editor%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="launch-editor源码剖析：快速打开编辑器的实现原理" data-image="/images/202509/1/k-k-Y0DTcx1pGpc-unsplash.jpg"><i class="fa-brands fa-weibo" aria-hidden="true"></i></a>
-  </span>
-        </div>
-      </div></div>
-
-  <div class="post-info-more">
-    <section class="post-tags"><i class="fa-solid fa-tags me-1" aria-hidden="true"></i><a href="/tags/node.js/" class="post-tag" title="标签 - Node.js">Node.js</a><a href="/tags/launch-editor/" class="post-tag" title="标签 - Launch-Editor">Launch-Editor</a></section>
-    <section><span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
-    </section>
-  </div><div class="post-nav"></div>
-</div>
-<div class="post-reward">
-    <div class="comment">请作者喝杯咖啡!</div>
-    <input type="checkbox" class="reward-input" name="reward" id="fi-reward" hidden />
-    <label class="reward-button" for="fi-reward"><i class="fa-solid fa-qrcode" aria-hidden="true"></i>赞赏</label>
-    <div class="reward-ways" data-mode="static"><div><img src='/reward/alipay.png' alt="AndyFree96 支付宝"><span data-animation>支付宝</span>
-          </div><div><img src='/reward/wechatpay.png' alt="AndyFree96 微信"><span data-animation>微信</span>
-          </div></div>
-  </div></article>
-
-  <aside class="toc" id="toc-auto" aria-label="目录"></aside></main><footer class="footer">
-    <div class="footer-container"><div class="footer-line powered">由 <a href="https://gohugo.io/" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.163.1">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/hugo-fixit/FixIt" target="_blank" rel="external" title="FixIt v1.0.0-mq99hlzg">FixIt</a>
-        </div><div class="footer-line copyright" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright" aria-hidden="true"></i>
-            <span itemprop="copyrightYear">2019 - 2026</span><span class="author" itemprop="copyrightHolder">
-              <a href="https://andyfree96.github.io/" target="_blank" rel="external nofollow noopener noreferrer">AndyFree96</a></span></div></div>
-  </footer></div><div class="widgets"><div class="fixed-buttons"><button type="button" class="fixed-button back-to-top animate__faster d-none" aria-label="回到顶部"><i class="fa-solid fa-arrow-up" aria-hidden="true"></i></button></div><div id="mask"></div><div class="reading-progress-bar" style="left: 0;top: 0;"></div><noscript>
-    <div class="noscript-warning">该网站在启用 JavaScript 的情况下效果最佳。</div>
-  </noscript>
-</div><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script src="/lib/autocomplete/autocomplete.min.js" defer></script><script src="/lib/algoliasearch/browser.umd.js" defer></script><script src="/lib/sharer/sharer.min.js" async defer></script><script src="/lib/cookieconsent/cookieconsent.min.js" defer></script><script src="/js/lib/cookieconsent.js" defer></script><script src="/lib/cell-tooltip/cell-tooltip.umd.js" defer></script><script src="/js/config/963766619f3eaa94c103ba00c669d682.js" defer></script><script src="/js/lib/file-tree.js" defer></script><script src="/js/main.js" defer></script></body>
-</html>
+<!doctype html><html itemscope itemtype=http://schema.org/WebPage lang=zh-CN><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=2"><meta name=robots content="noodp"><title>launch-editor源码剖析：快速打开编辑器的实现原理 - 东尼的博客</title><meta name=author content="AndyFree96"><meta name=description content="在阅读 Vite 源码的过程中，我注意到一个有趣的依赖 —— launch-editor。起初只是随手点开，结果却发现它正是支撑起「浏览器报错信息 → 一键跳转到编辑器」这一开发体验的核心工具。其实，我们在使用 Vite、Vue CLI 等工具的时候，不止一次用过这个功能：报错时点击链接，代码编辑器立刻打开到对应的文件和行号。背后的关键实现，正是 launch-editor。
+"><meta name=keywords content='launch-editor,源码剖析'><meta itemprop=name content="launch-editor源码剖析：快速打开编辑器的实现原理"><meta itemprop=description content="在阅读 Vite 源码的过程中，我注意到一个有趣的依赖 —— launch-editor。起初只是随手点开，结果却发现它正是支撑起「浏览器报错信息 → 一键跳转到编辑器」这一开发体验的核心工具。其实，我们在使用 Vite、Vue CLI 等工具的时候，不止一次用过这个功能：报错时点击链接，代码编辑器立刻打开到对应的文件和行号。背后的关键实现，正是 launch-editor。"><meta itemprop=datePublished content="2025-09-11T22:39:22+08:00"><meta itemprop=dateModified content="2025-09-11T22:39:22+08:00"><meta itemprop=wordCount content="2847"><meta itemprop=keywords content="launch-editor,源码剖析"><meta property="og:url" content="https://andyfree96.github.io/launch-editor%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/"><meta property="og:site_name" content="东尼的博客"><meta property="og:title" content="launch-editor源码剖析：快速打开编辑器的实现原理"><meta property="og:description" content="在阅读 Vite 源码的过程中，我注意到一个有趣的依赖 —— launch-editor。起初只是随手点开，结果却发现它正是支撑起「浏览器报错信息 → 一键跳转到编辑器」这一开发体验的核心工具。其实，我们在使用 Vite、Vue CLI 等工具的时候，不止一次用过这个功能：报错时点击链接，代码编辑器立刻打开到对应的文件和行号。背后的关键实现，正是 launch-editor。"><meta property="og:locale" content="zh_CN"><meta property="og:type" content="article"><meta property="article:section" content="posts"><meta property="article:published_time" content="2025-09-11T22:39:22+08:00"><meta property="article:modified_time" content="2025-09-11T22:39:22+08:00"><meta property="article:tag" content="Node.js"><meta property="article:tag" content="Launch-Editor"><meta name=twitter:card content="summary"><meta name=twitter:title content="launch-editor源码剖析：快速打开编辑器的实现原理"><meta name=twitter:description content="在阅读 Vite 源码的过程中，我注意到一个有趣的依赖 —— launch-editor。起初只是随手点开，结果却发现它正是支撑起「浏览器报错信息 → 一键跳转到编辑器」这一开发体验的核心工具。其实，我们在使用 Vite、Vue CLI 等工具的时候，不止一次用过这个功能：报错时点击链接，代码编辑器立刻打开到对应的文件和行号。背后的关键实现，正是 launch-editor。"><meta name=twitter:creator content="@IRONAnthony96"><meta name=application-name content="FixIt"><meta name=apple-mobile-web-app-title content="FixIt"><meta name=theme-color data-light=#f6f8fa data-dark=#151b23 content="#f6f8fa"><meta name=msapplication-TileColor content="#da532c"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico><link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=mask-icon href=/safari-pinned-tab.svg color=#5bbad5><link rel=canonical type=text/html href=https://andyfree96.github.io/launch-editor%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/ title="launch-editor源码剖析：快速打开编辑器的实现原理 - 东尼的博客"><link rel=prev type=text/html href=https://andyfree96.github.io/es6%E6%A8%A1%E5%9D%97%E6%95%99%E7%A8%8B/ title=ES6模块教程><link rel=next type=text/html href=https://andyfree96.github.io/%E7%BC%96%E5%86%99%E5%8F%AF%E8%AF%BB%E4%BB%A3%E7%A0%81%E7%9A%84%E8%89%BA%E6%9C%AF/ title="编写可读代码的艺术 (Dustin Boswell & Trevor Foucher)"><link rel=alternate type=text/markdown href=https://andyfree96.github.io/launch-editor%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/index.md title="launch-editor源码剖析：快速打开编辑器的实现原理 - 东尼的博客"><link rel=stylesheet href=/css/config.min.css><link rel=stylesheet href=/css/main.min.css><link rel=preload href=/lib/fontawesome-free/all.min.css as=style onload='this.removeAttribute("onload"),this.rel="stylesheet"'><noscript><link rel=stylesheet href=/lib/fontawesome-free/all.min.css></noscript><link rel=preload href=/lib/animate/animate.min.css as=style onload='this.removeAttribute("onload"),this.rel="stylesheet"'><noscript><link rel=stylesheet href=/lib/animate/animate.min.css></noscript><link rel=preload href=/js/main.min.js as=script><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"launch-editor源码剖析：快速打开编辑器的实现原理","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/andyfree96.github.io\/launch-editor%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90\/"},"genre":"posts","keywords":"Node.js, launch-editor","wordcount":2847,"url":"https:\/\/andyfree96.github.io\/launch-editor%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90\/","datePublished":"2025-09-11T22:39:22+08:00","dateModified":"2025-09-11T22:39:22+08:00","publisher":{"@type":"Organization","name":""},"author":{"@type":"Person","name":"AndyFree96"},"description":""}</script><script src=/js/head/color-scheme.min.js></script></head><body data-instant-intensity=viewport data-header-desktop=sticky data-header-mobile=auto><div class=wrapper data-page-style=normal><header class="desktop animate__faster" id=header-desktop><div class=header-wrapper><div class=header-title><a href=/ title=东尼的博客 class=header-title-link><span class=header-title-text>东尼的博客</span></a><span class=header-subtitle></span></div><nav><ul class=menu><li class=menu-item><a class=menu-link href=/posts/>📕 文章</a></li><li class=menu-item><a class=menu-link href=/categories/>🧰 分类</a></li><li class=menu-item><a class=menu-link href=/tags/>🔖 标签</a></li><li class=menu-item><a class=menu-link href=/book>📚 书单</a></li><li class=menu-item><a class=menu-link href=/paper>📝 论文</a></li><li class=menu-item><a class=menu-link href=/opencourse>👨🏻‍💻 公开课</a></li><li class=menu-item><a class=menu-link href=/filmtv>🎞️ 影视</a></li><li class=menu-item><a class=menu-link href=/resource>⚡️ 资源库</a></li><li class=menu-item><a class=menu-link href=/projects>⭐ 开源</a></li><li class=menu-item><a class=menu-link href=/about>🙋🏻‍♂️ 关于</a></li><li class="menu-item delimiter"></li><li class="menu-item search" id=search-desktop><input type=text placeholder=搜索文章标题或内容…… id=search-input-desktop tabindex=-1>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-desktop title=搜索 aria-controls=search-dropdown-desktop aria-expanded=false><i class="fa-solid fa-search" aria-hidden=true></i>
+</a><a href=javascript:void(0); class="search-button search-clear" id=search-clear-desktop title=清空><i class="fa-solid fa-times-circle" aria-hidden=true></i>
+</a><span class="search-button search-loading" id=search-loading-desktop><i class="fa-solid fa-spinner fa-spin" aria-hidden=true></i></span></li><li class="menu-item theme-switch-item"><button type=button class=theme-switch aria-label=切换主题 title=切换主题><i class="fa-solid fa-adjust" aria-hidden=true></i></button></li></ul></nav></div></header><header class="mobile animate__faster" id=header-mobile><div class=header-container><div class=header-wrapper><div class=header-title><a href=/ title=东尼的博客 class=header-title-link><span class=header-title-text>东尼的博客</span></a><span class=header-subtitle></span></div><button type=button class=theme-switch aria-label=切换主题><i class="fa-solid fa-adjust" aria-hidden=true></i></button>
+<button type=button class=menu-toggle id=menu-toggle-mobile aria-controls=menu-mobile aria-expanded=false aria-labelledby=menu-mobile>
+<span></span><span></span><span></span></button></div><nav><ul class=menu id=menu-mobile><li class=search-wrapper><div class="search mobile" id=search-mobile><input type=text placeholder=搜索文章标题或内容…… id=search-input-mobile>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-mobile title=搜索 aria-controls=search-dropdown-mobile aria-expanded=false><i class="fa-solid fa-search" aria-hidden=true></i>
+</a><a href=javascript:void(0); class="search-button search-clear" id=search-clear-mobile title=清空><i class="fa-solid fa-times-circle" aria-hidden=true></i>
+</a><span class="search-button search-loading" id=search-loading-mobile><i class="fa-solid fa-spinner fa-spin" aria-hidden=true></i></span></div><a href=javascript:void(0); class=search-cancel id=search-cancel-mobile>取消</a></li><li class=menu-item><a class=menu-link href=/posts/>📕 文章</a></li><li class=menu-item><a class=menu-link href=/categories/>🧰 分类</a></li><li class=menu-item><a class=menu-link href=/tags/>🔖 标签</a></li><li class=menu-item><a class=menu-link href=/book>📚 书单</a></li><li class=menu-item><a class=menu-link href=/paper>📝 论文</a></li><li class=menu-item><a class=menu-link href=/opencourse>👨🏻‍💻 公开课</a></li><li class=menu-item><a class=menu-link href=/filmtv>🎞️ 影视</a></li><li class=menu-item><a class=menu-link href=/resource>⚡️ 资源库</a></li><li class=menu-item><a class=menu-link href=/projects>⭐ 开源</a></li><li class=menu-item><a class=menu-link href=/about>🙋🏻‍♂️ 关于</a></li><li class="menu-item menu-system"></li></ul></nav></div></header><div class="search-dropdown desktop"><div id=search-dropdown-desktop></div></div><div class="search-dropdown mobile"><div id=search-dropdown-mobile></div></div><main class=fi-container><aside class="aside-collection animate__animated animate__fadeIn animate__faster" aria-label=合集><div class="details related-details open"><div class="details-summary related-summary"><i class="fa-solid fa-fire fa-fade text-danger" aria-hidden=true></i>
+<span class=related-title>相关内容</span><i class="details-icon fa-solid fa-angle-right" aria-hidden=true></i></div><div class="details-content related-content"><ul class=related-list><li class=related-item><a href=/csv2%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/ title="csv2 源码剖析：轻量级 CSV 处理的高效之道">csv2 源码剖析：轻量级 CSV 处理的高效之道</a></li><li class=related-item><a href=/%E5%A6%82%E4%BD%95%E8%A7%A3%E5%86%B3-node.js-%E4%B8%AD%E7%9A%84-emfile-%E9%94%99%E8%AF%AF/ title="如何解决 Node.js 中的 EMFILE 错误">如何解决 Node.js 中的 EMFILE 错误</a></li><li class=related-item><a href=/json-server%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/ title="json-server源码剖析：快速构建REST API背后的原理">json-server源码剖析：快速构建REST API背后的原理</a></li></ul></div></div></aside><article class="page single"><div class=header><h1 class="single-title animate__animated animate__flipInX"><span title=转载 class=icon-repost><i class="fa-solid fa-share" aria-hidden=true></i></span><span>launch-editor源码剖析：快速打开编辑器的实现原理</span></h1></div><div class=post-meta><div class=post-meta-line><span class=post-author><a href=https://andyfree96.github.io/ title=作者 rel=author class=author><img class=avatar src=/avatar/1.jpg alt=AndyFree96 height=16 width=16>&nbsp;AndyFree96</a></span><span class=post-included-in>&nbsp;收录于 <a href=/categories/%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/ class=post-category title="分类 - 源码剖析"><i class="fa-regular fa-folder" aria-hidden=true></i> 源码剖析</a></span></div><div class=post-meta-line><span title="发布于 2025-09-11 22:39:22"><i class="fa-solid fa-calendar-days me-1" aria-hidden=true></i><time datetime=2025-09-11>2025-09-11</time></span>&nbsp;<span title="2847 字"><i class="fa-solid fa-pencil-alt me-1" aria-hidden=true></i>约 2900 字</span>&nbsp;<span><i class="fa-regular fa-clock me-1" aria-hidden=true></i>预计阅读 6 分钟</span>&nbsp;</div></div><div class=featured-image><img loading=eager src=/images/202509/1/k-k-Y0DTcx1pGpc-unsplash.jpg sizes="(max-width: 680px) 100vw, (max-width: 960px) 80vw, (max-width: 1440px) 56vw, 800px" alt=/images/202509/1/k-k-Y0DTcx1pGpc-unsplash.jpg></div><div class=content id=content><p>在阅读 Vite 源码的过程中，我注意到一个有趣的依赖 —— launch-editor。起初只是随手点开，结果却发现它正是支撑起「浏览器报错信息 → 一键跳转到编辑器」这一开发体验的核心工具。其实，我们在使用 Vite、Vue CLI 等工具的时候，不止一次用过这个功能：报错时点击链接，代码编辑器立刻打开到对应的文件和行号。背后的关键实现，正是 launch-editor。</p><div class="details admonition note open"><div class="details-summary admonition-title"><i class="icon fa-solid fa-pencil-alt" aria-hidden=true></i>注意<i class="details-icon fa-solid fa-angle-right" aria-hidden=true></i></div><div class=details-content><div class=admonition-content>Vite 提交号为: <code>3676da5bc5b2b69b28619b8521fca94d30468fe5</code>。<code>launch-editor-middleware</code>版本为<code>2.10.0</code>，<code>launch-editor</code>版本为<code>2.10.0</code>。</div></div></div><p><code>vite</code>项目的<code>vite/packages/vite/src/node/server/index.ts</code>文件中有这么一句：</p><div class="code-block highlight" data-mode=classic data-copyable=true><div class=chroma><div class="code-header language-ts"><span class=code-title><i class="arrow fa-solid fa-chevron-down" aria-hidden=true></i></span><button type=button class=ellipses-btn aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden=true></i></button><button type=button class="action-btn line-nos-btn" aria-label=切换行号 title=切换行号><i class="fa-solid fa-list-ol" aria-hidden=true></i></button><button type=button class="action-btn line-wrap-btn" aria-label=切换自动换行 title=切换自动换行><i class="fa-solid fa-right-left" aria-hidden=true></i></button><button type=button class="action-btn copy-btn" aria-label=复制到剪贴板 title=复制到剪贴板 data-copied-text=已复制><i class="fa-regular fa-clone" aria-hidden=true></i></button><button type=button class="action-btn fullscreen-btn" aria-label=全屏 title=全屏 data-exit-title=退出全屏><i class="fa-solid fa-expand" aria-hidden=true></i></button></div><div class=code-wrapper data-max=400 data-line-digit=1 style=--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-ts data-lang=ts><span class=line><span class=cl><span class=c1>// open in editor support
+</span></span></span><span class=line><span class=cl><span class=nx>middlewares</span><span class=p>.</span><span class=nx>use</span><span class=p>(</span><span class=s1>&#39;/__open-in-editor&#39;</span><span class=p>,</span> <span class=nx>launchEditorMiddleware</span><span class=p>());</span></span></span></code></pre></td></tr></table></div></div></div><p>也就是使用了<code>launch-editor-middleware</code>中间件，它会监听<code>/__open-in-editor</code>路径，并将请求转发给<code>launch-editor</code>模块。启动了 vite 应用后，我们在浏览器中如下访问：</p><p><code>http://locahost:5173/__open-in-editor?file=package.json:9</code></p><p><code>launch-editor-middleware</code>模块的源码位于<code>vite/packages/vite/node_modules/launch-editor-middleware/index.js</code>，它主要做了两件事：</p><ol><li>解析请求参数，获取文件路径和行号</li><li>调用<code>launch-editor</code>模块，打开编辑器并跳转到相应的文件和行号</li></ol><p><code>index.js</code>具体代码如下：</p><div class="code-block highlight" data-mode=classic data-copyable=true title=index.js><div class=chroma><div class="code-header language-js"><span class=code-title><i class="arrow fa-solid fa-chevron-down" aria-hidden=true></i><span class=title-inner>index.js</span></span><button type=button class=ellipses-btn aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden=true></i></button><button type=button class="action-btn line-nos-btn" aria-label=切换行号 title=切换行号><i class="fa-solid fa-list-ol" aria-hidden=true></i></button><button type=button class="action-btn line-wrap-btn" aria-label=切换自动换行 title=切换自动换行><i class="fa-solid fa-right-left" aria-hidden=true></i></button><button type=button class="action-btn copy-btn" aria-label=复制到剪贴板 title=复制到剪贴板 data-copied-text=已复制><i class="fa-regular fa-clone" aria-hidden=true></i></button><button type=button class="action-btn fullscreen-btn" aria-label=全屏 title=全屏 data-exit-title=退出全屏><i class="fa-solid fa-expand" aria-hidden=true></i></button></div><div class=code-wrapper data-max=400 data-line-digit=2 style=--fi-max-shown-lines:400;--fi-line-digit:2;--fi-line-start:1><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-js data-lang=js><span class=line><span class=cl><span class=kr>const</span> <span class=nx>url</span> <span class=o>=</span> <span class=nx>require</span><span class=p>(</span><span class=s1>&#39;url&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=kr>const</span> <span class=nx>path</span> <span class=o>=</span> <span class=nx>require</span><span class=p>(</span><span class=s1>&#39;path&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=kr>const</span> <span class=nx>launch</span> <span class=o>=</span> <span class=nx>require</span><span class=p>(</span><span class=s1>&#39;launch-editor&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nx>module</span><span class=p>.</span><span class=nx>exports</span> <span class=o>=</span> <span class=p>(</span><span class=nx>specifiedEditor</span><span class=p>,</span> <span class=nx>srcRoot</span><span class=p>,</span> <span class=nx>onErrorCallback</span><span class=p>)</span> <span class=p>=&gt;</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=k>if</span> <span class=p>(</span><span class=k>typeof</span> <span class=nx>specifiedEditor</span> <span class=o>===</span> <span class=s1>&#39;function&#39;</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=nx>onErrorCallback</span> <span class=o>=</span> <span class=nx>specifiedEditor</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=nx>specifiedEditor</span> <span class=o>=</span> <span class=kc>undefined</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=k>if</span> <span class=p>(</span><span class=k>typeof</span> <span class=nx>srcRoot</span> <span class=o>===</span> <span class=s1>&#39;function&#39;</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=nx>onErrorCallback</span> <span class=o>=</span> <span class=nx>srcRoot</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=nx>srcRoot</span> <span class=o>=</span> <span class=kc>undefined</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=nx>srcRoot</span> <span class=o>=</span> <span class=nx>srcRoot</span> <span class=o>||</span> <span class=nx>process</span><span class=p>.</span><span class=nx>cwd</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=k>return</span> <span class=kd>function</span> <span class=nx>launchEditorMiddleware</span><span class=p>(</span><span class=nx>req</span><span class=p>,</span> <span class=nx>res</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=kr>const</span> <span class=p>{</span> <span class=nx>file</span> <span class=p>}</span> <span class=o>=</span> <span class=nx>url</span><span class=p>.</span><span class=nx>parse</span><span class=p>(</span><span class=nx>req</span><span class=p>.</span><span class=nx>url</span><span class=p>,</span> <span class=kc>true</span><span class=p>).</span><span class=nx>query</span> <span class=o>||</span> <span class=p>{};</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=p>(</span><span class=o>!</span><span class=nx>file</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=nx>res</span><span class=p>.</span><span class=nx>statusCode</span> <span class=o>=</span> <span class=mi>500</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>      <span class=nx>res</span><span class=p>.</span><span class=nx>end</span><span class=p>(</span>
+</span></span><span class=line><span class=cl>        <span class=sb>`launch-editor-middleware: required query param &#34;file&#34; is missing.`</span>
+</span></span><span class=line><span class=cl>      <span class=p>);</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span> <span class=k>else</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=nx>launch</span><span class=p>(</span><span class=nx>path</span><span class=p>.</span><span class=nx>resolve</span><span class=p>(</span><span class=nx>srcRoot</span><span class=p>,</span> <span class=nx>file</span><span class=p>),</span> <span class=nx>specifiedEditor</span><span class=p>,</span> <span class=nx>onErrorCallback</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>      <span class=nx>res</span><span class=p>.</span><span class=nx>end</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=p>};</span>
+</span></span><span class=line><span class=cl><span class=p>};</span></span></span></code></pre></td></tr></table></div></div></div><p><code>launch-editor-middleware</code>使用的<code>launch-editor</code>包位于<code>vite/node_modules/.pnpm/launch-editor@2.10.0/node_modules/launch-editor</code>。</p><p>我很好奇的是<code>launch-editor</code>是如何确定用哪个编辑器打开文件和行号的呢？答案可以在<code>vite/node_modules/.pnpm/launch-editor@2.10.0/node_modules/launch-editor/guess.js</code>中找到。</p><div class="code-block highlight" data-mode=classic data-copyable=true title=guess.js><div class=chroma><div class="code-header language-js"><span class=code-title><i class="arrow fa-solid fa-chevron-down" aria-hidden=true></i><span class=title-inner>guess.js</span></span><button type=button class=ellipses-btn aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden=true></i></button><button type=button class="action-btn line-nos-btn" aria-label=切换行号 title=切换行号><i class="fa-solid fa-list-ol" aria-hidden=true></i></button><button type=button class="action-btn line-wrap-btn" aria-label=切换自动换行 title=切换自动换行><i class="fa-solid fa-right-left" aria-hidden=true></i></button><button type=button class="action-btn copy-btn" aria-label=复制到剪贴板 title=复制到剪贴板 data-copied-text=已复制><i class="fa-regular fa-clone" aria-hidden=true></i></button><button type=button class="action-btn fullscreen-btn" aria-label=全屏 title=全屏 data-exit-title=退出全屏><i class="fa-solid fa-expand" aria-hidden=true></i></button></div><div class=code-wrapper data-max=400 data-line-digit=3 style=--fi-max-shown-lines:400;--fi-line-digit:3;--fi-line-start:1><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>  1
+</span><span class=lnt>  2
+</span><span class=lnt>  3
+</span><span class=lnt>  4
+</span><span class=lnt>  5
+</span><span class=lnt>  6
+</span><span class=lnt>  7
+</span><span class=lnt>  8
+</span><span class=lnt>  9
+</span><span class=lnt> 10
+</span><span class=lnt> 11
+</span><span class=lnt> 12
+</span><span class=lnt> 13
+</span><span class=lnt> 14
+</span><span class=lnt> 15
+</span><span class=lnt> 16
+</span><span class=lnt> 17
+</span><span class=lnt> 18
+</span><span class=lnt> 19
+</span><span class=lnt> 20
+</span><span class=lnt> 21
+</span><span class=lnt> 22
+</span><span class=lnt> 23
+</span><span class=lnt> 24
+</span><span class=lnt> 25
+</span><span class=lnt> 26
+</span><span class=lnt> 27
+</span><span class=lnt> 28
+</span><span class=lnt> 29
+</span><span class=lnt> 30
+</span><span class=lnt> 31
+</span><span class=lnt> 32
+</span><span class=lnt> 33
+</span><span class=lnt> 34
+</span><span class=lnt> 35
+</span><span class=lnt> 36
+</span><span class=lnt> 37
+</span><span class=lnt> 38
+</span><span class=lnt> 39
+</span><span class=lnt> 40
+</span><span class=lnt> 41
+</span><span class=lnt> 42
+</span><span class=lnt> 43
+</span><span class=lnt> 44
+</span><span class=lnt> 45
+</span><span class=lnt> 46
+</span><span class=lnt> 47
+</span><span class=lnt> 48
+</span><span class=lnt> 49
+</span><span class=lnt> 50
+</span><span class=lnt> 51
+</span><span class=lnt> 52
+</span><span class=lnt> 53
+</span><span class=lnt> 54
+</span><span class=lnt> 55
+</span><span class=lnt> 56
+</span><span class=lnt> 57
+</span><span class=lnt> 58
+</span><span class=lnt> 59
+</span><span class=lnt> 60
+</span><span class=lnt> 61
+</span><span class=lnt> 62
+</span><span class=lnt> 63
+</span><span class=lnt> 64
+</span><span class=lnt> 65
+</span><span class=lnt> 66
+</span><span class=lnt> 67
+</span><span class=lnt> 68
+</span><span class=lnt> 69
+</span><span class=lnt> 70
+</span><span class=lnt> 71
+</span><span class=lnt> 72
+</span><span class=lnt> 73
+</span><span class=lnt> 74
+</span><span class=lnt> 75
+</span><span class=lnt> 76
+</span><span class=lnt> 77
+</span><span class=lnt> 78
+</span><span class=lnt> 79
+</span><span class=lnt> 80
+</span><span class=lnt> 81
+</span><span class=lnt> 82
+</span><span class=lnt> 83
+</span><span class=lnt> 84
+</span><span class=lnt> 85
+</span><span class=lnt> 86
+</span><span class=lnt> 87
+</span><span class=lnt> 88
+</span><span class=lnt> 89
+</span><span class=lnt> 90
+</span><span class=lnt> 91
+</span><span class=lnt> 92
+</span><span class=lnt> 93
+</span><span class=lnt> 94
+</span><span class=lnt> 95
+</span><span class=lnt> 96
+</span><span class=lnt> 97
+</span><span class=lnt> 98
+</span><span class=lnt> 99
+</span><span class=lnt>100
+</span><span class=lnt>101
+</span><span class=lnt>102
+</span><span class=lnt>103
+</span><span class=lnt>104
+</span><span class=lnt>105
+</span><span class=lnt>106
+</span><span class=lnt>107
+</span><span class=lnt>108
+</span><span class=lnt>109
+</span><span class=lnt>110
+</span><span class=lnt>111
+</span><span class=lnt>112
+</span><span class=lnt>113
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-js data-lang=js><span class=line><span class=cl><span class=kr>const</span> <span class=nx>path</span> <span class=o>=</span> <span class=nx>require</span><span class=p>(</span><span class=s1>&#39;path&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=kr>const</span> <span class=nx>shellQuote</span> <span class=o>=</span> <span class=nx>require</span><span class=p>(</span><span class=s1>&#39;shell-quote&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=kr>const</span> <span class=nx>childProcess</span> <span class=o>=</span> <span class=nx>require</span><span class=p>(</span><span class=s1>&#39;child_process&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1>// Map from full process name to binary that starts the process
+</span></span></span><span class=line><span class=cl><span class=c1>// We can&#39;t just re-use full process name, because it will spawn a new instance
+</span></span></span><span class=line><span class=cl><span class=c1>// of the app every time
+</span></span></span><span class=line><span class=cl><span class=kr>const</span> <span class=nx>COMMON_EDITORS_MACOS</span> <span class=o>=</span> <span class=nx>require</span><span class=p>(</span><span class=s1>&#39;./editor-info/macos&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=kr>const</span> <span class=nx>COMMON_EDITORS_LINUX</span> <span class=o>=</span> <span class=nx>require</span><span class=p>(</span><span class=s1>&#39;./editor-info/linux&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=kr>const</span> <span class=nx>COMMON_EDITORS_WIN</span> <span class=o>=</span> <span class=nx>require</span><span class=p>(</span><span class=s1>&#39;./editor-info/windows&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nx>module</span><span class=p>.</span><span class=nx>exports</span> <span class=o>=</span> <span class=kd>function</span> <span class=nx>guessEditor</span><span class=p>(</span><span class=nx>specifiedEditor</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=k>if</span> <span class=p>(</span><span class=nx>specifiedEditor</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=nx>shellQuote</span><span class=p>.</span><span class=nx>parse</span><span class=p>(</span><span class=nx>specifiedEditor</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=k>if</span> <span class=p>(</span><span class=nx>process</span><span class=p>.</span><span class=nx>env</span><span class=p>.</span><span class=nx>LAUNCH_EDITOR</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=p>[</span><span class=nx>process</span><span class=p>.</span><span class=nx>env</span><span class=p>.</span><span class=nx>LAUNCH_EDITOR</span><span class=p>];</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=k>if</span> <span class=p>(</span><span class=nx>process</span><span class=p>.</span><span class=nx>versions</span><span class=p>.</span><span class=nx>webcontainer</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=p>[</span><span class=nx>process</span><span class=p>.</span><span class=nx>env</span><span class=p>.</span><span class=nx>EDITOR</span> <span class=o>||</span> <span class=s1>&#39;code&#39;</span><span class=p>];</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=c1>// We can find out which editor is currently running by:
+</span></span></span><span class=line><span class=cl>  <span class=c1>// `ps x` on macOS and Linux
+</span></span></span><span class=line><span class=cl>  <span class=c1>// `Get-Process` on Windows
+</span></span></span><span class=line><span class=cl>  <span class=k>try</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=p>(</span><span class=nx>process</span><span class=p>.</span><span class=nx>platform</span> <span class=o>===</span> <span class=s1>&#39;darwin&#39;</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=kr>const</span> <span class=nx>output</span> <span class=o>=</span> <span class=nx>childProcess</span>
+</span></span><span class=line><span class=cl>        <span class=p>.</span><span class=nx>execSync</span><span class=p>(</span><span class=s1>&#39;ps x -o comm=&#39;</span><span class=p>,</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>          <span class=nx>stdio</span><span class=o>:</span> <span class=p>[</span><span class=s1>&#39;pipe&#39;</span><span class=p>,</span> <span class=s1>&#39;pipe&#39;</span><span class=p>,</span> <span class=s1>&#39;ignore&#39;</span><span class=p>],</span>
+</span></span><span class=line><span class=cl>        <span class=p>})</span>
+</span></span><span class=line><span class=cl>        <span class=p>.</span><span class=nx>toString</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>      <span class=kr>const</span> <span class=nx>processNames</span> <span class=o>=</span> <span class=nb>Object</span><span class=p>.</span><span class=nx>keys</span><span class=p>(</span><span class=nx>COMMON_EDITORS_MACOS</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>      <span class=kr>const</span> <span class=nx>processList</span> <span class=o>=</span> <span class=nx>output</span><span class=p>.</span><span class=nx>split</span><span class=p>(</span><span class=s1>&#39;\n&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>      <span class=k>for</span> <span class=p>(</span><span class=kd>let</span> <span class=nx>i</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span> <span class=nx>i</span> <span class=o>&lt;</span> <span class=nx>processNames</span><span class=p>.</span><span class=nx>length</span><span class=p>;</span> <span class=nx>i</span><span class=o>++</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=kr>const</span> <span class=nx>processName</span> <span class=o>=</span> <span class=nx>processNames</span><span class=p>[</span><span class=nx>i</span><span class=p>];</span>
+</span></span><span class=line><span class=cl>        <span class=c1>// Find editor by exact match.
+</span></span></span><span class=line><span class=cl>        <span class=k>if</span> <span class=p>(</span><span class=nx>processList</span><span class=p>.</span><span class=nx>includes</span><span class=p>(</span><span class=nx>processName</span><span class=p>))</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>          <span class=k>return</span> <span class=p>[</span><span class=nx>COMMON_EDITORS_MACOS</span><span class=p>[</span><span class=nx>processName</span><span class=p>]];</span>
+</span></span><span class=line><span class=cl>        <span class=p>}</span>
+</span></span><span class=line><span class=cl>        <span class=kr>const</span> <span class=nx>processNameWithoutApplications</span> <span class=o>=</span> <span class=nx>processName</span><span class=p>.</span><span class=nx>replace</span><span class=p>(</span>
+</span></span><span class=line><span class=cl>          <span class=s1>&#39;/Applications&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>          <span class=s1>&#39;&#39;</span>
+</span></span><span class=line><span class=cl>        <span class=p>);</span>
+</span></span><span class=line><span class=cl>        <span class=c1>// Find editor installation not in /Applications.
+</span></span></span><span class=line><span class=cl>        <span class=k>if</span> <span class=p>(</span><span class=nx>output</span><span class=p>.</span><span class=nx>indexOf</span><span class=p>(</span><span class=nx>processNameWithoutApplications</span><span class=p>)</span> <span class=o>!==</span> <span class=o>-</span><span class=mi>1</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>          <span class=c1>// Use the CLI command if one is specified
+</span></span></span><span class=line><span class=cl>          <span class=k>if</span> <span class=p>(</span><span class=nx>processName</span> <span class=o>!==</span> <span class=nx>COMMON_EDITORS_MACOS</span><span class=p>[</span><span class=nx>processName</span><span class=p>])</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>            <span class=k>return</span> <span class=p>[</span><span class=nx>COMMON_EDITORS_MACOS</span><span class=p>[</span><span class=nx>processName</span><span class=p>]];</span>
+</span></span><span class=line><span class=cl>          <span class=p>}</span>
+</span></span><span class=line><span class=cl>          <span class=c1>// Use a partial match to find the running process path.  If one is found, use the
+</span></span></span><span class=line><span class=cl>          <span class=c1>// existing path since it can be running from anywhere.
+</span></span></span><span class=line><span class=cl>          <span class=kr>const</span> <span class=nx>runningProcess</span> <span class=o>=</span> <span class=nx>processList</span><span class=p>.</span><span class=nx>find</span><span class=p>((</span><span class=nx>procName</span><span class=p>)</span> <span class=p>=&gt;</span>
+</span></span><span class=line><span class=cl>            <span class=nx>procName</span><span class=p>.</span><span class=nx>endsWith</span><span class=p>(</span><span class=nx>processNameWithoutApplications</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>          <span class=p>);</span>
+</span></span><span class=line><span class=cl>          <span class=k>if</span> <span class=p>(</span><span class=nx>runningProcess</span> <span class=o>!==</span> <span class=kc>undefined</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>            <span class=k>return</span> <span class=p>[</span><span class=nx>runningProcess</span><span class=p>];</span>
+</span></span><span class=line><span class=cl>          <span class=p>}</span>
+</span></span><span class=line><span class=cl>        <span class=p>}</span>
+</span></span><span class=line><span class=cl>      <span class=p>}</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span> <span class=k>else</span> <span class=k>if</span> <span class=p>(</span><span class=nx>process</span><span class=p>.</span><span class=nx>platform</span> <span class=o>===</span> <span class=s1>&#39;win32&#39;</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=kr>const</span> <span class=nx>output</span> <span class=o>=</span> <span class=nx>childProcess</span>
+</span></span><span class=line><span class=cl>        <span class=p>.</span><span class=nx>execSync</span><span class=p>(</span>
+</span></span><span class=line><span class=cl>          <span class=s1>&#39;powershell -NoProfile -Command &#34;&#39;</span> <span class=o>+</span>
+</span></span><span class=line><span class=cl>            <span class=s1>&#39;[Console]::OutputEncoding=[Text.Encoding]::UTF8;&#39;</span> <span class=o>+</span>
+</span></span><span class=line><span class=cl>            <span class=s1>&#39;Get-CimInstance -Query \\&#34;select executablepath from win32_process where executablepath is not null\\&#34; | % { $_.ExecutablePath }&#39;</span> <span class=o>+</span>
+</span></span><span class=line><span class=cl>            <span class=s1>&#39;&#34;&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>          <span class=p>{</span>
+</span></span><span class=line><span class=cl>            <span class=nx>stdio</span><span class=o>:</span> <span class=p>[</span><span class=s1>&#39;pipe&#39;</span><span class=p>,</span> <span class=s1>&#39;pipe&#39;</span><span class=p>,</span> <span class=s1>&#39;ignore&#39;</span><span class=p>],</span>
+</span></span><span class=line><span class=cl>          <span class=p>}</span>
+</span></span><span class=line><span class=cl>        <span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=p>.</span><span class=nx>toString</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>      <span class=kr>const</span> <span class=nx>runningProcesses</span> <span class=o>=</span> <span class=nx>output</span><span class=p>.</span><span class=nx>split</span><span class=p>(</span><span class=s1>&#39;\r\n&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>      <span class=k>for</span> <span class=p>(</span><span class=kd>let</span> <span class=nx>i</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span> <span class=nx>i</span> <span class=o>&lt;</span> <span class=nx>runningProcesses</span><span class=p>.</span><span class=nx>length</span><span class=p>;</span> <span class=nx>i</span><span class=o>++</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=kr>const</span> <span class=nx>fullProcessPath</span> <span class=o>=</span> <span class=nx>runningProcesses</span><span class=p>[</span><span class=nx>i</span><span class=p>].</span><span class=nx>trim</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>        <span class=kr>const</span> <span class=nx>shortProcessName</span> <span class=o>=</span> <span class=nx>path</span><span class=p>.</span><span class=nx>basename</span><span class=p>(</span><span class=nx>fullProcessPath</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>        <span class=k>if</span> <span class=p>(</span><span class=nx>COMMON_EDITORS_WIN</span><span class=p>.</span><span class=nx>indexOf</span><span class=p>(</span><span class=nx>shortProcessName</span><span class=p>)</span> <span class=o>!==</span> <span class=o>-</span><span class=mi>1</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>          <span class=k>return</span> <span class=p>[</span><span class=nx>fullProcessPath</span><span class=p>];</span>
+</span></span><span class=line><span class=cl>        <span class=p>}</span>
+</span></span><span class=line><span class=cl>      <span class=p>}</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span> <span class=k>else</span> <span class=k>if</span> <span class=p>(</span><span class=nx>process</span><span class=p>.</span><span class=nx>platform</span> <span class=o>===</span> <span class=s1>&#39;linux&#39;</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=c1>// --no-heading No header line
+</span></span></span><span class=line><span class=cl>      <span class=c1>// x List all processes owned by you
+</span></span></span><span class=line><span class=cl>      <span class=c1>// -o comm Need only names column
+</span></span></span><span class=line><span class=cl>      <span class=kr>const</span> <span class=nx>output</span> <span class=o>=</span> <span class=nx>childProcess</span>
+</span></span><span class=line><span class=cl>        <span class=p>.</span><span class=nx>execSync</span><span class=p>(</span><span class=s1>&#39;ps x --no-heading -o comm --sort=comm&#39;</span><span class=p>,</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>          <span class=nx>stdio</span><span class=o>:</span> <span class=p>[</span><span class=s1>&#39;pipe&#39;</span><span class=p>,</span> <span class=s1>&#39;pipe&#39;</span><span class=p>,</span> <span class=s1>&#39;ignore&#39;</span><span class=p>],</span>
+</span></span><span class=line><span class=cl>        <span class=p>})</span>
+</span></span><span class=line><span class=cl>        <span class=p>.</span><span class=nx>toString</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>      <span class=kr>const</span> <span class=nx>processNames</span> <span class=o>=</span> <span class=nb>Object</span><span class=p>.</span><span class=nx>keys</span><span class=p>(</span><span class=nx>COMMON_EDITORS_LINUX</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>      <span class=k>for</span> <span class=p>(</span><span class=kd>let</span> <span class=nx>i</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span> <span class=nx>i</span> <span class=o>&lt;</span> <span class=nx>processNames</span><span class=p>.</span><span class=nx>length</span><span class=p>;</span> <span class=nx>i</span><span class=o>++</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=kr>const</span> <span class=nx>processName</span> <span class=o>=</span> <span class=nx>processNames</span><span class=p>[</span><span class=nx>i</span><span class=p>];</span>
+</span></span><span class=line><span class=cl>        <span class=k>if</span> <span class=p>(</span><span class=nx>output</span><span class=p>.</span><span class=nx>indexOf</span><span class=p>(</span><span class=nx>processName</span><span class=p>)</span> <span class=o>!==</span> <span class=o>-</span><span class=mi>1</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>          <span class=k>return</span> <span class=p>[</span><span class=nx>COMMON_EDITORS_LINUX</span><span class=p>[</span><span class=nx>processName</span><span class=p>]];</span>
+</span></span><span class=line><span class=cl>        <span class=p>}</span>
+</span></span><span class=line><span class=cl>      <span class=p>}</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span> <span class=k>catch</span> <span class=p>(</span><span class=nx>ignoreError</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=c1>// Ignore...
+</span></span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=c1>// Last resort, use old skool env vars
+</span></span></span><span class=line><span class=cl>  <span class=k>if</span> <span class=p>(</span><span class=nx>process</span><span class=p>.</span><span class=nx>env</span><span class=p>.</span><span class=nx>VISUAL</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=p>[</span><span class=nx>process</span><span class=p>.</span><span class=nx>env</span><span class=p>.</span><span class=nx>VISUAL</span><span class=p>];</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span> <span class=k>else</span> <span class=k>if</span> <span class=p>(</span><span class=nx>process</span><span class=p>.</span><span class=nx>env</span><span class=p>.</span><span class=nx>EDITOR</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=p>[</span><span class=nx>process</span><span class=p>.</span><span class=nx>env</span><span class=p>.</span><span class=nx>EDITOR</span><span class=p>];</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=k>return</span> <span class=p>[</span><span class=kc>null</span><span class=p>];</span>
+</span></span><span class=line><span class=cl><span class=p>};</span></span></span></code></pre></td></tr></table></div></div></div><p>如果用户调用函数时显式指定了编辑器<code>specifiedEditor</code>，则直接使用该编辑器。如果没有指定，则尝试使用环境变量<code>LAUNCH_EDITOR</code>。如果当前运行在<a href="https://stackblitz.com/edit/webcontainers-akbduvna?file=index.js" target=_blank rel="external nofollow noopener noreferrer">StackBlitz WebContainer<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden=true></i></a>这类环境中，就优先使用<code>EDITOR</code>环境变量，否则默认用<code>code</code>（VS Code 的命令函启动命令）。</p><p>如果以上情况都不满足，会根据<code>process.platform</code>来判断当前系统，分别进行处理。这里主要看在 Windows 系统下的处理方式：</p><div class="code-block highlight" data-mode=classic data-copyable=true title=guess.js><div class=chroma><div class="code-header language-js"><span class=code-title><i class="arrow fa-solid fa-chevron-down" aria-hidden=true></i><span class=title-inner>guess.js</span></span><button type=button class=ellipses-btn aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden=true></i></button><button type=button class="action-btn line-nos-btn" aria-label=切换行号 title=切换行号><i class="fa-solid fa-list-ol" aria-hidden=true></i></button><button type=button class="action-btn line-wrap-btn" aria-label=切换自动换行 title=切换自动换行><i class="fa-solid fa-right-left" aria-hidden=true></i></button><button type=button class="action-btn copy-btn" aria-label=复制到剪贴板 title=复制到剪贴板 data-copied-text=已复制><i class="fa-regular fa-clone" aria-hidden=true></i></button><button type=button class="action-btn fullscreen-btn" aria-label=全屏 title=全屏 data-exit-title=退出全屏><i class="fa-solid fa-expand" aria-hidden=true></i></button></div><div class=code-wrapper data-max=400 data-line-digit=2 style=--fi-max-shown-lines:400;--fi-line-digit:2;--fi-line-start:1><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-js data-lang=js><span class=line><span class=cl><span class=kr>const</span> <span class=nx>output</span> <span class=o>=</span> <span class=nx>childProcess</span>
+</span></span><span class=line><span class=cl>  <span class=p>.</span><span class=nx>execSync</span><span class=p>(</span>
+</span></span><span class=line><span class=cl>    <span class=s1>&#39;powershell -NoProfile -Command &#34;&#39;</span> <span class=o>+</span>
+</span></span><span class=line><span class=cl>      <span class=s1>&#39;[Console]::OutputEncoding=[Text.Encoding]::UTF8;&#39;</span> <span class=o>+</span>
+</span></span><span class=line><span class=cl>      <span class=s1>&#39;Get-CimInstance -Query \\&#34;select executablepath from win32_process where executablepath is not null\\&#34; | % { $_.ExecutablePath }&#39;</span> <span class=o>+</span>
+</span></span><span class=line><span class=cl>      <span class=s1>&#39;&#34;&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=nx>stdio</span><span class=o>:</span> <span class=p>[</span><span class=s1>&#39;pipe&#39;</span><span class=p>,</span> <span class=s1>&#39;pipe&#39;</span><span class=p>,</span> <span class=s1>&#39;ignore&#39;</span><span class=p>],</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=p>)</span>
+</span></span><span class=line><span class=cl>  <span class=p>.</span><span class=nx>toString</span><span class=p>();</span>
+</span></span><span class=line><span class=cl><span class=kr>const</span> <span class=nx>runningProcesses</span> <span class=o>=</span> <span class=nx>output</span><span class=p>.</span><span class=nx>split</span><span class=p>(</span><span class=s1>&#39;\r\n&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=k>for</span> <span class=p>(</span><span class=kd>let</span> <span class=nx>i</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span> <span class=nx>i</span> <span class=o>&lt;</span> <span class=nx>runningProcesses</span><span class=p>.</span><span class=nx>length</span><span class=p>;</span> <span class=nx>i</span><span class=o>++</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=kr>const</span> <span class=nx>fullProcessPath</span> <span class=o>=</span> <span class=nx>runningProcesses</span><span class=p>[</span><span class=nx>i</span><span class=p>].</span><span class=nx>trim</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>  <span class=kr>const</span> <span class=nx>shortProcessName</span> <span class=o>=</span> <span class=nx>path</span><span class=p>.</span><span class=nx>basename</span><span class=p>(</span><span class=nx>fullProcessPath</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=k>if</span> <span class=p>(</span><span class=nx>COMMON_EDITORS_WIN</span><span class=p>.</span><span class=nx>indexOf</span><span class=p>(</span><span class=nx>shortProcessName</span><span class=p>)</span> <span class=o>!==</span> <span class=o>-</span><span class=mi>1</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=p>[</span><span class=nx>fullProcessPath</span><span class=p>];</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>}</span></span></span></code></pre></td></tr></table></div></div></div><p><code>powershell -NoProfile -Command</code>调用 PowerShell 执行一段命令，不加载用户配置文件（<code>-NoProfile</code>，保证执行环境干净）。</p><p><code>[Console]::OutputEncoding=[Text.Encoding]::UTF8;</code>设置控制台输出为<code>UTF-8</code>编码，避免中文或路径中的特殊字符乱码。</p><p><code>Get-CimInstance -Query "select executablepath from win32_process where executablepath is not null" | % { $_.ExecutablePath }"</code>查询所有正在运行的进程，取出它们的<code>ExecutablePath</code>属性。</p><p><img loading=lazy src=/images/202509/1/1.png alt=/images/202509/1/1.png></p><p>得到的输出是一堆路径，如上图所示。<code>const runningProcesses = output.split('\r\n')</code>按行分割成数组，每个元素就是一个进程的完整路径。</p><div class="code-block highlight" data-mode=classic data-copyable=true title=guess.js><div class=chroma><div class="code-header language-js"><span class=code-title><i class="arrow fa-solid fa-chevron-down" aria-hidden=true></i><span class=title-inner>guess.js</span></span><button type=button class=ellipses-btn aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden=true></i></button><button type=button class="action-btn line-nos-btn" aria-label=切换行号 title=切换行号><i class="fa-solid fa-list-ol" aria-hidden=true></i></button><button type=button class="action-btn line-wrap-btn" aria-label=切换自动换行 title=切换自动换行><i class="fa-solid fa-right-left" aria-hidden=true></i></button><button type=button class="action-btn copy-btn" aria-label=复制到剪贴板 title=复制到剪贴板 data-copied-text=已复制><i class="fa-regular fa-clone" aria-hidden=true></i></button><button type=button class="action-btn fullscreen-btn" aria-label=全屏 title=全屏 data-exit-title=退出全屏><i class="fa-solid fa-expand" aria-hidden=true></i></button></div><div class=code-wrapper data-max=400 data-line-digit=1 style=--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-js data-lang=js><span class=line><span class=cl><span class=k>for</span> <span class=p>(</span><span class=kd>let</span> <span class=nx>i</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span> <span class=nx>i</span> <span class=o>&lt;</span> <span class=nx>runningProcesses</span><span class=p>.</span><span class=nx>length</span><span class=p>;</span> <span class=nx>i</span><span class=o>++</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=kr>const</span> <span class=nx>fullProcessPath</span> <span class=o>=</span> <span class=nx>runningProcesses</span><span class=p>[</span><span class=nx>i</span><span class=p>].</span><span class=nx>trim</span><span class=p>();</span>
+</span></span><span class=line><span class=cl>  <span class=kr>const</span> <span class=nx>shortProcessName</span> <span class=o>=</span> <span class=nx>path</span><span class=p>.</span><span class=nx>basename</span><span class=p>(</span><span class=nx>fullProcessPath</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=k>if</span> <span class=p>(</span><span class=nx>COMMON_EDITORS_WIN</span><span class=p>.</span><span class=nx>indexOf</span><span class=p>(</span><span class=nx>shortProcessName</span><span class=p>)</span> <span class=o>!==</span> <span class=o>-</span><span class=mi>1</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=p>[</span><span class=nx>fullProcessPath</span><span class=p>];</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl><span class=p>}</span></span></span></code></pre></td></tr></table></div></div></div><p><code>path.basename(fullProcessPath)</code>只取出文件名，例如<code>Code.exe</code>,<code>atom.exe</code>等。<code>COMMON_EDITORS_WIN</code>是一个数组，里面包含了常见的编辑器。具体如下：</p><div class="code-block highlight" data-mode=classic data-copyable=true title=windows.js><div class=chroma><div class="code-header language-js"><span class=code-title><i class="arrow fa-solid fa-chevron-down" aria-hidden=true></i><span class=title-inner>windows.js</span></span><button type=button class=ellipses-btn aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden=true></i></button><button type=button class="action-btn line-nos-btn" aria-label=切换行号 title=切换行号><i class="fa-solid fa-list-ol" aria-hidden=true></i></button><button type=button class="action-btn line-wrap-btn" aria-label=切换自动换行 title=切换自动换行><i class="fa-solid fa-right-left" aria-hidden=true></i></button><button type=button class="action-btn copy-btn" aria-label=复制到剪贴板 title=复制到剪贴板 data-copied-text=已复制><i class="fa-regular fa-clone" aria-hidden=true></i></button><button type=button class="action-btn fullscreen-btn" aria-label=全屏 title=全屏 data-exit-title=退出全屏><i class="fa-solid fa-expand" aria-hidden=true></i></button></div><div class=code-wrapper data-max=400 data-line-digit=2 style=--fi-max-shown-lines:400;--fi-line-digit:2;--fi-line-start:1><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-js data-lang=js><span class=line><span class=cl><span class=nx>module</span><span class=p>.</span><span class=nx>exports</span> <span class=o>=</span> <span class=p>[</span>
+</span></span><span class=line><span class=cl>  <span class=s1>&#39;Brackets.exe&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=s1>&#39;Code.exe&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=s1>&#39;Code - Insiders.exe&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=s1>&#39;VSCodium.exe&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=s1>&#39;Cursor.exe&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=s1>&#39;atom.exe&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=s1>&#39;sublime_text.exe&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=s1>&#39;notepad++.exe&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=s1>&#39;clion.exe&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=s1>&#39;clion64.exe&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=s1>&#39;idea.exe&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=s1>&#39;idea64.exe&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=s1>&#39;phpstorm.exe&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=s1>&#39;phpstorm64.exe&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=s1>&#39;pycharm.exe&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=s1>&#39;pycharm64.exe&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=s1>&#39;rubymine.exe&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=s1>&#39;rubymine64.exe&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=s1>&#39;webstorm.exe&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=s1>&#39;webstorm64.exe&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=s1>&#39;goland.exe&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=s1>&#39;goland64.exe&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=s1>&#39;rider.exe&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=s1>&#39;rider64.exe&#39;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl><span class=p>];</span></span></span></code></pre></td></tr></table></div></div></div><p>如果发现运行中的进程里有匹配的，就直接返回它的完整路径，方便后面去调用。最后，如果以上都不满足，则返回<code>null</code>，表示没有找到合适的编辑器。至此，我们知道了是如何确定用哪个编辑器。那么不同编辑器又是如何打开文件并跳转到相应的行号的呢？答案就在<code>vite/node_modules/.pnpm/launch-editor@2.10.0/node_modules/launch-editor/get-args.js</code>中。</p><div class="code-block highlight" data-mode=classic data-copyable=true title=get-args.js><div class=chroma><div class="code-header language-js"><span class=code-title><i class="arrow fa-solid fa-chevron-down" aria-hidden=true></i><span class=title-inner>get-args.js</span></span><button type=button class=ellipses-btn aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden=true></i></button><button type=button class="action-btn line-nos-btn" aria-label=切换行号 title=切换行号><i class="fa-solid fa-list-ol" aria-hidden=true></i></button><button type=button class="action-btn line-wrap-btn" aria-label=切换自动换行 title=切换自动换行><i class="fa-solid fa-right-left" aria-hidden=true></i></button><button type=button class="action-btn copy-btn" aria-label=复制到剪贴板 title=复制到剪贴板 data-copied-text=已复制><i class="fa-regular fa-clone" aria-hidden=true></i></button><button type=button class="action-btn fullscreen-btn" aria-label=全屏 title=全屏 data-exit-title=退出全屏><i class="fa-solid fa-expand" aria-hidden=true></i></button></div><div class=code-wrapper data-max=400 data-line-digit=2 style=--fi-max-shown-lines:400;--fi-line-digit:2;--fi-line-start:1><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span><span class=lnt>42
+</span><span class=lnt>43
+</span><span class=lnt>44
+</span><span class=lnt>45
+</span><span class=lnt>46
+</span><span class=lnt>47
+</span><span class=lnt>48
+</span><span class=lnt>49
+</span><span class=lnt>50
+</span><span class=lnt>51
+</span><span class=lnt>52
+</span><span class=lnt>53
+</span><span class=lnt>54
+</span><span class=lnt>55
+</span><span class=lnt>56
+</span><span class=lnt>57
+</span><span class=lnt>58
+</span><span class=lnt>59
+</span><span class=lnt>60
+</span><span class=lnt>61
+</span><span class=lnt>62
+</span><span class=lnt>63
+</span><span class=lnt>64
+</span><span class=lnt>65
+</span><span class=lnt>66
+</span><span class=lnt>67
+</span><span class=lnt>68
+</span><span class=lnt>69
+</span><span class=lnt>70
+</span><span class=lnt>71
+</span><span class=lnt>72
+</span><span class=lnt>73
+</span><span class=lnt>74
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-js data-lang=js><span class=line><span class=cl><span class=kr>const</span> <span class=nx>path</span> <span class=o>=</span> <span class=nx>require</span><span class=p>(</span><span class=s1>&#39;path&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1>// normalize file/line numbers into command line args for specific editors
+</span></span></span><span class=line><span class=cl><span class=nx>module</span><span class=p>.</span><span class=nx>exports</span> <span class=o>=</span> <span class=kd>function</span> <span class=nx>getArgumentsForPosition</span><span class=p>(</span>
+</span></span><span class=line><span class=cl>  <span class=nx>editor</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=nx>fileName</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=nx>lineNumber</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=nx>columnNumber</span> <span class=o>=</span> <span class=mi>1</span>
+</span></span><span class=line><span class=cl><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=kr>const</span> <span class=nx>editorBasename</span> <span class=o>=</span> <span class=nx>path</span><span class=p>.</span><span class=nx>basename</span><span class=p>(</span><span class=nx>editor</span><span class=p>).</span><span class=nx>replace</span><span class=p>(</span><span class=sr>/\.(exe|cmd|bat)$/i</span><span class=p>,</span> <span class=s1>&#39;&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=k>switch</span> <span class=p>(</span><span class=nx>editorBasename</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>case</span> <span class=s1>&#39;atom&#39;</span><span class=o>:</span>
+</span></span><span class=line><span class=cl>    <span class=k>case</span> <span class=s1>&#39;Atom&#39;</span><span class=o>:</span>
+</span></span><span class=line><span class=cl>    <span class=k>case</span> <span class=s1>&#39;Atom Beta&#39;</span><span class=o>:</span>
+</span></span><span class=line><span class=cl>    <span class=k>case</span> <span class=s1>&#39;subl&#39;</span><span class=o>:</span>
+</span></span><span class=line><span class=cl>    <span class=k>case</span> <span class=s1>&#39;sublime&#39;</span><span class=o>:</span>
+</span></span><span class=line><span class=cl>    <span class=k>case</span> <span class=s1>&#39;sublime_text&#39;</span><span class=o>:</span>
+</span></span><span class=line><span class=cl>    <span class=k>case</span> <span class=s1>&#39;wstorm&#39;</span><span class=o>:</span>
+</span></span><span class=line><span class=cl>    <span class=k>case</span> <span class=s1>&#39;charm&#39;</span><span class=o>:</span>
+</span></span><span class=line><span class=cl>    <span class=k>case</span> <span class=s1>&#39;zed&#39;</span><span class=o>:</span>
+</span></span><span class=line><span class=cl>      <span class=k>return</span> <span class=p>[</span><span class=sb>`</span><span class=si>${</span><span class=nx>fileName</span><span class=si>}</span><span class=sb>:</span><span class=si>${</span><span class=nx>lineNumber</span><span class=si>}</span><span class=sb>:</span><span class=si>${</span><span class=nx>columnNumber</span><span class=si>}</span><span class=sb>`</span><span class=p>];</span>
+</span></span><span class=line><span class=cl>    <span class=k>case</span> <span class=s1>&#39;notepad++&#39;</span><span class=o>:</span>
+</span></span><span class=line><span class=cl>      <span class=k>return</span> <span class=p>[</span><span class=s1>&#39;-n&#39;</span> <span class=o>+</span> <span class=nx>lineNumber</span><span class=p>,</span> <span class=s1>&#39;-c&#39;</span> <span class=o>+</span> <span class=nx>columnNumber</span><span class=p>,</span> <span class=nx>fileName</span><span class=p>];</span>
+</span></span><span class=line><span class=cl>    <span class=k>case</span> <span class=s1>&#39;vim&#39;</span><span class=o>:</span>
+</span></span><span class=line><span class=cl>    <span class=k>case</span> <span class=s1>&#39;mvim&#39;</span><span class=o>:</span>
+</span></span><span class=line><span class=cl>      <span class=k>return</span> <span class=p>[</span><span class=sb>`+call cursor(</span><span class=si>${</span><span class=nx>lineNumber</span><span class=si>}</span><span class=sb>, </span><span class=si>${</span><span class=nx>columnNumber</span><span class=si>}</span><span class=sb>)`</span><span class=p>,</span> <span class=nx>fileName</span><span class=p>];</span>
+</span></span><span class=line><span class=cl>    <span class=k>case</span> <span class=s1>&#39;joe&#39;</span><span class=o>:</span>
+</span></span><span class=line><span class=cl>    <span class=k>case</span> <span class=s1>&#39;gvim&#39;</span><span class=o>:</span>
+</span></span><span class=line><span class=cl>      <span class=k>return</span> <span class=p>[</span><span class=s1>&#39;+&#39;</span> <span class=o>+</span> <span class=sb>`</span><span class=si>${</span><span class=nx>lineNumber</span><span class=si>}</span><span class=sb>`</span><span class=p>,</span> <span class=nx>fileName</span><span class=p>];</span>
+</span></span><span class=line><span class=cl>    <span class=k>case</span> <span class=s1>&#39;emacs&#39;</span><span class=o>:</span>
+</span></span><span class=line><span class=cl>    <span class=k>case</span> <span class=s1>&#39;emacsclient&#39;</span><span class=o>:</span>
+</span></span><span class=line><span class=cl>      <span class=k>return</span> <span class=p>[</span><span class=sb>`+</span><span class=si>${</span><span class=nx>lineNumber</span><span class=si>}</span><span class=sb>:</span><span class=si>${</span><span class=nx>columnNumber</span><span class=si>}</span><span class=sb>`</span><span class=p>,</span> <span class=nx>fileName</span><span class=p>];</span>
+</span></span><span class=line><span class=cl>    <span class=k>case</span> <span class=s1>&#39;rmate&#39;</span><span class=o>:</span>
+</span></span><span class=line><span class=cl>    <span class=k>case</span> <span class=s1>&#39;mate&#39;</span><span class=o>:</span>
+</span></span><span class=line><span class=cl>    <span class=k>case</span> <span class=s1>&#39;mine&#39;</span><span class=o>:</span>
+</span></span><span class=line><span class=cl>      <span class=k>return</span> <span class=p>[</span><span class=s1>&#39;--line&#39;</span><span class=p>,</span> <span class=nx>lineNumber</span><span class=p>,</span> <span class=nx>fileName</span><span class=p>];</span>
+</span></span><span class=line><span class=cl>    <span class=k>case</span> <span class=s1>&#39;code&#39;</span><span class=o>:</span>
+</span></span><span class=line><span class=cl>    <span class=k>case</span> <span class=s1>&#39;Code&#39;</span><span class=o>:</span>
+</span></span><span class=line><span class=cl>    <span class=k>case</span> <span class=s1>&#39;code-insiders&#39;</span><span class=o>:</span>
+</span></span><span class=line><span class=cl>    <span class=k>case</span> <span class=s1>&#39;Code - Insiders&#39;</span><span class=o>:</span>
+</span></span><span class=line><span class=cl>    <span class=k>case</span> <span class=s1>&#39;codium&#39;</span><span class=o>:</span>
+</span></span><span class=line><span class=cl>    <span class=k>case</span> <span class=s1>&#39;cursor&#39;</span><span class=o>:</span>
+</span></span><span class=line><span class=cl>    <span class=k>case</span> <span class=s1>&#39;vscodium&#39;</span><span class=o>:</span>
+</span></span><span class=line><span class=cl>    <span class=k>case</span> <span class=s1>&#39;VSCodium&#39;</span><span class=o>:</span>
+</span></span><span class=line><span class=cl>      <span class=k>return</span> <span class=p>[</span><span class=s1>&#39;-r&#39;</span><span class=p>,</span> <span class=s1>&#39;-g&#39;</span><span class=p>,</span> <span class=sb>`</span><span class=si>${</span><span class=nx>fileName</span><span class=si>}</span><span class=sb>:</span><span class=si>${</span><span class=nx>lineNumber</span><span class=si>}</span><span class=sb>:</span><span class=si>${</span><span class=nx>columnNumber</span><span class=si>}</span><span class=sb>`</span><span class=p>];</span>
+</span></span><span class=line><span class=cl>    <span class=k>case</span> <span class=s1>&#39;appcode&#39;</span><span class=o>:</span>
+</span></span><span class=line><span class=cl>    <span class=k>case</span> <span class=s1>&#39;clion&#39;</span><span class=o>:</span>
+</span></span><span class=line><span class=cl>    <span class=k>case</span> <span class=s1>&#39;clion64&#39;</span><span class=o>:</span>
+</span></span><span class=line><span class=cl>    <span class=k>case</span> <span class=s1>&#39;idea&#39;</span><span class=o>:</span>
+</span></span><span class=line><span class=cl>    <span class=k>case</span> <span class=s1>&#39;idea64&#39;</span><span class=o>:</span>
+</span></span><span class=line><span class=cl>    <span class=k>case</span> <span class=s1>&#39;phpstorm&#39;</span><span class=o>:</span>
+</span></span><span class=line><span class=cl>    <span class=k>case</span> <span class=s1>&#39;phpstorm64&#39;</span><span class=o>:</span>
+</span></span><span class=line><span class=cl>    <span class=k>case</span> <span class=s1>&#39;pycharm&#39;</span><span class=o>:</span>
+</span></span><span class=line><span class=cl>    <span class=k>case</span> <span class=s1>&#39;pycharm64&#39;</span><span class=o>:</span>
+</span></span><span class=line><span class=cl>    <span class=k>case</span> <span class=s1>&#39;rubymine&#39;</span><span class=o>:</span>
+</span></span><span class=line><span class=cl>    <span class=k>case</span> <span class=s1>&#39;rubymine64&#39;</span><span class=o>:</span>
+</span></span><span class=line><span class=cl>    <span class=k>case</span> <span class=s1>&#39;webstorm&#39;</span><span class=o>:</span>
+</span></span><span class=line><span class=cl>    <span class=k>case</span> <span class=s1>&#39;webstorm64&#39;</span><span class=o>:</span>
+</span></span><span class=line><span class=cl>    <span class=k>case</span> <span class=s1>&#39;goland&#39;</span><span class=o>:</span>
+</span></span><span class=line><span class=cl>    <span class=k>case</span> <span class=s1>&#39;goland64&#39;</span><span class=o>:</span>
+</span></span><span class=line><span class=cl>    <span class=k>case</span> <span class=s1>&#39;rider&#39;</span><span class=o>:</span>
+</span></span><span class=line><span class=cl>    <span class=k>case</span> <span class=s1>&#39;rider64&#39;</span><span class=o>:</span>
+</span></span><span class=line><span class=cl>      <span class=k>return</span> <span class=p>[</span><span class=s1>&#39;--line&#39;</span><span class=p>,</span> <span class=nx>lineNumber</span><span class=p>,</span> <span class=s1>&#39;--column&#39;</span><span class=p>,</span> <span class=nx>columnNumber</span><span class=p>,</span> <span class=nx>fileName</span><span class=p>];</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=k>if</span> <span class=p>(</span><span class=nx>process</span><span class=p>.</span><span class=nx>env</span><span class=p>.</span><span class=nx>LAUNCH_EDITOR</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=p>[</span><span class=nx>fileName</span><span class=p>,</span> <span class=nx>lineNumber</span><span class=p>,</span> <span class=nx>columnNumber</span><span class=p>];</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=c1>// For all others, drop the lineNumber until we have
+</span></span></span><span class=line><span class=cl>  <span class=c1>// a mapping above, since providing the lineNumber incorrectly
+</span></span></span><span class=line><span class=cl>  <span class=c1>// can result in errors or confusing behavior.
+</span></span></span><span class=line><span class=cl>  <span class=k>return</span> <span class=p>[</span><span class=nx>fileName</span><span class=p>];</span>
+</span></span><span class=line><span class=cl><span class=p>};</span></span></span></code></pre></td></tr></table></div></div></div><p>每个编辑器的命令行参数都不太一样，这里只是列出了一些常见的编辑器的命令行参数。比如，对于 VS Code，它需要<code>-r -g</code>选项，以及<code>fileName:lineNumber:columnNumber</code>格式的参数。</p></div><hr class=awesome-hr><h2 id=see-also>相关内容</h2><ul><li><a href=/csv2%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/ title="csv2 源码剖析：轻量级 CSV 处理的高效之道">csv2 源码剖析：轻量级 CSV 处理的高效之道</a></li><li><a href=/%E5%A6%82%E4%BD%95%E8%A7%A3%E5%86%B3-node.js-%E4%B8%AD%E7%9A%84-emfile-%E9%94%99%E8%AF%AF/ title="如何解决 Node.js 中的 EMFILE 错误">如何解决 Node.js 中的 EMFILE 错误</a></li><li><a href=/json-server%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/ title="json-server源码剖析：快速构建REST API背后的原理">json-server源码剖析：快速构建REST API背后的原理</a></li></ul><div class=post-footer id=post-footer><div class=post-info><div class=post-info-line><div class=post-info-mod><span title="更新于 2025-09-11 22:39:22">更新于 2025-09-11&nbsp;</span></div></div><div class=post-info-line><div class=post-info-md></div><div class=post-info-share><span><a href=javascript:void(0); title="分享到 X" data-sharer=twitter data-url=https://andyfree96.github.io/launch-editor%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/ data-title=launch-editor源码剖析：快速打开编辑器的实现原理 data-via=IRONAnthony96 data-hashtags=Node.js,launch-editor><i class="fa-brands fa-x-twitter" aria-hidden=true></i></a>
+<a href=javascript:void(0); title="分享到 Facebook" data-sharer=facebook data-url=https://andyfree96.github.io/launch-editor%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/ data-hashtag=Node.js><i class="fa-brands fa-facebook-square" aria-hidden=true></i></a>
+<a href=javascript:void(0); title="分享到 微博" data-sharer=weibo data-url=https://andyfree96.github.io/launch-editor%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/ data-title=launch-editor源码剖析：快速打开编辑器的实现原理 data-image=/images/202509/1/k-k-Y0DTcx1pGpc-unsplash.jpg><i class="fa-brands fa-weibo" aria-hidden=true></i></a></span></div></div></div><div class=post-info-more><section class=post-tags><i class="fa-solid fa-tags me-1" aria-hidden=true></i><a href=/tags/node.js/ class=post-tag title="标签 - Node.js">Node.js</a><a href=/tags/launch-editor/ class=post-tag title="标签 - Launch-Editor">Launch-Editor</a></section><section><span><a href=javascript:void(0); onclick=window.history.back()>返回</a></span>&nbsp;|&nbsp;<span><a href=/>主页</a></span></section></div><div class=post-nav><a href=/es6%E6%A8%A1%E5%9D%97%E6%95%99%E7%A8%8B/ class=post-nav-item rel=prev title=ES6模块教程><i class="fa-solid fa-angle-left" aria-hidden=true></i>ES6模块教程</a><a href=/%E7%BC%96%E5%86%99%E5%8F%AF%E8%AF%BB%E4%BB%A3%E7%A0%81%E7%9A%84%E8%89%BA%E6%9C%AF/ class=post-nav-item rel=next title="编写可读代码的艺术 (Dustin Boswell & Trevor Foucher)">编写可读代码的艺术 (Dustin Boswell & Trevor Foucher)<i class="fa-solid fa-angle-right" aria-hidden=true></i></a></div></div><div class=post-reward><div class=comment>请作者喝杯咖啡!</div><input type=checkbox class=reward-input name=reward id=fi-reward hidden>
+<label class=reward-button for=fi-reward><i class="fa-solid fa-qrcode" aria-hidden=true></i>赞赏</label><div class=reward-ways data-mode=static><div><img src=/reward/alipay.png alt="AndyFree96 支付宝"><span data-animation>支付宝</span></div><div><img src=/reward/wechatpay.png alt="AndyFree96 微信"><span data-animation>微信</span></div></div></div></article><aside class=toc id=toc-auto aria-label=目录></aside></main><footer class=footer><div class=footer-container><div class="footer-line powered">由 <a href=https://gohugo.io/ target=_blank rel="external nofollow noopener noreferrer" title="Hugo 0.163.1">Hugo</a> 强力驱动 | 主题 - <a href=https://github.com/hugo-fixit/FixIt target=_blank rel=external title="FixIt v1.0.0-mq99hlzg">FixIt</a></div><div class="footer-line copyright" itemscope itemtype=http://schema.org/CreativeWork><i class="fa-regular fa-copyright" aria-hidden=true></i>
+<span itemprop=copyrightYear>2019 - 2026</span><span class=author itemprop=copyrightHolder>
+<a href=https://andyfree96.github.io/>AndyFree96</a></span></div></div></footer></div><div class=widgets><div class=fixed-buttons><button type=button class="fixed-button back-to-top animate__faster d-none" aria-label=回到顶部><i class="fa-solid fa-arrow-up" aria-hidden=true></i></button></div><div id=mask></div><div class=reading-progress-bar style=left:0;top:0></div><noscript><div class=noscript-warning>该网站在启用 JavaScript 的情况下效果最佳。</div></noscript></div><link rel=stylesheet href=/lib/cookieconsent/cookieconsent.min.css><script src=/lib/autocomplete/autocomplete.min.js defer></script><script src=/lib/algoliasearch/browser.umd.js defer></script><script src=/lib/sharer/sharer.min.js async defer></script><script src=/lib/cookieconsent/cookieconsent.min.js defer></script><script src=/js/lib/cookieconsent.min.js defer></script><script src=/lib/cell-tooltip/cell-tooltip.umd.js defer></script><script src=/js/config/963766619f3eaa94c103ba00c669d682.min.js defer></script><script src=/js/lib/file-tree.min.js defer></script><script src=/js/main.min.js defer></script></body></html>

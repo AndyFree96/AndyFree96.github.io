@@ -162,5 +162,5 @@ vim /etc/shadowsocks-r/config.json
 ---
 
 > 作者: [AndyFree96](https://andyfree96.github.io/)  
-> URL: http://localhost:1313/%E5%9C%A8%E4%BA%9A%E9%A9%AC%E9%80%8A%E4%BA%91%E9%85%8D%E7%BD%AEshadowsocksr/  
+> URL: https://andyfree96.github.io/%E5%9C%A8%E4%BA%9A%E9%A9%AC%E9%80%8A%E4%BA%91%E9%85%8D%E7%BD%AEshadowsocksr/  
 

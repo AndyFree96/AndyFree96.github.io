@@ -1,556 +1,201 @@
-<!DOCTYPE html>
-<html itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
-  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
-    <meta name="robots" content="noodp" />
-    <title>Python中的__all__：模块公开API设计的关键工具 - 东尼的博客</title><meta name="author" content="AndyFree96">
-<meta name="description" content="在Python项目中，我们经常会看到类似这样的代码：
-1 2 3 4 5 6 7 8 9 10 __all__ = [ &#34;Field&#34;, &#34;FormRequest&#34;, &#34;Item&#34;, &#34;Request&#34;, &#34;Selector&#34;, &#34;Spider&#34;, &#34;__version__&#34;, &#34;version_info&#34;, ] 很多初学者会疑惑：
+<!doctype html><html itemscope itemtype=http://schema.org/WebPage lang=zh-CN><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=2"><meta name=robots content="noodp"><title>Python中的__all__：模块公开API设计的关键工具 - 东尼的博客</title><meta name=author content="AndyFree96"><meta name=description content='在Python项目中，我们经常会看到类似这样的代码：
+1 2 3 4 5 6 7 8 9 10 __all__ = [ "Field", "FormRequest", "Item", "Request", "Selector", "Spider", "__version__", "version_info", ] 很多初学者会疑惑：
 __all__是做什么的？ 为什么需要它？ 和_xxx命名有什么区别？ 大型项目为什么经常使用？ 本文将从基础语法到工程实践，深入理解 Python 的__all__。
-"><meta name="keywords" content='Python, 模块公开, 模块设计'>
-	<meta itemprop="name" content="Python中的__all__：模块公开API设计的关键工具">
-	<meta itemprop="description" content="在Python项目中，我们经常会看到类似这样的代码：
-1 2 3 4 5 6 7 8 9 10 __all__ = [ &#34;Field&#34;, &#34;FormRequest&#34;, &#34;Item&#34;, &#34;Request&#34;, &#34;Selector&#34;, &#34;Spider&#34;, &#34;__version__&#34;, &#34;version_info&#34;, ] 很多初学者会疑惑：
-__all__是做什么的？ 为什么需要它？ 和_xxx命名有什么区别？ 大型项目为什么经常使用？ 本文将从基础语法到工程实践，深入理解 Python 的__all__。">
-	<meta itemprop="datePublished" content="2026-06-22T06:45:19+08:00">
-	<meta itemprop="dateModified" content="2026-06-22T06:45:19+08:00">
-	<meta itemprop="wordCount" content="1280">
-	<meta itemprop="keywords" content="Python,模块公开,模块设计"><meta property="og:url" content="http://localhost:1313/python%E4%B8%AD%E7%9A%84all/">
-	<meta property="og:site_name" content="东尼的博客">
-	<meta property="og:title" content="Python中的__all__：模块公开API设计的关键工具">
-	<meta property="og:description" content="在Python项目中，我们经常会看到类似这样的代码：
-1 2 3 4 5 6 7 8 9 10 __all__ = [ &#34;Field&#34;, &#34;FormRequest&#34;, &#34;Item&#34;, &#34;Request&#34;, &#34;Selector&#34;, &#34;Spider&#34;, &#34;__version__&#34;, &#34;version_info&#34;, ] 很多初学者会疑惑：
-__all__是做什么的？ 为什么需要它？ 和_xxx命名有什么区别？ 大型项目为什么经常使用？ 本文将从基础语法到工程实践，深入理解 Python 的__all__。">
-	<meta property="og:locale" content="zh_CN">
-	<meta property="og:type" content="article">
-		<meta property="article:section" content="posts">
-		<meta property="article:published_time" content="2026-06-22T06:45:19+08:00">
-		<meta property="article:modified_time" content="2026-06-22T06:45:19+08:00">
-		<meta property="article:tag" content="Python">
-		<meta property="article:tag" content="模块公开">
-		<meta property="article:tag" content="模块设计">
-
-  <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="Python中的__all__：模块公开API设计的关键工具">
-  <meta name="twitter:description" content="在Python项目中，我们经常会看到类似这样的代码：
-1 2 3 4 5 6 7 8 9 10 __all__ = [ &#34;Field&#34;, &#34;FormRequest&#34;, &#34;Item&#34;, &#34;Request&#34;, &#34;Selector&#34;, &#34;Spider&#34;, &#34;__version__&#34;, &#34;version_info&#34;, ] 很多初学者会疑惑：
-__all__是做什么的？ 为什么需要它？ 和_xxx命名有什么区别？ 大型项目为什么经常使用？ 本文将从基础语法到工程实践，深入理解 Python 的__all__。"><meta name="twitter:creator" content="@IRONAnthony96"><meta name="application-name" content="FixIt">
-<meta name="apple-mobile-web-app-title" content="FixIt"><meta name="theme-color" data-light="#f6f8fa" data-dark="#151b23" content="#f6f8fa"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" type="text/html" href="http://localhost:1313/python%E4%B8%AD%E7%9A%84all/" title="Python中的__all__：模块公开API设计的关键工具 - 东尼的博客" /><link rel="prev" type="text/html" href="http://localhost:1313/vue.js%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/" title="Vue.js设计与实现 (霍春阳)" /><link rel="next" type="text/html" href="http://localhost:1313/%E6%B5%81%E7%95%85%E7%9A%84python/" title="流畅的Python 第2版 (Luciano Ramalho)" /><link rel="alternate" type="text/markdown" href="http://localhost:1313/python%E4%B8%AD%E7%9A%84all/index.md" title="Python中的__all__：模块公开API设计的关键工具 - 东尼的博客"><link rel="stylesheet" href="/css/config.css"><link rel="stylesheet" href="/css/main.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
-    <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
-    <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><link rel="preload" href="/js/main.js" as="script"><script type="application/ld+json">
-  {
-    "@context": "http://schema.org",
-    "@type": "BlogPosting",
-    "headline": "Python中的__all__：模块公开API设计的关键工具",
-    "inLanguage": "zh-CN",
-    "mainEntityOfPage": {
-      "@type": "WebPage",
-      "@id": "http:\/\/localhost:1313\/python%E4%B8%AD%E7%9A%84all\/"
-    },"genre": "posts","keywords": "Python, 模块公开, 模块设计","wordcount":  1280 ,
-    "url": "http:\/\/localhost:1313\/python%E4%B8%AD%E7%9A%84all\/","datePublished": "2026-06-22T06:45:19+08:00","dateModified": "2026-06-22T06:45:19+08:00","publisher": {
-      "@type": "Organization",
-      "name": ""},"author": {
-        "@type": "Person",
-        "name": "AndyFree96"
-      },"description": ""
-  }
-  </script><script src="/js/head/color-scheme.js"></script></head>
-  <body data-instant-intensity="viewport" data-header-desktop="sticky" data-header-mobile="auto"><div class="wrapper" data-page-style="normal"><header class="desktop animate__faster" id="header-desktop">
-  <div class="header-wrapper">
-    <div class="header-title">
-      <a href="/" title="东尼的博客" class="header-title-link"><span class="header-title-text">东尼的博客</span></a><span class="header-subtitle"></span></div>
-    <nav>
-      <ul class="menu"><li class="menu-item">
-              <a class="menu-link" href="/posts/">📕 文章</a></li><li class="menu-item">
-              <a class="menu-link" href="/categories/">🧰 分类</a></li><li class="menu-item">
-              <a class="menu-link" href="/tags/">🔖 标签</a></li><li class="menu-item">
-              <a class="menu-link" href="/book">📚 书单</a></li><li class="menu-item">
-              <a class="menu-link" href="/paper">📝 论文</a></li><li class="menu-item">
-              <a class="menu-link" href="/opencourse">👨🏻‍💻 公开课</a></li><li class="menu-item">
-              <a class="menu-link" href="/filmtv">🎞️ 影视</a></li><li class="menu-item">
-              <a class="menu-link" href="/resource">⚡️ 资源库</a></li><li class="menu-item">
-              <a class="menu-link" href="/projects">⭐ 开源</a></li><li class="menu-item">
-              <a class="menu-link" href="/about">🙋🏻‍♂️ 关于</a></li><li class="menu-item delimiter"></li><li class="menu-item search" id="search-desktop">
-            <input type="text" placeholder="搜索文章标题或内容……" id="search-input-desktop" tabindex="-1">
-            <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索" aria-controls="search-dropdown-desktop" aria-expanded="false">
-              <i class="fa-solid fa-search" aria-hidden="true"></i>
-            </a>
-            <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
-              <i class="fa-solid fa-times-circle" aria-hidden="true"></i>
-            </a>
-            <span class="search-button search-loading" id="search-loading-desktop">
-              <i class="fa-solid fa-spinner fa-spin" aria-hidden="true"></i>
-            </span>
-          </li><li class="menu-item theme-switch-item">
-          <button type="button" class="theme-switch" aria-label="切换主题" title="切换主题"><i class="fa-solid fa-adjust" aria-hidden="true"></i></button>
-        </li></ul>
-    </nav>
-  </div>
-</header><header class="mobile animate__faster" id="header-mobile">
-  <div class="header-container">
-    <div class="header-wrapper">
-      <div class="header-title">
-        <a href="/" title="东尼的博客" class="header-title-link"><span class="header-title-text">东尼的博客</span></a><span class="header-subtitle"></span></div>
-      <button type="button" class="theme-switch" aria-label="切换主题"><i class="fa-solid fa-adjust" aria-hidden="true"></i></button>
-      <button type="button" class="menu-toggle" id="menu-toggle-mobile" aria-controls="menu-mobile" aria-expanded="false" aria-labelledby="menu-mobile">
-        <span></span><span></span><span></span>
-      </button>
-    </div>
-    <nav>
-      <ul class="menu" id="menu-mobile"><li class="search-wrapper">
-            <div class="search mobile" id="search-mobile">
-              <input type="text" placeholder="搜索文章标题或内容……" id="search-input-mobile">
-              <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索" aria-controls="search-dropdown-mobile" aria-expanded="false">
-                <i class="fa-solid fa-search" aria-hidden="true"></i>
-              </a>
-              <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
-                <i class="fa-solid fa-times-circle" aria-hidden="true"></i>
-              </a>
-              <span class="search-button search-loading" id="search-loading-mobile">
-                <i class="fa-solid fa-spinner fa-spin" aria-hidden="true"></i>
-              </span>
-            </div>
-            <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
-              取消
-            </a>
-          </li><li class="menu-item"><a class="menu-link" href="/posts/">📕 文章</a></li><li class="menu-item"><a class="menu-link" href="/categories/">🧰 分类</a></li><li class="menu-item"><a class="menu-link" href="/tags/">🔖 标签</a></li><li class="menu-item"><a class="menu-link" href="/book">📚 书单</a></li><li class="menu-item"><a class="menu-link" href="/paper">📝 论文</a></li><li class="menu-item"><a class="menu-link" href="/opencourse">👨🏻‍💻 公开课</a></li><li class="menu-item"><a class="menu-link" href="/filmtv">🎞️ 影视</a></li><li class="menu-item"><a class="menu-link" href="/resource">⚡️ 资源库</a></li><li class="menu-item"><a class="menu-link" href="/projects">⭐ 开源</a></li><li class="menu-item"><a class="menu-link" href="/about">🙋🏻‍♂️ 关于</a></li><li class="menu-item menu-system"></li>
-      </ul>
-    </nav>
-  </div>
-</header><div class="search-dropdown desktop">
-    <div id="search-dropdown-desktop"></div>
-  </div>
-  <div class="search-dropdown mobile">
-    <div id="search-dropdown-mobile"></div>
-  </div><main class="fi-container"><aside class="aside-collection animate__animated animate__fadeIn animate__faster" aria-label="合集"></aside>
-
-  <article class="page single">
-    <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span title="转载" class="icon-repost"><i class="fa-solid fa-share" aria-hidden="true"></i></span><span>Python中的__all__：模块公开API设计的关键工具</span>
-      </h1></div><div class="post-meta">
-      <div class="post-meta-line"><span class="post-author"><a href="https://andyfree96.github.io/" title="作者" target="_blank" rel="author external nofollow noopener noreferrer" class="author"><img class="avatar" src='/avatar/1.jpg' alt="AndyFree96" height="16" width="16">&nbsp;AndyFree96</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/python/" class="post-category" title="分类 - Python"><i class="fa-regular fa-folder" aria-hidden="true"></i> Python</a></span></div><div class="post-meta-line"><span title="发布于 2026-06-22 06:45:19"><i class="fa-solid fa-calendar-days me-1" aria-hidden="true"></i><time datetime="2026-06-22">2026-06-22</time></span>&nbsp;<span title="1280 字"><i class="fa-solid fa-pencil-alt me-1" aria-hidden="true"></i>约 1300 字</span>&nbsp;<span><i class="fa-regular fa-clock me-1" aria-hidden="true"></i>预计阅读 3 分钟</span>&nbsp;</div>
-    </div><div class="featured-image"><img loading="eager" src='/images/202606/7/peter-thomas-f0r8nQ-t1Rw-unsplash.jpg' sizes="(max-width: 680px) 100vw, (max-width: 960px) 80vw, (max-width: 1440px) 56vw, 800px" alt="/images/202606/7/peter-thomas-f0r8nQ-t1Rw-unsplash.jpg"></div><div class="details toc" id="toc-static" data-kept="false">
-        <div class="details-summary toc-title">
-          <span>目录</span>
-          <span><i class="details-icon fa-solid fa-angle-right" aria-hidden="true"></i></span>
-        </div>
-        <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
-  <ul>
-    <li><a href="#什么是__all__">什么是<code>__all__</code>？</a></li>
-    <li><a href="#没有__all__会发生什么">没有<code>__all__</code>会发生什么？</a></li>
-    <li><a href="#__all__与_xxx的区别"><code>__all__</code>与<code>_xxx</code>的区别</a></li>
-    <li><a href="#__all__可以暴露内部成员吗"><code>__all__</code>可以暴露内部成员吗？</a></li>
-    <li><a href="#为什么大型项目需要__all__">为什么大型项目需要<code>__all__</code></a></li>
-    <li><a href="#在包中的作用">在包中的作用</a></li>
-    <li><a href="#工程实践建议">工程实践建议</a></li>
-    <li><a href="#总结">总结</a></li>
-    <li><a href="#推荐">推荐</a></li>
-  </ul>
-</nav></div>
-      </div><div class="content" id="content"><p>在Python项目中，我们经常会看到类似这样的代码：</p>
-<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
-<div class="code-header language-python"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="2" style="--fi-max-shown-lines:400;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
-</span></span><span class="line"><span class="cl">    <span class="s2">&#34;Field&#34;</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">    <span class="s2">&#34;FormRequest&#34;</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">    <span class="s2">&#34;Item&#34;</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">    <span class="s2">&#34;Request&#34;</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">    <span class="s2">&#34;Selector&#34;</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">    <span class="s2">&#34;Spider&#34;</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">    <span class="s2">&#34;__version__&#34;</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">    <span class="s2">&#34;version_info&#34;</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl"><span class="p">]</span></span></span></code></pre></td></tr></table></div>
-</div>
-</div><p>很多初学者会疑惑：</p>
-<ul>
-<li><code>__all__</code>是做什么的？</li>
-<li>为什么需要它？</li>
-<li>和<code>_xxx</code>命名有什么区别？</li>
-<li>大型项目为什么经常使用？</li>
-</ul>
-<p>本文将从基础语法到工程实践，深入理解 Python 的<code>__all__</code>。</p>
-<div class="details admonition info open">
-    <div class="details-summary admonition-title"><i class="icon fa-solid fa-circle-info" aria-hidden="true"></i>信息<i class="details-icon fa-solid fa-angle-right" aria-hidden="true"></i></div><div class="details-content">
-      <div class="admonition-content"><p>上面所列代码来自<a href="https://github.com/scrapy/scrapy/blob/master/scrapy/__init__.py" target="_blank" rel="external nofollow noopener noreferrer">scrapy<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>。</p></div>
-    </div>
-</div><h2 class="heading-element" id="什么是__all__"><span>什么是<code>__all__</code>？</span>
-  <a href="#%e4%bb%80%e4%b9%88%e6%98%af__all__" class="heading-mark">
-    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
-  </a>
-</h2><p><code>__all__</code>是Python模块中的一个特殊变量，用来定义：当使用<code>from xxx import *</code>时，哪些成员会被导入。</p>
-<p>例如：</p>
-<div class="code-block highlight" data-mode="classic" data-copyable="true" title="math_utils.py"><div class="chroma">
-<div class="code-header language-python"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i><span class="title-inner">math_utils.py</span></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="2" style="--fi-max-shown-lines:400;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&#34;add&#34;</span><span class="p">,</span> <span class="s2">&#34;VERSION&#34;</span><span class="p">]</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
-</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">subtract</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
-</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">a</span> <span class="o">-</span> <span class="n">b</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="n">VERSION</span> <span class="o">=</span> <span class="s2">&#34;1.0.0&#34;</span>
-</span></span><span class="line"><span class="cl"><span class="n">_debug</span> <span class="o">=</span> <span class="kc">True</span></span></span></code></pre></td></tr></table></div>
-</div>
-</div><p>其他地方：</p>
-<div class="code-block highlight" data-mode="classic" data-copyable="true" title="main.py"><div class="chroma">
-<div class="code-header language-python"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i><span class="title-inner">main.py</span></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span><span class="lnt">6
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">math_utils</span> <span class="kn">import</span> <span class="o">*</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="nb">print</span><span class="p">(</span><span class="n">add</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span> <span class="c1"># 可以</span>
-</span></span><span class="line"><span class="cl"><span class="nb">print</span><span class="p">(</span><span class="n">subtract</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span> <span class="c1"># 不存在</span>
-</span></span><span class="line"><span class="cl"><span class="nb">print</span><span class="p">(</span><span class="n">VERSION</span><span class="p">)</span> <span class="c1"># 可以</span>
-</span></span><span class="line"><span class="cl"><span class="nb">print</span><span class="p">(</span><span class="n">_debug</span><span class="p">)</span> <span class="c1"># 不存在</span></span></span></code></pre></td></tr></table></div>
-</div>
-</div><p><code>__all__</code>明确告诉Python，这个模块对外公开的内容只有<code>add</code>和<code>VERSION</code>。</p>
-<h2 class="heading-element" id="没有__all__会发生什么"><span>没有<code>__all__</code>会发生什么？</span>
-  <a href="#%e6%b2%a1%e6%9c%89__all__%e4%bc%9a%e5%8f%91%e7%94%9f%e4%bb%80%e4%b9%88" class="heading-mark">
-    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
-  </a>
-</h2><p>如果没有定义<code>__all__</code>：</p>
-<div class="code-block highlight" data-mode="classic" data-copyable="true" title="math_utils.py"><div class="chroma">
-<div class="code-header language-python"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i><span class="title-inner">math_utils.py</span></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span><span class="lnt">6
-</span><span class="lnt">7
-</span><span class="lnt">8
-</span><span class="lnt">9
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
-</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">subtract</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
-</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">a</span> <span class="o">-</span> <span class="n">b</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="n">VERSION</span> <span class="o">=</span> <span class="s2">&#34;1.0.0&#34;</span>
-</span></span><span class="line"><span class="cl"><span class="n">_debug</span> <span class="o">=</span> <span class="kc">True</span></span></span></code></pre></td></tr></table></div>
-</div>
-</div><p>执行<code>from math_utils import *</code>。Python默认规则会导入所有不以下划线<code>_</code>开头的名字。因此<code>add</code>、<code>substract</code>和<code>VERSION</code>都会被导入，而<code>_debug</code>不会。所以很多Python项目会使用<code>_name</code>表示内部成员。</p>
-<h2 class="heading-element" id="__all__与_xxx的区别"><span><code>__all__</code>与<code>_xxx</code>的区别</span>
-  <a href="#__all__%e4%b8%8e_xxx%e7%9a%84%e5%8c%ba%e5%88%ab" class="heading-mark">
-    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
-  </a>
-</h2><p><code>_xxx</code>只是一个命名约定。<ins>表示这个东西是内部实现的，不建议外部使用</ins>。</p>
-<p>例如：</p>
-<div class="code-block highlight" data-mode="classic" data-copyable="true" title="camera.py"><div class="chroma">
-<div class="code-header language-python"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i><span class="title-inner">camera.py</span></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span><span class="lnt">6
-</span><span class="lnt">7
-</span><span class="lnt">8
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Camera</span><span class="p">:</span>
-</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span></span><span class="line"><span class="cl">        <span class="k">pass</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">_CameraWorker</span><span class="p">:</span>
-</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span></span><span class="line"><span class="cl">        <span class="k">pass</span></span></span></code></pre></td></tr></table></div>
-</div>
-</div><p>但是Python不禁止<code>from camera import _CameraWorker</code>依然可以。而<code>__all__</code>，是真正控制<code>from camera import *</code>导出的列表。</p>
-<h2 class="heading-element" id="__all__可以暴露内部成员吗"><span><code>__all__</code>可以暴露内部成员吗？</span>
-  <a href="#__all__%e5%8f%af%e4%bb%a5%e6%9a%b4%e9%9c%b2%e5%86%85%e9%83%a8%e6%88%90%e5%91%98%e5%90%97" class="heading-mark">
-    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
-  </a>
-</h2><p>可以。例如：</p>
-<div class="code-block highlight" data-mode="classic" data-copyable="true" title="calculate.py"><div class="chroma">
-<div class="code-header language-python"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i><span class="title-inner">calculate.py</span></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&#34;_calculate&#34;</span><span class="p">]</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">_calculate</span><span class="p">():</span>
-</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="mi">100</span></span></span></code></pre></td></tr></table></div>
-</div>
-</div><div class="code-block highlight" data-mode="classic" data-copyable="true" title="main.py"><div class="chroma">
-<div class="code-header language-python"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i><span class="title-inner">main.py</span></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">calculate</span> <span class="kn">import</span> <span class="o">*</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="n">_calculate</span><span class="p">()</span> <span class="c1">#可以</span></span></span></code></pre></td></tr></table></div>
-</div>
-</div><p><code>__all__</code>优先级高于<code>_</code>规则。</p>
-<h2 class="heading-element" id="为什么大型项目需要__all__"><span>为什么大型项目需要<code>__all__</code></span>
-  <a href="#%e4%b8%ba%e4%bb%80%e4%b9%88%e5%a4%a7%e5%9e%8b%e9%a1%b9%e7%9b%ae%e9%9c%80%e8%a6%81__all__" class="heading-mark">
-    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
-  </a>
-</h2><p>小项目可能感觉不到价值。但在大型工程中，一个模块可能包含：</p>
-<div class="code-block highlight" data-mode="classic" data-copyable="true" title="camera.py"><div class="chroma">
-<div class="code-header language-python"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i><span class="title-inner">camera.py</span></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="2" style="--fi-max-shown-lines:400;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span><span class="lnt">15
-</span><span class="lnt">16
-</span><span class="lnt">17
-</span><span class="lnt">18
-</span><span class="lnt">19
-</span><span class="lnt">20
-</span><span class="lnt">21
-</span><span class="lnt">22
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Camera</span><span class="p">:</span>
-</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span></span><span class="line"><span class="cl">        <span class="k">pass</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">_CameraWorker</span><span class="p">:</span>
-</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span></span><span class="line"><span class="cl">        <span class="k">pass</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">CameraFactory</span><span class="p">:</span>
-</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="nf">create_camera</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span></span><span class="line"><span class="cl">        <span class="k">pass</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">CameraLogger</span><span class="p">:</span>
-</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="nf">log</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
-</span></span><span class="line"><span class="cl">        <span class="k">pass</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">_test_camera</span><span class="p">():</span>
-</span></span><span class="line"><span class="cl">    <span class="k">pass</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">_debug</span><span class="p">():</span>
-</span></span><span class="line"><span class="cl">    <span class="k">pass</span></span></span></code></pre></td></tr></table></div>
-</div>
-</div><p>如果没有管理，用户不知道哪些是稳定API，哪些只是内部实现。例如：<code>from camera import *</code>可能导入几十个东西。这会导致命名污染、API不稳定、重构困难等问题。而使用：</p>
-<div class="code-block highlight" data-mode="classic" data-copyable="true" title="camera.py"><div class="chroma">
-<div class="code-header language-python"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i><span class="title-inner">camera.py</span></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span> <span class="s2">&#34;Camera&#34;</span><span class="p">,</span> <span class="s2">&#34;CameraFactory&#34;</span> <span class="p">]</span></span></span></code></pre></td></tr></table></div>
-</div>
-</div><p>模块边界清晰。</p>
-<h2 class="heading-element" id="在包中的作用"><span>在包中的作用</span>
-  <a href="#%e5%9c%a8%e5%8c%85%e4%b8%ad%e7%9a%84%e4%bd%9c%e7%94%a8" class="heading-mark">
-    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
-  </a>
-</h2><p>Python项目经常这样组织：</p>
-<div class="file-tree-wrapper"><ul class="file-tree" data-level="0"><li class="file-tree-item file-tree-folder">
-        <span class="file-tree-label file-tree-toggle"><i class="file-tree-icon fa-regular fa-folder-open" aria-hidden="true"></i><span class="file-tree-label__inner">vision</span>
-        </span><ul class="file-tree" data-level="1"><li class="file-tree-item">
-        <span class="file-tree-label"><i class="file-tree-icon fa-regular fa-file-lines" aria-hidden="true"></i><span class="file-tree-label__inner">__init__.py</span>
-        </span></li><li class="file-tree-item">
-        <span class="file-tree-label"><i class="file-tree-icon fa-regular fa-file-lines" aria-hidden="true"></i><span class="file-tree-label__inner">camera.py</span>
-        </span></li><li class="file-tree-item">
-        <span class="file-tree-label"><i class="file-tree-icon fa-regular fa-file-lines" aria-hidden="true"></i><span class="file-tree-label__inner">calibration.py</span>
-        </span></li><li class="file-tree-item">
-        <span class="file-tree-label"><i class="file-tree-icon fa-regular fa-file-lines" aria-hidden="true"></i><span class="file-tree-label__inner">matcher.py</span>
-        </span></li></ul></li></ul></div>
-<div class="code-block highlight" data-mode="classic" data-copyable="true" title="camera.py"><div class="chroma">
-<div class="code-header language-python"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i><span class="title-inner">camera.py</span></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span><span class="lnt">6
-</span><span class="lnt">7
-</span><span class="lnt">8
-</span><span class="lnt">9
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span> <span class="s2">&#34;Camera&#34;</span> <span class="p">]</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Camera</span><span class="p">:</span>
-</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span></span><span class="line"><span class="cl">        <span class="k">pass</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">CameraDebugTool</span><span class="p">:</span>
-</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="nf">debug</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span></span><span class="line"><span class="cl">        <span class="k">pass</span></span></span></code></pre></td></tr></table></div>
-</div>
-</div><p>然后：</p>
-<div class="code-block highlight" data-mode="classic" data-copyable="true" title="vision/__init__.py"><div class="chroma">
-<div class="code-header language-python"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i><span class="title-inner">vision/__init__.py</span></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">.camera</span> <span class="kn">import</span> <span class="n">Camera</span>
-</span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">.calibration</span> <span class="kn">import</span> <span class="n">Calibration</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span> <span class="s2">&#34;Camera&#34;</span><span class="p">,</span> <span class="s2">&#34;Calibration&#34;</span> <span class="p">]</span></span></span></code></pre></td></tr></table></div>
-</div>
-</div><p>外部使用时：</p>
-<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
-<div class="code-header language-python"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">vision</span> <span class="kn">import</span> <span class="n">Camera</span></span></span></code></pre></td></tr></table></div>
-</div>
-</div><p>而不用：</p>
-<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
-<div class="code-header language-python"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">vision.camera</span> <span class="kn">import</span> <span class="n">Camera</span></span></span></code></pre></td></tr></table></div>
-</div>
-</div><p>这就是典型的<a href="https://refactoring.guru/design-patterns/facade" target="_blank" rel="external nofollow noopener noreferrer">Facade<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>设计。</p>
-<h2 class="heading-element" id="工程实践建议"><span>工程实践建议</span>
-  <a href="#%e5%b7%a5%e7%a8%8b%e5%ae%9e%e8%b7%b5%e5%bb%ba%e8%ae%ae" class="heading-mark">
-    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
-  </a>
-</h2><p><code>__all__</code>看似只是一个列表，但在大型项目中，它实际上承担的是：<ins>模块 API 设计、依赖隔离、架构演进的作用</ins>。</p>
-<p>以下是工程中使用<code>__all__</code> 的核心原则：</p>
-<ul>
-<li>明确模块边界</li>
-<li>只暴露稳定 API</li>
-<li>隐藏内部实现</li>
-<li>减少模块耦合</li>
-<li>保护未来重构空间</li>
-<li>让包结构更加清晰</li>
-<li>把它当作 API 设计工具，而不是语法技巧</li>
-</ul>
-<p>好的 Python 工程，不只是写功能，更重要的是设计清晰的模块出口。</p>
-<h2 class="heading-element" id="总结"><span>总结</span>
-  <a href="#%e6%80%bb%e7%bb%93" class="heading-mark">
-    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
-  </a>
-</h2><p><code>__all__</code>的核心思想：</p>
-<blockquote>
-<p>明确模块边界，控制公开接口。</p>
-</blockquote>
-<p>它不是权限系统，也不是安全机制。它更像是一份<strong>模块API清单</strong>。在简单脚本中可以不用。在大型Python工程中，建议使用。合理设计<code>__all__</code>可以让代码：</p>
-<ul>
-<li>更容易维护</li>
-<li>更容易扩展</li>
-<li>更少依赖内部实现</li>
-</ul>
-<h2 class="heading-element" id="推荐"><span>推荐</span>
-  <a href="#%e6%8e%a8%e8%8d%90" class="heading-mark">
-    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
-  </a>
-</h2><p><a href="https://docs.python.org/3/tutorial/modules.html#importing-from-a-package" target="_blank" rel="external nofollow noopener noreferrer">Python Docs Modules<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></p>
-<p><a href="https://stackoverflow.com/questions/44834/what-does-all-mean-in-python" target="_blank" rel="external nofollow noopener noreferrer">What does <code>__all__</code> mean in Python?<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></p></div><div class="post-footer" id="post-footer">
-  <div class="post-info">
-    <div class="post-info-line">
-      <div class="post-info-mod"><span title="更新于 2026-06-22 06:45:19">更新于 2026-06-22&nbsp;</span>
-      </div></div><div class="post-info-line">
-        <div class="post-info-md"><span><a href="vscode://file/D:\hugo-blog\andyfree96\content\posts\Python中的all.md" title="在编辑器中打开" class="link-to-vscode">在编辑器中打开</a></span></div>
-        <div class="post-info-share">
-          <span><a href="javascript:void(0);" title="分享到 X" data-sharer="twitter" data-url="http://localhost:1313/python%E4%B8%AD%E7%9A%84all/" data-title="Python中的__all__：模块公开API设计的关键工具" data-via="IRONAnthony96" data-hashtags="Python,模块公开,模块设计"><i class="fa-brands fa-x-twitter" aria-hidden="true"></i></a>
-  <a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="http://localhost:1313/python%E4%B8%AD%E7%9A%84all/" data-hashtag="Python"><i class="fa-brands fa-facebook-square" aria-hidden="true"></i></a>
-  <a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="http://localhost:1313/python%E4%B8%AD%E7%9A%84all/" data-title="Python中的__all__：模块公开API设计的关键工具" data-image="/images/202606/7/peter-thomas-f0r8nQ-t1Rw-unsplash.jpg"><i class="fa-brands fa-weibo" aria-hidden="true"></i></a>
-  </span>
-        </div>
-      </div></div>
-
-  <div class="post-info-more">
-    <section class="post-tags"><i class="fa-solid fa-tags me-1" aria-hidden="true"></i><a href="/tags/python/" class="post-tag" title="标签 - Python">Python</a><a href="/tags/%E6%A8%A1%E5%9D%97%E5%85%AC%E5%BC%80/" class="post-tag" title="标签 - 模块公开">模块公开</a><a href="/tags/%E6%A8%A1%E5%9D%97%E8%AE%BE%E8%AE%A1/" class="post-tag" title="标签 - 模块设计">模块设计</a></section>
-    <section><span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
-    </section>
-  </div><div class="post-nav"></div>
-</div>
-<div class="post-reward">
-    <div class="comment">请作者喝杯咖啡!</div>
-    <input type="checkbox" class="reward-input" name="reward" id="fi-reward" hidden />
-    <label class="reward-button" for="fi-reward"><i class="fa-solid fa-qrcode" aria-hidden="true"></i>赞赏</label>
-    <div class="reward-ways" data-mode="static"><div><img src='/reward/alipay.png' alt="AndyFree96 支付宝"><span data-animation>支付宝</span>
-          </div><div><img src='/reward/wechatpay.png' alt="AndyFree96 微信"><span data-animation>微信</span>
-          </div></div>
-  </div></article>
-
-  <aside class="toc" id="toc-auto" aria-label="目录"><h2 class="toc-title">目录&nbsp;<i class="toc-icon fa-solid fa-angle-down" aria-hidden="true"></i></h2>
-      <div class="toc-content" id="toc-content-auto"></div></aside><dialog id="toc-dialog" aria-labelledby="toc-dialog-title" role="dialog" closedby="any">
-      <button type="button" class="toc-close-btn" aria-label="Close Table of Contents"><i class="fa-solid fa-xmark fa-lg" aria-hidden="true"></i></button>
-      <div class="toc">
-        <h2 class="toc-title" id="toc-dialog-title">目录</h2>
-        <div class="toc-content" id="toc-content-drawer"><nav >
-  <ul>
-    <li><a href="#什么是__all__">什么是<code>__all__</code>？</a></li>
-    <li><a href="#没有__all__会发生什么">没有<code>__all__</code>会发生什么？</a></li>
-    <li><a href="#__all__与_xxx的区别"><code>__all__</code>与<code>_xxx</code>的区别</a></li>
-    <li><a href="#__all__可以暴露内部成员吗"><code>__all__</code>可以暴露内部成员吗？</a></li>
-    <li><a href="#为什么大型项目需要__all__">为什么大型项目需要<code>__all__</code></a></li>
-    <li><a href="#在包中的作用">在包中的作用</a></li>
-    <li><a href="#工程实践建议">工程实践建议</a></li>
-    <li><a href="#总结">总结</a></li>
-    <li><a href="#推荐">推荐</a></li>
-  </ul>
-</nav></div>
-      </div>
-    </dialog></main><footer class="footer">
-    <div class="footer-container"><div class="footer-line powered">由 <a href="https://gohugo.io/" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.163.1">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/hugo-fixit/FixIt" target="_blank" rel="external" title="FixIt v1.0.0-mq99hlzg">FixIt</a>
-        </div><div class="footer-line copyright" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright" aria-hidden="true"></i>
-            <span itemprop="copyrightYear">2019 - 2026</span><span class="author" itemprop="copyrightHolder">
-              <a href="https://andyfree96.github.io/" target="_blank" rel="external nofollow noopener noreferrer">AndyFree96</a></span></div></div>
-  </footer></div><div class="widgets"><div class="fixed-buttons"><button type="button" class="fixed-button back-to-top animate__faster d-none" aria-label="回到顶部"><i class="fa-solid fa-arrow-up" aria-hidden="true"></i></button><button type="button" id="toc-drawer-button" class="fixed-button toc-drawer-button d-none" aria-label="目录" aria-controls="toc-dialog" aria-expanded="false"><i class="fa-solid fa-bars" aria-hidden="true"></i></button></div><div id="mask"></div><div class="reading-progress-bar" style="left: 0;top: 0;"></div><noscript>
-    <div class="noscript-warning">该网站在启用 JavaScript 的情况下效果最佳。</div>
-  </noscript>
-</div><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script src="/lib/autocomplete/autocomplete.min.js" defer></script><script src="/lib/algoliasearch/browser.umd.js" defer></script><script src="/lib/sharer/sharer.min.js" async defer></script><script src="/lib/cookieconsent/cookieconsent.min.js" defer></script><script src="/js/lib/cookieconsent.js" defer></script><script src="/lib/cell-tooltip/cell-tooltip.umd.js" defer></script><script src="/js/config/837e5786bd53440a6f972b990811004f.js" defer></script><script src="/js/lib/file-tree.js" defer></script><script src="/js/main.js" defer></script></body>
-</html>
+'><meta name=keywords content='Python,模块公开,模块设计'><meta itemprop=name content="Python中的__all__：模块公开API设计的关键工具"><meta itemprop=description content='在Python项目中，我们经常会看到类似这样的代码：
+1 2 3 4 5 6 7 8 9 10 __all__ = [ "Field", "FormRequest", "Item", "Request", "Selector", "Spider", "__version__", "version_info", ] 很多初学者会疑惑：
+__all__是做什么的？ 为什么需要它？ 和_xxx命名有什么区别？ 大型项目为什么经常使用？ 本文将从基础语法到工程实践，深入理解 Python 的__all__。'><meta itemprop=datePublished content="2026-06-22T06:45:19+08:00"><meta itemprop=dateModified content="2026-06-22T06:45:19+08:00"><meta itemprop=wordCount content="1280"><meta itemprop=keywords content="Python,模块公开,模块设计"><meta property="og:url" content="https://andyfree96.github.io/python%E4%B8%AD%E7%9A%84all/"><meta property="og:site_name" content="东尼的博客"><meta property="og:title" content="Python中的__all__：模块公开API设计的关键工具"><meta property="og:description" content='在Python项目中，我们经常会看到类似这样的代码：
+1 2 3 4 5 6 7 8 9 10 __all__ = [ "Field", "FormRequest", "Item", "Request", "Selector", "Spider", "__version__", "version_info", ] 很多初学者会疑惑：
+__all__是做什么的？ 为什么需要它？ 和_xxx命名有什么区别？ 大型项目为什么经常使用？ 本文将从基础语法到工程实践，深入理解 Python 的__all__。'><meta property="og:locale" content="zh_CN"><meta property="og:type" content="article"><meta property="article:section" content="posts"><meta property="article:published_time" content="2026-06-22T06:45:19+08:00"><meta property="article:modified_time" content="2026-06-22T06:45:19+08:00"><meta property="article:tag" content="Python"><meta property="article:tag" content="模块公开"><meta property="article:tag" content="模块设计"><meta name=twitter:card content="summary"><meta name=twitter:title content="Python中的__all__：模块公开API设计的关键工具"><meta name=twitter:description content='在Python项目中，我们经常会看到类似这样的代码：
+1 2 3 4 5 6 7 8 9 10 __all__ = [ "Field", "FormRequest", "Item", "Request", "Selector", "Spider", "__version__", "version_info", ] 很多初学者会疑惑：
+__all__是做什么的？ 为什么需要它？ 和_xxx命名有什么区别？ 大型项目为什么经常使用？ 本文将从基础语法到工程实践，深入理解 Python 的__all__。'><meta name=twitter:creator content="@IRONAnthony96"><meta name=application-name content="FixIt"><meta name=apple-mobile-web-app-title content="FixIt"><meta name=theme-color data-light=#f6f8fa data-dark=#151b23 content="#f6f8fa"><meta name=msapplication-TileColor content="#da532c"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico><link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=mask-icon href=/safari-pinned-tab.svg color=#5bbad5><link rel=canonical type=text/html href=https://andyfree96.github.io/python%E4%B8%AD%E7%9A%84all/ title="Python中的__all__：模块公开API设计的关键工具 - 东尼的博客"><link rel=prev type=text/html href=https://andyfree96.github.io/vue.js%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/ title="Vue.js设计与实现 (霍春阳)"><link rel=next type=text/html href=https://andyfree96.github.io/%E6%B5%81%E7%95%85%E7%9A%84python/ title="流畅的Python 第2版 (Luciano Ramalho)"><link rel=alternate type=text/markdown href=https://andyfree96.github.io/python%E4%B8%AD%E7%9A%84all/index.md title="Python中的__all__：模块公开API设计的关键工具 - 东尼的博客"><link rel=stylesheet href=/css/config.min.css><link rel=stylesheet href=/css/main.min.css><link rel=preload href=/lib/fontawesome-free/all.min.css as=style onload='this.removeAttribute("onload"),this.rel="stylesheet"'><noscript><link rel=stylesheet href=/lib/fontawesome-free/all.min.css></noscript><link rel=preload href=/lib/animate/animate.min.css as=style onload='this.removeAttribute("onload"),this.rel="stylesheet"'><noscript><link rel=stylesheet href=/lib/animate/animate.min.css></noscript><link rel=preload href=/js/main.min.js as=script><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"Python中的__all__：模块公开API设计的关键工具","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/andyfree96.github.io\/python%E4%B8%AD%E7%9A%84all\/"},"genre":"posts","keywords":"Python, 模块公开, 模块设计","wordcount":1280,"url":"https:\/\/andyfree96.github.io\/python%E4%B8%AD%E7%9A%84all\/","datePublished":"2026-06-22T06:45:19+08:00","dateModified":"2026-06-22T06:45:19+08:00","publisher":{"@type":"Organization","name":""},"author":{"@type":"Person","name":"AndyFree96"},"description":""}</script><script src=/js/head/color-scheme.min.js></script></head><body data-instant-intensity=viewport data-header-desktop=sticky data-header-mobile=auto><div class=wrapper data-page-style=normal><header class="desktop animate__faster" id=header-desktop><div class=header-wrapper><div class=header-title><a href=/ title=东尼的博客 class=header-title-link><span class=header-title-text>东尼的博客</span></a><span class=header-subtitle></span></div><nav><ul class=menu><li class=menu-item><a class=menu-link href=/posts/>📕 文章</a></li><li class=menu-item><a class=menu-link href=/categories/>🧰 分类</a></li><li class=menu-item><a class=menu-link href=/tags/>🔖 标签</a></li><li class=menu-item><a class=menu-link href=/book>📚 书单</a></li><li class=menu-item><a class=menu-link href=/paper>📝 论文</a></li><li class=menu-item><a class=menu-link href=/opencourse>👨🏻‍💻 公开课</a></li><li class=menu-item><a class=menu-link href=/filmtv>🎞️ 影视</a></li><li class=menu-item><a class=menu-link href=/resource>⚡️ 资源库</a></li><li class=menu-item><a class=menu-link href=/projects>⭐ 开源</a></li><li class=menu-item><a class=menu-link href=/about>🙋🏻‍♂️ 关于</a></li><li class="menu-item delimiter"></li><li class="menu-item search" id=search-desktop><input type=text placeholder=搜索文章标题或内容…… id=search-input-desktop tabindex=-1>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-desktop title=搜索 aria-controls=search-dropdown-desktop aria-expanded=false><i class="fa-solid fa-search" aria-hidden=true></i>
+</a><a href=javascript:void(0); class="search-button search-clear" id=search-clear-desktop title=清空><i class="fa-solid fa-times-circle" aria-hidden=true></i>
+</a><span class="search-button search-loading" id=search-loading-desktop><i class="fa-solid fa-spinner fa-spin" aria-hidden=true></i></span></li><li class="menu-item theme-switch-item"><button type=button class=theme-switch aria-label=切换主题 title=切换主题><i class="fa-solid fa-adjust" aria-hidden=true></i></button></li></ul></nav></div></header><header class="mobile animate__faster" id=header-mobile><div class=header-container><div class=header-wrapper><div class=header-title><a href=/ title=东尼的博客 class=header-title-link><span class=header-title-text>东尼的博客</span></a><span class=header-subtitle></span></div><button type=button class=theme-switch aria-label=切换主题><i class="fa-solid fa-adjust" aria-hidden=true></i></button>
+<button type=button class=menu-toggle id=menu-toggle-mobile aria-controls=menu-mobile aria-expanded=false aria-labelledby=menu-mobile>
+<span></span><span></span><span></span></button></div><nav><ul class=menu id=menu-mobile><li class=search-wrapper><div class="search mobile" id=search-mobile><input type=text placeholder=搜索文章标题或内容…… id=search-input-mobile>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-mobile title=搜索 aria-controls=search-dropdown-mobile aria-expanded=false><i class="fa-solid fa-search" aria-hidden=true></i>
+</a><a href=javascript:void(0); class="search-button search-clear" id=search-clear-mobile title=清空><i class="fa-solid fa-times-circle" aria-hidden=true></i>
+</a><span class="search-button search-loading" id=search-loading-mobile><i class="fa-solid fa-spinner fa-spin" aria-hidden=true></i></span></div><a href=javascript:void(0); class=search-cancel id=search-cancel-mobile>取消</a></li><li class=menu-item><a class=menu-link href=/posts/>📕 文章</a></li><li class=menu-item><a class=menu-link href=/categories/>🧰 分类</a></li><li class=menu-item><a class=menu-link href=/tags/>🔖 标签</a></li><li class=menu-item><a class=menu-link href=/book>📚 书单</a></li><li class=menu-item><a class=menu-link href=/paper>📝 论文</a></li><li class=menu-item><a class=menu-link href=/opencourse>👨🏻‍💻 公开课</a></li><li class=menu-item><a class=menu-link href=/filmtv>🎞️ 影视</a></li><li class=menu-item><a class=menu-link href=/resource>⚡️ 资源库</a></li><li class=menu-item><a class=menu-link href=/projects>⭐ 开源</a></li><li class=menu-item><a class=menu-link href=/about>🙋🏻‍♂️ 关于</a></li><li class="menu-item menu-system"></li></ul></nav></div></header><div class="search-dropdown desktop"><div id=search-dropdown-desktop></div></div><div class="search-dropdown mobile"><div id=search-dropdown-mobile></div></div><main class=fi-container><aside class="aside-collection animate__animated animate__fadeIn animate__faster" aria-label=合集><div class="details related-details open"><div class="details-summary related-summary"><i class="fa-solid fa-fire fa-fade text-danger" aria-hidden=true></i>
+<span class=related-title>相关内容</span><i class="details-icon fa-solid fa-angle-right" aria-hidden=true></i></div><div class="details-content related-content"><ul class=related-list><li class=related-item><a href=/cpython%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/ title="CPython 源码剖析：Python 运行的奥秘">CPython 源码剖析：Python 运行的奥秘</a></li><li class=related-item><a href=/beautifulsoup%E5%BA%93%E4%BD%BF%E7%94%A8/ title=BeautifulSoup库使用>BeautifulSoup库使用</a></li><li class=related-item><a href=/requests%E5%BA%93%E4%BD%BF%E7%94%A8/ title=Requests库使用>Requests库使用</a></li><li class=related-item><a href=/matplotlib%E7%AE%80%E6%98%8E%E6%95%99%E7%A8%8B/ title=Matplotlib简明教程>Matplotlib简明教程</a></li><li class=related-item><a href=/pandas%E7%AE%80%E6%98%8E%E6%95%99%E7%A8%8B/ title=Pandas简明教程>Pandas简明教程</a></li><li class=related-item><a href=/%E7%94%A8keras%E6%90%AD%E5%BB%BA%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/ title=用Keras搭建卷积神经网络>用Keras搭建卷积神经网络</a></li><li class=related-item><a href=/tkinter%E7%AE%80%E6%98%8E%E6%95%99%E7%A8%8B/ title=Tkinter简明教程>Tkinter简明教程</a></li><li class=related-item><a href=/opencv%E7%AE%80%E6%98%8E%E6%95%99%E7%A8%8B/ title=OpenCV简明教程>OpenCV简明教程</a></li></ul></div></div></aside><article class="page single"><div class=header><h1 class="single-title animate__animated animate__flipInX"><span title=转载 class=icon-repost><i class="fa-solid fa-share" aria-hidden=true></i></span><span>Python中的__all__：模块公开API设计的关键工具</span></h1></div><div class=post-meta><div class=post-meta-line><span class=post-author><a href=https://andyfree96.github.io/ title=作者 rel=author class=author><img class=avatar src=/avatar/1.jpg alt=AndyFree96 height=16 width=16>&nbsp;AndyFree96</a></span><span class=post-included-in>&nbsp;收录于 <a href=/categories/python/ class=post-category title="分类 - Python"><i class="fa-regular fa-folder" aria-hidden=true></i> Python</a></span></div><div class=post-meta-line><span title="发布于 2026-06-22 06:45:19"><i class="fa-solid fa-calendar-days me-1" aria-hidden=true></i><time datetime=2026-06-22>2026-06-22</time></span>&nbsp;<span title="1280 字"><i class="fa-solid fa-pencil-alt me-1" aria-hidden=true></i>约 1300 字</span>&nbsp;<span><i class="fa-regular fa-clock me-1" aria-hidden=true></i>预计阅读 3 分钟</span>&nbsp;</div></div><div class=featured-image><img loading=eager src=/images/202606/7/peter-thomas-f0r8nQ-t1Rw-unsplash.jpg sizes="(max-width: 680px) 100vw, (max-width: 960px) 80vw, (max-width: 1440px) 56vw, 800px" alt=/images/202606/7/peter-thomas-f0r8nQ-t1Rw-unsplash.jpg></div><div class="details toc" id=toc-static data-kept=false><div class="details-summary toc-title"><span>目录</span>
+<span><i class="details-icon fa-solid fa-angle-right" aria-hidden=true></i></span></div><div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents><ul><li><a href=#什么是__all__>什么是<code>__all__</code>？</a></li><li><a href=#没有__all__会发生什么>没有<code>__all__</code>会发生什么？</a></li><li><a href=#__all__与_xxx的区别><code>__all__</code>与<code>_xxx</code>的区别</a></li><li><a href=#__all__可以暴露内部成员吗><code>__all__</code>可以暴露内部成员吗？</a></li><li><a href=#为什么大型项目需要__all__>为什么大型项目需要<code>__all__</code></a></li><li><a href=#在包中的作用>在包中的作用</a></li><li><a href=#工程实践建议>工程实践建议</a></li><li><a href=#总结>总结</a></li><li><a href=#推荐>推荐</a></li></ul></nav></div></div><div class=content id=content><p>在Python项目中，我们经常会看到类似这样的代码：</p><div class="code-block highlight" data-mode=classic data-copyable=true><div class=chroma><div class="code-header language-python"><span class=code-title><i class="arrow fa-solid fa-chevron-down" aria-hidden=true></i></span><button type=button class=ellipses-btn aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden=true></i></button><button type=button class="action-btn line-nos-btn" aria-label=切换行号 title=切换行号><i class="fa-solid fa-list-ol" aria-hidden=true></i></button><button type=button class="action-btn line-wrap-btn" aria-label=切换自动换行 title=切换自动换行><i class="fa-solid fa-right-left" aria-hidden=true></i></button><button type=button class="action-btn copy-btn" aria-label=复制到剪贴板 title=复制到剪贴板 data-copied-text=已复制><i class="fa-regular fa-clone" aria-hidden=true></i></button><button type=button class="action-btn fullscreen-btn" aria-label=全屏 title=全屏 data-exit-title=退出全屏><i class="fa-solid fa-expand" aria-hidden=true></i></button></div><div class=code-wrapper data-max=400 data-line-digit=2 style=--fi-max-shown-lines:400;--fi-line-digit:2;--fi-line-start:1><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=n>__all__</span> <span class=o>=</span> <span class=p>[</span>
+</span></span><span class=line><span class=cl>    <span class=s2>&#34;Field&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=s2>&#34;FormRequest&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=s2>&#34;Item&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=s2>&#34;Request&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=s2>&#34;Selector&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=s2>&#34;Spider&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=s2>&#34;__version__&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=s2>&#34;version_info&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl><span class=p>]</span></span></span></code></pre></td></tr></table></div></div></div><p>很多初学者会疑惑：</p><ul><li><code>__all__</code>是做什么的？</li><li>为什么需要它？</li><li>和<code>_xxx</code>命名有什么区别？</li><li>大型项目为什么经常使用？</li></ul><p>本文将从基础语法到工程实践，深入理解 Python 的<code>__all__</code>。</p><div class="details admonition info open"><div class="details-summary admonition-title"><i class="icon fa-solid fa-circle-info" aria-hidden=true></i>信息<i class="details-icon fa-solid fa-angle-right" aria-hidden=true></i></div><div class=details-content><div class=admonition-content><p>上面所列代码来自<a href=https://github.com/scrapy/scrapy/blob/master/scrapy/__init__.py target=_blank rel="external nofollow noopener noreferrer">scrapy<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden=true></i></a>。</p></div></div></div><h2 class=heading-element id=什么是__all__><span>什么是<code>__all__</code>？</span>
+<a href=#%e4%bb%80%e4%b9%88%e6%98%af__all__ class=heading-mark><svg class="octicon octicon-link" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5.0 114.95 4.95l-2.5 2.5a3.5 3.5.0 01-4.95.0.751.751.0 01.018-1.042.751.751.0 011.042-.018 1.998 1.998.0 002.83.0l2.5-2.5a2.002 2.002.0 00-2.83-2.83l-1.25 1.25a.751.751.0 01-1.042-.018.751.751.0 01-.018-1.042zm-4.69 9.64a1.998 1.998.0 002.83.0l1.25-1.25a.751.751.0 011.042.018.751.751.0 01.018 1.042l-1.25 1.25a3.5 3.5.0 11-4.95-4.95l2.5-2.5a3.5 3.5.0 014.95.0.751.751.0 01-.018 1.042.751.751.0 01-1.042.018 1.998 1.998.0 00-2.83.0l-2.5 2.5a1.998 1.998.0 000 2.83z"/></svg></a></h2><p><code>__all__</code>是Python模块中的一个特殊变量，用来定义：当使用<code>from xxx import *</code>时，哪些成员会被导入。</p><p>例如：</p><div class="code-block highlight" data-mode=classic data-copyable=true title=math_utils.py><div class=chroma><div class="code-header language-python"><span class=code-title><i class="arrow fa-solid fa-chevron-down" aria-hidden=true></i><span class=title-inner>math_utils.py</span></span><button type=button class=ellipses-btn aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden=true></i></button><button type=button class="action-btn line-nos-btn" aria-label=切换行号 title=切换行号><i class="fa-solid fa-list-ol" aria-hidden=true></i></button><button type=button class="action-btn line-wrap-btn" aria-label=切换自动换行 title=切换自动换行><i class="fa-solid fa-right-left" aria-hidden=true></i></button><button type=button class="action-btn copy-btn" aria-label=复制到剪贴板 title=复制到剪贴板 data-copied-text=已复制><i class="fa-regular fa-clone" aria-hidden=true></i></button><button type=button class="action-btn fullscreen-btn" aria-label=全屏 title=全屏 data-exit-title=退出全屏><i class="fa-solid fa-expand" aria-hidden=true></i></button></div><div class=code-wrapper data-max=400 data-line-digit=2 style=--fi-max-shown-lines:400;--fi-line-digit:2;--fi-line-start:1><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=n>__all__</span> <span class=o>=</span> <span class=p>[</span><span class=s2>&#34;add&#34;</span><span class=p>,</span> <span class=s2>&#34;VERSION&#34;</span><span class=p>]</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>def</span> <span class=nf>add</span><span class=p>(</span><span class=n>a</span><span class=p>,</span> <span class=n>b</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=n>a</span> <span class=o>+</span> <span class=n>b</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>def</span> <span class=nf>subtract</span><span class=p>(</span><span class=n>a</span><span class=p>,</span> <span class=n>b</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=n>a</span> <span class=o>-</span> <span class=n>b</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>VERSION</span> <span class=o>=</span> <span class=s2>&#34;1.0.0&#34;</span>
+</span></span><span class=line><span class=cl><span class=n>_debug</span> <span class=o>=</span> <span class=kc>True</span></span></span></code></pre></td></tr></table></div></div></div><p>其他地方：</p><div class="code-block highlight" data-mode=classic data-copyable=true title=main.py><div class=chroma><div class="code-header language-python"><span class=code-title><i class="arrow fa-solid fa-chevron-down" aria-hidden=true></i><span class=title-inner>main.py</span></span><button type=button class=ellipses-btn aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden=true></i></button><button type=button class="action-btn line-nos-btn" aria-label=切换行号 title=切换行号><i class="fa-solid fa-list-ol" aria-hidden=true></i></button><button type=button class="action-btn line-wrap-btn" aria-label=切换自动换行 title=切换自动换行><i class="fa-solid fa-right-left" aria-hidden=true></i></button><button type=button class="action-btn copy-btn" aria-label=复制到剪贴板 title=复制到剪贴板 data-copied-text=已复制><i class="fa-regular fa-clone" aria-hidden=true></i></button><button type=button class="action-btn fullscreen-btn" aria-label=全屏 title=全屏 data-exit-title=退出全屏><i class="fa-solid fa-expand" aria-hidden=true></i></button></div><div class=code-wrapper data-max=400 data-line-digit=1 style=--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=kn>from</span> <span class=nn>math_utils</span> <span class=kn>import</span> <span class=o>*</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nb>print</span><span class=p>(</span><span class=n>add</span><span class=p>(</span><span class=mi>5</span><span class=p>,</span> <span class=mi>3</span><span class=p>))</span> <span class=c1># 可以</span>
+</span></span><span class=line><span class=cl><span class=nb>print</span><span class=p>(</span><span class=n>subtract</span><span class=p>(</span><span class=mi>5</span><span class=p>,</span> <span class=mi>3</span><span class=p>))</span> <span class=c1># 不存在</span>
+</span></span><span class=line><span class=cl><span class=nb>print</span><span class=p>(</span><span class=n>VERSION</span><span class=p>)</span> <span class=c1># 可以</span>
+</span></span><span class=line><span class=cl><span class=nb>print</span><span class=p>(</span><span class=n>_debug</span><span class=p>)</span> <span class=c1># 不存在</span></span></span></code></pre></td></tr></table></div></div></div><p><code>__all__</code>明确告诉Python，这个模块对外公开的内容只有<code>add</code>和<code>VERSION</code>。</p><h2 class=heading-element id=没有__all__会发生什么><span>没有<code>__all__</code>会发生什么？</span>
+<a href=#%e6%b2%a1%e6%9c%89__all__%e4%bc%9a%e5%8f%91%e7%94%9f%e4%bb%80%e4%b9%88 class=heading-mark><svg class="octicon octicon-link" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5.0 114.95 4.95l-2.5 2.5a3.5 3.5.0 01-4.95.0.751.751.0 01.018-1.042.751.751.0 011.042-.018 1.998 1.998.0 002.83.0l2.5-2.5a2.002 2.002.0 00-2.83-2.83l-1.25 1.25a.751.751.0 01-1.042-.018.751.751.0 01-.018-1.042zm-4.69 9.64a1.998 1.998.0 002.83.0l1.25-1.25a.751.751.0 011.042.018.751.751.0 01.018 1.042l-1.25 1.25a3.5 3.5.0 11-4.95-4.95l2.5-2.5a3.5 3.5.0 014.95.0.751.751.0 01-.018 1.042.751.751.0 01-1.042.018 1.998 1.998.0 00-2.83.0l-2.5 2.5a1.998 1.998.0 000 2.83z"/></svg></a></h2><p>如果没有定义<code>__all__</code>：</p><div class="code-block highlight" data-mode=classic data-copyable=true title=math_utils.py><div class=chroma><div class="code-header language-python"><span class=code-title><i class="arrow fa-solid fa-chevron-down" aria-hidden=true></i><span class=title-inner>math_utils.py</span></span><button type=button class=ellipses-btn aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden=true></i></button><button type=button class="action-btn line-nos-btn" aria-label=切换行号 title=切换行号><i class="fa-solid fa-list-ol" aria-hidden=true></i></button><button type=button class="action-btn line-wrap-btn" aria-label=切换自动换行 title=切换自动换行><i class="fa-solid fa-right-left" aria-hidden=true></i></button><button type=button class="action-btn copy-btn" aria-label=复制到剪贴板 title=复制到剪贴板 data-copied-text=已复制><i class="fa-regular fa-clone" aria-hidden=true></i></button><button type=button class="action-btn fullscreen-btn" aria-label=全屏 title=全屏 data-exit-title=退出全屏><i class="fa-solid fa-expand" aria-hidden=true></i></button></div><div class=code-wrapper data-max=400 data-line-digit=1 style=--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span><span class=lnt>9
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=k>def</span> <span class=nf>add</span><span class=p>(</span><span class=n>a</span><span class=p>,</span> <span class=n>b</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=n>a</span> <span class=o>+</span> <span class=n>b</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>def</span> <span class=nf>subtract</span><span class=p>(</span><span class=n>a</span><span class=p>,</span> <span class=n>b</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=n>a</span> <span class=o>-</span> <span class=n>b</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>VERSION</span> <span class=o>=</span> <span class=s2>&#34;1.0.0&#34;</span>
+</span></span><span class=line><span class=cl><span class=n>_debug</span> <span class=o>=</span> <span class=kc>True</span></span></span></code></pre></td></tr></table></div></div></div><p>执行<code>from math_utils import *</code>。Python默认规则会导入所有不以下划线<code>_</code>开头的名字。因此<code>add</code>、<code>substract</code>和<code>VERSION</code>都会被导入，而<code>_debug</code>不会。所以很多Python项目会使用<code>_name</code>表示内部成员。</p><h2 class=heading-element id=__all__与_xxx的区别><span><code>__all__</code>与<code>_xxx</code>的区别</span>
+<a href=#__all__%e4%b8%8e_xxx%e7%9a%84%e5%8c%ba%e5%88%ab class=heading-mark><svg class="octicon octicon-link" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5.0 114.95 4.95l-2.5 2.5a3.5 3.5.0 01-4.95.0.751.751.0 01.018-1.042.751.751.0 011.042-.018 1.998 1.998.0 002.83.0l2.5-2.5a2.002 2.002.0 00-2.83-2.83l-1.25 1.25a.751.751.0 01-1.042-.018.751.751.0 01-.018-1.042zm-4.69 9.64a1.998 1.998.0 002.83.0l1.25-1.25a.751.751.0 011.042.018.751.751.0 01.018 1.042l-1.25 1.25a3.5 3.5.0 11-4.95-4.95l2.5-2.5a3.5 3.5.0 014.95.0.751.751.0 01-.018 1.042.751.751.0 01-1.042.018 1.998 1.998.0 00-2.83.0l-2.5 2.5a1.998 1.998.0 000 2.83z"/></svg></a></h2><p><code>_xxx</code>只是一个命名约定。<ins>表示这个东西是内部实现的，不建议外部使用</ins>。</p><p>例如：</p><div class="code-block highlight" data-mode=classic data-copyable=true title=camera.py><div class=chroma><div class="code-header language-python"><span class=code-title><i class="arrow fa-solid fa-chevron-down" aria-hidden=true></i><span class=title-inner>camera.py</span></span><button type=button class=ellipses-btn aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden=true></i></button><button type=button class="action-btn line-nos-btn" aria-label=切换行号 title=切换行号><i class="fa-solid fa-list-ol" aria-hidden=true></i></button><button type=button class="action-btn line-wrap-btn" aria-label=切换自动换行 title=切换自动换行><i class="fa-solid fa-right-left" aria-hidden=true></i></button><button type=button class="action-btn copy-btn" aria-label=复制到剪贴板 title=复制到剪贴板 data-copied-text=已复制><i class="fa-regular fa-clone" aria-hidden=true></i></button><button type=button class="action-btn fullscreen-btn" aria-label=全屏 title=全屏 data-exit-title=退出全屏><i class="fa-solid fa-expand" aria-hidden=true></i></button></div><div class=code-wrapper data-max=400 data-line-digit=1 style=--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=k>class</span> <span class=nc>Camera</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>    <span class=k>def</span> <span class=nf>start</span><span class=p>(</span><span class=bp>self</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>        <span class=k>pass</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>class</span> <span class=nc>_CameraWorker</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>    <span class=k>def</span> <span class=nf>run</span><span class=p>(</span><span class=bp>self</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>        <span class=k>pass</span></span></span></code></pre></td></tr></table></div></div></div><p>但是Python不禁止<code>from camera import _CameraWorker</code>依然可以。而<code>__all__</code>，是真正控制<code>from camera import *</code>导出的列表。</p><h2 class=heading-element id=__all__可以暴露内部成员吗><span><code>__all__</code>可以暴露内部成员吗？</span>
+<a href=#__all__%e5%8f%af%e4%bb%a5%e6%9a%b4%e9%9c%b2%e5%86%85%e9%83%a8%e6%88%90%e5%91%98%e5%90%97 class=heading-mark><svg class="octicon octicon-link" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5.0 114.95 4.95l-2.5 2.5a3.5 3.5.0 01-4.95.0.751.751.0 01.018-1.042.751.751.0 011.042-.018 1.998 1.998.0 002.83.0l2.5-2.5a2.002 2.002.0 00-2.83-2.83l-1.25 1.25a.751.751.0 01-1.042-.018.751.751.0 01-.018-1.042zm-4.69 9.64a1.998 1.998.0 002.83.0l1.25-1.25a.751.751.0 011.042.018.751.751.0 01.018 1.042l-1.25 1.25a3.5 3.5.0 11-4.95-4.95l2.5-2.5a3.5 3.5.0 014.95.0.751.751.0 01-.018 1.042.751.751.0 01-1.042.018 1.998 1.998.0 00-2.83.0l-2.5 2.5a1.998 1.998.0 000 2.83z"/></svg></a></h2><p>可以。例如：</p><div class="code-block highlight" data-mode=classic data-copyable=true title=calculate.py><div class=chroma><div class="code-header language-python"><span class=code-title><i class="arrow fa-solid fa-chevron-down" aria-hidden=true></i><span class=title-inner>calculate.py</span></span><button type=button class=ellipses-btn aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden=true></i></button><button type=button class="action-btn line-nos-btn" aria-label=切换行号 title=切换行号><i class="fa-solid fa-list-ol" aria-hidden=true></i></button><button type=button class="action-btn line-wrap-btn" aria-label=切换自动换行 title=切换自动换行><i class="fa-solid fa-right-left" aria-hidden=true></i></button><button type=button class="action-btn copy-btn" aria-label=复制到剪贴板 title=复制到剪贴板 data-copied-text=已复制><i class="fa-regular fa-clone" aria-hidden=true></i></button><button type=button class="action-btn fullscreen-btn" aria-label=全屏 title=全屏 data-exit-title=退出全屏><i class="fa-solid fa-expand" aria-hidden=true></i></button></div><div class=code-wrapper data-max=400 data-line-digit=1 style=--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=n>__all__</span> <span class=o>=</span> <span class=p>[</span><span class=s2>&#34;_calculate&#34;</span><span class=p>]</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>def</span> <span class=nf>_calculate</span><span class=p>():</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=mi>100</span></span></span></code></pre></td></tr></table></div></div></div><div class="code-block highlight" data-mode=classic data-copyable=true title=main.py><div class=chroma><div class="code-header language-python"><span class=code-title><i class="arrow fa-solid fa-chevron-down" aria-hidden=true></i><span class=title-inner>main.py</span></span><button type=button class=ellipses-btn aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden=true></i></button><button type=button class="action-btn line-nos-btn" aria-label=切换行号 title=切换行号><i class="fa-solid fa-list-ol" aria-hidden=true></i></button><button type=button class="action-btn line-wrap-btn" aria-label=切换自动换行 title=切换自动换行><i class="fa-solid fa-right-left" aria-hidden=true></i></button><button type=button class="action-btn copy-btn" aria-label=复制到剪贴板 title=复制到剪贴板 data-copied-text=已复制><i class="fa-regular fa-clone" aria-hidden=true></i></button><button type=button class="action-btn fullscreen-btn" aria-label=全屏 title=全屏 data-exit-title=退出全屏><i class="fa-solid fa-expand" aria-hidden=true></i></button></div><div class=code-wrapper data-max=400 data-line-digit=1 style=--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=kn>from</span> <span class=nn>calculate</span> <span class=kn>import</span> <span class=o>*</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>_calculate</span><span class=p>()</span> <span class=c1>#可以</span></span></span></code></pre></td></tr></table></div></div></div><p><code>__all__</code>优先级高于<code>_</code>规则。</p><h2 class=heading-element id=为什么大型项目需要__all__><span>为什么大型项目需要<code>__all__</code></span>
+<a href=#%e4%b8%ba%e4%bb%80%e4%b9%88%e5%a4%a7%e5%9e%8b%e9%a1%b9%e7%9b%ae%e9%9c%80%e8%a6%81__all__ class=heading-mark><svg class="octicon octicon-link" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5.0 114.95 4.95l-2.5 2.5a3.5 3.5.0 01-4.95.0.751.751.0 01.018-1.042.751.751.0 011.042-.018 1.998 1.998.0 002.83.0l2.5-2.5a2.002 2.002.0 00-2.83-2.83l-1.25 1.25a.751.751.0 01-1.042-.018.751.751.0 01-.018-1.042zm-4.69 9.64a1.998 1.998.0 002.83.0l1.25-1.25a.751.751.0 011.042.018.751.751.0 01.018 1.042l-1.25 1.25a3.5 3.5.0 11-4.95-4.95l2.5-2.5a3.5 3.5.0 014.95.0.751.751.0 01-.018 1.042.751.751.0 01-1.042.018 1.998 1.998.0 00-2.83.0l-2.5 2.5a1.998 1.998.0 000 2.83z"/></svg></a></h2><p>小项目可能感觉不到价值。但在大型工程中，一个模块可能包含：</p><div class="code-block highlight" data-mode=classic data-copyable=true title=camera.py><div class=chroma><div class="code-header language-python"><span class=code-title><i class="arrow fa-solid fa-chevron-down" aria-hidden=true></i><span class=title-inner>camera.py</span></span><button type=button class=ellipses-btn aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden=true></i></button><button type=button class="action-btn line-nos-btn" aria-label=切换行号 title=切换行号><i class="fa-solid fa-list-ol" aria-hidden=true></i></button><button type=button class="action-btn line-wrap-btn" aria-label=切换自动换行 title=切换自动换行><i class="fa-solid fa-right-left" aria-hidden=true></i></button><button type=button class="action-btn copy-btn" aria-label=复制到剪贴板 title=复制到剪贴板 data-copied-text=已复制><i class="fa-regular fa-clone" aria-hidden=true></i></button><button type=button class="action-btn fullscreen-btn" aria-label=全屏 title=全屏 data-exit-title=退出全屏><i class="fa-solid fa-expand" aria-hidden=true></i></button></div><div class=code-wrapper data-max=400 data-line-digit=2 style=--fi-max-shown-lines:400;--fi-line-digit:2;--fi-line-start:1><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=k>class</span> <span class=nc>Camera</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>    <span class=k>def</span> <span class=nf>start</span><span class=p>(</span><span class=bp>self</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>        <span class=k>pass</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>class</span> <span class=nc>_CameraWorker</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>    <span class=k>def</span> <span class=nf>run</span><span class=p>(</span><span class=bp>self</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>        <span class=k>pass</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>class</span> <span class=nc>CameraFactory</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>    <span class=k>def</span> <span class=nf>create_camera</span><span class=p>(</span><span class=bp>self</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>        <span class=k>pass</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>class</span> <span class=nc>CameraLogger</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>    <span class=k>def</span> <span class=nf>log</span><span class=p>(</span><span class=bp>self</span><span class=p>,</span> <span class=n>message</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>        <span class=k>pass</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>def</span> <span class=nf>_test_camera</span><span class=p>():</span>
+</span></span><span class=line><span class=cl>    <span class=k>pass</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>def</span> <span class=nf>_debug</span><span class=p>():</span>
+</span></span><span class=line><span class=cl>    <span class=k>pass</span></span></span></code></pre></td></tr></table></div></div></div><p>如果没有管理，用户不知道哪些是稳定API，哪些只是内部实现。例如：<code>from camera import *</code>可能导入几十个东西。这会导致命名污染、API不稳定、重构困难等问题。而使用：</p><div class="code-block highlight" data-mode=classic data-copyable=true title=camera.py><div class=chroma><div class="code-header language-python"><span class=code-title><i class="arrow fa-solid fa-chevron-down" aria-hidden=true></i><span class=title-inner>camera.py</span></span><button type=button class=ellipses-btn aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden=true></i></button><button type=button class="action-btn line-nos-btn" aria-label=切换行号 title=切换行号><i class="fa-solid fa-list-ol" aria-hidden=true></i></button><button type=button class="action-btn line-wrap-btn" aria-label=切换自动换行 title=切换自动换行><i class="fa-solid fa-right-left" aria-hidden=true></i></button><button type=button class="action-btn copy-btn" aria-label=复制到剪贴板 title=复制到剪贴板 data-copied-text=已复制><i class="fa-regular fa-clone" aria-hidden=true></i></button><button type=button class="action-btn fullscreen-btn" aria-label=全屏 title=全屏 data-exit-title=退出全屏><i class="fa-solid fa-expand" aria-hidden=true></i></button></div><div class=code-wrapper data-max=400 data-line-digit=1 style=--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=n>__all__</span> <span class=o>=</span> <span class=p>[</span> <span class=s2>&#34;Camera&#34;</span><span class=p>,</span> <span class=s2>&#34;CameraFactory&#34;</span> <span class=p>]</span></span></span></code></pre></td></tr></table></div></div></div><p>模块边界清晰。</p><h2 class=heading-element id=在包中的作用><span>在包中的作用</span>
+<a href=#%e5%9c%a8%e5%8c%85%e4%b8%ad%e7%9a%84%e4%bd%9c%e7%94%a8 class=heading-mark><svg class="octicon octicon-link" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5.0 114.95 4.95l-2.5 2.5a3.5 3.5.0 01-4.95.0.751.751.0 01.018-1.042.751.751.0 011.042-.018 1.998 1.998.0 002.83.0l2.5-2.5a2.002 2.002.0 00-2.83-2.83l-1.25 1.25a.751.751.0 01-1.042-.018.751.751.0 01-.018-1.042zm-4.69 9.64a1.998 1.998.0 002.83.0l1.25-1.25a.751.751.0 011.042.018.751.751.0 01.018 1.042l-1.25 1.25a3.5 3.5.0 11-4.95-4.95l2.5-2.5a3.5 3.5.0 014.95.0.751.751.0 01-.018 1.042.751.751.0 01-1.042.018 1.998 1.998.0 00-2.83.0l-2.5 2.5a1.998 1.998.0 000 2.83z"/></svg></a></h2><p>Python项目经常这样组织：</p><div class=file-tree-wrapper><ul class=file-tree data-level=0><li class="file-tree-item file-tree-folder"><span class="file-tree-label file-tree-toggle"><i class="file-tree-icon fa-regular fa-folder-open" aria-hidden=true></i><span class=file-tree-label__inner>vision</span></span><ul class=file-tree data-level=1><li class=file-tree-item><span class=file-tree-label><i class="file-tree-icon fa-regular fa-file-lines" aria-hidden=true></i><span class=file-tree-label__inner>__init__.py</span></span></li><li class=file-tree-item><span class=file-tree-label><i class="file-tree-icon fa-regular fa-file-lines" aria-hidden=true></i><span class=file-tree-label__inner>camera.py</span></span></li><li class=file-tree-item><span class=file-tree-label><i class="file-tree-icon fa-regular fa-file-lines" aria-hidden=true></i><span class=file-tree-label__inner>calibration.py</span></span></li><li class=file-tree-item><span class=file-tree-label><i class="file-tree-icon fa-regular fa-file-lines" aria-hidden=true></i><span class=file-tree-label__inner>matcher.py</span></span></li></ul></li></ul></div><div class="code-block highlight" data-mode=classic data-copyable=true title=camera.py><div class=chroma><div class="code-header language-python"><span class=code-title><i class="arrow fa-solid fa-chevron-down" aria-hidden=true></i><span class=title-inner>camera.py</span></span><button type=button class=ellipses-btn aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden=true></i></button><button type=button class="action-btn line-nos-btn" aria-label=切换行号 title=切换行号><i class="fa-solid fa-list-ol" aria-hidden=true></i></button><button type=button class="action-btn line-wrap-btn" aria-label=切换自动换行 title=切换自动换行><i class="fa-solid fa-right-left" aria-hidden=true></i></button><button type=button class="action-btn copy-btn" aria-label=复制到剪贴板 title=复制到剪贴板 data-copied-text=已复制><i class="fa-regular fa-clone" aria-hidden=true></i></button><button type=button class="action-btn fullscreen-btn" aria-label=全屏 title=全屏 data-exit-title=退出全屏><i class="fa-solid fa-expand" aria-hidden=true></i></button></div><div class=code-wrapper data-max=400 data-line-digit=1 style=--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span><span class=lnt>9
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=n>__all__</span> <span class=o>=</span> <span class=p>[</span> <span class=s2>&#34;Camera&#34;</span> <span class=p>]</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>class</span> <span class=nc>Camera</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>    <span class=k>def</span> <span class=nf>start</span><span class=p>(</span><span class=bp>self</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>        <span class=k>pass</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>class</span> <span class=nc>CameraDebugTool</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>    <span class=k>def</span> <span class=nf>debug</span><span class=p>(</span><span class=bp>self</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>        <span class=k>pass</span></span></span></code></pre></td></tr></table></div></div></div><p>然后：</p><div class="code-block highlight" data-mode=classic data-copyable=true title=vision/__init__.py><div class=chroma><div class="code-header language-python"><span class=code-title><i class="arrow fa-solid fa-chevron-down" aria-hidden=true></i><span class=title-inner>vision/__init__.py</span></span><button type=button class=ellipses-btn aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden=true></i></button><button type=button class="action-btn line-nos-btn" aria-label=切换行号 title=切换行号><i class="fa-solid fa-list-ol" aria-hidden=true></i></button><button type=button class="action-btn line-wrap-btn" aria-label=切换自动换行 title=切换自动换行><i class="fa-solid fa-right-left" aria-hidden=true></i></button><button type=button class="action-btn copy-btn" aria-label=复制到剪贴板 title=复制到剪贴板 data-copied-text=已复制><i class="fa-regular fa-clone" aria-hidden=true></i></button><button type=button class="action-btn fullscreen-btn" aria-label=全屏 title=全屏 data-exit-title=退出全屏><i class="fa-solid fa-expand" aria-hidden=true></i></button></div><div class=code-wrapper data-max=400 data-line-digit=1 style=--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=kn>from</span> <span class=nn>.camera</span> <span class=kn>import</span> <span class=n>Camera</span>
+</span></span><span class=line><span class=cl><span class=kn>from</span> <span class=nn>.calibration</span> <span class=kn>import</span> <span class=n>Calibration</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>__all__</span> <span class=o>=</span> <span class=p>[</span> <span class=s2>&#34;Camera&#34;</span><span class=p>,</span> <span class=s2>&#34;Calibration&#34;</span> <span class=p>]</span></span></span></code></pre></td></tr></table></div></div></div><p>外部使用时：</p><div class="code-block highlight" data-mode=classic data-copyable=true><div class=chroma><div class="code-header language-python"><span class=code-title><i class="arrow fa-solid fa-chevron-down" aria-hidden=true></i></span><button type=button class=ellipses-btn aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden=true></i></button><button type=button class="action-btn line-nos-btn" aria-label=切换行号 title=切换行号><i class="fa-solid fa-list-ol" aria-hidden=true></i></button><button type=button class="action-btn line-wrap-btn" aria-label=切换自动换行 title=切换自动换行><i class="fa-solid fa-right-left" aria-hidden=true></i></button><button type=button class="action-btn copy-btn" aria-label=复制到剪贴板 title=复制到剪贴板 data-copied-text=已复制><i class="fa-regular fa-clone" aria-hidden=true></i></button><button type=button class="action-btn fullscreen-btn" aria-label=全屏 title=全屏 data-exit-title=退出全屏><i class="fa-solid fa-expand" aria-hidden=true></i></button></div><div class=code-wrapper data-max=400 data-line-digit=1 style=--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=kn>from</span> <span class=nn>vision</span> <span class=kn>import</span> <span class=n>Camera</span></span></span></code></pre></td></tr></table></div></div></div><p>而不用：</p><div class="code-block highlight" data-mode=classic data-copyable=true><div class=chroma><div class="code-header language-python"><span class=code-title><i class="arrow fa-solid fa-chevron-down" aria-hidden=true></i></span><button type=button class=ellipses-btn aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden=true></i></button><button type=button class="action-btn line-nos-btn" aria-label=切换行号 title=切换行号><i class="fa-solid fa-list-ol" aria-hidden=true></i></button><button type=button class="action-btn line-wrap-btn" aria-label=切换自动换行 title=切换自动换行><i class="fa-solid fa-right-left" aria-hidden=true></i></button><button type=button class="action-btn copy-btn" aria-label=复制到剪贴板 title=复制到剪贴板 data-copied-text=已复制><i class="fa-regular fa-clone" aria-hidden=true></i></button><button type=button class="action-btn fullscreen-btn" aria-label=全屏 title=全屏 data-exit-title=退出全屏><i class="fa-solid fa-expand" aria-hidden=true></i></button></div><div class=code-wrapper data-max=400 data-line-digit=1 style=--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=kn>from</span> <span class=nn>vision.camera</span> <span class=kn>import</span> <span class=n>Camera</span></span></span></code></pre></td></tr></table></div></div></div><p>这就是典型的<a href=https://refactoring.guru/design-patterns/facade target=_blank rel="external nofollow noopener noreferrer">Facade<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden=true></i></a>设计。</p><h2 class=heading-element id=工程实践建议><span>工程实践建议</span>
+<a href=#%e5%b7%a5%e7%a8%8b%e5%ae%9e%e8%b7%b5%e5%bb%ba%e8%ae%ae class=heading-mark><svg class="octicon octicon-link" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5.0 114.95 4.95l-2.5 2.5a3.5 3.5.0 01-4.95.0.751.751.0 01.018-1.042.751.751.0 011.042-.018 1.998 1.998.0 002.83.0l2.5-2.5a2.002 2.002.0 00-2.83-2.83l-1.25 1.25a.751.751.0 01-1.042-.018.751.751.0 01-.018-1.042zm-4.69 9.64a1.998 1.998.0 002.83.0l1.25-1.25a.751.751.0 011.042.018.751.751.0 01.018 1.042l-1.25 1.25a3.5 3.5.0 11-4.95-4.95l2.5-2.5a3.5 3.5.0 014.95.0.751.751.0 01-.018 1.042.751.751.0 01-1.042.018 1.998 1.998.0 00-2.83.0l-2.5 2.5a1.998 1.998.0 000 2.83z"/></svg></a></h2><p><code>__all__</code>看似只是一个列表，但在大型项目中，它实际上承担的是：<ins>模块 API 设计、依赖隔离、架构演进的作用</ins>。</p><p>以下是工程中使用<code>__all__</code> 的核心原则：</p><ul><li>明确模块边界</li><li>只暴露稳定 API</li><li>隐藏内部实现</li><li>减少模块耦合</li><li>保护未来重构空间</li><li>让包结构更加清晰</li><li>把它当作 API 设计工具，而不是语法技巧</li></ul><p>好的 Python 工程，不只是写功能，更重要的是设计清晰的模块出口。</p><h2 class=heading-element id=总结><span>总结</span>
+<a href=#%e6%80%bb%e7%bb%93 class=heading-mark><svg class="octicon octicon-link" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5.0 114.95 4.95l-2.5 2.5a3.5 3.5.0 01-4.95.0.751.751.0 01.018-1.042.751.751.0 011.042-.018 1.998 1.998.0 002.83.0l2.5-2.5a2.002 2.002.0 00-2.83-2.83l-1.25 1.25a.751.751.0 01-1.042-.018.751.751.0 01-.018-1.042zm-4.69 9.64a1.998 1.998.0 002.83.0l1.25-1.25a.751.751.0 011.042.018.751.751.0 01.018 1.042l-1.25 1.25a3.5 3.5.0 11-4.95-4.95l2.5-2.5a3.5 3.5.0 014.95.0.751.751.0 01-.018 1.042.751.751.0 01-1.042.018 1.998 1.998.0 00-2.83.0l-2.5 2.5a1.998 1.998.0 000 2.83z"/></svg></a></h2><p><code>__all__</code>的核心思想：</p><blockquote><p>明确模块边界，控制公开接口。</p></blockquote><p>它不是权限系统，也不是安全机制。它更像是一份<strong>模块API清单</strong>。在简单脚本中可以不用。在大型Python工程中，建议使用。合理设计<code>__all__</code>可以让代码：</p><ul><li>更容易维护</li><li>更容易扩展</li><li>更少依赖内部实现</li></ul><h2 class=heading-element id=推荐><span>推荐</span>
+<a href=#%e6%8e%a8%e8%8d%90 class=heading-mark><svg class="octicon octicon-link" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5.0 114.95 4.95l-2.5 2.5a3.5 3.5.0 01-4.95.0.751.751.0 01.018-1.042.751.751.0 011.042-.018 1.998 1.998.0 002.83.0l2.5-2.5a2.002 2.002.0 00-2.83-2.83l-1.25 1.25a.751.751.0 01-1.042-.018.751.751.0 01-.018-1.042zm-4.69 9.64a1.998 1.998.0 002.83.0l1.25-1.25a.751.751.0 011.042.018.751.751.0 01.018 1.042l-1.25 1.25a3.5 3.5.0 11-4.95-4.95l2.5-2.5a3.5 3.5.0 014.95.0.751.751.0 01-.018 1.042.751.751.0 01-1.042.018 1.998 1.998.0 00-2.83.0l-2.5 2.5a1.998 1.998.0 000 2.83z"/></svg></a></h2><p><a href=https://docs.python.org/3/tutorial/modules.html#importing-from-a-package target=_blank rel="external nofollow noopener noreferrer">Python Docs Modules<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden=true></i></a></p><p><a href=https://stackoverflow.com/questions/44834/what-does-all-mean-in-python target=_blank rel="external nofollow noopener noreferrer">What does <code>__all__</code> mean in Python?<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden=true></i></a></p></div><hr class=awesome-hr><h2 id=see-also>相关内容</h2><ul><li><a href=/cpython%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/ title="CPython 源码剖析：Python 运行的奥秘">CPython 源码剖析：Python 运行的奥秘</a></li><li><a href=/beautifulsoup%E5%BA%93%E4%BD%BF%E7%94%A8/ title=BeautifulSoup库使用>BeautifulSoup库使用</a></li><li><a href=/requests%E5%BA%93%E4%BD%BF%E7%94%A8/ title=Requests库使用>Requests库使用</a></li><li><a href=/matplotlib%E7%AE%80%E6%98%8E%E6%95%99%E7%A8%8B/ title=Matplotlib简明教程>Matplotlib简明教程</a></li><li><a href=/pandas%E7%AE%80%E6%98%8E%E6%95%99%E7%A8%8B/ title=Pandas简明教程>Pandas简明教程</a></li><li><a href=/%E7%94%A8keras%E6%90%AD%E5%BB%BA%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/ title=用Keras搭建卷积神经网络>用Keras搭建卷积神经网络</a></li><li><a href=/tkinter%E7%AE%80%E6%98%8E%E6%95%99%E7%A8%8B/ title=Tkinter简明教程>Tkinter简明教程</a></li><li><a href=/opencv%E7%AE%80%E6%98%8E%E6%95%99%E7%A8%8B/ title=OpenCV简明教程>OpenCV简明教程</a></li></ul><div class=post-footer id=post-footer><div class=post-info><div class=post-info-line><div class=post-info-mod><span title="更新于 2026-06-22 06:45:19">更新于 2026-06-22&nbsp;</span></div></div><div class=post-info-line><div class=post-info-md></div><div class=post-info-share><span><a href=javascript:void(0); title="分享到 X" data-sharer=twitter data-url=https://andyfree96.github.io/python%E4%B8%AD%E7%9A%84all/ data-title=Python中的__all__：模块公开API设计的关键工具 data-via=IRONAnthony96 data-hashtags=Python,模块公开,模块设计><i class="fa-brands fa-x-twitter" aria-hidden=true></i></a>
+<a href=javascript:void(0); title="分享到 Facebook" data-sharer=facebook data-url=https://andyfree96.github.io/python%E4%B8%AD%E7%9A%84all/ data-hashtag=Python><i class="fa-brands fa-facebook-square" aria-hidden=true></i></a>
+<a href=javascript:void(0); title="分享到 微博" data-sharer=weibo data-url=https://andyfree96.github.io/python%E4%B8%AD%E7%9A%84all/ data-title=Python中的__all__：模块公开API设计的关键工具 data-image=/images/202606/7/peter-thomas-f0r8nQ-t1Rw-unsplash.jpg><i class="fa-brands fa-weibo" aria-hidden=true></i></a></span></div></div></div><div class=post-info-more><section class=post-tags><i class="fa-solid fa-tags me-1" aria-hidden=true></i><a href=/tags/python/ class=post-tag title="标签 - Python">Python</a><a href=/tags/%E6%A8%A1%E5%9D%97%E5%85%AC%E5%BC%80/ class=post-tag title="标签 - 模块公开">模块公开</a><a href=/tags/%E6%A8%A1%E5%9D%97%E8%AE%BE%E8%AE%A1/ class=post-tag title="标签 - 模块设计">模块设计</a></section><section><span><a href=javascript:void(0); onclick=window.history.back()>返回</a></span>&nbsp;|&nbsp;<span><a href=/>主页</a></span></section></div><div class=post-nav><a href=/vue.js%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/ class=post-nav-item rel=prev title="Vue.js设计与实现 (霍春阳)"><i class="fa-solid fa-angle-left" aria-hidden=true></i>Vue.js设计与实现 (霍春阳)</a><a href=/%E6%B5%81%E7%95%85%E7%9A%84python/ class=post-nav-item rel=next title="流畅的Python 第2版 (Luciano Ramalho)">流畅的Python 第2版 (Luciano Ramalho)<i class="fa-solid fa-angle-right" aria-hidden=true></i></a></div></div><div class=post-reward><div class=comment>请作者喝杯咖啡!</div><input type=checkbox class=reward-input name=reward id=fi-reward hidden>
+<label class=reward-button for=fi-reward><i class="fa-solid fa-qrcode" aria-hidden=true></i>赞赏</label><div class=reward-ways data-mode=static><div><img src=/reward/alipay.png alt="AndyFree96 支付宝"><span data-animation>支付宝</span></div><div><img src=/reward/wechatpay.png alt="AndyFree96 微信"><span data-animation>微信</span></div></div></div></article><aside class=toc id=toc-auto aria-label=目录><h2 class=toc-title>目录&nbsp;<i class="toc-icon fa-solid fa-angle-down" aria-hidden=true></i></h2><div class=toc-content id=toc-content-auto></div></aside><dialog id=toc-dialog aria-labelledby=toc-dialog-title role=dialog closedby=any><button type=button class=toc-close-btn aria-label="Close Table of Contents"><i class="fa-solid fa-xmark fa-lg" aria-hidden=true></i></button><div class=toc><h2 class=toc-title id=toc-dialog-title>目录</h2><div class=toc-content id=toc-content-drawer><nav><ul><li><a href=#什么是__all__>什么是<code>__all__</code>？</a></li><li><a href=#没有__all__会发生什么>没有<code>__all__</code>会发生什么？</a></li><li><a href=#__all__与_xxx的区别><code>__all__</code>与<code>_xxx</code>的区别</a></li><li><a href=#__all__可以暴露内部成员吗><code>__all__</code>可以暴露内部成员吗？</a></li><li><a href=#为什么大型项目需要__all__>为什么大型项目需要<code>__all__</code></a></li><li><a href=#在包中的作用>在包中的作用</a></li><li><a href=#工程实践建议>工程实践建议</a></li><li><a href=#总结>总结</a></li><li><a href=#推荐>推荐</a></li></ul></nav></div></div></dialog></main><div id=comments><div id=gitalk class=comment></div><noscript>Please enable JavaScript to view the comments powered by <a href=https://github.com/gitalk/gitalk rel="external nofollow noopener noreferrer">Gitalk</a>.</noscript></div><footer class=footer><div class=footer-container><div class="footer-line powered">由 <a href=https://gohugo.io/ target=_blank rel="external nofollow noopener noreferrer" title="Hugo 0.163.1">Hugo</a> 强力驱动 | 主题 - <a href=https://github.com/hugo-fixit/FixIt target=_blank rel=external title="FixIt v1.0.0-mq99hlzg">FixIt</a></div><div class="footer-line copyright" itemscope itemtype=http://schema.org/CreativeWork><i class="fa-regular fa-copyright" aria-hidden=true></i>
+<span itemprop=copyrightYear>2019 - 2026</span><span class=author itemprop=copyrightHolder>
+<a href=https://andyfree96.github.io/>AndyFree96</a></span></div></div></footer></div><div class=widgets><div class=fixed-buttons><button type=button class="fixed-button back-to-top animate__faster d-none" aria-label=回到顶部><i class="fa-solid fa-arrow-up" aria-hidden=true></i></button><button type=button id=toc-drawer-button class="fixed-button toc-drawer-button d-none" aria-label=目录 aria-controls=toc-dialog aria-expanded=false><i class="fa-solid fa-bars" aria-hidden=true></i></button><button type=button class="fixed-button view-comments d-none" aria-label=查看评论><i class="fa-solid fa-comment" aria-hidden=true></i></button></div><div id=mask></div><div class=reading-progress-bar style=left:0;top:0></div><noscript><div class=noscript-warning>该网站在启用 JavaScript 的情况下效果最佳。</div></noscript></div><link rel=stylesheet href=/lib/gitalk/gitalk.min.css><link rel=stylesheet href=/lib/cookieconsent/cookieconsent.min.css><script src=/lib/gitalk/gitalk.min.js></script><script src=/js/lib/gitalk.min.js defer></script><script src=/lib/autocomplete/autocomplete.min.js defer></script><script src=/lib/algoliasearch/browser.umd.js defer></script><script src=/lib/sharer/sharer.min.js async defer></script><script src=/lib/cookieconsent/cookieconsent.min.js defer></script><script src=/js/lib/cookieconsent.min.js defer></script><script src=/lib/cell-tooltip/cell-tooltip.umd.js defer></script><script src=/js/config/837e5786bd53440a6f972b990811004f.min.js defer></script><script src=/js/lib/file-tree.min.js defer></script><script src=/js/main.min.js defer></script></body></html>

@@ -86,5 +86,5 @@ $HOST
 ---
 
 > 作者: [AndyFree96](https://andyfree96.github.io/)  
-> URL: http://localhost:1313/%E5%A6%82%E4%BD%95%E6%9F%A5%E7%9C%8Bpowershell%E7%9A%84%E7%89%88%E6%9C%AC/  
+> URL: https://andyfree96.github.io/%E5%A6%82%E4%BD%95%E6%9F%A5%E7%9C%8Bpowershell%E7%9A%84%E7%89%88%E6%9C%AC/  
 

@@ -1,253 +1,50 @@
-<!DOCTYPE html>
-<html itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
-  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
-    <meta name="robots" content="noodp" />
-    <title>从执行上下文理解JavaScript变量提升 - 东尼的博客</title><meta name="author" content="AndyFree96">
-<meta name="description" content="在学习 JavaScript 的过程中，我们可能会遇到一个经典问题：
-1 2 3 4 5 6 7 8 var a = 1; function test() { console.log(a); var a = 2; } test(); "><meta name="keywords" content='JavaScript, 执行上下文, 变量提升'>
-	<meta itemprop="name" content="从执行上下文理解JavaScript变量提升">
-	<meta itemprop="description" content="在学习 JavaScript 的过程中，我们可能会遇到一个经典问题：
-1 2 3 4 5 6 7 8 var a = 1; function test() { console.log(a); var a = 2; } test();">
-	<meta itemprop="datePublished" content="2026-03-16T22:09:54+08:00">
-	<meta itemprop="dateModified" content="2026-03-16T22:09:54+08:00">
-	<meta itemprop="wordCount" content="2411">
-	<meta itemprop="keywords" content="JavaScript,执行上下文,变量提升"><meta property="og:url" content="http://localhost:1313/%E4%BB%8E%E6%89%A7%E8%A1%8C%E4%B8%8A%E4%B8%8B%E6%96%87%E7%90%86%E8%A7%A3javascript%E5%8F%98%E9%87%8F%E6%8F%90%E5%8D%87/">
-	<meta property="og:site_name" content="东尼的博客">
-	<meta property="og:title" content="从执行上下文理解JavaScript变量提升">
-	<meta property="og:description" content="在学习 JavaScript 的过程中，我们可能会遇到一个经典问题：
-1 2 3 4 5 6 7 8 var a = 1; function test() { console.log(a); var a = 2; } test();">
-	<meta property="og:locale" content="zh_CN">
-	<meta property="og:type" content="article">
-		<meta property="article:section" content="posts">
-		<meta property="article:published_time" content="2026-03-16T22:09:54+08:00">
-		<meta property="article:modified_time" content="2026-03-16T22:09:54+08:00">
-		<meta property="article:tag" content="JavaScript">
-		<meta property="article:tag" content="执行上下文">
-		<meta property="article:tag" content="变量提升">
-
-  <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="从执行上下文理解JavaScript变量提升">
-  <meta name="twitter:description" content="在学习 JavaScript 的过程中，我们可能会遇到一个经典问题：
-1 2 3 4 5 6 7 8 var a = 1; function test() { console.log(a); var a = 2; } test();"><meta name="twitter:creator" content="@IRONAnthony96"><meta name="application-name" content="FixIt">
-<meta name="apple-mobile-web-app-title" content="FixIt"><meta name="theme-color" data-light="#f6f8fa" data-dark="#151b23" content="#f6f8fa"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" type="text/html" href="http://localhost:1313/%E4%BB%8E%E6%89%A7%E8%A1%8C%E4%B8%8A%E4%B8%8B%E6%96%87%E7%90%86%E8%A7%A3javascript%E5%8F%98%E9%87%8F%E6%8F%90%E5%8D%87/" title="从执行上下文理解JavaScript变量提升 - 东尼的博客" /><link rel="prev" type="text/html" href="http://localhost:1313/c%23%E4%B8%AD%E7%9A%84nameof%E8%BF%90%E7%AE%97%E7%AC%A6/" title="C#中的nameof运算符" /><link rel="next" type="text/html" href="http://localhost:1313/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F/" title="深入理解计算机系统 第3版 (Randal E. Bryant / David O&#39;Hallaron)" /><link rel="alternate" type="text/markdown" href="http://localhost:1313/%E4%BB%8E%E6%89%A7%E8%A1%8C%E4%B8%8A%E4%B8%8B%E6%96%87%E7%90%86%E8%A7%A3javascript%E5%8F%98%E9%87%8F%E6%8F%90%E5%8D%87/index.md" title="从执行上下文理解JavaScript变量提升 - 东尼的博客"><link rel="stylesheet" href="/css/config.css"><link rel="stylesheet" href="/css/main.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
-    <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
-    <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><link rel="preload" href="/js/main.js" as="script"><script type="application/ld+json">
-  {
-    "@context": "http://schema.org",
-    "@type": "BlogPosting",
-    "headline": "从执行上下文理解JavaScript变量提升",
-    "inLanguage": "zh-CN",
-    "mainEntityOfPage": {
-      "@type": "WebPage",
-      "@id": "http:\/\/localhost:1313\/%E4%BB%8E%E6%89%A7%E8%A1%8C%E4%B8%8A%E4%B8%8B%E6%96%87%E7%90%86%E8%A7%A3javascript%E5%8F%98%E9%87%8F%E6%8F%90%E5%8D%87\/"
-    },"genre": "posts","keywords": "JavaScript, 执行上下文, 变量提升","wordcount":  2411 ,
-    "url": "http:\/\/localhost:1313\/%E4%BB%8E%E6%89%A7%E8%A1%8C%E4%B8%8A%E4%B8%8B%E6%96%87%E7%90%86%E8%A7%A3javascript%E5%8F%98%E9%87%8F%E6%8F%90%E5%8D%87\/","datePublished": "2026-03-16T22:09:54+08:00","dateModified": "2026-03-16T22:09:54+08:00","publisher": {
-      "@type": "Organization",
-      "name": ""},"author": {
-        "@type": "Person",
-        "name": "AndyFree96"
-      },"description": ""
-  }
-  </script><script src="/js/head/color-scheme.js"></script></head>
-  <body data-instant-intensity="viewport" data-header-desktop="sticky" data-header-mobile="auto"><div class="wrapper" data-page-style="normal"><header class="desktop animate__faster" id="header-desktop">
-  <div class="header-wrapper">
-    <div class="header-title">
-      <a href="/" title="东尼的博客" class="header-title-link"><span class="header-title-text">东尼的博客</span></a><span class="header-subtitle"></span></div>
-    <nav>
-      <ul class="menu"><li class="menu-item">
-              <a class="menu-link" href="/posts/">📕 文章</a></li><li class="menu-item">
-              <a class="menu-link" href="/categories/">🧰 分类</a></li><li class="menu-item">
-              <a class="menu-link" href="/tags/">🔖 标签</a></li><li class="menu-item">
-              <a class="menu-link" href="/book">📚 书单</a></li><li class="menu-item">
-              <a class="menu-link" href="/paper">📝 论文</a></li><li class="menu-item">
-              <a class="menu-link" href="/opencourse">👨🏻‍💻 公开课</a></li><li class="menu-item">
-              <a class="menu-link" href="/filmtv">🎞️ 影视</a></li><li class="menu-item">
-              <a class="menu-link" href="/resource">⚡️ 资源库</a></li><li class="menu-item">
-              <a class="menu-link" href="/projects">⭐ 开源</a></li><li class="menu-item">
-              <a class="menu-link" href="/about">🙋🏻‍♂️ 关于</a></li><li class="menu-item delimiter"></li><li class="menu-item search" id="search-desktop">
-            <input type="text" placeholder="搜索文章标题或内容……" id="search-input-desktop" tabindex="-1">
-            <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索" aria-controls="search-dropdown-desktop" aria-expanded="false">
-              <i class="fa-solid fa-search" aria-hidden="true"></i>
-            </a>
-            <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
-              <i class="fa-solid fa-times-circle" aria-hidden="true"></i>
-            </a>
-            <span class="search-button search-loading" id="search-loading-desktop">
-              <i class="fa-solid fa-spinner fa-spin" aria-hidden="true"></i>
-            </span>
-          </li><li class="menu-item theme-switch-item">
-          <button type="button" class="theme-switch" aria-label="切换主题" title="切换主题"><i class="fa-solid fa-adjust" aria-hidden="true"></i></button>
-        </li></ul>
-    </nav>
-  </div>
-</header><header class="mobile animate__faster" id="header-mobile">
-  <div class="header-container">
-    <div class="header-wrapper">
-      <div class="header-title">
-        <a href="/" title="东尼的博客" class="header-title-link"><span class="header-title-text">东尼的博客</span></a><span class="header-subtitle"></span></div>
-      <button type="button" class="theme-switch" aria-label="切换主题"><i class="fa-solid fa-adjust" aria-hidden="true"></i></button>
-      <button type="button" class="menu-toggle" id="menu-toggle-mobile" aria-controls="menu-mobile" aria-expanded="false" aria-labelledby="menu-mobile">
-        <span></span><span></span><span></span>
-      </button>
-    </div>
-    <nav>
-      <ul class="menu" id="menu-mobile"><li class="search-wrapper">
-            <div class="search mobile" id="search-mobile">
-              <input type="text" placeholder="搜索文章标题或内容……" id="search-input-mobile">
-              <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索" aria-controls="search-dropdown-mobile" aria-expanded="false">
-                <i class="fa-solid fa-search" aria-hidden="true"></i>
-              </a>
-              <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
-                <i class="fa-solid fa-times-circle" aria-hidden="true"></i>
-              </a>
-              <span class="search-button search-loading" id="search-loading-mobile">
-                <i class="fa-solid fa-spinner fa-spin" aria-hidden="true"></i>
-              </span>
-            </div>
-            <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
-              取消
-            </a>
-          </li><li class="menu-item"><a class="menu-link" href="/posts/">📕 文章</a></li><li class="menu-item"><a class="menu-link" href="/categories/">🧰 分类</a></li><li class="menu-item"><a class="menu-link" href="/tags/">🔖 标签</a></li><li class="menu-item"><a class="menu-link" href="/book">📚 书单</a></li><li class="menu-item"><a class="menu-link" href="/paper">📝 论文</a></li><li class="menu-item"><a class="menu-link" href="/opencourse">👨🏻‍💻 公开课</a></li><li class="menu-item"><a class="menu-link" href="/filmtv">🎞️ 影视</a></li><li class="menu-item"><a class="menu-link" href="/resource">⚡️ 资源库</a></li><li class="menu-item"><a class="menu-link" href="/projects">⭐ 开源</a></li><li class="menu-item"><a class="menu-link" href="/about">🙋🏻‍♂️ 关于</a></li><li class="menu-item menu-system"></li>
-      </ul>
-    </nav>
-  </div>
-</header><div class="search-dropdown desktop">
-    <div id="search-dropdown-desktop"></div>
-  </div>
-  <div class="search-dropdown mobile">
-    <div id="search-dropdown-mobile"></div>
-  </div><main class="fi-container"><aside class="aside-collection animate__animated animate__fadeIn animate__faster" aria-label="合集"></aside>
-
-  <article class="page single">
-    <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span title="转载" class="icon-repost"><i class="fa-solid fa-share" aria-hidden="true"></i></span><span>从执行上下文理解JavaScript变量提升</span>
-      </h1></div><div class="post-meta">
-      <div class="post-meta-line"><span class="post-author"><a href="https://andyfree96.github.io/" title="作者" target="_blank" rel="author external nofollow noopener noreferrer" class="author"><img class="avatar" src='/avatar/1.jpg' alt="AndyFree96" height="16" width="16">&nbsp;AndyFree96</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/javascript/" class="post-category" title="分类 - JavaScript"><i class="fa-regular fa-folder" aria-hidden="true"></i> JavaScript</a></span></div><div class="post-meta-line"><span title="发布于 2026-03-16 22:09:54"><i class="fa-solid fa-calendar-days me-1" aria-hidden="true"></i><time datetime="2026-03-16">2026-03-16</time></span>&nbsp;<span title="2411 字"><i class="fa-solid fa-pencil-alt me-1" aria-hidden="true"></i>约 2500 字</span>&nbsp;<span><i class="fa-regular fa-clock me-1" aria-hidden="true"></i>预计阅读 5 分钟</span>&nbsp;</div>
-    </div><div class="featured-image"><img loading="eager" src='/images/202603/1/zhiyuan-sun-a_7NwraYpbI-unsplash.jpg' sizes="(max-width: 680px) 100vw, (max-width: 960px) 80vw, (max-width: 1440px) 56vw, 800px" alt="/images/202603/1/zhiyuan-sun-a_7NwraYpbI-unsplash.jpg"></div><div class="details toc" id="toc-static" data-kept="false">
-        <div class="details-summary toc-title">
-          <span>目录</span>
-          <span><i class="details-icon fa-solid fa-angle-right" aria-hidden="true"></i></span>
-        </div>
-        <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
-  <ul>
-    <li><a href="#javascript-是如何执行代码的">JavaScript 是如何执行代码的</a></li>
-    <li><a href="#什么是执行上下文-execution-context">什么是执行上下文 (Execution Context)</a></li>
-    <li><a href="#执行上下文的结构">执行上下文的结构</a></li>
-    <li><a href="#变量提升是如何发生的">变量提升是如何发生的</a></li>
-    <li><a href="#代码真实执行顺序">代码真实执行顺序</a></li>
-    <li><a href="#为什么不是输出-1">为什么不是输出 1</a></li>
-    <li><a href="#如果使用-let-会发生什么">如果使用 let 会发生什么</a></li>
-    <li><a href="#模拟-javascript-引擎编译">模拟 JavaScript 引擎编译</a></li>
-    <li><a href="#总结">总结</a></li>
-  </ul>
-</nav></div>
-      </div><div class="content" id="content"><p>在学习 JavaScript 的过程中，我们可能会遇到一个经典问题：</p>
-<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
-<div class="code-header language-js"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span><span class="lnt">6
-</span><span class="lnt">7
-</span><span class="lnt">8
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="line"><span class="cl"><span class="kd">var</span> <span class="nx">a</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="kd">function</span> <span class="nx">test</span><span class="p">()</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">a</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">  <span class="kd">var</span> <span class="nx">a</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="nx">test</span><span class="p">();</span></span></span></code></pre></td></tr></table></div>
-</div>
-</div><p>很多人第一反应是：</p>
-<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
-<div class="code-header language-bash"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="m">1</span></span></span></code></pre></td></tr></table></div>
-</div>
-</div><p>但实际运行结果却是：</p>
-<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
-<div class="code-header language-bash"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">undefined</span></span></code></pre></td></tr></table></div>
-</div>
-</div><p>为什么会出现这种情况？</p>
-<p>理解这个问题的关键在于 JavaScript 的 <strong>执行上下文（Execution Context）</strong> 和 <strong>变量提升（Hoisting）</strong> 机制。</p>
-<h2 class="heading-element" id="javascript-是如何执行代码的"><span>JavaScript 是如何执行代码的</span>
-  <a href="#javascript-%e6%98%af%e5%a6%82%e4%bd%95%e6%89%a7%e8%a1%8c%e4%bb%a3%e7%a0%81%e7%9a%84" class="heading-mark">
-    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
-  </a>
-</h2><p>JavaScript 代码并不是从上到下一行一行直接执行的，而是大致分为两个阶段：</p>
-<div class="code-tabs diagram-tabs" data-diagram="mermaid">
-    <div class="tabs-header">
-      <div class="tabs-items">
-        <span class="tab-item active" data-tab="diagram" title="图表">图表</span>
-        <span class="tab-item" data-tab="code" title="代码">代码</span>
-      </div>
-      <div class="tabs-actions">
-        <button type="button" class="action-btn diagram-zoom-out-btn" aria-label="缩小" title="缩小"><i class="fa-solid fa-magnifying-glass-minus" aria-hidden="true"></i></button>
-        <button type="button" class="action-btn diagram-zoom-in-btn" aria-label="放大" title="放大"><i class="fa-solid fa-magnifying-glass-plus" aria-hidden="true"></i></button>
-        <button type="button" class="action-btn diagram-reset-btn" aria-label="重置" title="重置"><i class="fa-solid fa-arrows-rotate" aria-hidden="true"></i></button>
-        <button type="button" class="action-btn diagram-download-btn" aria-label="下载 SVG" title="下载 SVG"><i class="fa-solid fa-download" aria-hidden="true"></i></button>
-      </div>
-    </div>
-    <div class="tabs-content">
-      <div class="code-block diagram-view active" data-filename="mermaid.mmd">
-        <div class="diagram-container">
-          <pre class="mermaid">flowchart TD
-    A[编译阶段 创建执行上下文] --> B[执行阶段 逐行执行代码]</pre>
-          <pre class="mermaid-dark">flowchart TD
-    A[编译阶段 创建执行上下文] --> B[执行阶段 逐行执行代码]</pre>
-          <pre class="mermaid-neutral">flowchart TD
-    A[编译阶段 创建执行上下文] --> B[执行阶段 逐行执行代码]</pre>
-        </div>
-      </div><div class="code-block highlight diagram-code" data-mode="classic" data-copyable="true" copyable="true" fullscreen="true" filename="mermaid.mmd"><div class="chroma">
-<div class="code-header language-text"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">flowchart TD
-</span></span><span class="line"><span class="cl">    A[编译阶段 创建执行上下文] --&gt; B[执行阶段 逐行执行代码]</span></span></code></pre></td></tr></table></div>
-</div>
-</div></div>
-  </div><p>在编译阶段，JavaScript 引擎会：</p>
-<ol>
-<li>创建执行上下文</li>
-<li>创建变量对象 VO</li>
-<li>扫描<code>var</code></li>
-<li>扫描<code>function</code></li>
-<li>建立作用域链</li>
-<li>确定<code>this</code></li>
-</ol>
-<div class="code-tabs diagram-tabs" data-diagram="mermaid">
-    <div class="tabs-header">
-      <div class="tabs-items">
-        <span class="tab-item active" data-tab="diagram" title="图表">图表</span>
-        <span class="tab-item" data-tab="code" title="代码">代码</span>
-      </div>
-      <div class="tabs-actions">
-        <button type="button" class="action-btn diagram-zoom-out-btn" aria-label="缩小" title="缩小"><i class="fa-solid fa-magnifying-glass-minus" aria-hidden="true"></i></button>
-        <button type="button" class="action-btn diagram-zoom-in-btn" aria-label="放大" title="放大"><i class="fa-solid fa-magnifying-glass-plus" aria-hidden="true"></i></button>
-        <button type="button" class="action-btn diagram-reset-btn" aria-label="重置" title="重置"><i class="fa-solid fa-arrows-rotate" aria-hidden="true"></i></button>
-        <button type="button" class="action-btn diagram-download-btn" aria-label="下载 SVG" title="下载 SVG"><i class="fa-solid fa-download" aria-hidden="true"></i></button>
-      </div>
-    </div>
-    <div class="tabs-content">
-      <div class="code-block diagram-view active" data-filename="mermaid.mmd">
-        <div class="diagram-container">
-          <pre class="mermaid">flowchart TD
+<!doctype html><html itemscope itemtype=http://schema.org/WebPage lang=zh-CN><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=2"><meta name=robots content="noodp"><title>从执行上下文理解JavaScript变量提升 - 东尼的博客</title><meta name=author content="AndyFree96"><meta name=description content="在学习 JavaScript 的过程中，我们可能会遇到一个经典问题：
+1 2 3 4 5 6 7 8 var a = 1; function test() { console.log(a); var a = 2; } test(); "><meta name=keywords content='JavaScript,执行上下文,变量提升'><meta itemprop=name content="从执行上下文理解JavaScript变量提升"><meta itemprop=description content="在学习 JavaScript 的过程中，我们可能会遇到一个经典问题：
+1 2 3 4 5 6 7 8 var a = 1; function test() { console.log(a); var a = 2; } test();"><meta itemprop=datePublished content="2026-03-16T22:09:54+08:00"><meta itemprop=dateModified content="2026-03-16T22:09:54+08:00"><meta itemprop=wordCount content="2411"><meta itemprop=keywords content="JavaScript,执行上下文,变量提升"><meta property="og:url" content="https://andyfree96.github.io/%E4%BB%8E%E6%89%A7%E8%A1%8C%E4%B8%8A%E4%B8%8B%E6%96%87%E7%90%86%E8%A7%A3javascript%E5%8F%98%E9%87%8F%E6%8F%90%E5%8D%87/"><meta property="og:site_name" content="东尼的博客"><meta property="og:title" content="从执行上下文理解JavaScript变量提升"><meta property="og:description" content="在学习 JavaScript 的过程中，我们可能会遇到一个经典问题：
+1 2 3 4 5 6 7 8 var a = 1; function test() { console.log(a); var a = 2; } test();"><meta property="og:locale" content="zh_CN"><meta property="og:type" content="article"><meta property="article:section" content="posts"><meta property="article:published_time" content="2026-03-16T22:09:54+08:00"><meta property="article:modified_time" content="2026-03-16T22:09:54+08:00"><meta property="article:tag" content="JavaScript"><meta property="article:tag" content="执行上下文"><meta property="article:tag" content="变量提升"><meta name=twitter:card content="summary"><meta name=twitter:title content="从执行上下文理解JavaScript变量提升"><meta name=twitter:description content="在学习 JavaScript 的过程中，我们可能会遇到一个经典问题：
+1 2 3 4 5 6 7 8 var a = 1; function test() { console.log(a); var a = 2; } test();"><meta name=twitter:creator content="@IRONAnthony96"><meta name=application-name content="FixIt"><meta name=apple-mobile-web-app-title content="FixIt"><meta name=theme-color data-light=#f6f8fa data-dark=#151b23 content="#f6f8fa"><meta name=msapplication-TileColor content="#da532c"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico><link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=mask-icon href=/safari-pinned-tab.svg color=#5bbad5><link rel=canonical type=text/html href=https://andyfree96.github.io/%E4%BB%8E%E6%89%A7%E8%A1%8C%E4%B8%8A%E4%B8%8B%E6%96%87%E7%90%86%E8%A7%A3javascript%E5%8F%98%E9%87%8F%E6%8F%90%E5%8D%87/ title="从执行上下文理解JavaScript变量提升 - 东尼的博客"><link rel=prev type=text/html href=https://andyfree96.github.io/c%23%E4%B8%AD%E7%9A%84nameof%E8%BF%90%E7%AE%97%E7%AC%A6/ title=C#中的nameof运算符><link rel=next type=text/html href=https://andyfree96.github.io/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F/ title="深入理解计算机系统 第3版 (Randal E. Bryant / David O'Hallaron)"><link rel=alternate type=text/markdown href=https://andyfree96.github.io/%E4%BB%8E%E6%89%A7%E8%A1%8C%E4%B8%8A%E4%B8%8B%E6%96%87%E7%90%86%E8%A7%A3javascript%E5%8F%98%E9%87%8F%E6%8F%90%E5%8D%87/index.md title="从执行上下文理解JavaScript变量提升 - 东尼的博客"><link rel=stylesheet href=/css/config.min.css><link rel=stylesheet href=/css/main.min.css><link rel=preload href=/lib/fontawesome-free/all.min.css as=style onload='this.removeAttribute("onload"),this.rel="stylesheet"'><noscript><link rel=stylesheet href=/lib/fontawesome-free/all.min.css></noscript><link rel=preload href=/lib/animate/animate.min.css as=style onload='this.removeAttribute("onload"),this.rel="stylesheet"'><noscript><link rel=stylesheet href=/lib/animate/animate.min.css></noscript><link rel=preload href=/js/main.min.js as=script><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"从执行上下文理解JavaScript变量提升","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/andyfree96.github.io\/%E4%BB%8E%E6%89%A7%E8%A1%8C%E4%B8%8A%E4%B8%8B%E6%96%87%E7%90%86%E8%A7%A3javascript%E5%8F%98%E9%87%8F%E6%8F%90%E5%8D%87\/"},"genre":"posts","keywords":"JavaScript, 执行上下文, 变量提升","wordcount":2411,"url":"https:\/\/andyfree96.github.io\/%E4%BB%8E%E6%89%A7%E8%A1%8C%E4%B8%8A%E4%B8%8B%E6%96%87%E7%90%86%E8%A7%A3javascript%E5%8F%98%E9%87%8F%E6%8F%90%E5%8D%87\/","datePublished":"2026-03-16T22:09:54+08:00","dateModified":"2026-03-16T22:09:54+08:00","publisher":{"@type":"Organization","name":""},"author":{"@type":"Person","name":"AndyFree96"},"description":""}</script><script src=/js/head/color-scheme.min.js></script></head><body data-instant-intensity=viewport data-header-desktop=sticky data-header-mobile=auto><div class=wrapper data-page-style=normal><header class="desktop animate__faster" id=header-desktop><div class=header-wrapper><div class=header-title><a href=/ title=东尼的博客 class=header-title-link><span class=header-title-text>东尼的博客</span></a><span class=header-subtitle></span></div><nav><ul class=menu><li class=menu-item><a class=menu-link href=/posts/>📕 文章</a></li><li class=menu-item><a class=menu-link href=/categories/>🧰 分类</a></li><li class=menu-item><a class=menu-link href=/tags/>🔖 标签</a></li><li class=menu-item><a class=menu-link href=/book>📚 书单</a></li><li class=menu-item><a class=menu-link href=/paper>📝 论文</a></li><li class=menu-item><a class=menu-link href=/opencourse>👨🏻‍💻 公开课</a></li><li class=menu-item><a class=menu-link href=/filmtv>🎞️ 影视</a></li><li class=menu-item><a class=menu-link href=/resource>⚡️ 资源库</a></li><li class=menu-item><a class=menu-link href=/projects>⭐ 开源</a></li><li class=menu-item><a class=menu-link href=/about>🙋🏻‍♂️ 关于</a></li><li class="menu-item delimiter"></li><li class="menu-item search" id=search-desktop><input type=text placeholder=搜索文章标题或内容…… id=search-input-desktop tabindex=-1>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-desktop title=搜索 aria-controls=search-dropdown-desktop aria-expanded=false><i class="fa-solid fa-search" aria-hidden=true></i>
+</a><a href=javascript:void(0); class="search-button search-clear" id=search-clear-desktop title=清空><i class="fa-solid fa-times-circle" aria-hidden=true></i>
+</a><span class="search-button search-loading" id=search-loading-desktop><i class="fa-solid fa-spinner fa-spin" aria-hidden=true></i></span></li><li class="menu-item theme-switch-item"><button type=button class=theme-switch aria-label=切换主题 title=切换主题><i class="fa-solid fa-adjust" aria-hidden=true></i></button></li></ul></nav></div></header><header class="mobile animate__faster" id=header-mobile><div class=header-container><div class=header-wrapper><div class=header-title><a href=/ title=东尼的博客 class=header-title-link><span class=header-title-text>东尼的博客</span></a><span class=header-subtitle></span></div><button type=button class=theme-switch aria-label=切换主题><i class="fa-solid fa-adjust" aria-hidden=true></i></button>
+<button type=button class=menu-toggle id=menu-toggle-mobile aria-controls=menu-mobile aria-expanded=false aria-labelledby=menu-mobile>
+<span></span><span></span><span></span></button></div><nav><ul class=menu id=menu-mobile><li class=search-wrapper><div class="search mobile" id=search-mobile><input type=text placeholder=搜索文章标题或内容…… id=search-input-mobile>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-mobile title=搜索 aria-controls=search-dropdown-mobile aria-expanded=false><i class="fa-solid fa-search" aria-hidden=true></i>
+</a><a href=javascript:void(0); class="search-button search-clear" id=search-clear-mobile title=清空><i class="fa-solid fa-times-circle" aria-hidden=true></i>
+</a><span class="search-button search-loading" id=search-loading-mobile><i class="fa-solid fa-spinner fa-spin" aria-hidden=true></i></span></div><a href=javascript:void(0); class=search-cancel id=search-cancel-mobile>取消</a></li><li class=menu-item><a class=menu-link href=/posts/>📕 文章</a></li><li class=menu-item><a class=menu-link href=/categories/>🧰 分类</a></li><li class=menu-item><a class=menu-link href=/tags/>🔖 标签</a></li><li class=menu-item><a class=menu-link href=/book>📚 书单</a></li><li class=menu-item><a class=menu-link href=/paper>📝 论文</a></li><li class=menu-item><a class=menu-link href=/opencourse>👨🏻‍💻 公开课</a></li><li class=menu-item><a class=menu-link href=/filmtv>🎞️ 影视</a></li><li class=menu-item><a class=menu-link href=/resource>⚡️ 资源库</a></li><li class=menu-item><a class=menu-link href=/projects>⭐ 开源</a></li><li class=menu-item><a class=menu-link href=/about>🙋🏻‍♂️ 关于</a></li><li class="menu-item menu-system"></li></ul></nav></div></header><div class="search-dropdown desktop"><div id=search-dropdown-desktop></div></div><div class="search-dropdown mobile"><div id=search-dropdown-mobile></div></div><main class=fi-container><aside class="aside-collection animate__animated animate__fadeIn animate__faster" aria-label=合集><div class="details related-details open"><div class="details-summary related-summary"><i class="fa-solid fa-fire fa-fade text-danger" aria-hidden=true></i>
+<span class=related-title>相关内容</span><i class="details-icon fa-solid fa-angle-right" aria-hidden=true></i></div><div class="details-content related-content"><ul class=related-list><li class=related-item><a href=/%E5%AD%A6%E4%B9%A0javascript%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/ title="学习JavaScript数据结构与算法 第3版 (Loiane Groner)">学习JavaScript数据结构与算法 第3版 (Loiane Groner)</a></li><li class=related-item><a href=/%E9%82%A3%E4%BA%9B%E5%A5%BD%E7%94%A8%E7%9A%84javascript%E6%95%B0%E7%BB%84%E6%96%B9%E6%B3%95/ title=那些好用的JavaScript数组方法>那些好用的JavaScript数组方法</a></li><li class=related-item><a href=/axios%E7%AE%80%E6%98%8E%E6%95%99%E7%A8%8B/ title=Axios简明教程>Axios简明教程</a></li></ul></div></div></aside><article class="page single"><div class=header><h1 class="single-title animate__animated animate__flipInX"><span title=转载 class=icon-repost><i class="fa-solid fa-share" aria-hidden=true></i></span><span>从执行上下文理解JavaScript变量提升</span></h1></div><div class=post-meta><div class=post-meta-line><span class=post-author><a href=https://andyfree96.github.io/ title=作者 rel=author class=author><img class=avatar src=/avatar/1.jpg alt=AndyFree96 height=16 width=16>&nbsp;AndyFree96</a></span><span class=post-included-in>&nbsp;收录于 <a href=/categories/javascript/ class=post-category title="分类 - JavaScript"><i class="fa-regular fa-folder" aria-hidden=true></i> JavaScript</a></span></div><div class=post-meta-line><span title="发布于 2026-03-16 22:09:54"><i class="fa-solid fa-calendar-days me-1" aria-hidden=true></i><time datetime=2026-03-16>2026-03-16</time></span>&nbsp;<span title="2411 字"><i class="fa-solid fa-pencil-alt me-1" aria-hidden=true></i>约 2500 字</span>&nbsp;<span><i class="fa-regular fa-clock me-1" aria-hidden=true></i>预计阅读 5 分钟</span>&nbsp;</div></div><div class=featured-image><img loading=eager src=/images/202603/1/zhiyuan-sun-a_7NwraYpbI-unsplash.jpg sizes="(max-width: 680px) 100vw, (max-width: 960px) 80vw, (max-width: 1440px) 56vw, 800px" alt=/images/202603/1/zhiyuan-sun-a_7NwraYpbI-unsplash.jpg></div><div class="details toc" id=toc-static data-kept=false><div class="details-summary toc-title"><span>目录</span>
+<span><i class="details-icon fa-solid fa-angle-right" aria-hidden=true></i></span></div><div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents><ul><li><a href=#javascript-是如何执行代码的>JavaScript 是如何执行代码的</a></li><li><a href=#什么是执行上下文-execution-context>什么是执行上下文 (Execution Context)</a></li><li><a href=#执行上下文的结构>执行上下文的结构</a></li><li><a href=#变量提升是如何发生的>变量提升是如何发生的</a></li><li><a href=#代码真实执行顺序>代码真实执行顺序</a></li><li><a href=#为什么不是输出-1>为什么不是输出 1</a></li><li><a href=#如果使用-let-会发生什么>如果使用 let 会发生什么</a></li><li><a href=#模拟-javascript-引擎编译>模拟 JavaScript 引擎编译</a></li><li><a href=#总结>总结</a></li></ul></nav></div></div><div class=content id=content><p>在学习 JavaScript 的过程中，我们可能会遇到一个经典问题：</p><div class="code-block highlight" data-mode=classic data-copyable=true><div class=chroma><div class="code-header language-js"><span class=code-title><i class="arrow fa-solid fa-chevron-down" aria-hidden=true></i></span><button type=button class=ellipses-btn aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden=true></i></button><button type=button class="action-btn line-nos-btn" aria-label=切换行号 title=切换行号><i class="fa-solid fa-list-ol" aria-hidden=true></i></button><button type=button class="action-btn line-wrap-btn" aria-label=切换自动换行 title=切换自动换行><i class="fa-solid fa-right-left" aria-hidden=true></i></button><button type=button class="action-btn copy-btn" aria-label=复制到剪贴板 title=复制到剪贴板 data-copied-text=已复制><i class="fa-regular fa-clone" aria-hidden=true></i></button><button type=button class="action-btn fullscreen-btn" aria-label=全屏 title=全屏 data-exit-title=退出全屏><i class="fa-solid fa-expand" aria-hidden=true></i></button></div><div class=code-wrapper data-max=400 data-line-digit=1 style=--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-js data-lang=js><span class=line><span class=cl><span class=kd>var</span> <span class=nx>a</span> <span class=o>=</span> <span class=mi>1</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kd>function</span> <span class=nx>test</span><span class=p>()</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=nx>console</span><span class=p>.</span><span class=nx>log</span><span class=p>(</span><span class=nx>a</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=kd>var</span> <span class=nx>a</span> <span class=o>=</span> <span class=mi>2</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nx>test</span><span class=p>();</span></span></span></code></pre></td></tr></table></div></div></div><p>很多人第一反应是：</p><div class="code-block highlight" data-mode=classic data-copyable=true><div class=chroma><div class="code-header language-bash"><span class=code-title><i class="arrow fa-solid fa-chevron-down" aria-hidden=true></i></span><button type=button class=ellipses-btn aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden=true></i></button><button type=button class="action-btn line-nos-btn" aria-label=切换行号 title=切换行号><i class="fa-solid fa-list-ol" aria-hidden=true></i></button><button type=button class="action-btn line-wrap-btn" aria-label=切换自动换行 title=切换自动换行><i class="fa-solid fa-right-left" aria-hidden=true></i></button><button type=button class="action-btn copy-btn" aria-label=复制到剪贴板 title=复制到剪贴板 data-copied-text=已复制><i class="fa-regular fa-clone" aria-hidden=true></i></button><button type=button class="action-btn fullscreen-btn" aria-label=全屏 title=全屏 data-exit-title=退出全屏><i class="fa-solid fa-expand" aria-hidden=true></i></button></div><div class=code-wrapper data-max=400 data-line-digit=1 style=--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=m>1</span></span></span></code></pre></td></tr></table></div></div></div><p>但实际运行结果却是：</p><div class="code-block highlight" data-mode=classic data-copyable=true><div class=chroma><div class="code-header language-bash"><span class=code-title><i class="arrow fa-solid fa-chevron-down" aria-hidden=true></i></span><button type=button class=ellipses-btn aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden=true></i></button><button type=button class="action-btn line-nos-btn" aria-label=切换行号 title=切换行号><i class="fa-solid fa-list-ol" aria-hidden=true></i></button><button type=button class="action-btn line-wrap-btn" aria-label=切换自动换行 title=切换自动换行><i class="fa-solid fa-right-left" aria-hidden=true></i></button><button type=button class="action-btn copy-btn" aria-label=复制到剪贴板 title=复制到剪贴板 data-copied-text=已复制><i class="fa-regular fa-clone" aria-hidden=true></i></button><button type=button class="action-btn fullscreen-btn" aria-label=全屏 title=全屏 data-exit-title=退出全屏><i class="fa-solid fa-expand" aria-hidden=true></i></button></div><div class=code-wrapper data-max=400 data-line-digit=1 style=--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>undefined</span></span></code></pre></td></tr></table></div></div></div><p>为什么会出现这种情况？</p><p>理解这个问题的关键在于 JavaScript 的 <strong>执行上下文（Execution Context）</strong> 和 <strong>变量提升（Hoisting）</strong> 机制。</p><h2 class=heading-element id=javascript-是如何执行代码的><span>JavaScript 是如何执行代码的</span>
+<a href=#javascript-%e6%98%af%e5%a6%82%e4%bd%95%e6%89%a7%e8%a1%8c%e4%bb%a3%e7%a0%81%e7%9a%84 class=heading-mark><svg class="octicon octicon-link" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5.0 114.95 4.95l-2.5 2.5a3.5 3.5.0 01-4.95.0.751.751.0 01.018-1.042.751.751.0 011.042-.018 1.998 1.998.0 002.83.0l2.5-2.5a2.002 2.002.0 00-2.83-2.83l-1.25 1.25a.751.751.0 01-1.042-.018.751.751.0 01-.018-1.042zm-4.69 9.64a1.998 1.998.0 002.83.0l1.25-1.25a.751.751.0 011.042.018.751.751.0 01.018 1.042l-1.25 1.25a3.5 3.5.0 11-4.95-4.95l2.5-2.5a3.5 3.5.0 014.95.0.751.751.0 01-.018 1.042.751.751.0 01-1.042.018 1.998 1.998.0 00-2.83.0l-2.5 2.5a1.998 1.998.0 000 2.83z"/></svg></a></h2><p>JavaScript 代码并不是从上到下一行一行直接执行的，而是大致分为两个阶段：</p><div class="code-tabs diagram-tabs" data-diagram=mermaid><div class=tabs-header><div class=tabs-items><span class="tab-item active" data-tab=diagram title=图表>图表</span>
+<span class=tab-item data-tab=code title=代码>代码</span></div><div class=tabs-actions><button type=button class="action-btn diagram-zoom-out-btn" aria-label=缩小 title=缩小><i class="fa-solid fa-magnifying-glass-minus" aria-hidden=true></i></button>
+<button type=button class="action-btn diagram-zoom-in-btn" aria-label=放大 title=放大><i class="fa-solid fa-magnifying-glass-plus" aria-hidden=true></i></button>
+<button type=button class="action-btn diagram-reset-btn" aria-label=重置 title=重置><i class="fa-solid fa-arrows-rotate" aria-hidden=true></i></button>
+<button type=button class="action-btn diagram-download-btn" aria-label="下载 SVG" title="下载 SVG"><i class="fa-solid fa-download" aria-hidden=true></i></button></div></div><div class=tabs-content><div class="code-block diagram-view active" data-filename=mermaid.mmd><div class=diagram-container><pre class=mermaid>flowchart TD
+    A[编译阶段 创建执行上下文] --> B[执行阶段 逐行执行代码]</pre><pre class=mermaid-dark>flowchart TD
+    A[编译阶段 创建执行上下文] --> B[执行阶段 逐行执行代码]</pre><pre class=mermaid-neutral>flowchart TD
+    A[编译阶段 创建执行上下文] --> B[执行阶段 逐行执行代码]</pre></div></div><div class="code-block highlight diagram-code" data-mode=classic data-copyable=true copyable=true fullscreen=true filename=mermaid.mmd><div class=chroma><div class="code-header language-text"><span class=code-title><i class="arrow fa-solid fa-chevron-down" aria-hidden=true></i></span><button type=button class=ellipses-btn aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden=true></i></button><button type=button class="action-btn line-nos-btn" aria-label=切换行号 title=切换行号><i class="fa-solid fa-list-ol" aria-hidden=true></i></button><button type=button class="action-btn line-wrap-btn" aria-label=切换自动换行 title=切换自动换行><i class="fa-solid fa-right-left" aria-hidden=true></i></button><button type=button class="action-btn copy-btn" aria-label=复制到剪贴板 title=复制到剪贴板 data-copied-text=已复制><i class="fa-regular fa-clone" aria-hidden=true></i></button><button type=button class="action-btn fullscreen-btn" aria-label=全屏 title=全屏 data-exit-title=退出全屏><i class="fa-solid fa-expand" aria-hidden=true></i></button></div><div class=code-wrapper data-max=400 data-line-digit=1 style=--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-text data-lang=text><span class=line><span class=cl>flowchart TD
+</span></span><span class=line><span class=cl>    A[编译阶段 创建执行上下文] --&gt; B[执行阶段 逐行执行代码]</span></span></code></pre></td></tr></table></div></div></div></div></div><p>在编译阶段，JavaScript 引擎会：</p><ol><li>创建执行上下文</li><li>创建变量对象 VO</li><li>扫描<code>var</code></li><li>扫描<code>function</code></li><li>建立作用域链</li><li>确定<code>this</code></li></ol><div class="code-tabs diagram-tabs" data-diagram=mermaid><div class=tabs-header><div class=tabs-items><span class="tab-item active" data-tab=diagram title=图表>图表</span>
+<span class=tab-item data-tab=code title=代码>代码</span></div><div class=tabs-actions><button type=button class="action-btn diagram-zoom-out-btn" aria-label=缩小 title=缩小><i class="fa-solid fa-magnifying-glass-minus" aria-hidden=true></i></button>
+<button type=button class="action-btn diagram-zoom-in-btn" aria-label=放大 title=放大><i class="fa-solid fa-magnifying-glass-plus" aria-hidden=true></i></button>
+<button type=button class="action-btn diagram-reset-btn" aria-label=重置 title=重置><i class="fa-solid fa-arrows-rotate" aria-hidden=true></i></button>
+<button type=button class="action-btn diagram-download-btn" aria-label="下载 SVG" title="下载 SVG"><i class="fa-solid fa-download" aria-hidden=true></i></button></div></div><div class=tabs-content><div class="code-block diagram-view active" data-filename=mermaid.mmd><div class=diagram-container><pre class=mermaid>flowchart TD
     A[编译阶段开始] --> B[创建执行上下文 Execution Context]
     B --> C[创建变量对象 VO]
     C --> D[扫描变量声明 var]
@@ -256,8 +53,7 @@
     F --> G[函数整体加入 VO]
     G --> H[建立作用域链 Scope Chain]
     H --> I[确定 this 指向]
-    I --> J[编译阶段完成]</pre>
-          <pre class="mermaid-dark">flowchart TD
+    I --> J[编译阶段完成]</pre><pre class=mermaid-dark>flowchart TD
     A[编译阶段开始] --> B[创建执行上下文 Execution Context]
     B --> C[创建变量对象 VO]
     C --> D[扫描变量声明 var]
@@ -266,8 +62,7 @@
     F --> G[函数整体加入 VO]
     G --> H[建立作用域链 Scope Chain]
     H --> I[确定 this 指向]
-    I --> J[编译阶段完成]</pre>
-          <pre class="mermaid-neutral">flowchart TD
+    I --> J[编译阶段完成]</pre><pre class=mermaid-neutral>flowchart TD
     A[编译阶段开始] --> B[创建执行上下文 Execution Context]
     B --> C[创建变量对象 VO]
     C --> D[扫描变量声明 var]
@@ -276,187 +71,92 @@
     F --> G[函数整体加入 VO]
     G --> H[建立作用域链 Scope Chain]
     H --> I[确定 this 指向]
-    I --> J[编译阶段完成]</pre>
-        </div>
-      </div><div class="code-block highlight diagram-code" data-mode="classic" data-copyable="true" copyable="true" fullscreen="true" filename="mermaid.mmd"><div class="chroma">
-<div class="code-header language-text"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="2" style="--fi-max-shown-lines:400;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">flowchart TD
-</span></span><span class="line"><span class="cl">    A[编译阶段开始] --&gt; B[创建执行上下文 Execution Context]
-</span></span><span class="line"><span class="cl">    B --&gt; C[创建变量对象 VO]
-</span></span><span class="line"><span class="cl">    C --&gt; D[扫描变量声明 var]
-</span></span><span class="line"><span class="cl">    D --&gt; E[变量加入 VO&lt;br&gt;初始值 undefined]
-</span></span><span class="line"><span class="cl">    C --&gt; F[扫描函数声明 function]
-</span></span><span class="line"><span class="cl">    F --&gt; G[函数整体加入 VO]
-</span></span><span class="line"><span class="cl">    G --&gt; H[建立作用域链 Scope Chain]
-</span></span><span class="line"><span class="cl">    H --&gt; I[确定 this 指向]
-</span></span><span class="line"><span class="cl">    I --&gt; J[编译阶段完成]</span></span></code></pre></td></tr></table></div>
-</div>
-</div></div>
-  </div><p>示例：</p>
-<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
-<div class="code-header language-js"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="line"><span class="cl"><span class="kd">function</span> <span class="nx">test</span><span class="p">()</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">a</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">  <span class="kd">var</span> <span class="nx">a</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div>
-</div>
-</div><p>编译阶段后：</p>
-<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
-<div class="code-header language-js"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="line"><span class="cl"><span class="nx">VO</span> <span class="o">=</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">  <span class="nx">a</span><span class="o">:</span> <span class="kc">undefined</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl"><span class="p">};</span></span></span></code></pre></td></tr></table></div>
-</div>
-</div><p>在编译阶段会发生变量提升（Hoisting）。主流浏览器和 Node.js 使用的 JavaScript 引擎是<a href="https://v8.dev/" target="_blank" rel="external nofollow noopener noreferrer">V8<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>。</p>
-<h2 class="heading-element" id="什么是执行上下文-execution-context"><span>什么是执行上下文 (Execution Context)</span>
-  <a href="#%e4%bb%80%e4%b9%88%e6%98%af%e6%89%a7%e8%a1%8c%e4%b8%8a%e4%b8%8b%e6%96%87-execution-context" class="heading-mark">
-    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
-  </a>
-</h2><p>简单的一句话总结：执行上下文 = JavaScript 代码执行时的环境。</p>
-<p>它决定了代码在运行时 变量如何查找、函数如何调用、this 指向什么。</p>
-<p>JavaScript 中有三种执行上下文：全局执行上下文（Global Execution Context）、函数执行上下文（Function Execution Context）和<code>eval</code>执行上下文。</p>
-<h2 class="heading-element" id="执行上下文的结构"><span>执行上下文的结构</span>
-  <a href="#%e6%89%a7%e8%a1%8c%e4%b8%8a%e4%b8%8b%e6%96%87%e7%9a%84%e7%bb%93%e6%9e%84" class="heading-mark">
-    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
-  </a>
-</h2><p>每个执行上下文内部通常包含三个核心部分：</p>
-<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
-<div class="code-header language-bash"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">ExecutionContext
-</span></span><span class="line"><span class="cl">│
-</span></span><span class="line"><span class="cl">├── LexicalEnvironment
-</span></span><span class="line"><span class="cl">├── VariableEnvironment
-</span></span><span class="line"><span class="cl">└── ThisBinding</span></span></code></pre></td></tr></table></div>
-</div>
-</div><p>其中最重要的是<code>LexicalEnvironment</code>。它内部包含：<code>EnvironmentRecord</code>用于存储变量：</p>
-<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
-<div class="code-header language-js"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="line"><span class="cl"><span class="p">{</span>
-</span></span><span class="line"><span class="cl">  <span class="nx">a</span><span class="o">:</span> <span class="mi">1</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">  <span class="nx">b</span><span class="o">:</span> <span class="mi">2</span>
-</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div>
-</div>
-</div><h2 class="heading-element" id="变量提升是如何发生的"><span>变量提升是如何发生的</span>
-  <a href="#%e5%8f%98%e9%87%8f%e6%8f%90%e5%8d%87%e6%98%af%e5%a6%82%e4%bd%95%e5%8f%91%e7%94%9f%e7%9a%84" class="heading-mark">
-    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
-  </a>
-</h2><p>回到最开始的代码：</p>
-<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
-<div class="code-header language-js"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span><span class="lnt">6
-</span><span class="lnt">7
-</span><span class="lnt">8
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="line"><span class="cl"><span class="kd">var</span> <span class="nx">a</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="kd">function</span> <span class="nx">test</span><span class="p">()</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">a</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">  <span class="kd">var</span> <span class="nx">a</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="nx">test</span><span class="p">();</span></span></span></code></pre></td></tr></table></div>
-</div>
-</div><p>当<code>test()</code>被调用时，JavaScript 会创建新的执行上下文<code>test Execution Context</code>。</p>
-<p>在编译阶段，引擎会扫描变量声明：</p>
-<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
-<div class="code-header language-js"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="line"><span class="cl"><span class="kd">var</span> <span class="nx">a</span><span class="p">;</span></span></span></code></pre></td></tr></table></div>
-</div>
-</div><p>并在环境记录中创建变量：</p>
-<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
-<div class="code-header language-fallback"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">EnvironmentRecord
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">a: undefined</span></span></code></pre></td></tr></table></div>
-</div>
-</div><p>此时执行上下文变成：</p>
-<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
-<div class="code-header language-fallback"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">est Execution Context
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">LexicalEnvironment
-</span></span><span class="line"><span class="cl">└── EnvironmentRecord
-</span></span><span class="line"><span class="cl">        a: undefined</span></span></code></pre></td></tr></table></div>
-</div>
-</div><h2 class="heading-element" id="代码真实执行顺序"><span>代码真实执行顺序</span>
-  <a href="#%e4%bb%a3%e7%a0%81%e7%9c%9f%e5%ae%9e%e6%89%a7%e8%a1%8c%e9%a1%ba%e5%ba%8f" class="heading-mark">
-    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
-  </a>
-</h2><p>执行阶段，JavaScript 会逐行执行代码：</p>
-<div class="code-tabs diagram-tabs" data-diagram="mermaid">
-    <div class="tabs-header">
-      <div class="tabs-items">
-        <span class="tab-item active" data-tab="diagram" title="图表">图表</span>
-        <span class="tab-item" data-tab="code" title="代码">代码</span>
-      </div>
-      <div class="tabs-actions">
-        <button type="button" class="action-btn diagram-zoom-out-btn" aria-label="缩小" title="缩小"><i class="fa-solid fa-magnifying-glass-minus" aria-hidden="true"></i></button>
-        <button type="button" class="action-btn diagram-zoom-in-btn" aria-label="放大" title="放大"><i class="fa-solid fa-magnifying-glass-plus" aria-hidden="true"></i></button>
-        <button type="button" class="action-btn diagram-reset-btn" aria-label="重置" title="重置"><i class="fa-solid fa-arrows-rotate" aria-hidden="true"></i></button>
-        <button type="button" class="action-btn diagram-download-btn" aria-label="下载 SVG" title="下载 SVG"><i class="fa-solid fa-download" aria-hidden="true"></i></button>
-      </div>
-    </div>
-    <div class="tabs-content">
-      <div class="code-block diagram-view active" data-filename="mermaid.mmd">
-        <div class="diagram-container">
-          <pre class="mermaid">flowchart TD
+    I --> J[编译阶段完成]</pre></div></div><div class="code-block highlight diagram-code" data-mode=classic data-copyable=true copyable=true fullscreen=true filename=mermaid.mmd><div class=chroma><div class="code-header language-text"><span class=code-title><i class="arrow fa-solid fa-chevron-down" aria-hidden=true></i></span><button type=button class=ellipses-btn aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden=true></i></button><button type=button class="action-btn line-nos-btn" aria-label=切换行号 title=切换行号><i class="fa-solid fa-list-ol" aria-hidden=true></i></button><button type=button class="action-btn line-wrap-btn" aria-label=切换自动换行 title=切换自动换行><i class="fa-solid fa-right-left" aria-hidden=true></i></button><button type=button class="action-btn copy-btn" aria-label=复制到剪贴板 title=复制到剪贴板 data-copied-text=已复制><i class="fa-regular fa-clone" aria-hidden=true></i></button><button type=button class="action-btn fullscreen-btn" aria-label=全屏 title=全屏 data-exit-title=退出全屏><i class="fa-solid fa-expand" aria-hidden=true></i></button></div><div class=code-wrapper data-max=400 data-line-digit=2 style=--fi-max-shown-lines:400;--fi-line-digit:2;--fi-line-start:1><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-text data-lang=text><span class=line><span class=cl>flowchart TD
+</span></span><span class=line><span class=cl>    A[编译阶段开始] --&gt; B[创建执行上下文 Execution Context]
+</span></span><span class=line><span class=cl>    B --&gt; C[创建变量对象 VO]
+</span></span><span class=line><span class=cl>    C --&gt; D[扫描变量声明 var]
+</span></span><span class=line><span class=cl>    D --&gt; E[变量加入 VO&lt;br&gt;初始值 undefined]
+</span></span><span class=line><span class=cl>    C --&gt; F[扫描函数声明 function]
+</span></span><span class=line><span class=cl>    F --&gt; G[函数整体加入 VO]
+</span></span><span class=line><span class=cl>    G --&gt; H[建立作用域链 Scope Chain]
+</span></span><span class=line><span class=cl>    H --&gt; I[确定 this 指向]
+</span></span><span class=line><span class=cl>    I --&gt; J[编译阶段完成]</span></span></code></pre></td></tr></table></div></div></div></div></div><p>示例：</p><div class="code-block highlight" data-mode=classic data-copyable=true><div class=chroma><div class="code-header language-js"><span class=code-title><i class="arrow fa-solid fa-chevron-down" aria-hidden=true></i></span><button type=button class=ellipses-btn aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden=true></i></button><button type=button class="action-btn line-nos-btn" aria-label=切换行号 title=切换行号><i class="fa-solid fa-list-ol" aria-hidden=true></i></button><button type=button class="action-btn line-wrap-btn" aria-label=切换自动换行 title=切换自动换行><i class="fa-solid fa-right-left" aria-hidden=true></i></button><button type=button class="action-btn copy-btn" aria-label=复制到剪贴板 title=复制到剪贴板 data-copied-text=已复制><i class="fa-regular fa-clone" aria-hidden=true></i></button><button type=button class="action-btn fullscreen-btn" aria-label=全屏 title=全屏 data-exit-title=退出全屏><i class="fa-solid fa-expand" aria-hidden=true></i></button></div><div class=code-wrapper data-max=400 data-line-digit=1 style=--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-js data-lang=js><span class=line><span class=cl><span class=kd>function</span> <span class=nx>test</span><span class=p>()</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=nx>console</span><span class=p>.</span><span class=nx>log</span><span class=p>(</span><span class=nx>a</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=kd>var</span> <span class=nx>a</span> <span class=o>=</span> <span class=mi>2</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=p>}</span></span></span></code></pre></td></tr></table></div></div></div><p>编译阶段后：</p><div class="code-block highlight" data-mode=classic data-copyable=true><div class=chroma><div class="code-header language-js"><span class=code-title><i class="arrow fa-solid fa-chevron-down" aria-hidden=true></i></span><button type=button class=ellipses-btn aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden=true></i></button><button type=button class="action-btn line-nos-btn" aria-label=切换行号 title=切换行号><i class="fa-solid fa-list-ol" aria-hidden=true></i></button><button type=button class="action-btn line-wrap-btn" aria-label=切换自动换行 title=切换自动换行><i class="fa-solid fa-right-left" aria-hidden=true></i></button><button type=button class="action-btn copy-btn" aria-label=复制到剪贴板 title=复制到剪贴板 data-copied-text=已复制><i class="fa-regular fa-clone" aria-hidden=true></i></button><button type=button class="action-btn fullscreen-btn" aria-label=全屏 title=全屏 data-exit-title=退出全屏><i class="fa-solid fa-expand" aria-hidden=true></i></button></div><div class=code-wrapper data-max=400 data-line-digit=1 style=--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-js data-lang=js><span class=line><span class=cl><span class=nx>VO</span> <span class=o>=</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=nx>a</span><span class=o>:</span> <span class=kc>undefined</span><span class=p>,</span>
+</span></span><span class=line><span class=cl><span class=p>};</span></span></span></code></pre></td></tr></table></div></div></div><p>在编译阶段会发生变量提升（Hoisting）。主流浏览器和 Node.js 使用的 JavaScript 引擎是<a href=https://v8.dev/ target=_blank rel="external nofollow noopener noreferrer">V8<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden=true></i></a>。</p><h2 class=heading-element id=什么是执行上下文-execution-context><span>什么是执行上下文 (Execution Context)</span>
+<a href=#%e4%bb%80%e4%b9%88%e6%98%af%e6%89%a7%e8%a1%8c%e4%b8%8a%e4%b8%8b%e6%96%87-execution-context class=heading-mark><svg class="octicon octicon-link" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5.0 114.95 4.95l-2.5 2.5a3.5 3.5.0 01-4.95.0.751.751.0 01.018-1.042.751.751.0 011.042-.018 1.998 1.998.0 002.83.0l2.5-2.5a2.002 2.002.0 00-2.83-2.83l-1.25 1.25a.751.751.0 01-1.042-.018.751.751.0 01-.018-1.042zm-4.69 9.64a1.998 1.998.0 002.83.0l1.25-1.25a.751.751.0 011.042.018.751.751.0 01.018 1.042l-1.25 1.25a3.5 3.5.0 11-4.95-4.95l2.5-2.5a3.5 3.5.0 014.95.0.751.751.0 01-.018 1.042.751.751.0 01-1.042.018 1.998 1.998.0 00-2.83.0l-2.5 2.5a1.998 1.998.0 000 2.83z"/></svg></a></h2><p>简单的一句话总结：执行上下文 = JavaScript 代码执行时的环境。</p><p>它决定了代码在运行时 变量如何查找、函数如何调用、this 指向什么。</p><p>JavaScript 中有三种执行上下文：全局执行上下文（Global Execution Context）、函数执行上下文（Function Execution Context）和<code>eval</code>执行上下文。</p><h2 class=heading-element id=执行上下文的结构><span>执行上下文的结构</span>
+<a href=#%e6%89%a7%e8%a1%8c%e4%b8%8a%e4%b8%8b%e6%96%87%e7%9a%84%e7%bb%93%e6%9e%84 class=heading-mark><svg class="octicon octicon-link" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5.0 114.95 4.95l-2.5 2.5a3.5 3.5.0 01-4.95.0.751.751.0 01.018-1.042.751.751.0 011.042-.018 1.998 1.998.0 002.83.0l2.5-2.5a2.002 2.002.0 00-2.83-2.83l-1.25 1.25a.751.751.0 01-1.042-.018.751.751.0 01-.018-1.042zm-4.69 9.64a1.998 1.998.0 002.83.0l1.25-1.25a.751.751.0 011.042.018.751.751.0 01.018 1.042l-1.25 1.25a3.5 3.5.0 11-4.95-4.95l2.5-2.5a3.5 3.5.0 014.95.0.751.751.0 01-.018 1.042.751.751.0 01-1.042.018 1.998 1.998.0 00-2.83.0l-2.5 2.5a1.998 1.998.0 000 2.83z"/></svg></a></h2><p>每个执行上下文内部通常包含三个核心部分：</p><div class="code-block highlight" data-mode=classic data-copyable=true><div class=chroma><div class="code-header language-bash"><span class=code-title><i class="arrow fa-solid fa-chevron-down" aria-hidden=true></i></span><button type=button class=ellipses-btn aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden=true></i></button><button type=button class="action-btn line-nos-btn" aria-label=切换行号 title=切换行号><i class="fa-solid fa-list-ol" aria-hidden=true></i></button><button type=button class="action-btn line-wrap-btn" aria-label=切换自动换行 title=切换自动换行><i class="fa-solid fa-right-left" aria-hidden=true></i></button><button type=button class="action-btn copy-btn" aria-label=复制到剪贴板 title=复制到剪贴板 data-copied-text=已复制><i class="fa-regular fa-clone" aria-hidden=true></i></button><button type=button class="action-btn fullscreen-btn" aria-label=全屏 title=全屏 data-exit-title=退出全屏><i class="fa-solid fa-expand" aria-hidden=true></i></button></div><div class=code-wrapper data-max=400 data-line-digit=1 style=--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>ExecutionContext
+</span></span><span class=line><span class=cl>│
+</span></span><span class=line><span class=cl>├── LexicalEnvironment
+</span></span><span class=line><span class=cl>├── VariableEnvironment
+</span></span><span class=line><span class=cl>└── ThisBinding</span></span></code></pre></td></tr></table></div></div></div><p>其中最重要的是<code>LexicalEnvironment</code>。它内部包含：<code>EnvironmentRecord</code>用于存储变量：</p><div class="code-block highlight" data-mode=classic data-copyable=true><div class=chroma><div class="code-header language-js"><span class=code-title><i class="arrow fa-solid fa-chevron-down" aria-hidden=true></i></span><button type=button class=ellipses-btn aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden=true></i></button><button type=button class="action-btn line-nos-btn" aria-label=切换行号 title=切换行号><i class="fa-solid fa-list-ol" aria-hidden=true></i></button><button type=button class="action-btn line-wrap-btn" aria-label=切换自动换行 title=切换自动换行><i class="fa-solid fa-right-left" aria-hidden=true></i></button><button type=button class="action-btn copy-btn" aria-label=复制到剪贴板 title=复制到剪贴板 data-copied-text=已复制><i class="fa-regular fa-clone" aria-hidden=true></i></button><button type=button class="action-btn fullscreen-btn" aria-label=全屏 title=全屏 data-exit-title=退出全屏><i class="fa-solid fa-expand" aria-hidden=true></i></button></div><div class=code-wrapper data-max=400 data-line-digit=1 style=--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-js data-lang=js><span class=line><span class=cl><span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=nx>a</span><span class=o>:</span> <span class=mi>1</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=nx>b</span><span class=o>:</span> <span class=mi>2</span>
+</span></span><span class=line><span class=cl><span class=p>}</span></span></span></code></pre></td></tr></table></div></div></div><h2 class=heading-element id=变量提升是如何发生的><span>变量提升是如何发生的</span>
+<a href=#%e5%8f%98%e9%87%8f%e6%8f%90%e5%8d%87%e6%98%af%e5%a6%82%e4%bd%95%e5%8f%91%e7%94%9f%e7%9a%84 class=heading-mark><svg class="octicon octicon-link" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5.0 114.95 4.95l-2.5 2.5a3.5 3.5.0 01-4.95.0.751.751.0 01.018-1.042.751.751.0 011.042-.018 1.998 1.998.0 002.83.0l2.5-2.5a2.002 2.002.0 00-2.83-2.83l-1.25 1.25a.751.751.0 01-1.042-.018.751.751.0 01-.018-1.042zm-4.69 9.64a1.998 1.998.0 002.83.0l1.25-1.25a.751.751.0 011.042.018.751.751.0 01.018 1.042l-1.25 1.25a3.5 3.5.0 11-4.95-4.95l2.5-2.5a3.5 3.5.0 014.95.0.751.751.0 01-.018 1.042.751.751.0 01-1.042.018 1.998 1.998.0 00-2.83.0l-2.5 2.5a1.998 1.998.0 000 2.83z"/></svg></a></h2><p>回到最开始的代码：</p><div class="code-block highlight" data-mode=classic data-copyable=true><div class=chroma><div class="code-header language-js"><span class=code-title><i class="arrow fa-solid fa-chevron-down" aria-hidden=true></i></span><button type=button class=ellipses-btn aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden=true></i></button><button type=button class="action-btn line-nos-btn" aria-label=切换行号 title=切换行号><i class="fa-solid fa-list-ol" aria-hidden=true></i></button><button type=button class="action-btn line-wrap-btn" aria-label=切换自动换行 title=切换自动换行><i class="fa-solid fa-right-left" aria-hidden=true></i></button><button type=button class="action-btn copy-btn" aria-label=复制到剪贴板 title=复制到剪贴板 data-copied-text=已复制><i class="fa-regular fa-clone" aria-hidden=true></i></button><button type=button class="action-btn fullscreen-btn" aria-label=全屏 title=全屏 data-exit-title=退出全屏><i class="fa-solid fa-expand" aria-hidden=true></i></button></div><div class=code-wrapper data-max=400 data-line-digit=1 style=--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-js data-lang=js><span class=line><span class=cl><span class=kd>var</span> <span class=nx>a</span> <span class=o>=</span> <span class=mi>1</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kd>function</span> <span class=nx>test</span><span class=p>()</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=nx>console</span><span class=p>.</span><span class=nx>log</span><span class=p>(</span><span class=nx>a</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=kd>var</span> <span class=nx>a</span> <span class=o>=</span> <span class=mi>2</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nx>test</span><span class=p>();</span></span></span></code></pre></td></tr></table></div></div></div><p>当<code>test()</code>被调用时，JavaScript 会创建新的执行上下文<code>test Execution Context</code>。</p><p>在编译阶段，引擎会扫描变量声明：</p><div class="code-block highlight" data-mode=classic data-copyable=true><div class=chroma><div class="code-header language-js"><span class=code-title><i class="arrow fa-solid fa-chevron-down" aria-hidden=true></i></span><button type=button class=ellipses-btn aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden=true></i></button><button type=button class="action-btn line-nos-btn" aria-label=切换行号 title=切换行号><i class="fa-solid fa-list-ol" aria-hidden=true></i></button><button type=button class="action-btn line-wrap-btn" aria-label=切换自动换行 title=切换自动换行><i class="fa-solid fa-right-left" aria-hidden=true></i></button><button type=button class="action-btn copy-btn" aria-label=复制到剪贴板 title=复制到剪贴板 data-copied-text=已复制><i class="fa-regular fa-clone" aria-hidden=true></i></button><button type=button class="action-btn fullscreen-btn" aria-label=全屏 title=全屏 data-exit-title=退出全屏><i class="fa-solid fa-expand" aria-hidden=true></i></button></div><div class=code-wrapper data-max=400 data-line-digit=1 style=--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-js data-lang=js><span class=line><span class=cl><span class=kd>var</span> <span class=nx>a</span><span class=p>;</span></span></span></code></pre></td></tr></table></div></div></div><p>并在环境记录中创建变量：</p><div class="code-block highlight" data-mode=classic data-copyable=true><div class=chroma><div class="code-header language-fallback"><span class=code-title><i class="arrow fa-solid fa-chevron-down" aria-hidden=true></i></span><button type=button class=ellipses-btn aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden=true></i></button><button type=button class="action-btn line-nos-btn" aria-label=切换行号 title=切换行号><i class="fa-solid fa-list-ol" aria-hidden=true></i></button><button type=button class="action-btn line-wrap-btn" aria-label=切换自动换行 title=切换自动换行><i class="fa-solid fa-right-left" aria-hidden=true></i></button><button type=button class="action-btn copy-btn" aria-label=复制到剪贴板 title=复制到剪贴板 data-copied-text=已复制><i class="fa-regular fa-clone" aria-hidden=true></i></button><button type=button class="action-btn fullscreen-btn" aria-label=全屏 title=全屏 data-exit-title=退出全屏><i class="fa-solid fa-expand" aria-hidden=true></i></button></div><div class=code-wrapper data-max=400 data-line-digit=1 style=--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>EnvironmentRecord
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>a: undefined</span></span></code></pre></td></tr></table></div></div></div><p>此时执行上下文变成：</p><div class="code-block highlight" data-mode=classic data-copyable=true><div class=chroma><div class="code-header language-fallback"><span class=code-title><i class="arrow fa-solid fa-chevron-down" aria-hidden=true></i></span><button type=button class=ellipses-btn aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden=true></i></button><button type=button class="action-btn line-nos-btn" aria-label=切换行号 title=切换行号><i class="fa-solid fa-list-ol" aria-hidden=true></i></button><button type=button class="action-btn line-wrap-btn" aria-label=切换自动换行 title=切换自动换行><i class="fa-solid fa-right-left" aria-hidden=true></i></button><button type=button class="action-btn copy-btn" aria-label=复制到剪贴板 title=复制到剪贴板 data-copied-text=已复制><i class="fa-regular fa-clone" aria-hidden=true></i></button><button type=button class="action-btn fullscreen-btn" aria-label=全屏 title=全屏 data-exit-title=退出全屏><i class="fa-solid fa-expand" aria-hidden=true></i></button></div><div class=code-wrapper data-max=400 data-line-digit=1 style=--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>est Execution Context
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>LexicalEnvironment
+</span></span><span class=line><span class=cl>└── EnvironmentRecord
+</span></span><span class=line><span class=cl>        a: undefined</span></span></code></pre></td></tr></table></div></div></div><h2 class=heading-element id=代码真实执行顺序><span>代码真实执行顺序</span>
+<a href=#%e4%bb%a3%e7%a0%81%e7%9c%9f%e5%ae%9e%e6%89%a7%e8%a1%8c%e9%a1%ba%e5%ba%8f class=heading-mark><svg class="octicon octicon-link" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5.0 114.95 4.95l-2.5 2.5a3.5 3.5.0 01-4.95.0.751.751.0 01.018-1.042.751.751.0 011.042-.018 1.998 1.998.0 002.83.0l2.5-2.5a2.002 2.002.0 00-2.83-2.83l-1.25 1.25a.751.751.0 01-1.042-.018.751.751.0 01-.018-1.042zm-4.69 9.64a1.998 1.998.0 002.83.0l1.25-1.25a.751.751.0 011.042.018.751.751.0 01.018 1.042l-1.25 1.25a3.5 3.5.0 11-4.95-4.95l2.5-2.5a3.5 3.5.0 014.95.0.751.751.0 01-.018 1.042.751.751.0 01-1.042.018 1.998 1.998.0 00-2.83.0l-2.5 2.5a1.998 1.998.0 000 2.83z"/></svg></a></h2><p>执行阶段，JavaScript 会逐行执行代码：</p><div class="code-tabs diagram-tabs" data-diagram=mermaid><div class=tabs-header><div class=tabs-items><span class="tab-item active" data-tab=diagram title=图表>图表</span>
+<span class=tab-item data-tab=code title=代码>代码</span></div><div class=tabs-actions><button type=button class="action-btn diagram-zoom-out-btn" aria-label=缩小 title=缩小><i class="fa-solid fa-magnifying-glass-minus" aria-hidden=true></i></button>
+<button type=button class="action-btn diagram-zoom-in-btn" aria-label=放大 title=放大><i class="fa-solid fa-magnifying-glass-plus" aria-hidden=true></i></button>
+<button type=button class="action-btn diagram-reset-btn" aria-label=重置 title=重置><i class="fa-solid fa-arrows-rotate" aria-hidden=true></i></button>
+<button type=button class="action-btn diagram-download-btn" aria-label="下载 SVG" title="下载 SVG"><i class="fa-solid fa-download" aria-hidden=true></i></button></div></div><div class=tabs-content><div class="code-block diagram-view active" data-filename=mermaid.mmd><div class=diagram-container><pre class=mermaid>flowchart TD
     A[进入执行阶段] --> B["执行 console.log(a)"]
     B --> C[查找变量 a]
     C --> D[在 VO 中找到 a]
@@ -464,8 +164,7 @@
     E --> F[输出 undefined]
     F --> G[执行 a = 2]
     G --> H[更新 VO 中的 a]
-    H --> I[执行结束]</pre>
-          <pre class="mermaid-dark">flowchart TD
+    H --> I[执行结束]</pre><pre class=mermaid-dark>flowchart TD
     A[进入执行阶段] --> B["执行 console.log(a)"]
     B --> C[查找变量 a]
     C --> D[在 VO 中找到 a]
@@ -473,8 +172,7 @@
     E --> F[输出 undefined]
     F --> G[执行 a = 2]
     G --> H[更新 VO 中的 a]
-    H --> I[执行结束]</pre>
-          <pre class="mermaid-neutral">flowchart TD
+    H --> I[执行结束]</pre><pre class=mermaid-neutral>flowchart TD
     A[进入执行阶段] --> B["执行 console.log(a)"]
     B --> C[查找变量 a]
     C --> D[在 VO 中找到 a]
@@ -482,327 +180,155 @@
     E --> F[输出 undefined]
     F --> G[执行 a = 2]
     G --> H[更新 VO 中的 a]
-    H --> I[执行结束]</pre>
-        </div>
-      </div><div class="code-block highlight diagram-code" data-mode="classic" data-copyable="true" copyable="true" fullscreen="true" filename="mermaid.mmd"><div class="chroma">
-<div class="code-header language-text"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span><span class="lnt">6
-</span><span class="lnt">7
-</span><span class="lnt">8
-</span><span class="lnt">9
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">flowchart TD
-</span></span><span class="line"><span class="cl">    A[进入执行阶段] --&gt; B[&#34;执行 console.log(a)&#34;]
-</span></span><span class="line"><span class="cl">    B --&gt; C[查找变量 a]
-</span></span><span class="line"><span class="cl">    C --&gt; D[在 VO 中找到 a]
-</span></span><span class="line"><span class="cl">    D --&gt; E[当前值 undefined]
-</span></span><span class="line"><span class="cl">    E --&gt; F[输出 undefined]
-</span></span><span class="line"><span class="cl">    F --&gt; G[执行 a = 2]
-</span></span><span class="line"><span class="cl">    G --&gt; H[更新 VO 中的 a]
-</span></span><span class="line"><span class="cl">    H --&gt; I[执行结束]</span></span></code></pre></td></tr></table></div>
-</div>
-</div></div>
-  </div><h2 class="heading-element" id="为什么不是输出-1"><span>为什么不是输出 1</span>
-  <a href="#%e4%b8%ba%e4%bb%80%e4%b9%88%e4%b8%8d%e6%98%af%e8%be%93%e5%87%ba-1" class="heading-mark">
-    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
-  </a>
-</h2><p>代码中实际上存在两个<code>a</code>：</p>
-<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
-<div class="code-header language-js"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="line"><span class="cl"><span class="kd">var</span> <span class="nx">a</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="c1">// 全局变量
-</span></span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="kd">function</span> <span class="nx">test</span><span class="p">()</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">  <span class="kd">var</span> <span class="nx">a</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span> <span class="c1">// 局部变量
-</span></span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div>
-</div>
-</div><p>JavaScript 查找变量遵循 <strong>作用域链规则</strong>：</p>
-<div class="code-tabs diagram-tabs" data-diagram="mermaid">
-    <div class="tabs-header">
-      <div class="tabs-items">
-        <span class="tab-item active" data-tab="diagram" title="图表">图表</span>
-        <span class="tab-item" data-tab="code" title="代码">代码</span>
-      </div>
-      <div class="tabs-actions">
-        <button type="button" class="action-btn diagram-zoom-out-btn" aria-label="缩小" title="缩小"><i class="fa-solid fa-magnifying-glass-minus" aria-hidden="true"></i></button>
-        <button type="button" class="action-btn diagram-zoom-in-btn" aria-label="放大" title="放大"><i class="fa-solid fa-magnifying-glass-plus" aria-hidden="true"></i></button>
-        <button type="button" class="action-btn diagram-reset-btn" aria-label="重置" title="重置"><i class="fa-solid fa-arrows-rotate" aria-hidden="true"></i></button>
-        <button type="button" class="action-btn diagram-download-btn" aria-label="下载 SVG" title="下载 SVG"><i class="fa-solid fa-download" aria-hidden="true"></i></button>
-      </div>
-    </div>
-    <div class="tabs-content">
-      <div class="code-block diagram-view active" data-filename="mermaid.mmd">
-        <div class="diagram-container">
-          <pre class="mermaid">flowchart TD
+    H --> I[执行结束]</pre></div></div><div class="code-block highlight diagram-code" data-mode=classic data-copyable=true copyable=true fullscreen=true filename=mermaid.mmd><div class=chroma><div class="code-header language-text"><span class=code-title><i class="arrow fa-solid fa-chevron-down" aria-hidden=true></i></span><button type=button class=ellipses-btn aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden=true></i></button><button type=button class="action-btn line-nos-btn" aria-label=切换行号 title=切换行号><i class="fa-solid fa-list-ol" aria-hidden=true></i></button><button type=button class="action-btn line-wrap-btn" aria-label=切换自动换行 title=切换自动换行><i class="fa-solid fa-right-left" aria-hidden=true></i></button><button type=button class="action-btn copy-btn" aria-label=复制到剪贴板 title=复制到剪贴板 data-copied-text=已复制><i class="fa-regular fa-clone" aria-hidden=true></i></button><button type=button class="action-btn fullscreen-btn" aria-label=全屏 title=全屏 data-exit-title=退出全屏><i class="fa-solid fa-expand" aria-hidden=true></i></button></div><div class=code-wrapper data-max=400 data-line-digit=1 style=--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span><span class=lnt>9
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-text data-lang=text><span class=line><span class=cl>flowchart TD
+</span></span><span class=line><span class=cl>    A[进入执行阶段] --&gt; B[&#34;执行 console.log(a)&#34;]
+</span></span><span class=line><span class=cl>    B --&gt; C[查找变量 a]
+</span></span><span class=line><span class=cl>    C --&gt; D[在 VO 中找到 a]
+</span></span><span class=line><span class=cl>    D --&gt; E[当前值 undefined]
+</span></span><span class=line><span class=cl>    E --&gt; F[输出 undefined]
+</span></span><span class=line><span class=cl>    F --&gt; G[执行 a = 2]
+</span></span><span class=line><span class=cl>    G --&gt; H[更新 VO 中的 a]
+</span></span><span class=line><span class=cl>    H --&gt; I[执行结束]</span></span></code></pre></td></tr></table></div></div></div></div></div><h2 class=heading-element id=为什么不是输出-1><span>为什么不是输出 1</span>
+<a href=#%e4%b8%ba%e4%bb%80%e4%b9%88%e4%b8%8d%e6%98%af%e8%be%93%e5%87%ba-1 class=heading-mark><svg class="octicon octicon-link" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5.0 114.95 4.95l-2.5 2.5a3.5 3.5.0 01-4.95.0.751.751.0 01.018-1.042.751.751.0 011.042-.018 1.998 1.998.0 002.83.0l2.5-2.5a2.002 2.002.0 00-2.83-2.83l-1.25 1.25a.751.751.0 01-1.042-.018.751.751.0 01-.018-1.042zm-4.69 9.64a1.998 1.998.0 002.83.0l1.25-1.25a.751.751.0 011.042.018.751.751.0 01.018 1.042l-1.25 1.25a3.5 3.5.0 11-4.95-4.95l2.5-2.5a3.5 3.5.0 014.95.0.751.751.0 01-.018 1.042.751.751.0 01-1.042.018 1.998 1.998.0 00-2.83.0l-2.5 2.5a1.998 1.998.0 000 2.83z"/></svg></a></h2><p>代码中实际上存在两个<code>a</code>：</p><div class="code-block highlight" data-mode=classic data-copyable=true><div class=chroma><div class="code-header language-js"><span class=code-title><i class="arrow fa-solid fa-chevron-down" aria-hidden=true></i></span><button type=button class=ellipses-btn aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden=true></i></button><button type=button class="action-btn line-nos-btn" aria-label=切换行号 title=切换行号><i class="fa-solid fa-list-ol" aria-hidden=true></i></button><button type=button class="action-btn line-wrap-btn" aria-label=切换自动换行 title=切换自动换行><i class="fa-solid fa-right-left" aria-hidden=true></i></button><button type=button class="action-btn copy-btn" aria-label=复制到剪贴板 title=复制到剪贴板 data-copied-text=已复制><i class="fa-regular fa-clone" aria-hidden=true></i></button><button type=button class="action-btn fullscreen-btn" aria-label=全屏 title=全屏 data-exit-title=退出全屏><i class="fa-solid fa-expand" aria-hidden=true></i></button></div><div class=code-wrapper data-max=400 data-line-digit=1 style=--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-js data-lang=js><span class=line><span class=cl><span class=kd>var</span> <span class=nx>a</span> <span class=o>=</span> <span class=mi>1</span><span class=p>;</span> <span class=c1>// 全局变量
+</span></span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kd>function</span> <span class=nx>test</span><span class=p>()</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=kd>var</span> <span class=nx>a</span> <span class=o>=</span> <span class=mi>2</span><span class=p>;</span> <span class=c1>// 局部变量
+</span></span></span><span class=line><span class=cl><span class=p>}</span></span></span></code></pre></td></tr></table></div></div></div><p>JavaScript 查找变量遵循 <strong>作用域链规则</strong>：</p><div class="code-tabs diagram-tabs" data-diagram=mermaid><div class=tabs-header><div class=tabs-items><span class="tab-item active" data-tab=diagram title=图表>图表</span>
+<span class=tab-item data-tab=code title=代码>代码</span></div><div class=tabs-actions><button type=button class="action-btn diagram-zoom-out-btn" aria-label=缩小 title=缩小><i class="fa-solid fa-magnifying-glass-minus" aria-hidden=true></i></button>
+<button type=button class="action-btn diagram-zoom-in-btn" aria-label=放大 title=放大><i class="fa-solid fa-magnifying-glass-plus" aria-hidden=true></i></button>
+<button type=button class="action-btn diagram-reset-btn" aria-label=重置 title=重置><i class="fa-solid fa-arrows-rotate" aria-hidden=true></i></button>
+<button type=button class="action-btn diagram-download-btn" aria-label="下载 SVG" title="下载 SVG"><i class="fa-solid fa-download" aria-hidden=true></i></button></div></div><div class=tabs-content><div class="code-block diagram-view active" data-filename=mermaid.mmd><div class=diagram-container><pre class=mermaid>flowchart TD
     A[当前作用域] --> B[外层作用域]
-    B --> C[全局作用域]</pre>
-          <pre class="mermaid-dark">flowchart TD
+    B --> C[全局作用域]</pre><pre class=mermaid-dark>flowchart TD
     A[当前作用域] --> B[外层作用域]
-    B --> C[全局作用域]</pre>
-          <pre class="mermaid-neutral">flowchart TD
+    B --> C[全局作用域]</pre><pre class=mermaid-neutral>flowchart TD
     A[当前作用域] --> B[外层作用域]
-    B --> C[全局作用域]</pre>
-        </div>
-      </div><div class="code-block highlight diagram-code" data-mode="classic" data-copyable="true" copyable="true" fullscreen="true" filename="mermaid.mmd"><div class="chroma">
-<div class="code-header language-text"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">flowchart TD
-</span></span><span class="line"><span class="cl">    A[当前作用域] --&gt; B[外层作用域]
-</span></span><span class="line"><span class="cl">    B --&gt; C[全局作用域]</span></span></code></pre></td></tr></table></div>
-</div>
-</div></div>
-  </div><p>当执行：</p>
-<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
-<div class="code-header language-js"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="line"><span class="cl"><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">a</span><span class="p">);</span></span></span></code></pre></td></tr></table></div>
-</div>
-</div><ol>
-<li>先查找函数作用域</li>
-<li>找到了变量<code>a</code></li>
-<li>但值是<code>undefined</code></li>
-<li>因此不会再查找全局<code>a</code></li>
-</ol>
-<p>最终输出<code>undefined</code>。</p>
-<h2 class="heading-element" id="如果使用-let-会发生什么"><span>如果使用 let 会发生什么</span>
-  <a href="#%e5%a6%82%e6%9e%9c%e4%bd%bf%e7%94%a8-let-%e4%bc%9a%e5%8f%91%e7%94%9f%e4%bb%80%e4%b9%88" class="heading-mark">
-    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
-  </a>
-</h2><p>如果改成：</p>
-<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
-<div class="code-header language-js"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span><span class="lnt">6
-</span><span class="lnt">7
-</span><span class="lnt">8
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="line"><span class="cl"><span class="kd">var</span> <span class="nx">a</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="kd">function</span> <span class="nx">test</span><span class="p">()</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">a</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">  <span class="kd">let</span> <span class="nx">a</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="nx">test</span><span class="p">();</span></span></span></code></pre></td></tr></table></div>
-</div>
-</div><p>运行会报错：</p>
-<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
-<div class="code-header language-fallback"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">ReferenceError: Cannot access &#39;a&#39; before initialization</span></span></code></pre></td></tr></table></div>
-</div>
-</div><p>原因是<code>let</code>存在暂时性死区（Temporal Dead Zone，TDZ）。在<code>let</code>或<code>const</code>声明的变量 从作用域开始到变量声明之前的区域，在这段时间内访问变量会直接抛出 <code>ReferenceError</code>。<strong>变量在声明之前不可访问。</strong></p>
-<h2 class="heading-element" id="模拟-javascript-引擎编译"><span>模拟 JavaScript 引擎编译</span>
-  <a href="#%e6%a8%a1%e6%8b%9f-javascript-%e5%bc%95%e6%93%8e%e7%bc%96%e8%af%91" class="heading-mark">
-    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
-  </a>
-</h2><p>下面用 JavaScript 模拟一个简单的编译器行为：</p>
-<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
-<div class="code-header language-js"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="2" style="--fi-max-shown-lines:400;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span><span class="lnt">15
-</span><span class="lnt">16
-</span><span class="lnt">17
-</span><span class="lnt">18
-</span><span class="lnt">19
-</span><span class="lnt">20
-</span><span class="lnt">21
-</span><span class="lnt">22
-</span><span class="lnt">23
-</span><span class="lnt">24
-</span><span class="lnt">25
-</span><span class="lnt">26
-</span><span class="lnt">27
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="line"><span class="cl"><span class="kd">function</span> <span class="nx">compile</span><span class="p">(</span><span class="nx">code</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">  <span class="c1">// 执行上下文
-</span></span></span><span class="line"><span class="cl">  <span class="kr">const</span> <span class="nx">executionContext</span> <span class="o">=</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="nx">VO</span><span class="o">:</span> <span class="p">{},</span> <span class="c1">// Variable Object
-</span></span></span><span class="line"><span class="cl">    <span class="nx">scopeChain</span><span class="o">:</span> <span class="p">[],</span>
-</span></span><span class="line"><span class="cl">    <span class="k">this</span><span class="o">:</span> <span class="nx">globalThis</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">  <span class="p">};</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">  <span class="c1">// 模拟扫描代码
-</span></span></span><span class="line"><span class="cl">  <span class="kr">const</span> <span class="nx">lines</span> <span class="o">=</span> <span class="nx">code</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="s1">&#39;\n&#39;</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">  <span class="k">for</span> <span class="p">(</span><span class="kr">const</span> <span class="nx">line</span> <span class="k">of</span> <span class="nx">lines</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="c1">// 发现 var 声明
-</span></span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="nx">line</span><span class="p">.</span><span class="nx">includes</span><span class="p">(</span><span class="s1">&#39;var &#39;</span><span class="p">))</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">      <span class="kr">const</span> <span class="nx">name</span> <span class="o">=</span> <span class="nx">line</span><span class="p">.</span><span class="nx">match</span><span class="p">(</span><span class="sr">/var\s+(\w+)/</span><span class="p">)[</span><span class="mi">1</span><span class="p">];</span>
-</span></span><span class="line"><span class="cl">      <span class="nx">executionContext</span><span class="p">.</span><span class="nx">VO</span><span class="p">[</span><span class="nx">name</span><span class="p">]</span> <span class="o">=</span> <span class="kc">undefined</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">    <span class="p">}</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">    <span class="c1">// 发现 function 声明
-</span></span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="nx">line</span><span class="p">.</span><span class="nx">includes</span><span class="p">(</span><span class="s1">&#39;function &#39;</span><span class="p">))</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">      <span class="kr">const</span> <span class="nx">name</span> <span class="o">=</span> <span class="nx">line</span><span class="p">.</span><span class="nx">match</span><span class="p">(</span><span class="sr">/function\s+(\w+)/</span><span class="p">)[</span><span class="mi">1</span><span class="p">];</span>
-</span></span><span class="line"><span class="cl">      <span class="nx">executionContext</span><span class="p">.</span><span class="nx">VO</span><span class="p">[</span><span class="nx">name</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;[Function]&#39;</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">    <span class="p">}</span>
-</span></span><span class="line"><span class="cl">  <span class="p">}</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">  <span class="k">return</span> <span class="nx">executionContext</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div>
-</div>
-</div><p>测试编译：</p>
-<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
-<div class="code-header language-js"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span><span class="lnt">6
-</span><span class="lnt">7
-</span><span class="lnt">8
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="line"><span class="cl"><span class="kr">const</span> <span class="nx">code</span> <span class="o">=</span> <span class="sb">`
-</span></span></span><span class="line"><span class="cl"><span class="sb">function test(){
-</span></span></span><span class="line"><span class="cl"><span class="sb">  console.log(a)
-</span></span></span><span class="line"><span class="cl"><span class="sb">  var a = 2
-</span></span></span><span class="line"><span class="cl"><span class="sb">}
-</span></span></span><span class="line"><span class="cl"><span class="sb">`</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">compile</span><span class="p">(</span><span class="nx">code</span><span class="p">));</span></span></span></code></pre></td></tr></table></div>
-</div>
-</div><p>输出如下：</p>
-<p><img loading="lazy" src='/images/202603/1/1.png' alt="/images/202603/1/1.png"></p>
-<p>写一个简单的执行器：</p>
-<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
-<div class="code-header language-js"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span><span class="lnt">6
-</span><span class="lnt">7
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="line"><span class="cl"><span class="kd">function</span> <span class="nx">execute</span><span class="p">(</span><span class="nx">context</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;执行 console.log(a)&#39;</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">context</span><span class="p">.</span><span class="nx">VO</span><span class="p">.</span><span class="nx">a</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;执行 a = 2&#39;</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">  <span class="nx">context</span><span class="p">.</span><span class="nx">VO</span><span class="p">.</span><span class="nx">a</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div>
-</div>
-</div><p>执行：</p>
-<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
-<div class="code-header language-js"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="line"><span class="cl"><span class="kr">const</span> <span class="nx">context</span> <span class="o">=</span> <span class="nx">compile</span><span class="p">(</span><span class="nx">code</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl"><span class="nx">execute</span><span class="p">(</span><span class="nx">context</span><span class="p">);</span></span></span></code></pre></td></tr></table></div>
-</div>
-</div><p><img loading="lazy" src='/images/202603/1/2.png' alt="/images/202603/1/2.png"></p>
-<h2 class="heading-element" id="总结"><span>总结</span>
-  <a href="#%e6%80%bb%e7%bb%93" class="heading-mark">
-    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
-  </a>
-</h2><p>理解变量提升的关键是理解执行上下文的创建过程。</p>
-<p>核心要点：</p>
-<ul>
-<li>JavaScript 代码执行前会创建执行上下文</li>
-<li>在编译阶段会扫描变量声明</li>
-<li><code>var</code>声明的变量会被初始化为 <code>undefined</code></li>
-<li>局部变量会遮蔽外部变量</li>
-<li><code>let</code>和<code>const</code>存在暂时性死区</li>
-</ul></div><div class="post-footer" id="post-footer">
-  <div class="post-info">
-    <div class="post-info-line">
-      <div class="post-info-mod"><span title="更新于 2026-03-16 22:09:54">更新于 2026-03-16&nbsp;</span>
-      </div></div><div class="post-info-line">
-        <div class="post-info-md"><span><a href="vscode://file/D:\hugo-blog\andyfree96\content\posts\从执行上下文理解JavaScript变量提升.md" title="在编辑器中打开" class="link-to-vscode">在编辑器中打开</a></span></div>
-        <div class="post-info-share">
-          <span><a href="javascript:void(0);" title="分享到 X" data-sharer="twitter" data-url="http://localhost:1313/%E4%BB%8E%E6%89%A7%E8%A1%8C%E4%B8%8A%E4%B8%8B%E6%96%87%E7%90%86%E8%A7%A3javascript%E5%8F%98%E9%87%8F%E6%8F%90%E5%8D%87/" data-title="从执行上下文理解JavaScript变量提升" data-via="IRONAnthony96" data-hashtags="JavaScript,执行上下文,变量提升"><i class="fa-brands fa-x-twitter" aria-hidden="true"></i></a>
-  <a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="http://localhost:1313/%E4%BB%8E%E6%89%A7%E8%A1%8C%E4%B8%8A%E4%B8%8B%E6%96%87%E7%90%86%E8%A7%A3javascript%E5%8F%98%E9%87%8F%E6%8F%90%E5%8D%87/" data-hashtag="JavaScript"><i class="fa-brands fa-facebook-square" aria-hidden="true"></i></a>
-  <a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="http://localhost:1313/%E4%BB%8E%E6%89%A7%E8%A1%8C%E4%B8%8A%E4%B8%8B%E6%96%87%E7%90%86%E8%A7%A3javascript%E5%8F%98%E9%87%8F%E6%8F%90%E5%8D%87/" data-title="从执行上下文理解JavaScript变量提升" data-image="/images/202603/1/zhiyuan-sun-a_7NwraYpbI-unsplash.jpg"><i class="fa-brands fa-weibo" aria-hidden="true"></i></a>
-  </span>
-        </div>
-      </div></div>
-
-  <div class="post-info-more">
-    <section class="post-tags"><i class="fa-solid fa-tags me-1" aria-hidden="true"></i><a href="/tags/javascript/" class="post-tag" title="标签 - JavaScript">JavaScript</a><a href="/tags/%E6%89%A7%E8%A1%8C%E4%B8%8A%E4%B8%8B%E6%96%87/" class="post-tag" title="标签 - 执行上下文">执行上下文</a><a href="/tags/%E5%8F%98%E9%87%8F%E6%8F%90%E5%8D%87/" class="post-tag" title="标签 - 变量提升">变量提升</a></section>
-    <section><span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
-    </section>
-  </div><div class="post-nav"></div>
-</div>
-<div class="post-reward">
-    <div class="comment">请作者喝杯咖啡!</div>
-    <input type="checkbox" class="reward-input" name="reward" id="fi-reward" hidden />
-    <label class="reward-button" for="fi-reward"><i class="fa-solid fa-qrcode" aria-hidden="true"></i>赞赏</label>
-    <div class="reward-ways" data-mode="static"><div><img src='/reward/alipay.png' alt="AndyFree96 支付宝"><span data-animation>支付宝</span>
-          </div><div><img src='/reward/wechatpay.png' alt="AndyFree96 微信"><span data-animation>微信</span>
-          </div></div>
-  </div></article>
-
-  <aside class="toc" id="toc-auto" aria-label="目录"><h2 class="toc-title">目录&nbsp;<i class="toc-icon fa-solid fa-angle-down" aria-hidden="true"></i></h2>
-      <div class="toc-content" id="toc-content-auto"></div></aside><dialog id="toc-dialog" aria-labelledby="toc-dialog-title" role="dialog" closedby="any">
-      <button type="button" class="toc-close-btn" aria-label="Close Table of Contents"><i class="fa-solid fa-xmark fa-lg" aria-hidden="true"></i></button>
-      <div class="toc">
-        <h2 class="toc-title" id="toc-dialog-title">目录</h2>
-        <div class="toc-content" id="toc-content-drawer"><nav >
-  <ul>
-    <li><a href="#javascript-是如何执行代码的">JavaScript 是如何执行代码的</a></li>
-    <li><a href="#什么是执行上下文-execution-context">什么是执行上下文 (Execution Context)</a></li>
-    <li><a href="#执行上下文的结构">执行上下文的结构</a></li>
-    <li><a href="#变量提升是如何发生的">变量提升是如何发生的</a></li>
-    <li><a href="#代码真实执行顺序">代码真实执行顺序</a></li>
-    <li><a href="#为什么不是输出-1">为什么不是输出 1</a></li>
-    <li><a href="#如果使用-let-会发生什么">如果使用 let 会发生什么</a></li>
-    <li><a href="#模拟-javascript-引擎编译">模拟 JavaScript 引擎编译</a></li>
-    <li><a href="#总结">总结</a></li>
-  </ul>
-</nav></div>
-      </div>
-    </dialog></main><footer class="footer">
-    <div class="footer-container"><div class="footer-line powered">由 <a href="https://gohugo.io/" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.163.1">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/hugo-fixit/FixIt" target="_blank" rel="external" title="FixIt v1.0.0-mq99hlzg">FixIt</a>
-        </div><div class="footer-line copyright" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright" aria-hidden="true"></i>
-            <span itemprop="copyrightYear">2019 - 2026</span><span class="author" itemprop="copyrightHolder">
-              <a href="https://andyfree96.github.io/" target="_blank" rel="external nofollow noopener noreferrer">AndyFree96</a></span></div></div>
-  </footer></div><div class="widgets"><div class="fixed-buttons"><button type="button" class="fixed-button back-to-top animate__faster d-none" aria-label="回到顶部"><i class="fa-solid fa-arrow-up" aria-hidden="true"></i></button><button type="button" id="toc-drawer-button" class="fixed-button toc-drawer-button d-none" aria-label="目录" aria-controls="toc-dialog" aria-expanded="false"><i class="fa-solid fa-bars" aria-hidden="true"></i></button></div><div id="mask"></div><div class="reading-progress-bar" style="left: 0;top: 0;"></div><noscript>
-    <div class="noscript-warning">该网站在启用 JavaScript 的情况下效果最佳。</div>
-  </noscript>
-</div><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script src="/lib/autocomplete/autocomplete.min.js" defer></script><script src="/lib/algoliasearch/browser.umd.js" defer></script><script src="/lib/sharer/sharer.min.js" async defer></script><script src="/lib/cookieconsent/cookieconsent.min.js" defer></script><script src="/js/lib/cookieconsent.js" defer></script><script src="/lib/cell-tooltip/cell-tooltip.umd.js" defer></script><script src="/js/config/74552bf039995b6f561678da8fb1e582.js" defer></script><script src="/js/lib/file-tree.js" defer></script><script src="/lib/panzoom/panzoom.min.js" defer></script><script src="/js/lib/mermaid-bootstrap.js" defer type="module"></script><script src="/js/main.js" defer></script></body>
-</html>
+    B --> C[全局作用域]</pre></div></div><div class="code-block highlight diagram-code" data-mode=classic data-copyable=true copyable=true fullscreen=true filename=mermaid.mmd><div class=chroma><div class="code-header language-text"><span class=code-title><i class="arrow fa-solid fa-chevron-down" aria-hidden=true></i></span><button type=button class=ellipses-btn aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden=true></i></button><button type=button class="action-btn line-nos-btn" aria-label=切换行号 title=切换行号><i class="fa-solid fa-list-ol" aria-hidden=true></i></button><button type=button class="action-btn line-wrap-btn" aria-label=切换自动换行 title=切换自动换行><i class="fa-solid fa-right-left" aria-hidden=true></i></button><button type=button class="action-btn copy-btn" aria-label=复制到剪贴板 title=复制到剪贴板 data-copied-text=已复制><i class="fa-regular fa-clone" aria-hidden=true></i></button><button type=button class="action-btn fullscreen-btn" aria-label=全屏 title=全屏 data-exit-title=退出全屏><i class="fa-solid fa-expand" aria-hidden=true></i></button></div><div class=code-wrapper data-max=400 data-line-digit=1 style=--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-text data-lang=text><span class=line><span class=cl>flowchart TD
+</span></span><span class=line><span class=cl>    A[当前作用域] --&gt; B[外层作用域]
+</span></span><span class=line><span class=cl>    B --&gt; C[全局作用域]</span></span></code></pre></td></tr></table></div></div></div></div></div><p>当执行：</p><div class="code-block highlight" data-mode=classic data-copyable=true><div class=chroma><div class="code-header language-js"><span class=code-title><i class="arrow fa-solid fa-chevron-down" aria-hidden=true></i></span><button type=button class=ellipses-btn aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden=true></i></button><button type=button class="action-btn line-nos-btn" aria-label=切换行号 title=切换行号><i class="fa-solid fa-list-ol" aria-hidden=true></i></button><button type=button class="action-btn line-wrap-btn" aria-label=切换自动换行 title=切换自动换行><i class="fa-solid fa-right-left" aria-hidden=true></i></button><button type=button class="action-btn copy-btn" aria-label=复制到剪贴板 title=复制到剪贴板 data-copied-text=已复制><i class="fa-regular fa-clone" aria-hidden=true></i></button><button type=button class="action-btn fullscreen-btn" aria-label=全屏 title=全屏 data-exit-title=退出全屏><i class="fa-solid fa-expand" aria-hidden=true></i></button></div><div class=code-wrapper data-max=400 data-line-digit=1 style=--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-js data-lang=js><span class=line><span class=cl><span class=nx>console</span><span class=p>.</span><span class=nx>log</span><span class=p>(</span><span class=nx>a</span><span class=p>);</span></span></span></code></pre></td></tr></table></div></div></div><ol><li>先查找函数作用域</li><li>找到了变量<code>a</code></li><li>但值是<code>undefined</code></li><li>因此不会再查找全局<code>a</code></li></ol><p>最终输出<code>undefined</code>。</p><h2 class=heading-element id=如果使用-let-会发生什么><span>如果使用 let 会发生什么</span>
+<a href=#%e5%a6%82%e6%9e%9c%e4%bd%bf%e7%94%a8-let-%e4%bc%9a%e5%8f%91%e7%94%9f%e4%bb%80%e4%b9%88 class=heading-mark><svg class="octicon octicon-link" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5.0 114.95 4.95l-2.5 2.5a3.5 3.5.0 01-4.95.0.751.751.0 01.018-1.042.751.751.0 011.042-.018 1.998 1.998.0 002.83.0l2.5-2.5a2.002 2.002.0 00-2.83-2.83l-1.25 1.25a.751.751.0 01-1.042-.018.751.751.0 01-.018-1.042zm-4.69 9.64a1.998 1.998.0 002.83.0l1.25-1.25a.751.751.0 011.042.018.751.751.0 01.018 1.042l-1.25 1.25a3.5 3.5.0 11-4.95-4.95l2.5-2.5a3.5 3.5.0 014.95.0.751.751.0 01-.018 1.042.751.751.0 01-1.042.018 1.998 1.998.0 00-2.83.0l-2.5 2.5a1.998 1.998.0 000 2.83z"/></svg></a></h2><p>如果改成：</p><div class="code-block highlight" data-mode=classic data-copyable=true><div class=chroma><div class="code-header language-js"><span class=code-title><i class="arrow fa-solid fa-chevron-down" aria-hidden=true></i></span><button type=button class=ellipses-btn aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden=true></i></button><button type=button class="action-btn line-nos-btn" aria-label=切换行号 title=切换行号><i class="fa-solid fa-list-ol" aria-hidden=true></i></button><button type=button class="action-btn line-wrap-btn" aria-label=切换自动换行 title=切换自动换行><i class="fa-solid fa-right-left" aria-hidden=true></i></button><button type=button class="action-btn copy-btn" aria-label=复制到剪贴板 title=复制到剪贴板 data-copied-text=已复制><i class="fa-regular fa-clone" aria-hidden=true></i></button><button type=button class="action-btn fullscreen-btn" aria-label=全屏 title=全屏 data-exit-title=退出全屏><i class="fa-solid fa-expand" aria-hidden=true></i></button></div><div class=code-wrapper data-max=400 data-line-digit=1 style=--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-js data-lang=js><span class=line><span class=cl><span class=kd>var</span> <span class=nx>a</span> <span class=o>=</span> <span class=mi>1</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kd>function</span> <span class=nx>test</span><span class=p>()</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=nx>console</span><span class=p>.</span><span class=nx>log</span><span class=p>(</span><span class=nx>a</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=kd>let</span> <span class=nx>a</span> <span class=o>=</span> <span class=mi>2</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nx>test</span><span class=p>();</span></span></span></code></pre></td></tr></table></div></div></div><p>运行会报错：</p><div class="code-block highlight" data-mode=classic data-copyable=true><div class=chroma><div class="code-header language-fallback"><span class=code-title><i class="arrow fa-solid fa-chevron-down" aria-hidden=true></i></span><button type=button class=ellipses-btn aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden=true></i></button><button type=button class="action-btn line-nos-btn" aria-label=切换行号 title=切换行号><i class="fa-solid fa-list-ol" aria-hidden=true></i></button><button type=button class="action-btn line-wrap-btn" aria-label=切换自动换行 title=切换自动换行><i class="fa-solid fa-right-left" aria-hidden=true></i></button><button type=button class="action-btn copy-btn" aria-label=复制到剪贴板 title=复制到剪贴板 data-copied-text=已复制><i class="fa-regular fa-clone" aria-hidden=true></i></button><button type=button class="action-btn fullscreen-btn" aria-label=全屏 title=全屏 data-exit-title=退出全屏><i class="fa-solid fa-expand" aria-hidden=true></i></button></div><div class=code-wrapper data-max=400 data-line-digit=1 style=--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>ReferenceError: Cannot access &#39;a&#39; before initialization</span></span></code></pre></td></tr></table></div></div></div><p>原因是<code>let</code>存在暂时性死区（Temporal Dead Zone，TDZ）。在<code>let</code>或<code>const</code>声明的变量 从作用域开始到变量声明之前的区域，在这段时间内访问变量会直接抛出 <code>ReferenceError</code>。<strong>变量在声明之前不可访问。</strong></p><h2 class=heading-element id=模拟-javascript-引擎编译><span>模拟 JavaScript 引擎编译</span>
+<a href=#%e6%a8%a1%e6%8b%9f-javascript-%e5%bc%95%e6%93%8e%e7%bc%96%e8%af%91 class=heading-mark><svg class="octicon octicon-link" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5.0 114.95 4.95l-2.5 2.5a3.5 3.5.0 01-4.95.0.751.751.0 01.018-1.042.751.751.0 011.042-.018 1.998 1.998.0 002.83.0l2.5-2.5a2.002 2.002.0 00-2.83-2.83l-1.25 1.25a.751.751.0 01-1.042-.018.751.751.0 01-.018-1.042zm-4.69 9.64a1.998 1.998.0 002.83.0l1.25-1.25a.751.751.0 011.042.018.751.751.0 01.018 1.042l-1.25 1.25a3.5 3.5.0 11-4.95-4.95l2.5-2.5a3.5 3.5.0 014.95.0.751.751.0 01-.018 1.042.751.751.0 01-1.042.018 1.998 1.998.0 00-2.83.0l-2.5 2.5a1.998 1.998.0 000 2.83z"/></svg></a></h2><p>下面用 JavaScript 模拟一个简单的编译器行为：</p><div class="code-block highlight" data-mode=classic data-copyable=true><div class=chroma><div class="code-header language-js"><span class=code-title><i class="arrow fa-solid fa-chevron-down" aria-hidden=true></i></span><button type=button class=ellipses-btn aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden=true></i></button><button type=button class="action-btn line-nos-btn" aria-label=切换行号 title=切换行号><i class="fa-solid fa-list-ol" aria-hidden=true></i></button><button type=button class="action-btn line-wrap-btn" aria-label=切换自动换行 title=切换自动换行><i class="fa-solid fa-right-left" aria-hidden=true></i></button><button type=button class="action-btn copy-btn" aria-label=复制到剪贴板 title=复制到剪贴板 data-copied-text=已复制><i class="fa-regular fa-clone" aria-hidden=true></i></button><button type=button class="action-btn fullscreen-btn" aria-label=全屏 title=全屏 data-exit-title=退出全屏><i class="fa-solid fa-expand" aria-hidden=true></i></button></div><div class=code-wrapper data-max=400 data-line-digit=2 style=--fi-max-shown-lines:400;--fi-line-digit:2;--fi-line-start:1><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-js data-lang=js><span class=line><span class=cl><span class=kd>function</span> <span class=nx>compile</span><span class=p>(</span><span class=nx>code</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=c1>// 执行上下文
+</span></span></span><span class=line><span class=cl>  <span class=kr>const</span> <span class=nx>executionContext</span> <span class=o>=</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=nx>VO</span><span class=o>:</span> <span class=p>{},</span> <span class=c1>// Variable Object
+</span></span></span><span class=line><span class=cl>    <span class=nx>scopeChain</span><span class=o>:</span> <span class=p>[],</span>
+</span></span><span class=line><span class=cl>    <span class=k>this</span><span class=o>:</span> <span class=nx>globalThis</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>  <span class=p>};</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=c1>// 模拟扫描代码
+</span></span></span><span class=line><span class=cl>  <span class=kr>const</span> <span class=nx>lines</span> <span class=o>=</span> <span class=nx>code</span><span class=p>.</span><span class=nx>split</span><span class=p>(</span><span class=s1>&#39;\n&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=k>for</span> <span class=p>(</span><span class=kr>const</span> <span class=nx>line</span> <span class=k>of</span> <span class=nx>lines</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>    <span class=c1>// 发现 var 声明
+</span></span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=p>(</span><span class=nx>line</span><span class=p>.</span><span class=nx>includes</span><span class=p>(</span><span class=s1>&#39;var &#39;</span><span class=p>))</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=kr>const</span> <span class=nx>name</span> <span class=o>=</span> <span class=nx>line</span><span class=p>.</span><span class=nx>match</span><span class=p>(</span><span class=sr>/var\s+(\w+)/</span><span class=p>)[</span><span class=mi>1</span><span class=p>];</span>
+</span></span><span class=line><span class=cl>      <span class=nx>executionContext</span><span class=p>.</span><span class=nx>VO</span><span class=p>[</span><span class=nx>name</span><span class=p>]</span> <span class=o>=</span> <span class=kc>undefined</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1>// 发现 function 声明
+</span></span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=p>(</span><span class=nx>line</span><span class=p>.</span><span class=nx>includes</span><span class=p>(</span><span class=s1>&#39;function &#39;</span><span class=p>))</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>      <span class=kr>const</span> <span class=nx>name</span> <span class=o>=</span> <span class=nx>line</span><span class=p>.</span><span class=nx>match</span><span class=p>(</span><span class=sr>/function\s+(\w+)/</span><span class=p>)[</span><span class=mi>1</span><span class=p>];</span>
+</span></span><span class=line><span class=cl>      <span class=nx>executionContext</span><span class=p>.</span><span class=nx>VO</span><span class=p>[</span><span class=nx>name</span><span class=p>]</span> <span class=o>=</span> <span class=s1>&#39;[Function]&#39;</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>    <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=k>return</span> <span class=nx>executionContext</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=p>}</span></span></span></code></pre></td></tr></table></div></div></div><p>测试编译：</p><div class="code-block highlight" data-mode=classic data-copyable=true><div class=chroma><div class="code-header language-js"><span class=code-title><i class="arrow fa-solid fa-chevron-down" aria-hidden=true></i></span><button type=button class=ellipses-btn aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden=true></i></button><button type=button class="action-btn line-nos-btn" aria-label=切换行号 title=切换行号><i class="fa-solid fa-list-ol" aria-hidden=true></i></button><button type=button class="action-btn line-wrap-btn" aria-label=切换自动换行 title=切换自动换行><i class="fa-solid fa-right-left" aria-hidden=true></i></button><button type=button class="action-btn copy-btn" aria-label=复制到剪贴板 title=复制到剪贴板 data-copied-text=已复制><i class="fa-regular fa-clone" aria-hidden=true></i></button><button type=button class="action-btn fullscreen-btn" aria-label=全屏 title=全屏 data-exit-title=退出全屏><i class="fa-solid fa-expand" aria-hidden=true></i></button></div><div class=code-wrapper data-max=400 data-line-digit=1 style=--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-js data-lang=js><span class=line><span class=cl><span class=kr>const</span> <span class=nx>code</span> <span class=o>=</span> <span class=sb>`
+</span></span></span><span class=line><span class=cl><span class=sb>function test(){
+</span></span></span><span class=line><span class=cl><span class=sb>  console.log(a)
+</span></span></span><span class=line><span class=cl><span class=sb>  var a = 2
+</span></span></span><span class=line><span class=cl><span class=sb>}
+</span></span></span><span class=line><span class=cl><span class=sb>`</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nx>console</span><span class=p>.</span><span class=nx>log</span><span class=p>(</span><span class=nx>compile</span><span class=p>(</span><span class=nx>code</span><span class=p>));</span></span></span></code></pre></td></tr></table></div></div></div><p>输出如下：</p><p><img loading=lazy src=/images/202603/1/1.png alt=/images/202603/1/1.png></p><p>写一个简单的执行器：</p><div class="code-block highlight" data-mode=classic data-copyable=true><div class=chroma><div class="code-header language-js"><span class=code-title><i class="arrow fa-solid fa-chevron-down" aria-hidden=true></i></span><button type=button class=ellipses-btn aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden=true></i></button><button type=button class="action-btn line-nos-btn" aria-label=切换行号 title=切换行号><i class="fa-solid fa-list-ol" aria-hidden=true></i></button><button type=button class="action-btn line-wrap-btn" aria-label=切换自动换行 title=切换自动换行><i class="fa-solid fa-right-left" aria-hidden=true></i></button><button type=button class="action-btn copy-btn" aria-label=复制到剪贴板 title=复制到剪贴板 data-copied-text=已复制><i class="fa-regular fa-clone" aria-hidden=true></i></button><button type=button class="action-btn fullscreen-btn" aria-label=全屏 title=全屏 data-exit-title=退出全屏><i class="fa-solid fa-expand" aria-hidden=true></i></button></div><div class=code-wrapper data-max=400 data-line-digit=1 style=--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-js data-lang=js><span class=line><span class=cl><span class=kd>function</span> <span class=nx>execute</span><span class=p>(</span><span class=nx>context</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=nx>console</span><span class=p>.</span><span class=nx>log</span><span class=p>(</span><span class=s1>&#39;执行 console.log(a)&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=nx>console</span><span class=p>.</span><span class=nx>log</span><span class=p>(</span><span class=nx>context</span><span class=p>.</span><span class=nx>VO</span><span class=p>.</span><span class=nx>a</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=nx>console</span><span class=p>.</span><span class=nx>log</span><span class=p>(</span><span class=s1>&#39;执行 a = 2&#39;</span><span class=p>);</span>
+</span></span><span class=line><span class=cl>  <span class=nx>context</span><span class=p>.</span><span class=nx>VO</span><span class=p>.</span><span class=nx>a</span> <span class=o>=</span> <span class=mi>2</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=p>}</span></span></span></code></pre></td></tr></table></div></div></div><p>执行：</p><div class="code-block highlight" data-mode=classic data-copyable=true><div class=chroma><div class="code-header language-js"><span class=code-title><i class="arrow fa-solid fa-chevron-down" aria-hidden=true></i></span><button type=button class=ellipses-btn aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden=true></i></button><button type=button class="action-btn line-nos-btn" aria-label=切换行号 title=切换行号><i class="fa-solid fa-list-ol" aria-hidden=true></i></button><button type=button class="action-btn line-wrap-btn" aria-label=切换自动换行 title=切换自动换行><i class="fa-solid fa-right-left" aria-hidden=true></i></button><button type=button class="action-btn copy-btn" aria-label=复制到剪贴板 title=复制到剪贴板 data-copied-text=已复制><i class="fa-regular fa-clone" aria-hidden=true></i></button><button type=button class="action-btn fullscreen-btn" aria-label=全屏 title=全屏 data-exit-title=退出全屏><i class="fa-solid fa-expand" aria-hidden=true></i></button></div><div class=code-wrapper data-max=400 data-line-digit=1 style=--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-js data-lang=js><span class=line><span class=cl><span class=kr>const</span> <span class=nx>context</span> <span class=o>=</span> <span class=nx>compile</span><span class=p>(</span><span class=nx>code</span><span class=p>);</span>
+</span></span><span class=line><span class=cl><span class=nx>execute</span><span class=p>(</span><span class=nx>context</span><span class=p>);</span></span></span></code></pre></td></tr></table></div></div></div><p><img loading=lazy src=/images/202603/1/2.png alt=/images/202603/1/2.png></p><h2 class=heading-element id=总结><span>总结</span>
+<a href=#%e6%80%bb%e7%bb%93 class=heading-mark><svg class="octicon octicon-link" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5.0 114.95 4.95l-2.5 2.5a3.5 3.5.0 01-4.95.0.751.751.0 01.018-1.042.751.751.0 011.042-.018 1.998 1.998.0 002.83.0l2.5-2.5a2.002 2.002.0 00-2.83-2.83l-1.25 1.25a.751.751.0 01-1.042-.018.751.751.0 01-.018-1.042zm-4.69 9.64a1.998 1.998.0 002.83.0l1.25-1.25a.751.751.0 011.042.018.751.751.0 01.018 1.042l-1.25 1.25a3.5 3.5.0 11-4.95-4.95l2.5-2.5a3.5 3.5.0 014.95.0.751.751.0 01-.018 1.042.751.751.0 01-1.042.018 1.998 1.998.0 00-2.83.0l-2.5 2.5a1.998 1.998.0 000 2.83z"/></svg></a></h2><p>理解变量提升的关键是理解执行上下文的创建过程。</p><p>核心要点：</p><ul><li>JavaScript 代码执行前会创建执行上下文</li><li>在编译阶段会扫描变量声明</li><li><code>var</code>声明的变量会被初始化为 <code>undefined</code></li><li>局部变量会遮蔽外部变量</li><li><code>let</code>和<code>const</code>存在暂时性死区</li></ul></div><hr class=awesome-hr><h2 id=see-also>相关内容</h2><ul><li><a href=/%E5%AD%A6%E4%B9%A0javascript%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/ title="学习JavaScript数据结构与算法 第3版 (Loiane Groner)">学习JavaScript数据结构与算法 第3版 (Loiane Groner)</a></li><li><a href=/%E9%82%A3%E4%BA%9B%E5%A5%BD%E7%94%A8%E7%9A%84javascript%E6%95%B0%E7%BB%84%E6%96%B9%E6%B3%95/ title=那些好用的JavaScript数组方法>那些好用的JavaScript数组方法</a></li><li><a href=/axios%E7%AE%80%E6%98%8E%E6%95%99%E7%A8%8B/ title=Axios简明教程>Axios简明教程</a></li></ul><div class=post-footer id=post-footer><div class=post-info><div class=post-info-line><div class=post-info-mod><span title="更新于 2026-03-16 22:09:54">更新于 2026-03-16&nbsp;</span></div></div><div class=post-info-line><div class=post-info-md></div><div class=post-info-share><span><a href=javascript:void(0); title="分享到 X" data-sharer=twitter data-url=https://andyfree96.github.io/%E4%BB%8E%E6%89%A7%E8%A1%8C%E4%B8%8A%E4%B8%8B%E6%96%87%E7%90%86%E8%A7%A3javascript%E5%8F%98%E9%87%8F%E6%8F%90%E5%8D%87/ data-title=从执行上下文理解JavaScript变量提升 data-via=IRONAnthony96 data-hashtags=JavaScript,执行上下文,变量提升><i class="fa-brands fa-x-twitter" aria-hidden=true></i></a>
+<a href=javascript:void(0); title="分享到 Facebook" data-sharer=facebook data-url=https://andyfree96.github.io/%E4%BB%8E%E6%89%A7%E8%A1%8C%E4%B8%8A%E4%B8%8B%E6%96%87%E7%90%86%E8%A7%A3javascript%E5%8F%98%E9%87%8F%E6%8F%90%E5%8D%87/ data-hashtag=JavaScript><i class="fa-brands fa-facebook-square" aria-hidden=true></i></a>
+<a href=javascript:void(0); title="分享到 微博" data-sharer=weibo data-url=https://andyfree96.github.io/%E4%BB%8E%E6%89%A7%E8%A1%8C%E4%B8%8A%E4%B8%8B%E6%96%87%E7%90%86%E8%A7%A3javascript%E5%8F%98%E9%87%8F%E6%8F%90%E5%8D%87/ data-title=从执行上下文理解JavaScript变量提升 data-image=/images/202603/1/zhiyuan-sun-a_7NwraYpbI-unsplash.jpg><i class="fa-brands fa-weibo" aria-hidden=true></i></a></span></div></div></div><div class=post-info-more><section class=post-tags><i class="fa-solid fa-tags me-1" aria-hidden=true></i><a href=/tags/javascript/ class=post-tag title="标签 - JavaScript">JavaScript</a><a href=/tags/%E6%89%A7%E8%A1%8C%E4%B8%8A%E4%B8%8B%E6%96%87/ class=post-tag title="标签 - 执行上下文">执行上下文</a><a href=/tags/%E5%8F%98%E9%87%8F%E6%8F%90%E5%8D%87/ class=post-tag title="标签 - 变量提升">变量提升</a></section><section><span><a href=javascript:void(0); onclick=window.history.back()>返回</a></span>&nbsp;|&nbsp;<span><a href=/>主页</a></span></section></div><div class=post-nav><a href=/c%23%E4%B8%AD%E7%9A%84nameof%E8%BF%90%E7%AE%97%E7%AC%A6/ class=post-nav-item rel=prev title=C#中的nameof运算符><i class="fa-solid fa-angle-left" aria-hidden=true></i>C#中的nameof运算符</a><a href=/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F/ class=post-nav-item rel=next title="深入理解计算机系统 第3版 (Randal E. Bryant / David O'Hallaron)">深入理解计算机系统 第3版 (Randal E. Bryant / David O'Hallaron)<i class="fa-solid fa-angle-right" aria-hidden=true></i></a></div></div><div class=post-reward><div class=comment>请作者喝杯咖啡!</div><input type=checkbox class=reward-input name=reward id=fi-reward hidden>
+<label class=reward-button for=fi-reward><i class="fa-solid fa-qrcode" aria-hidden=true></i>赞赏</label><div class=reward-ways data-mode=static><div><img src=/reward/alipay.png alt="AndyFree96 支付宝"><span data-animation>支付宝</span></div><div><img src=/reward/wechatpay.png alt="AndyFree96 微信"><span data-animation>微信</span></div></div></div></article><aside class=toc id=toc-auto aria-label=目录><h2 class=toc-title>目录&nbsp;<i class="toc-icon fa-solid fa-angle-down" aria-hidden=true></i></h2><div class=toc-content id=toc-content-auto></div></aside><dialog id=toc-dialog aria-labelledby=toc-dialog-title role=dialog closedby=any><button type=button class=toc-close-btn aria-label="Close Table of Contents"><i class="fa-solid fa-xmark fa-lg" aria-hidden=true></i></button><div class=toc><h2 class=toc-title id=toc-dialog-title>目录</h2><div class=toc-content id=toc-content-drawer><nav><ul><li><a href=#javascript-是如何执行代码的>JavaScript 是如何执行代码的</a></li><li><a href=#什么是执行上下文-execution-context>什么是执行上下文 (Execution Context)</a></li><li><a href=#执行上下文的结构>执行上下文的结构</a></li><li><a href=#变量提升是如何发生的>变量提升是如何发生的</a></li><li><a href=#代码真实执行顺序>代码真实执行顺序</a></li><li><a href=#为什么不是输出-1>为什么不是输出 1</a></li><li><a href=#如果使用-let-会发生什么>如果使用 let 会发生什么</a></li><li><a href=#模拟-javascript-引擎编译>模拟 JavaScript 引擎编译</a></li><li><a href=#总结>总结</a></li></ul></nav></div></div></dialog></main><div id=comments><div id=gitalk class=comment></div><noscript>Please enable JavaScript to view the comments powered by <a href=https://github.com/gitalk/gitalk rel="external nofollow noopener noreferrer">Gitalk</a>.</noscript></div><footer class=footer><div class=footer-container><div class="footer-line powered">由 <a href=https://gohugo.io/ target=_blank rel="external nofollow noopener noreferrer" title="Hugo 0.163.1">Hugo</a> 强力驱动 | 主题 - <a href=https://github.com/hugo-fixit/FixIt target=_blank rel=external title="FixIt v1.0.0-mq99hlzg">FixIt</a></div><div class="footer-line copyright" itemscope itemtype=http://schema.org/CreativeWork><i class="fa-regular fa-copyright" aria-hidden=true></i>
+<span itemprop=copyrightYear>2019 - 2026</span><span class=author itemprop=copyrightHolder>
+<a href=https://andyfree96.github.io/>AndyFree96</a></span></div></div></footer></div><div class=widgets><div class=fixed-buttons><button type=button class="fixed-button back-to-top animate__faster d-none" aria-label=回到顶部><i class="fa-solid fa-arrow-up" aria-hidden=true></i></button><button type=button id=toc-drawer-button class="fixed-button toc-drawer-button d-none" aria-label=目录 aria-controls=toc-dialog aria-expanded=false><i class="fa-solid fa-bars" aria-hidden=true></i></button><button type=button class="fixed-button view-comments d-none" aria-label=查看评论><i class="fa-solid fa-comment" aria-hidden=true></i></button></div><div id=mask></div><div class=reading-progress-bar style=left:0;top:0></div><noscript><div class=noscript-warning>该网站在启用 JavaScript 的情况下效果最佳。</div></noscript></div><link rel=stylesheet href=/lib/gitalk/gitalk.min.css><link rel=stylesheet href=/lib/cookieconsent/cookieconsent.min.css><script src=/lib/gitalk/gitalk.min.js></script><script src=/js/lib/gitalk.min.js defer></script><script src=/lib/autocomplete/autocomplete.min.js defer></script><script src=/lib/algoliasearch/browser.umd.js defer></script><script src=/lib/sharer/sharer.min.js async defer></script><script src=/lib/cookieconsent/cookieconsent.min.js defer></script><script src=/js/lib/cookieconsent.min.js defer></script><script src=/lib/cell-tooltip/cell-tooltip.umd.js defer></script><script src=/js/config/74552bf039995b6f561678da8fb1e582.min.js defer></script><script src=/js/lib/file-tree.min.js defer></script><script src=/lib/panzoom/panzoom.min.js defer></script><script src=/js/lib/mermaid-bootstrap.min.js defer type=module></script><script src=/js/main.min.js defer></script></body></html>
