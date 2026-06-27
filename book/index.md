@@ -548,6 +548,11 @@
 
 [Build a Large Language Model (From Scratch)](https://sebastianraschka.com/llms-from-scratch/)
 
+#### 历史
+
+[史记](https://book.douban.com/subject/1836555/)
+
+[史记的读法](https://book.douban.com/subject/35897357/)
 
 ---
 

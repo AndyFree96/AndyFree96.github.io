@@ -41,7 +41,7 @@
 无论你是想提升对 Node.js 的理解，还是希望从源码中汲取工程设计的智慧，这都将是一次充满收获的技术旅程。准备好了吗？让我们从入口文件开始，走进 Node.js 的源码迷宫！"><meta name="twitter:creator" content="@IRONAnthony96"><meta name="application-name" content="FixIt">
 <meta name="apple-mobile-web-app-title" content="FixIt"><meta name="theme-color" data-light="#f6f8fa" data-dark="#151b23" content="#f6f8fa"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" type="text/html" href="http://localhost:1313/node.js%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="Node.js 源码剖析：非阻塞世界的引擎密码 - 东尼的博客" /><link rel="prev" type="text/html" href="http://localhost:1313/cpython%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="CPython 源码剖析：Python 运行的奥秘" /><link rel="next" type="text/html" href="http://localhost:1313/shadowsocks%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="Shadowsocks源码剖析" /><link rel="alternate" type="text/markdown" href="http://localhost:1313/node.js%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/index.md" title="Node.js 源码剖析：非阻塞世界的引擎密码 - 东尼的博客"><link rel="stylesheet" href="/css/config.css"><link rel="stylesheet" href="/css/main.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" type="text/html" href="http://localhost:1313/node.js%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="Node.js 源码剖析：非阻塞世界的引擎密码 - 东尼的博客" /><link rel="prev" type="text/html" href="http://localhost:1313/cpython%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="CPython 源码剖析：Python 运行的奥秘" /><link rel="next" type="text/html" href="http://localhost:1313/shadowsocks%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="Shadowsocks源码剖析：一个轻量级代理工具背后的网络编程设计" /><link rel="alternate" type="text/markdown" href="http://localhost:1313/node.js%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/index.md" title="Node.js 源码剖析：非阻塞世界的引擎密码 - 东尼的博客"><link rel="stylesheet" href="/css/config.css"><link rel="stylesheet" href="/css/main.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><link rel="preload" href="/js/main.js" as="script"><script type="application/ld+json">
   {
@@ -75,6 +75,7 @@
               <a class="menu-link" href="/opencourse">👨🏻‍💻 公开课</a></li><li class="menu-item">
               <a class="menu-link" href="/filmtv">🎞️ 影视</a></li><li class="menu-item">
               <a class="menu-link" href="/resource">⚡️ 资源库</a></li><li class="menu-item">
+              <a class="menu-link" href="/projects">⭐ 开源</a></li><li class="menu-item">
               <a class="menu-link" href="/about">🙋🏻‍♂️ 关于</a></li><li class="menu-item delimiter"></li><li class="menu-item search" id="search-desktop">
             <input type="text" placeholder="搜索文章标题或内容……" id="search-input-desktop" tabindex="-1">
             <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索" aria-controls="search-dropdown-desktop" aria-expanded="false">
@@ -118,7 +119,7 @@
             <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
               取消
             </a>
-          </li><li class="menu-item"><a class="menu-link" href="/posts/">📕 文章</a></li><li class="menu-item"><a class="menu-link" href="/categories/">🧰 分类</a></li><li class="menu-item"><a class="menu-link" href="/tags/">🔖 标签</a></li><li class="menu-item"><a class="menu-link" href="/book">📚 书单</a></li><li class="menu-item"><a class="menu-link" href="/paper">📝 论文</a></li><li class="menu-item"><a class="menu-link" href="/opencourse">👨🏻‍💻 公开课</a></li><li class="menu-item"><a class="menu-link" href="/filmtv">🎞️ 影视</a></li><li class="menu-item"><a class="menu-link" href="/resource">⚡️ 资源库</a></li><li class="menu-item"><a class="menu-link" href="/about">🙋🏻‍♂️ 关于</a></li><li class="menu-item menu-system"></li>
+          </li><li class="menu-item"><a class="menu-link" href="/posts/">📕 文章</a></li><li class="menu-item"><a class="menu-link" href="/categories/">🧰 分类</a></li><li class="menu-item"><a class="menu-link" href="/tags/">🔖 标签</a></li><li class="menu-item"><a class="menu-link" href="/book">📚 书单</a></li><li class="menu-item"><a class="menu-link" href="/paper">📝 论文</a></li><li class="menu-item"><a class="menu-link" href="/opencourse">👨🏻‍💻 公开课</a></li><li class="menu-item"><a class="menu-link" href="/filmtv">🎞️ 影视</a></li><li class="menu-item"><a class="menu-link" href="/resource">⚡️ 资源库</a></li><li class="menu-item"><a class="menu-link" href="/projects">⭐ 开源</a></li><li class="menu-item"><a class="menu-link" href="/about">🙋🏻‍♂️ 关于</a></li><li class="menu-item menu-system"></li>
       </ul>
     </nav>
   </div>
@@ -127,19 +128,7 @@
   </div>
   <div class="search-dropdown mobile">
     <div id="search-dropdown-mobile"></div>
-  </div><main class="fi-container"><aside class="aside-collection animate__animated animate__fadeIn animate__faster" aria-label="合集"><div class="details related-details open">
-      <div class="details-summary related-summary">
-        <i class="fa-solid fa-fire fa-fade text-danger" aria-hidden="true"></i>
-        <span class="related-title">相关内容</span><i class="details-icon fa-solid fa-angle-right" aria-hidden="true"></i></div>
-      <div class="details-content related-content">
-        <ul class="related-list"><li class="related-item">
-              <a href="/cpython%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="CPython 源码剖析：Python 运行的奥秘">CPython 源码剖析：Python 运行的奥秘</a></li><li class="related-item">
-              <a href="/launch-editor%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="launch-editor源码剖析：快速打开编辑器的实现原理">launch-editor源码剖析：快速打开编辑器的实现原理</a></li><li class="related-item">
-              <a href="/%E5%A6%82%E4%BD%95%E8%A7%A3%E5%86%B3-node.js-%E4%B8%AD%E7%9A%84-emfile-%E9%94%99%E8%AF%AF/" title="如何解决 Node.js 中的 EMFILE 错误">如何解决 Node.js 中的 EMFILE 错误</a></li><li class="related-item">
-              <a href="/json-server%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="json-server源码剖析：快速构建REST API背后的原理">json-server源码剖析：快速构建REST API背后的原理</a></li><li class="related-item">
-              <a href="/csv2%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="csv2 源码剖析：轻量级 CSV 处理的高效之道">csv2 源码剖析：轻量级 CSV 处理的高效之道</a></li></ul>
-      </div>
-    </div></aside>
+  </div><main class="fi-container"><aside class="aside-collection animate__animated animate__fadeIn animate__faster" aria-label="合集"></aside>
 
   <article class="page single">
     <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span title="转载" class="icon-repost"><i class="fa-solid fa-share" aria-hidden="true"></i></span><span>Node.js 源码剖析：非阻塞世界的引擎密码</span>
@@ -197,14 +186,7 @@
 </h2><ul>
 <li><a href="https://theanarkh.github.io/understand-nodejs/" target="_blank" rel="external nofollow noopener noreferrer">Node.js 源码剖析<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></li>
 <li><a href="https://book.douban.com/subject/25768396/" target="_blank" rel="external nofollow noopener noreferrer">《深入浅出 Node.js》朴灵<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></li>
-</ul></div><hr class="awesome-hr" />
-    <h2 id="see-also">相关内容</h2>
-    <ul><li>
-          <a href="/cpython%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="CPython 源码剖析：Python 运行的奥秘">CPython 源码剖析：Python 运行的奥秘</a></li><li>
-          <a href="/launch-editor%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="launch-editor源码剖析：快速打开编辑器的实现原理">launch-editor源码剖析：快速打开编辑器的实现原理</a></li><li>
-          <a href="/%E5%A6%82%E4%BD%95%E8%A7%A3%E5%86%B3-node.js-%E4%B8%AD%E7%9A%84-emfile-%E9%94%99%E8%AF%AF/" title="如何解决 Node.js 中的 EMFILE 错误">如何解决 Node.js 中的 EMFILE 错误</a></li><li>
-          <a href="/json-server%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="json-server源码剖析：快速构建REST API背后的原理">json-server源码剖析：快速构建REST API背后的原理</a></li><li>
-          <a href="/csv2%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="csv2 源码剖析：轻量级 CSV 处理的高效之道">csv2 源码剖析：轻量级 CSV 处理的高效之道</a></li></ul><div class="post-footer" id="post-footer">
+</ul></div><div class="post-footer" id="post-footer">
   <div class="post-info">
     <div class="post-info-line">
       <div class="post-info-mod"><span title="更新于 2026-06-02 11:33:50">更新于 2026-06-02&nbsp;</span>
@@ -222,7 +204,7 @@
     <section class="post-tags"><i class="fa-solid fa-tags me-1" aria-hidden="true"></i><a href="/tags/node.js/" class="post-tag" title="标签 - Node.js">Node.js</a><a href="/tags/%E8%BF%90%E8%A1%8C%E6%97%B6/" class="post-tag" title="标签 - 运行时">运行时</a><a href="/tags/%E9%9D%9E%E9%98%BB%E5%A1%9Eio/" class="post-tag" title="标签 - 非阻塞IO">非阻塞IO</a><a href="/tags/%E5%BC%82%E6%AD%A5/" class="post-tag" title="标签 - 异步">异步</a><a href="/tags/%E4%BA%8B%E4%BB%B6%E9%A9%B1%E5%8A%A8/" class="post-tag" title="标签 - 事件驱动">事件驱动</a><a href="/tags/%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" class="post-tag" title="标签 - 源码剖析">源码剖析</a></section>
     <section><span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
     </section>
-  </div><div class="post-nav"><a href="/cpython%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" class="post-nav-item" rel="prev" title="CPython 源码剖析：Python 运行的奥秘"><i class="fa-solid fa-angle-left" aria-hidden="true"></i>CPython 源码剖析：Python 运行的奥秘</a><a href="/shadowsocks%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" class="post-nav-item" rel="next" title="Shadowsocks源码剖析">Shadowsocks源码剖析<i class="fa-solid fa-angle-right" aria-hidden="true"></i></a></div>
+  </div><div class="post-nav"></div>
 </div>
 <div class="post-reward">
     <div class="comment">请作者喝杯咖啡!</div>
