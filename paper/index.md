@@ -64,5 +64,5 @@
 ---
 
 > 作者: [AndyFree96](https://andyfree96.github.io/)  
-> URL: https://andyfree96.github.io/paper/  
+> URL: http://localhost:1313/paper/  
 

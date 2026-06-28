@@ -244,5 +244,5 @@ dw 0xaa55		; 结束标志
 ---
 
 > 作者: [AndyFree96](https://andyfree96.github.io/)  
-> URL: https://andyfree96.github.io/%E4%B8%80%E4%B8%AA%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%AE%9E%E7%8E%B0/  
+> URL: http://localhost:1313/%E4%B8%80%E4%B8%AA%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%AE%9E%E7%8E%B0/  
 

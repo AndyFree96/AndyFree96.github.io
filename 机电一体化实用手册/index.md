@@ -95,5 +95,5 @@
 ---
 
 > 作者: [AndyFree96](https://andyfree96.github.io/)  
-> URL: https://andyfree96.github.io/%E6%9C%BA%E7%94%B5%E4%B8%80%E4%BD%93%E5%8C%96%E5%AE%9E%E7%94%A8%E6%89%8B%E5%86%8C/  
+> URL: http://localhost:1313/%E6%9C%BA%E7%94%B5%E4%B8%80%E4%BD%93%E5%8C%96%E5%AE%9E%E7%94%A8%E6%89%8B%E5%86%8C/  
 

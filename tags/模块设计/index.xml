@@ -1,18 +1,22 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>模块设计 - 标签 - 东尼的博客</title><link>https://andyfree96.github.io/tags/%E6%A8%A1%E5%9D%97%E8%AE%BE%E8%AE%A1/</link><description>安东尼的博客，分享生活中的一些有意思的事儿！</description><generator>Hugo 0.163.1 &amp; FixIt v1.0.0-mq99hlzg</generator><language>zh-CN</language><managingEditor>anthonyfree96@gmail.com (AndyFree96)</managingEditor><webMaster>anthonyfree96@gmail.com (AndyFree96)</webMaster><lastBuildDate>Mon, 22 Jun 2026 06:45:19 +0800</lastBuildDate><atom:link href="https://andyfree96.github.io/tags/%E6%A8%A1%E5%9D%97%E8%AE%BE%E8%AE%A1/index.xml" rel="self" type="application/rss+xml"/><item><title>Python中的__all__：模块公开API设计的关键工具</title><link>https://andyfree96.github.io/python%E4%B8%AD%E7%9A%84all/</link><pubDate>Mon, 22 Jun 2026 06:45:19 +0800</pubDate><author>anthonyfree96@gmail.com (AndyFree96)</author><guid>https://andyfree96.github.io/python%E4%B8%AD%E7%9A%84all/</guid><category domain="https://andyfree96.github.io/categories/python/">Python</category><description>&lt;p&gt;在Python项目中，我们经常会看到类似这样的代码：&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;__all__ = [
- &amp;#34;Field&amp;#34;,
- &amp;#34;FormRequest&amp;#34;,
- &amp;#34;Item&amp;#34;,
- &amp;#34;Request&amp;#34;,
- &amp;#34;Selector&amp;#34;,
- &amp;#34;Spider&amp;#34;,
- &amp;#34;__version__&amp;#34;,
- &amp;#34;version_info&amp;#34;,
-]&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;很多初学者会疑惑：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;__all__&lt;/code&gt;是做什么的？&lt;/li&gt;
-&lt;li&gt;为什么需要它？&lt;/li&gt;
-&lt;li&gt;和&lt;code&gt;_xxx&lt;/code&gt;命名有什么区别？&lt;/li&gt;
-&lt;li&gt;大型项目为什么经常使用？&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;本文将从基础语法到工程实践，深入理解 Python 的&lt;code&gt;__all__&lt;/code&gt;。&lt;/p&gt;</description></item></channel></rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>模块设计 - 标签 - 东尼的博客</title>
+    <link>http://localhost:1313/tags/%E6%A8%A1%E5%9D%97%E8%AE%BE%E8%AE%A1/</link>
+    <description>安东尼的博客，分享生活中的一些有意思的事儿！</description>
+    <generator>Hugo 0.163.1 &amp; FixIt v1.0.0-mq99hlzg</generator>
+    <language>zh-CN</language>
+    <managingEditor>anthonyfree96@gmail.com (AndyFree96)</managingEditor>
+    <webMaster>anthonyfree96@gmail.com (AndyFree96)</webMaster>
+    <lastBuildDate>Mon, 22 Jun 2026 06:45:19 +0800</lastBuildDate>
+    <atom:link href="http://localhost:1313/tags/%E6%A8%A1%E5%9D%97%E8%AE%BE%E8%AE%A1/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Python中的__all__：模块公开API设计的关键工具</title>
+      <link>http://localhost:1313/python%E4%B8%AD%E7%9A%84all/</link>
+      <pubDate>Mon, 22 Jun 2026 06:45:19 +0800</pubDate><author>anthonyfree96@gmail.com (AndyFree96)</author>
+      <guid>http://localhost:1313/python%E4%B8%AD%E7%9A%84all/</guid>
+      <category domain="http://localhost:1313/categories/python/">Python</category>
+      <description>&lt;p&gt;在Python项目中，我们经常会看到类似这样的代码：&lt;/p&gt;&#xA;&lt;pre&gt;&lt;code&gt;__all__ = [&#xD;&#xA;    &amp;#34;Field&amp;#34;,&#xD;&#xA;    &amp;#34;FormRequest&amp;#34;,&#xD;&#xA;    &amp;#34;Item&amp;#34;,&#xD;&#xA;    &amp;#34;Request&amp;#34;,&#xD;&#xA;    &amp;#34;Selector&amp;#34;,&#xD;&#xA;    &amp;#34;Spider&amp;#34;,&#xD;&#xA;    &amp;#34;__version__&amp;#34;,&#xD;&#xA;    &amp;#34;version_info&amp;#34;,&#xD;&#xA;]&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;很多初学者会疑惑：&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;&lt;code&gt;__all__&lt;/code&gt;是做什么的？&lt;/li&gt;&#xA;&lt;li&gt;为什么需要它？&lt;/li&gt;&#xA;&lt;li&gt;和&lt;code&gt;_xxx&lt;/code&gt;命名有什么区别？&lt;/li&gt;&#xA;&lt;li&gt;大型项目为什么经常使用？&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;p&gt;本文将从基础语法到工程实践，深入理解 Python 的&lt;code&gt;__all__&lt;/code&gt;。&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

@@ -1,73 +1,367 @@
-<!doctype html><html itemscope itemtype=http://schema.org/WebPage lang=zh-CN><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=2"><meta name=robots content="noodp"><title>80. Remove Duplicates From Sorted Array II - 东尼的博客</title><meta name=author content="AndyFree96"><meta name=description content="Given an integer array nums sorted in non-decreasing order, remove some duplicates in-place such that each unique element appears at most twice. The relative order of the elements should be kept the same.
+<!DOCTYPE html>
+<html itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+    <meta name="robots" content="noodp" />
+    <title>80. Remove Duplicates From Sorted Array II - 东尼的博客</title><meta name="author" content="AndyFree96">
+<meta name="description" content="Given an integer array nums sorted in non-decreasing order, remove some duplicates in-place such that each unique element appears at most twice. The relative order of the elements should be kept the same.
 Since it is impossible to change the length of the array in some languages, you must instead have the result be placed in the first part of the array nums. More formally, if there are k elements after removing the duplicates, then the first k elements of nums should hold the final result. It does not matter what you leave beyond the first k elements.
 Return k after placing the final result in the first k slots of nums.
 Do not allocate extra space for another array. You must do this by modifying the input array in-place with O(1) extra memory.
-"><meta name=keywords content='LeetCode,Array,数据结构,算法'><meta itemprop=name content="80. Remove Duplicates From Sorted Array II"><meta itemprop=description content="Given an integer array nums sorted in non-decreasing order, remove some duplicates in-place such that each unique element appears at most twice. The relative order of the elements should be kept the same.
+"><meta name="keywords" content='LeetCode, Array, 数据结构, 算法'>
+	<meta itemprop="name" content="80. Remove Duplicates From Sorted Array II">
+	<meta itemprop="description" content="Given an integer array nums sorted in non-decreasing order, remove some duplicates in-place such that each unique element appears at most twice. The relative order of the elements should be kept the same.
 Since it is impossible to change the length of the array in some languages, you must instead have the result be placed in the first part of the array nums. More formally, if there are k elements after removing the duplicates, then the first k elements of nums should hold the final result. It does not matter what you leave beyond the first k elements.
 Return k after placing the final result in the first k slots of nums.
-Do not allocate extra space for another array. You must do this by modifying the input array in-place with O(1) extra memory."><meta itemprop=datePublished content="2025-08-20T06:45:53+08:00"><meta itemprop=dateModified content="2025-08-20T06:45:53+08:00"><meta itemprop=wordCount content="1527"><meta itemprop=keywords content="LeetCode,Array,数据结构,算法"><meta property="og:url" content="https://andyfree96.github.io/remove-duplicates-from-sorted-array-ii/"><meta property="og:site_name" content="东尼的博客"><meta property="og:title" content="80. Remove Duplicates From Sorted Array II"><meta property="og:description" content="Given an integer array nums sorted in non-decreasing order, remove some duplicates in-place such that each unique element appears at most twice. The relative order of the elements should be kept the same.
+Do not allocate extra space for another array. You must do this by modifying the input array in-place with O(1) extra memory.">
+	<meta itemprop="datePublished" content="2025-08-20T06:45:53+08:00">
+	<meta itemprop="dateModified" content="2025-08-20T06:45:53+08:00">
+	<meta itemprop="wordCount" content="1527">
+	<meta itemprop="keywords" content="LeetCode,Array,数据结构,算法"><meta property="og:url" content="http://localhost:1313/remove-duplicates-from-sorted-array-ii/">
+	<meta property="og:site_name" content="东尼的博客">
+	<meta property="og:title" content="80. Remove Duplicates From Sorted Array II">
+	<meta property="og:description" content="Given an integer array nums sorted in non-decreasing order, remove some duplicates in-place such that each unique element appears at most twice. The relative order of the elements should be kept the same.
 Since it is impossible to change the length of the array in some languages, you must instead have the result be placed in the first part of the array nums. More formally, if there are k elements after removing the duplicates, then the first k elements of nums should hold the final result. It does not matter what you leave beyond the first k elements.
 Return k after placing the final result in the first k slots of nums.
-Do not allocate extra space for another array. You must do this by modifying the input array in-place with O(1) extra memory."><meta property="og:locale" content="zh_CN"><meta property="og:type" content="article"><meta property="article:section" content="posts"><meta property="article:published_time" content="2025-08-20T06:45:53+08:00"><meta property="article:modified_time" content="2025-08-20T06:45:53+08:00"><meta property="article:tag" content="LeetCode"><meta property="article:tag" content="Array"><meta property="article:tag" content="数据结构"><meta property="article:tag" content="算法"><meta name=twitter:card content="summary"><meta name=twitter:title content="80. Remove Duplicates From Sorted Array II"><meta name=twitter:description content="Given an integer array nums sorted in non-decreasing order, remove some duplicates in-place such that each unique element appears at most twice. The relative order of the elements should be kept the same.
+Do not allocate extra space for another array. You must do this by modifying the input array in-place with O(1) extra memory.">
+	<meta property="og:locale" content="zh_CN">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="posts">
+		<meta property="article:published_time" content="2025-08-20T06:45:53+08:00">
+		<meta property="article:modified_time" content="2025-08-20T06:45:53+08:00">
+		<meta property="article:tag" content="LeetCode">
+		<meta property="article:tag" content="Array">
+		<meta property="article:tag" content="数据结构">
+		<meta property="article:tag" content="算法">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="80. Remove Duplicates From Sorted Array II">
+  <meta name="twitter:description" content="Given an integer array nums sorted in non-decreasing order, remove some duplicates in-place such that each unique element appears at most twice. The relative order of the elements should be kept the same.
 Since it is impossible to change the length of the array in some languages, you must instead have the result be placed in the first part of the array nums. More formally, if there are k elements after removing the duplicates, then the first k elements of nums should hold the final result. It does not matter what you leave beyond the first k elements.
 Return k after placing the final result in the first k slots of nums.
-Do not allocate extra space for another array. You must do this by modifying the input array in-place with O(1) extra memory."><meta name=twitter:creator content="@IRONAnthony96"><meta name=application-name content="FixIt"><meta name=apple-mobile-web-app-title content="FixIt"><meta name=theme-color data-light=#f6f8fa data-dark=#151b23 content="#f6f8fa"><meta name=msapplication-TileColor content="#da532c"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico><link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=mask-icon href=/safari-pinned-tab.svg color=#5bbad5><link rel=canonical type=text/html href=https://andyfree96.github.io/remove-duplicates-from-sorted-array-ii/ title="80. Remove Duplicates From Sorted Array II - 东尼的博客"><link rel=prev type=text/html href=https://andyfree96.github.io/%E5%A6%82%E4%BD%95%E8%A7%A3%E5%86%B3-node.js-%E4%B8%AD%E7%9A%84-emfile-%E9%94%99%E8%AF%AF/ title="如何解决 Node.js 中的 EMFILE 错误"><link rel=next type=text/html href=https://andyfree96.github.io/es6%E6%A8%A1%E5%9D%97%E6%95%99%E7%A8%8B/ title=ES6模块教程><link rel=alternate type=text/markdown href=https://andyfree96.github.io/remove-duplicates-from-sorted-array-ii/index.md title="80. Remove Duplicates From Sorted Array II - 东尼的博客"><link rel=stylesheet href=/css/config.min.css><link rel=stylesheet href=/css/main.min.css><link rel=preload href=/lib/fontawesome-free/all.min.css as=style onload='this.removeAttribute("onload"),this.rel="stylesheet"'><noscript><link rel=stylesheet href=/lib/fontawesome-free/all.min.css></noscript><link rel=preload href=/lib/animate/animate.min.css as=style onload='this.removeAttribute("onload"),this.rel="stylesheet"'><noscript><link rel=stylesheet href=/lib/animate/animate.min.css></noscript><link rel=preload href=/js/main.min.js as=script><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"80. Remove Duplicates From Sorted Array II","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/andyfree96.github.io\/remove-duplicates-from-sorted-array-ii\/"},"genre":"posts","keywords":"LeetCode, Array, 数据结构, 算法","wordcount":1527,"url":"https:\/\/andyfree96.github.io\/remove-duplicates-from-sorted-array-ii\/","datePublished":"2025-08-20T06:45:53+08:00","dateModified":"2025-08-20T06:45:53+08:00","publisher":{"@type":"Organization","name":""},"author":{"@type":"Person","name":"AndyFree96"},"description":""}</script><script src=/js/head/color-scheme.min.js></script></head><body data-instant-intensity=viewport data-header-desktop=sticky data-header-mobile=auto><div class=wrapper data-page-style=normal><header class="desktop animate__faster" id=header-desktop><div class=header-wrapper><div class=header-title><a href=/ title=东尼的博客 class=header-title-link><span class=header-title-text>东尼的博客</span></a><span class=header-subtitle></span></div><nav><ul class=menu><li class=menu-item><a class=menu-link href=/posts/>📕 文章</a></li><li class=menu-item><a class=menu-link href=/categories/>🧰 分类</a></li><li class=menu-item><a class=menu-link href=/tags/>🔖 标签</a></li><li class=menu-item><a class=menu-link href=/book>📚 书单</a></li><li class=menu-item><a class=menu-link href=/paper>📝 论文</a></li><li class=menu-item><a class=menu-link href=/opencourse>👨🏻‍💻 公开课</a></li><li class=menu-item><a class=menu-link href=/filmtv>🎞️ 影视</a></li><li class=menu-item><a class=menu-link href=/resource>⚡️ 资源库</a></li><li class=menu-item><a class=menu-link href=/projects>⭐ 开源</a></li><li class=menu-item><a class=menu-link href=/about>🙋🏻‍♂️ 关于</a></li><li class="menu-item delimiter"></li><li class="menu-item search" id=search-desktop><input type=text placeholder=搜索文章标题或内容…… id=search-input-desktop tabindex=-1>
-<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-desktop title=搜索 aria-controls=search-dropdown-desktop aria-expanded=false><i class="fa-solid fa-search" aria-hidden=true></i>
-</a><a href=javascript:void(0); class="search-button search-clear" id=search-clear-desktop title=清空><i class="fa-solid fa-times-circle" aria-hidden=true></i>
-</a><span class="search-button search-loading" id=search-loading-desktop><i class="fa-solid fa-spinner fa-spin" aria-hidden=true></i></span></li><li class="menu-item theme-switch-item"><button type=button class=theme-switch aria-label=切换主题 title=切换主题><i class="fa-solid fa-adjust" aria-hidden=true></i></button></li></ul></nav></div></header><header class="mobile animate__faster" id=header-mobile><div class=header-container><div class=header-wrapper><div class=header-title><a href=/ title=东尼的博客 class=header-title-link><span class=header-title-text>东尼的博客</span></a><span class=header-subtitle></span></div><button type=button class=theme-switch aria-label=切换主题><i class="fa-solid fa-adjust" aria-hidden=true></i></button>
-<button type=button class=menu-toggle id=menu-toggle-mobile aria-controls=menu-mobile aria-expanded=false aria-labelledby=menu-mobile>
-<span></span><span></span><span></span></button></div><nav><ul class=menu id=menu-mobile><li class=search-wrapper><div class="search mobile" id=search-mobile><input type=text placeholder=搜索文章标题或内容…… id=search-input-mobile>
-<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-mobile title=搜索 aria-controls=search-dropdown-mobile aria-expanded=false><i class="fa-solid fa-search" aria-hidden=true></i>
-</a><a href=javascript:void(0); class="search-button search-clear" id=search-clear-mobile title=清空><i class="fa-solid fa-times-circle" aria-hidden=true></i>
-</a><span class="search-button search-loading" id=search-loading-mobile><i class="fa-solid fa-spinner fa-spin" aria-hidden=true></i></span></div><a href=javascript:void(0); class=search-cancel id=search-cancel-mobile>取消</a></li><li class=menu-item><a class=menu-link href=/posts/>📕 文章</a></li><li class=menu-item><a class=menu-link href=/categories/>🧰 分类</a></li><li class=menu-item><a class=menu-link href=/tags/>🔖 标签</a></li><li class=menu-item><a class=menu-link href=/book>📚 书单</a></li><li class=menu-item><a class=menu-link href=/paper>📝 论文</a></li><li class=menu-item><a class=menu-link href=/opencourse>👨🏻‍💻 公开课</a></li><li class=menu-item><a class=menu-link href=/filmtv>🎞️ 影视</a></li><li class=menu-item><a class=menu-link href=/resource>⚡️ 资源库</a></li><li class=menu-item><a class=menu-link href=/projects>⭐ 开源</a></li><li class=menu-item><a class=menu-link href=/about>🙋🏻‍♂️ 关于</a></li><li class="menu-item menu-system"></li></ul></nav></div></header><div class="search-dropdown desktop"><div id=search-dropdown-desktop></div></div><div class="search-dropdown mobile"><div id=search-dropdown-mobile></div></div><main class=fi-container><aside class="aside-collection animate__animated animate__fadeIn animate__faster" aria-label=合集><div class="details related-details open"><div class="details-summary related-summary"><i class="fa-solid fa-fire fa-fade text-danger" aria-hidden=true></i>
-<span class=related-title>相关内容</span><i class="details-icon fa-solid fa-angle-right" aria-hidden=true></i></div><div class="details-content related-content"><ul class=related-list><li class=related-item><a href=/rotate-array/ title="189. Rotate Array">189. Rotate Array</a></li><li class=related-item><a href=/%E5%AD%A6%E4%B9%A0javascript%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/ title="学习JavaScript数据结构与算法 第3版 (Loiane Groner)">学习JavaScript数据结构与算法 第3版 (Loiane Groner)</a></li><li class=related-item><a href=/%E9%82%A3%E4%BA%9B%E5%A5%BD%E7%94%A8%E7%9A%84javascript%E6%95%B0%E7%BB%84%E6%96%B9%E6%B3%95/ title=那些好用的JavaScript数组方法>那些好用的JavaScript数组方法</a></li></ul></div></div></aside><article class="page single"><div class=header><h1 class="single-title animate__animated animate__flipInX"><span title=转载 class=icon-repost><i class="fa-solid fa-share" aria-hidden=true></i></span><span>80. Remove Duplicates From Sorted Array II</span></h1></div><div class=post-meta><div class=post-meta-line><span class=post-author><a href=https://andyfree96.github.io/ title=作者 rel=author class=author><img class=avatar src=/avatar/1.jpg alt=AndyFree96 height=16 width=16>&nbsp;AndyFree96</a></span><span class=post-included-in>&nbsp;收录于 <a href=/categories/leetcode/ class=post-category title="分类 - LeetCode"><i class="fa-regular fa-folder" aria-hidden=true></i> LeetCode</a></span></div><div class=post-meta-line><span title="发布于 2025-08-20 06:45:53"><i class="fa-solid fa-calendar-days me-1" aria-hidden=true></i><time datetime=2025-08-20>2025-08-20</time></span>&nbsp;<span title="1527 字"><i class="fa-solid fa-pencil-alt me-1" aria-hidden=true></i>约 1600 字</span>&nbsp;<span><i class="fa-regular fa-clock me-1" aria-hidden=true></i>预计阅读 4 分钟</span>&nbsp;</div></div><div class=featured-image><img loading=eager src=/images/202508/5/andri-aeschlimann-CO85Eu7_4fI-unsplash.jpg sizes="(max-width: 680px) 100vw, (max-width: 960px) 80vw, (max-width: 1440px) 56vw, 800px" alt=/images/202508/5/andri-aeschlimann-CO85Eu7_4fI-unsplash.jpg></div><div class="details toc" id=toc-static data-kept=false><div class="details-summary toc-title"><span>目录</span>
-<span><i class="details-icon fa-solid fa-angle-right" aria-hidden=true></i></span></div><div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents><ul><li><ul><li><a href=#示例-1>示例 1</a></li><li><a href=#示例-2>示例 2</a></li></ul></li></ul></nav></div></div><div class=content id=content><p>Given an integer array nums sorted in non-decreasing order, remove some duplicates in-place such that each unique element appears at most twice. The relative order of the elements should be kept the same.</p><p>Since it is impossible to change the length of the array in some languages, you must instead have the result be placed in the first part of the array nums. More formally, if there are k elements after removing the duplicates, then the first k elements of nums should hold the final result. It does not matter what you leave beyond the first k elements.</p><p>Return k after placing the final result in the first k slots of nums.</p><p>Do not allocate extra space for another array. You must do this by modifying the input array in-place with O(1) extra memory.</p><p>Custom Judge:</p><p>The judge will test your solution with the following code:</p><blockquote><p>int[] nums = [&mldr;]; // Input array</p></blockquote><blockquote><p>int[] expectedNums = [&mldr;]; // The expected answer with correct length</p></blockquote><blockquote><p>int k = removeDuplicates(nums); // Calls your implementation</p></blockquote><blockquote><p>assert k == expectedNums.length;</p></blockquote><blockquote><p>for (int i = 0; i &lt; k; i++) {</p></blockquote><blockquote><p>assert nums[i] == expectedNums[i];</p></blockquote><blockquote><p>}</p></blockquote><p>If all assertions pass, then your solution will be accepted.</p><p>Example 1:</p><blockquote><p>Input: nums = [1,1,1,2,2,3]</p></blockquote><blockquote><p>Output: 5, nums = [1,1,2,2,3,_]</p></blockquote><blockquote><p>Explanation: Your function should return k = 5, with the first five elements of nums being 1, 1, 2, 2 and 3 respectively.
-It does not matter what you leave beyond the returned k (hence they are underscores).</p></blockquote><p>Example 2:</p><blockquote><p>Input: nums = [0,0,1,1,1,1,2,3,3]</p></blockquote><blockquote><p>Output: 7, nums = [0,0,1,1,2,3,3,<em>,</em>]</p></blockquote><blockquote><p>Explanation: Your function should return k = 7, with the first seven elements of nums being 0, 0, 1, 1, 2, 3 and 3 respectively.It does not matter what you leave beyond the returned k (hence they are underscores).</p></blockquote><p>原题链接: <a href=https://leetcode.com/problems/remove-duplicates-from-sorted-array-ii/description/ target=_blank rel="external nofollow noopener noreferrer">https://leetcode.com/problems/remove-duplicates-from-sorted-array-ii/description/<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden=true></i></a></p><p>给定一个排序数组，你需要在原地删除重复出现的元素，使得每个元素最多出现两次，返回删除后数组的新长度。不要使用额外的数组空间，你必须在原地修改输入数组并在使用<code>O(1)</code>额外空间的条件下完成删除操作。</p><h3 class=heading-element id=示例-1><span>示例 1</span>
-<a href=#%e7%a4%ba%e4%be%8b-1 class=heading-mark><svg class="octicon octicon-link" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5.0 114.95 4.95l-2.5 2.5a3.5 3.5.0 01-4.95.0.751.751.0 01.018-1.042.751.751.0 011.042-.018 1.998 1.998.0 002.83.0l2.5-2.5a2.002 2.002.0 00-2.83-2.83l-1.25 1.25a.751.751.0 01-1.042-.018.751.751.0 01-.018-1.042zm-4.69 9.64a1.998 1.998.0 002.83.0l1.25-1.25a.751.751.0 011.042.018.751.751.0 01.018 1.042l-1.25 1.25a3.5 3.5.0 11-4.95-4.95l2.5-2.5a3.5 3.5.0 014.95.0.751.751.0 01-.018 1.042.751.751.0 01-1.042.018 1.998 1.998.0 00-2.83.0l-2.5 2.5a1.998 1.998.0 000 2.83z"/></svg></a></h3><div class="code-block highlight" data-mode=classic data-copyable=true><div class=chroma><div class="code-header language-fallback"><span class=code-title><i class="arrow fa-solid fa-chevron-down" aria-hidden=true></i></span><button type=button class=ellipses-btn aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden=true></i></button><button type=button class="action-btn line-nos-btn" aria-label=切换行号 title=切换行号><i class="fa-solid fa-list-ol" aria-hidden=true></i></button><button type=button class="action-btn line-wrap-btn" aria-label=切换自动换行 title=切换自动换行><i class="fa-solid fa-right-left" aria-hidden=true></i></button><button type=button class="action-btn copy-btn" aria-label=复制到剪贴板 title=复制到剪贴板 data-copied-text=已复制><i class="fa-regular fa-clone" aria-hidden=true></i></button><button type=button class="action-btn fullscreen-btn" aria-label=全屏 title=全屏 data-exit-title=退出全屏><i class="fa-solid fa-expand" aria-hidden=true></i></button></div><div class=code-wrapper data-max=400 data-line-digit=1 style=--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
-</span><span class=lnt>2
-</span><span class=lnt>3
-</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>// 给定nums=[1,1,1,2,2,3]
-</span></span><span class=line><span class=cl>// 函数应该返回新长度length=5, 并且原数组的前五个元素被修改为1,1,2,2,3
-</span></span><span class=line><span class=cl>// 你不需要考虑数组中超出新长度后面的元素</span></span></code></pre></td></tr></table></div></div></div><h3 class=heading-element id=示例-2><span>示例 2</span>
-<a href=#%e7%a4%ba%e4%be%8b-2 class=heading-mark><svg class="octicon octicon-link" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5.0 114.95 4.95l-2.5 2.5a3.5 3.5.0 01-4.95.0.751.751.0 01.018-1.042.751.751.0 011.042-.018 1.998 1.998.0 002.83.0l2.5-2.5a2.002 2.002.0 00-2.83-2.83l-1.25 1.25a.751.751.0 01-1.042-.018.751.751.0 01-.018-1.042zm-4.69 9.64a1.998 1.998.0 002.83.0l1.25-1.25a.751.751.0 011.042.018.751.751.0 01.018 1.042l-1.25 1.25a3.5 3.5.0 11-4.95-4.95l2.5-2.5a3.5 3.5.0 014.95.0.751.751.0 01-.018 1.042.751.751.0 01-1.042.018 1.998 1.998.0 00-2.83.0l-2.5 2.5a1.998 1.998.0 000 2.83z"/></svg></a></h3><div class="code-block highlight" data-mode=classic data-copyable=true><div class=chroma><div class="code-header language-fallback"><span class=code-title><i class="arrow fa-solid fa-chevron-down" aria-hidden=true></i></span><button type=button class=ellipses-btn aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden=true></i></button><button type=button class="action-btn line-nos-btn" aria-label=切换行号 title=切换行号><i class="fa-solid fa-list-ol" aria-hidden=true></i></button><button type=button class="action-btn line-wrap-btn" aria-label=切换自动换行 title=切换自动换行><i class="fa-solid fa-right-left" aria-hidden=true></i></button><button type=button class="action-btn copy-btn" aria-label=复制到剪贴板 title=复制到剪贴板 data-copied-text=已复制><i class="fa-regular fa-clone" aria-hidden=true></i></button><button type=button class="action-btn fullscreen-btn" aria-label=全屏 title=全屏 data-exit-title=退出全屏><i class="fa-solid fa-expand" aria-hidden=true></i></button></div><div class=code-wrapper data-max=400 data-line-digit=1 style=--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
-</span><span class=lnt>2
-</span><span class=lnt>3
-</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>// 给定nums=[0,0,1,1,1,1,2,3,3]
-</span></span><span class=line><span class=cl>// 函数应该返回新长度length=7, 并且原数组的前五个元素被修改为0,0,1,1,2,3,3
-</span></span><span class=line><span class=cl>// 你不需要考虑数组中超出新长度后面的元素</span></span></code></pre></td></tr></table></div></div></div><p>这个问题怎么解决呢？</p><p>我们需要注意到的是：<strong>给定的数组是已经排好序的</strong>。可以确定的是需要一个变量<code>i</code>用于遍历数组，意思就是就算是比计算机聪明许多的人来处理这个问题，我们也要至少从左往右看一遍数组。还需要一个变量<code>j</code>用于存储删除重复出现元素后的数组长度(准确的说应该是长度减 1)。</p><p>初始情况下，<code>i</code>的值为<code>2</code>，<code>j</code>的值为<code>1</code></p><p><img loading=lazy src=/images/202508/5/1.png alt=/images/202508/5/1.png></p><p>因为如果数组长度小于 3 的话，直接返回数组长度即可。</p><p>将重复元素按要求删除后，结果应该如下所示</p><p><img loading=lazy src=/images/202508/5/2.png alt=/images/202508/5/2.png></p><p>我们通过上图其实可以观察到，下标<code>&lt;=j</code>的元素就是最终数组中该有的元素，而下标<code>&lt;i</code>并且<code>>j</code>的元素就是那些重复的元素。下一步的操作就是<code>A[++j]=A[i]</code>，然后<code>i=i+1</code>(以保持下标<code>&lt;=j</code>的元素就是最终数组中该有的元素，而下标<code>&lt;i</code>并且<code>>j</code>的元素就是那些重复的元素这个性质)。</p><p>什么时候会有<code>A[++j]=A[i]</code>这个操作呢？答案是<code>A[j-1]!=A[i]</code>时。由于我们的数组是有序的，对于合法的下标<code>j-1,j,i</code>，元素之间的关系应该是<code>A[j-1]&lt;=A[j]&lt;=A[i]</code>。如果<code>A[j-1]==A[i]</code>那么就意味着<code>A[j-1]==A[j]==A[i]</code>，此时只需要<code>i=i+1</code>。如果<code>A[j-1]!=A[i]</code>，这三个元素之间的情况可能有如下三种情况：</p><ul><li>第一种</li></ul><p><img loading=lazy src=/images/202508/5/3.png alt=/images/202508/5/3.png></p><p>若出现上图所示的情况，我们可以推断出中间省略号部分其实省略的是<code>a</code>值(参考之前提到的性质)，下一步的操作自然是<code>A[++j]=A[i]</code>。</p><ul><li>第二种</li></ul><p><img loading=lazy src=/images/202508/5/4.png alt=/images/202508/5/4.png></p><p>如果出现上图所示的情况，我们可以推断出省略号部分因应该是没有值的，也就是说<code>j+1==i</code>，此时<code>A[++j]=A[i]</code>，也是没有问题的。</p><ul><li>第三种</li></ul><p><img loading=lazy src=/images/202508/5/5.png alt=/images/202508/5/5.png></p><p>如果省略号部分省略是没有值的，那么下一步进行<code>A[++j]=A[i]</code>自然是没有问题的。如果省略号部分是有值的，那必定是已经移动到下标<code>&lt;=j</code>保存下来的值，也就是说下标<code>>j</code>并且<code>&lt;i</code>的元素都是处理好被弃用的值，此时进行<code>A[++j]=A[i]</code>也是没有问题的。</p><p>综上所述，当<code>A[j-1]!=A[i]</code>时，我们可以放心地进行<code>A[++j]=A[i]</code>这个操作。</p><p>接下来就可以实现上述思路：</p><div class="code-block highlight" data-mode=classic data-copyable=true><div class=chroma><div class="code-header language-java"><span class=code-title><i class="arrow fa-solid fa-chevron-down" aria-hidden=true></i></span><button type=button class=ellipses-btn aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden=true></i></button><button type=button class="action-btn line-nos-btn" aria-label=切换行号 title=切换行号><i class="fa-solid fa-list-ol" aria-hidden=true></i></button><button type=button class="action-btn line-wrap-btn" aria-label=切换自动换行 title=切换自动换行><i class="fa-solid fa-right-left" aria-hidden=true></i></button><button type=button class="action-btn copy-btn" aria-label=复制到剪贴板 title=复制到剪贴板 data-copied-text=已复制><i class="fa-regular fa-clone" aria-hidden=true></i></button><button type=button class="action-btn fullscreen-btn" aria-label=全屏 title=全屏 data-exit-title=退出全屏><i class="fa-solid fa-expand" aria-hidden=true></i></button></div><div class=code-wrapper data-max=400 data-line-digit=2 style=--fi-max-shown-lines:400;--fi-line-digit:2;--fi-line-start:1><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
-</span><span class=lnt> 2
-</span><span class=lnt> 3
-</span><span class=lnt> 4
-</span><span class=lnt> 5
-</span><span class=lnt> 6
-</span><span class=lnt> 7
-</span><span class=lnt> 8
-</span><span class=lnt> 9
-</span><span class=lnt>10
-</span><span class=lnt>11
-</span><span class=lnt>12
-</span><span class=lnt>13
-</span><span class=lnt>14
-</span><span class=lnt>15
-</span><span class=lnt>16
-</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-Java data-lang=Java><span class=line><span class=cl><span class=kd>class</span> <span class=nc>Solution</span><span class=w> </span><span class=p>{</span><span class=w>
-</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=kd>public</span><span class=w> </span><span class=kd>static</span><span class=w> </span><span class=kt>int</span><span class=w> </span><span class=nf>removeDuplicates</span><span class=p>(</span><span class=kt>int</span><span class=o>[]</span><span class=w> </span><span class=n>nums</span><span class=p>)</span><span class=w> </span><span class=p>{</span><span class=w>
-</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=kt>int</span><span class=w> </span><span class=n>j</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=n>1</span><span class=p>;</span><span class=w>
-</span></span></span><span class=line><span class=cl><span class=w>
-</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=k>if</span><span class=w> </span><span class=p>(</span><span class=n>nums</span><span class=p>.</span><span class=na>length</span><span class=w> </span><span class=o>&lt;</span><span class=w> </span><span class=n>3</span><span class=p>)</span><span class=w> </span><span class=p>{</span><span class=w>
-</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=k>return</span><span class=w> </span><span class=n>nums</span><span class=p>.</span><span class=na>length</span><span class=p>;</span><span class=w>
-</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=p>}</span><span class=w>
-</span></span></span><span class=line><span class=cl><span class=w>
-</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=k>for</span><span class=w> </span><span class=p>(</span><span class=kt>int</span><span class=w> </span><span class=n>i</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=n>2</span><span class=p>;</span><span class=w> </span><span class=n>i</span><span class=w> </span><span class=o>&lt;</span><span class=w> </span><span class=n>nums</span><span class=p>.</span><span class=na>length</span><span class=p>;</span><span class=w> </span><span class=n>i</span><span class=o>++</span><span class=p>)</span><span class=w> </span><span class=p>{</span><span class=w>
-</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=k>if</span><span class=w> </span><span class=p>(</span><span class=n>nums</span><span class=o>[</span><span class=n>j</span><span class=w> </span><span class=o>-</span><span class=w> </span><span class=n>1</span><span class=o>]</span><span class=w> </span><span class=o>!=</span><span class=w> </span><span class=n>nums</span><span class=o>[</span><span class=n>i</span><span class=o>]</span><span class=p>)</span><span class=w> </span><span class=p>{</span><span class=w>
-</span></span></span><span class=line><span class=cl><span class=w>                </span><span class=n>nums</span><span class=o>[++</span><span class=n>j</span><span class=o>]</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=n>nums</span><span class=o>[</span><span class=n>i</span><span class=o>]</span><span class=p>;</span><span class=w>
-</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=p>}</span><span class=w>
-</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=p>}</span><span class=w>
-</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=k>return</span><span class=w> </span><span class=n>j</span><span class=w> </span><span class=o>+</span><span class=w> </span><span class=n>1</span><span class=p>;</span><span class=w>
-</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=p>}</span><span class=w>
-</span></span></span><span class=line><span class=cl><span class=p>}</span></span></span></code></pre></td></tr></table></div></div></div></div><hr class=awesome-hr><h2 id=see-also>相关内容</h2><ul><li><a href=/rotate-array/ title="189. Rotate Array">189. Rotate Array</a></li><li><a href=/%E5%AD%A6%E4%B9%A0javascript%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/ title="学习JavaScript数据结构与算法 第3版 (Loiane Groner)">学习JavaScript数据结构与算法 第3版 (Loiane Groner)</a></li><li><a href=/%E9%82%A3%E4%BA%9B%E5%A5%BD%E7%94%A8%E7%9A%84javascript%E6%95%B0%E7%BB%84%E6%96%B9%E6%B3%95/ title=那些好用的JavaScript数组方法>那些好用的JavaScript数组方法</a></li></ul><div class=post-footer id=post-footer><div class=post-info><div class=post-info-line><div class=post-info-mod><span title="更新于 2025-08-20 06:45:53">更新于 2025-08-20&nbsp;</span></div></div><div class=post-info-line><div class=post-info-md></div><div class=post-info-share><span><a href=javascript:void(0); title="分享到 X" data-sharer=twitter data-url=https://andyfree96.github.io/remove-duplicates-from-sorted-array-ii/ data-title="80. Remove Duplicates From Sorted Array II" data-via=IRONAnthony96 data-hashtags=LeetCode,Array,数据结构,算法><i class="fa-brands fa-x-twitter" aria-hidden=true></i></a>
-<a href=javascript:void(0); title="分享到 Facebook" data-sharer=facebook data-url=https://andyfree96.github.io/remove-duplicates-from-sorted-array-ii/ data-hashtag=LeetCode><i class="fa-brands fa-facebook-square" aria-hidden=true></i></a>
-<a href=javascript:void(0); title="分享到 微博" data-sharer=weibo data-url=https://andyfree96.github.io/remove-duplicates-from-sorted-array-ii/ data-title="80. Remove Duplicates From Sorted Array II" data-image=/images/202508/5/andri-aeschlimann-CO85Eu7_4fI-unsplash.jpg><i class="fa-brands fa-weibo" aria-hidden=true></i></a></span></div></div></div><div class=post-info-more><section class=post-tags><i class="fa-solid fa-tags me-1" aria-hidden=true></i><a href=/tags/leetcode/ class=post-tag title="标签 - LeetCode">LeetCode</a><a href=/tags/array/ class=post-tag title="标签 - Array">Array</a><a href=/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/ class=post-tag title="标签 - 数据结构">数据结构</a><a href=/tags/%E7%AE%97%E6%B3%95/ class=post-tag title="标签 - 算法">算法</a></section><section><span><a href=javascript:void(0); onclick=window.history.back()>返回</a></span>&nbsp;|&nbsp;<span><a href=/>主页</a></span></section></div><div class=post-nav><a href=/%E5%A6%82%E4%BD%95%E8%A7%A3%E5%86%B3-node.js-%E4%B8%AD%E7%9A%84-emfile-%E9%94%99%E8%AF%AF/ class=post-nav-item rel=prev title="如何解决 Node.js 中的 EMFILE 错误"><i class="fa-solid fa-angle-left" aria-hidden=true></i>如何解决 Node.js 中的 EMFILE 错误</a><a href=/es6%E6%A8%A1%E5%9D%97%E6%95%99%E7%A8%8B/ class=post-nav-item rel=next title=ES6模块教程>ES6模块教程<i class="fa-solid fa-angle-right" aria-hidden=true></i></a></div></div><div class=post-reward><div class=comment>请作者喝杯咖啡!</div><input type=checkbox class=reward-input name=reward id=fi-reward hidden>
-<label class=reward-button for=fi-reward><i class="fa-solid fa-qrcode" aria-hidden=true></i>赞赏</label><div class=reward-ways data-mode=static><div><img src=/reward/alipay.png alt="AndyFree96 支付宝"><span data-animation>支付宝</span></div><div><img src=/reward/wechatpay.png alt="AndyFree96 微信"><span data-animation>微信</span></div></div></div></article><aside class=toc id=toc-auto aria-label=目录><h2 class=toc-title>目录&nbsp;<i class="toc-icon fa-solid fa-angle-down" aria-hidden=true></i></h2><div class=toc-content id=toc-content-auto></div></aside><dialog id=toc-dialog aria-labelledby=toc-dialog-title role=dialog closedby=any><button type=button class=toc-close-btn aria-label="Close Table of Contents"><i class="fa-solid fa-xmark fa-lg" aria-hidden=true></i></button><div class=toc><h2 class=toc-title id=toc-dialog-title>目录</h2><div class=toc-content id=toc-content-drawer><nav><ul><li><ul><li><a href=#示例-1>示例 1</a></li><li><a href=#示例-2>示例 2</a></li></ul></li></ul></nav></div></div></dialog></main><div id=comments><div id=gitalk class=comment></div><noscript>Please enable JavaScript to view the comments powered by <a href=https://github.com/gitalk/gitalk rel="external nofollow noopener noreferrer">Gitalk</a>.</noscript></div><footer class=footer><div class=footer-container><div class="footer-line powered">由 <a href=https://gohugo.io/ target=_blank rel="external nofollow noopener noreferrer" title="Hugo 0.163.1">Hugo</a> 强力驱动 | 主题 - <a href=https://github.com/hugo-fixit/FixIt target=_blank rel=external title="FixIt v1.0.0-mq99hlzg">FixIt</a></div><div class="footer-line copyright" itemscope itemtype=http://schema.org/CreativeWork><i class="fa-regular fa-copyright" aria-hidden=true></i>
-<span itemprop=copyrightYear>2019 - 2026</span><span class=author itemprop=copyrightHolder>
-<a href=https://andyfree96.github.io/>AndyFree96</a></span></div></div></footer></div><div class=widgets><div class=fixed-buttons><button type=button class="fixed-button back-to-top animate__faster d-none" aria-label=回到顶部><i class="fa-solid fa-arrow-up" aria-hidden=true></i></button><button type=button id=toc-drawer-button class="fixed-button toc-drawer-button d-none" aria-label=目录 aria-controls=toc-dialog aria-expanded=false><i class="fa-solid fa-bars" aria-hidden=true></i></button><button type=button class="fixed-button view-comments d-none" aria-label=查看评论><i class="fa-solid fa-comment" aria-hidden=true></i></button></div><div id=mask></div><div class=reading-progress-bar style=left:0;top:0></div><noscript><div class=noscript-warning>该网站在启用 JavaScript 的情况下效果最佳。</div></noscript></div><link rel=stylesheet href=/lib/gitalk/gitalk.min.css><link rel=stylesheet href=/lib/cookieconsent/cookieconsent.min.css><script src=/lib/gitalk/gitalk.min.js></script><script src=/js/lib/gitalk.min.js defer></script><script src=/lib/autocomplete/autocomplete.min.js defer></script><script src=/lib/algoliasearch/browser.umd.js defer></script><script src=/lib/sharer/sharer.min.js async defer></script><script src=/lib/cookieconsent/cookieconsent.min.js defer></script><script src=/js/lib/cookieconsent.min.js defer></script><script src=/lib/cell-tooltip/cell-tooltip.umd.js defer></script><script src=/js/config/37bc557883f715288f6f9f7e11a232da.min.js defer></script><script src=/js/lib/file-tree.min.js defer></script><script src=/js/main.min.js defer></script></body></html>
+Do not allocate extra space for another array. You must do this by modifying the input array in-place with O(1) extra memory."><meta name="twitter:creator" content="@IRONAnthony96"><meta name="application-name" content="FixIt">
+<meta name="apple-mobile-web-app-title" content="FixIt"><meta name="theme-color" data-light="#f6f8fa" data-dark="#151b23" content="#f6f8fa"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" type="text/html" href="http://localhost:1313/remove-duplicates-from-sorted-array-ii/" title="80. Remove Duplicates From Sorted Array II - 东尼的博客" /><link rel="prev" type="text/html" href="http://localhost:1313/%E5%A6%82%E4%BD%95%E8%A7%A3%E5%86%B3-node.js-%E4%B8%AD%E7%9A%84-emfile-%E9%94%99%E8%AF%AF/" title="如何解决 Node.js 中的 EMFILE 错误" /><link rel="next" type="text/html" href="http://localhost:1313/es6%E6%A8%A1%E5%9D%97%E6%95%99%E7%A8%8B/" title="ES6模块教程" /><link rel="alternate" type="text/markdown" href="http://localhost:1313/remove-duplicates-from-sorted-array-ii/index.md" title="80. Remove Duplicates From Sorted Array II - 东尼的博客"><link rel="stylesheet" href="/css/config.css"><link rel="stylesheet" href="/css/main.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><link rel="preload" href="/js/main.js" as="script"><script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "BlogPosting",
+    "headline": "80. Remove Duplicates From Sorted Array II",
+    "inLanguage": "zh-CN",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "http:\/\/localhost:1313\/remove-duplicates-from-sorted-array-ii\/"
+    },"genre": "posts","keywords": "LeetCode, Array, 数据结构, 算法","wordcount":  1527 ,
+    "url": "http:\/\/localhost:1313\/remove-duplicates-from-sorted-array-ii\/","datePublished": "2025-08-20T06:45:53+08:00","dateModified": "2025-08-20T06:45:53+08:00","publisher": {
+      "@type": "Organization",
+      "name": ""},"author": {
+        "@type": "Person",
+        "name": "AndyFree96"
+      },"description": ""
+  }
+  </script><script src="/js/head/color-scheme.js"></script></head>
+  <body data-instant-intensity="viewport" data-header-desktop="sticky" data-header-mobile="auto"><div class="wrapper" data-page-style="normal"><header class="desktop animate__faster" id="header-desktop">
+  <div class="header-wrapper">
+    <div class="header-title">
+      <a href="/" title="东尼的博客" class="header-title-link"><span class="header-title-text">东尼的博客</span></a><span class="header-subtitle"></span></div>
+    <nav>
+      <ul class="menu"><li class="menu-item">
+              <a class="menu-link" href="/posts/">📕 文章</a></li><li class="menu-item">
+              <a class="menu-link" href="/categories/">🧰 分类</a></li><li class="menu-item">
+              <a class="menu-link" href="/tags/">🔖 标签</a></li><li class="menu-item">
+              <a class="menu-link" href="/book">📚 书单</a></li><li class="menu-item">
+              <a class="menu-link" href="/paper">📝 论文</a></li><li class="menu-item">
+              <a class="menu-link" href="/opencourse">👨🏻‍💻 公开课</a></li><li class="menu-item">
+              <a class="menu-link" href="/filmtv">🎞️ 影视</a></li><li class="menu-item">
+              <a class="menu-link" href="/resource">⚡️ 资源库</a></li><li class="menu-item">
+              <a class="menu-link" href="/projects">⭐ 开源</a></li><li class="menu-item">
+              <a class="menu-link" href="/about">🙋🏻‍♂️ 关于</a></li><li class="menu-item delimiter"></li><li class="menu-item search" id="search-desktop">
+            <input type="text" placeholder="搜索文章标题或内容……" id="search-input-desktop" tabindex="-1">
+            <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索" aria-controls="search-dropdown-desktop" aria-expanded="false">
+              <i class="fa-solid fa-search" aria-hidden="true"></i>
+            </a>
+            <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+              <i class="fa-solid fa-times-circle" aria-hidden="true"></i>
+            </a>
+            <span class="search-button search-loading" id="search-loading-desktop">
+              <i class="fa-solid fa-spinner fa-spin" aria-hidden="true"></i>
+            </span>
+          </li><li class="menu-item theme-switch-item">
+          <button type="button" class="theme-switch" aria-label="切换主题" title="切换主题"><i class="fa-solid fa-adjust" aria-hidden="true"></i></button>
+        </li></ul>
+    </nav>
+  </div>
+</header><header class="mobile animate__faster" id="header-mobile">
+  <div class="header-container">
+    <div class="header-wrapper">
+      <div class="header-title">
+        <a href="/" title="东尼的博客" class="header-title-link"><span class="header-title-text">东尼的博客</span></a><span class="header-subtitle"></span></div>
+      <button type="button" class="theme-switch" aria-label="切换主题"><i class="fa-solid fa-adjust" aria-hidden="true"></i></button>
+      <button type="button" class="menu-toggle" id="menu-toggle-mobile" aria-controls="menu-mobile" aria-expanded="false" aria-labelledby="menu-mobile">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <nav>
+      <ul class="menu" id="menu-mobile"><li class="search-wrapper">
+            <div class="search mobile" id="search-mobile">
+              <input type="text" placeholder="搜索文章标题或内容……" id="search-input-mobile">
+              <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索" aria-controls="search-dropdown-mobile" aria-expanded="false">
+                <i class="fa-solid fa-search" aria-hidden="true"></i>
+              </a>
+              <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                <i class="fa-solid fa-times-circle" aria-hidden="true"></i>
+              </a>
+              <span class="search-button search-loading" id="search-loading-mobile">
+                <i class="fa-solid fa-spinner fa-spin" aria-hidden="true"></i>
+              </span>
+            </div>
+            <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+              取消
+            </a>
+          </li><li class="menu-item"><a class="menu-link" href="/posts/">📕 文章</a></li><li class="menu-item"><a class="menu-link" href="/categories/">🧰 分类</a></li><li class="menu-item"><a class="menu-link" href="/tags/">🔖 标签</a></li><li class="menu-item"><a class="menu-link" href="/book">📚 书单</a></li><li class="menu-item"><a class="menu-link" href="/paper">📝 论文</a></li><li class="menu-item"><a class="menu-link" href="/opencourse">👨🏻‍💻 公开课</a></li><li class="menu-item"><a class="menu-link" href="/filmtv">🎞️ 影视</a></li><li class="menu-item"><a class="menu-link" href="/resource">⚡️ 资源库</a></li><li class="menu-item"><a class="menu-link" href="/projects">⭐ 开源</a></li><li class="menu-item"><a class="menu-link" href="/about">🙋🏻‍♂️ 关于</a></li><li class="menu-item menu-system"></li>
+      </ul>
+    </nav>
+  </div>
+</header><div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+  </div>
+  <div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+  </div><main class="fi-container"><aside class="aside-collection animate__animated animate__fadeIn animate__faster" aria-label="合集"><div class="details related-details open">
+      <div class="details-summary related-summary">
+        <i class="fa-solid fa-fire fa-fade text-danger" aria-hidden="true"></i>
+        <span class="related-title">相关内容</span><i class="details-icon fa-solid fa-angle-right" aria-hidden="true"></i></div>
+      <div class="details-content related-content">
+        <ul class="related-list"><li class="related-item">
+              <a href="/rotate-array/" title="189. Rotate Array">189. Rotate Array</a></li><li class="related-item">
+              <a href="/%E5%AD%A6%E4%B9%A0javascript%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" title="学习JavaScript数据结构与算法 第3版 (Loiane Groner)">学习JavaScript数据结构与算法 第3版 (Loiane Groner)</a></li><li class="related-item">
+              <a href="/%E9%82%A3%E4%BA%9B%E5%A5%BD%E7%94%A8%E7%9A%84javascript%E6%95%B0%E7%BB%84%E6%96%B9%E6%B3%95/" title="那些好用的JavaScript数组方法">那些好用的JavaScript数组方法</a></li></ul>
+      </div>
+    </div></aside>
+
+  <article class="page single">
+    <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span title="转载" class="icon-repost"><i class="fa-solid fa-share" aria-hidden="true"></i></span><span>80. Remove Duplicates From Sorted Array II</span>
+      </h1></div><div class="post-meta">
+      <div class="post-meta-line"><span class="post-author"><a href="https://andyfree96.github.io/" title="作者" target="_blank" rel="author external nofollow noopener noreferrer" class="author"><img class="avatar" src='/avatar/1.jpg' alt="AndyFree96" height="16" width="16">&nbsp;AndyFree96</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/leetcode/" class="post-category" title="分类 - LeetCode"><i class="fa-regular fa-folder" aria-hidden="true"></i> LeetCode</a></span></div><div class="post-meta-line"><span title="发布于 2025-08-20 06:45:53"><i class="fa-solid fa-calendar-days me-1" aria-hidden="true"></i><time datetime="2025-08-20">2025-08-20</time></span>&nbsp;<span title="1527 字"><i class="fa-solid fa-pencil-alt me-1" aria-hidden="true"></i>约 1600 字</span>&nbsp;<span><i class="fa-regular fa-clock me-1" aria-hidden="true"></i>预计阅读 4 分钟</span>&nbsp;</div>
+    </div><div class="featured-image"><img loading="eager" src='/images/202508/5/andri-aeschlimann-CO85Eu7_4fI-unsplash.jpg' sizes="(max-width: 680px) 100vw, (max-width: 960px) 80vw, (max-width: 1440px) 56vw, 800px" alt="/images/202508/5/andri-aeschlimann-CO85Eu7_4fI-unsplash.jpg"></div><div class="details toc" id="toc-static" data-kept="false">
+        <div class="details-summary toc-title">
+          <span>目录</span>
+          <span><i class="details-icon fa-solid fa-angle-right" aria-hidden="true"></i></span>
+        </div>
+        <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#示例-1">示例 1</a></li>
+        <li><a href="#示例-2">示例 2</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+      </div><div class="content" id="content"><p>Given an integer array nums sorted in non-decreasing order, remove some duplicates in-place such that each unique element appears at most twice. The relative order of the elements should be kept the same.</p>
+<p>Since it is impossible to change the length of the array in some languages, you must instead have the result be placed in the first part of the array nums. More formally, if there are k elements after removing the duplicates, then the first k elements of nums should hold the final result. It does not matter what you leave beyond the first k elements.</p>
+<p>Return k after placing the final result in the first k slots of nums.</p>
+<p>Do not allocate extra space for another array. You must do this by modifying the input array in-place with O(1) extra memory.</p>
+<p>Custom Judge:</p>
+<p>The judge will test your solution with the following code:</p>
+<blockquote>
+<p>int[] nums = [&hellip;]; // Input array</p>
+</blockquote>
+<blockquote>
+<p>int[] expectedNums = [&hellip;]; // The expected answer with correct length</p>
+</blockquote>
+<blockquote>
+<p>int k = removeDuplicates(nums); // Calls your implementation</p>
+</blockquote>
+<blockquote>
+<p>assert k == expectedNums.length;</p>
+</blockquote>
+<blockquote>
+<p>for (int i = 0; i &lt; k; i++) {</p>
+</blockquote>
+<blockquote>
+<p>assert nums[i] == expectedNums[i];</p>
+</blockquote>
+<blockquote>
+<p>}</p>
+</blockquote>
+<p>If all assertions pass, then your solution will be accepted.</p>
+<p>Example 1:</p>
+<blockquote>
+<p>Input: nums = [1,1,1,2,2,3]</p>
+</blockquote>
+<blockquote>
+<p>Output: 5, nums = [1,1,2,2,3,_]</p>
+</blockquote>
+<blockquote>
+<p>Explanation: Your function should return k = 5, with the first five elements of nums being 1, 1, 2, 2 and 3 respectively.
+It does not matter what you leave beyond the returned k (hence they are underscores).</p>
+</blockquote>
+<p>Example 2:</p>
+<blockquote>
+<p>Input: nums = [0,0,1,1,1,1,2,3,3]</p>
+</blockquote>
+<blockquote>
+<p>Output: 7, nums = [0,0,1,1,2,3,3,<em>,</em>]</p>
+</blockquote>
+<blockquote>
+<p>Explanation: Your function should return k = 7, with the first seven elements of nums being 0, 0, 1, 1, 2, 3 and 3 respectively.It does not matter what you leave beyond the returned k (hence they are underscores).</p>
+</blockquote>
+<p>原题链接: <a href="https://leetcode.com/problems/remove-duplicates-from-sorted-array-ii/description/" target="_blank" rel="external nofollow noopener noreferrer">https://leetcode.com/problems/remove-duplicates-from-sorted-array-ii/description/<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></p>
+<p>给定一个排序数组，你需要在原地删除重复出现的元素，使得每个元素最多出现两次，返回删除后数组的新长度。不要使用额外的数组空间，你必须在原地修改输入数组并在使用<code>O(1)</code>额外空间的条件下完成删除操作。</p>
+<h3 class="heading-element" id="示例-1"><span>示例 1</span>
+  <a href="#%e7%a4%ba%e4%be%8b-1" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-fallback"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">// 给定nums=[1,1,1,2,2,3]
+</span></span><span class="line"><span class="cl">// 函数应该返回新长度length=5, 并且原数组的前五个元素被修改为1,1,2,2,3
+</span></span><span class="line"><span class="cl">// 你不需要考虑数组中超出新长度后面的元素</span></span></code></pre></td></tr></table></div>
+</div>
+</div><h3 class="heading-element" id="示例-2"><span>示例 2</span>
+  <a href="#%e7%a4%ba%e4%be%8b-2" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-fallback"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">// 给定nums=[0,0,1,1,1,1,2,3,3]
+</span></span><span class="line"><span class="cl">// 函数应该返回新长度length=7, 并且原数组的前五个元素被修改为0,0,1,1,2,3,3
+</span></span><span class="line"><span class="cl">// 你不需要考虑数组中超出新长度后面的元素</span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>这个问题怎么解决呢？</p>
+<p>我们需要注意到的是：<strong>给定的数组是已经排好序的</strong>。可以确定的是需要一个变量<code>i</code>用于遍历数组，意思就是就算是比计算机聪明许多的人来处理这个问题，我们也要至少从左往右看一遍数组。还需要一个变量<code>j</code>用于存储删除重复出现元素后的数组长度(准确的说应该是长度减 1)。</p>
+<p>初始情况下，<code>i</code>的值为<code>2</code>，<code>j</code>的值为<code>1</code></p>
+<p><img loading="lazy" src='/images/202508/5/1.png' alt="/images/202508/5/1.png"></p>
+<p>因为如果数组长度小于 3 的话，直接返回数组长度即可。</p>
+<p>将重复元素按要求删除后，结果应该如下所示</p>
+<p><img loading="lazy" src='/images/202508/5/2.png' alt="/images/202508/5/2.png"></p>
+<p>我们通过上图其实可以观察到，下标<code>&lt;=j</code>的元素就是最终数组中该有的元素，而下标<code>&lt;i</code>并且<code>&gt;j</code>的元素就是那些重复的元素。下一步的操作就是<code>A[++j]=A[i]</code>，然后<code>i=i+1</code>(以保持下标<code>&lt;=j</code>的元素就是最终数组中该有的元素，而下标<code>&lt;i</code>并且<code>&gt;j</code>的元素就是那些重复的元素这个性质)。</p>
+<p>什么时候会有<code>A[++j]=A[i]</code>这个操作呢？答案是<code>A[j-1]!=A[i]</code>时。由于我们的数组是有序的，对于合法的下标<code>j-1,j,i</code>，元素之间的关系应该是<code>A[j-1]&lt;=A[j]&lt;=A[i]</code>。如果<code>A[j-1]==A[i]</code>那么就意味着<code>A[j-1]==A[j]==A[i]</code>，此时只需要<code>i=i+1</code>。如果<code>A[j-1]!=A[i]</code>，这三个元素之间的情况可能有如下三种情况：</p>
+<ul>
+<li>第一种</li>
+</ul>
+<p><img loading="lazy" src='/images/202508/5/3.png' alt="/images/202508/5/3.png"></p>
+<p>若出现上图所示的情况，我们可以推断出中间省略号部分其实省略的是<code>a</code>值(参考之前提到的性质)，下一步的操作自然是<code>A[++j]=A[i]</code>。</p>
+<ul>
+<li>第二种</li>
+</ul>
+<p><img loading="lazy" src='/images/202508/5/4.png' alt="/images/202508/5/4.png"></p>
+<p>如果出现上图所示的情况，我们可以推断出省略号部分因应该是没有值的，也就是说<code>j+1==i</code>，此时<code>A[++j]=A[i]</code>，也是没有问题的。</p>
+<ul>
+<li>第三种</li>
+</ul>
+<p><img loading="lazy" src='/images/202508/5/5.png' alt="/images/202508/5/5.png"></p>
+<p>如果省略号部分省略是没有值的，那么下一步进行<code>A[++j]=A[i]</code>自然是没有问题的。如果省略号部分是有值的，那必定是已经移动到下标<code>&lt;=j</code>保存下来的值，也就是说下标<code>&gt;j</code>并且<code>&lt;i</code>的元素都是处理好被弃用的值，此时进行<code>A[++j]=A[i]</code>也是没有问题的。</p>
+<p>综上所述，当<code>A[j-1]!=A[i]</code>时，我们可以放心地进行<code>A[++j]=A[i]</code>这个操作。</p>
+<p>接下来就可以实现上述思路：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-java"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="2" style="--fi-max-shown-lines:400;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-Java" data-lang="Java"><span class="line"><span class="cl"><span class="kd">class</span> <span class="nc">Solution</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="nf">removeDuplicates</span><span class="p">(</span><span class="kt">int</span><span class="o">[]</span><span class="w"> </span><span class="n">nums</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">1</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">nums</span><span class="p">.</span><span class="na">length</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">3</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">nums</span><span class="p">.</span><span class="na">length</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">2</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">nums</span><span class="p">.</span><span class="na">length</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">nums</span><span class="o">[</span><span class="n">j</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">1</span><span class="o">]</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">nums</span><span class="o">[</span><span class="n">i</span><span class="o">]</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                </span><span class="n">nums</span><span class="o">[++</span><span class="n">j</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">nums</span><span class="o">[</span><span class="n">i</span><span class="o">]</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">1</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div></div><hr class="awesome-hr" />
+    <h2 id="see-also">相关内容</h2>
+    <ul><li>
+          <a href="/rotate-array/" title="189. Rotate Array">189. Rotate Array</a></li><li>
+          <a href="/%E5%AD%A6%E4%B9%A0javascript%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" title="学习JavaScript数据结构与算法 第3版 (Loiane Groner)">学习JavaScript数据结构与算法 第3版 (Loiane Groner)</a></li><li>
+          <a href="/%E9%82%A3%E4%BA%9B%E5%A5%BD%E7%94%A8%E7%9A%84javascript%E6%95%B0%E7%BB%84%E6%96%B9%E6%B3%95/" title="那些好用的JavaScript数组方法">那些好用的JavaScript数组方法</a></li></ul><div class="post-footer" id="post-footer">
+  <div class="post-info">
+    <div class="post-info-line">
+      <div class="post-info-mod"><span title="更新于 2025-08-20 06:45:53">更新于 2025-08-20&nbsp;</span>
+      </div></div><div class="post-info-line">
+        <div class="post-info-md"><span><a href="vscode://file/D:\hugo-blog\andyfree96\content\posts\remove-duplicates-from-sorted-array-ii.md" title="在编辑器中打开" class="link-to-vscode">在编辑器中打开</a></span></div>
+        <div class="post-info-share">
+          <span><a href="javascript:void(0);" title="分享到 X" data-sharer="twitter" data-url="http://localhost:1313/remove-duplicates-from-sorted-array-ii/" data-title="80. Remove Duplicates From Sorted Array II" data-via="IRONAnthony96" data-hashtags="LeetCode,Array,数据结构,算法"><i class="fa-brands fa-x-twitter" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="http://localhost:1313/remove-duplicates-from-sorted-array-ii/" data-hashtag="LeetCode"><i class="fa-brands fa-facebook-square" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="http://localhost:1313/remove-duplicates-from-sorted-array-ii/" data-title="80. Remove Duplicates From Sorted Array II" data-image="/images/202508/5/andri-aeschlimann-CO85Eu7_4fI-unsplash.jpg"><i class="fa-brands fa-weibo" aria-hidden="true"></i></a>
+  </span>
+        </div>
+      </div></div>
+
+  <div class="post-info-more">
+    <section class="post-tags"><i class="fa-solid fa-tags me-1" aria-hidden="true"></i><a href="/tags/leetcode/" class="post-tag" title="标签 - LeetCode">LeetCode</a><a href="/tags/array/" class="post-tag" title="标签 - Array">Array</a><a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" class="post-tag" title="标签 - 数据结构">数据结构</a><a href="/tags/%E7%AE%97%E6%B3%95/" class="post-tag" title="标签 - 算法">算法</a></section>
+    <section><span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+    </section>
+  </div><div class="post-nav"><a href="/%E5%A6%82%E4%BD%95%E8%A7%A3%E5%86%B3-node.js-%E4%B8%AD%E7%9A%84-emfile-%E9%94%99%E8%AF%AF/" class="post-nav-item" rel="prev" title="如何解决 Node.js 中的 EMFILE 错误"><i class="fa-solid fa-angle-left" aria-hidden="true"></i>如何解决 Node.js 中的 EMFILE 错误</a><a href="/es6%E6%A8%A1%E5%9D%97%E6%95%99%E7%A8%8B/" class="post-nav-item" rel="next" title="ES6模块教程">ES6模块教程<i class="fa-solid fa-angle-right" aria-hidden="true"></i></a></div>
+</div>
+<div class="post-reward">
+    <div class="comment">请作者喝杯咖啡!</div>
+    <input type="checkbox" class="reward-input" name="reward" id="fi-reward" hidden />
+    <label class="reward-button" for="fi-reward"><i class="fa-solid fa-qrcode" aria-hidden="true"></i>赞赏</label>
+    <div class="reward-ways" data-mode="static"><div><img src='/reward/alipay.png' alt="AndyFree96 支付宝"><span data-animation>支付宝</span>
+          </div><div><img src='/reward/wechatpay.png' alt="AndyFree96 微信"><span data-animation>微信</span>
+          </div></div>
+  </div></article>
+
+  <aside class="toc" id="toc-auto" aria-label="目录"><h2 class="toc-title">目录&nbsp;<i class="toc-icon fa-solid fa-angle-down" aria-hidden="true"></i></h2>
+      <div class="toc-content" id="toc-content-auto"></div></aside><dialog id="toc-dialog" aria-labelledby="toc-dialog-title" role="dialog" closedby="any">
+      <button type="button" class="toc-close-btn" aria-label="Close Table of Contents"><i class="fa-solid fa-xmark fa-lg" aria-hidden="true"></i></button>
+      <div class="toc">
+        <h2 class="toc-title" id="toc-dialog-title">目录</h2>
+        <div class="toc-content" id="toc-content-drawer"><nav >
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#示例-1">示例 1</a></li>
+        <li><a href="#示例-2">示例 2</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+      </div>
+    </dialog></main><footer class="footer">
+    <div class="footer-container"><div class="footer-line powered">由 <a href="https://gohugo.io/" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.163.1">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/hugo-fixit/FixIt" target="_blank" rel="external" title="FixIt v1.0.0-mq99hlzg">FixIt</a>
+        </div><div class="footer-line copyright" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright" aria-hidden="true"></i>
+            <span itemprop="copyrightYear">2019 - 2026</span><span class="author" itemprop="copyrightHolder">
+              <a href="https://andyfree96.github.io/" target="_blank" rel="external nofollow noopener noreferrer">AndyFree96</a></span></div></div>
+  </footer></div><div class="widgets"><div class="fixed-buttons"><button type="button" class="fixed-button back-to-top animate__faster d-none" aria-label="回到顶部"><i class="fa-solid fa-arrow-up" aria-hidden="true"></i></button><button type="button" id="toc-drawer-button" class="fixed-button toc-drawer-button d-none" aria-label="目录" aria-controls="toc-dialog" aria-expanded="false"><i class="fa-solid fa-bars" aria-hidden="true"></i></button></div><div id="mask"></div><div class="reading-progress-bar" style="left: 0;top: 0;"></div><noscript>
+    <div class="noscript-warning">该网站在启用 JavaScript 的情况下效果最佳。</div>
+  </noscript>
+</div><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script src="/lib/autocomplete/autocomplete.min.js" defer></script><script src="/lib/algoliasearch/browser.umd.js" defer></script><script src="/lib/sharer/sharer.min.js" async defer></script><script src="/lib/cookieconsent/cookieconsent.min.js" defer></script><script src="/js/lib/cookieconsent.js" defer></script><script src="/lib/cell-tooltip/cell-tooltip.umd.js" defer></script><script src="/js/config/37bc557883f715288f6f9f7e11a232da.js" defer></script><script src="/js/lib/file-tree.js" defer></script><script src="/js/main.js" defer></script></body>
+</html>

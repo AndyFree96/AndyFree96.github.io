@@ -427,6 +427,8 @@ Remove-Item *.tmp
 Move-Item *.log archive/
 ```
 
+更多关于文件的操作可阅读[用PowerShell玩转文件处理](https://andyfree96.github.io/%E7%94%A8powershell%E7%8E%A9%E8%BD%AC%E6%96%87%E4%BB%B6%E5%A4%84%E7%90%86/)。
+
 ## 网络自动化
 
 测试连接：
@@ -495,5 +497,5 @@ PowerShell不只是Windows命令行。它是一套自动化语言、系统管理
 ---
 
 > 作者: [AndyFree96](https://andyfree96.github.io/)  
-> URL: https://andyfree96.github.io/powershell%E8%84%9A%E6%9C%AC%E5%AE%9E%E8%B7%B5%E6%8C%87%E5%8D%97/  
+> URL: http://localhost:1313/powershell%E8%84%9A%E6%9C%AC%E5%AE%9E%E8%B7%B5%E6%8C%87%E5%8D%97/  
 
