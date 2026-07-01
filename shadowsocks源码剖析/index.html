@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
-  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=9613&amp;path=livereload" data-no-instant defer></script>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
     <meta name="robots" content="noodp" />
@@ -14,7 +14,7 @@ Socks5 协议解析 Socket 编程 非阻塞 IO Reactor 事件模型 epoll/kqueue
 	<meta itemprop="datePublished" content="2026-06-12T14:47:56+08:00">
 	<meta itemprop="dateModified" content="2026-06-12T14:47:56+08:00">
 	<meta itemprop="wordCount" content="3243">
-	<meta itemprop="keywords" content="网络编程,非阻塞IO,源码剖析"><meta property="og:url" content="http://localhost:1313/shadowsocks%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/">
+	<meta itemprop="keywords" content="网络编程,非阻塞IO,源码剖析"><meta property="og:url" content="http://localhost:9613/shadowsocks%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/">
 	<meta property="og:site_name" content="东尼的博客">
 	<meta property="og:title" content="Shadowsocks源码剖析：一个轻量级代理工具背后的网络编程设计">
 	<meta property="og:description" content="前言很多人第一次接触 Shadowsocks，只把它当作一个代理工具。但是从源码角度看，Shadowsocks 是一个非常适合学习网络编程的项目。它代码量不大，却包含了现代网络服务端开发中的很多核心思想：
@@ -34,7 +34,7 @@ Socks5 协议解析 Socket 编程 非阻塞 IO Reactor 事件模型 epoll/kqueue
 Socks5 协议解析 Socket 编程 非阻塞 IO Reactor 事件模型 epoll/kqueue/select 状态机设计 TCP Relay 转发 UDP Relay 加密通信 阅读 Shadowsocks 源码，可以帮助我们理解一个代理程序从建立连接，到数据转发，再到连接关闭的完整过程。本文以 Python 版 Shadowsocks 为例，分析它内部的设计。"><meta name="twitter:creator" content="@IRONAnthony96"><meta name="application-name" content="FixIt">
 <meta name="apple-mobile-web-app-title" content="FixIt"><meta name="theme-color" data-light="#f6f8fa" data-dark="#151b23" content="#f6f8fa"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" type="text/html" href="http://localhost:1313/shadowsocks%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="Shadowsocks源码剖析：一个轻量级代理工具背后的网络编程设计 - 东尼的博客" /><link rel="prev" type="text/html" href="http://localhost:1313/node.js%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="Node.js 源码剖析：非阻塞世界的引擎密码" /><link rel="next" type="text/html" href="http://localhost:1313/filmtv/" title="影视" /><link rel="alternate" type="text/markdown" href="http://localhost:1313/shadowsocks%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/index.md" title="Shadowsocks源码剖析：一个轻量级代理工具背后的网络编程设计 - 东尼的博客"><link rel="stylesheet" href="/css/config.css"><link rel="stylesheet" href="/css/main.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" type="text/html" href="http://localhost:9613/shadowsocks%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="Shadowsocks源码剖析：一个轻量级代理工具背后的网络编程设计 - 东尼的博客" /><link rel="prev" type="text/html" href="http://localhost:9613/node.js%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="Node.js 源码剖析：非阻塞世界的引擎密码" /><link rel="next" type="text/html" href="http://localhost:9613/filmtv/" title="影视" /><link rel="alternate" type="text/markdown" href="http://localhost:9613/shadowsocks%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/index.md" title="Shadowsocks源码剖析：一个轻量级代理工具背后的网络编程设计 - 东尼的博客"><link rel="stylesheet" href="/css/config.css"><link rel="stylesheet" href="/css/main.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><link rel="preload" href="/js/main.js" as="script"><script type="application/ld+json">
   {
@@ -44,9 +44,9 @@ Socks5 协议解析 Socket 编程 非阻塞 IO Reactor 事件模型 epoll/kqueue
     "inLanguage": "zh-CN",
     "mainEntityOfPage": {
       "@type": "WebPage",
-      "@id": "http:\/\/localhost:1313\/shadowsocks%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90\/"
+      "@id": "http:\/\/localhost:9613\/shadowsocks%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90\/"
     },"genre": "posts","keywords": "网络编程, 非阻塞IO, 源码剖析","wordcount":  3243 ,
-    "url": "http:\/\/localhost:1313\/shadowsocks%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90\/","datePublished": "2026-06-12T14:47:56+08:00","dateModified": "2026-06-12T14:47:56+08:00","publisher": {
+    "url": "http:\/\/localhost:9613\/shadowsocks%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90\/","datePublished": "2026-06-12T14:47:56+08:00","dateModified": "2026-06-12T14:47:56+08:00","publisher": {
       "@type": "Organization",
       "name": ""},"author": {
         "@type": "Person",
@@ -999,9 +999,9 @@ Socks5 协议解析 Socket 编程 非阻塞 IO Reactor 事件模型 epoll/kqueue
       </div></div><div class="post-info-line">
         <div class="post-info-md"><span><a href="vscode://file/D:\hugo-blog\andyfree96\content\posts\Shadowsocks源码剖析.md" title="在编辑器中打开" class="link-to-vscode">在编辑器中打开</a></span></div>
         <div class="post-info-share">
-          <span><a href="javascript:void(0);" title="分享到 X" data-sharer="twitter" data-url="http://localhost:1313/shadowsocks%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="Shadowsocks源码剖析：一个轻量级代理工具背后的网络编程设计" data-via="IRONAnthony96" data-hashtags="网络编程,非阻塞IO,源码剖析"><i class="fa-brands fa-x-twitter" aria-hidden="true"></i></a>
-  <a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="http://localhost:1313/shadowsocks%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-hashtag="网络编程"><i class="fa-brands fa-facebook-square" aria-hidden="true"></i></a>
-  <a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="http://localhost:1313/shadowsocks%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="Shadowsocks源码剖析：一个轻量级代理工具背后的网络编程设计" data-image="/images/202606/1/shubham-dhage-v-PEtZBLA0s-unsplash.jpg"><i class="fa-brands fa-weibo" aria-hidden="true"></i></a>
+          <span><a href="javascript:void(0);" title="分享到 X" data-sharer="twitter" data-url="http://localhost:9613/shadowsocks%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="Shadowsocks源码剖析：一个轻量级代理工具背后的网络编程设计" data-via="IRONAnthony96" data-hashtags="网络编程,非阻塞IO,源码剖析"><i class="fa-brands fa-x-twitter" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="http://localhost:9613/shadowsocks%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-hashtag="网络编程"><i class="fa-brands fa-facebook-square" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="http://localhost:9613/shadowsocks%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="Shadowsocks源码剖析：一个轻量级代理工具背后的网络编程设计" data-image="/images/202606/1/shubham-dhage-v-PEtZBLA0s-unsplash.jpg"><i class="fa-brands fa-weibo" aria-hidden="true"></i></a>
   </span>
         </div>
       </div></div>

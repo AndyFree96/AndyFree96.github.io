@@ -1,0 +1,971 @@
+<!DOCTYPE html>
+<html itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=9613&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+    <meta name="robots" content="noodp" />
+    <title>让Hugo支持HDevelop代码高亮 - 东尼的博客</title><meta name="author" content="AndyFree96">
+<meta name="description" content="Hugo基于 Chroma 实现代码高亮，对 Go、Python、C&#43;&#43;、Matlab 等主流语言都提供了开箱即用的支持。最近阅读机器视觉算法与应用 第2版 (Carsten Steger)时，需要在博客中展示 HDevelop 代码，却发现 Hugo 默认并不支持这种语言。与其退而求其次使用普通文本展示，不如直接扩展 Hugo 的语法高亮能力。因此本文记录整个实现过程，包括：
+Hugo如何找到对应的Lexer Chroma 的语法解析机制 如何新增一个HDevelop Lexer 最终让Hugo支持HDevelop代码高亮 "><meta name="keywords" content='Go, Hugo, 语法高亮, Chroma'>
+	<meta itemprop="name" content="让Hugo支持HDevelop代码高亮">
+	<meta itemprop="description" content="Hugo基于 Chroma 实现代码高亮，对 Go、Python、C&#43;&#43;、Matlab 等主流语言都提供了开箱即用的支持。最近阅读机器视觉算法与应用 第2版 (Carsten Steger)时，需要在博客中展示 HDevelop 代码，却发现 Hugo 默认并不支持这种语言。与其退而求其次使用普通文本展示，不如直接扩展 Hugo 的语法高亮能力。因此本文记录整个实现过程，包括：
+Hugo如何找到对应的Lexer Chroma 的语法解析机制 如何新增一个HDevelop Lexer 最终让Hugo支持HDevelop代码高亮">
+	<meta itemprop="datePublished" content="2026-07-01T15:46:16+08:00">
+	<meta itemprop="dateModified" content="2026-07-01T15:46:16+08:00">
+	<meta itemprop="wordCount" content="4289">
+	<meta itemprop="keywords" content="Go,Hugo,语法高亮,Chroma"><meta property="og:url" content="http://localhost:9613/%E8%AE%A9hugo%E6%94%AF%E6%8C%81hdevelop%E4%BB%A3%E7%A0%81%E9%AB%98%E4%BA%AE/">
+	<meta property="og:site_name" content="东尼的博客">
+	<meta property="og:title" content="让Hugo支持HDevelop代码高亮">
+	<meta property="og:description" content="Hugo基于 Chroma 实现代码高亮，对 Go、Python、C&#43;&#43;、Matlab 等主流语言都提供了开箱即用的支持。最近阅读机器视觉算法与应用 第2版 (Carsten Steger)时，需要在博客中展示 HDevelop 代码，却发现 Hugo 默认并不支持这种语言。与其退而求其次使用普通文本展示，不如直接扩展 Hugo 的语法高亮能力。因此本文记录整个实现过程，包括：
+Hugo如何找到对应的Lexer Chroma 的语法解析机制 如何新增一个HDevelop Lexer 最终让Hugo支持HDevelop代码高亮">
+	<meta property="og:locale" content="zh_CN">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="posts">
+		<meta property="article:published_time" content="2026-07-01T15:46:16+08:00">
+		<meta property="article:modified_time" content="2026-07-01T15:46:16+08:00">
+		<meta property="article:tag" content="Go">
+		<meta property="article:tag" content="Hugo">
+		<meta property="article:tag" content="语法高亮">
+		<meta property="article:tag" content="Chroma">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="让Hugo支持HDevelop代码高亮">
+  <meta name="twitter:description" content="Hugo基于 Chroma 实现代码高亮，对 Go、Python、C&#43;&#43;、Matlab 等主流语言都提供了开箱即用的支持。最近阅读机器视觉算法与应用 第2版 (Carsten Steger)时，需要在博客中展示 HDevelop 代码，却发现 Hugo 默认并不支持这种语言。与其退而求其次使用普通文本展示，不如直接扩展 Hugo 的语法高亮能力。因此本文记录整个实现过程，包括：
+Hugo如何找到对应的Lexer Chroma 的语法解析机制 如何新增一个HDevelop Lexer 最终让Hugo支持HDevelop代码高亮"><meta name="twitter:creator" content="@IRONAnthony96"><meta name="application-name" content="FixIt">
+<meta name="apple-mobile-web-app-title" content="FixIt"><meta name="theme-color" data-light="#f6f8fa" data-dark="#151b23" content="#f6f8fa"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" type="text/html" href="http://localhost:9613/%E8%AE%A9hugo%E6%94%AF%E6%8C%81hdevelop%E4%BB%A3%E7%A0%81%E9%AB%98%E4%BA%AE/" title="让Hugo支持HDevelop代码高亮 - 东尼的博客" /><link rel="prev" type="text/html" href="http://localhost:9613/%E8%81%AA%E6%98%8E%E7%9A%84%E6%8A%95%E8%B5%84%E8%80%85/" title="聪明的投资者 第4版 (Benjamin Graham)" /><link rel="alternate" type="text/markdown" href="http://localhost:9613/%E8%AE%A9hugo%E6%94%AF%E6%8C%81hdevelop%E4%BB%A3%E7%A0%81%E9%AB%98%E4%BA%AE/index.md" title="让Hugo支持HDevelop代码高亮 - 东尼的博客"><link rel="stylesheet" href="/css/config.css"><link rel="stylesheet" href="/css/main.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><link rel="preload" href="/js/main.js" as="script"><script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "BlogPosting",
+    "headline": "让Hugo支持HDevelop代码高亮",
+    "inLanguage": "zh-CN",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "http:\/\/localhost:9613\/%E8%AE%A9hugo%E6%94%AF%E6%8C%81hdevelop%E4%BB%A3%E7%A0%81%E9%AB%98%E4%BA%AE\/"
+    },"genre": "posts","keywords": "Go, Hugo, 语法高亮, Chroma","wordcount":  4289 ,
+    "url": "http:\/\/localhost:9613\/%E8%AE%A9hugo%E6%94%AF%E6%8C%81hdevelop%E4%BB%A3%E7%A0%81%E9%AB%98%E4%BA%AE\/","datePublished": "2026-07-01T15:46:16+08:00","dateModified": "2026-07-01T15:46:16+08:00","publisher": {
+      "@type": "Organization",
+      "name": ""},"author": {
+        "@type": "Person",
+        "name": "AndyFree96"
+      },"description": ""
+  }
+  </script><script src="/js/head/color-scheme.js"></script></head>
+  <body data-instant-intensity="viewport" data-header-desktop="sticky" data-header-mobile="auto"><div class="wrapper" data-page-style="normal"><header class="desktop animate__faster" id="header-desktop">
+  <div class="header-wrapper">
+    <div class="header-title">
+      <a href="/" title="东尼的博客" class="header-title-link"><span class="header-title-text">东尼的博客</span></a><span class="header-subtitle"></span></div>
+    <nav>
+      <ul class="menu"><li class="menu-item">
+              <a class="menu-link" href="/posts/">📕 文章</a></li><li class="menu-item">
+              <a class="menu-link" href="/categories/">🧰 分类</a></li><li class="menu-item">
+              <a class="menu-link" href="/tags/">🔖 标签</a></li><li class="menu-item">
+              <a class="menu-link" href="/book">📚 书单</a></li><li class="menu-item">
+              <a class="menu-link" href="/paper">📝 论文</a></li><li class="menu-item">
+              <a class="menu-link" href="/opencourse">👨🏻‍💻 公开课</a></li><li class="menu-item">
+              <a class="menu-link" href="/filmtv">🎞️ 影视</a></li><li class="menu-item">
+              <a class="menu-link" href="/resource">⚡️ 资源库</a></li><li class="menu-item">
+              <a class="menu-link" href="/projects">⭐ 开源</a></li><li class="menu-item">
+              <a class="menu-link" href="/about">🙋🏻‍♂️ 关于</a></li><li class="menu-item delimiter"></li><li class="menu-item search" id="search-desktop">
+            <input type="text" placeholder="搜索文章标题或内容……" id="search-input-desktop" tabindex="-1">
+            <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索" aria-controls="search-dropdown-desktop" aria-expanded="false">
+              <i class="fa-solid fa-search" aria-hidden="true"></i>
+            </a>
+            <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+              <i class="fa-solid fa-times-circle" aria-hidden="true"></i>
+            </a>
+            <span class="search-button search-loading" id="search-loading-desktop">
+              <i class="fa-solid fa-spinner fa-spin" aria-hidden="true"></i>
+            </span>
+          </li><li class="menu-item theme-switch-item">
+          <button type="button" class="theme-switch" aria-label="切换主题" title="切换主题"><i class="fa-solid fa-adjust" aria-hidden="true"></i></button>
+        </li></ul>
+    </nav>
+  </div>
+</header><header class="mobile animate__faster" id="header-mobile">
+  <div class="header-container">
+    <div class="header-wrapper">
+      <div class="header-title">
+        <a href="/" title="东尼的博客" class="header-title-link"><span class="header-title-text">东尼的博客</span></a><span class="header-subtitle"></span></div>
+      <button type="button" class="theme-switch" aria-label="切换主题"><i class="fa-solid fa-adjust" aria-hidden="true"></i></button>
+      <button type="button" class="menu-toggle" id="menu-toggle-mobile" aria-controls="menu-mobile" aria-expanded="false" aria-labelledby="menu-mobile">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <nav>
+      <ul class="menu" id="menu-mobile"><li class="search-wrapper">
+            <div class="search mobile" id="search-mobile">
+              <input type="text" placeholder="搜索文章标题或内容……" id="search-input-mobile">
+              <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索" aria-controls="search-dropdown-mobile" aria-expanded="false">
+                <i class="fa-solid fa-search" aria-hidden="true"></i>
+              </a>
+              <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                <i class="fa-solid fa-times-circle" aria-hidden="true"></i>
+              </a>
+              <span class="search-button search-loading" id="search-loading-mobile">
+                <i class="fa-solid fa-spinner fa-spin" aria-hidden="true"></i>
+              </span>
+            </div>
+            <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+              取消
+            </a>
+          </li><li class="menu-item"><a class="menu-link" href="/posts/">📕 文章</a></li><li class="menu-item"><a class="menu-link" href="/categories/">🧰 分类</a></li><li class="menu-item"><a class="menu-link" href="/tags/">🔖 标签</a></li><li class="menu-item"><a class="menu-link" href="/book">📚 书单</a></li><li class="menu-item"><a class="menu-link" href="/paper">📝 论文</a></li><li class="menu-item"><a class="menu-link" href="/opencourse">👨🏻‍💻 公开课</a></li><li class="menu-item"><a class="menu-link" href="/filmtv">🎞️ 影视</a></li><li class="menu-item"><a class="menu-link" href="/resource">⚡️ 资源库</a></li><li class="menu-item"><a class="menu-link" href="/projects">⭐ 开源</a></li><li class="menu-item"><a class="menu-link" href="/about">🙋🏻‍♂️ 关于</a></li><li class="menu-item menu-system"></li>
+      </ul>
+    </nav>
+  </div>
+</header><div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+  </div>
+  <div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+  </div><main class="fi-container"><aside class="aside-collection animate__animated animate__fadeIn animate__faster" aria-label="合集"><div class="details related-details open">
+      <div class="details-summary related-summary">
+        <i class="fa-solid fa-fire fa-fade text-danger" aria-hidden="true"></i>
+        <span class="related-title">相关内容</span><i class="details-icon fa-solid fa-angle-right" aria-hidden="true"></i></div>
+      <div class="details-content related-content">
+        <ul class="related-list"><li class="related-item">
+              <a href="/hugo%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="Hugo源码剖析：世界最快静态站点生成器的实现原理">Hugo源码剖析：世界最快静态站点生成器的实现原理</a></li></ul>
+      </div>
+    </div></aside>
+
+  <article class="page single">
+    <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span title="转载" class="icon-repost"><i class="fa-solid fa-share" aria-hidden="true"></i></span><span>让Hugo支持HDevelop代码高亮</span>
+      </h1></div><div class="post-meta">
+      <div class="post-meta-line"><span class="post-author"><a href="https://andyfree96.github.io/" title="作者" target="_blank" rel="author external nofollow noopener noreferrer" class="author"><img class="avatar" src='/avatar/1.jpg' alt="AndyFree96" height="16" width="16">&nbsp;AndyFree96</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/" class="post-category" title="分类 - 工程实践"><i class="fa-regular fa-folder" aria-hidden="true"></i> 工程实践</a></span></div><div class="post-meta-line"><span title="发布于 2026-07-01 15:46:16"><i class="fa-solid fa-calendar-days me-1" aria-hidden="true"></i><time datetime="2026-07-01">2026-07-01</time></span>&nbsp;<span title="4289 字"><i class="fa-solid fa-pencil-alt me-1" aria-hidden="true"></i>约 4300 字</span>&nbsp;<span><i class="fa-regular fa-clock me-1" aria-hidden="true"></i>预计阅读 9 分钟</span>&nbsp;</div>
+    </div><div class="featured-image"><img loading="eager" src='/images/202607/1/doncoombez-RFtQIL8AwHM-unsplash.jpg' sizes="(max-width: 680px) 100vw, (max-width: 960px) 80vw, (max-width: 1440px) 56vw, 800px" alt="/images/202607/1/doncoombez-RFtQIL8AwHM-unsplash.jpg"></div><div class="details toc" id="toc-static" data-kept="false">
+        <div class="details-summary toc-title">
+          <span>目录</span>
+          <span><i class="details-icon fa-solid fa-angle-right" aria-hidden="true"></i></span>
+        </div>
+        <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#准备环境">准备环境</a></li>
+    <li><a href="#找到代码高亮入口">找到代码高亮入口</a></li>
+    <li><a href="#hugo如何获取lexer">Hugo如何获取Lexer</a></li>
+    <li><a href="#chroma从哪里加载lexer">chroma从哪里加载Lexer</a></li>
+    <li><a href="#matlab-xml示例">Matlab XML示例</a></li>
+    <li><a href="#hdevelopxml"><code>hdevelop.xml</code></a></li>
+    <li><a href="#当前仍存在的问题">当前仍存在的问题</a></li>
+    <li><a href="#问题1解决代码块名称显示为code">问题1：解决代码块名称显示为<code>Code</code></a></li>
+    <li><a href="#问题2缩进后的注释无法正确识别">问题2：缩进后的注释无法正确识别</a></li>
+    <li><a href="#总结">总结</a></li>
+  </ul>
+</nav></div>
+      </div><div class="content" id="content"><p><a href="https://gohugo.io/" target="_blank" rel="external nofollow noopener noreferrer">Hugo<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>基于 Chroma 实现代码高亮，对 Go、Python、C++、Matlab 等主流语言都提供了开箱即用的支持。最近阅读<a href="https://andyfree96.github.io/%E6%9C%BA%E5%99%A8%E8%A7%86%E8%A7%89%E7%AE%97%E6%B3%95%E4%B8%8E%E5%BA%94%E7%94%A8/" target="_blank" rel="external nofollow noopener noreferrer">机器视觉算法与应用 第2版 (Carsten Steger)<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>时，需要在博客中展示 HDevelop 代码，却发现 Hugo 默认并不支持这种语言。与其退而求其次使用普通文本展示，不如直接扩展 Hugo 的语法高亮能力。因此本文记录整个实现过程，包括：</p>
+<ul>
+<li>Hugo如何找到对应的Lexer</li>
+<li>Chroma 的语法解析机制</li>
+<li>如何新增一个HDevelop Lexer</li>
+<li>最终让Hugo支持HDevelop代码高亮</li>
+</ul>
+<h2 class="heading-element" id="准备环境"><span>准备环境</span>
+  <a href="#%e5%87%86%e5%a4%87%e7%8e%af%e5%a2%83" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>为了方便调试Hugo的源码，我将Hugo Clone到本地，并使用VS Code配合<a href="https://github.com/go-delve/delve" target="_blank" rel="external nofollow noopener noreferrer">delve<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>进行调试。</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-bash"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">git clone https://github.com/gohugoio/hugo.git
+</span></span><span class="line"><span class="cl"><span class="nb">cd</span> hugo
+</span></span><span class="line"><span class="cl">go mod download
+</span></span><span class="line"><span class="cl">go install github.com/go-delve/delve/cmd/dlv@latest</span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>安装delve时，我遇到了Go Module校验失败的问题：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-fallback"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">checksum mismatch</span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>清理模块缓存并切换GOPROXY后即可正常安装</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-bash"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">go clean -modcache
+</span></span><span class="line"><span class="cl">go env -w <span class="nv">GOPROXY</span><span class="o">=</span>https://goproxy.cn,direct
+</span></span><span class="line"><span class="cl">go install github.com/go-delve/delve/cmd/dlv@latest</span></span></code></pre></td></tr></table></div>
+</div>
+</div><p><code>.vscode/launch.json</code>内容如下：</p>
+<json-viewer value="&#34;{\r\n  \&#34;version\&#34;: \&#34;0.2.0\&#34;,\r\n  \&#34;configurations\&#34;: [\r\n    {\r\n      \&#34;name\&#34;: \&#34;Debug hugo\&#34;,\r\n      \&#34;type\&#34;: \&#34;go\&#34;,\r\n      \&#34;request\&#34;: \&#34;launch\&#34;,\r\n      \&#34;mode\&#34;: \&#34;auto\&#34;,\r\n      \&#34;program\&#34;: \&#34;${workspaceFolder}\&#34;,\r\n      \&#34;args\&#34;: [\&#34;server\&#34;, \&#34;-D\&#34;, \&#34;--source\&#34;, \&#34;./andyfree96\&#34;],\r\n      \&#34;buildFlags\&#34;: \&#34;-gcflags=all=-N -gcflags=all=-l\&#34;\r\n    }\r\n  ]\r\n}&#34;" expand-depth="6" boxed copyable="{&#34;copiedText&#34;:&#34;已复制&#34;,&#34;copyText&#34;:&#34;复制&#34;}"></json-viewer><p><code>andyfree96</code>是用<code>hugo</code>新建的一个示例站点，使用的主题是<a href="https://github.com/hugo-fixit/FixIt" target="_blank" rel="external nofollow noopener noreferrer">FixIt<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>，可参考<a href="https://juejin.cn/post/7458856975709143040" target="_blank" rel="external nofollow noopener noreferrer">30分钟搭建完整的个人博客<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>进行搭建。</p>
+<h2 class="heading-element" id="找到代码高亮入口"><span>找到代码高亮入口</span>
+  <a href="#%e6%89%be%e5%88%b0%e4%bb%a3%e7%a0%81%e9%ab%98%e4%ba%ae%e5%85%a5%e5%8f%a3" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>经过一番浏览发现发现<code>markup\highlight\highlight.go</code>中有一个<code>highlight</code>函数：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-go"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="2" style="--fi-max-shown-lines:400;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span><span class="lnt">60
+</span><span class="lnt">61
+</span><span class="lnt">62
+</span><span class="lnt">63
+</span><span class="lnt">64
+</span><span class="lnt">65
+</span><span class="lnt">66
+</span><span class="lnt">67
+</span><span class="lnt">68
+</span><span class="lnt">69
+</span><span class="lnt">70
+</span><span class="lnt">71
+</span><span class="lnt">72
+</span><span class="lnt">73
+</span><span class="lnt">74
+</span><span class="lnt">75
+</span><span class="lnt">76
+</span><span class="lnt">77
+</span><span class="lnt">78
+</span><span class="lnt">79
+</span><span class="lnt">80
+</span><span class="lnt">81
+</span><span class="lnt">82
+</span><span class="lnt">83
+</span><span class="lnt">84
+</span><span class="lnt">85
+</span><span class="lnt">86
+</span><span class="lnt">87
+</span><span class="lnt">88
+</span><span class="lnt">89
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kd">func</span><span class="w"> </span><span class="nf">highlight</span><span class="p">(</span><span class="nx">fw</span><span class="w"> </span><span class="nx">hugio</span><span class="p">.</span><span class="nx">FlexiWriter</span><span class="p">,</span><span class="w"> </span><span class="nx">code</span><span class="p">,</span><span class="w"> </span><span class="nx">lang</span><span class="w"> </span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="nx">attributes</span><span class="w"> </span><span class="p">[]</span><span class="nx">attributes</span><span class="p">.</span><span class="nx">Attribute</span><span class="p">,</span><span class="w"> </span><span class="nx">cfg</span><span class="w"> </span><span class="nx">Config</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="p">,</span><span class="w"> </span><span class="kt">error</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="kd">var</span><span class="w"> </span><span class="nx">lexer</span><span class="w"> </span><span class="nx">Chroma</span><span class="p">.</span><span class="nx">Lexer</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="k">if</span><span class="w"> </span><span class="nx">lang</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="s">&#34;&#34;</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="nx">lexer</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">chromalexers</span><span class="p">.</span><span class="nf">Get</span><span class="p">(</span><span class="nx">lang</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="k">if</span><span class="w"> </span><span class="nx">lexer</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nx">cfg</span><span class="p">.</span><span class="nx">GuessSyntax</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="nx">lexer</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">lexers</span><span class="p">.</span><span class="nf">Analyse</span><span class="p">(</span><span class="nx">code</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="k">if</span><span class="w"> </span><span class="nx">lexer</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">			</span><span class="nx">lexer</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">lexers</span><span class="p">.</span><span class="nx">Fallback</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="nx">lang</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">strings</span><span class="p">.</span><span class="nf">ToLower</span><span class="p">(</span><span class="nx">lexer</span><span class="p">.</span><span class="nf">Config</span><span class="p">().</span><span class="nx">Name</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">w</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">byteCountFlexiWriter</span><span class="p">{</span><span class="nx">delegate</span><span class="p">:</span><span class="w"> </span><span class="nx">fw</span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="k">if</span><span class="w"> </span><span class="nx">lexer</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="k">if</span><span class="w"> </span><span class="nx">cfg</span><span class="p">.</span><span class="nx">Hl_inline</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">			</span><span class="nx">fmt</span><span class="p">.</span><span class="nf">Fprintf</span><span class="p">(</span><span class="nx">w</span><span class="p">,</span><span class="w"> </span><span class="s">&#34;&lt;code%s&gt;%s&lt;/code&gt;&#34;</span><span class="p">,</span><span class="w"> </span><span class="nf">inlineCodeAttrs</span><span class="p">(</span><span class="nx">lang</span><span class="p">),</span><span class="w"> </span><span class="nx">gohtml</span><span class="p">.</span><span class="nf">EscapeString</span><span class="p">(</span><span class="nx">code</span><span class="p">))</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">			</span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="kc">nil</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="nx">preWrapper</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nf">getPreWrapper</span><span class="p">(</span><span class="nx">lang</span><span class="p">,</span><span class="w"> </span><span class="nx">w</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="nx">fmt</span><span class="p">.</span><span class="nf">Fprint</span><span class="p">(</span><span class="nx">w</span><span class="p">,</span><span class="w"> </span><span class="nx">preWrapper</span><span class="p">.</span><span class="nf">Start</span><span class="p">(</span><span class="kc">true</span><span class="p">,</span><span class="w"> </span><span class="s">&#34;&#34;</span><span class="p">))</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="nx">fmt</span><span class="p">.</span><span class="nf">Fprint</span><span class="p">(</span><span class="nx">w</span><span class="p">,</span><span class="w"> </span><span class="nx">gohtml</span><span class="p">.</span><span class="nf">EscapeString</span><span class="p">(</span><span class="nx">code</span><span class="p">))</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="nx">fmt</span><span class="p">.</span><span class="nf">Fprint</span><span class="p">(</span><span class="nx">w</span><span class="p">,</span><span class="w"> </span><span class="nx">preWrapper</span><span class="p">.</span><span class="nf">End</span><span class="p">(</span><span class="kc">true</span><span class="p">))</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="k">return</span><span class="w"> </span><span class="nx">preWrapper</span><span class="p">.</span><span class="nx">low</span><span class="p">,</span><span class="w"> </span><span class="nx">preWrapper</span><span class="p">.</span><span class="nx">high</span><span class="p">,</span><span class="w"> </span><span class="kc">nil</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">style</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">styles</span><span class="p">.</span><span class="nf">Get</span><span class="p">(</span><span class="nx">cfg</span><span class="p">.</span><span class="nx">Style</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="k">if</span><span class="w"> </span><span class="nx">style</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="nx">style</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">styles</span><span class="p">.</span><span class="nx">Fallback</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">lexer</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">Chroma</span><span class="p">.</span><span class="nf">Coalesce</span><span class="p">(</span><span class="nx">lexer</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">iterator</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">lexer</span><span class="p">.</span><span class="nf">Tokenise</span><span class="p">(</span><span class="kc">nil</span><span class="p">,</span><span class="w"> </span><span class="nx">code</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="k">if</span><span class="w"> </span><span class="p">!</span><span class="nx">cfg</span><span class="p">.</span><span class="nx">Hl_inline</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="nf">writeDivStart</span><span class="p">(</span><span class="nx">w</span><span class="p">,</span><span class="w"> </span><span class="nx">attributes</span><span class="p">,</span><span class="w"> </span><span class="nx">cfg</span><span class="p">.</span><span class="nx">WrapperClass</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">options</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">cfg</span><span class="p">.</span><span class="nf">toHTMLOptions</span><span class="p">()</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="kd">var</span><span class="w"> </span><span class="nx">wrapper</span><span class="w"> </span><span class="nx">html</span><span class="p">.</span><span class="nx">PreWrapper</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="k">if</span><span class="w"> </span><span class="nx">cfg</span><span class="p">.</span><span class="nx">Hl_inline</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="nx">wrapper</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">startEnd</span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">			</span><span class="nx">start</span><span class="p">:</span><span class="w"> </span><span class="kd">func</span><span class="p">(</span><span class="nx">code</span><span class="w"> </span><span class="kt">bool</span><span class="p">,</span><span class="w"> </span><span class="nx">styleAttr</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">				</span><span class="k">if</span><span class="w"> </span><span class="nx">code</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">					</span><span class="k">return</span><span class="w"> </span><span class="nx">fmt</span><span class="p">.</span><span class="nf">Sprintf</span><span class="p">(</span><span class="s">`&lt;code%s&gt;`</span><span class="p">,</span><span class="w"> </span><span class="nf">inlineCodeAttrs</span><span class="p">(</span><span class="nx">lang</span><span class="p">))</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">				</span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">				</span><span class="k">return</span><span class="w"> </span><span class="s">``</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">			</span><span class="p">},</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">			</span><span class="nx">end</span><span class="p">:</span><span class="w"> </span><span class="kd">func</span><span class="p">(</span><span class="nx">code</span><span class="w"> </span><span class="kt">bool</span><span class="p">)</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">				</span><span class="k">if</span><span class="w"> </span><span class="nx">code</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">					</span><span class="k">return</span><span class="w"> </span><span class="s">`&lt;/code&gt;`</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">				</span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">				</span><span class="k">return</span><span class="w"> </span><span class="s">``</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">			</span><span class="p">},</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="nx">wrapper</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nf">getPreWrapper</span><span class="p">(</span><span class="nx">lang</span><span class="p">,</span><span class="w"> </span><span class="nx">w</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">options</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nb">append</span><span class="p">(</span><span class="nx">options</span><span class="p">,</span><span class="w"> </span><span class="nx">html</span><span class="p">.</span><span class="nf">WithPreWrapper</span><span class="p">(</span><span class="nx">wrapper</span><span class="p">))</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">formatter</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">html</span><span class="p">.</span><span class="nf">New</span><span class="p">(</span><span class="nx">options</span><span class="o">...</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">formatter</span><span class="p">.</span><span class="nf">Format</span><span class="p">(</span><span class="nx">w</span><span class="p">,</span><span class="w"> </span><span class="nx">style</span><span class="p">,</span><span class="w"> </span><span class="nx">iterator</span><span class="p">);</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="k">if</span><span class="w"> </span><span class="p">!</span><span class="nx">cfg</span><span class="p">.</span><span class="nx">Hl_inline</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="nf">writeDivEnd</span><span class="p">(</span><span class="nx">w</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="k">if</span><span class="w"> </span><span class="nx">p</span><span class="p">,</span><span class="w"> </span><span class="nx">ok</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">wrapper</span><span class="p">.(</span><span class="o">*</span><span class="nx">preWrapper</span><span class="p">);</span><span class="w"> </span><span class="nx">ok</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="k">return</span><span class="w"> </span><span class="nx">p</span><span class="p">.</span><span class="nx">low</span><span class="p">,</span><span class="w"> </span><span class="nx">p</span><span class="p">.</span><span class="nx">high</span><span class="p">,</span><span class="w"> </span><span class="kc">nil</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="kc">nil</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><h2 class="heading-element" id="hugo如何获取lexer"><span>Hugo如何获取Lexer</span>
+  <a href="#hugo%e5%a6%82%e4%bd%95%e8%8e%b7%e5%8f%96lexer" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>当看到<code>lexer</code>字样出现，马上锁定了<code>chromalexers.Get(lang)</code>这一句，其调用了<code>markup\highlight\chromalexers\chromalexers.go</code>中的<code>Get</code>函数：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-go"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="2" style="--fi-max-shown-lines:400;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kn">package</span><span class="w"> </span><span class="nx">chromalexers</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="p">(</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="s">&#34;github.com/alecthomas/Chroma/v2&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="s">&#34;github.com/alecthomas/Chroma/v2/lexers&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="s">&#34;github.com/bep/helpers/maphelpers&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">var</span><span class="w"> </span><span class="nx">lexerCache</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="o">*</span><span class="nx">maphelpers</span><span class="p">.</span><span class="nx">NewConcurrentMap</span><span class="p">[</span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="nx">Chroma</span><span class="p">.</span><span class="nx">Lexer</span><span class="p">]()</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c1">// Get returns a lexer for the given language name, nil if not found.</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c1">// This is just a wrapper around chromalexers.Get that caches the result.</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c1">// Reasoning for this is that chromalexers.Get is slow in the case where the lexer is not found,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c1">// which is a common case in Hugo.</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">func</span><span class="w"> </span><span class="nf">Get</span><span class="p">(</span><span class="nx">name</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span><span class="w"> </span><span class="nx">Chroma</span><span class="p">.</span><span class="nx">Lexer</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">l</span><span class="p">,</span><span class="w"> </span><span class="nx">_</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">lexerCache</span><span class="p">.</span><span class="nf">GetOrCreate</span><span class="p">(</span><span class="nx">name</span><span class="p">,</span><span class="w"> </span><span class="kd">func</span><span class="p">()</span><span class="w"> </span><span class="p">(</span><span class="nx">Chroma</span><span class="p">.</span><span class="nx">Lexer</span><span class="p">,</span><span class="w"> </span><span class="kt">error</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="nx">l</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">lexers</span><span class="p">.</span><span class="nf">Get</span><span class="p">(</span><span class="nx">name</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="k">return</span><span class="w"> </span><span class="nx">l</span><span class="p">,</span><span class="w"> </span><span class="kc">nil</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="p">})</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="k">return</span><span class="w"> </span><span class="nx">l</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p><code>Get</code>其实就是获取语言对应的词法解析器(lexer)，还做了缓存处理。使用的<code>lexers</code>包通过如下命令找到在本机的路径：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-go"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="k">go</span><span class="w"> </span><span class="nx">list</span><span class="w"> </span><span class="o">-</span><span class="nx">f</span><span class="w"> </span><span class="err">&#39;</span><span class="p">{{.</span><span class="nx">Dir</span><span class="p">}}</span><span class="err">&#39;</span><span class="w"> </span><span class="nx">github</span><span class="p">.</span><span class="nx">com</span><span class="o">/</span><span class="nx">alecthomas</span><span class="o">/</span><span class="nx">Chroma</span><span class="o">/</span><span class="nx">v2</span><span class="o">/</span><span class="nx">lexers</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>或者直接在VS Code中右键-&gt;Go to Definition也可看到路径。查看<code>lexers.Get</code>函数的定义：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-go"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="c1">// Get a Lexer by name, alias or file extension.</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c1">//
+</span></span></span><span class="line"><span class="cl"><span class="c1">// Note that this if there isn&#39;t an exact match on name or alias, this will</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c1">// call Match(), so it is not efficient.</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">func</span><span class="w"> </span><span class="nf">Get</span><span class="p">(</span><span class="nx">name</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span><span class="w"> </span><span class="nx">Chroma</span><span class="p">.</span><span class="nx">Lexer</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="k">return</span><span class="w"> </span><span class="nx">GlobalLexerRegistry</span><span class="p">.</span><span class="nf">Get</span><span class="p">(</span><span class="nx">name</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><h2 class="heading-element" id="chroma从哪里加载lexer"><span>chroma从哪里加载Lexer</span>
+  <a href="#chroma%e4%bb%8e%e5%93%aa%e9%87%8c%e5%8a%a0%e8%bd%bdlexer" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>也就是说词法解析器都是从<code>GlobalLexerRegistry</code>中拿到的，那么<code>GlobalLexerRegistry</code>又是什么？</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-go"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="2" style="--fi-max-shown-lines:400;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="c1">// GlobalLexerRegistry is the global LexerRegistry of Lexers.</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">var</span><span class="w"> </span><span class="nx">GlobalLexerRegistry</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="kd">func</span><span class="p">()</span><span class="w"> </span><span class="o">*</span><span class="nx">Chroma</span><span class="p">.</span><span class="nx">LexerRegistry</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">reg</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">Chroma</span><span class="p">.</span><span class="nf">NewLexerRegistry</span><span class="p">()</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="c1">// index(reg)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">paths</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">fs</span><span class="p">.</span><span class="nf">Glob</span><span class="p">(</span><span class="nx">embedded</span><span class="p">,</span><span class="w"> </span><span class="s">&#34;embedded/*.xml&#34;</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="nb">panic</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="k">for</span><span class="w"> </span><span class="nx">_</span><span class="p">,</span><span class="w"> </span><span class="nx">path</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="k">range</span><span class="w"> </span><span class="nx">paths</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="nx">reg</span><span class="p">.</span><span class="nf">Register</span><span class="p">(</span><span class="nx">Chroma</span><span class="p">.</span><span class="nf">MustNewXMLLexer</span><span class="p">(</span><span class="nx">embedded</span><span class="p">,</span><span class="w"> </span><span class="nx">path</span><span class="p">))</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="k">return</span><span class="w"> </span><span class="nx">reg</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}()</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c1">// LexerRegistry is a registry of Lexers.</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">type</span><span class="w"> </span><span class="nx">LexerRegistry</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">Lexers</span><span class="w">  </span><span class="nx">Lexers</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">byName</span><span class="w">  </span><span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="nx">Lexer</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">byAlias</span><span class="w"> </span><span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="nx">Lexer</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>也就是<code>GlobalLexerRegistry</code>中的所有解析器都是从<code>embedded/*.xml</code>文件中拿到的。</p>
+<p><figure><img loading="lazy" src='/images/202607/1/1.png' alt="图1 流程图"><figcaption class="image-caption">图1 流程图</figcaption>
+  </figure></p>
+<h2 class="heading-element" id="matlab-xml示例"><span>Matlab XML示例</span>
+  <a href="#matlab-xml%e7%a4%ba%e4%be%8b" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>以<code>matlab.xml</code>为例：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-xml"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="2" style="--fi-max-shown-lines:400;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-xml" data-lang="xml"><span class="line"><span class="cl"><span class="nt">&lt;lexer&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&lt;config&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;name&gt;</span>Matlab<span class="nt">&lt;/name&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;alias&gt;</span>matlab<span class="nt">&lt;/alias&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;filename&gt;</span>*.m<span class="nt">&lt;/filename&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;mime_type&gt;</span>text/matlab<span class="nt">&lt;/mime_type&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&lt;/config&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&lt;rules&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;state</span> <span class="na">name=</span><span class="s">&#34;blockcomment&#34;</span><span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&lt;rule</span> <span class="na">pattern=</span><span class="s">&#34;^\s*%\}&#34;</span><span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;token</span> <span class="na">type=</span><span class="s">&#34;CommentMultiline&#34;</span><span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;pop</span> <span class="na">depth=</span><span class="s">&#34;1&#34;</span><span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&lt;/rule&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&lt;rule</span> <span class="na">pattern=</span><span class="s">&#34;^.*\n&#34;</span><span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;token</span> <span class="na">type=</span><span class="s">&#34;CommentMultiline&#34;</span><span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&lt;/rule&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&lt;rule</span> <span class="na">pattern=</span><span class="s">&#34;.&#34;</span><span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;token</span> <span class="na">type=</span><span class="s">&#34;CommentMultiline&#34;</span><span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&lt;/rule&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;/state&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;state</span> <span class="na">name=</span><span class="s">&#34;deffunc&#34;</span><span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&lt;rule</span> <span class="na">pattern=</span><span class="s">&#34;(\s*)(?:(.+)(\s*)(=)(\s*))?(.+)(\()(.*)(\))(\s*)&#34;</span><span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;bygroups&gt;</span>
+</span></span><span class="line"><span class="cl">          <span class="nt">&lt;token</span> <span class="na">type=</span><span class="s">&#34;TextWhitespace&#34;</span><span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">          <span class="nt">&lt;token</span> <span class="na">type=</span><span class="s">&#34;Text&#34;</span><span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">          <span class="nt">&lt;token</span> <span class="na">type=</span><span class="s">&#34;TextWhitespace&#34;</span><span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">          <span class="nt">&lt;token</span> <span class="na">type=</span><span class="s">&#34;Punctuation&#34;</span><span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">          <span class="nt">&lt;token</span> <span class="na">type=</span><span class="s">&#34;TextWhitespace&#34;</span><span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">          <span class="nt">&lt;token</span> <span class="na">type=</span><span class="s">&#34;NameFunction&#34;</span><span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">          <span class="nt">&lt;token</span> <span class="na">type=</span><span class="s">&#34;Punctuation&#34;</span><span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">          <span class="nt">&lt;token</span> <span class="na">type=</span><span class="s">&#34;Text&#34;</span><span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">          <span class="nt">&lt;token</span> <span class="na">type=</span><span class="s">&#34;Punctuation&#34;</span><span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">          <span class="nt">&lt;token</span> <span class="na">type=</span><span class="s">&#34;TextWhitespace&#34;</span><span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;/bygroups&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;pop</span> <span class="na">depth=</span><span class="s">&#34;1&#34;</span><span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&lt;/rule&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&lt;rule</span> <span class="na">pattern=</span><span class="s">&#34;(\s*)([a-zA-Z_]\w*)&#34;</span><span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;bygroups&gt;</span>
+</span></span><span class="line"><span class="cl">          <span class="nt">&lt;token</span> <span class="na">type=</span><span class="s">&#34;Text&#34;</span><span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">          <span class="nt">&lt;token</span> <span class="na">type=</span><span class="s">&#34;NameFunction&#34;</span><span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;/bygroups&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;pop</span> <span class="na">depth=</span><span class="s">&#34;1&#34;</span><span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&lt;/rule&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;/state&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;state</span> <span class="na">name=</span><span class="s">&#34;string&#34;</span><span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&lt;rule</span> <span class="na">pattern=</span><span class="s">&#34;[^\&amp;#39;]*\&amp;#39;&#34;</span><span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;token</span> <span class="na">type=</span><span class="s">&#34;LiteralString&#34;</span><span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;pop</span> <span class="na">depth=</span><span class="s">&#34;1&#34;</span><span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&lt;/rule&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;/state&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&lt;/rules&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="nt">&lt;/lexer&gt;</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>Matlab的Lexer主要由<code>&lt;config&gt;</code>和<code>&lt;rules&gt;</code>两部分组成。其中：</p>
+<ul>
+<li><code>&lt;config&gt;</code>描述语言名称、别名和文件扩展名</li>
+<li><code>&lt;rules&gt;</code>定义词法规则，每个<code>&lt;rule&gt;</code>对应一种Token匹配方式。</li>
+</ul>
+<h2 class="heading-element" id="hdevelopxml"><span><code>hdevelop.xml</code></span>
+  <a href="#hdevelopxml" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>至此，思路已经比较清晰了。既然所有Lexer都来自<code>embedded/*.xml</code>，那么理论上只要增加一个能够描述HDevelop语法规则的XML文件，并将其注册到chroma中，Hugo就能够识别这种语言。</p>
+<p>HDevelop的语法并不复杂，主要需要支持以下几类Token：</p>
+<ul>
+<li>注释</li>
+<li>关键字</li>
+<li>字符串</li>
+<li>数字</li>
+<li>运算符</li>
+<li>变量</li>
+<li>HALCON Operator</li>
+<li>Tuple Operator</li>
+</ul>
+<p>在<code>lexers/embedded</code>中新增<code>hdevelop.xml</code>文件：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-xml"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="2" style="--fi-max-shown-lines:400;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span><span class="lnt">60
+</span><span class="lnt">61
+</span><span class="lnt">62
+</span><span class="lnt">63
+</span><span class="lnt">64
+</span><span class="lnt">65
+</span><span class="lnt">66
+</span><span class="lnt">67
+</span><span class="lnt">68
+</span><span class="lnt">69
+</span><span class="lnt">70
+</span><span class="lnt">71
+</span><span class="lnt">72
+</span><span class="lnt">73
+</span><span class="lnt">74
+</span><span class="lnt">75
+</span><span class="lnt">76
+</span><span class="lnt">77
+</span><span class="lnt">78
+</span><span class="lnt">79
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-xml" data-lang="xml"><span class="line"><span class="cl"><span class="nt">&lt;lexer&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&lt;config&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;name&gt;</span>HDevelop<span class="nt">&lt;/name&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;alias&gt;</span>hdev<span class="nt">&lt;/alias&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;alias&gt;</span>hdevelop<span class="nt">&lt;/alias&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;alias&gt;</span>halcon<span class="nt">&lt;/alias&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;filename&gt;</span>*.hdev<span class="nt">&lt;/filename&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;mime_type&gt;</span>text/x-hdevelop<span class="nt">&lt;/mime_type&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&lt;/config&gt;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="nt">&lt;rules&gt;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;state</span> <span class="na">name=</span><span class="s">&#34;root&#34;</span><span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">      <span class="c">&lt;!-- comment --&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&lt;rule</span> <span class="na">pattern=</span><span class="s">&#34;^\s*\*.*$&#34;</span><span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;token</span> <span class="na">type=</span><span class="s">&#34;Comment&#34;</span><span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&lt;/rule&gt;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">      <span class="c">&lt;!-- keywords --&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&lt;rule</span> <span class="na">pattern=</span><span class="s">&#34;\b(if|else|elseif|endif|for|endfor|while|endwhile|repeat|until|break|continue|return|try|catch|throw|switch|case|default|endswitch)\b&#34;</span><span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;token</span> <span class="na">type=</span><span class="s">&#34;Keyword&#34;</span><span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&lt;/rule&gt;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">      <span class="c">&lt;!-- tuple operators --&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&lt;rule</span> <span class="na">pattern=</span><span class="s">&#34;\b(tuple_[A-Za-z0-9_]+)\b&#34;</span><span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;token</span> <span class="na">type=</span><span class="s">&#34;NameBuiltin&#34;</span><span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&lt;/rule&gt;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">      <span class="c">&lt;!-- dev operators --&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&lt;rule</span> <span class="na">pattern=</span><span class="s">&#34;\b(dev_[A-Za-z0-9_]+)\b&#34;</span><span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;token</span> <span class="na">type=</span><span class="s">&#34;NameBuiltin&#34;</span><span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&lt;/rule&gt;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">      <span class="c">&lt;!-- common HALCON operators --&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&lt;rule</span> <span class="na">pattern=</span><span class="s">&#34;\b(read_image|write_image|read_region|write_region|threshold|binary_threshold|connection|union1|union2|difference|intersection|select_shape|select_shape_std|area_center|count_obj|gen_rectangle1|gen_rectangle2|gen_circle|reduce_domain|crop_domain|edges_sub_pix|edges_image|find_shape_model|find_scaled_shape_model|find_ncc_model|create_shape_model|create_ncc_model|disp_obj|clear_window|open_window|close_window|set_color|set_draw|set_line_width|disp_message|dev_display|dev_clear_window|dev_open_window|dev_close_window|dev_update_window|dev_set_color|dev_set_draw|dev_set_line_width)\b&#34;</span><span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;token</span> <span class="na">type=</span><span class="s">&#34;NameBuiltin&#34;</span><span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&lt;/rule&gt;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;rule</span> <span class="na">pattern=</span><span class="s">&#34;\b[a-z][A-Za-z0-9_]*(?=\s*\()&#34;</span><span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;token</span> <span class="na">type=</span><span class="s">&#34;NameBuiltin&#34;</span><span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;/rule&gt;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">      <span class="c">&lt;!-- constants --&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&lt;rule</span> <span class="na">pattern=</span><span class="s">&#34;\b(true|false)\b&#34;</span><span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;token</span> <span class="na">type=</span><span class="s">&#34;NameBuiltinPseudo&#34;</span><span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&lt;/rule&gt;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">      <span class="nt">&lt;rule</span> <span class="na">pattern=</span><span class="s">&#34;\$&#39;[^&#39;]*&#39;&#34;</span><span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">          <span class="nt">&lt;token</span> <span class="na">type=</span><span class="s">&#34;LiteralStringInterpol&#34;</span><span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&lt;/rule&gt;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">      <span class="nt">&lt;rule</span> <span class="na">pattern=</span><span class="s">&#34;\$&amp;quot;[^&amp;quot;]*&amp;quot;&#34;</span><span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">          <span class="nt">&lt;token</span> <span class="na">type=</span><span class="s">&#34;LiteralStringInterpol&#34;</span><span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&lt;/rule&gt;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">      <span class="c">&lt;!-- strings --&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&lt;rule</span> <span class="na">pattern=</span><span class="s">&#34;&#39;[^&#39;]*&#39;&#34;</span><span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;token</span> <span class="na">type=</span><span class="s">&#34;LiteralString&#34;</span><span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&lt;/rule&gt;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">      <span class="nt">&lt;rule</span> <span class="na">pattern=</span><span class="s">&#34;&amp;quot;[^&amp;quot;]*&amp;quot;&#34;</span><span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;token</span> <span class="na">type=</span><span class="s">&#34;LiteralString&#34;</span><span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&lt;/rule&gt;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">      <span class="nt">&lt;rule</span> <span class="na">pattern=</span><span class="s">&#34;\|[^\|\r\n]+\|&#34;</span><span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">          <span class="nt">&lt;token</span> <span class="na">type=</span><span class="s">&#34;NameBuiltinPseudo&#34;</span><span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&lt;/rule&gt;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">      <span class="c">&lt;!-- float --&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&lt;rule</span> <span class="na">pattern=</span><span class="s">&#34;\d+\.\d+([eE][+-]?\d+)?&#34;</span><span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;token</span> <span class="na">type=</span><span class="s">&#34;LiteralNumberFloat&#34;</span><span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&lt;/rule&gt;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">      ...
+</span></span><span class="line"><span class="cl">  <span class="nt">&lt;/rules&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="nt">&lt;/lexer&gt;</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p><code>hugo server -D</code>启动Hugo后，效果如下：</p>
+<p><figure><img loading="lazy" src='/images/202607/1/2.png' alt="图2 Hugo高亮HDevelop效果"><figcaption class="image-caption">图2 Hugo高亮HDevelop效果</figcaption>
+  </figure></p>
+<h2 class="heading-element" id="当前仍存在的问题"><span>当前仍存在的问题</span>
+  <a href="#%e5%bd%93%e5%89%8d%e4%bb%8d%e5%ad%98%e5%9c%a8%e7%9a%84%e9%97%ae%e9%a2%98" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>目前已经能够完成 HDevelop 的基本语法高亮，但仍有两个细节需要进一步优化：</p>
+<ol>
+<li>代码块必须要写明<code>hdev {name=&quot;HDevelop&quot;}</code>否则代码块名称是<code>Code</code>字样而不是<code>HDevelop</code></li>
+<li>注释规则尚未完全兼容，当前行首存在空白字符时无法正确识别注释。</li>
+</ol>
+<h2 class="heading-element" id="问题1解决代码块名称显示为code"><span>问题1：解决代码块名称显示为<code>Code</code></span>
+  <a href="#%e9%97%ae%e9%a2%981%e8%a7%a3%e5%86%b3%e4%bb%a3%e7%a0%81%e5%9d%97%e5%90%8d%e7%a7%b0%e6%98%be%e7%a4%ba%e4%b8%bacode" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>虽然HDevelop已经能够完成语法高亮，但代码块名称仍然显示为<code>Code</code>，而不是<code>HDevelop</code>。首先打开浏览器开发者工具，审查代码块对应的HTML，可以看到外层<code>div</code>包含了一个<code>language-hdev</code>类。</p>
+<p><figure><img loading="lazy" src='/images/202607/1/3.png' alt="图3 带有language-hdev类的div元素"><figcaption class="image-caption">图3 带有language-hdev类的div元素</figcaption>
+  </figure></p>
+<p>随后尝试将该类名临时修改为<code>language-javascript</code>，页面立即发生了变化，代码块名称由<code>Code</code>变成了<code>JavaScript</code>。</p>
+<p><figure><img loading="lazy" src='/images/202607/1/4.png' alt="图4 带有language-javascript类的div元素"><figcaption class="image-caption">图4 带有language-javascript类的div元素</figcaption>
+  </figure></p>
+<p>这一现象说明，代码块顶部显示的语言名称并不是 Hugo 在生成 HTML 时直接写入的，而是通过 CSS 根据<code>language-xxx</code>类名动态添加的。因此，虽然我们已经让 Hugo 识别了 hdev 语言，但主题并没有生成对应的<code>language-hdev</code>样式，所以最终只能回退显示默认的<code>Code</code>。既然如此，就需要继续追踪<code>language-xxx</code>这些 CSS 类的生成位置。在 VS Code 中全局搜索<code>language-</code>，很快定位到了<code>_code.scss</code>文件：</p>
+<p><figure><img loading="lazy" src='/images/202607/1/5.png' alt="图5 _code.scss文件"><figcaption class="image-caption">图5 _code.scss文件</figcaption>
+  </figure></p>
+<p>可以看到，<code>language-xxx</code>相关样式都是通过遍历<code>$Chroma-lexers</code>自动生成的，因此继续搜索<code>$Chroma-lexers</code>的定义位置。</p>
+<p><figure><img loading="lazy" src='/images/202607/1/6.png' alt="图6 _chroma-lexers.scss文件"><figcaption class="image-caption">图6 _chroma-lexers.scss文件</figcaption>
+  </figure></p>
+<p>最终找到了一份语言映射表。虽然文件顶部明确注明不要手动修改（Do not edit manually），但为了验证我们的猜想，还是先在映射表末尾临时追加两项：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-scss"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="hl"><span class="lnt">3
+</span></span><span class="hl"><span class="lnt">4
+</span></span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-scss" data-lang="scss"><span class="line"><span class="cl"><span class="p">(</span> <span class="nc">...</span>
+</span></span><span class="line"><span class="cl"><span class="s2">&#34;yml&#34;</span><span class="nd">:</span> <span class="s2">&#34;YAML&#34;</span><span class="o">,</span>
+</span></span><span class="line hl"><span class="cl"><span class="s2">&#34;hdev&#34;</span><span class="nd">:</span> <span class="s2">&#34;HDevelop&#34;</span><span class="o">,</span>
+</span></span><span class="line hl"><span class="cl"><span class="s2">&#34;hdevelop&#34;</span><span class="nd">:</span> <span class="s2">&#34;HDevelop&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="o">)</span> <span class="o">!</span><span class="nt">default</span><span class="p">;</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>重新编译并启动 Hugo 后，代码块标题成功由<code>Code</code>变成了<code>HDevelop</code>。这说明之前的分析是正确的：代码块顶部显示的语言名称并不是 Hugo 根据 Lexer 自动生成的，而是依赖主题维护的一份语言名称映射表。当新增一种语言时，除了实现对应的 Lexer，还需要在这份映射表中补充相应的配置，否则页面无法显示正确的语言名称。</p>
+<h2 class="heading-element" id="问题2缩进后的注释无法正确识别"><span>问题2：缩进后的注释无法正确识别</span>
+  <a href="#%e9%97%ae%e9%a2%982%e7%bc%a9%e8%bf%9b%e5%90%8e%e7%9a%84%e6%b3%a8%e9%87%8a%e6%97%a0%e6%b3%95%e6%ad%a3%e7%a1%ae%e8%af%86%e5%88%ab" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>另一个问题出现在注释解析上。如图7所示，当第3行<code>*</code>前增加几个空白字符后，这一行便无法再被识别为注释。</p>
+<p><figure><img loading="lazy" src='/images/202607/1/7.jpeg' alt="图7 缩进后的注释无法正确识别"><figcaption class="image-caption">图7 缩进后的注释无法正确识别</figcaption>
+  </figure></p>
+<p>打开浏览器开发者工具查看生成的 HTML（如图7所示），可以发现第一行注释被解析成了一个完整的元素，而第3行却被拆分成了三个不同的 <code>span</code>元素。这说明 Chroma 在词法分析阶段就已经将这一行拆分成了多个 Token，而不是后续渲染阶段出现的问题。继续观察页面样式，可以发现<code>*</code>被渲染成了<code class="color-code"><span class="color-preview" style="background-color: #cf222e;" title="Color: #cf222e"></span>#cf222e</code>，对应的是运算符（Operator）的颜色。于是，在 Hugo 源码中搜索该颜色值，很快便定位到了对应的 Token 类型。</p>
+<p><figure><img loading="lazy" src='/images/202607/1/8.jpeg' alt="图8 .Chroma .o类对应的是Operator"><figcaption class="image-caption">图8 .Chroma .o类对应的是Operator</figcaption>
+  </figure></p>
+<p>由此可以确定，当前 Lexer 将带有缩进的<code>*</code>识别成了运算符，而不是注释起始符。问题的根源也就十分明确了：<code>hdevelop.xml</code>中关于注释的匹配规则还不够完善。目前使用的是：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-xml"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-xml" data-lang="xml"><span class="line"><span class="cl">      <span class="nt">&lt;rule</span> <span class="na">pattern=</span><span class="s">&#34;^\s*\*.*$&#34;</span><span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;token</span> <span class="na">type=</span><span class="s">&#34;Comment&#34;</span><span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&lt;/rule&gt;</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>除了使用 XML 描述词法规则之外，Chroma 还支持直接使用 Go 编写 Lexer。</p>
+<p><figure><img loading="lazy" src='/images/202607/1/9.jpeg' alt="图9 Go编写的Lexer"><figcaption class="image-caption">图9 Go编写的Lexer</figcaption>
+  </figure></p>
+<p>例如上图中的某些语言，就采用了 Go 实现，而不是 XML 配置。相比 XML，Go Lexer 拥有更强的表达能力，可以处理更复杂的上下文逻辑和状态切换。如果后续发现 HDevelop 的语法难以通过 XML 完整描述，那么直接编写一个 Go 版本的 Lexer，也是一个值得尝试的方向。</p>
+<h2 class="heading-element" id="总结"><span>总结</span>
+  <a href="#%e6%80%bb%e7%bb%93" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>本文从 Hugo 不支持 HDevelop 代码高亮这一问题出发，逐步分析了 Hugo 与 Chroma 的源码实现，最终成功实现了 HDevelop 的基本语法高亮支持。</p>
+<p>整个过程主要完成了以下几项工作：</p>
+<ul>
+<li>通过调试 Hugo 源码，定位到代码高亮的入口<code>highlight()</code>；</li>
+<li>顺着调用链追踪到<code>chromalexers.Get()</code>和<code>GlobalLexerRegistry</code>，弄清楚了 Chroma 加载 Lexer 的机制；</li>
+<li>编写<code>hdevelop.xml</code>，为 HDevelop 定义基本的词法规则，并成功注册到 Chroma；</li>
+<li>分析主题源码，补充语言名称映射，使代码块能够正确显示 HDevelop；</li>
+<li>借助浏览器开发者工具和源码分析，定位了注释解析存在的问题，并明确了问题根源仍在 Lexer 的词法规则。</li>
+</ul>
+<p>虽然目前已经能够满足日常博客中 HDevelop 代码的展示需求，但距离一个完整、成熟的 Lexer 还有一定差距。例如，缩进注释、更多内置算子、复杂字符串以及其他语法细节仍有待进一步完善。另外，在阅读 Chroma 源码的过程中还发现，除了 XML 描述语言规则外，还可以直接使用 Go 编写 Lexer。相比 XML，Go 拥有更高的灵活性和更强的表达能力。如果后续 HDevelop 的语法越来越复杂，或 XML 难以准确描述某些语法特性，尝试实现一个 Go 版本的 Lexer 或许会是更好的选择。</p>
+<p>整个折腾过程也让我对 Hugo 的代码高亮机制有了更加深入的理解。从最初的一个&quot;为什么不支持 HDevelop&quot;的问题开始，一路追踪到 Chroma 的 Lexer 注册、词法解析以及主题样式生成，最终不仅解决了实际问题，也顺带熟悉了 Hugo 与 Chroma 的内部实现。对我而言，这比单纯得到一个可用的结果更有价值。</p>
+<p>如果后续能够不断完善 HDevelop 的 Lexer，并达到 Chroma 的质量要求，希望尝试向 Chroma 提交 Pull Request。能够让 Hugo、Hexo 等依赖 Chroma 的项目原生支持 HDevelop 语法高亮，也算是这次源码阅读之外的另一份收获。</p></div><hr class="awesome-hr" />
+    <h2 id="see-also">相关内容</h2>
+    <ul><li>
+          <a href="/hugo%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="Hugo源码剖析：世界最快静态站点生成器的实现原理">Hugo源码剖析：世界最快静态站点生成器的实现原理</a></li></ul><div class="post-footer" id="post-footer">
+  <div class="post-info">
+    <div class="post-info-line">
+      <div class="post-info-mod"><span title="更新于 2026-07-01 15:46:16">更新于 2026-07-01&nbsp;</span>
+      </div></div><div class="post-info-line">
+        <div class="post-info-md"><span><a href="vscode://file/D:\hugo-blog\andyfree96\content\posts\让Hugo支持HDevelop代码高亮.md" title="在编辑器中打开" class="link-to-vscode">在编辑器中打开</a></span></div>
+        <div class="post-info-share">
+          <span><a href="javascript:void(0);" title="分享到 X" data-sharer="twitter" data-url="http://localhost:9613/%E8%AE%A9hugo%E6%94%AF%E6%8C%81hdevelop%E4%BB%A3%E7%A0%81%E9%AB%98%E4%BA%AE/" data-title="让Hugo支持HDevelop代码高亮" data-via="IRONAnthony96" data-hashtags="Go,Hugo,语法高亮,Chroma"><i class="fa-brands fa-x-twitter" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="http://localhost:9613/%E8%AE%A9hugo%E6%94%AF%E6%8C%81hdevelop%E4%BB%A3%E7%A0%81%E9%AB%98%E4%BA%AE/" data-hashtag="Go"><i class="fa-brands fa-facebook-square" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="http://localhost:9613/%E8%AE%A9hugo%E6%94%AF%E6%8C%81hdevelop%E4%BB%A3%E7%A0%81%E9%AB%98%E4%BA%AE/" data-title="让Hugo支持HDevelop代码高亮" data-image="/images/202607/1/doncoombez-RFtQIL8AwHM-unsplash.jpg"><i class="fa-brands fa-weibo" aria-hidden="true"></i></a>
+  </span>
+        </div>
+      </div></div>
+
+  <div class="post-info-more">
+    <section class="post-tags"><i class="fa-solid fa-tags me-1" aria-hidden="true"></i><a href="/tags/go/" class="post-tag" title="标签 - Go">Go</a><a href="/tags/hugo/" class="post-tag" title="标签 - Hugo">Hugo</a><a href="/tags/%E8%AF%AD%E6%B3%95%E9%AB%98%E4%BA%AE/" class="post-tag" title="标签 - 语法高亮">语法高亮</a><a href="/tags/chroma/" class="post-tag" title="标签 - Chroma">Chroma</a></section>
+    <section><span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+    </section>
+  </div><div class="post-nav"><a href="/%E8%81%AA%E6%98%8E%E7%9A%84%E6%8A%95%E8%B5%84%E8%80%85/" class="post-nav-item" rel="prev" title="聪明的投资者 第4版 (Benjamin Graham)"><i class="fa-solid fa-angle-left" aria-hidden="true"></i>聪明的投资者 第4版 (Benjamin Graham)</a></div>
+</div>
+<div class="post-reward">
+    <div class="comment">请作者喝杯咖啡!</div>
+    <input type="checkbox" class="reward-input" name="reward" id="fi-reward" hidden />
+    <label class="reward-button" for="fi-reward"><i class="fa-solid fa-qrcode" aria-hidden="true"></i>赞赏</label>
+    <div class="reward-ways" data-mode="static"><div><img src='/reward/alipay.png' alt="AndyFree96 支付宝"><span data-animation>支付宝</span>
+          </div><div><img src='/reward/wechatpay.png' alt="AndyFree96 微信"><span data-animation>微信</span>
+          </div></div>
+  </div></article>
+
+  <aside class="toc" id="toc-auto" aria-label="目录"><h2 class="toc-title">目录&nbsp;<i class="toc-icon fa-solid fa-angle-down" aria-hidden="true"></i></h2>
+      <div class="toc-content" id="toc-content-auto"></div></aside><dialog id="toc-dialog" aria-labelledby="toc-dialog-title" role="dialog" closedby="any">
+      <button type="button" class="toc-close-btn" aria-label="Close Table of Contents"><i class="fa-solid fa-xmark fa-lg" aria-hidden="true"></i></button>
+      <div class="toc">
+        <h2 class="toc-title" id="toc-dialog-title">目录</h2>
+        <div class="toc-content" id="toc-content-drawer"><nav >
+  <ul>
+    <li><a href="#准备环境">准备环境</a></li>
+    <li><a href="#找到代码高亮入口">找到代码高亮入口</a></li>
+    <li><a href="#hugo如何获取lexer">Hugo如何获取Lexer</a></li>
+    <li><a href="#chroma从哪里加载lexer">chroma从哪里加载Lexer</a></li>
+    <li><a href="#matlab-xml示例">Matlab XML示例</a></li>
+    <li><a href="#hdevelopxml"><code>hdevelop.xml</code></a></li>
+    <li><a href="#当前仍存在的问题">当前仍存在的问题</a></li>
+    <li><a href="#问题1解决代码块名称显示为code">问题1：解决代码块名称显示为<code>Code</code></a></li>
+    <li><a href="#问题2缩进后的注释无法正确识别">问题2：缩进后的注释无法正确识别</a></li>
+    <li><a href="#总结">总结</a></li>
+  </ul>
+</nav></div>
+      </div>
+    </dialog></main><footer class="footer">
+    <div class="footer-container"><div class="footer-line powered">由 <a href="https://gohugo.io/" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.163.1">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/hugo-fixit/FixIt" target="_blank" rel="external" title="FixIt v1.0.0-mq99hlzg">FixIt</a>
+        </div><div class="footer-line copyright" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright" aria-hidden="true"></i>
+            <span itemprop="copyrightYear">2019 - 2026</span><span class="author" itemprop="copyrightHolder">
+              <a href="https://andyfree96.github.io/" target="_blank" rel="external nofollow noopener noreferrer">AndyFree96</a></span></div></div>
+  </footer></div><div class="widgets"><div class="fixed-buttons"><button type="button" class="fixed-button back-to-top animate__faster d-none" aria-label="回到顶部"><i class="fa-solid fa-arrow-up" aria-hidden="true"></i></button><button type="button" id="toc-drawer-button" class="fixed-button toc-drawer-button d-none" aria-label="目录" aria-controls="toc-dialog" aria-expanded="false"><i class="fa-solid fa-bars" aria-hidden="true"></i></button></div><div id="mask"></div><div class="reading-progress-bar" style="left: 0;top: 0;"></div><noscript>
+    <div class="noscript-warning">该网站在启用 JavaScript 的情况下效果最佳。</div>
+  </noscript>
+</div><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script src="/lib/autocomplete/autocomplete.min.js" defer></script><script src="/lib/algoliasearch/browser.umd.js" defer></script><script src="/lib/json-viewer-element/json-viewer-element.umd.js" defer></script><script src="/js/lib/json-viewer.js" defer></script><script src="/lib/sharer/sharer.min.js" async defer></script><script src="/lib/cookieconsent/cookieconsent.min.js" defer></script><script src="/js/lib/cookieconsent.js" defer></script><script src="/lib/cell-tooltip/cell-tooltip.umd.js" defer></script><script src="/js/config/b25a9cf18eed83c2d0241e84903a8042.js" defer></script><script src="/js/lib/file-tree.js" defer></script><script src="/js/main.js" defer></script></body>
+</html>

@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
-  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=9613&amp;path=livereload" data-no-instant defer></script>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
     <meta name="robots" content="noodp" />
@@ -12,7 +12,7 @@
 	<meta itemprop="datePublished" content="2026-06-27T22:14:02+08:00">
 	<meta itemprop="dateModified" content="2026-06-27T22:14:02+08:00">
 	<meta itemprop="wordCount" content="1877">
-	<meta itemprop="keywords" content="PowerShell,命令行,脚本,自动化,效率提升"><meta property="og:url" content="http://localhost:1313/powershell%E8%84%9A%E6%9C%AC%E5%AE%9E%E8%B7%B5%E6%8C%87%E5%8D%97/">
+	<meta itemprop="keywords" content="PowerShell,命令行,脚本,自动化,效率提升"><meta property="og:url" content="http://localhost:9613/powershell%E8%84%9A%E6%9C%AC%E5%AE%9E%E8%B7%B5%E6%8C%87%E5%8D%97/">
 	<meta property="og:site_name" content="东尼的博客">
 	<meta property="og:title" content="PowerShell脚本实践指南">
 	<meta property="og:description" content="在软件开发、系统运维和DevOps 等领域，有一个永远存在的问题：大量重复性的工作正在消耗工程师的时间。每天登录服务器、检查日志、修改配置、部署应用、整理数据、生成报告……这些事情单次并不复杂，但重复几十次、几百次之后，就变成了巨大的时间成本。PowerShell（pwsh）就是解决这类问题的工具之一。它不仅是一门脚本语言，更是一套现代化自动化平台。本文将从基础语法开始，一直到脚本工程实践，全面介绍如何使用 pwsh 构建可靠、高效的自动化工具。">
@@ -32,7 +32,7 @@
   <meta name="twitter:description" content="在软件开发、系统运维和DevOps 等领域，有一个永远存在的问题：大量重复性的工作正在消耗工程师的时间。每天登录服务器、检查日志、修改配置、部署应用、整理数据、生成报告……这些事情单次并不复杂，但重复几十次、几百次之后，就变成了巨大的时间成本。PowerShell（pwsh）就是解决这类问题的工具之一。它不仅是一门脚本语言，更是一套现代化自动化平台。本文将从基础语法开始，一直到脚本工程实践，全面介绍如何使用 pwsh 构建可靠、高效的自动化工具。"><meta name="twitter:creator" content="@IRONAnthony96"><meta name="application-name" content="FixIt">
 <meta name="apple-mobile-web-app-title" content="FixIt"><meta name="theme-color" data-light="#f6f8fa" data-dark="#151b23" content="#f6f8fa"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" type="text/html" href="http://localhost:1313/powershell%E8%84%9A%E6%9C%AC%E5%AE%9E%E8%B7%B5%E6%8C%87%E5%8D%97/" title="PowerShell脚本实践指南 - 东尼的博客" /><link rel="prev" type="text/html" href="http://localhost:1313/hugo%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="Hugo源码剖析：世界最快静态站点生成器的实现原理" /><link rel="next" type="text/html" href="http://localhost:1313/%E8%81%AA%E6%98%8E%E7%9A%84%E6%8A%95%E8%B5%84%E8%80%85/" title="聪明的投资者 第4版 (Benjamin Graham)" /><link rel="alternate" type="text/markdown" href="http://localhost:1313/powershell%E8%84%9A%E6%9C%AC%E5%AE%9E%E8%B7%B5%E6%8C%87%E5%8D%97/index.md" title="PowerShell脚本实践指南 - 东尼的博客"><link rel="stylesheet" href="/css/config.css"><link rel="stylesheet" href="/css/main.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" type="text/html" href="http://localhost:9613/powershell%E8%84%9A%E6%9C%AC%E5%AE%9E%E8%B7%B5%E6%8C%87%E5%8D%97/" title="PowerShell脚本实践指南 - 东尼的博客" /><link rel="prev" type="text/html" href="http://localhost:9613/hugo%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="Hugo源码剖析：世界最快静态站点生成器的实现原理" /><link rel="next" type="text/html" href="http://localhost:9613/%E8%81%AA%E6%98%8E%E7%9A%84%E6%8A%95%E8%B5%84%E8%80%85/" title="聪明的投资者 第4版 (Benjamin Graham)" /><link rel="alternate" type="text/markdown" href="http://localhost:9613/powershell%E8%84%9A%E6%9C%AC%E5%AE%9E%E8%B7%B5%E6%8C%87%E5%8D%97/index.md" title="PowerShell脚本实践指南 - 东尼的博客"><link rel="stylesheet" href="/css/config.css"><link rel="stylesheet" href="/css/main.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><link rel="preload" href="/js/main.js" as="script"><script type="application/ld+json">
   {
@@ -42,9 +42,9 @@
     "inLanguage": "zh-CN",
     "mainEntityOfPage": {
       "@type": "WebPage",
-      "@id": "http:\/\/localhost:1313\/powershell%E8%84%9A%E6%9C%AC%E5%AE%9E%E8%B7%B5%E6%8C%87%E5%8D%97\/"
+      "@id": "http:\/\/localhost:9613\/powershell%E8%84%9A%E6%9C%AC%E5%AE%9E%E8%B7%B5%E6%8C%87%E5%8D%97\/"
     },"genre": "posts","keywords": "PowerShell, 命令行, 脚本, 自动化, 效率提升","wordcount":  1877 ,
-    "url": "http:\/\/localhost:1313\/powershell%E8%84%9A%E6%9C%AC%E5%AE%9E%E8%B7%B5%E6%8C%87%E5%8D%97\/","datePublished": "2026-06-27T22:14:02+08:00","dateModified": "2026-06-27T22:14:02+08:00","publisher": {
+    "url": "http:\/\/localhost:9613\/powershell%E8%84%9A%E6%9C%AC%E5%AE%9E%E8%B7%B5%E6%8C%87%E5%8D%97\/","datePublished": "2026-06-27T22:14:02+08:00","dateModified": "2026-06-27T22:14:02+08:00","publisher": {
       "@type": "Organization",
       "name": ""},"author": {
         "@type": "Person",
@@ -982,9 +982,9 @@
       </div></div><div class="post-info-line">
         <div class="post-info-md"><span><a href="vscode://file/D:\hugo-blog\andyfree96\content\posts\PowerShell脚本实践指南.md" title="在编辑器中打开" class="link-to-vscode">在编辑器中打开</a></span></div>
         <div class="post-info-share">
-          <span><a href="javascript:void(0);" title="分享到 X" data-sharer="twitter" data-url="http://localhost:1313/powershell%E8%84%9A%E6%9C%AC%E5%AE%9E%E8%B7%B5%E6%8C%87%E5%8D%97/" data-title="PowerShell脚本实践指南" data-via="IRONAnthony96" data-hashtags="PowerShell,命令行,脚本,自动化,效率提升"><i class="fa-brands fa-x-twitter" aria-hidden="true"></i></a>
-  <a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="http://localhost:1313/powershell%E8%84%9A%E6%9C%AC%E5%AE%9E%E8%B7%B5%E6%8C%87%E5%8D%97/" data-hashtag="PowerShell"><i class="fa-brands fa-facebook-square" aria-hidden="true"></i></a>
-  <a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="http://localhost:1313/powershell%E8%84%9A%E6%9C%AC%E5%AE%9E%E8%B7%B5%E6%8C%87%E5%8D%97/" data-title="PowerShell脚本实践指南" data-image="/images/202606/17/microsoft-copilot-ghVMdPN33vM-unsplash.jpg"><i class="fa-brands fa-weibo" aria-hidden="true"></i></a>
+          <span><a href="javascript:void(0);" title="分享到 X" data-sharer="twitter" data-url="http://localhost:9613/powershell%E8%84%9A%E6%9C%AC%E5%AE%9E%E8%B7%B5%E6%8C%87%E5%8D%97/" data-title="PowerShell脚本实践指南" data-via="IRONAnthony96" data-hashtags="PowerShell,命令行,脚本,自动化,效率提升"><i class="fa-brands fa-x-twitter" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="http://localhost:9613/powershell%E8%84%9A%E6%9C%AC%E5%AE%9E%E8%B7%B5%E6%8C%87%E5%8D%97/" data-hashtag="PowerShell"><i class="fa-brands fa-facebook-square" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="http://localhost:9613/powershell%E8%84%9A%E6%9C%AC%E5%AE%9E%E8%B7%B5%E6%8C%87%E5%8D%97/" data-title="PowerShell脚本实践指南" data-image="/images/202606/17/microsoft-copilot-ghVMdPN33vM-unsplash.jpg"><i class="fa-brands fa-weibo" aria-hidden="true"></i></a>
   </span>
         </div>
       </div></div>

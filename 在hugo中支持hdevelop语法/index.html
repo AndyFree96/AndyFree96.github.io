@@ -1,0 +1,1070 @@
+<!DOCTYPE html>
+<html itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=9613&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+    <meta name="robots" content="noodp" />
+    <title>在Hugo中支持HDevelop语法 - 东尼的博客</title><meta name="author" content="AndyFree96">
+<meta name="description" content="在使用Hugo构建技术博客时，代码高亮通常是一个“默认就能用”的能力。Hugo 默认提供了丰富的语言支持，大多数主流语言（如 Go、Python、C&#43;&#43;、Matlab）都可以直接获得语法高亮效果。但当我阅读机器视觉算法与应用 第2版 (Carsten Steger)一书，将视觉领域的脚本语言——HDevelop引入到博客中时。问题出现了：Hugo默认不支持HDevelop。本文因此而写，记录了如何让Hugo支持HDevelop。
+"><meta name="keywords" content='Go, Hugo, 语法高亮, chroma'>
+	<meta itemprop="name" content="在Hugo中支持HDevelop语法">
+	<meta itemprop="description" content="在使用Hugo构建技术博客时，代码高亮通常是一个“默认就能用”的能力。Hugo 默认提供了丰富的语言支持，大多数主流语言（如 Go、Python、C&#43;&#43;、Matlab）都可以直接获得语法高亮效果。但当我阅读机器视觉算法与应用 第2版 (Carsten Steger)一书，将视觉领域的脚本语言——HDevelop引入到博客中时。问题出现了：Hugo默认不支持HDevelop。本文因此而写，记录了如何让Hugo支持HDevelop。">
+	<meta itemprop="datePublished" content="2026-07-01T15:46:16+08:00">
+	<meta itemprop="dateModified" content="2026-07-01T15:46:16+08:00">
+	<meta itemprop="wordCount" content="2304">
+	<meta itemprop="keywords" content="Go,Hugo,语法高亮,chroma"><meta property="og:url" content="http://localhost:9613/%E5%9C%A8hugo%E4%B8%AD%E6%94%AF%E6%8C%81hdevelop%E8%AF%AD%E6%B3%95/">
+	<meta property="og:site_name" content="东尼的博客">
+	<meta property="og:title" content="在Hugo中支持HDevelop语法">
+	<meta property="og:description" content="在使用Hugo构建技术博客时，代码高亮通常是一个“默认就能用”的能力。Hugo 默认提供了丰富的语言支持，大多数主流语言（如 Go、Python、C&#43;&#43;、Matlab）都可以直接获得语法高亮效果。但当我阅读机器视觉算法与应用 第2版 (Carsten Steger)一书，将视觉领域的脚本语言——HDevelop引入到博客中时。问题出现了：Hugo默认不支持HDevelop。本文因此而写，记录了如何让Hugo支持HDevelop。">
+	<meta property="og:locale" content="zh_CN">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="posts">
+		<meta property="article:published_time" content="2026-07-01T15:46:16+08:00">
+		<meta property="article:modified_time" content="2026-07-01T15:46:16+08:00">
+		<meta property="article:tag" content="Go">
+		<meta property="article:tag" content="Hugo">
+		<meta property="article:tag" content="语法高亮">
+		<meta property="article:tag" content="Chroma">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="在Hugo中支持HDevelop语法">
+  <meta name="twitter:description" content="在使用Hugo构建技术博客时，代码高亮通常是一个“默认就能用”的能力。Hugo 默认提供了丰富的语言支持，大多数主流语言（如 Go、Python、C&#43;&#43;、Matlab）都可以直接获得语法高亮效果。但当我阅读机器视觉算法与应用 第2版 (Carsten Steger)一书，将视觉领域的脚本语言——HDevelop引入到博客中时。问题出现了：Hugo默认不支持HDevelop。本文因此而写，记录了如何让Hugo支持HDevelop。"><meta name="twitter:creator" content="@IRONAnthony96"><meta name="application-name" content="FixIt">
+<meta name="apple-mobile-web-app-title" content="FixIt"><meta name="theme-color" data-light="#f6f8fa" data-dark="#151b23" content="#f6f8fa"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" type="text/html" href="http://localhost:9613/%E5%9C%A8hugo%E4%B8%AD%E6%94%AF%E6%8C%81hdevelop%E8%AF%AD%E6%B3%95/" title="在Hugo中支持HDevelop语法 - 东尼的博客" /><link rel="prev" type="text/html" href="http://localhost:9613/%E8%81%AA%E6%98%8E%E7%9A%84%E6%8A%95%E8%B5%84%E8%80%85/" title="聪明的投资者 第4版 (Benjamin Graham)" /><link rel="alternate" type="text/markdown" href="http://localhost:9613/%E5%9C%A8hugo%E4%B8%AD%E6%94%AF%E6%8C%81hdevelop%E8%AF%AD%E6%B3%95/index.md" title="在Hugo中支持HDevelop语法 - 东尼的博客"><link rel="stylesheet" href="/css/config.css"><link rel="stylesheet" href="/css/main.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><link rel="preload" href="/js/main.js" as="script"><script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "BlogPosting",
+    "headline": "在Hugo中支持HDevelop语法",
+    "inLanguage": "zh-CN",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "http:\/\/localhost:9613\/%E5%9C%A8hugo%E4%B8%AD%E6%94%AF%E6%8C%81hdevelop%E8%AF%AD%E6%B3%95\/"
+    },"genre": "posts","keywords": "Go, Hugo, 语法高亮, chroma","wordcount":  2304 ,
+    "url": "http:\/\/localhost:9613\/%E5%9C%A8hugo%E4%B8%AD%E6%94%AF%E6%8C%81hdevelop%E8%AF%AD%E6%B3%95\/","datePublished": "2026-07-01T15:46:16+08:00","dateModified": "2026-07-01T15:46:16+08:00","publisher": {
+      "@type": "Organization",
+      "name": ""},"author": {
+        "@type": "Person",
+        "name": "AndyFree96"
+      },"description": ""
+  }
+  </script><script src="/js/head/color-scheme.js"></script></head>
+  <body data-instant-intensity="viewport" data-header-desktop="sticky" data-header-mobile="auto"><div class="wrapper" data-page-style="normal"><header class="desktop animate__faster" id="header-desktop">
+  <div class="header-wrapper">
+    <div class="header-title">
+      <a href="/" title="东尼的博客" class="header-title-link"><span class="header-title-text">东尼的博客</span></a><span class="header-subtitle"></span></div>
+    <nav>
+      <ul class="menu"><li class="menu-item">
+              <a class="menu-link" href="/posts/">📕 文章</a></li><li class="menu-item">
+              <a class="menu-link" href="/categories/">🧰 分类</a></li><li class="menu-item">
+              <a class="menu-link" href="/tags/">🔖 标签</a></li><li class="menu-item">
+              <a class="menu-link" href="/book">📚 书单</a></li><li class="menu-item">
+              <a class="menu-link" href="/paper">📝 论文</a></li><li class="menu-item">
+              <a class="menu-link" href="/opencourse">👨🏻‍💻 公开课</a></li><li class="menu-item">
+              <a class="menu-link" href="/filmtv">🎞️ 影视</a></li><li class="menu-item">
+              <a class="menu-link" href="/resource">⚡️ 资源库</a></li><li class="menu-item">
+              <a class="menu-link" href="/projects">⭐ 开源</a></li><li class="menu-item">
+              <a class="menu-link" href="/about">🙋🏻‍♂️ 关于</a></li><li class="menu-item delimiter"></li><li class="menu-item search" id="search-desktop">
+            <input type="text" placeholder="搜索文章标题或内容……" id="search-input-desktop" tabindex="-1">
+            <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索" aria-controls="search-dropdown-desktop" aria-expanded="false">
+              <i class="fa-solid fa-search" aria-hidden="true"></i>
+            </a>
+            <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+              <i class="fa-solid fa-times-circle" aria-hidden="true"></i>
+            </a>
+            <span class="search-button search-loading" id="search-loading-desktop">
+              <i class="fa-solid fa-spinner fa-spin" aria-hidden="true"></i>
+            </span>
+          </li><li class="menu-item theme-switch-item">
+          <button type="button" class="theme-switch" aria-label="切换主题" title="切换主题"><i class="fa-solid fa-adjust" aria-hidden="true"></i></button>
+        </li></ul>
+    </nav>
+  </div>
+</header><header class="mobile animate__faster" id="header-mobile">
+  <div class="header-container">
+    <div class="header-wrapper">
+      <div class="header-title">
+        <a href="/" title="东尼的博客" class="header-title-link"><span class="header-title-text">东尼的博客</span></a><span class="header-subtitle"></span></div>
+      <button type="button" class="theme-switch" aria-label="切换主题"><i class="fa-solid fa-adjust" aria-hidden="true"></i></button>
+      <button type="button" class="menu-toggle" id="menu-toggle-mobile" aria-controls="menu-mobile" aria-expanded="false" aria-labelledby="menu-mobile">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <nav>
+      <ul class="menu" id="menu-mobile"><li class="search-wrapper">
+            <div class="search mobile" id="search-mobile">
+              <input type="text" placeholder="搜索文章标题或内容……" id="search-input-mobile">
+              <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索" aria-controls="search-dropdown-mobile" aria-expanded="false">
+                <i class="fa-solid fa-search" aria-hidden="true"></i>
+              </a>
+              <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                <i class="fa-solid fa-times-circle" aria-hidden="true"></i>
+              </a>
+              <span class="search-button search-loading" id="search-loading-mobile">
+                <i class="fa-solid fa-spinner fa-spin" aria-hidden="true"></i>
+              </span>
+            </div>
+            <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+              取消
+            </a>
+          </li><li class="menu-item"><a class="menu-link" href="/posts/">📕 文章</a></li><li class="menu-item"><a class="menu-link" href="/categories/">🧰 分类</a></li><li class="menu-item"><a class="menu-link" href="/tags/">🔖 标签</a></li><li class="menu-item"><a class="menu-link" href="/book">📚 书单</a></li><li class="menu-item"><a class="menu-link" href="/paper">📝 论文</a></li><li class="menu-item"><a class="menu-link" href="/opencourse">👨🏻‍💻 公开课</a></li><li class="menu-item"><a class="menu-link" href="/filmtv">🎞️ 影视</a></li><li class="menu-item"><a class="menu-link" href="/resource">⚡️ 资源库</a></li><li class="menu-item"><a class="menu-link" href="/projects">⭐ 开源</a></li><li class="menu-item"><a class="menu-link" href="/about">🙋🏻‍♂️ 关于</a></li><li class="menu-item menu-system"></li>
+      </ul>
+    </nav>
+  </div>
+</header><div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+  </div>
+  <div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+  </div><main class="fi-container"><aside class="aside-collection animate__animated animate__fadeIn animate__faster" aria-label="合集"><div class="details related-details open">
+      <div class="details-summary related-summary">
+        <i class="fa-solid fa-fire fa-fade text-danger" aria-hidden="true"></i>
+        <span class="related-title">相关内容</span><i class="details-icon fa-solid fa-angle-right" aria-hidden="true"></i></div>
+      <div class="details-content related-content">
+        <ul class="related-list"><li class="related-item">
+              <a href="/hugo%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="Hugo源码剖析：世界最快静态站点生成器的实现原理">Hugo源码剖析：世界最快静态站点生成器的实现原理</a></li></ul>
+      </div>
+    </div></aside>
+
+  <article class="page single">
+    <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span title="转载" class="icon-repost"><i class="fa-solid fa-share" aria-hidden="true"></i></span><span>在Hugo中支持HDevelop语法</span>
+      </h1></div><div class="post-meta">
+      <div class="post-meta-line"><span class="post-author"><a href="https://andyfree96.github.io/" title="作者" target="_blank" rel="author external nofollow noopener noreferrer" class="author"><img class="avatar" src='/avatar/1.jpg' alt="AndyFree96" height="16" width="16">&nbsp;AndyFree96</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/" class="post-category" title="分类 - 工程实践"><i class="fa-regular fa-folder" aria-hidden="true"></i> 工程实践</a></span></div><div class="post-meta-line"><span title="发布于 2026-07-01 15:46:16"><i class="fa-solid fa-calendar-days me-1" aria-hidden="true"></i><time datetime="2026-07-01">2026-07-01</time></span>&nbsp;<span title="2304 字"><i class="fa-solid fa-pencil-alt me-1" aria-hidden="true"></i>约 2400 字</span>&nbsp;<span><i class="fa-regular fa-clock me-1" aria-hidden="true"></i>预计阅读 5 分钟</span>&nbsp;</div>
+    </div><div class="featured-image"><img loading="eager" src='/images/202607/1/doncoombez-RFtQIL8AwHM-unsplash.jpg' sizes="(max-width: 680px) 100vw, (max-width: 960px) 80vw, (max-width: 1440px) 56vw, 800px" alt="/images/202607/1/doncoombez-RFtQIL8AwHM-unsplash.jpg"></div><div class="details toc" id="toc-static" data-kept="false">
+        <div class="details-summary toc-title">
+          <span>目录</span>
+          <span><i class="details-icon fa-solid fa-angle-right" aria-hidden="true"></i></span>
+        </div>
+        <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#准备环境">准备环境</a></li>
+    <li><a href="#确定思路">确定思路</a></li>
+    <li><a href="#hdevelopxml文件定义"><code>hdevelop.xml</code>文件定义</a></li>
+    <li><a href="#推荐">推荐</a></li>
+  </ul>
+</nav></div>
+      </div><div class="content" id="content"><p>在使用<a href="https://gohugo.io/" target="_blank" rel="external nofollow noopener noreferrer">Hugo<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>构建技术博客时，代码高亮通常是一个“默认就能用”的能力。Hugo 默认提供了丰富的语言支持，大多数主流语言（如 Go、Python、C++、Matlab）都可以直接获得语法高亮效果。但当我阅读<a href="https://andyfree96.github.io/%E6%9C%BA%E5%99%A8%E8%A7%86%E8%A7%89%E7%AE%97%E6%B3%95%E4%B8%8E%E5%BA%94%E7%94%A8/" target="_blank" rel="external nofollow noopener noreferrer">机器视觉算法与应用 第2版 (Carsten Steger)<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>一书，将视觉领域的脚本语言——HDevelop引入到博客中时。问题出现了：Hugo默认不支持HDevelop。本文因此而写，记录了如何让Hugo支持HDevelop。</p>
+<h2 class="heading-element" id="准备环境"><span>准备环境</span>
+  <a href="#%e5%87%86%e5%a4%87%e7%8e%af%e5%a2%83" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p><a href="https://gohugo.io/" target="_blank" rel="external nofollow noopener noreferrer">Hugo<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>是开源项目。首先将源码Clone到本地并安装一些依赖包：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-bash"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">git clone https://github.com/gohugoio/hugo.git
+</span></span><span class="line"><span class="cl"><span class="nb">cd</span> hugo
+</span></span><span class="line"><span class="cl">go mod download</span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>为了方便调试，这里使用的是VSCode。<code>.vscode/launch.json</code>内容如下：</p>
+<json-viewer value="&#34;{\r\n  \&#34;version\&#34;: \&#34;0.2.0\&#34;,\r\n  \&#34;configurations\&#34;: [\r\n    {\r\n      \&#34;name\&#34;: \&#34;Debug hugo\&#34;,\r\n      \&#34;type\&#34;: \&#34;go\&#34;,\r\n      \&#34;request\&#34;: \&#34;launch\&#34;,\r\n      \&#34;mode\&#34;: \&#34;auto\&#34;,\r\n      \&#34;program\&#34;: \&#34;${workspaceFolder}\&#34;,\r\n      \&#34;args\&#34;: [\&#34;server\&#34;, \&#34;-D\&#34;, \&#34;--source\&#34;, \&#34;./andyfree96\&#34;],\r\n      \&#34;buildFlags\&#34;: \&#34;-gcflags=all=-N -gcflags=all=-l\&#34;\r\n    }\r\n  ]\r\n}&#34;" expand-depth="6" boxed copyable="{&#34;copiedText&#34;:&#34;已复制&#34;,&#34;copyText&#34;:&#34;复制&#34;}"></json-viewer><p><code>andyfree96</code>是用<code>hugo</code>新建的一个示例站点，可参考<a href="https://juejin.cn/post/7458856975709143040" target="_blank" rel="external nofollow noopener noreferrer">30分钟搭建完整的个人博客<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>进行搭建。</p>
+<p>调试需要安装<a href="https://github.com/go-delve/delve" target="_blank" rel="external nofollow noopener noreferrer">delve<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>，执行如下命令即可：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-bash"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">go install github.com/go-delve/delve/cmd/dlv@latest</span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>但我在本机执行出现了如下提示：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-fallback"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="n">go</span><span class="p">:</span> <span class="n">downloading</span> <span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">go</span><span class="o">-</span><span class="n">delve</span><span class="o">/</span><span class="n">delve</span> <span class="n">v1</span><span class="o">.</span><span class="mf">27.0</span> <span class="n">go</span><span class="p">:</span> <span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">go</span><span class="o">-</span><span class="n">delve</span><span class="o">/</span><span class="n">delve</span><span class="o">/</span><span class="n">cmd</span><span class="o">/</span><span class="n">dlv</span><span class="err">@</span><span class="n">latest</span><span class="p">:</span> <span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">go</span><span class="o">-</span><span class="n">delve</span><span class="o">/</span><span class="n">delve</span><span class="err">@</span><span class="n">v1</span><span class="o">.</span><span class="mf">27.0</span><span class="p">:</span> <span class="n">verifying</span> <span class="n">module</span><span class="p">:</span> <span class="n">checksum</span> <span class="n">mismatch</span> <span class="n">downloaded</span><span class="p">:</span> <span class="n">h1</span><span class="p">:</span><span class="o">+</span><span class="n">kS</span><span class="o">/</span><span class="n">c3lq</span><span class="o">/</span><span class="mi">7</span><span class="n">m2CskWmVRakaJL5</span><span class="o">+</span><span class="n">CioRjWutU5jjQkYac</span><span class="o">=</span> <span class="n">sum</span><span class="o">.</span><span class="n">golang</span><span class="o">.</span><span class="n">org</span><span class="p">:</span> <span class="n">h1</span><span class="p">:</span><span class="n">i66Einw</span><span class="o">/</span><span class="n">sQhm0hlbjLNUNxrwCmKdTcIqpyHVqSWAbd0</span><span class="o">=</span> <span class="n">SECURITY</span> <span class="n">ERROR</span> <span class="n">This</span> <span class="n">download</span> <span class="n">does</span> <span class="n">NOT</span> <span class="n">match</span> <span class="n">the</span> <span class="n">one</span> <span class="n">reported</span> <span class="n">by</span> <span class="n">the</span> <span class="n">checksum</span> <span class="n">server</span><span class="o">.</span> <span class="n">The</span> <span class="n">bits</span> <span class="n">may</span> <span class="n">have</span> <span class="n">been</span> <span class="n">replaced</span> <span class="n">on</span> <span class="n">the</span> <span class="n">origin</span> <span class="n">server</span><span class="p">,</span> <span class="ow">or</span> <span class="n">an</span> <span class="n">attacker</span> <span class="n">may</span> <span class="n">have</span> <span class="n">intercepted</span> <span class="n">the</span> <span class="n">download</span> <span class="n">attempt</span><span class="o">.</span> <span class="n">For</span> <span class="n">more</span> <span class="n">information</span><span class="p">,</span> <span class="n">see</span> <span class="s1">&#39;go help module-auth&#39;</span><span class="o">.</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>依次执行下列命令，可正常安装：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-bash"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">go env -w <span class="nv">GOPROXY</span><span class="o">=</span>https://goproxy.cn,direct
+</span></span><span class="line"><span class="cl">go clean -modcache
+</span></span><span class="line"><span class="cl">go install github.com/go-delve/delve/cmd/dlv@latest</span></span></code></pre></td></tr></table></div>
+</div>
+</div><h2 class="heading-element" id="确定思路"><span>确定思路</span>
+  <a href="#%e7%a1%ae%e5%ae%9a%e6%80%9d%e8%b7%af" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>经过一番浏览发现发现<code>markup\highlight\highlight.go</code>中有一个<code>highlight</code>函数：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-go"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="2" style="--fi-max-shown-lines:400;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span><span class="lnt">60
+</span><span class="lnt">61
+</span><span class="lnt">62
+</span><span class="lnt">63
+</span><span class="lnt">64
+</span><span class="lnt">65
+</span><span class="lnt">66
+</span><span class="lnt">67
+</span><span class="lnt">68
+</span><span class="lnt">69
+</span><span class="lnt">70
+</span><span class="lnt">71
+</span><span class="lnt">72
+</span><span class="lnt">73
+</span><span class="lnt">74
+</span><span class="lnt">75
+</span><span class="lnt">76
+</span><span class="lnt">77
+</span><span class="lnt">78
+</span><span class="lnt">79
+</span><span class="lnt">80
+</span><span class="lnt">81
+</span><span class="lnt">82
+</span><span class="lnt">83
+</span><span class="lnt">84
+</span><span class="lnt">85
+</span><span class="lnt">86
+</span><span class="lnt">87
+</span><span class="lnt">88
+</span><span class="lnt">89
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kd">func</span><span class="w"> </span><span class="nf">highlight</span><span class="p">(</span><span class="nx">fw</span><span class="w"> </span><span class="nx">hugio</span><span class="p">.</span><span class="nx">FlexiWriter</span><span class="p">,</span><span class="w"> </span><span class="nx">code</span><span class="p">,</span><span class="w"> </span><span class="nx">lang</span><span class="w"> </span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="nx">attributes</span><span class="w"> </span><span class="p">[]</span><span class="nx">attributes</span><span class="p">.</span><span class="nx">Attribute</span><span class="p">,</span><span class="w"> </span><span class="nx">cfg</span><span class="w"> </span><span class="nx">Config</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="p">,</span><span class="w"> </span><span class="kt">error</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="kd">var</span><span class="w"> </span><span class="nx">lexer</span><span class="w"> </span><span class="nx">chroma</span><span class="p">.</span><span class="nx">Lexer</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="k">if</span><span class="w"> </span><span class="nx">lang</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="s">&#34;&#34;</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="nx">lexer</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">chromalexers</span><span class="p">.</span><span class="nf">Get</span><span class="p">(</span><span class="nx">lang</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="k">if</span><span class="w"> </span><span class="nx">lexer</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nx">cfg</span><span class="p">.</span><span class="nx">GuessSyntax</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="nx">lexer</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">lexers</span><span class="p">.</span><span class="nf">Analyse</span><span class="p">(</span><span class="nx">code</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="k">if</span><span class="w"> </span><span class="nx">lexer</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">			</span><span class="nx">lexer</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">lexers</span><span class="p">.</span><span class="nx">Fallback</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="nx">lang</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">strings</span><span class="p">.</span><span class="nf">ToLower</span><span class="p">(</span><span class="nx">lexer</span><span class="p">.</span><span class="nf">Config</span><span class="p">().</span><span class="nx">Name</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">w</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">byteCountFlexiWriter</span><span class="p">{</span><span class="nx">delegate</span><span class="p">:</span><span class="w"> </span><span class="nx">fw</span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="k">if</span><span class="w"> </span><span class="nx">lexer</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="k">if</span><span class="w"> </span><span class="nx">cfg</span><span class="p">.</span><span class="nx">Hl_inline</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">			</span><span class="nx">fmt</span><span class="p">.</span><span class="nf">Fprintf</span><span class="p">(</span><span class="nx">w</span><span class="p">,</span><span class="w"> </span><span class="s">&#34;&lt;code%s&gt;%s&lt;/code&gt;&#34;</span><span class="p">,</span><span class="w"> </span><span class="nf">inlineCodeAttrs</span><span class="p">(</span><span class="nx">lang</span><span class="p">),</span><span class="w"> </span><span class="nx">gohtml</span><span class="p">.</span><span class="nf">EscapeString</span><span class="p">(</span><span class="nx">code</span><span class="p">))</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">			</span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="kc">nil</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="nx">preWrapper</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nf">getPreWrapper</span><span class="p">(</span><span class="nx">lang</span><span class="p">,</span><span class="w"> </span><span class="nx">w</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="nx">fmt</span><span class="p">.</span><span class="nf">Fprint</span><span class="p">(</span><span class="nx">w</span><span class="p">,</span><span class="w"> </span><span class="nx">preWrapper</span><span class="p">.</span><span class="nf">Start</span><span class="p">(</span><span class="kc">true</span><span class="p">,</span><span class="w"> </span><span class="s">&#34;&#34;</span><span class="p">))</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="nx">fmt</span><span class="p">.</span><span class="nf">Fprint</span><span class="p">(</span><span class="nx">w</span><span class="p">,</span><span class="w"> </span><span class="nx">gohtml</span><span class="p">.</span><span class="nf">EscapeString</span><span class="p">(</span><span class="nx">code</span><span class="p">))</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="nx">fmt</span><span class="p">.</span><span class="nf">Fprint</span><span class="p">(</span><span class="nx">w</span><span class="p">,</span><span class="w"> </span><span class="nx">preWrapper</span><span class="p">.</span><span class="nf">End</span><span class="p">(</span><span class="kc">true</span><span class="p">))</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="k">return</span><span class="w"> </span><span class="nx">preWrapper</span><span class="p">.</span><span class="nx">low</span><span class="p">,</span><span class="w"> </span><span class="nx">preWrapper</span><span class="p">.</span><span class="nx">high</span><span class="p">,</span><span class="w"> </span><span class="kc">nil</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">style</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">styles</span><span class="p">.</span><span class="nf">Get</span><span class="p">(</span><span class="nx">cfg</span><span class="p">.</span><span class="nx">Style</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="k">if</span><span class="w"> </span><span class="nx">style</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="nx">style</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">styles</span><span class="p">.</span><span class="nx">Fallback</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">lexer</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">chroma</span><span class="p">.</span><span class="nf">Coalesce</span><span class="p">(</span><span class="nx">lexer</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">iterator</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">lexer</span><span class="p">.</span><span class="nf">Tokenise</span><span class="p">(</span><span class="kc">nil</span><span class="p">,</span><span class="w"> </span><span class="nx">code</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="k">if</span><span class="w"> </span><span class="p">!</span><span class="nx">cfg</span><span class="p">.</span><span class="nx">Hl_inline</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="nf">writeDivStart</span><span class="p">(</span><span class="nx">w</span><span class="p">,</span><span class="w"> </span><span class="nx">attributes</span><span class="p">,</span><span class="w"> </span><span class="nx">cfg</span><span class="p">.</span><span class="nx">WrapperClass</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">options</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">cfg</span><span class="p">.</span><span class="nf">toHTMLOptions</span><span class="p">()</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="kd">var</span><span class="w"> </span><span class="nx">wrapper</span><span class="w"> </span><span class="nx">html</span><span class="p">.</span><span class="nx">PreWrapper</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="k">if</span><span class="w"> </span><span class="nx">cfg</span><span class="p">.</span><span class="nx">Hl_inline</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="nx">wrapper</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nx">startEnd</span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">			</span><span class="nx">start</span><span class="p">:</span><span class="w"> </span><span class="kd">func</span><span class="p">(</span><span class="nx">code</span><span class="w"> </span><span class="kt">bool</span><span class="p">,</span><span class="w"> </span><span class="nx">styleAttr</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">				</span><span class="k">if</span><span class="w"> </span><span class="nx">code</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">					</span><span class="k">return</span><span class="w"> </span><span class="nx">fmt</span><span class="p">.</span><span class="nf">Sprintf</span><span class="p">(</span><span class="s">`&lt;code%s&gt;`</span><span class="p">,</span><span class="w"> </span><span class="nf">inlineCodeAttrs</span><span class="p">(</span><span class="nx">lang</span><span class="p">))</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">				</span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">				</span><span class="k">return</span><span class="w"> </span><span class="s">``</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">			</span><span class="p">},</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">			</span><span class="nx">end</span><span class="p">:</span><span class="w"> </span><span class="kd">func</span><span class="p">(</span><span class="nx">code</span><span class="w"> </span><span class="kt">bool</span><span class="p">)</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">				</span><span class="k">if</span><span class="w"> </span><span class="nx">code</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">					</span><span class="k">return</span><span class="w"> </span><span class="s">`&lt;/code&gt;`</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">				</span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">				</span><span class="k">return</span><span class="w"> </span><span class="s">``</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">			</span><span class="p">},</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="nx">wrapper</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nf">getPreWrapper</span><span class="p">(</span><span class="nx">lang</span><span class="p">,</span><span class="w"> </span><span class="nx">w</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">options</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nb">append</span><span class="p">(</span><span class="nx">options</span><span class="p">,</span><span class="w"> </span><span class="nx">html</span><span class="p">.</span><span class="nf">WithPreWrapper</span><span class="p">(</span><span class="nx">wrapper</span><span class="p">))</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">formatter</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">html</span><span class="p">.</span><span class="nf">New</span><span class="p">(</span><span class="nx">options</span><span class="o">...</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">formatter</span><span class="p">.</span><span class="nf">Format</span><span class="p">(</span><span class="nx">w</span><span class="p">,</span><span class="w"> </span><span class="nx">style</span><span class="p">,</span><span class="w"> </span><span class="nx">iterator</span><span class="p">);</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="k">if</span><span class="w"> </span><span class="p">!</span><span class="nx">cfg</span><span class="p">.</span><span class="nx">Hl_inline</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="nf">writeDivEnd</span><span class="p">(</span><span class="nx">w</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="k">if</span><span class="w"> </span><span class="nx">p</span><span class="p">,</span><span class="w"> </span><span class="nx">ok</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">wrapper</span><span class="p">.(</span><span class="o">*</span><span class="nx">preWrapper</span><span class="p">);</span><span class="w"> </span><span class="nx">ok</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="k">return</span><span class="w"> </span><span class="nx">p</span><span class="p">.</span><span class="nx">low</span><span class="p">,</span><span class="w"> </span><span class="nx">p</span><span class="p">.</span><span class="nx">high</span><span class="p">,</span><span class="w"> </span><span class="kc">nil</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="kc">nil</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>当看到<code>lexer</code>字样出现，马上锁定了<code>chromalexers.Get(lang)</code>这一句，其调用了<code>markup\highlight\chromalexers\chromalexers.go</code>中的<code>Get</code>函数：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-go"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="2" style="--fi-max-shown-lines:400;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kn">package</span><span class="w"> </span><span class="nx">chromalexers</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="p">(</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="s">&#34;github.com/alecthomas/chroma/v2&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="s">&#34;github.com/alecthomas/chroma/v2/lexers&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="s">&#34;github.com/bep/helpers/maphelpers&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">var</span><span class="w"> </span><span class="nx">lexerCache</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="o">*</span><span class="nx">maphelpers</span><span class="p">.</span><span class="nx">NewConcurrentMap</span><span class="p">[</span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="nx">chroma</span><span class="p">.</span><span class="nx">Lexer</span><span class="p">]()</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c1">// Get returns a lexer for the given language name, nil if not found.</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c1">// This is just a wrapper around chromalexers.Get that caches the result.</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c1">// Reasoning for this is that chromalexers.Get is slow in the case where the lexer is not found,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c1">// which is a common case in Hugo.</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">func</span><span class="w"> </span><span class="nf">Get</span><span class="p">(</span><span class="nx">name</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span><span class="w"> </span><span class="nx">chroma</span><span class="p">.</span><span class="nx">Lexer</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">l</span><span class="p">,</span><span class="w"> </span><span class="nx">_</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">lexerCache</span><span class="p">.</span><span class="nf">GetOrCreate</span><span class="p">(</span><span class="nx">name</span><span class="p">,</span><span class="w"> </span><span class="kd">func</span><span class="p">()</span><span class="w"> </span><span class="p">(</span><span class="nx">chroma</span><span class="p">.</span><span class="nx">Lexer</span><span class="p">,</span><span class="w"> </span><span class="kt">error</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="nx">l</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">lexers</span><span class="p">.</span><span class="nf">Get</span><span class="p">(</span><span class="nx">name</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="k">return</span><span class="w"> </span><span class="nx">l</span><span class="p">,</span><span class="w"> </span><span class="kc">nil</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="p">})</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="k">return</span><span class="w"> </span><span class="nx">l</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p><code>Get</code>其实就是获取语言对应的词法解析器(lexer)，还做了缓存处理。使用的<code>lexers</code>包通过如下命令找到在本机的路径：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-go"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="k">go</span><span class="w"> </span><span class="nx">list</span><span class="w"> </span><span class="o">-</span><span class="nx">f</span><span class="w"> </span><span class="err">&#39;</span><span class="p">{{.</span><span class="nx">Dir</span><span class="p">}}</span><span class="err">&#39;</span><span class="w"> </span><span class="nx">github</span><span class="p">.</span><span class="nx">com</span><span class="o">/</span><span class="nx">alecthomas</span><span class="o">/</span><span class="nx">chroma</span><span class="o">/</span><span class="nx">v2</span><span class="o">/</span><span class="nx">lexers</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>或者直接在VS Code中右键-&gt;Go to Definition也可看到路径。查看<code>lexers.Get</code>函数的定义：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-go"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="c1">// Get a Lexer by name, alias or file extension.</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c1">//
+</span></span></span><span class="line"><span class="cl"><span class="c1">// Note that this if there isn&#39;t an exact match on name or alias, this will</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c1">// call Match(), so it is not efficient.</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">func</span><span class="w"> </span><span class="nf">Get</span><span class="p">(</span><span class="nx">name</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span><span class="w"> </span><span class="nx">chroma</span><span class="p">.</span><span class="nx">Lexer</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="k">return</span><span class="w"> </span><span class="nx">GlobalLexerRegistry</span><span class="p">.</span><span class="nf">Get</span><span class="p">(</span><span class="nx">name</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>也就是说词法解析器都是从<code>GlobalLexerRegistry</code>中拿到的，那么<code>GlobalLexerRegistry</code>又是什么？</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-go"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="2" style="--fi-max-shown-lines:400;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="c1">// GlobalLexerRegistry is the global LexerRegistry of Lexers.</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">var</span><span class="w"> </span><span class="nx">GlobalLexerRegistry</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="kd">func</span><span class="p">()</span><span class="w"> </span><span class="o">*</span><span class="nx">chroma</span><span class="p">.</span><span class="nx">LexerRegistry</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">reg</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">chroma</span><span class="p">.</span><span class="nf">NewLexerRegistry</span><span class="p">()</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="c1">// index(reg)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">paths</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">fs</span><span class="p">.</span><span class="nf">Glob</span><span class="p">(</span><span class="nx">embedded</span><span class="p">,</span><span class="w"> </span><span class="s">&#34;embedded/*.xml&#34;</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="nb">panic</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="k">for</span><span class="w"> </span><span class="nx">_</span><span class="p">,</span><span class="w"> </span><span class="nx">path</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="k">range</span><span class="w"> </span><span class="nx">paths</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="nx">reg</span><span class="p">.</span><span class="nf">Register</span><span class="p">(</span><span class="nx">chroma</span><span class="p">.</span><span class="nf">MustNewXMLLexer</span><span class="p">(</span><span class="nx">embedded</span><span class="p">,</span><span class="w"> </span><span class="nx">path</span><span class="p">))</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="k">return</span><span class="w"> </span><span class="nx">reg</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}()</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c1">// LexerRegistry is a registry of Lexers.</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">type</span><span class="w"> </span><span class="nx">LexerRegistry</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">Lexers</span><span class="w">  </span><span class="nx">Lexers</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">byName</span><span class="w">  </span><span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="nx">Lexer</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">byAlias</span><span class="w"> </span><span class="kd">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="nx">Lexer</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>也就是<code>GlobalLexerRegistry</code>中的所有解析器都是从<code>embedded/*.xml</code>文件中拿到的。以<code>matlab.xml</code>为例：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-xml"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="3" style="--fi-max-shown-lines:400;--fi-line-digit:3;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">  1
+</span><span class="lnt">  2
+</span><span class="lnt">  3
+</span><span class="lnt">  4
+</span><span class="lnt">  5
+</span><span class="lnt">  6
+</span><span class="lnt">  7
+</span><span class="lnt">  8
+</span><span class="lnt">  9
+</span><span class="lnt"> 10
+</span><span class="lnt"> 11
+</span><span class="lnt"> 12
+</span><span class="lnt"> 13
+</span><span class="lnt"> 14
+</span><span class="lnt"> 15
+</span><span class="lnt"> 16
+</span><span class="lnt"> 17
+</span><span class="lnt"> 18
+</span><span class="lnt"> 19
+</span><span class="lnt"> 20
+</span><span class="lnt"> 21
+</span><span class="lnt"> 22
+</span><span class="lnt"> 23
+</span><span class="lnt"> 24
+</span><span class="lnt"> 25
+</span><span class="lnt"> 26
+</span><span class="lnt"> 27
+</span><span class="lnt"> 28
+</span><span class="lnt"> 29
+</span><span class="lnt"> 30
+</span><span class="lnt"> 31
+</span><span class="lnt"> 32
+</span><span class="lnt"> 33
+</span><span class="lnt"> 34
+</span><span class="lnt"> 35
+</span><span class="lnt"> 36
+</span><span class="lnt"> 37
+</span><span class="lnt"> 38
+</span><span class="lnt"> 39
+</span><span class="lnt"> 40
+</span><span class="lnt"> 41
+</span><span class="lnt"> 42
+</span><span class="lnt"> 43
+</span><span class="lnt"> 44
+</span><span class="lnt"> 45
+</span><span class="lnt"> 46
+</span><span class="lnt"> 47
+</span><span class="lnt"> 48
+</span><span class="lnt"> 49
+</span><span class="lnt"> 50
+</span><span class="lnt"> 51
+</span><span class="lnt"> 52
+</span><span class="lnt"> 53
+</span><span class="lnt"> 54
+</span><span class="lnt"> 55
+</span><span class="lnt"> 56
+</span><span class="lnt"> 57
+</span><span class="lnt"> 58
+</span><span class="lnt"> 59
+</span><span class="lnt"> 60
+</span><span class="lnt"> 61
+</span><span class="lnt"> 62
+</span><span class="lnt"> 63
+</span><span class="lnt"> 64
+</span><span class="lnt"> 65
+</span><span class="lnt"> 66
+</span><span class="lnt"> 67
+</span><span class="lnt"> 68
+</span><span class="lnt"> 69
+</span><span class="lnt"> 70
+</span><span class="lnt"> 71
+</span><span class="lnt"> 72
+</span><span class="lnt"> 73
+</span><span class="lnt"> 74
+</span><span class="lnt"> 75
+</span><span class="lnt"> 76
+</span><span class="lnt"> 77
+</span><span class="lnt"> 78
+</span><span class="lnt"> 79
+</span><span class="lnt"> 80
+</span><span class="lnt"> 81
+</span><span class="lnt"> 82
+</span><span class="lnt"> 83
+</span><span class="lnt"> 84
+</span><span class="lnt"> 85
+</span><span class="lnt"> 86
+</span><span class="lnt"> 87
+</span><span class="lnt"> 88
+</span><span class="lnt"> 89
+</span><span class="lnt"> 90
+</span><span class="lnt"> 91
+</span><span class="lnt"> 92
+</span><span class="lnt"> 93
+</span><span class="lnt"> 94
+</span><span class="lnt"> 95
+</span><span class="lnt"> 96
+</span><span class="lnt"> 97
+</span><span class="lnt"> 98
+</span><span class="lnt"> 99
+</span><span class="lnt">100
+</span><span class="lnt">101
+</span><span class="lnt">102
+</span><span class="lnt">103
+</span><span class="lnt">104
+</span><span class="lnt">105
+</span><span class="lnt">106
+</span><span class="lnt">107
+</span><span class="lnt">108
+</span><span class="lnt">109
+</span><span class="lnt">110
+</span><span class="lnt">111
+</span><span class="lnt">112
+</span><span class="lnt">113
+</span><span class="lnt">114
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-xml" data-lang="xml"><span class="line"><span class="cl"><span class="nt">&lt;lexer&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&lt;config&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;name&gt;</span>Matlab<span class="nt">&lt;/name&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;alias&gt;</span>matlab<span class="nt">&lt;/alias&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;filename&gt;</span>*.m<span class="nt">&lt;/filename&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;mime_type&gt;</span>text/matlab<span class="nt">&lt;/mime_type&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&lt;/config&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&lt;rules&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;state</span> <span class="na">name=</span><span class="s">&#34;blockcomment&#34;</span><span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&lt;rule</span> <span class="na">pattern=</span><span class="s">&#34;^\s*%\}&#34;</span><span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;token</span> <span class="na">type=</span><span class="s">&#34;CommentMultiline&#34;</span><span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;pop</span> <span class="na">depth=</span><span class="s">&#34;1&#34;</span><span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&lt;/rule&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&lt;rule</span> <span class="na">pattern=</span><span class="s">&#34;^.*\n&#34;</span><span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;token</span> <span class="na">type=</span><span class="s">&#34;CommentMultiline&#34;</span><span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&lt;/rule&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&lt;rule</span> <span class="na">pattern=</span><span class="s">&#34;.&#34;</span><span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;token</span> <span class="na">type=</span><span class="s">&#34;CommentMultiline&#34;</span><span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&lt;/rule&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;/state&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;state</span> <span class="na">name=</span><span class="s">&#34;deffunc&#34;</span><span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&lt;rule</span> <span class="na">pattern=</span><span class="s">&#34;(\s*)(?:(.+)(\s*)(=)(\s*))?(.+)(\()(.*)(\))(\s*)&#34;</span><span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;bygroups&gt;</span>
+</span></span><span class="line"><span class="cl">          <span class="nt">&lt;token</span> <span class="na">type=</span><span class="s">&#34;TextWhitespace&#34;</span><span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">          <span class="nt">&lt;token</span> <span class="na">type=</span><span class="s">&#34;Text&#34;</span><span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">          <span class="nt">&lt;token</span> <span class="na">type=</span><span class="s">&#34;TextWhitespace&#34;</span><span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">          <span class="nt">&lt;token</span> <span class="na">type=</span><span class="s">&#34;Punctuation&#34;</span><span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">          <span class="nt">&lt;token</span> <span class="na">type=</span><span class="s">&#34;TextWhitespace&#34;</span><span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">          <span class="nt">&lt;token</span> <span class="na">type=</span><span class="s">&#34;NameFunction&#34;</span><span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">          <span class="nt">&lt;token</span> <span class="na">type=</span><span class="s">&#34;Punctuation&#34;</span><span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">          <span class="nt">&lt;token</span> <span class="na">type=</span><span class="s">&#34;Text&#34;</span><span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">          <span class="nt">&lt;token</span> <span class="na">type=</span><span class="s">&#34;Punctuation&#34;</span><span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">          <span class="nt">&lt;token</span> <span class="na">type=</span><span class="s">&#34;TextWhitespace&#34;</span><span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;/bygroups&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;pop</span> <span class="na">depth=</span><span class="s">&#34;1&#34;</span><span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&lt;/rule&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&lt;rule</span> <span class="na">pattern=</span><span class="s">&#34;(\s*)([a-zA-Z_]\w*)&#34;</span><span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;bygroups&gt;</span>
+</span></span><span class="line"><span class="cl">          <span class="nt">&lt;token</span> <span class="na">type=</span><span class="s">&#34;Text&#34;</span><span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">          <span class="nt">&lt;token</span> <span class="na">type=</span><span class="s">&#34;NameFunction&#34;</span><span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;/bygroups&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;pop</span> <span class="na">depth=</span><span class="s">&#34;1&#34;</span><span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&lt;/rule&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;/state&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;state</span> <span class="na">name=</span><span class="s">&#34;root&#34;</span><span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&lt;rule</span> <span class="na">pattern=</span><span class="s">&#34;\n&#34;</span><span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;token</span> <span class="na">type=</span><span class="s">&#34;Text&#34;</span><span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&lt;/rule&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&lt;rule</span> <span class="na">pattern=</span><span class="s">&#34;^!.*&#34;</span><span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;token</span> <span class="na">type=</span><span class="s">&#34;LiteralStringOther&#34;</span><span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&lt;/rule&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&lt;rule</span> <span class="na">pattern=</span><span class="s">&#34;%\{\s*\n&#34;</span><span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;token</span> <span class="na">type=</span><span class="s">&#34;CommentMultiline&#34;</span><span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;push</span> <span class="na">state=</span><span class="s">&#34;blockcomment&#34;</span><span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&lt;/rule&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&lt;rule</span> <span class="na">pattern=</span><span class="s">&#34;%.*$&#34;</span><span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;token</span> <span class="na">type=</span><span class="s">&#34;Comment&#34;</span><span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&lt;/rule&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&lt;rule</span> <span class="na">pattern=</span><span class="s">&#34;^\s*function&#34;</span><span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;token</span> <span class="na">type=</span><span class="s">&#34;Keyword&#34;</span><span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;push</span> <span class="na">state=</span><span class="s">&#34;deffunc&#34;</span><span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&lt;/rule&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&lt;rule</span> <span class="na">pattern=</span><span class="s">&#34;(properties|persistent|enumerated|otherwise|continue|function|classdef|methods|elseif|events|switch|return|global|parfor|catch|break|while|else|spmd|case|try|end|for|if)\b&#34;</span><span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;token</span> <span class="na">type=</span><span class="s">&#34;Keyword&#34;</span><span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&lt;/rule&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&lt;rule</span> <span class="na">pattern=</span><span class="s">&#34;(sin|sind|sinh|asin|asind|asinh|cos|cosd|cosh|acos|acosd|acosh|tan|tand|tanh|atan|atand|atan2|atanh|sec|secd|sech|asec|asecd|asech|csc|cscd|csch|acsc|acscd|acsch|cot|cotd|coth|acot|acotd|acoth|hypot|exp|expm1|log|log1p|log10|log2|pow2|realpow|reallog|realsqrt|sqrt|nthroot|nextpow2|abs|angle|complex|conj|imag|real|unwrap|isreal|cplxpair|fix|floor|ceil|round|mod|rem|sign|airy|besselj|bessely|besselh|besseli|besselk|beta|betainc|betaln|ellipj|ellipke|erf|erfc|erfcx|erfinv|expint|gamma|gammainc|gammaln|psi|legendre|cross|dot|factor|isprime|primes|gcd|lcm|rat|rats|perms|nchoosek|factorial|cart2sph|cart2pol|pol2cart|sph2cart|hsv2rgb|rgb2hsv|zeros|ones|eye|repmat|rand|randn|linspace|logspace|freqspace|meshgrid|accumarray|size|length|ndims|numel|disp|isempty|isequal|isequalwithequalnans|cat|reshape|diag|blkdiag|tril|triu|fliplr|flipud|flipdim|rot90|find|end|sub2ind|ind2sub|bsxfun|ndgrid|permute|ipermute|shiftdim|circshift|squeeze|isscalar|isvector|ans|eps|realmax|realmin|pi|i|inf|nan|isnan|isinf|isfinite|j|why|compan|gallery|hadamard|hankel|hilb|invhilb|magic|pascal|rosser|toeplitz|vander|wilkinson)\b&#34;</span><span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;token</span> <span class="na">type=</span><span class="s">&#34;NameBuiltin&#34;</span><span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&lt;/rule&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&lt;rule</span> <span class="na">pattern=</span><span class="s">&#34;\.\.\..*$&#34;</span><span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;token</span> <span class="na">type=</span><span class="s">&#34;Comment&#34;</span><span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&lt;/rule&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&lt;rule</span> <span class="na">pattern=</span><span class="s">&#34;-|==|~=|&amp;lt;|&amp;gt;|&amp;lt;=|&amp;gt;=|&amp;amp;&amp;amp;|&amp;amp;|~|\|\|?&#34;</span><span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;token</span> <span class="na">type=</span><span class="s">&#34;Operator&#34;</span><span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&lt;/rule&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&lt;rule</span> <span class="na">pattern=</span><span class="s">&#34;\.\*|\*|\+|\.\^|\.\\|\.\/|\/|\\&#34;</span><span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;token</span> <span class="na">type=</span><span class="s">&#34;Operator&#34;</span><span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&lt;/rule&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&lt;rule</span> <span class="na">pattern=</span><span class="s">&#34;\[|\]|\(|\)|\{|\}|:|@|\.|,&#34;</span><span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;token</span> <span class="na">type=</span><span class="s">&#34;Punctuation&#34;</span><span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&lt;/rule&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&lt;rule</span> <span class="na">pattern=</span><span class="s">&#34;=|:|;&#34;</span><span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;token</span> <span class="na">type=</span><span class="s">&#34;Punctuation&#34;</span><span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&lt;/rule&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&lt;rule</span> <span class="na">pattern=</span><span class="s">&#34;(?&amp;lt;=[\w)\].])\&amp;#39;+&#34;</span><span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;token</span> <span class="na">type=</span><span class="s">&#34;Operator&#34;</span><span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&lt;/rule&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&lt;rule</span> <span class="na">pattern=</span><span class="s">&#34;(\d+\.\d*|\d*\.\d+)([eEf][+-]?[0-9]+)?&#34;</span><span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;token</span> <span class="na">type=</span><span class="s">&#34;LiteralNumberFloat&#34;</span><span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&lt;/rule&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&lt;rule</span> <span class="na">pattern=</span><span class="s">&#34;\d+[eEf][+-]?[0-9]+&#34;</span><span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;token</span> <span class="na">type=</span><span class="s">&#34;LiteralNumberFloat&#34;</span><span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&lt;/rule&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&lt;rule</span> <span class="na">pattern=</span><span class="s">&#34;\d+&#34;</span><span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;token</span> <span class="na">type=</span><span class="s">&#34;LiteralNumberInteger&#34;</span><span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&lt;/rule&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&lt;rule</span> <span class="na">pattern=</span><span class="s">&#34;(?&amp;lt;![\w)\].])\&amp;#39;&#34;</span><span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;token</span> <span class="na">type=</span><span class="s">&#34;LiteralString&#34;</span><span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;push</span> <span class="na">state=</span><span class="s">&#34;string&#34;</span><span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&lt;/rule&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&lt;rule</span> <span class="na">pattern=</span><span class="s">&#34;[a-zA-Z_]\w*&#34;</span><span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;token</span> <span class="na">type=</span><span class="s">&#34;Name&#34;</span><span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&lt;/rule&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&lt;rule</span> <span class="na">pattern=</span><span class="s">&#34;.&#34;</span><span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;token</span> <span class="na">type=</span><span class="s">&#34;Text&#34;</span><span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&lt;/rule&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;/state&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;state</span> <span class="na">name=</span><span class="s">&#34;string&#34;</span><span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&lt;rule</span> <span class="na">pattern=</span><span class="s">&#34;[^\&amp;#39;]*\&amp;#39;&#34;</span><span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;token</span> <span class="na">type=</span><span class="s">&#34;LiteralString&#34;</span><span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;pop</span> <span class="na">depth=</span><span class="s">&#34;1&#34;</span><span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&lt;/rule&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;/state&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&lt;/rules&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="nt">&lt;/lexer&gt;</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>xml文件中定义了语言的词法规则。如果我们想要让Hugo支持HDevelop语法，那么新增一个能表述出HDevelop语法的xml文件是否就行？</p>
+<h2 class="heading-element" id="hdevelopxml文件定义"><span><code>hdevelop.xml</code>文件定义</span>
+  <a href="#hdevelopxml%e6%96%87%e4%bb%b6%e5%ae%9a%e4%b9%89" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>在<code>lexers/embedded</code>中新增<code>hdevelop.xml</code>文件：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-xml"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="3" style="--fi-max-shown-lines:400;--fi-line-digit:3;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">  1
+</span><span class="lnt">  2
+</span><span class="lnt">  3
+</span><span class="lnt">  4
+</span><span class="lnt">  5
+</span><span class="lnt">  6
+</span><span class="lnt">  7
+</span><span class="lnt">  8
+</span><span class="lnt">  9
+</span><span class="lnt"> 10
+</span><span class="lnt"> 11
+</span><span class="lnt"> 12
+</span><span class="lnt"> 13
+</span><span class="lnt"> 14
+</span><span class="lnt"> 15
+</span><span class="lnt"> 16
+</span><span class="lnt"> 17
+</span><span class="lnt"> 18
+</span><span class="lnt"> 19
+</span><span class="lnt"> 20
+</span><span class="lnt"> 21
+</span><span class="lnt"> 22
+</span><span class="lnt"> 23
+</span><span class="lnt"> 24
+</span><span class="lnt"> 25
+</span><span class="lnt"> 26
+</span><span class="lnt"> 27
+</span><span class="lnt"> 28
+</span><span class="lnt"> 29
+</span><span class="lnt"> 30
+</span><span class="lnt"> 31
+</span><span class="lnt"> 32
+</span><span class="lnt"> 33
+</span><span class="lnt"> 34
+</span><span class="lnt"> 35
+</span><span class="lnt"> 36
+</span><span class="lnt"> 37
+</span><span class="lnt"> 38
+</span><span class="lnt"> 39
+</span><span class="lnt"> 40
+</span><span class="lnt"> 41
+</span><span class="lnt"> 42
+</span><span class="lnt"> 43
+</span><span class="lnt"> 44
+</span><span class="lnt"> 45
+</span><span class="lnt"> 46
+</span><span class="lnt"> 47
+</span><span class="lnt"> 48
+</span><span class="lnt"> 49
+</span><span class="lnt"> 50
+</span><span class="lnt"> 51
+</span><span class="lnt"> 52
+</span><span class="lnt"> 53
+</span><span class="lnt"> 54
+</span><span class="lnt"> 55
+</span><span class="lnt"> 56
+</span><span class="lnt"> 57
+</span><span class="lnt"> 58
+</span><span class="lnt"> 59
+</span><span class="lnt"> 60
+</span><span class="lnt"> 61
+</span><span class="lnt"> 62
+</span><span class="lnt"> 63
+</span><span class="lnt"> 64
+</span><span class="lnt"> 65
+</span><span class="lnt"> 66
+</span><span class="lnt"> 67
+</span><span class="lnt"> 68
+</span><span class="lnt"> 69
+</span><span class="lnt"> 70
+</span><span class="lnt"> 71
+</span><span class="lnt"> 72
+</span><span class="lnt"> 73
+</span><span class="lnt"> 74
+</span><span class="lnt"> 75
+</span><span class="lnt"> 76
+</span><span class="lnt"> 77
+</span><span class="lnt"> 78
+</span><span class="lnt"> 79
+</span><span class="lnt"> 80
+</span><span class="lnt"> 81
+</span><span class="lnt"> 82
+</span><span class="lnt"> 83
+</span><span class="lnt"> 84
+</span><span class="lnt"> 85
+</span><span class="lnt"> 86
+</span><span class="lnt"> 87
+</span><span class="lnt"> 88
+</span><span class="lnt"> 89
+</span><span class="lnt"> 90
+</span><span class="lnt"> 91
+</span><span class="lnt"> 92
+</span><span class="lnt"> 93
+</span><span class="lnt"> 94
+</span><span class="lnt"> 95
+</span><span class="lnt"> 96
+</span><span class="lnt"> 97
+</span><span class="lnt"> 98
+</span><span class="lnt"> 99
+</span><span class="lnt">100
+</span><span class="lnt">101
+</span><span class="lnt">102
+</span><span class="lnt">103
+</span><span class="lnt">104
+</span><span class="lnt">105
+</span><span class="lnt">106
+</span><span class="lnt">107
+</span><span class="lnt">108
+</span><span class="lnt">109
+</span><span class="lnt">110
+</span><span class="lnt">111
+</span><span class="lnt">112
+</span><span class="lnt">113
+</span><span class="lnt">114
+</span><span class="lnt">115
+</span><span class="lnt">116
+</span><span class="lnt">117
+</span><span class="lnt">118
+</span><span class="lnt">119
+</span><span class="lnt">120
+</span><span class="lnt">121
+</span><span class="lnt">122
+</span><span class="lnt">123
+</span><span class="lnt">124
+</span><span class="lnt">125
+</span><span class="lnt">126
+</span><span class="lnt">127
+</span><span class="lnt">128
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-xml" data-lang="xml"><span class="line"><span class="cl"><span class="nt">&lt;lexer&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&lt;config&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;name&gt;</span>HDevelop<span class="nt">&lt;/name&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;alias&gt;</span>hdev<span class="nt">&lt;/alias&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;alias&gt;</span>hdevelop<span class="nt">&lt;/alias&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;alias&gt;</span>halcon<span class="nt">&lt;/alias&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;filename&gt;</span>*.hdev<span class="nt">&lt;/filename&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;mime_type&gt;</span>text/x-hdevelop<span class="nt">&lt;/mime_type&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&lt;/config&gt;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="nt">&lt;rules&gt;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;state</span> <span class="na">name=</span><span class="s">&#34;root&#34;</span><span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">      <span class="c">&lt;!-- comment --&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&lt;rule</span> <span class="na">pattern=</span><span class="s">&#34;\*.*$&#34;</span><span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;token</span> <span class="na">type=</span><span class="s">&#34;Comment&#34;</span><span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&lt;/rule&gt;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">      <span class="c">&lt;!-- keywords --&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&lt;rule</span> <span class="na">pattern=</span><span class="s">&#34;\b(if|else|elseif|endif|for|endfor|while|endwhile|repeat|until|break|continue|return|try|catch|throw|switch|case|default|endswitch)\b&#34;</span><span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;token</span> <span class="na">type=</span><span class="s">&#34;Keyword&#34;</span><span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&lt;/rule&gt;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">      <span class="c">&lt;!-- tuple operators --&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&lt;rule</span> <span class="na">pattern=</span><span class="s">&#34;\b(tuple_[A-Za-z0-9_]+)\b&#34;</span><span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;token</span> <span class="na">type=</span><span class="s">&#34;NameBuiltin&#34;</span><span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&lt;/rule&gt;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">      <span class="c">&lt;!-- dev operators --&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&lt;rule</span> <span class="na">pattern=</span><span class="s">&#34;\b(dev_[A-Za-z0-9_]+)\b&#34;</span><span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;token</span> <span class="na">type=</span><span class="s">&#34;NameBuiltin&#34;</span><span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&lt;/rule&gt;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">      <span class="c">&lt;!-- common HALCON operators --&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&lt;rule</span> <span class="na">pattern=</span><span class="s">&#34;\b(read_image|write_image|read_region|write_region|threshold|binary_threshold|connection|union1|union2|difference|intersection|select_shape|select_shape_std|area_center|count_obj|gen_rectangle1|gen_rectangle2|gen_circle|reduce_domain|crop_domain|edges_sub_pix|edges_image|find_shape_model|find_scaled_shape_model|find_ncc_model|create_shape_model|create_ncc_model|disp_obj|clear_window|open_window|close_window|set_color|set_draw|set_line_width|disp_message|dev_display|dev_clear_window|dev_open_window|dev_close_window|dev_update_window|dev_set_color|dev_set_draw|dev_set_line_width)\b&#34;</span><span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;token</span> <span class="na">type=</span><span class="s">&#34;NameBuiltin&#34;</span><span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&lt;/rule&gt;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;rule</span> <span class="na">pattern=</span><span class="s">&#34;\b[a-z][A-Za-z0-9_]*(?=\s*\()&#34;</span><span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;token</span> <span class="na">type=</span><span class="s">&#34;NameBuiltin&#34;</span><span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;/rule&gt;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">      <span class="c">&lt;!-- constants --&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&lt;rule</span> <span class="na">pattern=</span><span class="s">&#34;\b(true|false)\b&#34;</span><span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;token</span> <span class="na">type=</span><span class="s">&#34;NameBuiltinPseudo&#34;</span><span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&lt;/rule&gt;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">      <span class="nt">&lt;rule</span> <span class="na">pattern=</span><span class="s">&#34;\$&#39;[^&#39;]*&#39;&#34;</span><span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">          <span class="nt">&lt;token</span> <span class="na">type=</span><span class="s">&#34;LiteralStringInterpol&#34;</span><span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&lt;/rule&gt;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">      <span class="nt">&lt;rule</span> <span class="na">pattern=</span><span class="s">&#34;\$&amp;quot;[^&amp;quot;]*&amp;quot;&#34;</span><span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">          <span class="nt">&lt;token</span> <span class="na">type=</span><span class="s">&#34;LiteralStringInterpol&#34;</span><span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&lt;/rule&gt;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">      <span class="c">&lt;!-- strings --&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&lt;rule</span> <span class="na">pattern=</span><span class="s">&#34;&#39;[^&#39;]*&#39;&#34;</span><span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;token</span> <span class="na">type=</span><span class="s">&#34;LiteralString&#34;</span><span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&lt;/rule&gt;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">      <span class="nt">&lt;rule</span> <span class="na">pattern=</span><span class="s">&#34;&amp;quot;[^&amp;quot;]*&amp;quot;&#34;</span><span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;token</span> <span class="na">type=</span><span class="s">&#34;LiteralString&#34;</span><span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&lt;/rule&gt;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">      <span class="nt">&lt;rule</span> <span class="na">pattern=</span><span class="s">&#34;\|[^\|\r\n]+\|&#34;</span><span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">          <span class="nt">&lt;token</span> <span class="na">type=</span><span class="s">&#34;NameBuiltinPseudo&#34;</span><span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&lt;/rule&gt;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">      <span class="c">&lt;!-- float --&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&lt;rule</span> <span class="na">pattern=</span><span class="s">&#34;\d+\.\d+([eE][+-]?\d+)?&#34;</span><span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;token</span> <span class="na">type=</span><span class="s">&#34;LiteralNumberFloat&#34;</span><span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&lt;/rule&gt;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">      <span class="c">&lt;!-- integer --&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&lt;rule</span> <span class="na">pattern=</span><span class="s">&#34;\d+&#34;</span><span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;token</span> <span class="na">type=</span><span class="s">&#34;LiteralNumberInteger&#34;</span><span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&lt;/rule&gt;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">      <span class="c">&lt;!-- operators --&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&lt;rule</span> <span class="na">pattern=</span><span class="s">&#34;:=|==|!=|&amp;lt;=|&amp;gt;=|&amp;lt;|&amp;gt;|\+|-|\*|/|=&#34;</span><span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;token</span> <span class="na">type=</span><span class="s">&#34;Operator&#34;</span><span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&lt;/rule&gt;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">      <span class="c">&lt;!-- punctuation --&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&lt;rule</span> <span class="na">pattern=</span><span class="s">&#34;\(|\)|\[|\]|\{|\}|,|;|:&#34;</span><span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;token</span> <span class="na">type=</span><span class="s">&#34;Punctuation&#34;</span><span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&lt;/rule&gt;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">      <span class="nt">&lt;rule</span> <span class="na">pattern=</span><span class="s">&#34;\[&#34;</span><span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">          <span class="nt">&lt;token</span> <span class="na">type=</span><span class="s">&#34;Punctuation&#34;</span><span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">          <span class="nt">&lt;push</span> <span class="na">state=</span><span class="s">&#34;slice&#34;</span><span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&lt;/rule&gt;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">      <span class="c">&lt;!-- variables --&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&lt;rule</span> <span class="na">pattern=</span><span class="s">&#34;[A-Za-z_][A-Za-z0-9_]*&#34;</span><span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;token</span> <span class="na">type=</span><span class="s">&#34;Name&#34;</span><span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&lt;/rule&gt;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">      <span class="c">&lt;!-- whitespace --&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&lt;rule</span> <span class="na">pattern=</span><span class="s">&#34;\s+&#34;</span><span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;token</span> <span class="na">type=</span><span class="s">&#34;Text&#34;</span><span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&lt;/rule&gt;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;/state&gt;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;state</span> <span class="na">name=</span><span class="s">&#34;slice&#34;</span><span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;rule</span> <span class="na">pattern=</span><span class="s">&#34;-?\d+&#34;</span><span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&lt;token</span> <span class="na">type=</span><span class="s">&#34;LiteralNumberInteger&#34;</span><span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;/rule&gt;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;rule</span> <span class="na">pattern=</span><span class="s">&#34;:&#34;</span><span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&lt;token</span> <span class="na">type=</span><span class="s">&#34;Punctuation&#34;</span><span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;/rule&gt;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;rule</span> <span class="na">pattern=</span><span class="s">&#34;\]&#34;</span><span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&lt;token</span> <span class="na">type=</span><span class="s">&#34;Punctuation&#34;</span><span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&lt;pop</span> <span class="na">depth=</span><span class="s">&#34;1&#34;</span><span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;/rule&gt;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;/state&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&lt;/rules&gt;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nt">&lt;/lexer&gt;</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p><code>hugo server -D</code>启动Hugo后，发现此时基本已经支持了HDevelop语法。但还有两个问题：</p>
+<ol>
+<li>代码块必须要写明<code>hdev {name=&quot;HDevelop&quot;}</code>否则渲染出的代码块显示的是<code>Code</code>字样而不是<code>HDevelop</code></li>
+<li>解析注释还不够完善，注释前加空白符无法辨别出来。</li>
+</ol>
+<h2 class="heading-element" id="推荐"><span>推荐</span>
+  <a href="#%e6%8e%a8%e8%8d%90" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p><a href="https://tool.oschina.net/uploads/apidocs/jquery/regexp.html" target="_blank" rel="external nofollow noopener noreferrer">表达式全集<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></p></div><hr class="awesome-hr" />
+    <h2 id="see-also">相关内容</h2>
+    <ul><li>
+          <a href="/hugo%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="Hugo源码剖析：世界最快静态站点生成器的实现原理">Hugo源码剖析：世界最快静态站点生成器的实现原理</a></li></ul><div class="post-footer" id="post-footer">
+  <div class="post-info">
+    <div class="post-info-line">
+      <div class="post-info-mod"><span title="更新于 2026-07-01 15:46:16">更新于 2026-07-01&nbsp;</span>
+      </div></div><div class="post-info-line">
+        <div class="post-info-md"><span><a href="vscode://file/D:\hugo-blog\andyfree96\content\posts\在Hugo中支持HDevelop语法.md" title="在编辑器中打开" class="link-to-vscode">在编辑器中打开</a></span></div>
+        <div class="post-info-share">
+          <span><a href="javascript:void(0);" title="分享到 X" data-sharer="twitter" data-url="http://localhost:9613/%E5%9C%A8hugo%E4%B8%AD%E6%94%AF%E6%8C%81hdevelop%E8%AF%AD%E6%B3%95/" data-title="在Hugo中支持HDevelop语法" data-via="IRONAnthony96" data-hashtags="Go,Hugo,语法高亮,chroma"><i class="fa-brands fa-x-twitter" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="http://localhost:9613/%E5%9C%A8hugo%E4%B8%AD%E6%94%AF%E6%8C%81hdevelop%E8%AF%AD%E6%B3%95/" data-hashtag="Go"><i class="fa-brands fa-facebook-square" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="http://localhost:9613/%E5%9C%A8hugo%E4%B8%AD%E6%94%AF%E6%8C%81hdevelop%E8%AF%AD%E6%B3%95/" data-title="在Hugo中支持HDevelop语法" data-image="/images/202607/1/doncoombez-RFtQIL8AwHM-unsplash.jpg"><i class="fa-brands fa-weibo" aria-hidden="true"></i></a>
+  </span>
+        </div>
+      </div></div>
+
+  <div class="post-info-more">
+    <section class="post-tags"><i class="fa-solid fa-tags me-1" aria-hidden="true"></i><a href="/tags/go/" class="post-tag" title="标签 - Go">Go</a><a href="/tags/hugo/" class="post-tag" title="标签 - Hugo">Hugo</a><a href="/tags/%E8%AF%AD%E6%B3%95%E9%AB%98%E4%BA%AE/" class="post-tag" title="标签 - 语法高亮">语法高亮</a><a href="/tags/chroma/" class="post-tag" title="标签 - Chroma">Chroma</a></section>
+    <section><span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+    </section>
+  </div><div class="post-nav"><a href="/%E8%81%AA%E6%98%8E%E7%9A%84%E6%8A%95%E8%B5%84%E8%80%85/" class="post-nav-item" rel="prev" title="聪明的投资者 第4版 (Benjamin Graham)"><i class="fa-solid fa-angle-left" aria-hidden="true"></i>聪明的投资者 第4版 (Benjamin Graham)</a></div>
+</div>
+<div class="post-reward">
+    <div class="comment">请作者喝杯咖啡!</div>
+    <input type="checkbox" class="reward-input" name="reward" id="fi-reward" hidden />
+    <label class="reward-button" for="fi-reward"><i class="fa-solid fa-qrcode" aria-hidden="true"></i>赞赏</label>
+    <div class="reward-ways" data-mode="static"><div><img src='/reward/alipay.png' alt="AndyFree96 支付宝"><span data-animation>支付宝</span>
+          </div><div><img src='/reward/wechatpay.png' alt="AndyFree96 微信"><span data-animation>微信</span>
+          </div></div>
+  </div></article>
+
+  <aside class="toc" id="toc-auto" aria-label="目录"><h2 class="toc-title">目录&nbsp;<i class="toc-icon fa-solid fa-angle-down" aria-hidden="true"></i></h2>
+      <div class="toc-content" id="toc-content-auto"></div></aside><dialog id="toc-dialog" aria-labelledby="toc-dialog-title" role="dialog" closedby="any">
+      <button type="button" class="toc-close-btn" aria-label="Close Table of Contents"><i class="fa-solid fa-xmark fa-lg" aria-hidden="true"></i></button>
+      <div class="toc">
+        <h2 class="toc-title" id="toc-dialog-title">目录</h2>
+        <div class="toc-content" id="toc-content-drawer"><nav >
+  <ul>
+    <li><a href="#准备环境">准备环境</a></li>
+    <li><a href="#确定思路">确定思路</a></li>
+    <li><a href="#hdevelopxml文件定义"><code>hdevelop.xml</code>文件定义</a></li>
+    <li><a href="#推荐">推荐</a></li>
+  </ul>
+</nav></div>
+      </div>
+    </dialog></main><footer class="footer">
+    <div class="footer-container"><div class="footer-line powered">由 <a href="https://gohugo.io/" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.163.1">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/hugo-fixit/FixIt" target="_blank" rel="external" title="FixIt v1.0.0-mq99hlzg">FixIt</a>
+        </div><div class="footer-line copyright" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright" aria-hidden="true"></i>
+            <span itemprop="copyrightYear">2019 - 2026</span><span class="author" itemprop="copyrightHolder">
+              <a href="https://andyfree96.github.io/" target="_blank" rel="external nofollow noopener noreferrer">AndyFree96</a></span></div></div>
+  </footer></div><div class="widgets"><div class="fixed-buttons"><button type="button" class="fixed-button back-to-top animate__faster d-none" aria-label="回到顶部"><i class="fa-solid fa-arrow-up" aria-hidden="true"></i></button><button type="button" id="toc-drawer-button" class="fixed-button toc-drawer-button d-none" aria-label="目录" aria-controls="toc-dialog" aria-expanded="false"><i class="fa-solid fa-bars" aria-hidden="true"></i></button></div><div id="mask"></div><div class="reading-progress-bar" style="left: 0;top: 0;"></div><noscript>
+    <div class="noscript-warning">该网站在启用 JavaScript 的情况下效果最佳。</div>
+  </noscript>
+</div><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script src="/lib/autocomplete/autocomplete.min.js" defer></script><script src="/lib/algoliasearch/browser.umd.js" defer></script><script src="/lib/json-viewer-element/json-viewer-element.umd.js" defer></script><script src="/js/lib/json-viewer.js" defer></script><script src="/lib/sharer/sharer.min.js" async defer></script><script src="/lib/cookieconsent/cookieconsent.min.js" defer></script><script src="/js/lib/cookieconsent.js" defer></script><script src="/lib/cell-tooltip/cell-tooltip.umd.js" defer></script><script src="/js/config/238ca555bc305937d7a4c9d6243aa615.js" defer></script><script src="/js/lib/file-tree.js" defer></script><script src="/js/main.js" defer></script></body>
+</html>

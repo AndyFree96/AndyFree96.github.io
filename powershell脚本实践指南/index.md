@@ -497,5 +497,5 @@ PowerShell不只是Windows命令行。它是一套自动化语言、系统管理
 ---
 
 > 作者: [AndyFree96](https://andyfree96.github.io/)  
-> URL: http://localhost:1313/powershell%E8%84%9A%E6%9C%AC%E5%AE%9E%E8%B7%B5%E6%8C%87%E5%8D%97/  
+> URL: http://localhost:9613/powershell%E8%84%9A%E6%9C%AC%E5%AE%9E%E8%B7%B5%E6%8C%87%E5%8D%97/  
 
