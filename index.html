@@ -10,8 +10,8 @@
 <meta name="description" content="安东尼的博客，分享生活中的一些有意思的事儿！">
 	<meta itemprop="name" content="东尼的博客">
 	<meta itemprop="description" content="安东尼的博客，分享生活中的一些有意思的事儿！">
-	<meta itemprop="datePublished" content="2026-07-01T15:46:16+08:00">
-	<meta itemprop="dateModified" content="2026-07-01T15:46:16+08:00"><meta property="og:url" content="http://localhost:1313/">
+	<meta itemprop="datePublished" content="2026-07-05T10:19:17+08:00">
+	<meta itemprop="dateModified" content="2026-07-05T10:19:17+08:00"><meta property="og:url" content="http://localhost:1313/">
 	<meta property="og:site_name" content="东尼的博客">
 	<meta property="og:title" content="东尼的博客">
 	<meta property="og:description" content="安东尼的博客，分享生活中的一些有意思的事儿！">
@@ -110,6 +110,40 @@
   </a><a href="/index.xml" title="RSS" target="_blank" rel="me"><i class="fa-solid fa-rss" aria-hidden="true"></i>
   </a></div></div>
 <article class="single summary" itemscope itemtype="http://schema.org/Article"><div class="featured-image-preview">
+        <a href="/c-pimpl%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E8%AF%A6%E8%A7%A3/" aria-label="C&#43;&#43; Pimpl设计模式详解"><img loading="eager" src='/images/202607/2/maverick-frame-8HLYshXvQfY-unsplash.jpg' sizes="(max-width: 680px) 100vw, (max-width: 960px) 80vw, (max-width: 1440px) 56vw, 800px" alt="Featured image for C&#43;&#43; Pimpl设计模式详解" height="336" width="800"></a>
+      </div><h2 class="single-title" itemprop="name headline"><span title="转载" class="icon-repost"><i class="fa-solid fa-share" aria-hidden="true"></i></span><a href="/c-pimpl%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E8%AF%A6%E8%A7%A3/">C&#43;&#43; Pimpl设计模式详解</a>
+  </h2><div class="post-meta"><span class="post-author"><a href="https://andyfree96.github.io/" title="作者" target="_blank" rel="author external nofollow noopener noreferrer" class="author"><img class="avatar" src='/avatar/1.jpg' alt="AndyFree96" height="16" width="16">&nbsp;AndyFree96</a></span>&nbsp;<span class="post-publish" title='2026-07-05 10:19:17'>发布于 <time datetime="2026-07-05">2026-07-05</time></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/c++/" class="post-category" title="分类 - C++"><i class="fa-regular fa-folder" aria-hidden="true"></i> C++</a></span></div><div class="content"><p>在阅读一些大型 C++ 项目源码时，经常会看到类似下面这样的代码：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-cpp"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">MyClass</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">  <span class="n">MyClass</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">  <span class="o">~</span><span class="n">MyClass</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="k">private</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">  <span class="k">class</span> <span class="nc">Impl</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">Impl</span><span class="o">&gt;</span> <span class="n">impl_</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>第一次看到这种写法，很多人都会疑惑：</p>
+<ul>
+<li>为什么真正的数据成员不放在类里面？</li>
+<li>为什么要多定义一个<code>Impl</code>类？</li>
+<li>为什么析构函数要放到<code>.cpp</code>中实现？</li>
+<li>这样设计有什么好处？</li>
+</ul>
+<p>实际上，这就是C++中非常经典的Pimpl(Pointer to Implementation)设计模式。本文将从设计思想、实现方式、优缺点以及使用场景几个方面详细介绍Pimpl。</p></div><div class="post-footer">
+    <a href="/c-pimpl%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E8%AF%A6%E8%A7%A3/">阅读全文</a><div class="post-tags"><i class="fa-solid fa-tags me-1" aria-hidden="true"></i><a href='/tags/c&#43;&#43;/' class="post-tag">C&#43;&#43;</a><a href='/tags/pimpl/' class="post-tag">Pimpl</a><a href='/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/' class="post-tag">设计模式</a><a href='/tags/%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/' class="post-tag">面向对象</a><a href='/tags/%E7%BC%96%E8%AF%91%E4%BC%98%E5%8C%96/' class="post-tag">编译优化</a><a href='/tags/%E5%B0%81%E8%A3%85/' class="post-tag">封装</a></div></div>
+</article><article class="single summary" itemscope itemtype="http://schema.org/Article"><div class="featured-image-preview">
         <a href="/%E8%AE%A9hugo%E6%94%AF%E6%8C%81hdevelop%E4%BB%A3%E7%A0%81%E9%AB%98%E4%BA%AE/" aria-label="让Hugo支持HDevelop代码高亮"><img loading="eager" src='/images/202607/1/doncoombez-RFtQIL8AwHM-unsplash.jpg' sizes="(max-width: 680px) 100vw, (max-width: 960px) 80vw, (max-width: 1440px) 56vw, 800px" alt="Featured image for 让Hugo支持HDevelop代码高亮" height="336" width="800"></a>
       </div><h2 class="single-title" itemprop="name headline"><span title="转载" class="icon-repost"><i class="fa-solid fa-share" aria-hidden="true"></i></span><a href="/%E8%AE%A9hugo%E6%94%AF%E6%8C%81hdevelop%E4%BB%A3%E7%A0%81%E9%AB%98%E4%BA%AE/">让Hugo支持HDevelop代码高亮</a>
   </h2><div class="post-meta"><span class="post-author"><a href="https://andyfree96.github.io/" title="作者" target="_blank" rel="author external nofollow noopener noreferrer" class="author"><img class="avatar" src='/avatar/1.jpg' alt="AndyFree96" height="16" width="16">&nbsp;AndyFree96</a></span>&nbsp;<span class="post-publish" title='2026-07-01 15:46:16'>发布于 <time datetime="2026-07-01">2026-07-01</time></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/" class="post-category" title="分类 - 工程实践"><i class="fa-regular fa-folder" aria-hidden="true"></i> 工程实践</a></span></div><div class="content"><p><a href="https://gohugo.io/" target="_blank" rel="external nofollow noopener noreferrer">Hugo<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>基于 Chroma 实现代码高亮，对 Go、Python、C++、Matlab 等主流语言都提供了开箱即用的支持。最近阅读<a href="https://andyfree96.github.io/%E6%9C%BA%E5%99%A8%E8%A7%86%E8%A7%89%E7%AE%97%E6%B3%95%E4%B8%8E%E5%BA%94%E7%94%A8/" target="_blank" rel="external nofollow noopener noreferrer">机器视觉算法与应用 第2版 (Carsten Steger)<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>时，需要在博客中展示 HDevelop 代码，却发现 Hugo 默认并不支持这种语言。与其退而求其次使用普通文本展示，不如直接扩展 Hugo 的语法高亮能力。因此本文记录整个实现过程，包括：</p>
@@ -350,11 +384,6 @@
 <p>本篇文章将带你深入 Node.js 的源码世界，揭开其核心模块、事件循环、异步模型和底层实现的神秘面纱。从 libuv 的非阻塞 I/O，到 V8 引擎对 JavaScript 的极速解析，我们将从代码的视角探索 Node.js 是如何在性能与灵活性之间找到绝佳平衡的。</p>
 <p>无论你是想提升对 Node.js 的理解，还是希望从源码中汲取工程设计的智慧，这都将是一次充满收获的技术旅程。准备好了吗？让我们从入口文件开始，走进 Node.js 的源码迷宫！</p></div><div class="post-footer">
     <a href="/node.js%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/">阅读全文</a><div class="post-tags"><i class="fa-solid fa-tags me-1" aria-hidden="true"></i><a href='/tags/node.js/' class="post-tag">Node.js</a><a href='/tags/%E8%BF%90%E8%A1%8C%E6%97%B6/' class="post-tag">运行时</a><a href='/tags/%E9%9D%9E%E9%98%BB%E5%A1%9Eio/' class="post-tag">非阻塞IO</a><a href='/tags/%E5%BC%82%E6%AD%A5/' class="post-tag">异步</a><a href='/tags/%E4%BA%8B%E4%BB%B6%E9%A9%B1%E5%8A%A8/' class="post-tag">事件驱动</a><a href='/tags/%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/' class="post-tag">源码剖析</a></div></div>
-</article><article class="single summary" itemscope itemtype="http://schema.org/Article"><div class="featured-image-preview">
-        <a href="/cpython%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" aria-label="CPython 源码剖析：Python 运行的奥秘"><img loading="eager" src='/images/202411/4/annie-spratt-6TTV6JO2zy8-unsplash.jpg' sizes="(max-width: 680px) 100vw, (max-width: 960px) 80vw, (max-width: 1440px) 56vw, 800px" alt="Featured image for CPython 源码剖析：Python 运行的奥秘" height="336" width="800"></a>
-      </div><h2 class="single-title" itemprop="name headline"><span title="转载" class="icon-repost"><i class="fa-solid fa-share" aria-hidden="true"></i></span><a href="/cpython%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/">CPython 源码剖析：Python 运行的奥秘</a>
-  </h2><div class="post-meta"><span class="post-author"><a href="https://andyfree96.github.io/" title="作者" target="_blank" rel="author external nofollow noopener noreferrer" class="author"><img class="avatar" src='/avatar/1.jpg' alt="AndyFree96" height="16" width="16">&nbsp;AndyFree96</a></span>&nbsp;<span class="post-publish" title='2026-05-27 10:29:07'>发布于 <time datetime="2026-05-27">2026-05-27</time></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" class="post-category" title="分类 - 源码剖析"><i class="fa-regular fa-folder" aria-hidden="true"></i> 源码剖析</a></span></div><div class="content"><p>我们经常说，Python 是一门<strong>解释型语言</strong>，但你知道它的解释器 CPython 究竟是如何工作的么？Python 的内存管理、字节码执行、垃圾回收……这些<em>幕后英雄</em>是如何协作的？在这篇文章中，我们将通过剖析 CPython 源码，一起探索 Python 的运行本质。</p></div><div class="post-footer">
-    <a href="/cpython%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/">阅读全文</a><div class="post-tags"><i class="fa-solid fa-tags me-1" aria-hidden="true"></i><a href='/tags/python/' class="post-tag">Python</a><a href='/tags/cpython/' class="post-tag">CPython</a><a href='/tags/%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/' class="post-tag">源码剖析</a></div></div>
 </article><ul class="pagination"><li class="page-item active">
           <span class="page-link">
             <a href="/">1</a>

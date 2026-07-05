@@ -3,32 +3,98 @@
 
 <!--more-->
 
-## 准备
+## 0. 准备工作
 
-## 1. 整体架构与核心思想
+执行以下命令将LevelDB项目克隆到本地：
 
-## 2. Put写入流程，从接口到WAL
+```bash
+git clone --recurse-submodules https://github.com/google/leveldb.git
+```
 
-## 3. MemTable为什么选择SkipList？
+LevelDB本身是一个Key-Value存储引擎，并没有提供`main`入口函数。为了方便调试，参考[reading-source-code-of-leveldb-1.23](https://github.com/SmartKeyerror/reading-source-code-of-leveldb-1.23)中的做法。在项目根目录下，新建`debug/leveldb_debug.cc`文件：
 
-## 4. WAL日志系统如何保证数据不丢失
+```cpp {title="debug/leveldb_debug.cc"}
+#include <iostream>
+#include <string>
 
-## 5. SSTable文件格式与读取流程
+#include "leveldb/db.h"
 
-## 6. Compaction机制与LSM树核心秘密
+using namespace std;
 
-## 7. VersionSet如何管理整个数据库状态
+int main() {
+  leveldb::DB* db;
+  leveldb::Options options;
 
-## 8. Get查询全过程，为什么这么快？
+  options.create_if_missing = true;
 
-## 9. LRU Cache设计与高性能实现
+  leveldb::Status status = leveldb::DB::Open(options, "./leveldb_test", &db);
 
-## 10. 从源码看Google工程设计思想
+  if (!status.ok()) {
+    cerr << status.ToString() << endl;
+  }
+
+  leveldb::WriteOptions writeOptions;
+
+  db->Put(writeOptions, "hello", "world");
+  string value;
+  db->Get(leveldb::ReadOptions(), "hello", &value);
+  cout << "Keyword value : " << value << endl;
+  db->Put(writeOptions, "hello1", "nice");
+
+  if (!status.ok()) {
+    cerr << status.ToString() << endl;
+  }
+
+  return 0;
+}
+
+```
+
+并在`CMakeLists.txt`中增加下图所示内容：
+
+![图1 CMakeLists.txt文件](/images/202606/12/1.jpeg '图1 CMakeLists.txt文件')
+
+## 1. 整体架构——一张图看懂LevelDB
+
+## 2. 数据写入流程——一次Put()到底发生了什么？
+
+## 3. MemTable——内存中的有序表是如何实现的？
+
+## 4. SkipList——为什么不用红黑树？
+
+## 5. WAL——崩溃恢复的第一道防线
+
+## 6. SSTable——磁盘数据是如何组织的？
+
+## 7. Block——Restart Point的设计思想
+
+## 8. Bloom Filter——如何避免无效磁盘访问？
+
+## 9. VersionSet与Manifest——元数据如何管理？
+
+## 10. Compaction——LSM Tree的核心机制
+
+## 11. Iterator——多路归并遍历的实现
+
+## 12. 读取流程——一次Get()都经历了什么？
+
+## 13. LRUCache——缓存是如何设计的？
+
+## 14. 恢复流程——数据库重启时发生了什么？
+
+## 15. 总结
 
 ## 推荐
 
 ## 参考
 
+[Just For Fun](https://selfboot.cn/archives/)
+
+[Ying](https://izualzhy.cn/archive.html?tag=leveldb)
+
+[leveldb-handbook](https://leveldb-handbook.readthedocs.io/zh/latest/index.html)
+
+[reading-source-code-of-leveldb-1.23](https://github.com/SmartKeyerror/reading-source-code-of-leveldb-1.23)
 
 
 ---
