@@ -8,8 +8,16 @@
     <language>zh-CN</language>
     <managingEditor>anthonyfree96@gmail.com (AndyFree96)</managingEditor>
     <webMaster>anthonyfree96@gmail.com (AndyFree96)</webMaster>
-    <lastBuildDate>Sun, 05 Jul 2026 10:19:17 +0800</lastBuildDate>
+    <lastBuildDate>Tue, 07 Jul 2026 21:32:43 +0800</lastBuildDate>
     <atom:link href="http://localhost:1313/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>百万级CSV导入MongoDB性能实战</title>
+      <link>http://localhost:1313/%E7%99%BE%E4%B8%87%E7%BA%A7csv%E5%AF%BC%E5%85%A5mongodb%E6%80%A7%E8%83%BD%E5%AE%9E%E6%88%98/</link>
+      <pubDate>Tue, 07 Jul 2026 21:32:43 +0800</pubDate><author>anthonyfree96@gmail.com (AndyFree96)</author>
+      <guid>http://localhost:1313/%E7%99%BE%E4%B8%87%E7%BA%A7csv%E5%AF%BC%E5%85%A5mongodb%E6%80%A7%E8%83%BD%E5%AE%9E%E6%88%98/</guid>
+      <category domain="http://localhost:1313/categories/c%23/">C#</category>
+      <description>&lt;p&gt;在日常开发中CSV导入是一个比较常见的数据处理场景。例如：&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;用户信息导入&lt;/li&gt;&#xA;&lt;li&gt;商品数据同步&lt;/li&gt;&#xA;&lt;li&gt;日志分析&lt;/li&gt;&#xA;&lt;li&gt;财务流水导入&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;p&gt;很多项目开始都会写出类似下面的代码：&lt;/p&gt;&#xA;&lt;pre&gt;&lt;code&gt;foreach(var line in FileReadLines(path))&#xD;&#xA;{&#xD;&#xA;  var user = Parse(line);&#xD;&#xA;&#xD;&#xA;  if (!Validate(user))&#xD;&#xA;    continue;&#xD;&#xA;&#xD;&#xA;    await collection.InsertOneAsync(user);&#xD;&#xA;}&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;数据只有几千条时，这段代码运行地非常流畅。然而，当数据增长到几十万甚至几百万条之后，问题便开始暴露出来：&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;CPU利用率很低&lt;/li&gt;&#xA;&lt;li&gt;MongoDB写入速度跟不上&lt;/li&gt;&#xA;&lt;li&gt;IO长时间阻塞&lt;/li&gt;&#xA;&lt;li&gt;GC次数明显增加&lt;/li&gt;&#xA;&lt;li&gt;导入时间从几秒增长到数十分钟&lt;/li&gt;&#xA;&lt;/ul&gt;</description>
+    </item>
     <item>
       <title>C&#43;&#43; Pimpl设计模式详解</title>
       <link>http://localhost:1313/c-pimpl%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E8%AF%A6%E8%A7%A3/</link>

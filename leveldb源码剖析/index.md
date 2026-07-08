@@ -86,6 +86,8 @@ int main() {
 
 ## 推荐
 
+[leveldb doc](https://github.com/google/leveldb/tree/main/doc)
+
 ## 参考
 
 [Just For Fun](https://selfboot.cn/archives/)
