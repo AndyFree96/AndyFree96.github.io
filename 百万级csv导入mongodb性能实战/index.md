@@ -268,7 +268,7 @@ class Program
 
 启动MongoDB，创建数据库`csv-benchmark`以及Collection `users`。
 
-![图2 MongoDB数据库结构](/images/202607/4/1.png '图2 MongoDB数据库结构')
+![图2 MongoDB数据库结构](/images/202607/4/2.png '图2 MongoDB数据库结构')
 
 为了公平测试，每次Benchmark前，将数据全部删除重新导入，否则索引缓存会影响结果。
 
@@ -1141,5 +1141,5 @@ CsvImportBenchmark.TaskWhenAll: Job-CNUJVU(InvocationCount=1, UnrollFactor=1)
 ---
 
 > 作者: [AndyFree96](https://andyfree96.github.io/)  
-> URL: http://localhost:7953/%E7%99%BE%E4%B8%87%E7%BA%A7csv%E5%AF%BC%E5%85%A5mongodb%E6%80%A7%E8%83%BD%E5%AE%9E%E6%88%98/  
+> URL: http://localhost:1313/%E7%99%BE%E4%B8%87%E7%BA%A7csv%E5%AF%BC%E5%85%A5mongodb%E6%80%A7%E8%83%BD%E5%AE%9E%E6%88%98/  
 

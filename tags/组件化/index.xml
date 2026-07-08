@@ -2,20 +2,20 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>组件化 - 标签 - 东尼的博客</title>
-    <link>http://localhost:7953/tags/%E7%BB%84%E4%BB%B6%E5%8C%96/</link>
+    <link>http://localhost:1313/tags/%E7%BB%84%E4%BB%B6%E5%8C%96/</link>
     <description>安东尼的博客，分享生活中的一些有意思的事儿！</description>
     <generator>Hugo 0.163.1 &amp; FixIt v1.0.0-mq99hlzg</generator>
     <language>zh-CN</language>
     <managingEditor>anthonyfree96@gmail.com (AndyFree96)</managingEditor>
     <webMaster>anthonyfree96@gmail.com (AndyFree96)</webMaster>
     <lastBuildDate>Wed, 17 Jun 2026 06:19:04 +0800</lastBuildDate>
-    <atom:link href="http://localhost:7953/tags/%E7%BB%84%E4%BB%B6%E5%8C%96/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://localhost:1313/tags/%E7%BB%84%E4%BB%B6%E5%8C%96/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Vue.js设计与实现 (霍春阳)</title>
-      <link>http://localhost:7953/vue.js%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/</link>
+      <link>http://localhost:1313/vue.js%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/</link>
       <pubDate>Wed, 17 Jun 2026 06:19:04 +0800</pubDate><author>anthonyfree96@gmail.com (AndyFree96)</author>
-      <guid>http://localhost:7953/vue.js%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/</guid>
-      <category domain="http://localhost:7953/categories/%E4%B9%A6%E7%B1%8D%E7%A0%94%E8%AF%BB/">书籍研读</category>
+      <guid>http://localhost:1313/vue.js%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/</guid>
+      <category domain="http://localhost:1313/categories/%E4%B9%A6%E7%B1%8D%E7%A0%94%E8%AF%BB/">书籍研读</category>
       <description>&lt;p&gt;在前端开发领域，&lt;a href=&#34;https://vuejs.org/&#34; target=&#34;_blank&#34; rel=&#34;external nofollow noopener noreferrer&#34;&gt;Vue.js&lt;i class=&#34;fa-solid fa-external-link-alt fa-xs ms-1 text-secondary&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;&lt;/a&gt;一直以其易用性和渐进式设计理念受到开发者的喜爱。很多开发者从学习模板语法、组件开发、状态管理开始使用 Vue，但当我们真正深入大型项目开发时，往往会遇到一些更底层的问题：&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;Vue 的响应式系统为什么能够自动追踪依赖？&lt;/li&gt;&#xA;&lt;li&gt;一个简单的 &lt;code&gt;{{ message }}&lt;/code&gt; 插值表达式背后经历了哪些过程？&lt;/li&gt;&#xA;&lt;li&gt;Vue 是如何将模板编译成可执行代码的？&lt;/li&gt;&#xA;&lt;li&gt;为什么 Vue 需要虚拟 DOM？它真的一定比直接操作 DOM 快吗？&lt;/li&gt;&#xA;&lt;li&gt;组件更新时，框架如何精确找到需要更新的部分？&lt;/li&gt;&#xA;&lt;li&gt;&lt;code&gt;effect&lt;/code&gt;、&lt;code&gt;computed&lt;/code&gt;、&lt;code&gt;watch&lt;/code&gt;这些 API 背后的实现原理是什么？&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;p&gt;解答这些问题，是我阅读&lt;a href=&#34;https://github.com/hcysunyang&#34; target=&#34;_blank&#34; rel=&#34;external nofollow noopener noreferrer&#34;&gt;霍春阳&lt;i class=&#34;fa-solid fa-external-link-alt fa-xs ms-1 text-secondary&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;&lt;/a&gt;老师&lt;a href=&#34;https://book.douban.com/subject/35768338/&#34; target=&#34;_blank&#34; rel=&#34;external nofollow noopener noreferrer&#34;&gt;《Vue.js设计与实现》&lt;i class=&#34;fa-solid fa-external-link-alt fa-xs ms-1 text-secondary&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;&lt;/a&gt;这本书的主要原因。与传统的 Vue 使用教程不同，这本书并不是告诉你“如何写 Vue”，而是带你站在框架设计者的角度，重新审视一个现代前端框架是如何构建出来的。阅读过程中最大的感受是：一个看似简单的 API 背后，往往隐藏着大量设计权衡。&lt;/p&gt;&#xA;&lt;p&gt;例如，我们每天使用的：&lt;/p&gt;&#xA;&lt;pre&gt;&lt;code&gt;const count = ref(0)&#xD;&#xA;&#xD;&#xA;effect(() =&amp;gt; {&#xD;&#xA;  console.log(count.value)&#xD;&#xA;})&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;看起来只是数据变化后自动执行函数，但为了实现这个能力，框架内部需要解决：&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;如何记录当前正在执行的副作用函数？&lt;/li&gt;&#xA;&lt;li&gt;如何建立数据与副作用之间的关联？&lt;/li&gt;&#xA;&lt;li&gt;数据变化时如何找到对应的更新任务？&lt;/li&gt;&#xA;&lt;li&gt;多次变化如何避免重复执行？&lt;/li&gt;&#xA;&lt;li&gt;嵌套依赖如何正确处理？&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;p&gt;最终形成了一套完整的响应式系统。这本书让我重新认识了“框架”这个概念：&lt;ins&gt;框架并不是简单的工具集合，而是一系列围绕开发体验、性能、扩展性和工程实践做出的设计选择&lt;/ins&gt;。&lt;/p&gt;</description>
     </item>
   </channel>
