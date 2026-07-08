@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
-  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=7953&amp;path=livereload" data-no-instant defer></script>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
     <meta name="robots" content="noodp" />
@@ -16,7 +16,7 @@ __all__是做什么的？ 为什么需要它？ 和_xxx命名有什么区别？ 
 	<meta itemprop="datePublished" content="2026-06-22T06:45:19+08:00">
 	<meta itemprop="dateModified" content="2026-06-22T06:45:19+08:00">
 	<meta itemprop="wordCount" content="1280">
-	<meta itemprop="keywords" content="Python,模块公开,模块设计"><meta property="og:url" content="http://localhost:1313/python%E4%B8%AD%E7%9A%84all/">
+	<meta itemprop="keywords" content="Python,模块公开,模块设计"><meta property="og:url" content="http://localhost:7953/python%E4%B8%AD%E7%9A%84all/">
 	<meta property="og:site_name" content="东尼的博客">
 	<meta property="og:title" content="Python中的__all__：模块公开API设计的关键工具">
 	<meta property="og:description" content="在Python项目中，我们经常会看到类似这样的代码：
@@ -38,7 +38,7 @@ __all__是做什么的？ 为什么需要它？ 和_xxx命名有什么区别？ 
 __all__是做什么的？ 为什么需要它？ 和_xxx命名有什么区别？ 大型项目为什么经常使用？ 本文将从基础语法到工程实践，深入理解 Python 的__all__。"><meta name="twitter:creator" content="@IRONAnthony96"><meta name="application-name" content="FixIt">
 <meta name="apple-mobile-web-app-title" content="FixIt"><meta name="theme-color" data-light="#f6f8fa" data-dark="#151b23" content="#f6f8fa"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" type="text/html" href="http://localhost:1313/python%E4%B8%AD%E7%9A%84all/" title="Python中的__all__：模块公开API设计的关键工具 - 东尼的博客" /><link rel="prev" type="text/html" href="http://localhost:1313/vue.js%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/" title="Vue.js设计与实现 (霍春阳)" /><link rel="next" type="text/html" href="http://localhost:1313/%E6%B5%81%E7%95%85%E7%9A%84python/" title="流畅的Python 第2版 (Luciano Ramalho)" /><link rel="alternate" type="text/markdown" href="http://localhost:1313/python%E4%B8%AD%E7%9A%84all/index.md" title="Python中的__all__：模块公开API设计的关键工具 - 东尼的博客"><link rel="stylesheet" href="/css/config.css"><link rel="stylesheet" href="/css/main.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" type="text/html" href="http://localhost:7953/python%E4%B8%AD%E7%9A%84all/" title="Python中的__all__：模块公开API设计的关键工具 - 东尼的博客" /><link rel="prev" type="text/html" href="http://localhost:7953/vue.js%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/" title="Vue.js设计与实现 (霍春阳)" /><link rel="next" type="text/html" href="http://localhost:7953/%E6%B5%81%E7%95%85%E7%9A%84python/" title="流畅的Python 第2版 (Luciano Ramalho)" /><link rel="alternate" type="text/markdown" href="http://localhost:7953/python%E4%B8%AD%E7%9A%84all/index.md" title="Python中的__all__：模块公开API设计的关键工具 - 东尼的博客"><link rel="stylesheet" href="/css/config.css"><link rel="stylesheet" href="/css/main.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><link rel="preload" href="/js/main.js" as="script"><script type="application/ld+json">
   {
@@ -48,9 +48,9 @@ __all__是做什么的？ 为什么需要它？ 和_xxx命名有什么区别？ 
     "inLanguage": "zh-CN",
     "mainEntityOfPage": {
       "@type": "WebPage",
-      "@id": "http:\/\/localhost:1313\/python%E4%B8%AD%E7%9A%84all\/"
+      "@id": "http:\/\/localhost:7953\/python%E4%B8%AD%E7%9A%84all\/"
     },"genre": "posts","keywords": "Python, 模块公开, 模块设计","wordcount":  1280 ,
-    "url": "http:\/\/localhost:1313\/python%E4%B8%AD%E7%9A%84all\/","datePublished": "2026-06-22T06:45:19+08:00","dateModified": "2026-06-22T06:45:19+08:00","publisher": {
+    "url": "http:\/\/localhost:7953\/python%E4%B8%AD%E7%9A%84all\/","datePublished": "2026-06-22T06:45:19+08:00","dateModified": "2026-06-22T06:45:19+08:00","publisher": {
       "@type": "Organization",
       "name": ""},"author": {
         "@type": "Person",
@@ -528,9 +528,9 @@ __all__是做什么的？ 为什么需要它？ 和_xxx命名有什么区别？ 
       </div></div><div class="post-info-line">
         <div class="post-info-md"><span><a href="vscode://file/D:\hugo-blog\andyfree96\content\posts\Python中的all.md" title="在编辑器中打开" class="link-to-vscode">在编辑器中打开</a></span></div>
         <div class="post-info-share">
-          <span><a href="javascript:void(0);" title="分享到 X" data-sharer="twitter" data-url="http://localhost:1313/python%E4%B8%AD%E7%9A%84all/" data-title="Python中的__all__：模块公开API设计的关键工具" data-via="IRONAnthony96" data-hashtags="Python,模块公开,模块设计"><i class="fa-brands fa-x-twitter" aria-hidden="true"></i></a>
-  <a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="http://localhost:1313/python%E4%B8%AD%E7%9A%84all/" data-hashtag="Python"><i class="fa-brands fa-facebook-square" aria-hidden="true"></i></a>
-  <a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="http://localhost:1313/python%E4%B8%AD%E7%9A%84all/" data-title="Python中的__all__：模块公开API设计的关键工具" data-image="/images/202606/7/peter-thomas-f0r8nQ-t1Rw-unsplash.jpg"><i class="fa-brands fa-weibo" aria-hidden="true"></i></a>
+          <span><a href="javascript:void(0);" title="分享到 X" data-sharer="twitter" data-url="http://localhost:7953/python%E4%B8%AD%E7%9A%84all/" data-title="Python中的__all__：模块公开API设计的关键工具" data-via="IRONAnthony96" data-hashtags="Python,模块公开,模块设计"><i class="fa-brands fa-x-twitter" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="http://localhost:7953/python%E4%B8%AD%E7%9A%84all/" data-hashtag="Python"><i class="fa-brands fa-facebook-square" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="http://localhost:7953/python%E4%B8%AD%E7%9A%84all/" data-title="Python中的__all__：模块公开API设计的关键工具" data-image="/images/202606/7/peter-thomas-f0r8nQ-t1Rw-unsplash.jpg"><i class="fa-brands fa-weibo" aria-hidden="true"></i></a>
   </span>
         </div>
       </div></div>

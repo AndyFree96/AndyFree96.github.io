@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
-  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=7953&amp;path=livereload" data-no-instant defer></script>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
     <meta name="robots" content="noodp" />
@@ -11,7 +11,7 @@
 	<meta itemprop="datePublished" content="2026-06-27T20:35:24+08:00">
 	<meta itemprop="dateModified" content="2026-06-27T20:35:24+08:00">
 	<meta itemprop="wordCount" content="92">
-	<meta itemprop="keywords" content="Hugo,Go,静态网站生成器,架构设计"><meta property="og:url" content="http://localhost:1313/hugo%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/">
+	<meta itemprop="keywords" content="Hugo,Go,静态网站生成器,架构设计"><meta property="og:url" content="http://localhost:7953/hugo%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/">
 	<meta property="og:site_name" content="东尼的博客">
 	<meta property="og:title" content="Hugo源码剖析：世界最快静态站点生成器的实现原理">
 	<meta property="og:description" content="安东尼的博客，分享生活中的一些有意思的事儿！">
@@ -30,7 +30,7 @@
   <meta name="twitter:description" content="安东尼的博客，分享生活中的一些有意思的事儿！"><meta name="twitter:creator" content="@IRONAnthony96"><meta name="application-name" content="FixIt">
 <meta name="apple-mobile-web-app-title" content="FixIt"><meta name="theme-color" data-light="#f6f8fa" data-dark="#151b23" content="#f6f8fa"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" type="text/html" href="http://localhost:1313/hugo%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="Hugo源码剖析：世界最快静态站点生成器的实现原理 - 东尼的博客" /><link rel="prev" type="text/html" href="http://localhost:1313/%E5%B0%8F%E5%BC%BA%E5%8D%87%E8%81%8C%E8%AE%B0/" title="小强升职记 升级版 (邹小强)" /><link rel="next" type="text/html" href="http://localhost:1313/powershell%E8%84%9A%E6%9C%AC%E5%AE%9E%E8%B7%B5%E6%8C%87%E5%8D%97/" title="PowerShell脚本实践指南" /><link rel="alternate" type="text/markdown" href="http://localhost:1313/hugo%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/index.md" title="Hugo源码剖析：世界最快静态站点生成器的实现原理 - 东尼的博客"><link rel="stylesheet" href="/css/config.css"><link rel="stylesheet" href="/css/main.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" type="text/html" href="http://localhost:7953/hugo%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="Hugo源码剖析：世界最快静态站点生成器的实现原理 - 东尼的博客" /><link rel="prev" type="text/html" href="http://localhost:7953/%E5%B0%8F%E5%BC%BA%E5%8D%87%E8%81%8C%E8%AE%B0/" title="小强升职记 升级版 (邹小强)" /><link rel="next" type="text/html" href="http://localhost:7953/powershell%E8%84%9A%E6%9C%AC%E5%AE%9E%E8%B7%B5%E6%8C%87%E5%8D%97/" title="PowerShell脚本实践指南" /><link rel="alternate" type="text/markdown" href="http://localhost:7953/hugo%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/index.md" title="Hugo源码剖析：世界最快静态站点生成器的实现原理 - 东尼的博客"><link rel="stylesheet" href="/css/config.css"><link rel="stylesheet" href="/css/main.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><link rel="preload" href="/js/main.js" as="script"><script type="application/ld+json">
   {
@@ -40,9 +40,9 @@
     "inLanguage": "zh-CN",
     "mainEntityOfPage": {
       "@type": "WebPage",
-      "@id": "http:\/\/localhost:1313\/hugo%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90\/"
+      "@id": "http:\/\/localhost:7953\/hugo%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90\/"
     },"genre": "posts","keywords": "Hugo, Go, 静态网站生成器, 架构设计","wordcount":  92 ,
-    "url": "http:\/\/localhost:1313\/hugo%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90\/","datePublished": "2026-06-27T20:35:24+08:00","dateModified": "2026-06-27T20:35:24+08:00","publisher": {
+    "url": "http:\/\/localhost:7953\/hugo%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90\/","datePublished": "2026-06-27T20:35:24+08:00","dateModified": "2026-06-27T20:35:24+08:00","publisher": {
       "@type": "Organization",
       "name": ""},"author": {
         "@type": "Person",
@@ -203,9 +203,9 @@
       </div></div><div class="post-info-line">
         <div class="post-info-md"><span><a href="vscode://file/D:\hugo-blog\andyfree96\content\posts\Hugo源码剖析.md" title="在编辑器中打开" class="link-to-vscode">在编辑器中打开</a></span></div>
         <div class="post-info-share">
-          <span><a href="javascript:void(0);" title="分享到 X" data-sharer="twitter" data-url="http://localhost:1313/hugo%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="Hugo源码剖析：世界最快静态站点生成器的实现原理" data-via="IRONAnthony96" data-hashtags="Hugo,Go,静态网站生成器,架构设计"><i class="fa-brands fa-x-twitter" aria-hidden="true"></i></a>
-  <a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="http://localhost:1313/hugo%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-hashtag="Hugo"><i class="fa-brands fa-facebook-square" aria-hidden="true"></i></a>
-  <a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="http://localhost:1313/hugo%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="Hugo源码剖析：世界最快静态站点生成器的实现原理" data-image="/images/202606/16/rowan-heuvel-5ZsI-rFsoHU-unsplash.jpg"><i class="fa-brands fa-weibo" aria-hidden="true"></i></a>
+          <span><a href="javascript:void(0);" title="分享到 X" data-sharer="twitter" data-url="http://localhost:7953/hugo%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="Hugo源码剖析：世界最快静态站点生成器的实现原理" data-via="IRONAnthony96" data-hashtags="Hugo,Go,静态网站生成器,架构设计"><i class="fa-brands fa-x-twitter" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="http://localhost:7953/hugo%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-hashtag="Hugo"><i class="fa-brands fa-facebook-square" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="http://localhost:7953/hugo%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="Hugo源码剖析：世界最快静态站点生成器的实现原理" data-image="/images/202606/16/rowan-heuvel-5ZsI-rFsoHU-unsplash.jpg"><i class="fa-brands fa-weibo" aria-hidden="true"></i></a>
   </span>
         </div>
       </div></div>

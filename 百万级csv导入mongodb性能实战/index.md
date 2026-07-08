@@ -1135,11 +1135,11 @@ CsvImportBenchmark.TaskWhenAll: Job-CNUJVU(InvocationCount=1, UnrollFactor=1)
 
 ## 总结
 
-至此，我们完成了从简单到复杂的4种实现。对于需要处理大量数据导入（如 CSV 导入 MongoDB）的场景，优先++推荐采用 Channel 构建生产者—消费者模型++。相比简单的`Task.WhenAll`或`SemaphoreSlim`限流方案，`Channel`不仅拥有更高的吞吐量，而且能够避免海量`Task`带来的调度开销，在高并发数据处理场景中具有更好的性能和可扩展性。不过，本文的测试重点仍然放在++应用层并发模型++的优化，而数据库写入策略同样会对整体吞吐量产生重要影响。当前所有测试均采用相同的写入方式，以保证不同并发模型之间的公平对比。后续文章将继续围绕 MongoDB 的写入性能展开研究，对`InsertOne`、`InsertMany`和`BulkWrite`等不同写入策略进行系统性的 Benchmark，对比它们在不同数据规模、批量大小以及并发条件下的性能表现，并结合前文介绍的 Channel 等并发模型，探索应用层并发与数据库批量写入相结合的最佳实践，为大规模数据导入场景提供更完整的性能优化方案。
+至此，我们完成了从简单到复杂的[4种实现](https://github.com/AndyFree96/CsvImportBenchmark)。对于需要处理大量数据导入（如 CSV 导入 MongoDB）的场景，优先++推荐采用 Channel 构建生产者—消费者模型++。相比简单的`Task.WhenAll`或`SemaphoreSlim`限流方案，`Channel`不仅拥有更高的吞吐量，而且能够避免海量`Task`带来的调度开销，在高并发数据处理场景中具有更好的性能和可扩展性。不过，本文的测试重点仍然放在++应用层并发模型++的优化，而数据库写入策略同样会对整体吞吐量产生重要影响。当前所有测试均采用相同的写入方式，以保证不同并发模型之间的公平对比。后续文章将继续围绕 MongoDB 的写入性能展开研究，对`InsertOne`、`InsertMany`和`BulkWrite`等不同写入策略进行系统性的 Benchmark，对比它们在不同数据规模、批量大小以及并发条件下的性能表现，并结合前文介绍的 Channel 等并发模型，探索应用层并发与数据库批量写入相结合的最佳实践，为大规模数据导入场景提供更完整的性能优化方案。
 
 
 ---
 
 > 作者: [AndyFree96](https://andyfree96.github.io/)  
-> URL: http://localhost:1313/%E7%99%BE%E4%B8%87%E7%BA%A7csv%E5%AF%BC%E5%85%A5mongodb%E6%80%A7%E8%83%BD%E5%AE%9E%E6%88%98/  
+> URL: http://localhost:7953/%E7%99%BE%E4%B8%87%E7%BA%A7csv%E5%AF%BC%E5%85%A5mongodb%E6%80%A7%E8%83%BD%E5%AE%9E%E6%88%98/  
 
