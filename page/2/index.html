@@ -10,8 +10,8 @@
 <meta name="description" content="安东尼的博客，分享生活中的一些有意思的事儿！">
 	<meta itemprop="name" content="东尼的博客">
 	<meta itemprop="description" content="安东尼的博客，分享生活中的一些有意思的事儿！">
-	<meta itemprop="datePublished" content="2026-07-07T21:32:43+08:00">
-	<meta itemprop="dateModified" content="2026-07-07T21:32:43+08:00"><meta property="og:url" content="http://localhost:1313/">
+	<meta itemprop="datePublished" content="2026-07-09T09:56:56+08:00">
+	<meta itemprop="dateModified" content="2026-07-09T09:56:56+08:00"><meta property="og:url" content="http://localhost:1313/">
 	<meta property="og:site_name" content="东尼的博客">
 	<meta property="og:title" content="东尼的博客">
 	<meta property="og:description" content="安东尼的博客，分享生活中的一些有意思的事儿！">
@@ -110,6 +110,27 @@
   </a><a href="/index.xml" title="RSS" target="_blank" rel="me"><i class="fa-solid fa-rss" aria-hidden="true"></i>
   </a></div></div>
 <article class="single summary" itemscope itemtype="http://schema.org/Article"><div class="featured-image-preview">
+        <a href="/shadowsocks%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" aria-label="Shadowsocks源码剖析：一个轻量级代理工具背后的网络编程设计"><img loading="eager" src='/images/202606/1/shubham-dhage-v-PEtZBLA0s-unsplash.jpg' sizes="(max-width: 680px) 100vw, (max-width: 960px) 80vw, (max-width: 1440px) 56vw, 800px" alt="Featured image for Shadowsocks源码剖析：一个轻量级代理工具背后的网络编程设计" height="336" width="800"></a>
+      </div><h2 class="single-title" itemprop="name headline"><span title="转载" class="icon-repost"><i class="fa-solid fa-share" aria-hidden="true"></i></span><a href="/shadowsocks%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/">Shadowsocks源码剖析：一个轻量级代理工具背后的网络编程设计</a>
+  </h2><div class="post-meta"><span class="post-author"><a href="https://andyfree96.github.io/" title="作者" target="_blank" rel="author external nofollow noopener noreferrer" class="author"><img class="avatar" src='/avatar/1.jpg' alt="AndyFree96" height="16" width="16">&nbsp;AndyFree96</a></span>&nbsp;<span class="post-publish" title='2026-06-12 14:47:56'>发布于 <time datetime="2026-06-12">2026-06-12</time></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" class="post-category" title="分类 - 源码剖析"><i class="fa-regular fa-folder" aria-hidden="true"></i> 源码剖析</a></span></div><div class="content"><h3 class="heading-element" id="前言"><span>前言</span>
+  <a href="#%e5%89%8d%e8%a8%80" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p>很多人第一次接触 Shadowsocks，只把它当作一个代理工具。但是从源码角度看，Shadowsocks 是一个非常适合学习网络编程的项目。它代码量不大，却包含了现代网络服务端开发中的很多核心思想：</p>
+<ul>
+<li>Socks5 协议解析</li>
+<li>Socket 编程</li>
+<li>非阻塞 IO</li>
+<li>Reactor 事件模型</li>
+<li>epoll/kqueue/select</li>
+<li>状态机设计</li>
+<li>TCP Relay 转发</li>
+<li>UDP Relay</li>
+<li>加密通信</li>
+</ul>
+<p>阅读 Shadowsocks 源码，可以帮助我们理解一个代理程序从建立连接，到数据转发，再到连接关闭的完整过程。本文以 Python 版 Shadowsocks 为例，分析它内部的设计。</p></div><div class="post-footer">
+    <a href="/shadowsocks%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/">阅读全文</a><div class="post-tags"><i class="fa-solid fa-tags me-1" aria-hidden="true"></i><a href='/tags/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/' class="post-tag">网络编程</a><a href='/tags/%E9%9D%9E%E9%98%BB%E5%A1%9Eio/' class="post-tag">非阻塞IO</a><a href='/tags/%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/' class="post-tag">源码剖析</a></div></div>
+</article><article class="single summary" itemscope itemtype="http://schema.org/Article"><div class="featured-image-preview">
         <a href="/node.js%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" aria-label="Node.js 源码剖析：非阻塞世界的引擎密码"><img loading="eager" src='/images/202606/2/vinicius-henrique-photography-tlCzxI2RQAc-unsplash.jpg' sizes="(max-width: 680px) 100vw, (max-width: 960px) 80vw, (max-width: 1440px) 56vw, 800px" alt="Featured image for Node.js 源码剖析：非阻塞世界的引擎密码" height="336" width="800"></a>
       </div><h2 class="single-title" itemprop="name headline"><span title="转载" class="icon-repost"><i class="fa-solid fa-share" aria-hidden="true"></i></span><a href="/node.js%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/">Node.js 源码剖析：非阻塞世界的引擎密码</a>
   </h2><div class="post-meta"><span class="post-author"><a href="https://andyfree96.github.io/" title="作者" target="_blank" rel="author external nofollow noopener noreferrer" class="author"><img class="avatar" src='/avatar/1.jpg' alt="AndyFree96" height="16" width="16">&nbsp;AndyFree96</a></span>&nbsp;<span class="post-publish" title='2026-06-02 11:33:50'>发布于 <time datetime="2026-06-02">2026-06-02</time></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" class="post-category" title="分类 - 源码剖析"><i class="fa-regular fa-folder" aria-hidden="true"></i> 源码剖析</a></span></div><div class="content"><p>Node.js 的诞生，让 JavaScript 从浏览器的专属语言，跃升为构建高性能服务器的利器。凭借事件驱动的架构和非阻塞 I/O 特性，Node.js 成为现代网络应用开发中的重要基石。然而，当你写下 <code>http.createServer</code>时，是否好奇过这些简单的 API 背后究竟发生了什么？</p>
@@ -271,20 +292,6 @@
       </div><h2 class="single-title" itemprop="name headline"><span title="转载" class="icon-repost"><i class="fa-solid fa-share" aria-hidden="true"></i></span><a href="/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B/">UNIX环境高级编程 第3版 (W.Richard Stevens / Stephen A.Rago)</a>
   </h2><div class="post-meta"><span class="post-author"><a href="https://andyfree96.github.io/" title="作者" target="_blank" rel="author external nofollow noopener noreferrer" class="author"><img class="avatar" src='/avatar/1.jpg' alt="AndyFree96" height="16" width="16">&nbsp;AndyFree96</a></span>&nbsp;<span class="post-publish" title='2024-11-27 13:35:34'>发布于 <time datetime="2024-11-27">2024-11-27</time></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E4%B9%A6%E7%B1%8D%E7%A0%94%E8%AF%BB/" class="post-category" title="分类 - 书籍研读"><i class="fa-regular fa-folder" aria-hidden="true"></i> 书籍研读</a></span></div><div class="content"></div><div class="post-footer">
     <a href="/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B/">阅读全文</a><div class="post-tags"><i class="fa-solid fa-tags me-1" aria-hidden="true"></i><a href='/tags/unix/' class="post-tag">UNIX</a><a href='/tags/%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B/' class="post-tag">系统编程</a><a href='/tags/%E8%BF%9B%E7%A8%8B%E9%97%B4%E9%80%9A%E4%BF%A1/' class="post-tag">进程间通信</a><a href='/tags/%E6%A0%87%E5%87%86i/o%E5%BA%93/' class="post-tag">标准I/O库</a><a href='/tags/%E8%BF%9B%E7%A8%8B%E6%8E%A7%E5%88%B6/' class="post-tag">进程控制</a><a href='/tags/%E7%BA%BF%E7%A8%8B%E6%8E%A7%E5%88%B6/' class="post-tag">线程控制</a><a href='/tags/%E7%BD%91%E7%BB%9Cipc/' class="post-tag">网络IPC</a><a href='/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/' class="post-tag">读书笔记</a><a href='/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA/' class="post-tag">计算机</a></div></div>
-</article><article class="single summary" itemscope itemtype="http://schema.org/Article"><div class="featured-image-preview">
-        <a href="/csv2%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" aria-label="csv2 源码剖析：轻量级 CSV 处理的高效之道"><img loading="eager" src='/images/202410/16/samsung-memory-dIfsOkzzSk4-unsplash.jpg' sizes="(max-width: 680px) 100vw, (max-width: 960px) 80vw, (max-width: 1440px) 56vw, 800px" alt="Featured image for csv2 源码剖析：轻量级 CSV 处理的高效之道" height="336" width="800"></a>
-      </div><h2 class="single-title" itemprop="name headline"><span title="转载" class="icon-repost"><i class="fa-solid fa-share" aria-hidden="true"></i></span><a href="/csv2%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/">csv2 源码剖析：轻量级 CSV 处理的高效之道</a>
-  </h2><div class="post-meta"><span class="post-author"><a href="https://andyfree96.github.io/" title="作者" target="_blank" rel="author external nofollow noopener noreferrer" class="author"><img class="avatar" src='/avatar/1.jpg' alt="AndyFree96" height="16" width="16">&nbsp;AndyFree96</a></span>&nbsp;<span class="post-publish" title='2024-10-07 14:16:41'>发布于 <time datetime="2024-10-07">2024-10-07</time></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" class="post-category" title="分类 - 源码剖析"><i class="fa-regular fa-folder" aria-hidden="true"></i> 源码剖析</a></span></div><div class="content"><blockquote>
-<p>纸上得来终觉浅，绝知此事要躬行。——陆游《冬夜读书示子聿》</p>
-</blockquote>
-<p><a href="https://github.com/p-ranav/csv2" target="_blank" rel="external nofollow noopener noreferrer">csv2<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>是一个轻量级 C++ 库，用于将 CSV 文件解析为 C++ 中的 STL 容器。该库的主要功能是高效地处理 CSV 数据，简化了处理 CSV 文件的代码编写过程。以下是它的主要特性：</p>
-<ol>
-<li>简单易用：通过使用 STL 容器（如 std::vector 和 std::tuple），使得开发者能够轻松将 CSV 文件的内容转换为标准 C++ 数据结构。</li>
-<li>依赖少：该库只有 C++17 标准库的依赖，因此不需要额外的第三方库。</li>
-<li>高效解析：该库采用高效的解析机制，支持处理大型 CSV 文件。</li>
-<li>轻量级：代码库很小，适用于嵌入式或对依赖库要求较高的项目。</li>
-</ol></div><div class="post-footer">
-    <a href="/csv2%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/">阅读全文</a><div class="post-tags"><i class="fa-solid fa-tags me-1" aria-hidden="true"></i><a href='/tags/csv/' class="post-tag">CSV</a><a href='/tags/c&#43;&#43;/' class="post-tag">C&#43;&#43;</a><a href='/tags/%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/' class="post-tag">源码剖析</a></div></div>
 </article><ul class="pagination"><li class="page-item">
           <span class="page-link">
             <a href="/">1</a>
