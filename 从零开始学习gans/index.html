@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+    <meta name="robots" content="noodp" />
+    <title>从零开始学习GANs - 东尼的博客</title><meta name="author" content="AndyFree96">
+<meta name="description" content="生成对抗网络（GANs, generative adversarial networks）是由Ian Goodfellow等人在2014年的Generative Adversarial Networks一文中提出。Facebook的人工智能主管Yann Lecun对其的评价是：“机器学习在过去10年中最有趣的想法”。
+"><meta name="keywords" content='Python, Keras, GANs, 神经网络, 深度学习, AI'>
+	<meta itemprop="name" content="从零开始学习GANs">
+	<meta itemprop="description" content="生成对抗网络（GANs, generative adversarial networks）是由Ian Goodfellow等人在2014年的Generative Adversarial Networks一文中提出。Facebook的人工智能主管Yann Lecun对其的评价是：“机器学习在过去10年中最有趣的想法”。">
+	<meta itemprop="datePublished" content="2019-03-09T13:59:10+08:00">
+	<meta itemprop="dateModified" content="2019-03-09T13:59:10+08:00">
+	<meta itemprop="wordCount" content="2792">
+	<meta itemprop="keywords" content="Python,Keras,GANs,神经网络,深度学习,AI"><meta property="og:url" content="http://localhost:1313/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E5%AD%A6%E4%B9%A0gans/">
+	<meta property="og:site_name" content="东尼的博客">
+	<meta property="og:title" content="从零开始学习GANs">
+	<meta property="og:description" content="生成对抗网络（GANs, generative adversarial networks）是由Ian Goodfellow等人在2014年的Generative Adversarial Networks一文中提出。Facebook的人工智能主管Yann Lecun对其的评价是：“机器学习在过去10年中最有趣的想法”。">
+	<meta property="og:locale" content="zh_CN">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="posts">
+		<meta property="article:published_time" content="2019-03-09T13:59:10+08:00">
+		<meta property="article:modified_time" content="2019-03-09T13:59:10+08:00">
+		<meta property="article:tag" content="Python">
+		<meta property="article:tag" content="Keras">
+		<meta property="article:tag" content="GANs">
+		<meta property="article:tag" content="神经网络">
+		<meta property="article:tag" content="深度学习">
+		<meta property="article:tag" content="AI">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="从零开始学习GANs">
+  <meta name="twitter:description" content="生成对抗网络（GANs, generative adversarial networks）是由Ian Goodfellow等人在2014年的Generative Adversarial Networks一文中提出。Facebook的人工智能主管Yann Lecun对其的评价是：“机器学习在过去10年中最有趣的想法”。"><meta name="twitter:creator" content="@IRONAnthony96"><meta name="application-name" content="FixIt">
+<meta name="apple-mobile-web-app-title" content="FixIt"><meta name="theme-color" data-light="#f6f8fa" data-dark="#151b23" content="#f6f8fa"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" type="text/html" href="http://localhost:1313/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E5%AD%A6%E4%B9%A0gans/" title="从零开始学习GANs - 东尼的博客" /><link rel="prev" type="text/html" href="http://localhost:1313/opencv%E7%AE%80%E6%98%8E%E6%95%99%E7%A8%8B/" title="OpenCV简明教程" /><link rel="next" type="text/html" href="http://localhost:1313/tkinter%E7%AE%80%E6%98%8E%E6%95%99%E7%A8%8B/" title="Tkinter简明教程" /><link rel="alternate" type="text/markdown" href="http://localhost:1313/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E5%AD%A6%E4%B9%A0gans/index.md" title="从零开始学习GANs - 东尼的博客"><link rel="stylesheet" href="/css/config.css"><link rel="stylesheet" href="/css/main.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><link rel="preload" href="/js/main.js" as="script"><script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "BlogPosting",
+    "headline": "从零开始学习GANs",
+    "inLanguage": "zh-CN",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "http:\/\/localhost:1313\/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E5%AD%A6%E4%B9%A0gans\/"
+    },"genre": "posts","keywords": "Python, Keras, GANs, 神经网络, 深度学习, AI","wordcount":  2792 ,
+    "url": "http:\/\/localhost:1313\/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E5%AD%A6%E4%B9%A0gans\/","datePublished": "2019-03-09T13:59:10+08:00","dateModified": "2019-03-09T13:59:10+08:00","publisher": {
+      "@type": "Organization",
+      "name": ""},"author": {
+        "@type": "Person",
+        "name": "AndyFree96"
+      },"description": ""
+  }
+  </script><script src="/js/head/color-scheme.js"></script></head>
+  <body data-instant-intensity="viewport" data-header-desktop="sticky" data-header-mobile="auto"><div class="wrapper" data-page-style="normal"><header class="desktop animate__faster" id="header-desktop">
+  <div class="header-wrapper">
+    <div class="header-title">
+      <a href="/" title="东尼的博客" class="header-title-link"><span class="header-title-text">东尼的博客</span></a><span class="header-subtitle"></span></div>
+    <nav>
+      <ul class="menu"><li class="menu-item">
+              <a class="menu-link" href="/posts/">📕 文章</a></li><li class="menu-item">
+              <a class="menu-link" href="/categories/">🧰 分类</a></li><li class="menu-item">
+              <a class="menu-link" href="/tags/">🔖 标签</a></li><li class="menu-item">
+              <a class="menu-link" href="/book">📚 书单</a></li><li class="menu-item">
+              <a class="menu-link" href="/paper">📝 论文</a></li><li class="menu-item">
+              <a class="menu-link" href="/opencourse">👨🏻‍💻 公开课</a></li><li class="menu-item">
+              <a class="menu-link" href="/filmtv">🎞️ 影视</a></li><li class="menu-item">
+              <a class="menu-link" href="/resource">⚡️ 资源库</a></li><li class="menu-item">
+              <a class="menu-link" href="/projects">⭐ 开源</a></li><li class="menu-item">
+              <a class="menu-link" href="/about">🙋🏻‍♂️ 关于</a></li><li class="menu-item delimiter"></li><li class="menu-item search" id="search-desktop">
+            <input type="text" placeholder="搜索文章标题或内容……" id="search-input-desktop" tabindex="-1">
+            <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索" aria-controls="search-dropdown-desktop" aria-expanded="false">
+              <i class="fa-solid fa-search" aria-hidden="true"></i>
+            </a>
+            <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+              <i class="fa-solid fa-times-circle" aria-hidden="true"></i>
+            </a>
+            <span class="search-button search-loading" id="search-loading-desktop">
+              <i class="fa-solid fa-spinner fa-spin" aria-hidden="true"></i>
+            </span>
+          </li><li class="menu-item theme-switch-item">
+          <button type="button" class="theme-switch" aria-label="切换主题" title="切换主题"><i class="fa-solid fa-adjust" aria-hidden="true"></i></button>
+        </li></ul>
+    </nav>
+  </div>
+</header><header class="mobile animate__faster" id="header-mobile">
+  <div class="header-container">
+    <div class="header-wrapper">
+      <div class="header-title">
+        <a href="/" title="东尼的博客" class="header-title-link"><span class="header-title-text">东尼的博客</span></a><span class="header-subtitle"></span></div>
+      <button type="button" class="theme-switch" aria-label="切换主题"><i class="fa-solid fa-adjust" aria-hidden="true"></i></button>
+      <button type="button" class="menu-toggle" id="menu-toggle-mobile" aria-controls="menu-mobile" aria-expanded="false" aria-labelledby="menu-mobile">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <nav>
+      <ul class="menu" id="menu-mobile"><li class="search-wrapper">
+            <div class="search mobile" id="search-mobile">
+              <input type="text" placeholder="搜索文章标题或内容……" id="search-input-mobile">
+              <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索" aria-controls="search-dropdown-mobile" aria-expanded="false">
+                <i class="fa-solid fa-search" aria-hidden="true"></i>
+              </a>
+              <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                <i class="fa-solid fa-times-circle" aria-hidden="true"></i>
+              </a>
+              <span class="search-button search-loading" id="search-loading-mobile">
+                <i class="fa-solid fa-spinner fa-spin" aria-hidden="true"></i>
+              </span>
+            </div>
+            <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+              取消
+            </a>
+          </li><li class="menu-item"><a class="menu-link" href="/posts/">📕 文章</a></li><li class="menu-item"><a class="menu-link" href="/categories/">🧰 分类</a></li><li class="menu-item"><a class="menu-link" href="/tags/">🔖 标签</a></li><li class="menu-item"><a class="menu-link" href="/book">📚 书单</a></li><li class="menu-item"><a class="menu-link" href="/paper">📝 论文</a></li><li class="menu-item"><a class="menu-link" href="/opencourse">👨🏻‍💻 公开课</a></li><li class="menu-item"><a class="menu-link" href="/filmtv">🎞️ 影视</a></li><li class="menu-item"><a class="menu-link" href="/resource">⚡️ 资源库</a></li><li class="menu-item"><a class="menu-link" href="/projects">⭐ 开源</a></li><li class="menu-item"><a class="menu-link" href="/about">🙋🏻‍♂️ 关于</a></li><li class="menu-item menu-system"></li>
+      </ul>
+    </nav>
+  </div>
+</header><div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+  </div>
+  <div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+  </div><main class="fi-container"><aside class="aside-collection animate__animated animate__fadeIn animate__faster" aria-label="合集"><div class="details related-details open">
+      <div class="details-summary related-summary">
+        <i class="fa-solid fa-fire fa-fade text-danger" aria-hidden="true"></i>
+        <span class="related-title">相关内容</span><i class="details-icon fa-solid fa-angle-right" aria-hidden="true"></i></div>
+      <div class="details-content related-content">
+        <ul class="related-list"><li class="related-item">
+              <a href="/opencv%E7%AE%80%E6%98%8E%E6%95%99%E7%A8%8B/" title="OpenCV简明教程">OpenCV简明教程</a></li></ul>
+      </div>
+    </div></aside>
+
+  <article class="page single">
+    <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span title="转载" class="icon-repost"><i class="fa-solid fa-share" aria-hidden="true"></i></span><span>从零开始学习GANs</span>
+      </h1></div><div class="post-meta">
+      <div class="post-meta-line"><span class="post-author"><a href="https://andyfree96.github.io/" title="作者" target="_blank" rel="author external nofollow noopener noreferrer" class="author"><img class="avatar" src='/avatar/1.jpg' alt="AndyFree96" height="16" width="16">&nbsp;AndyFree96</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" class="post-category" title="分类 - 深度学习"><i class="fa-regular fa-folder" aria-hidden="true"></i> 深度学习</a></span></div><div class="post-meta-line"><span title="发布于 2019-03-09 13:59:10"><i class="fa-solid fa-calendar-days me-1" aria-hidden="true"></i><time datetime="2019-03-09">2019-03-09</time></span>&nbsp;<span title="2792 字"><i class="fa-solid fa-pencil-alt me-1" aria-hidden="true"></i>约 2800 字</span>&nbsp;<span><i class="fa-regular fa-clock me-1" aria-hidden="true"></i>预计阅读 6 分钟</span>&nbsp;</div>
+    </div><div class="featured-image"><img loading="eager" src='/images/201911/2/claudio-schwarz-purzlbaum-wXRxdOFxBT0-unsplash.jpg' sizes="(max-width: 680px) 100vw, (max-width: 960px) 80vw, (max-width: 1440px) 56vw, 800px" alt="/images/201911/2/claudio-schwarz-purzlbaum-wXRxdOFxBT0-unsplash.jpg"></div><div class="details toc" id="toc-static" data-kept="false">
+        <div class="details-summary toc-title">
+          <span>目录</span>
+          <span><i class="details-icon fa-solid fa-angle-right" aria-hidden="true"></i></span>
+        </div>
+        <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#判别discriminative和生成generative">判别(Discriminative)和生成(Generative)</a>
+      <ul>
+        <li><a href="#判别模型">判别模型</a></li>
+        <li><a href="#生成模型">生成模型</a></li>
+      </ul>
+    </li>
+    <li><a href="#生成对抗网络gans">生成对抗网络(GANs)</a></li>
+    <li><a href="#具体实现">具体实现</a></li>
+    <li><a href="#参考">参考</a></li>
+  </ul>
+</nav></div>
+      </div><div class="content" id="content"><p>生成对抗网络（GANs, generative adversarial networks）是由Ian Goodfellow等人在2014年的<a href="https://arxiv.org/abs/1406.2661" target="_blank" rel="external nofollow noopener noreferrer">Generative Adversarial Networks<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>一文中提出。Facebook的人工智能主管Yann Lecun对其的评价是：“机器学习在过去10年中最有趣的想法”。</p>
+<p><img loading="lazy" src='/images/201911/2/1.png' alt="/images/201911/2/1.png"></p>
+<p>GANs的潜力巨大，因为它们可以学习模仿任何数据分布。也就是说，GANs经过学习后，可以创造出类似于我们真实世界的一些东西，比如：图像、音乐、散文等等。从某种意义来说，它们是“机器人艺术家”，有些确实能够让人印象深刻。</p>
+<p><img loading="lazy" src='/images/201911/2/2.jpg' alt="/images/201911/2/2.jpg"></p>
+<h2 class="heading-element" id="判别discriminative和生成generative"><span>判别(Discriminative)和生成(Generative)</span>
+  <a href="#%e5%88%a4%e5%88%abdiscriminative%e5%92%8c%e7%94%9f%e6%88%90generative" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>在开始介绍GANs之前，让我们先了解一下什么是生成模型和判别模型吧！</p>
+<p>我们可能会经常看到数据以<code>(x,y)</code>对的形式出现，<code>x</code>是输入/特征（比如：图像，文本，语音等等），<code>y</code>是目标/标签。</p>
+<p><img loading="lazy" src='/images/201911/2/3.png' alt="/images/201911/2/3.png"></p>
+<h3 class="heading-element" id="判别模型"><span>判别模型</span>
+  <a href="#%e5%88%a4%e5%88%ab%e6%a8%a1%e5%9e%8b" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p>对于判别模型而言，我们希望构建一个模型，在给定输入的情况下，这个模型可以将输入尽可能正确地找到对应的目标。</p>
+<p>举例来说，给了上图所示的数据集中的一张图像比如鸟，模型就要尽可能地将这张鸟的图像归为<code>bird</code>一类。</p>
+<p>判别模型学习的是条件概率分布，<code>p(y|x)</code>给定<code>x</code>后<code>y</code>的概率最大。这类模型学习到的是如何给定输入预测目标，换句话说，学习到的是目标的决策边界。它们并不关心数据是如何产生的，如何分布的。</p>
+<h3 class="heading-element" id="生成模型"><span>生成模型</span>
+  <a href="#%e7%94%9f%e6%88%90%e6%a8%a1%e5%9e%8b" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p>对于生成模型而言，我们希望构建一个模型能“弄懂”输入以产生类似的输入,它们的标签来自于目标。</p>
+<p>举例来说，给了一张<code>bird</code>的图像，模型想要类似于<code>bird</code>的图像。</p>
+<p>生成模型学习的是联合概率分布，<code>p(x,y) = p(y|x) *  p(x)</code>，它得学习<code>p(x)</code>。</p>
+<p>它们关心数据和如何产生，如何分布的。</p>
+<p><img loading="lazy" src='/images/201911/2/4.png' alt="/images/201911/2/4.png"></p>
+<h2 class="heading-element" id="生成对抗网络gans"><span>生成对抗网络(GANs)</span>
+  <a href="#%e7%94%9f%e6%88%90%e5%af%b9%e6%8a%97%e7%bd%91%e7%bb%9cgans" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>GANs就是生成模型，试图通过学习让模型尽可能生成逼真的输入分布。</p>
+<p>GANs的最终目的是预测给定标签的特征，而不是预测给定特征的标签。</p>
+<p>例如：如果我们将猫图像视为<code>x</code>，则GANs的目的是学习可以从训练数据<code>x</code>产生逼真可信猫图像的模型。</p>
+<p>对生成对抗网络的一种直观理解是，想象一名造假者试图伪造红酒。一开始，作为一名小白，他非常不擅长这任务。他将自己造的假酒和真酒混在一起，并将其给品鉴师。品鉴师对每瓶酒进行真实评估，并向这个伪造者给出相应的反馈，告诉他怎么才是更真的红酒。造假者回到自己的作坊，根据品鉴师的反馈，开始制作一些新的假酒。随着时间的推移，二人一来一往的交流，造假者变得越来越擅长造假酒，品鉴师也变得越来越擅长找出假酒。最后，造假者终于造出了足以以假乱真的红酒。</p>
+<p>整个过程可以类似下图所示：</p>
+<p><img loading="lazy" src='/images/201911/2/5.png' alt="/images/201911/2/5.png"></p>
+<p>这就是GANs的工作原理：一个造假者网络和一个品鉴师网络，二者训练的目的都是为了打败彼此。具体来说，GANs由以下两部分组成。</p>
+<ul>
+<li>生成器网络（Generator Network）: 以一个随机向量作为输入，将其解码成一张“伪造”图像。</li>
+<li>判别器网络（Discriminator Network）：以一张图像（来自于训练集或生成网络“伪造”）作为输入，预测该图像是来自于训练集还是生成网络“伪造”的。</li>
+</ul>
+<p>训练生成器网络的目的是使其能够欺骗判别器网络，因此随着训练的进行，它能够逐渐生成越来越逼真的图像，甚至达到以假乱真的程度，以至于判别器网络无法区分二者。同时，判别器网络也在不断也在不断“鉴伪”能力，为生成图像的真实性设置了很高的标准。一旦训练结束后，生成器就能够将其输入空间中的任何点转换为一张真实可信的图像。</p>
+<p><img loading="lazy" src='/images/201911/2/6.png' alt="/images/201911/2/6.png"></p>
+<h2 class="heading-element" id="具体实现"><span>具体实现</span>
+  <a href="#%e5%85%b7%e4%bd%93%e5%ae%9e%e7%8e%b0" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>下面，我们就基于上述想法将其<a href="https://github.com/eriklindernoren/Keras-GAN/blob/master/gan/gan.py" target="_blank" rel="external nofollow noopener noreferrer">实现<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>，使用的是MNIST数据集。</p>
+<p><img loading="lazy" src='/images/201911/2/7.png' alt="/images/201911/2/7.png"></p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-python"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="3" style="--fi-max-shown-lines:400;--fi-line-digit:3;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">  1
+</span><span class="lnt">  2
+</span><span class="lnt">  3
+</span><span class="lnt">  4
+</span><span class="lnt">  5
+</span><span class="lnt">  6
+</span><span class="lnt">  7
+</span><span class="lnt">  8
+</span><span class="lnt">  9
+</span><span class="lnt"> 10
+</span><span class="lnt"> 11
+</span><span class="lnt"> 12
+</span><span class="lnt"> 13
+</span><span class="lnt"> 14
+</span><span class="lnt"> 15
+</span><span class="lnt"> 16
+</span><span class="lnt"> 17
+</span><span class="lnt"> 18
+</span><span class="lnt"> 19
+</span><span class="lnt"> 20
+</span><span class="lnt"> 21
+</span><span class="lnt"> 22
+</span><span class="lnt"> 23
+</span><span class="lnt"> 24
+</span><span class="lnt"> 25
+</span><span class="lnt"> 26
+</span><span class="lnt"> 27
+</span><span class="lnt"> 28
+</span><span class="lnt"> 29
+</span><span class="lnt"> 30
+</span><span class="lnt"> 31
+</span><span class="lnt"> 32
+</span><span class="lnt"> 33
+</span><span class="lnt"> 34
+</span><span class="lnt"> 35
+</span><span class="lnt"> 36
+</span><span class="lnt"> 37
+</span><span class="lnt"> 38
+</span><span class="lnt"> 39
+</span><span class="lnt"> 40
+</span><span class="lnt"> 41
+</span><span class="lnt"> 42
+</span><span class="lnt"> 43
+</span><span class="lnt"> 44
+</span><span class="lnt"> 45
+</span><span class="lnt"> 46
+</span><span class="lnt"> 47
+</span><span class="lnt"> 48
+</span><span class="lnt"> 49
+</span><span class="lnt"> 50
+</span><span class="lnt"> 51
+</span><span class="lnt"> 52
+</span><span class="lnt"> 53
+</span><span class="lnt"> 54
+</span><span class="lnt"> 55
+</span><span class="lnt"> 56
+</span><span class="lnt"> 57
+</span><span class="lnt"> 58
+</span><span class="lnt"> 59
+</span><span class="lnt"> 60
+</span><span class="lnt"> 61
+</span><span class="lnt"> 62
+</span><span class="lnt"> 63
+</span><span class="lnt"> 64
+</span><span class="lnt"> 65
+</span><span class="lnt"> 66
+</span><span class="lnt"> 67
+</span><span class="lnt"> 68
+</span><span class="lnt"> 69
+</span><span class="lnt"> 70
+</span><span class="lnt"> 71
+</span><span class="lnt"> 72
+</span><span class="lnt"> 73
+</span><span class="lnt"> 74
+</span><span class="lnt"> 75
+</span><span class="lnt"> 76
+</span><span class="lnt"> 77
+</span><span class="lnt"> 78
+</span><span class="lnt"> 79
+</span><span class="lnt"> 80
+</span><span class="lnt"> 81
+</span><span class="lnt"> 82
+</span><span class="lnt"> 83
+</span><span class="lnt"> 84
+</span><span class="lnt"> 85
+</span><span class="lnt"> 86
+</span><span class="lnt"> 87
+</span><span class="lnt"> 88
+</span><span class="lnt"> 89
+</span><span class="lnt"> 90
+</span><span class="lnt"> 91
+</span><span class="lnt"> 92
+</span><span class="lnt"> 93
+</span><span class="lnt"> 94
+</span><span class="lnt"> 95
+</span><span class="lnt"> 96
+</span><span class="lnt"> 97
+</span><span class="lnt"> 98
+</span><span class="lnt"> 99
+</span><span class="lnt">100
+</span><span class="lnt">101
+</span><span class="lnt">102
+</span><span class="lnt">103
+</span><span class="lnt">104
+</span><span class="lnt">105
+</span><span class="lnt">106
+</span><span class="lnt">107
+</span><span class="lnt">108
+</span><span class="lnt">109
+</span><span class="lnt">110
+</span><span class="lnt">111
+</span><span class="lnt">112
+</span><span class="lnt">113
+</span><span class="lnt">114
+</span><span class="lnt">115
+</span><span class="lnt">116
+</span><span class="lnt">117
+</span><span class="lnt">118
+</span><span class="lnt">119
+</span><span class="lnt">120
+</span><span class="lnt">121
+</span><span class="lnt">122
+</span><span class="lnt">123
+</span><span class="lnt">124
+</span><span class="lnt">125
+</span><span class="lnt">126
+</span><span class="lnt">127
+</span><span class="lnt">128
+</span><span class="lnt">129
+</span><span class="lnt">130
+</span><span class="lnt">131
+</span><span class="lnt">132
+</span><span class="lnt">133
+</span><span class="lnt">134
+</span><span class="lnt">135
+</span><span class="lnt">136
+</span><span class="lnt">137
+</span><span class="lnt">138
+</span><span class="lnt">139
+</span><span class="lnt">140
+</span><span class="lnt">141
+</span><span class="lnt">142
+</span><span class="lnt">143
+</span><span class="lnt">144
+</span><span class="lnt">145
+</span><span class="lnt">146
+</span><span class="lnt">147
+</span><span class="lnt">148
+</span><span class="lnt">149
+</span><span class="lnt">150
+</span><span class="lnt">151
+</span><span class="lnt">152
+</span><span class="lnt">153
+</span><span class="lnt">154
+</span><span class="lnt">155
+</span><span class="lnt">156
+</span><span class="lnt">157
+</span><span class="lnt">158
+</span><span class="lnt">159
+</span><span class="lnt">160
+</span><span class="lnt">161
+</span><span class="lnt">162
+</span><span class="lnt">163
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-Python" data-lang="Python"><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">keras.datasets</span> <span class="kn">import</span> <span class="n">mnist</span>
+</span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">keras.layers</span> <span class="kn">import</span> <span class="n">Input</span><span class="p">,</span> <span class="n">Dense</span><span class="p">,</span> <span class="n">Reshape</span><span class="p">,</span> <span class="n">Flatten</span><span class="p">,</span> <span class="n">Dropout</span>
+</span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">keras.layers</span> <span class="kn">import</span> <span class="n">BatchNormalization</span><span class="p">,</span> <span class="n">Activation</span><span class="p">,</span> <span class="n">ZeroPadding2D</span>
+</span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">keras.layers.advanced_activations</span> <span class="kn">import</span> <span class="n">LeakyReLU</span>
+</span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">keras.layers.convolutional</span> <span class="kn">import</span> <span class="n">UpSampling2D</span><span class="p">,</span> <span class="n">Conv2D</span>
+</span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">keras.models</span> <span class="kn">import</span> <span class="n">Sequential</span><span class="p">,</span> <span class="n">Model</span>
+</span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">keras.optimizers</span> <span class="kn">import</span> <span class="n">Adam</span>
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">sys</span>
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">GAN</span><span class="p">():</span>
+</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">img_rows</span> <span class="o">=</span> <span class="mi">28</span>
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">img_cols</span> <span class="o">=</span> <span class="mi">28</span>
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">channels</span> <span class="o">=</span> <span class="mi">1</span>
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">img_shape</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">img_rows</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">img_cols</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">channels</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="n">optimizer</span> <span class="o">=</span> <span class="n">Adam</span><span class="p">(</span><span class="mf">0.0002</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="c1"># Build and compile the discriminator</span>
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">discriminator</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">build_discriminator</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">discriminator</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">loss</span><span class="o">=</span><span class="s1">&#39;binary_crossentropy&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="n">optimizer</span><span class="o">=</span><span class="n">optimizer</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="n">metrics</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;accuracy&#39;</span><span class="p">])</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="c1"># Build and compile the generator</span>
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">generator</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">build_generator</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">generator</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">loss</span><span class="o">=</span><span class="s1">&#39;binary_crossentropy&#39;</span><span class="p">,</span> <span class="n">optimizer</span><span class="o">=</span><span class="n">optimizer</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="c1"># The generator takes noise as input and generated imgs</span>
+</span></span><span class="line"><span class="cl">        <span class="n">z</span> <span class="o">=</span> <span class="n">Input</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">100</span><span class="p">,))</span>
+</span></span><span class="line"><span class="cl">        <span class="n">img</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">generator</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="c1"># For the combined model we will only train the generator</span>
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">discriminator</span><span class="o">.</span><span class="n">trainable</span> <span class="o">=</span> <span class="kc">False</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="c1"># The valid takes generated images as input and determines validity</span>
+</span></span><span class="line"><span class="cl">        <span class="n">valid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">discriminator</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="c1"># The combined model  (stacked generator and discriminator) takes</span>
+</span></span><span class="line"><span class="cl">        <span class="c1"># noise as input =&gt; generates images =&gt; determines validity</span>
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">combined</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="n">valid</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="bp">self</span><span class="o">.</span><span class="n">combined</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">loss</span><span class="o">=</span><span class="s1">&#39;binary_crossentropy&#39;</span><span class="p">,</span> <span class="n">optimizer</span><span class="o">=</span><span class="n">optimizer</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="nf">build_generator</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="n">noise_shape</span> <span class="o">=</span> <span class="p">(</span><span class="mi">100</span><span class="p">,)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="n">model</span> <span class="o">=</span> <span class="n">Sequential</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dense</span><span class="p">(</span><span class="mi">256</span><span class="p">,</span> <span class="n">input_shape</span><span class="o">=</span><span class="n">noise_shape</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">        <span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">LeakyReLU</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.2</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">        <span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">BatchNormalization</span><span class="p">(</span><span class="n">momentum</span><span class="o">=</span><span class="mf">0.8</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">        <span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dense</span><span class="p">(</span><span class="mi">512</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">        <span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">LeakyReLU</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.2</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">        <span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">BatchNormalization</span><span class="p">(</span><span class="n">momentum</span><span class="o">=</span><span class="mf">0.8</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">        <span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dense</span><span class="p">(</span><span class="mi">1024</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">        <span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">LeakyReLU</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.2</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">        <span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">BatchNormalization</span><span class="p">(</span><span class="n">momentum</span><span class="o">=</span><span class="mf">0.8</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">        <span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dense</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">prod</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">img_shape</span><span class="p">),</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;tanh&#39;</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">        <span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Reshape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">img_shape</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="n">model</span><span class="o">.</span><span class="n">summary</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="n">noise</span> <span class="o">=</span> <span class="n">Input</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="n">noise_shape</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="n">img</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">noise</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">Model</span><span class="p">(</span><span class="n">noise</span><span class="p">,</span> <span class="n">img</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="nf">build_discriminator</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="n">img_shape</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">img_rows</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">img_cols</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">channels</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="n">model</span> <span class="o">=</span> <span class="n">Sequential</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Flatten</span><span class="p">(</span><span class="n">input_shape</span><span class="o">=</span><span class="n">img_shape</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">        <span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dense</span><span class="p">(</span><span class="mi">512</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">        <span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">LeakyReLU</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.2</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">        <span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dense</span><span class="p">(</span><span class="mi">256</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">        <span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">LeakyReLU</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.2</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">        <span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dense</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;sigmoid&#39;</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">        <span class="n">model</span><span class="o">.</span><span class="n">summary</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="n">img</span> <span class="o">=</span> <span class="n">Input</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="n">img_shape</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="n">validity</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">Model</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">validity</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="nf">train</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">epochs</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">128</span><span class="p">,</span> <span class="n">save_interval</span><span class="o">=</span><span class="mi">50</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="c1"># Load the dataset</span>
+</span></span><span class="line"><span class="cl">        <span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">_</span><span class="p">),</span> <span class="p">(</span><span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">)</span> <span class="o">=</span> <span class="n">mnist</span><span class="o">.</span><span class="n">load_data</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="c1"># Rescale -1 to 1</span>
+</span></span><span class="line"><span class="cl">        <span class="n">X_train</span> <span class="o">=</span> <span class="p">(</span><span class="n">X_train</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span> <span class="o">-</span> <span class="mf">127.5</span><span class="p">)</span> <span class="o">/</span> <span class="mf">127.5</span>
+</span></span><span class="line"><span class="cl">        <span class="n">X_train</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="n">half_batch</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">batch_size</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="n">epoch</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">epochs</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            <span class="c1"># ---------------------</span>
+</span></span><span class="line"><span class="cl">            <span class="c1">#  Train Discriminator</span>
+</span></span><span class="line"><span class="cl">            <span class="c1"># ---------------------</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            <span class="c1"># Select a random half batch of images</span>
+</span></span><span class="line"><span class="cl">            <span class="n">idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">X_train</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">half_batch</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="n">imgs</span> <span class="o">=</span> <span class="n">X_train</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            <span class="n">noise</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="p">(</span><span class="n">half_batch</span><span class="p">,</span> <span class="mi">100</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            <span class="c1"># Generate a half batch of new images</span>
+</span></span><span class="line"><span class="cl">            <span class="n">gen_imgs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">generator</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">noise</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            <span class="c1"># Train the discriminator</span>
+</span></span><span class="line"><span class="cl">            <span class="n">d_loss_real</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">discriminator</span><span class="o">.</span><span class="n">train_on_batch</span><span class="p">(</span><span class="n">imgs</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">half_batch</span><span class="p">,</span> <span class="mi">1</span><span class="p">)))</span>
+</span></span><span class="line"><span class="cl">            <span class="n">d_loss_fake</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">discriminator</span><span class="o">.</span><span class="n">train_on_batch</span><span class="p">(</span><span class="n">gen_imgs</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">half_batch</span><span class="p">,</span> <span class="mi">1</span><span class="p">)))</span>
+</span></span><span class="line"><span class="cl">            <span class="n">d_loss</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">d_loss_real</span><span class="p">,</span> <span class="n">d_loss_fake</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            <span class="c1"># ---------------------</span>
+</span></span><span class="line"><span class="cl">            <span class="c1">#  Train Generator</span>
+</span></span><span class="line"><span class="cl">            <span class="c1"># ---------------------</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            <span class="n">noise</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="p">(</span><span class="n">batch_size</span><span class="p">,</span> <span class="mi">100</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            <span class="c1"># The generator wants the discriminator to label the generated samples</span>
+</span></span><span class="line"><span class="cl">            <span class="c1"># as valid (ones)</span>
+</span></span><span class="line"><span class="cl">            <span class="n">valid_y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">batch_size</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            <span class="c1"># Train the generator</span>
+</span></span><span class="line"><span class="cl">            <span class="n">g_loss</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">combined</span><span class="o">.</span><span class="n">train_on_batch</span><span class="p">(</span><span class="n">noise</span><span class="p">,</span> <span class="n">valid_y</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            <span class="c1"># Plot the progress</span>
+</span></span><span class="line"><span class="cl">            <span class="nb">print</span> <span class="p">(</span><span class="s2">&#34;</span><span class="si">%d</span><span class="s2"> [D loss: </span><span class="si">%f</span><span class="s2">, acc.: </span><span class="si">%.2f%%</span><span class="s2">] [G loss: </span><span class="si">%f</span><span class="s2">]&#34;</span> <span class="o">%</span> <span class="p">(</span><span class="n">epoch</span><span class="p">,</span> <span class="n">d_loss</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">100</span><span class="o">*</span><span class="n">d_loss</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">g_loss</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            <span class="c1"># If at save interval =&gt; save generated image samples</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="n">epoch</span> <span class="o">%</span> <span class="n">save_interval</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">                <span class="bp">self</span><span class="o">.</span><span class="n">save_imgs</span><span class="p">(</span><span class="n">epoch</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="nf">save_imgs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">epoch</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="n">r</span><span class="p">,</span> <span class="n">c</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">5</span>
+</span></span><span class="line"><span class="cl">        <span class="n">noise</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="p">(</span><span class="n">r</span> <span class="o">*</span> <span class="n">c</span><span class="p">,</span> <span class="mi">100</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">        <span class="n">gen_imgs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">generator</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">noise</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="c1"># Rescale images 0 - 1</span>
+</span></span><span class="line"><span class="cl">        <span class="n">gen_imgs</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">gen_imgs</span> <span class="o">+</span> <span class="mf">0.5</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">c</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="n">cnt</span> <span class="o">=</span> <span class="mi">0</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">r</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">c</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">                <span class="n">axs</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">gen_imgs</span><span class="p">[</span><span class="n">cnt</span><span class="p">,</span> <span class="p">:,:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">                <span class="n">axs</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">                <span class="n">cnt</span> <span class="o">+=</span> <span class="mi">1</span>
+</span></span><span class="line"><span class="cl">        <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&#34;./mnist_</span><span class="si">%d</span><span class="s2">.png&#34;</span> <span class="o">%</span> <span class="n">epoch</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">gan</span> <span class="o">=</span> <span class="n">GAN</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">    <span class="n">gan</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">epochs</span><span class="o">=</span><span class="mi">30000</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span> <span class="n">save_interval</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>将上述代码保存到一个名为<code>GAN.py</code>的文件中并运行。</p>
+<p>刚开始时，生成器网络生成的图像如下所示：</p>
+<p><img loading="lazy" src='/images/201911/2/8.png' alt="/images/201911/2/8.png"></p>
+<p>经过8000个轮次（epoch）的训练，生成器网络“高明”了许多，生成的图像如下所示：</p>
+<p><img loading="lazy" src='/images/201911/2/9.png' alt="/images/201911/2/9.png"></p>
+<p>生成手写数字感觉有点无趣，我们可以尝试生成别的，比如美女。为了获取到训练数据，我们到<a href="http://image.so.com/z?ch=beauty" target="_blank" rel="external nofollow noopener noreferrer">美女_360图片<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>进行采集，具体如下所示：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-python"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="2" style="--fi-max-shown-lines:400;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-Python" data-lang="Python"><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">requests</span>
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">argparse</span>
+</span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">requests</span> <span class="kn">import</span> <span class="n">exceptions</span>
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">cv2</span>
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">os</span>
+</span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">fake_useragent</span> <span class="kn">import</span> <span class="n">UserAgent</span>
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">time</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">ap</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="n">ap</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&#34;-q&#34;</span><span class="p">,</span> <span class="s2">&#34;--query&#34;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">                <span class="n">help</span><span class="o">=</span><span class="s2">&#34;search query&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">ap</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&#34;-o&#34;</span><span class="p">,</span> <span class="s2">&#34;--output&#34;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">                <span class="n">help</span><span class="o">=</span><span class="s2">&#34;path to output directory of images&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">args</span> <span class="o">=</span> <span class="nb">vars</span><span class="p">(</span><span class="n">ap</span><span class="o">.</span><span class="n">parse_args</span><span class="p">())</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">user_agent</span> <span class="o">=</span> <span class="n">UserAgent</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">EXCEPTIONS</span> <span class="o">=</span> <span class="nb">set</span><span class="p">([</span><span class="ne">IOError</span><span class="p">,</span> <span class="ne">FileNotFoundError</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="n">exceptions</span><span class="o">.</span><span class="n">RequestException</span><span class="p">,</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">HTTPError</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="n">exceptions</span><span class="o">.</span><span class="n">ConnectionError</span><span class="p">,</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">Timeout</span><span class="p">])</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">GROUP_SIZE</span> <span class="o">=</span> <span class="mi">30</span>
+</span></span><span class="line"><span class="cl"><span class="n">MAX_RESULTS</span> <span class="o">=</span> <span class="mi">600</span>
+</span></span><span class="line"><span class="cl"><span class="n">URL</span> <span class="o">=</span> <span class="s2">&#34;http://image.so.com/zj&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">ch</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="s1">&#39;query&#39;</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="n">params</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;ch&#39;</span><span class="p">:</span><span class="n">ch</span><span class="p">,</span> <span class="s1">&#39;listtype&#39;</span><span class="p">:</span><span class="s1">&#39;new&#39;</span><span class="p">,</span> <span class="s1">&#39;temp&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">total</span> <span class="o">=</span> <span class="mi">0</span>
+</span></span><span class="line"><span class="cl"><span class="k">for</span> <span class="n">sn</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">MAX_RESULTS</span><span class="p">,</span> <span class="n">GROUP_SIZE</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="n">headers</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;User-Agent&#39;</span><span class="p">:</span> <span class="n">user_agent</span><span class="o">.</span><span class="n">random</span><span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="n">params</span><span class="p">[</span><span class="s1">&#39;sn&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sn</span>
+</span></span><span class="line"><span class="cl">    <span class="n">search_result</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">URL</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">results</span> <span class="o">=</span> <span class="n">search_result</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">results</span><span class="p">[</span><span class="s1">&#39;list&#39;</span><span class="p">]:</span>
+</span></span><span class="line"><span class="cl">        <span class="k">try</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">            <span class="nb">print</span><span class="p">(</span><span class="s2">&#34;Downloading: </span><span class="si">{}</span><span class="s2">&#34;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">l</span><span class="p">[</span><span class="s1">&#39;qhimg_thumb_url&#39;</span><span class="p">]))</span>
+</span></span><span class="line"><span class="cl">            <span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">l</span><span class="p">[</span><span class="s1">&#39;qhimg_thumb_url&#39;</span><span class="p">],</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="n">ext</span> <span class="o">=</span> <span class="n">l</span><span class="p">[</span><span class="s1">&#39;qhimg_thumb_url&#39;</span><span class="p">][</span><span class="n">l</span><span class="p">[</span><span class="s1">&#39;qhimg_thumb_url&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">rfind</span><span class="p">(</span><span class="s2">&#34;.&#34;</span><span class="p">):]</span>
+</span></span><span class="line"><span class="cl">            <span class="n">path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">sep</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">args</span><span class="p">[</span><span class="s1">&#39;output&#39;</span><span class="p">],</span> <span class="s2">&#34;</span><span class="si">{}{}</span><span class="s2">&#34;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">total</span><span class="p">)</span><span class="o">.</span><span class="n">zfill</span><span class="p">(</span><span class="mi">8</span><span class="p">),</span> <span class="n">ext</span><span class="p">)])</span>
+</span></span><span class="line"><span class="cl">            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file_obj</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">                <span class="n">file_obj</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">content</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">e</span><span class="p">)</span> <span class="ow">in</span> <span class="n">EXCEPTIONS</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">                <span class="nb">print</span><span class="p">(</span><span class="s2">&#34;Skipping: </span><span class="si">{}</span><span class="s2">&#34;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">l</span><span class="p">[</span><span class="s1">&#39;qhimg_thumb_url&#39;</span><span class="p">]))</span>
+</span></span><span class="line"><span class="cl">                <span class="k">continue</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="n">image</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="n">image</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Deleting: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">path</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">            <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="k">continue</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="n">total</span> <span class="o">+=</span> <span class="mi">1</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>不妨将上面的代码保存到一个名为<code>crawl_pics.py</code>的文件中，打开命令行输入<code>python crawl_pics.py -query beauty -o ./images</code>运行代码，图片就被我们采集到了。</p>
+<p><img loading="lazy" src='/images/201911/2/10.png' alt="/images/201911/2/10.png"></p>
+<p>这时，如果想用<code>GAN.py</code>的代码的话，我们可以将采集到的图片进行相应的处理，新建一个名为<code>processing.py</code>的文件，写入以下代码：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-python"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="2" style="--fi-max-shown-lines:400;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-Python" data-lang="Python"><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">os</span>
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">cv2</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">image_folder</span> <span class="o">=</span> <span class="s1">&#39;./images&#39;</span>
+</span></span><span class="line"><span class="cl"><span class="n">files</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">image_folder</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">new_image_folder</span> <span class="o">=</span> <span class="s1">&#39;new_images&#39;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">files</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">image_path</span> <span class="o">=</span> <span class="s2">&#34;</span><span class="si">{}</span><span class="s2">/</span><span class="si">{}</span><span class="s2">&#34;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">image_folder</span><span class="p">,</span> <span class="n">file</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">new_image_path</span> <span class="o">=</span> <span class="s2">&#34;</span><span class="si">{}</span><span class="s2">/</span><span class="si">{}</span><span class="s2">&#34;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">new_image_folder</span><span class="p">,</span> <span class="n">file</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">img_gray_mode</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="n">image_path</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">IMREAD_GRAYSCALE</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">print</span><span class="p">(</span><span class="n">image_path</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">resized_image</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">resize</span><span class="p">(</span><span class="n">img_gray_mode</span><span class="p">,</span> <span class="p">(</span><span class="mi">28</span><span class="p">,</span> <span class="mi">28</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">    <span class="n">cv2</span><span class="o">.</span><span class="n">imwrite</span><span class="p">(</span><span class="n">new_image_path</span><span class="p">,</span><span class="n">resized_image</span><span class="p">)</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>运行完就可以得到处理好的图片。然后，在<code>GAN.py</code>新增一个名为<code>load_data</code>的函数：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-python"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-Python" data-lang="Python"><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">load_data</span><span class="p">():</span>
+</span></span><span class="line"><span class="cl">    <span class="n">image_folder</span> <span class="o">=</span> <span class="s1">&#39;./new_images&#39;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">files</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">image_folder</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">data</span> <span class="o">=</span> <span class="p">[</span><span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="s2">&#34;</span><span class="si">{}</span><span class="s2">/</span><span class="si">{}</span><span class="s2">&#34;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">image_folder</span><span class="p">,</span> <span class="n">file</span><span class="p">),</span> <span class="n">cv2</span><span class="o">.</span><span class="n">IMREAD_GRAYSCALE</span><span class="p">)[</span><span class="n">newaxis</span><span class="p">,:,:]</span> <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">files</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">    <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">data</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>再将<code>GAN.py</code>中的<code>(X_train, _), (_, _) = mnist.load_data()</code>改为<code>X_train = load_data()</code>即可。</p>
+<p>运行代码，经过29800个轮次（epoch）的训练后，生成器网络生成的“美女”图片如下所示：</p>
+<p><img loading="lazy" src='/images/201911/2/11.png' alt="/images/201911/2/11.png"></p>
+<h2 class="heading-element" id="参考"><span>参考</span>
+  <a href="#%e5%8f%82%e8%80%83" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p><a href="https://medium.com/deep-math-machine-learning-ai/ch-14-general-adversarial-networks-gans-with-math-1318faf46b43" target="_blank" rel="external nofollow noopener noreferrer">Ch:14 Generative Adversarial Networks (GAN’s) with Math.<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></p></div><hr class="awesome-hr" />
+    <h2 id="see-also">相关内容</h2>
+    <ul><li>
+          <a href="/opencv%E7%AE%80%E6%98%8E%E6%95%99%E7%A8%8B/" title="OpenCV简明教程">OpenCV简明教程</a></li></ul><div class="post-footer" id="post-footer">
+  <div class="post-info">
+    <div class="post-info-line">
+      <div class="post-info-mod"><span title="更新于 2019-03-09 13:59:10">更新于 2019-03-09&nbsp;</span>
+      </div></div><div class="post-info-line">
+        <div class="post-info-md"><span><a href="vscode://file/D:\hugo-blog\andyfree96\content\posts\从零开始学习GANs.md" title="在编辑器中打开" class="link-to-vscode">在编辑器中打开</a></span></div>
+        <div class="post-info-share">
+          <span><a href="javascript:void(0);" title="分享到 X" data-sharer="twitter" data-url="http://localhost:1313/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E5%AD%A6%E4%B9%A0gans/" data-title="从零开始学习GANs" data-via="IRONAnthony96" data-hashtags="Python,Keras,GANs,神经网络,深度学习,AI"><i class="fa-brands fa-x-twitter" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="http://localhost:1313/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E5%AD%A6%E4%B9%A0gans/" data-hashtag="Python"><i class="fa-brands fa-facebook-square" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="http://localhost:1313/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E5%AD%A6%E4%B9%A0gans/" data-title="从零开始学习GANs" data-image="/images/201911/2/claudio-schwarz-purzlbaum-wXRxdOFxBT0-unsplash.jpg"><i class="fa-brands fa-weibo" aria-hidden="true"></i></a>
+  </span>
+        </div>
+      </div></div>
+
+  <div class="post-info-more">
+    <section class="post-tags"><i class="fa-solid fa-tags me-1" aria-hidden="true"></i><a href="/tags/python/" class="post-tag" title="标签 - Python">Python</a><a href="/tags/keras/" class="post-tag" title="标签 - Keras">Keras</a><a href="/tags/gans/" class="post-tag" title="标签 - GANs">GANs</a><a href="/tags/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" class="post-tag" title="标签 - 神经网络">神经网络</a><a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" class="post-tag" title="标签 - 深度学习">深度学习</a><a href="/tags/ai/" class="post-tag" title="标签 - AI">AI</a></section>
+    <section><span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+    </section>
+  </div><div class="post-nav"><a href="/opencv%E7%AE%80%E6%98%8E%E6%95%99%E7%A8%8B/" class="post-nav-item" rel="prev" title="OpenCV简明教程"><i class="fa-solid fa-angle-left" aria-hidden="true"></i>OpenCV简明教程</a><a href="/tkinter%E7%AE%80%E6%98%8E%E6%95%99%E7%A8%8B/" class="post-nav-item" rel="next" title="Tkinter简明教程">Tkinter简明教程<i class="fa-solid fa-angle-right" aria-hidden="true"></i></a></div>
+</div>
+<div class="post-reward">
+    <div class="comment">请作者喝杯咖啡!</div>
+    <input type="checkbox" class="reward-input" name="reward" id="fi-reward" hidden />
+    <label class="reward-button" for="fi-reward"><i class="fa-solid fa-qrcode" aria-hidden="true"></i>赞赏</label>
+    <div class="reward-ways" data-mode="static"><div><img src='/reward/alipay.png' alt="AndyFree96 支付宝"><span data-animation>支付宝</span>
+          </div><div><img src='/reward/wechatpay.png' alt="AndyFree96 微信"><span data-animation>微信</span>
+          </div></div>
+  </div></article>
+
+  <aside class="toc" id="toc-auto" aria-label="目录"><h2 class="toc-title">目录&nbsp;<i class="toc-icon fa-solid fa-angle-down" aria-hidden="true"></i></h2>
+      <div class="toc-content" id="toc-content-auto"></div></aside><dialog id="toc-dialog" aria-labelledby="toc-dialog-title" role="dialog" closedby="any">
+      <button type="button" class="toc-close-btn" aria-label="Close Table of Contents"><i class="fa-solid fa-xmark fa-lg" aria-hidden="true"></i></button>
+      <div class="toc">
+        <h2 class="toc-title" id="toc-dialog-title">目录</h2>
+        <div class="toc-content" id="toc-content-drawer"><nav >
+  <ul>
+    <li><a href="#判别discriminative和生成generative">判别(Discriminative)和生成(Generative)</a>
+      <ul>
+        <li><a href="#判别模型">判别模型</a></li>
+        <li><a href="#生成模型">生成模型</a></li>
+      </ul>
+    </li>
+    <li><a href="#生成对抗网络gans">生成对抗网络(GANs)</a></li>
+    <li><a href="#具体实现">具体实现</a></li>
+    <li><a href="#参考">参考</a></li>
+  </ul>
+</nav></div>
+      </div>
+    </dialog></main><footer class="footer">
+    <div class="footer-container"><div class="footer-line powered">由 <a href="https://gohugo.io/" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.163.1">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/hugo-fixit/FixIt" target="_blank" rel="external" title="FixIt v1.0.0-mq99hlzg">FixIt</a>
+        </div><div class="footer-line copyright" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright" aria-hidden="true"></i>
+            <span itemprop="copyrightYear">2019 - 2026</span><span class="author" itemprop="copyrightHolder">
+              <a href="https://andyfree96.github.io/" target="_blank" rel="external nofollow noopener noreferrer">AndyFree96</a></span></div></div>
+  </footer></div><div class="widgets"><div class="fixed-buttons"><button type="button" class="fixed-button back-to-top animate__faster d-none" aria-label="回到顶部"><i class="fa-solid fa-arrow-up" aria-hidden="true"></i></button><button type="button" id="toc-drawer-button" class="fixed-button toc-drawer-button d-none" aria-label="目录" aria-controls="toc-dialog" aria-expanded="false"><i class="fa-solid fa-bars" aria-hidden="true"></i></button></div><div id="mask"></div><div class="reading-progress-bar" style="left: 0;top: 0;"></div><noscript>
+    <div class="noscript-warning">该网站在启用 JavaScript 的情况下效果最佳。</div>
+  </noscript>
+</div><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script src="/lib/autocomplete/autocomplete.min.js" defer></script><script src="/lib/algoliasearch/browser.umd.js" defer></script><script src="/lib/sharer/sharer.min.js" async defer></script><script src="/lib/cookieconsent/cookieconsent.min.js" defer></script><script src="/js/lib/cookieconsent.js" defer></script><script src="/lib/cell-tooltip/cell-tooltip.umd.js" defer></script><script src="/js/config/115ed3412384ad4bc1bb2925cc7c5a7b.js" defer></script><script src="/js/lib/file-tree.js" defer></script><script src="/js/main.js" defer></script></body>
+</html>

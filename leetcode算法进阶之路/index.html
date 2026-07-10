@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+    <meta name="robots" content="noodp" />
+    <title>LeetCode算法进阶之路：从数据机构到算法思想的刷题笔记 - 东尼的博客</title><meta name="author" content="AndyFree96">
+<meta name="description" content="算法能力是编程人员成长过程中不可绕过的基础能力。在实际工程开发中，我们更多面对的是业务问题、系统设计、架构演进以及工程实践，但有很多底层能力。例如：如何高效处理数据、如何设计合理的数据结构、如何优化程序复杂度——最终都会回归到数据结构与算法。从日常开发中的缓存设计，到高性能系统中的数据组织、搜索优化，再到人工智能和计算机视觉领域中的模型设计，算法思想始终贯穿其中。
+过去的开发经历让我积累了一定的工程经验，也意识到掌握语言特性和框架使用，并不能代表真正具备扎实的软件工程能力。因此，开始重新系统学习数据结构与算法，并通过LeetCode作为主要练习平台，将每一道题的思考过程、算法思想以及实现方式记录下来。这篇文章将作为我的LeetCode刷题总记录，持续更新，Github同步记录。
+"><meta name="keywords" content='LeetCode, 算法, 数据结构, 刷题记录, 算法题解'>
+	<meta itemprop="name" content="LeetCode算法进阶之路：从数据机构到算法思想的刷题笔记">
+	<meta itemprop="description" content="算法能力是编程人员成长过程中不可绕过的基础能力。在实际工程开发中，我们更多面对的是业务问题、系统设计、架构演进以及工程实践，但有很多底层能力。例如：如何高效处理数据、如何设计合理的数据结构、如何优化程序复杂度——最终都会回归到数据结构与算法。从日常开发中的缓存设计，到高性能系统中的数据组织、搜索优化，再到人工智能和计算机视觉领域中的模型设计，算法思想始终贯穿其中。
+过去的开发经历让我积累了一定的工程经验，也意识到掌握语言特性和框架使用，并不能代表真正具备扎实的软件工程能力。因此，开始重新系统学习数据结构与算法，并通过LeetCode作为主要练习平台，将每一道题的思考过程、算法思想以及实现方式记录下来。这篇文章将作为我的LeetCode刷题总记录，持续更新，Github同步记录。">
+	<meta itemprop="datePublished" content="2026-03-09T14:42:53+08:00">
+	<meta itemprop="dateModified" content="2026-03-09T14:42:53+08:00">
+	<meta itemprop="wordCount" content="2312">
+	<meta itemprop="keywords" content="LeetCode,算法,数据结构,刷题记录,算法题解"><meta property="og:url" content="http://localhost:1313/leetcode%E7%AE%97%E6%B3%95%E8%BF%9B%E9%98%B6%E4%B9%8B%E8%B7%AF/">
+	<meta property="og:site_name" content="东尼的博客">
+	<meta property="og:title" content="LeetCode算法进阶之路：从数据机构到算法思想的刷题笔记">
+	<meta property="og:description" content="算法能力是编程人员成长过程中不可绕过的基础能力。在实际工程开发中，我们更多面对的是业务问题、系统设计、架构演进以及工程实践，但有很多底层能力。例如：如何高效处理数据、如何设计合理的数据结构、如何优化程序复杂度——最终都会回归到数据结构与算法。从日常开发中的缓存设计，到高性能系统中的数据组织、搜索优化，再到人工智能和计算机视觉领域中的模型设计，算法思想始终贯穿其中。
+过去的开发经历让我积累了一定的工程经验，也意识到掌握语言特性和框架使用，并不能代表真正具备扎实的软件工程能力。因此，开始重新系统学习数据结构与算法，并通过LeetCode作为主要练习平台，将每一道题的思考过程、算法思想以及实现方式记录下来。这篇文章将作为我的LeetCode刷题总记录，持续更新，Github同步记录。">
+	<meta property="og:locale" content="zh_CN">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="posts">
+		<meta property="article:published_time" content="2026-03-09T14:42:53+08:00">
+		<meta property="article:modified_time" content="2026-03-09T14:42:53+08:00">
+		<meta property="article:tag" content="LeetCode">
+		<meta property="article:tag" content="算法">
+		<meta property="article:tag" content="数据结构">
+		<meta property="article:tag" content="刷题记录">
+		<meta property="article:tag" content="算法题解">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="LeetCode算法进阶之路：从数据机构到算法思想的刷题笔记">
+  <meta name="twitter:description" content="算法能力是编程人员成长过程中不可绕过的基础能力。在实际工程开发中，我们更多面对的是业务问题、系统设计、架构演进以及工程实践，但有很多底层能力。例如：如何高效处理数据、如何设计合理的数据结构、如何优化程序复杂度——最终都会回归到数据结构与算法。从日常开发中的缓存设计，到高性能系统中的数据组织、搜索优化，再到人工智能和计算机视觉领域中的模型设计，算法思想始终贯穿其中。
+过去的开发经历让我积累了一定的工程经验，也意识到掌握语言特性和框架使用，并不能代表真正具备扎实的软件工程能力。因此，开始重新系统学习数据结构与算法，并通过LeetCode作为主要练习平台，将每一道题的思考过程、算法思想以及实现方式记录下来。这篇文章将作为我的LeetCode刷题总记录，持续更新，Github同步记录。"><meta name="twitter:creator" content="@IRONAnthony96"><meta name="application-name" content="FixIt">
+<meta name="apple-mobile-web-app-title" content="FixIt"><meta name="theme-color" data-light="#f6f8fa" data-dark="#151b23" content="#f6f8fa"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" type="text/html" href="http://localhost:1313/leetcode%E7%AE%97%E6%B3%95%E8%BF%9B%E9%98%B6%E4%B9%8B%E8%B7%AF/" title="LeetCode算法进阶之路：从数据机构到算法思想的刷题笔记 - 东尼的博客" /><link rel="prev" type="text/html" href="http://localhost:1313/c%23%E4%B8%AD%E7%9A%84nameof%E8%BF%90%E7%AE%97%E7%AC%A6/" title="C#中的nameof运算符" /><link rel="next" type="text/html" href="http://localhost:1313/%E4%BB%8E%E6%89%A7%E8%A1%8C%E4%B8%8A%E4%B8%8B%E6%96%87%E7%90%86%E8%A7%A3javascript%E5%8F%98%E9%87%8F%E6%8F%90%E5%8D%87/" title="从执行上下文理解JavaScript变量提升" /><link rel="alternate" type="text/markdown" href="http://localhost:1313/leetcode%E7%AE%97%E6%B3%95%E8%BF%9B%E9%98%B6%E4%B9%8B%E8%B7%AF/index.md" title="LeetCode算法进阶之路：从数据机构到算法思想的刷题笔记 - 东尼的博客"><link rel="stylesheet" href="/css/config.css"><link rel="stylesheet" href="/css/main.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><link rel="preload" href="/js/main.js" as="script"><script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "BlogPosting",
+    "headline": "LeetCode算法进阶之路：从数据机构到算法思想的刷题笔记",
+    "inLanguage": "zh-CN",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "http:\/\/localhost:1313\/leetcode%E7%AE%97%E6%B3%95%E8%BF%9B%E9%98%B6%E4%B9%8B%E8%B7%AF\/"
+    },"genre": "posts","keywords": "LeetCode, 算法, 数据结构, 刷题记录, 算法题解","wordcount":  2312 ,
+    "url": "http:\/\/localhost:1313\/leetcode%E7%AE%97%E6%B3%95%E8%BF%9B%E9%98%B6%E4%B9%8B%E8%B7%AF\/","datePublished": "2026-03-09T14:42:53+08:00","dateModified": "2026-03-09T14:42:53+08:00","publisher": {
+      "@type": "Organization",
+      "name": ""},"author": {
+        "@type": "Person",
+        "name": "AndyFree96"
+      },"description": ""
+  }
+  </script><script src="/js/head/color-scheme.js"></script></head>
+  <body data-instant-intensity="viewport" data-header-desktop="sticky" data-header-mobile="auto"><div class="wrapper" data-page-style="normal"><header class="desktop animate__faster" id="header-desktop">
+  <div class="header-wrapper">
+    <div class="header-title">
+      <a href="/" title="东尼的博客" class="header-title-link"><span class="header-title-text">东尼的博客</span></a><span class="header-subtitle"></span></div>
+    <nav>
+      <ul class="menu"><li class="menu-item">
+              <a class="menu-link" href="/posts/">📕 文章</a></li><li class="menu-item">
+              <a class="menu-link" href="/categories/">🧰 分类</a></li><li class="menu-item">
+              <a class="menu-link" href="/tags/">🔖 标签</a></li><li class="menu-item">
+              <a class="menu-link" href="/book">📚 书单</a></li><li class="menu-item">
+              <a class="menu-link" href="/paper">📝 论文</a></li><li class="menu-item">
+              <a class="menu-link" href="/opencourse">👨🏻‍💻 公开课</a></li><li class="menu-item">
+              <a class="menu-link" href="/filmtv">🎞️ 影视</a></li><li class="menu-item">
+              <a class="menu-link" href="/resource">⚡️ 资源库</a></li><li class="menu-item">
+              <a class="menu-link" href="/projects">⭐ 开源</a></li><li class="menu-item">
+              <a class="menu-link" href="/about">🙋🏻‍♂️ 关于</a></li><li class="menu-item delimiter"></li><li class="menu-item search" id="search-desktop">
+            <input type="text" placeholder="搜索文章标题或内容……" id="search-input-desktop" tabindex="-1">
+            <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索" aria-controls="search-dropdown-desktop" aria-expanded="false">
+              <i class="fa-solid fa-search" aria-hidden="true"></i>
+            </a>
+            <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+              <i class="fa-solid fa-times-circle" aria-hidden="true"></i>
+            </a>
+            <span class="search-button search-loading" id="search-loading-desktop">
+              <i class="fa-solid fa-spinner fa-spin" aria-hidden="true"></i>
+            </span>
+          </li><li class="menu-item theme-switch-item">
+          <button type="button" class="theme-switch" aria-label="切换主题" title="切换主题"><i class="fa-solid fa-adjust" aria-hidden="true"></i></button>
+        </li></ul>
+    </nav>
+  </div>
+</header><header class="mobile animate__faster" id="header-mobile">
+  <div class="header-container">
+    <div class="header-wrapper">
+      <div class="header-title">
+        <a href="/" title="东尼的博客" class="header-title-link"><span class="header-title-text">东尼的博客</span></a><span class="header-subtitle"></span></div>
+      <button type="button" class="theme-switch" aria-label="切换主题"><i class="fa-solid fa-adjust" aria-hidden="true"></i></button>
+      <button type="button" class="menu-toggle" id="menu-toggle-mobile" aria-controls="menu-mobile" aria-expanded="false" aria-labelledby="menu-mobile">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <nav>
+      <ul class="menu" id="menu-mobile"><li class="search-wrapper">
+            <div class="search mobile" id="search-mobile">
+              <input type="text" placeholder="搜索文章标题或内容……" id="search-input-mobile">
+              <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索" aria-controls="search-dropdown-mobile" aria-expanded="false">
+                <i class="fa-solid fa-search" aria-hidden="true"></i>
+              </a>
+              <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                <i class="fa-solid fa-times-circle" aria-hidden="true"></i>
+              </a>
+              <span class="search-button search-loading" id="search-loading-mobile">
+                <i class="fa-solid fa-spinner fa-spin" aria-hidden="true"></i>
+              </span>
+            </div>
+            <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+              取消
+            </a>
+          </li><li class="menu-item"><a class="menu-link" href="/posts/">📕 文章</a></li><li class="menu-item"><a class="menu-link" href="/categories/">🧰 分类</a></li><li class="menu-item"><a class="menu-link" href="/tags/">🔖 标签</a></li><li class="menu-item"><a class="menu-link" href="/book">📚 书单</a></li><li class="menu-item"><a class="menu-link" href="/paper">📝 论文</a></li><li class="menu-item"><a class="menu-link" href="/opencourse">👨🏻‍💻 公开课</a></li><li class="menu-item"><a class="menu-link" href="/filmtv">🎞️ 影视</a></li><li class="menu-item"><a class="menu-link" href="/resource">⚡️ 资源库</a></li><li class="menu-item"><a class="menu-link" href="/projects">⭐ 开源</a></li><li class="menu-item"><a class="menu-link" href="/about">🙋🏻‍♂️ 关于</a></li><li class="menu-item menu-system"></li>
+      </ul>
+    </nav>
+  </div>
+</header><div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+  </div>
+  <div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+  </div><main class="fi-container"><aside class="aside-collection animate__animated animate__fadeIn animate__faster" aria-label="合集"><div class="details related-details open">
+      <div class="details-summary related-summary">
+        <i class="fa-solid fa-fire fa-fade text-danger" aria-hidden="true"></i>
+        <span class="related-title">相关内容</span><i class="details-icon fa-solid fa-angle-right" aria-hidden="true"></i></div>
+      <div class="details-content related-content">
+        <ul class="related-list"><li class="related-item">
+              <a href="/%E5%AD%A6%E4%B9%A0javascript%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" title="学习JavaScript数据结构与算法 第3版 (Loiane Groner)">学习JavaScript数据结构与算法 第3版 (Loiane Groner)</a></li></ul>
+      </div>
+    </div></aside>
+
+  <article class="page single">
+    <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span title="转载" class="icon-repost"><i class="fa-solid fa-share" aria-hidden="true"></i></span><span>LeetCode算法进阶之路：从数据机构到算法思想的刷题笔记</span>
+      </h1></div><div class="post-meta">
+      <div class="post-meta-line"><span class="post-author"><a href="https://andyfree96.github.io/" title="作者" target="_blank" rel="author external nofollow noopener noreferrer" class="author"><img class="avatar" src='/avatar/1.jpg' alt="AndyFree96" height="16" width="16">&nbsp;AndyFree96</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" class="post-category" title="分类 - 数据结构与算法"><i class="fa-regular fa-folder" aria-hidden="true"></i> 数据结构与算法</a></span></div><div class="post-meta-line"><span title="发布于 2026-03-09 14:42:53"><i class="fa-solid fa-calendar-days me-1" aria-hidden="true"></i><time datetime="2026-03-09">2026-03-09</time></span>&nbsp;<span title="2312 字"><i class="fa-solid fa-pencil-alt me-1" aria-hidden="true"></i>约 2400 字</span>&nbsp;<span><i class="fa-regular fa-clock me-1" aria-hidden="true"></i>预计阅读 5 分钟</span>&nbsp;</div>
+    </div><div class="featured-image"><img loading="eager" src='/images/202603/2/microsoft-copilot-o2MBk6J-Iqc-unsplash.jpg' sizes="(max-width: 680px) 100vw, (max-width: 960px) 80vw, (max-width: 1440px) 56vw, 800px" alt="/images/202603/2/microsoft-copilot-o2MBk6J-Iqc-unsplash.jpg"></div><div class="details toc" id="toc-static" data-kept="false">
+        <div class="details-summary toc-title">
+          <span>目录</span>
+          <span><i class="details-icon fa-solid fa-angle-right" aria-hidden="true"></i></span>
+        </div>
+        <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#刷题目标">刷题目标</a>
+      <ul>
+        <li><a href="#建立完整的数据结构知识体系">建立完整的数据结构知识体系</a></li>
+        <li><a href="#掌握常见算法思想">掌握常见算法思想</a></li>
+        <li><a href="#提升工程代码能力">提升工程代码能力</a></li>
+      </ul>
+    </li>
+    <li><a href="#记录方式">记录方式</a></li>
+    <li><a href="#刷题记录">刷题记录</a></li>
+    <li><a href="#数组与字符串篇">数组与字符串篇</a>
+      <ul>
+        <li><a href="#两数之和">两数之和</a>
+          <ul>
+            <li><a href="#解题思路">解题思路</a>
+              <ul>
+                <li><a href="#最直接的思路暴力枚举">最直接的思路：暴力枚举</a></li>
+                <li><a href="#优化思路利用哈希表较低查找复杂度">优化思路：利用哈希表较低查找复杂度</a></li>
+              </ul>
+            </li>
+            <li><a href="#算法流程">算法流程</a></li>
+            <li><a href="#c实现">C++实现</a></li>
+            <li><a href="#c实现-1">C#实现</a></li>
+            <li><a href="#python实现">Python实现</a></li>
+            <li><a href="#typescript实现">TypeScript实现</a></li>
+          </ul>
+        </li>
+        <li><a href="#两个有序数组的中位数">两个有序数组的中位数</a>
+          <ul>
+            <li><a href="#复杂度">复杂度</a></li>
+            <li><a href="#知识总结">知识总结</a></li>
+            <li><a href="#个人总结">个人总结</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#链表篇">链表篇</a></li>
+    <li><a href="#栈与队列篇">栈与队列篇</a></li>
+    <li><a href="#哈希表篇">哈希表篇</a></li>
+    <li><a href="#二叉树篇">二叉树篇</a></li>
+    <li><a href="#dfs--bfs-篇">DFS / BFS 篇</a></li>
+    <li><a href="#二分查找篇">二分查找篇</a></li>
+    <li><a href="#动态规划篇">动态规划篇</a></li>
+    <li><a href="#图论篇">图论篇</a></li>
+    <li><a href="#高级数据结构篇">高级数据结构篇</a></li>
+    <li><a href="#推荐">推荐</a></li>
+    <li><a href="#参考">参考</a></li>
+  </ul>
+</nav></div>
+      </div><div class="content" id="content"><p>算法能力是编程人员成长过程中不可绕过的基础能力。在实际工程开发中，我们更多面对的是业务问题、系统设计、架构演进以及工程实践，但有很多底层能力。例如：如何高效处理数据、如何设计合理的数据结构、如何优化程序复杂度——最终都会回归到数据结构与算法。从日常开发中的缓存设计，到高性能系统中的数据组织、搜索优化，再到人工智能和计算机视觉领域中的模型设计，算法思想始终贯穿其中。</p>
+<p>过去的开发经历让我积累了一定的工程经验，也意识到掌握语言特性和框架使用，并不能代表真正具备扎实的软件工程能力。因此，开始重新系统学习数据结构与算法，并通过<a href="https://leetcode.com/" target="_blank" rel="external nofollow noopener noreferrer">LeetCode<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>作为主要练习平台，将每一道题的思考过程、算法思想以及实现方式记录下来。这篇文章将作为我的LeetCode刷题总记录，持续更新，<a href="https://github.com/AndyFree96/leetcode-notebook" target="_blank" rel="external nofollow noopener noreferrer">Github<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>同步记录。</p>
+<h2 class="heading-element" id="刷题目标"><span>刷题目标</span>
+  <a href="#%e5%88%b7%e9%a2%98%e7%9b%ae%e6%a0%87" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>刷LeetCode并不是为了简单追求题目数量，也不是为了机械记忆某些固定模板。真正希望通过刷题达到以下几个目标：</p>
+<h3 class="heading-element" id="建立完整的数据结构知识体系"><span>建立完整的数据结构知识体系</span>
+  <a href="#%e5%bb%ba%e7%ab%8b%e5%ae%8c%e6%95%b4%e7%9a%84%e6%95%b0%e6%8d%ae%e7%bb%93%e6%9e%84%e7%9f%a5%e8%af%86%e4%bd%93%e7%b3%bb" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p>重新梳理常见的数据结构：</p>
+<ul>
+<li>数组（Array）</li>
+<li>链表（Linked List）</li>
+<li>栈（Stack）</li>
+<li>队列（Queue）</li>
+<li>哈希表（Hash Table）</li>
+<li>树（Tree）</li>
+<li>图（Graph）</li>
+<li>堆（Heap）</li>
+</ul>
+<p>理解它们的内部结构、适用场景以及时间复杂度。</p>
+<h3 class="heading-element" id="掌握常见算法思想"><span>掌握常见算法思想</span>
+  <a href="#%e6%8e%8c%e6%8f%a1%e5%b8%b8%e8%a7%81%e7%ae%97%e6%b3%95%e6%80%9d%e6%83%b3" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p>算法题真正考察的并不是代码，而是解决问题的思维方式。</p>
+<p>刷题过程中重点总结：</p>
+<ul>
+<li>双指针（Two Pointers）</li>
+<li>滑动窗口（Sliding Window）</li>
+<li>二分查找（Binary Search）</li>
+<li>深度优先搜索（DFS）</li>
+<li>广度优先搜索（BFS）</li>
+<li>回溯（Backtracking）</li>
+<li>动态规划（Dynamic Programming）</li>
+<li>贪心算法（Greedy）</li>
+<li>分治算法（Divide and Conquer）</li>
+</ul>
+<p>希望逐渐形成面对陌生问题时的分析能力，而不是依赖题目记忆。</p>
+<h3 class="heading-element" id="提升工程代码能力"><span>提升工程代码能力</span>
+  <a href="#%e6%8f%90%e5%8d%87%e5%b7%a5%e7%a8%8b%e4%bb%a3%e7%a0%81%e8%83%bd%e5%8a%9b" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p>算法题最终需要通过代码实现。在实现过程中，会持续关注：</p>
+<ul>
+<li>代码可读性</li>
+<li>边界条件处理</li>
+<li>时间复杂度</li>
+<li>空间复杂度</li>
+<li>不同语言实现方式</li>
+</ul>
+<p>目前主要使用：</p>
+<ul>
+<li>C++</li>
+<li>C#</li>
+<li>Python</li>
+<li>TypeScript</li>
+</ul>
+<p>进行练习。通过不同语言实现同一个算法，也可以进一步理解语言特性以及底层实现差异。</p>
+<h2 class="heading-element" id="记录方式"><span>记录方式</span>
+  <a href="#%e8%ae%b0%e5%bd%95%e6%96%b9%e5%bc%8f" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>本文不会简单罗列题目列表，而是按照知识体系进行整理。每一道题主要记录：</p>
+<ul>
+<li>题目名称</li>
+<li>题号</li>
+<li>难度</li>
+<li>涉及知识点</li>
+<li>解题思路</li>
+<li>核心算法</li>
+<li>代码实现</li>
+<li>时间复杂度</li>
+<li>空间复杂度</li>
+<li>个人总结</li>
+</ul>
+<h2 class="heading-element" id="刷题记录"><span>刷题记录</span>
+  <a href="#%e5%88%b7%e9%a2%98%e8%ae%b0%e5%bd%95" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>后续章节将按照数据结构和算法分类持续更新。当前规划：</p>
+<ul>
+<li>数组与字符串篇</li>
+<li>链表篇</li>
+<li>栈与队列篇</li>
+<li>哈希表篇</li>
+<li>二叉树篇</li>
+<li>DFS / BFS 篇</li>
+<li>二分查找篇</li>
+<li>动态规划篇</li>
+<li>图论篇</li>
+<li>高级数据结构篇</li>
+</ul>
+<h2 class="heading-element" id="数组与字符串篇"><span>数组与字符串篇</span>
+  <a href="#%e6%95%b0%e7%bb%84%e4%b8%8e%e5%ad%97%e7%ac%a6%e4%b8%b2%e7%af%87" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><h3 class="heading-element" id="两数之和"><span>两数之和</span>
+  <a href="#%e4%b8%a4%e6%95%b0%e4%b9%8b%e5%92%8c" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><div class="table-wrapper">
+  <table>
+    <thead>
+        <tr>
+            <th style="text-align: left">题号</th>
+            <th style="text-align: left">难度</th>
+            <th style="text-align: left">题目链接</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td style="text-align: left">#1</td>
+            <td style="text-align: left">Easy</td>
+            <td style="text-align: left"><a href="https://leetcode.com/problems/two-sum" target="_blank" rel="external nofollow noopener noreferrer">Two Sum<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></td>
+        </tr>
+    </tbody>
+  </table>
+</div><h4 class="heading-element" id="解题思路"><span>解题思路</span>
+  <a href="#%e8%a7%a3%e9%a2%98%e6%80%9d%e8%b7%af" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h4><h5 class="heading-element" id="最直接的思路暴力枚举"><span>最直接的思路：暴力枚举</span>
+  <a href="#%e6%9c%80%e7%9b%b4%e6%8e%a5%e7%9a%84%e6%80%9d%e8%b7%af%e6%9a%b4%e5%8a%9b%e6%9e%9a%e4%b8%be" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h5><p>最容易想到的方法是遍历数组中的每两个元素：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-cpp"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">nums</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">==</span> <span class="n">target</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>如果满足条件，就返回对应下标。这种方法简单，但需要两层循环。时间复杂度：<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>O</mi><mrow><mo fence="true">(</mo><msup><mi>n</mi><mn>2</mn></msup><mo fence="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">O\left(n^2\right)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.2em;vertical-align:-0.35em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="minner"><span class="mopen delimcenter" style="top:0em;"><span class="delimsizing size1">(</span></span><span class="mord"><span class="mord mathnormal">n</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mclose delimcenter" style="top:0em;"><span class="delimsizing size1">)</span></span></span></span></span></span>。当数组规模较大时，性能较差。</p>
+<h5 class="heading-element" id="优化思路利用哈希表较低查找复杂度"><span>优化思路：利用哈希表较低查找复杂度</span>
+  <a href="#%e4%bc%98%e5%8c%96%e6%80%9d%e8%b7%af%e5%88%a9%e7%94%a8%e5%93%88%e5%b8%8c%e8%a1%a8%e8%be%83%e4%bd%8e%e6%9f%a5%e6%89%be%e5%a4%8d%e6%9d%82%e5%ba%a6" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h5><p>我们在寻找：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-cpp"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">nums</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">==</span> <span class="n">target</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>可以转化为：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-cpp"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="n">nums</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">==</span> <span class="n">target</span> <span class="o">-</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">]</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>也就是说遍历当前元素时，只需要判断之前是否出现过：target-当前值。</p>
+<h4 class="heading-element" id="算法流程"><span>算法流程</span>
+  <a href="#%e7%ae%97%e6%b3%95%e6%b5%81%e7%a8%8b" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h4><div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-fallback"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">初始化HashMap
+</span></span><span class="line"><span class="cl">遍历数组:
+</span></span><span class="line"><span class="cl">  计算需要寻找的值: target - nums[i]
+</span></span><span class="line"><span class="cl">  如果HashMap中存在:
+</span></span><span class="line"><span class="cl">    返回对应下标
+</span></span><span class="line"><span class="cl">  否则:
+</span></span><span class="line"><span class="cl">    将当前元素加入HashMap</span></span></code></pre></td></tr></table></div>
+</div>
+</div><h4 class="heading-element" id="c实现"><span>C++实现</span>
+  <a href="#c%e5%ae%9e%e7%8e%b0" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h4><div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-cpp"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="2" style="--fi-max-shown-lines:400;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">twoSum</span><span class="p">(</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;&amp;</span> <span class="n">nums</span><span class="p">,</span> <span class="kt">int</span> <span class="n">target</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">unordered_map</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;</span> <span class="n">hash</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">hash</span><span class="p">.</span><span class="n">reserve</span><span class="p">(</span><span class="n">nums</span><span class="p">.</span><span class="n">size</span><span class="p">());</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">nums</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="kt">int</span> <span class="n">complement</span> <span class="o">=</span> <span class="n">target</span> <span class="o">-</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            <span class="k">auto</span> <span class="n">it</span> <span class="o">=</span> <span class="n">hash</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">complement</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="n">it</span> <span class="o">!=</span> <span class="n">hash</span><span class="p">.</span><span class="n">end</span><span class="p">())</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="k">return</span> <span class="p">{</span><span class="n">it</span><span class="o">-&gt;</span><span class="n">second</span><span class="p">,</span> <span class="n">i</span><span class="p">};</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            <span class="n">hash</span><span class="p">[</span><span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="p">{};</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><h4 class="heading-element" id="c实现-1"><span>C#实现</span>
+  <a href="#c%e5%ae%9e%e7%8e%b0-1" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h4><div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-c#"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="2" style="--fi-max-shown-lines:400;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c#" data-lang="c#"><span class="line"><span class="cl"><span class="kd">public</span> <span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">public</span> <span class="kt">int</span><span class="p">[]</span> <span class="n">TwoSum</span><span class="p">(</span><span class="kt">int</span><span class="p">[]</span> <span class="n">nums</span><span class="p">,</span> <span class="kt">int</span> <span class="n">target</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">var</span> <span class="n">map</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Dictionary</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="p">&gt;();</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="p">&lt;</span> <span class="n">nums</span><span class="p">.</span><span class="n">Length</span><span class="p">;</span> <span class="n">i</span><span class="p">++)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="kt">int</span> <span class="n">complement</span> <span class="p">=</span> <span class="n">target</span> <span class="p">-</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="n">map</span><span class="p">.</span><span class="n">TryGetValue</span><span class="p">(</span><span class="n">complement</span><span class="p">,</span> <span class="k">out</span> <span class="kt">int</span> <span class="n">index</span><span class="p">))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="k">return</span> <span class="k">new</span><span class="p">[]</span> <span class="p">{</span><span class="n">index</span><span class="p">,</span> <span class="n">i</span><span class="p">};</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            <span class="n">map</span><span class="p">[</span><span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="p">=</span> <span class="n">i</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">Array</span><span class="p">.</span><span class="n">Empty</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">&gt;();</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><h4 class="heading-element" id="python实现"><span>Python实现</span>
+  <a href="#python%e5%ae%9e%e7%8e%b0" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h4><div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-python"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Solution</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="nf">twoSum</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nums</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">target</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
+</span></span><span class="line"><span class="cl">        <span class="n">hashMap</span> <span class="o">=</span> <span class="p">{}</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">num</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">nums</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">            <span class="n">complement</span> <span class="o">=</span> <span class="n">target</span> <span class="o">-</span> <span class="n">num</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="n">complement</span> <span class="ow">in</span> <span class="n">hashMap</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">                <span class="k">return</span> <span class="p">[</span><span class="n">hashMap</span><span class="p">[</span><span class="n">complement</span><span class="p">],</span> <span class="n">i</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">            <span class="n">hashMap</span><span class="p">[</span><span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">=</span> <span class="n">i</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="p">[]</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><h4 class="heading-element" id="typescript实现"><span>TypeScript实现</span>
+  <a href="#typescript%e5%ae%9e%e7%8e%b0" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h4><div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-ts"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="2" style="--fi-max-shown-lines:400;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-ts" data-lang="ts"><span class="line"><span class="cl"><span class="kd">function</span> <span class="nx">twoSum</span><span class="p">(</span><span class="nx">nums</span>: <span class="kt">number</span><span class="p">[],</span> <span class="nx">target</span>: <span class="kt">number</span><span class="p">)</span><span class="o">:</span> <span class="kt">number</span><span class="p">[]</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="kr">const</span> <span class="nx">map</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Map</span><span class="p">&lt;</span><span class="nt">number</span><span class="p">,</span> <span class="na">number</span><span class="p">&gt;();</span>
+</span></span><span class="line"><span class="cl">  <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">nums</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kr">const</span> <span class="nx">complement</span> <span class="o">=</span> <span class="nx">target</span> <span class="o">-</span> <span class="nx">nums</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="nx">map</span><span class="p">.</span><span class="nx">has</span><span class="p">(</span><span class="nx">complement</span><span class="p">))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="k">return</span> <span class="p">[</span><span class="nx">map</span><span class="p">.</span><span class="kr">get</span><span class="p">(</span><span class="nx">complement</span><span class="p">),</span> <span class="nx">i</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nx">map</span><span class="p">.</span><span class="kr">set</span><span class="p">(</span><span class="nx">nums</span><span class="p">[</span><span class="nx">i</span><span class="p">],</span> <span class="nx">i</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="k">return</span> <span class="p">[];</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><h3 class="heading-element" id="两个有序数组的中位数"><span>两个有序数组的中位数</span>
+  <a href="#%e4%b8%a4%e4%b8%aa%e6%9c%89%e5%ba%8f%e6%95%b0%e7%bb%84%e7%9a%84%e4%b8%ad%e4%bd%8d%e6%95%b0" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><div class="table-wrapper">
+  <table>
+    <thead>
+        <tr>
+            <th style="text-align: left">题号</th>
+            <th style="text-align: left">难度</th>
+            <th style="text-align: left">题目链接</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td style="text-align: left">#4</td>
+            <td style="text-align: left">Hard</td>
+            <td style="text-align: left"><a href="https://leetcode.com/problems/median-of-two-sorted-arrays" target="_blank" rel="external nofollow noopener noreferrer">Median of Two Sorted Arrays<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></td>
+        </tr>
+    </tbody>
+  </table>
+</div><h4 class="heading-element" id="复杂度"><span>复杂度</span>
+  <a href="#%e5%a4%8d%e6%9d%82%e5%ba%a6" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h4><p>遍历数组一次<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>O</mi><mrow><mo fence="true">(</mo><mi>n</mi><mo fence="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">O\left(n\right)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="minner"><span class="mopen delimcenter" style="top:0em;">(</span><span class="mord mathnormal">n</span><span class="mclose delimcenter" style="top:0em;">)</span></span></span></span></span>，哈希表查询平均<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>O</mi><mrow><mo fence="true">(</mo><mn>1</mn><mo fence="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">O\left(1\right)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="minner"><span class="mopen delimcenter" style="top:0em;">(</span><span class="mord">1</span><span class="mclose delimcenter" style="top:0em;">)</span></span></span></span></span>。因此，时间复杂度为<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>O</mi><mrow><mo fence="true">(</mo><mi>n</mi><mo fence="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">O\left(n\right)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="minner"><span class="mopen delimcenter" style="top:0em;">(</span><span class="mord mathnormal">n</span><span class="mclose delimcenter" style="top:0em;">)</span></span></span></span></span>。额外使用哈希标保存元素，空间复杂度为<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>O</mi><mrow><mo fence="true">(</mo><mi>n</mi><mo fence="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">O\left(n\right)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="minner"><span class="mopen delimcenter" style="top:0em;">(</span><span class="mord mathnormal">n</span><span class="mclose delimcenter" style="top:0em;">)</span></span></span></span></span>。</p>
+<h4 class="heading-element" id="知识总结"><span>知识总结</span>
+  <a href="#%e7%9f%a5%e8%af%86%e6%80%bb%e7%bb%93" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h4><p>哈希表的核心价值是可以通过空间换时间，增加额外存储空间，将查找过程优化。这种思想在实际工程中非常常见。例如，使用HashSet数据去重，判断元素是否已经出现。Redis缓存查询，通过哈希结构快速定位数据。</p>
+<h4 class="heading-element" id="个人总结"><span>个人总结</span>
+  <a href="#%e4%b8%aa%e4%ba%ba%e6%80%bb%e7%bb%93" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h4><p>两数之和是LeetCode中非常经典的一道入门题。它的重要意义并不在于题目本身，而是第一次体现了：</p>
+<blockquote>
+<p>面对一个查找问题，不一定要直接搜索，可以通过合适的数据结构改变问题的复杂度。</p>
+</blockquote>
+<p>后续很多算法优化，本质都是类似思想：</p>
+<div class="code-tabs diagram-tabs" data-diagram="mermaid">
+    <div class="tabs-header">
+      <div class="tabs-items">
+        <span class="tab-item active" data-tab="diagram" title="图表">图表</span>
+        <span class="tab-item" data-tab="code" title="代码">代码</span>
+      </div>
+      <div class="tabs-actions">
+        <button type="button" class="action-btn diagram-zoom-out-btn" aria-label="缩小" title="缩小"><i class="fa-solid fa-magnifying-glass-minus" aria-hidden="true"></i></button>
+        <button type="button" class="action-btn diagram-zoom-in-btn" aria-label="放大" title="放大"><i class="fa-solid fa-magnifying-glass-plus" aria-hidden="true"></i></button>
+        <button type="button" class="action-btn diagram-reset-btn" aria-label="重置" title="重置"><i class="fa-solid fa-arrows-rotate" aria-hidden="true"></i></button>
+        <button type="button" class="action-btn diagram-download-btn" aria-label="下载 SVG" title="下载 SVG"><i class="fa-solid fa-download" aria-hidden="true"></i></button>
+      </div>
+    </div>
+    <div class="tabs-content">
+      <div class="code-block diagram-view active" data-filename="mermaid.mmd">
+        <div class="diagram-container">
+          <pre class="mermaid">flowchart TD
+    A[暴力解决] --> B[分析瓶颈]
+    B --> C[引入数据结构]
+    C --> D[降低时间复杂度]</pre>
+          <pre class="mermaid-dark">flowchart TD
+    A[暴力解决] --> B[分析瓶颈]
+    B --> C[引入数据结构]
+    C --> D[降低时间复杂度]</pre>
+          <pre class="mermaid-neutral">flowchart TD
+    A[暴力解决] --> B[分析瓶颈]
+    B --> C[引入数据结构]
+    C --> D[降低时间复杂度]</pre>
+        </div>
+      </div><div class="code-block highlight diagram-code" data-mode="classic" data-copyable="true" copyable="true" fullscreen="true" filename="mermaid.mmd"><div class="chroma">
+<div class="code-header language-text"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">flowchart TD
+</span></span><span class="line"><span class="cl">    A[暴力解决] --&gt; B[分析瓶颈]
+</span></span><span class="line"><span class="cl">    B --&gt; C[引入数据结构]
+</span></span><span class="line"><span class="cl">    C --&gt; D[降低时间复杂度]</span></span></code></pre></td></tr></table></div>
+</div>
+</div></div>
+  </div><p>这是学习算法过程中非常重要的一种思维方式。</p>
+<h2 class="heading-element" id="链表篇"><span>链表篇</span>
+  <a href="#%e9%93%be%e8%a1%a8%e7%af%87" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><h2 class="heading-element" id="栈与队列篇"><span>栈与队列篇</span>
+  <a href="#%e6%a0%88%e4%b8%8e%e9%98%9f%e5%88%97%e7%af%87" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><h2 class="heading-element" id="哈希表篇"><span>哈希表篇</span>
+  <a href="#%e5%93%88%e5%b8%8c%e8%a1%a8%e7%af%87" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><h2 class="heading-element" id="二叉树篇"><span>二叉树篇</span>
+  <a href="#%e4%ba%8c%e5%8f%89%e6%a0%91%e7%af%87" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><h2 class="heading-element" id="dfs--bfs-篇"><span>DFS / BFS 篇</span>
+  <a href="#dfs--bfs-%e7%af%87" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><h2 class="heading-element" id="二分查找篇"><span>二分查找篇</span>
+  <a href="#%e4%ba%8c%e5%88%86%e6%9f%a5%e6%89%be%e7%af%87" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><h2 class="heading-element" id="动态规划篇"><span>动态规划篇</span>
+  <a href="#%e5%8a%a8%e6%80%81%e8%a7%84%e5%88%92%e7%af%87" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><h2 class="heading-element" id="图论篇"><span>图论篇</span>
+  <a href="#%e5%9b%be%e8%ae%ba%e7%af%87" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><h2 class="heading-element" id="高级数据结构篇"><span>高级数据结构篇</span>
+  <a href="#%e9%ab%98%e7%ba%a7%e6%95%b0%e6%8d%ae%e7%bb%93%e6%9e%84%e7%af%87" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><h2 class="heading-element" id="推荐"><span>推荐</span>
+  <a href="#%e6%8e%a8%e8%8d%90" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p><a href="https://github.com/youngyangyang04/leetcode-master" target="_blank" rel="external nofollow noopener noreferrer">leetcode-master<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>: 代码随想录》LeetCode 刷题攻略：200道经典题目刷题顺序，共60w字的详细图解，视频难点剖析，50余张思维导图，支持C++，Java，Python，Go，JavaScript等多语言版本，从此算法学习不再迷茫！🔥🔥 来看看，你会发现相见恨晚！🚀</p>
+<h2 class="heading-element" id="参考"><span>参考</span>
+  <a href="#%e5%8f%82%e8%80%83" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2></div><hr class="awesome-hr" />
+    <h2 id="see-also">相关内容</h2>
+    <ul><li>
+          <a href="/%E5%AD%A6%E4%B9%A0javascript%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" title="学习JavaScript数据结构与算法 第3版 (Loiane Groner)">学习JavaScript数据结构与算法 第3版 (Loiane Groner)</a></li></ul><div class="post-footer" id="post-footer">
+  <div class="post-info">
+    <div class="post-info-line">
+      <div class="post-info-mod"><span title="更新于 2026-03-09 14:42:53">更新于 2026-03-09&nbsp;</span>
+      </div></div><div class="post-info-line">
+        <div class="post-info-md"><span><a href="vscode://file/D:\hugo-blog\andyfree96\content\posts\LeetCode算法进阶之路.md" title="在编辑器中打开" class="link-to-vscode">在编辑器中打开</a></span></div>
+        <div class="post-info-share">
+          <span><a href="javascript:void(0);" title="分享到 X" data-sharer="twitter" data-url="http://localhost:1313/leetcode%E7%AE%97%E6%B3%95%E8%BF%9B%E9%98%B6%E4%B9%8B%E8%B7%AF/" data-title="LeetCode算法进阶之路：从数据机构到算法思想的刷题笔记" data-via="IRONAnthony96" data-hashtags="LeetCode,算法,数据结构,刷题记录,算法题解"><i class="fa-brands fa-x-twitter" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="http://localhost:1313/leetcode%E7%AE%97%E6%B3%95%E8%BF%9B%E9%98%B6%E4%B9%8B%E8%B7%AF/" data-hashtag="LeetCode"><i class="fa-brands fa-facebook-square" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="http://localhost:1313/leetcode%E7%AE%97%E6%B3%95%E8%BF%9B%E9%98%B6%E4%B9%8B%E8%B7%AF/" data-title="LeetCode算法进阶之路：从数据机构到算法思想的刷题笔记" data-image="/images/202603/2/microsoft-copilot-o2MBk6J-Iqc-unsplash.jpg"><i class="fa-brands fa-weibo" aria-hidden="true"></i></a>
+  </span>
+        </div>
+      </div></div>
+
+  <div class="post-info-more">
+    <section class="post-tags"><i class="fa-solid fa-tags me-1" aria-hidden="true"></i><a href="/tags/leetcode/" class="post-tag" title="标签 - LeetCode">LeetCode</a><a href="/tags/%E7%AE%97%E6%B3%95/" class="post-tag" title="标签 - 算法">算法</a><a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" class="post-tag" title="标签 - 数据结构">数据结构</a><a href="/tags/%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%95/" class="post-tag" title="标签 - 刷题记录">刷题记录</a><a href="/tags/%E7%AE%97%E6%B3%95%E9%A2%98%E8%A7%A3/" class="post-tag" title="标签 - 算法题解">算法题解</a></section>
+    <section><span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+    </section>
+  </div><div class="post-nav"><a href="/c%23%E4%B8%AD%E7%9A%84nameof%E8%BF%90%E7%AE%97%E7%AC%A6/" class="post-nav-item" rel="prev" title="C#中的nameof运算符"><i class="fa-solid fa-angle-left" aria-hidden="true"></i>C#中的nameof运算符</a><a href="/%E4%BB%8E%E6%89%A7%E8%A1%8C%E4%B8%8A%E4%B8%8B%E6%96%87%E7%90%86%E8%A7%A3javascript%E5%8F%98%E9%87%8F%E6%8F%90%E5%8D%87/" class="post-nav-item" rel="next" title="从执行上下文理解JavaScript变量提升">从执行上下文理解JavaScript变量提升<i class="fa-solid fa-angle-right" aria-hidden="true"></i></a></div>
+</div>
+<div class="post-reward">
+    <div class="comment">请作者喝杯咖啡!</div>
+    <input type="checkbox" class="reward-input" name="reward" id="fi-reward" hidden />
+    <label class="reward-button" for="fi-reward"><i class="fa-solid fa-qrcode" aria-hidden="true"></i>赞赏</label>
+    <div class="reward-ways" data-mode="static"><div><img src='/reward/alipay.png' alt="AndyFree96 支付宝"><span data-animation>支付宝</span>
+          </div><div><img src='/reward/wechatpay.png' alt="AndyFree96 微信"><span data-animation>微信</span>
+          </div></div>
+  </div></article>
+
+  <aside class="toc" id="toc-auto" aria-label="目录"><h2 class="toc-title">目录&nbsp;<i class="toc-icon fa-solid fa-angle-down" aria-hidden="true"></i></h2>
+      <div class="toc-content" id="toc-content-auto"></div></aside><dialog id="toc-dialog" aria-labelledby="toc-dialog-title" role="dialog" closedby="any">
+      <button type="button" class="toc-close-btn" aria-label="Close Table of Contents"><i class="fa-solid fa-xmark fa-lg" aria-hidden="true"></i></button>
+      <div class="toc">
+        <h2 class="toc-title" id="toc-dialog-title">目录</h2>
+        <div class="toc-content" id="toc-content-drawer"><nav >
+  <ul>
+    <li><a href="#刷题目标">刷题目标</a>
+      <ul>
+        <li><a href="#建立完整的数据结构知识体系">建立完整的数据结构知识体系</a></li>
+        <li><a href="#掌握常见算法思想">掌握常见算法思想</a></li>
+        <li><a href="#提升工程代码能力">提升工程代码能力</a></li>
+      </ul>
+    </li>
+    <li><a href="#记录方式">记录方式</a></li>
+    <li><a href="#刷题记录">刷题记录</a></li>
+    <li><a href="#数组与字符串篇">数组与字符串篇</a>
+      <ul>
+        <li><a href="#两数之和">两数之和</a>
+          <ul>
+            <li><a href="#解题思路">解题思路</a>
+              <ul>
+                <li><a href="#最直接的思路暴力枚举">最直接的思路：暴力枚举</a></li>
+                <li><a href="#优化思路利用哈希表较低查找复杂度">优化思路：利用哈希表较低查找复杂度</a></li>
+              </ul>
+            </li>
+            <li><a href="#算法流程">算法流程</a></li>
+            <li><a href="#c实现">C++实现</a></li>
+            <li><a href="#c实现-1">C#实现</a></li>
+            <li><a href="#python实现">Python实现</a></li>
+            <li><a href="#typescript实现">TypeScript实现</a></li>
+          </ul>
+        </li>
+        <li><a href="#两个有序数组的中位数">两个有序数组的中位数</a>
+          <ul>
+            <li><a href="#复杂度">复杂度</a></li>
+            <li><a href="#知识总结">知识总结</a></li>
+            <li><a href="#个人总结">个人总结</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#链表篇">链表篇</a></li>
+    <li><a href="#栈与队列篇">栈与队列篇</a></li>
+    <li><a href="#哈希表篇">哈希表篇</a></li>
+    <li><a href="#二叉树篇">二叉树篇</a></li>
+    <li><a href="#dfs--bfs-篇">DFS / BFS 篇</a></li>
+    <li><a href="#二分查找篇">二分查找篇</a></li>
+    <li><a href="#动态规划篇">动态规划篇</a></li>
+    <li><a href="#图论篇">图论篇</a></li>
+    <li><a href="#高级数据结构篇">高级数据结构篇</a></li>
+    <li><a href="#推荐">推荐</a></li>
+    <li><a href="#参考">参考</a></li>
+  </ul>
+</nav></div>
+      </div>
+    </dialog></main><footer class="footer">
+    <div class="footer-container"><div class="footer-line powered">由 <a href="https://gohugo.io/" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.163.1">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/hugo-fixit/FixIt" target="_blank" rel="external" title="FixIt v1.0.0-mq99hlzg">FixIt</a>
+        </div><div class="footer-line copyright" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright" aria-hidden="true"></i>
+            <span itemprop="copyrightYear">2019 - 2026</span><span class="author" itemprop="copyrightHolder">
+              <a href="https://andyfree96.github.io/" target="_blank" rel="external nofollow noopener noreferrer">AndyFree96</a></span></div></div>
+  </footer></div><div class="widgets"><div class="fixed-buttons"><button type="button" class="fixed-button back-to-top animate__faster d-none" aria-label="回到顶部"><i class="fa-solid fa-arrow-up" aria-hidden="true"></i></button><button type="button" id="toc-drawer-button" class="fixed-button toc-drawer-button d-none" aria-label="目录" aria-controls="toc-dialog" aria-expanded="false"><i class="fa-solid fa-bars" aria-hidden="true"></i></button></div><div id="mask"></div><div class="reading-progress-bar" style="left: 0;top: 0;"></div><noscript>
+    <div class="noscript-warning">该网站在启用 JavaScript 的情况下效果最佳。</div>
+  </noscript>
+</div><link rel="stylesheet" href="/lib/katex/katex.min.css"><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script src="/lib/autocomplete/autocomplete.min.js" defer></script><script src="/lib/algoliasearch/browser.umd.js" defer></script><script src="/lib/sharer/sharer.min.js" async defer></script><script src="/lib/katex/copy-tex.min.js" defer></script><script src="/lib/cookieconsent/cookieconsent.min.js" defer></script><script src="/js/lib/cookieconsent.js" defer></script><script src="/lib/cell-tooltip/cell-tooltip.umd.js" defer></script><script src="/js/config/5a86bba6e4c432c9bda5d6d9a8da52a3.js" defer></script><script src="/js/lib/file-tree.js" defer></script><script src="/lib/panzoom/panzoom.min.js" defer></script><script src="/js/lib/mermaid-bootstrap.js" defer type="module"></script><script src="/js/main.js" defer></script></body>
+</html>
