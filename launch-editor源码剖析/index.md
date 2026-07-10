@@ -50,7 +50,7 @@ module.exports = (specifiedEditor, srcRoot, onErrorCallback) => {
     if (!file) {
       res.statusCode = 500;
       res.end(
-        `launch-editor-middleware: required query param "file" is missing.`
+        `launch-editor-middleware: required query param "file" is missing.`,
       );
     } else {
       launch(path.resolve(srcRoot, file), specifiedEditor, onErrorCallback);
@@ -109,7 +109,7 @@ module.exports = function guessEditor(specifiedEditor) {
         }
         const processNameWithoutApplications = processName.replace(
           '/Applications',
-          ''
+          '',
         );
         // Find editor installation not in /Applications.
         if (output.indexOf(processNameWithoutApplications) !== -1) {
@@ -120,7 +120,7 @@ module.exports = function guessEditor(specifiedEditor) {
           // Use a partial match to find the running process path.  If one is found, use the
           // existing path since it can be running from anywhere.
           const runningProcess = processList.find((procName) =>
-            procName.endsWith(processNameWithoutApplications)
+            procName.endsWith(processNameWithoutApplications),
           );
           if (runningProcess !== undefined) {
             return [runningProcess];
@@ -136,7 +136,7 @@ module.exports = function guessEditor(specifiedEditor) {
             '"',
           {
             stdio: ['pipe', 'pipe', 'ignore'],
-          }
+          },
         )
         .toString();
       const runningProcesses = output.split('\r\n');
@@ -193,7 +193,7 @@ const output = childProcess
       '"',
     {
       stdio: ['pipe', 'pipe', 'ignore'],
-    }
+    },
   )
   .toString();
 const runningProcesses = output.split('\r\n');
@@ -269,7 +269,7 @@ module.exports = function getArgumentsForPosition(
   editor,
   fileName,
   lineNumber,
-  columnNumber = 1
+  columnNumber = 1,
 ) {
   const editorBasename = path.basename(editor).replace(/\.(exe|cmd|bat)$/i, '');
   switch (editorBasename) {
