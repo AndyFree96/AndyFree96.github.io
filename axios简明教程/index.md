@@ -1,4 +1,4 @@
-# Axios简明教程
+# Axios完全指南：高效网络请求实战
 
 
 [Axios](https://github.com/axios/axios)是一个基于 Promise 的 HTTP 客户端，我们可以在浏览器和 Node.js 中使用它。Axios 使向 REST 端点发送异步 HTTP 请求和执行 CRUD 操作变得更加容易。它可以在纯 JavaScript 中使用，也可以在 Vue 或者 React 之类的库中使用。
@@ -208,7 +208,7 @@ async function getImage(url) {
 }
 
 getImage(
-  'https://himg.bdimg.com/sys/portraitn/item/856f6c656f73636f74743936f939'
+  'https://himg.bdimg.com/sys/portraitn/item/856f6c656f73636f74743936f939',
 );
 ```
 

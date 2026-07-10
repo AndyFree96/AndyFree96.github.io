@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+    <meta name="robots" content="noodp" />
+    <title>Pandas：让数据处理变得简单 - 东尼的博客</title><meta name="author" content="AndyFree96">
+<meta name="description" content="众所周知，Pandas 是最受欢迎的 Python 数据科学与分析库。Numpy 用于较低级别的科学计算。Pandas 构建于 Numpy 之上，专为实际数据分析而设计。本文总结了一些常见、方便的功能。话不多说，让我们开始吧！
+"><meta name="keywords" content='Python, Pandas, 数据分析, 数据科学'>
+	<meta itemprop="name" content="Pandas：让数据处理变得简单">
+	<meta itemprop="description" content="众所周知，Pandas 是最受欢迎的 Python 数据科学与分析库。Numpy 用于较低级别的科学计算。Pandas 构建于 Numpy 之上，专为实际数据分析而设计。本文总结了一些常见、方便的功能。话不多说，让我们开始吧！">
+	<meta itemprop="datePublished" content="2021-01-27T09:27:09+08:00">
+	<meta itemprop="dateModified" content="2021-01-27T09:27:09+08:00">
+	<meta itemprop="wordCount" content="2058">
+	<meta itemprop="keywords" content="Python,Pandas,数据分析,数据科学"><meta property="og:url" content="http://localhost:1313/python%E4%B9%8Bpandas/">
+	<meta property="og:site_name" content="东尼的博客">
+	<meta property="og:title" content="Pandas：让数据处理变得简单">
+	<meta property="og:description" content="众所周知，Pandas 是最受欢迎的 Python 数据科学与分析库。Numpy 用于较低级别的科学计算。Pandas 构建于 Numpy 之上，专为实际数据分析而设计。本文总结了一些常见、方便的功能。话不多说，让我们开始吧！">
+	<meta property="og:locale" content="zh_CN">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="posts">
+		<meta property="article:published_time" content="2021-01-27T09:27:09+08:00">
+		<meta property="article:modified_time" content="2021-01-27T09:27:09+08:00">
+		<meta property="article:tag" content="Python">
+		<meta property="article:tag" content="Pandas">
+		<meta property="article:tag" content="数据分析">
+		<meta property="article:tag" content="数据科学">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Pandas：让数据处理变得简单">
+  <meta name="twitter:description" content="众所周知，Pandas 是最受欢迎的 Python 数据科学与分析库。Numpy 用于较低级别的科学计算。Pandas 构建于 Numpy 之上，专为实际数据分析而设计。本文总结了一些常见、方便的功能。话不多说，让我们开始吧！"><meta name="twitter:creator" content="@IRONAnthony96"><meta name="application-name" content="FixIt">
+<meta name="apple-mobile-web-app-title" content="FixIt"><meta name="theme-color" data-light="#f6f8fa" data-dark="#151b23" content="#f6f8fa"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" type="text/html" href="http://localhost:1313/python%E4%B9%8Bpandas/" title="Pandas：让数据处理变得简单 - 东尼的博客" /><link rel="prev" type="text/html" href="http://localhost:1313/opencv%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E5%AE%9E%E6%88%98/" title="OpenCV从入门到实战" /><link rel="next" type="text/html" href="http://localhost:1313/python%E4%B9%8Bmatplotlib/" title="Matplotlib：绘图入门与实践" /><link rel="alternate" type="text/markdown" href="http://localhost:1313/python%E4%B9%8Bpandas/index.md" title="Pandas：让数据处理变得简单 - 东尼的博客"><link rel="stylesheet" href="/css/config.css"><link rel="stylesheet" href="/css/main.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><link rel="preload" href="/js/main.js" as="script"><script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "BlogPosting",
+    "headline": "Pandas：让数据处理变得简单",
+    "inLanguage": "zh-CN",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "http:\/\/localhost:1313\/python%E4%B9%8Bpandas\/"
+    },"genre": "posts","keywords": "Python, Pandas, 数据分析, 数据科学","wordcount":  2058 ,
+    "url": "http:\/\/localhost:1313\/python%E4%B9%8Bpandas\/","datePublished": "2021-01-27T09:27:09+08:00","dateModified": "2021-01-27T09:27:09+08:00","publisher": {
+      "@type": "Organization",
+      "name": ""},"author": {
+        "@type": "Person",
+        "name": "AndyFree96"
+      },"description": ""
+  }
+  </script><script src="/js/head/color-scheme.js"></script></head>
+  <body data-instant-intensity="viewport" data-header-desktop="sticky" data-header-mobile="auto"><div class="wrapper" data-page-style="normal"><header class="desktop animate__faster" id="header-desktop">
+  <div class="header-wrapper">
+    <div class="header-title">
+      <a href="/" title="东尼的博客" class="header-title-link"><span class="header-title-text">东尼的博客</span></a><span class="header-subtitle"></span></div>
+    <nav>
+      <ul class="menu"><li class="menu-item">
+              <a class="menu-link" href="/posts/">📕 文章</a></li><li class="menu-item">
+              <a class="menu-link" href="/categories/">🧰 分类</a></li><li class="menu-item">
+              <a class="menu-link" href="/tags/">🔖 标签</a></li><li class="menu-item">
+              <a class="menu-link" href="/book">📚 书单</a></li><li class="menu-item">
+              <a class="menu-link" href="/paper">📝 论文</a></li><li class="menu-item">
+              <a class="menu-link" href="/opencourse">👨🏻‍💻 公开课</a></li><li class="menu-item">
+              <a class="menu-link" href="/filmtv">🎞️ 影视</a></li><li class="menu-item">
+              <a class="menu-link" href="/resource">⚡️ 资源库</a></li><li class="menu-item">
+              <a class="menu-link" href="/projects">⭐ 开源</a></li><li class="menu-item">
+              <a class="menu-link" href="/about">🙋🏻‍♂️ 关于</a></li><li class="menu-item delimiter"></li><li class="menu-item search" id="search-desktop">
+            <input type="text" placeholder="搜索文章标题或内容……" id="search-input-desktop" tabindex="-1">
+            <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索" aria-controls="search-dropdown-desktop" aria-expanded="false">
+              <i class="fa-solid fa-search" aria-hidden="true"></i>
+            </a>
+            <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+              <i class="fa-solid fa-times-circle" aria-hidden="true"></i>
+            </a>
+            <span class="search-button search-loading" id="search-loading-desktop">
+              <i class="fa-solid fa-spinner fa-spin" aria-hidden="true"></i>
+            </span>
+          </li><li class="menu-item theme-switch-item">
+          <button type="button" class="theme-switch" aria-label="切换主题" title="切换主题"><i class="fa-solid fa-adjust" aria-hidden="true"></i></button>
+        </li></ul>
+    </nav>
+  </div>
+</header><header class="mobile animate__faster" id="header-mobile">
+  <div class="header-container">
+    <div class="header-wrapper">
+      <div class="header-title">
+        <a href="/" title="东尼的博客" class="header-title-link"><span class="header-title-text">东尼的博客</span></a><span class="header-subtitle"></span></div>
+      <button type="button" class="theme-switch" aria-label="切换主题"><i class="fa-solid fa-adjust" aria-hidden="true"></i></button>
+      <button type="button" class="menu-toggle" id="menu-toggle-mobile" aria-controls="menu-mobile" aria-expanded="false" aria-labelledby="menu-mobile">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <nav>
+      <ul class="menu" id="menu-mobile"><li class="search-wrapper">
+            <div class="search mobile" id="search-mobile">
+              <input type="text" placeholder="搜索文章标题或内容……" id="search-input-mobile">
+              <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索" aria-controls="search-dropdown-mobile" aria-expanded="false">
+                <i class="fa-solid fa-search" aria-hidden="true"></i>
+              </a>
+              <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                <i class="fa-solid fa-times-circle" aria-hidden="true"></i>
+              </a>
+              <span class="search-button search-loading" id="search-loading-mobile">
+                <i class="fa-solid fa-spinner fa-spin" aria-hidden="true"></i>
+              </span>
+            </div>
+            <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+              取消
+            </a>
+          </li><li class="menu-item"><a class="menu-link" href="/posts/">📕 文章</a></li><li class="menu-item"><a class="menu-link" href="/categories/">🧰 分类</a></li><li class="menu-item"><a class="menu-link" href="/tags/">🔖 标签</a></li><li class="menu-item"><a class="menu-link" href="/book">📚 书单</a></li><li class="menu-item"><a class="menu-link" href="/paper">📝 论文</a></li><li class="menu-item"><a class="menu-link" href="/opencourse">👨🏻‍💻 公开课</a></li><li class="menu-item"><a class="menu-link" href="/filmtv">🎞️ 影视</a></li><li class="menu-item"><a class="menu-link" href="/resource">⚡️ 资源库</a></li><li class="menu-item"><a class="menu-link" href="/projects">⭐ 开源</a></li><li class="menu-item"><a class="menu-link" href="/about">🙋🏻‍♂️ 关于</a></li><li class="menu-item menu-system"></li>
+      </ul>
+    </nav>
+  </div>
+</header><div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+  </div>
+  <div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+  </div><main class="fi-container"><aside class="aside-collection animate__animated animate__fadeIn animate__faster" aria-label="合集"><div class="details related-details open">
+      <div class="details-summary related-summary">
+        <i class="fa-solid fa-fire fa-fade text-danger" aria-hidden="true"></i>
+        <span class="related-title">相关内容</span><i class="details-icon fa-solid fa-angle-right" aria-hidden="true"></i></div>
+      <div class="details-content related-content">
+        <ul class="related-list"><li class="related-item">
+              <a href="/%E7%94%A8keras%E6%90%AD%E5%BB%BA%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" title="用Keras搭建卷积神经网络">用Keras搭建卷积神经网络</a></li><li class="related-item">
+              <a href="/tkinter%E7%AE%80%E6%98%8E%E6%95%99%E7%A8%8B/" title="Tkinter简明教程">Tkinter简明教程</a></li><li class="related-item">
+              <a href="/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E5%AD%A6%E4%B9%A0gans/" title="从零开始学习GANs">从零开始学习GANs</a></li><li class="related-item">
+              <a href="/python%E4%B9%8Bopencv/" title="OpenCV：计算机视觉入门与实践">OpenCV：计算机视觉入门与实践</a></li></ul>
+      </div>
+    </div></aside>
+
+  <article class="page single">
+    <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span title="转载" class="icon-repost"><i class="fa-solid fa-share" aria-hidden="true"></i></span><span>Pandas：让数据处理变得简单</span>
+      </h1></div><div class="post-meta">
+      <div class="post-meta-line"><span class="post-author"><a href="https://andyfree96.github.io/" title="作者" target="_blank" rel="author external nofollow noopener noreferrer" class="author"><img class="avatar" src='/avatar/1.jpg' alt="AndyFree96" height="16" width="16">&nbsp;AndyFree96</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E6%8A%80%E6%9C%AF%E7%A7%AF%E6%9C%A8/" class="post-category" title="分类 - 技术积木"><i class="fa-regular fa-folder" aria-hidden="true"></i> 技术积木</a></span></div><div class="post-meta-line"><span title="发布于 2021-01-27 09:27:09"><i class="fa-solid fa-calendar-days me-1" aria-hidden="true"></i><time datetime="2021-01-27">2021-01-27</time></span>&nbsp;<span title="2058 字"><i class="fa-solid fa-pencil-alt me-1" aria-hidden="true"></i>约 2100 字</span>&nbsp;<span><i class="fa-regular fa-clock me-1" aria-hidden="true"></i>预计阅读 5 分钟</span>&nbsp;</div>
+    </div><div class="featured-image"><img loading="eager" src='/images/202101/1/tsuyoshi-kozu-4ftDrtCzFfs-unsplash.jpg' sizes="(max-width: 680px) 100vw, (max-width: 960px) 80vw, (max-width: 1440px) 56vw, 800px" alt="/images/202101/1/tsuyoshi-kozu-4ftDrtCzFfs-unsplash.jpg"></div><div class="details toc" id="toc-static" data-kept="false">
+        <div class="details-summary toc-title">
+          <span>目录</span>
+          <span><i class="details-icon fa-solid fa-angle-right" aria-hidden="true"></i></span>
+        </div>
+        <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#数据集">数据集</a></li>
+    <li><a href="#导入数据">导入数据</a></li>
+    <li><a href="#探索数据">探索数据</a></li>
+    <li><a href="#选择">选择</a></li>
+    <li><a href="#数据清理">数据清理</a></li>
+    <li><a href="#过滤排序和分组">过滤，排序和分组</a></li>
+    <li><a href="#导出数据">导出数据</a></li>
+    <li><a href="#连接和合并">连接和合并</a></li>
+    <li><a href="#创建测试对象">创建测试对象</a></li>
+    <li><a href="#bitly_usagov-数据集分析">bitly_usagov 数据集分析</a>
+      <ul>
+        <li><a href="#导入数据-1">导入数据</a></li>
+        <li><a href="#对时区计数">对时区计数</a></li>
+      </ul>
+    </li>
+    <li><a href="#参考">参考</a></li>
+  </ul>
+</nav></div>
+      </div><div class="content" id="content"><p>众所周知，Pandas 是最受欢迎的 Python 数据科学与分析库。Numpy 用于较低级别的科学计算。Pandas 构建于 Numpy 之上，专为实际数据分析而设计。本文总结了一些常见、方便的功能。话不多说，让我们开始吧！</p>
+<h2 class="heading-element" id="数据集"><span>数据集</span>
+  <a href="#%e6%95%b0%e6%8d%ae%e9%9b%86" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>数据是数据科学与分析的“命根子”，我们需要从数据中寻找答案，从数据中发现模式……如果没有数据的话，就无从谈起。数据获取的方式有很多种，这里分享一些提供数据的平台。</p>
+<p>pandas-videos：https://github.com/justmarkham/pandas-videos</p>
+<p><img loading="lazy" src='/images/202101/1/4.png' alt="pandas-videos上的数据集"></p>
+<p>UCI Machine Learning Reposity：https://archive.ics.uci.edu/datasets</p>
+<p><img loading="lazy" src='/images/202101/1/3.png' alt="UCI Machine Learning Reposity"></p>
+<h2 class="heading-element" id="导入数据"><span>导入数据</span>
+  <a href="#%e5%af%bc%e5%85%a5%e6%95%b0%e6%8d%ae" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>任何的数据分析工作都是从导入数据开始，<a href="https://pandas.pydata.org/pandas-docs/stable/" target="_blank" rel="external nofollow noopener noreferrer">Pandas<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>提供了很多导入数据的方法。</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-python"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-Python" data-lang="Python"><span class="line"><span class="cl"><span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span> <span class="c1"># From a CSV file</span>
+</span></span><span class="line"><span class="cl"><span class="n">pd</span><span class="o">.</span><span class="n">read_table</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span> <span class="c1"># From a delimited text file (like TSV)</span>
+</span></span><span class="line"><span class="cl"><span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span> <span class="c1"># From an Excel file</span>
+</span></span><span class="line"><span class="cl"><span class="n">pd</span><span class="o">.</span><span class="n">read_sql</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">connection_object</span><span class="p">)</span> <span class="c1"># Reads from a SQL table/database</span>
+</span></span><span class="line"><span class="cl"><span class="n">pd</span><span class="o">.</span><span class="n">read_json</span><span class="p">(</span><span class="n">json_string</span><span class="p">)</span> <span class="c1"># Reads from a JSON formatted string, URL or file</span>
+</span></span><span class="line"><span class="cl"><span class="n">pd</span><span class="o">.</span><span class="n">read_html</span><span class="p">(</span><span class="n">url</span><span class="p">)</span> <span class="c1"># Parses an html URL, string or file and extract tables to a list of dataframes</span>
+</span></span><span class="line"><span class="cl"><span class="n">pd</span><span class="o">.</span><span class="n">read_clipboard</span><span class="p">()</span> <span class="c1"># Takes the contents of your clipboard and passes it to read_table()</span>
+</span></span><span class="line"><span class="cl"><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="nb">dict</span><span class="p">)</span> <span class="c1"># From a dict, keys for columns names, values for data as lists</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>不妨举个例子，我们想分析一下 IMDB 高分电影，经过一番搜索，发现 <a href="https://raw.githubusercontent.com/justmarkham/pandas-videos/master/data/imdb_1000.csv" target="_blank" rel="external nofollow noopener noreferrer">https://raw.githubusercontent.com/justmarkham/pandas-videos/master/data/imdb_1000.csv<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> 上的数据就不错，
+若想把它导入，使用<code>pd.read_csv</code>方法就行啦！</p>
+<p>具体来说，就是：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-python"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-Python" data-lang="Python"><span class="line"><span class="cl"><span class="n">dataURL</span> <span class="o">=</span> <span class="s1">&#39;https://raw.githubusercontent.com/justmarkham/pandas-videos/master/data/imdb_1000.csv&#39;</span>
+</span></span><span class="line"><span class="cl"><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">dataURL</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span> <span class="c1"># Prints first 5 rows of the DataFrame</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p><img loading="lazy" src='/images/202101/1/1.png' alt="前5行数据"></p>
+<p>关于上述导入数据方法的更多详细内容，请查看<a href="http://pandas.pydata.org/pandas-docs/stable/io.html#" target="_blank" rel="external nofollow noopener noreferrer">IO Tools<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>。</p>
+<h2 class="heading-element" id="探索数据"><span>探索数据</span>
+  <a href="#%e6%8e%a2%e7%b4%a2%e6%95%b0%e6%8d%ae" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>一旦将数据导入到 DataFrame 中之后，就可以用以下方法来了解数据的情况。</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-python"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="2" style="--fi-max-shown-lines:400;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-Python" data-lang="Python"><span class="line"><span class="cl"><span class="n">df</span><span class="o">.</span><span class="n">index</span> <span class="c1"># Index Description</span>
+</span></span><span class="line"><span class="cl"><span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="c1"># Columns in the DataFrame</span>
+</span></span><span class="line"><span class="cl"><span class="n">df</span><span class="o">.</span><span class="n">shape</span> <span class="c1"># Prints number of row and columns in DataFrame</span>
+</span></span><span class="line"><span class="cl"><span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="c1"># Prints first n rows of the DataFrame</span>
+</span></span><span class="line"><span class="cl"><span class="n">df</span><span class="o">.</span><span class="n">tail</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="c1"># Prints last n rows of the DataFrame</span>
+</span></span><span class="line"><span class="cl"><span class="n">df</span><span class="o">.</span><span class="n">info</span><span class="p">()</span> <span class="c1"># Index, DataType and Memory information</span>
+</span></span><span class="line"><span class="cl"><span class="n">df</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span> <span class="c1"># Summary statistics for numerical columns</span>
+</span></span><span class="line"><span class="cl"><span class="n">s</span><span class="o">.</span><span class="n">value_counts</span><span class="p">(</span><span class="n">dropna</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="c1"># Views unique values and counts</span>
+</span></span><span class="line"><span class="cl"><span class="n">df</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="o">.</span><span class="n">value_counts</span><span class="p">)</span> <span class="c1"># Unique value and counts for all columns</span>
+</span></span><span class="line"><span class="cl"><span class="n">df</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span> <span class="c1"># Returns the mean of all columns</span>
+</span></span><span class="line"><span class="cl"><span class="n">df</span><span class="o">.</span><span class="n">corr</span><span class="p">()</span> <span class="c1"># Returns the correlation between columns in a DataFrame</span>
+</span></span><span class="line"><span class="cl"><span class="n">df</span><span class="o">.</span><span class="n">count</span><span class="p">()</span> <span class="c1"># Returns the number of non-null values in each DataFrame column</span>
+</span></span><span class="line"><span class="cl"><span class="n">df</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="c1"># Returns the highest value in each column</span>
+</span></span><span class="line"><span class="cl"><span class="n">df</span><span class="o">.</span><span class="n">min</span><span class="p">()</span> <span class="c1"># Returns the lowest value in each column</span>
+</span></span><span class="line"><span class="cl"><span class="n">df</span><span class="o">.</span><span class="n">median</span><span class="p">()</span> <span class="c1"># Returns the median of each column</span>
+</span></span><span class="line"><span class="cl"><span class="n">df</span><span class="o">.</span><span class="n">std</span><span class="p">()</span> <span class="c1"># Returns the standard deviation of each column</span>
+</span></span><span class="line"><span class="cl"><span class="n">df</span><span class="o">.</span><span class="n">idxmax</span><span class="p">()</span> <span class="c1"># Index of the lowest value</span>
+</span></span><span class="line"><span class="cl"><span class="n">df</span><span class="o">.</span><span class="n">idxmin</span><span class="p">()</span> <span class="c1"># Index of the highest value</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>举个例子，在导入 IMDB 高分电影数据后统计一下每种电影类型的频数，我们就可以用:</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-python"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-Python" data-lang="Python"><span class="line"><span class="cl"><span class="n">df</span><span class="p">[</span><span class="s1">&#39;genre&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p><img loading="lazy" src='/images/202101/1/2.png' alt="每种电影类型的频数"></p>
+<h2 class="heading-element" id="选择"><span>选择</span>
+  <a href="#%e9%80%89%e6%8b%a9" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>通常，我们可能需要选择单个元素或者数据的某个子集来进行深入分析。那么，这些方法就会大显身手：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-python"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-Python" data-lang="Python"><span class="line"><span class="cl"><span class="n">df</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="c1"># Returns column with label col as Series</span>
+</span></span><span class="line"><span class="cl"><span class="n">df</span><span class="p">[[</span><span class="n">col1</span><span class="p">,</span> <span class="n">col2</span><span class="p">]]</span> <span class="c1"># Returns columns as a new DataFrame</span>
+</span></span><span class="line"><span class="cl"><span class="n">s</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="c1"># Selection by position (selects first element)</span>
+</span></span><span class="line"><span class="cl"><span class="n">s</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="c1"># Selection by index (selects element as index 0)</span>
+</span></span><span class="line"><span class="cl"><span class="n">df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:]</span> <span class="c1"># First row</span>
+</span></span><span class="line"><span class="cl"><span class="n">df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="c1"># First element of first column</span>
+</span></span><span class="line"><span class="cl"><span class="n">df</span><span class="o">.</span><span class="n">iat</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="c1"># First element of first column. Access a single value for row/column pair by integer position</span>
+</span></span><span class="line"><span class="cl"><span class="n">df</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="n">row_label</span><span class="p">,</span> <span class="n">col_label</span><span class="p">]</span> <span class="c1"># Access a single value for row/column label pair</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>更多内容，请查看<a href="http://pandas.pydata.org/pandas-docs/stable/indexing.html" target="_blank" rel="external nofollow noopener noreferrer">Indexing and Selecting Data<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>。</p>
+<h2 class="heading-element" id="数据清理"><span>数据清理</span>
+  <a href="#%e6%95%b0%e6%8d%ae%e6%b8%85%e7%90%86" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>实际上，我们拿到数据后，往往需要清理它。以下就是一些非常有用的方法：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-python"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="2" style="--fi-max-shown-lines:400;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-Python" data-lang="Python"><span class="line"><span class="cl"><span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">]</span> <span class="c1"># Renames columns</span>
+</span></span><span class="line"><span class="cl"><span class="n">pd</span><span class="o">.</span><span class="n">isnull</span><span class="p">()</span> <span class="c1"># Checks for null values, return Boolean Array</span>
+</span></span><span class="line"><span class="cl"><span class="n">pd</span><span class="o">.</span><span class="n">notnull</span><span class="p">()</span> <span class="c1"># Opposite of pd.isnull()</span>
+</span></span><span class="line"><span class="cl"><span class="n">df</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span> <span class="c1"># Drops all rows that contain null values</span>
+</span></span><span class="line"><span class="cl"><span class="n">df</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="c1"># Drops all columns that contain null values</span>
+</span></span><span class="line"><span class="cl"><span class="n">df</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">thresh</span><span class="o">=</span><span class="n">n</span><span class="p">)</span> <span class="c1"># Drops all rows hava less than non null values</span>
+</span></span><span class="line"><span class="cl"><span class="n">df</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="c1"># Replaces all null values with x</span>
+</span></span><span class="line"><span class="cl"><span class="n">s</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span> <span class="c1"># Replaces all null values with the mean</span>
+</span></span><span class="line"><span class="cl"><span class="n">s</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span> <span class="c1"># Converts the datatype of the series to float</span>
+</span></span><span class="line"><span class="cl"><span class="n">s</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;one&#39;</span><span class="p">)</span> <span class="c1"># Replaces all values equal to 1 with &#39;one&#39;</span>
+</span></span><span class="line"><span class="cl"><span class="n">s</span><span class="o">.</span><span class="n">replace</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="s1">&#39;one&#39;</span><span class="p">,</span> <span class="s1">&#39;three&#39;</span><span class="p">])</span> <span class="c1"># Replace all 1 with &#39;one&#39; and 3 with &#39;three&#39;</span>
+</span></span><span class="line"><span class="cl"><span class="n">df</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="c1"># Mass renaming of columns</span>
+</span></span><span class="line"><span class="cl"><span class="n">df</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;old_name&#39;</span><span class="p">:</span> <span class="s1">&#39;new_name&#39;</span><span class="p">})</span> <span class="c1"># Selective renaming</span>
+</span></span><span class="line"><span class="cl"><span class="n">df</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s1">&#39;column_one&#39;</span><span class="p">)</span> <span class="c1"># Changes the index</span>
+</span></span><span class="line"><span class="cl"><span class="n">df</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="c1"># Mass renaming of index</span>
+</span></span><span class="line"><span class="cl"><span class="n">df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">labels</span><span class="p">)</span> <span class="c1"># Drop specified labels from rows or columns</span>
+</span></span><span class="line"><span class="cl"><span class="n">df</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">(</span><span class="n">subset</span><span class="p">)</span> <span class="c1"># Return DataFrame with duplicate rows removed, optionally only considering certain columns</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>更多内容，请查看<a href="http://pandas.pydata.org/pandas-docs/stable/missing_data.html" target="_blank" rel="external nofollow noopener noreferrer">Working with missing data<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>。</p>
+<h2 class="heading-element" id="过滤排序和分组"><span>过滤，排序和分组</span>
+  <a href="#%e8%bf%87%e6%bb%a4%e6%8e%92%e5%ba%8f%e5%92%8c%e5%88%86%e7%bb%84" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>一些对数据过滤、排序和分组的方法：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-python"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="2" style="--fi-max-shown-lines:400;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-Python" data-lang="Python"><span class="line"><span class="cl"><span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mf">0.5</span><span class="p">]</span> <span class="c1"># Rows where the col column is greater than 0.5</span>
+</span></span><span class="line"><span class="cl"><span class="n">df</span><span class="p">[(</span><span class="n">df</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mf">0.5</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mf">0.7</span><span class="p">)]</span> <span class="c1"># Rows where 0.5 &lt; col &lt; 0.7</span>
+</span></span><span class="line"><span class="cl"><span class="n">df</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">col1</span><span class="p">)</span> <span class="c1"># Sorts values by col1 in ascending order</span>
+</span></span><span class="line"><span class="cl"><span class="n">df</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">col2</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="c1"># Sorts values by col2 in descending order</span>
+</span></span><span class="line"><span class="cl"><span class="n">df</span><span class="o">.</span><span class="n">sort_values</span><span class="p">([</span><span class="n">col1</span><span class="p">,</span> <span class="n">col2</span><span class="p">],</span> <span class="n">ascending</span><span class="o">=</span><span class="p">[</span><span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">])</span> <span class="c1"># Sorts values by col1 in ascending order then col2 in descending order</span>
+</span></span><span class="line"><span class="cl"><span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">col</span><span class="p">)</span> <span class="c1"># Returns a groupby object for values from one column</span>
+</span></span><span class="line"><span class="cl"><span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="n">col1</span><span class="p">,</span><span class="n">col2</span><span class="p">])</span> <span class="c1"># Returns a groupby object values from multiple columns</span>
+</span></span><span class="line"><span class="cl"><span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">col1</span><span class="p">)[</span><span class="n">col2</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span> <span class="c1"># Returns the mean of the values in col2, grouped by the values in col1 (mean can be replaced with almost any function from the statistics section)</span>
+</span></span><span class="line"><span class="cl"><span class="n">df</span><span class="o">.</span><span class="n">pivot_table</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="n">col1</span><span class="p">,</span> <span class="n">values</span><span class="o">=</span> <span class="n">col2</span><span class="p">,</span><span class="n">col3</span><span class="p">],</span> <span class="n">aggfunc</span><span class="o">=</span><span class="n">mean</span><span class="p">)</span> <span class="c1"># Creates a pivot table that groups by col1 and calculates the mean of col2 and col3</span>
+</span></span><span class="line"><span class="cl"><span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">col1</span><span class="p">)</span><span class="o">.</span><span class="n">agg</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">)</span> <span class="c1"># Finds the average across all columns for every unique column 1 group</span>
+</span></span><span class="line"><span class="cl"><span class="n">df</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">)</span> <span class="c1"># Applies a function across each column</span>
+</span></span><span class="line"><span class="cl"><span class="n">df</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="c1"># Applies a function across each row</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>更多内容，请查看<a href="http://pandas.pydata.org/pandas-docs/stable/groupby.html" target="_blank" rel="external nofollow noopener noreferrer">Group By: split-apply-combine<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>。</p>
+<h2 class="heading-element" id="导出数据"><span>导出数据</span>
+  <a href="#%e5%af%bc%e5%87%ba%e6%95%b0%e6%8d%ae" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>最后，当需要将分析结果导出时，也有几种方便的发方：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-python"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-Python" data-lang="Python"><span class="line"><span class="cl"><span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span> <span class="c1"># Writes to a CSV file</span>
+</span></span><span class="line"><span class="cl"><span class="n">df</span><span class="o">.</span><span class="n">to_excel</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span> <span class="c1"># Writes to an Excel file</span>
+</span></span><span class="line"><span class="cl"><span class="n">df</span><span class="o">.</span><span class="n">to_sql</span><span class="p">(</span><span class="n">table_name</span><span class="p">,</span> <span class="n">connectiion_object</span><span class="p">)</span> <span class="c1"># Writes to a SQL table</span>
+</span></span><span class="line"><span class="cl"><span class="n">df</span><span class="o">.</span><span class="n">to_json</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span> <span class="c1"># Writes to a file in JSON format</span>
+</span></span><span class="line"><span class="cl"><span class="n">df</span><span class="o">.</span><span class="n">to_html</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span> <span class="c1"># Saves as an HTML table</span>
+</span></span><span class="line"><span class="cl"><span class="n">df</span><span class="o">.</span><span class="n">to_clipboard</span><span class="p">()</span> <span class="c1"># Writes to the clipboard</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>详情请查看<a href="http://pandas.pydata.org/pandas-docs/stable/io.html#" target="_blank" rel="external nofollow noopener noreferrer">IO Tools<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>。</p>
+<h2 class="heading-element" id="连接和合并"><span>连接和合并</span>
+  <a href="#%e8%bf%9e%e6%8e%a5%e5%92%8c%e5%90%88%e5%b9%b6" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>合并两个 DataFrame 的方法：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-python"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-Python" data-lang="Python"><span class="line"><span class="cl"><span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">df1</span><span class="p">,</span> <span class="n">df2</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="c1"># Adds the columns in df1 to the end of df2</span>
+</span></span><span class="line"><span class="cl"><span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">df11</span><span class="p">,</span> <span class="n">df2</span><span class="p">)</span> <span class="c1"># SQL-style merges</span>
+</span></span><span class="line"><span class="cl"><span class="n">df1</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">df2</span><span class="p">)</span> <span class="c1"># Adds the rows in df1 to the end of df2 (columns should be identical)</span>
+</span></span><span class="line"><span class="cl"><span class="n">df1</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">df2</span><span class="p">,</span><span class="n">on</span><span class="o">=</span><span class="n">col1</span><span class="p">,</span><span class="n">how</span><span class="o">=</span><span class="s1">&#39;inner&#39;</span><span class="p">)</span> <span class="c1"># SQL-style joins</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>更多内容，请查看<a href="http://pandas.pydata.org/pandas-docs/stable/merging.html" target="_blank" rel="external nofollow noopener noreferrer">Merge, join, and concatenate<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>。</p>
+<h2 class="heading-element" id="创建测试对象"><span>创建测试对象</span>
+  <a href="#%e5%88%9b%e5%bb%ba%e6%b5%8b%e8%af%95%e5%af%b9%e8%b1%a1" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>通用用于测试代码段。</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-python"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-Python" data-lang="Python"><span class="line"><span class="cl"><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span> <span class="c1"># 5 columns and 20 rows of random floats</span>
+</span></span><span class="line"><span class="cl"><span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">my_list</span><span class="p">)</span> <span class="c1"># Create a series from an iterable my_list</span>
+</span></span><span class="line"><span class="cl"><span class="n">df</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">data_range</span><span class="p">(</span><span class="s1">&#39;1900/1/30&#39;</span><span class="p">,</span> <span class="n">periods</span><span class="o">=</span><span class="n">df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="c1"># Add a date index</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><h2 class="heading-element" id="bitly_usagov-数据集分析"><span>bitly_usagov 数据集分析</span>
+  <a href="#bitly_usagov-%e6%95%b0%e6%8d%ae%e9%9b%86%e5%88%86%e6%9e%90" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>或许我们可以从一个实例（来源于书籍《Python for Data Analysis》）出发，当作一个小练习。选用的是<code>bitly_usagov</code>数据集。</p>
+<p>该数据集可以在：https://github.com/wesm/pydata-book 处找到。</p>
+<h3 class="heading-element" id="导入数据-1"><span>导入数据</span>
+  <a href="#%e5%af%bc%e5%85%a5%e6%95%b0%e6%8d%ae-1" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p>假如将数据下载到了本地，我们可以尝试将其导入并得到 DataFrame 对象，便于之后的分析工作。</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-python"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-Python" data-lang="Python"><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">file_path</span> <span class="o">=</span> <span class="s1">&#39;../../Datasets/bitly_usagov/example.txt&#39;</span> <span class="c1"># Local file path</span>
+</span></span><span class="line"><span class="cl"><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_json</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="n">lines</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">df</span><span class="o">.</span><span class="n">info</span><span class="p">()</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p><img loading="lazy" src='/images/202101/1/5.png' alt="用info方法查看数据"></p>
+<h3 class="heading-element" id="对时区计数"><span>对时区计数</span>
+  <a href="#%e5%af%b9%e6%97%b6%e5%8c%ba%e8%ae%a1%e6%95%b0" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p><code>df</code>对象有一列名为<code>tz</code>，表示的是时区。我们可以对所有数据的时区进行统计，</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-python"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-Python" data-lang="Python"><span class="line"><span class="cl"><span class="n">tz_counts</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;tz&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="n">tz_counts</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p><img loading="lazy" src='/images/202101/1/6.png' alt="/images/202101/1/6.png"></p>
+<p>我们可以将结果可视化，但在此之前，可以将未知或者缺失的时区补上一个替代值。</p>
+<p><code>fillna</code>函数可以替换缺失值（NA），而未知值（空字符串）则可以通过布尔数组索引进行替换：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-python"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-Python" data-lang="Python"><span class="line"><span class="cl"><span class="n">clean_tz</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;tz&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="s1">&#39;Missing&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">clean_tz</span><span class="p">[</span><span class="n">clean_tz</span> <span class="o">==</span> <span class="s1">&#39;&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;Unknown&#39;</span>
+</span></span><span class="line"><span class="cl"><span class="n">tz_counts</span> <span class="o">=</span> <span class="n">clean_tz</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>之后，我们可以用<code>seaborn</code>包创建水平柱状图：</p>
+<p><img loading="lazy" src='/images/202101/1/7.png' alt="/images/202101/1/7.png"></p>
+<p><code>df</code>对象名为<code>a</code>的列中含有浏览器、设备、应用程序的相关信息，我们可以简单地将浏览器信息提取出来：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-python"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-Python" data-lang="Python"><span class="line"><span class="cl"><span class="n">df</span><span class="o">.</span><span class="n">a</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">)</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p><img loading="lazy" src='/images/202101/1/8.png' alt="/images/202101/1/8.png"></p>
+<p>类似地，我们也可以将浏览器的统计信息可视化：</p>
+<p><img loading="lazy" src='/images/202101/1/9.png' alt="/images/202101/1/9.png"></p>
+<h2 class="heading-element" id="参考"><span>参考</span>
+  <a href="#%e5%8f%82%e8%80%83" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><ul>
+<li><a href="https://paulovasconcellos.com.br/28-useful-pandas-functions-you-might-not-know-de42c59db085" target="_blank" rel="external nofollow noopener noreferrer">https://paulovasconcellos.com.br/28-useful-pandas-functions-you-might-not-know-de42c59db085<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></li>
+<li><a href="https://elitedatascience.com/python-cheat-sheet" target="_blank" rel="external nofollow noopener noreferrer">https://elitedatascience.com/python-cheat-sheet<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></li>
+<li><a href="https://www.dataquest.io/blog/pandas-cheat-sheet/" target="_blank" rel="external nofollow noopener noreferrer">https://www.dataquest.io/blog/pandas-cheat-sheet/<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></li>
+<li><a href="http://pandas.pydata.org/pandas-docs/stable/10min.html" target="_blank" rel="external nofollow noopener noreferrer">http://pandas.pydata.org/pandas-docs/stable/10min.html<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></li>
+</ul></div><hr class="awesome-hr" />
+    <h2 id="see-also">相关内容</h2>
+    <ul><li>
+          <a href="/%E7%94%A8keras%E6%90%AD%E5%BB%BA%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" title="用Keras搭建卷积神经网络">用Keras搭建卷积神经网络</a></li><li>
+          <a href="/tkinter%E7%AE%80%E6%98%8E%E6%95%99%E7%A8%8B/" title="Tkinter简明教程">Tkinter简明教程</a></li><li>
+          <a href="/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E5%AD%A6%E4%B9%A0gans/" title="从零开始学习GANs">从零开始学习GANs</a></li><li>
+          <a href="/python%E4%B9%8Bopencv/" title="OpenCV：计算机视觉入门与实践">OpenCV：计算机视觉入门与实践</a></li></ul><div class="post-footer" id="post-footer">
+  <div class="post-info">
+    <div class="post-info-line">
+      <div class="post-info-mod"><span title="更新于 2021-01-27 09:27:09">更新于 2021-01-27&nbsp;</span>
+      </div></div><div class="post-info-line">
+        <div class="post-info-md"><span><a href="vscode://file/D:\hugo-blog\andyfree96\content\posts\Python之Pandas.md" title="在编辑器中打开" class="link-to-vscode">在编辑器中打开</a></span></div>
+        <div class="post-info-share">
+          <span><a href="javascript:void(0);" title="分享到 X" data-sharer="twitter" data-url="http://localhost:1313/python%E4%B9%8Bpandas/" data-title="Pandas：让数据处理变得简单" data-via="IRONAnthony96" data-hashtags="Python,Pandas,数据分析,数据科学"><i class="fa-brands fa-x-twitter" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="http://localhost:1313/python%E4%B9%8Bpandas/" data-hashtag="Python"><i class="fa-brands fa-facebook-square" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="http://localhost:1313/python%E4%B9%8Bpandas/" data-title="Pandas：让数据处理变得简单" data-image="/images/202101/1/tsuyoshi-kozu-4ftDrtCzFfs-unsplash.jpg"><i class="fa-brands fa-weibo" aria-hidden="true"></i></a>
+  </span>
+        </div>
+      </div></div>
+
+  <div class="post-info-more">
+    <section class="post-tags"><i class="fa-solid fa-tags me-1" aria-hidden="true"></i><a href="/tags/python/" class="post-tag" title="标签 - Python">Python</a><a href="/tags/pandas/" class="post-tag" title="标签 - Pandas">Pandas</a><a href="/tags/%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/" class="post-tag" title="标签 - 数据分析">数据分析</a><a href="/tags/%E6%95%B0%E6%8D%AE%E7%A7%91%E5%AD%A6/" class="post-tag" title="标签 - 数据科学">数据科学</a></section>
+    <section><span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+    </section>
+  </div><div class="post-nav"><a href="/opencv%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E5%AE%9E%E6%88%98/" class="post-nav-item" rel="prev" title="OpenCV从入门到实战"><i class="fa-solid fa-angle-left" aria-hidden="true"></i>OpenCV从入门到实战</a><a href="/python%E4%B9%8Bmatplotlib/" class="post-nav-item" rel="next" title="Matplotlib：绘图入门与实践">Matplotlib：绘图入门与实践<i class="fa-solid fa-angle-right" aria-hidden="true"></i></a></div>
+</div>
+<div class="post-reward">
+    <div class="comment">请作者喝杯咖啡!</div>
+    <input type="checkbox" class="reward-input" name="reward" id="fi-reward" hidden />
+    <label class="reward-button" for="fi-reward"><i class="fa-solid fa-qrcode" aria-hidden="true"></i>赞赏</label>
+    <div class="reward-ways" data-mode="static"><div><img src='/reward/alipay.png' alt="AndyFree96 支付宝"><span data-animation>支付宝</span>
+          </div><div><img src='/reward/wechatpay.png' alt="AndyFree96 微信"><span data-animation>微信</span>
+          </div></div>
+  </div></article>
+
+  <aside class="toc" id="toc-auto" aria-label="目录"><h2 class="toc-title">目录&nbsp;<i class="toc-icon fa-solid fa-angle-down" aria-hidden="true"></i></h2>
+      <div class="toc-content" id="toc-content-auto"></div></aside><dialog id="toc-dialog" aria-labelledby="toc-dialog-title" role="dialog" closedby="any">
+      <button type="button" class="toc-close-btn" aria-label="Close Table of Contents"><i class="fa-solid fa-xmark fa-lg" aria-hidden="true"></i></button>
+      <div class="toc">
+        <h2 class="toc-title" id="toc-dialog-title">目录</h2>
+        <div class="toc-content" id="toc-content-drawer"><nav >
+  <ul>
+    <li><a href="#数据集">数据集</a></li>
+    <li><a href="#导入数据">导入数据</a></li>
+    <li><a href="#探索数据">探索数据</a></li>
+    <li><a href="#选择">选择</a></li>
+    <li><a href="#数据清理">数据清理</a></li>
+    <li><a href="#过滤排序和分组">过滤，排序和分组</a></li>
+    <li><a href="#导出数据">导出数据</a></li>
+    <li><a href="#连接和合并">连接和合并</a></li>
+    <li><a href="#创建测试对象">创建测试对象</a></li>
+    <li><a href="#bitly_usagov-数据集分析">bitly_usagov 数据集分析</a>
+      <ul>
+        <li><a href="#导入数据-1">导入数据</a></li>
+        <li><a href="#对时区计数">对时区计数</a></li>
+      </ul>
+    </li>
+    <li><a href="#参考">参考</a></li>
+  </ul>
+</nav></div>
+      </div>
+    </dialog></main><footer class="footer">
+    <div class="footer-container"><div class="footer-line powered">由 <a href="https://gohugo.io/" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.163.1">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/hugo-fixit/FixIt" target="_blank" rel="external" title="FixIt v1.0.0-mq99hlzg">FixIt</a>
+        </div><div class="footer-line copyright" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright" aria-hidden="true"></i>
+            <span itemprop="copyrightYear">2019 - 2026</span><span class="author" itemprop="copyrightHolder">
+              <a href="https://andyfree96.github.io/" target="_blank" rel="external nofollow noopener noreferrer">AndyFree96</a></span></div></div>
+  </footer></div><div class="widgets"><div class="fixed-buttons"><button type="button" class="fixed-button back-to-top animate__faster d-none" aria-label="回到顶部"><i class="fa-solid fa-arrow-up" aria-hidden="true"></i></button><button type="button" id="toc-drawer-button" class="fixed-button toc-drawer-button d-none" aria-label="目录" aria-controls="toc-dialog" aria-expanded="false"><i class="fa-solid fa-bars" aria-hidden="true"></i></button></div><div id="mask"></div><div class="reading-progress-bar" style="left: 0;top: 0;"></div><noscript>
+    <div class="noscript-warning">该网站在启用 JavaScript 的情况下效果最佳。</div>
+  </noscript>
+</div><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script src="/lib/autocomplete/autocomplete.min.js" defer></script><script src="/lib/algoliasearch/browser.umd.js" defer></script><script src="/lib/sharer/sharer.min.js" async defer></script><script src="/lib/cookieconsent/cookieconsent.min.js" defer></script><script src="/js/lib/cookieconsent.js" defer></script><script src="/lib/cell-tooltip/cell-tooltip.umd.js" defer></script><script src="/js/config/10c720b0712f528e45a0b9ca8c5c8171.js" defer></script><script src="/js/lib/file-tree.js" defer></script><script src="/js/main.js" defer></script></body>
+</html>

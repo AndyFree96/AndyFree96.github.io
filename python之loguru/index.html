@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+    <meta name="robots" content="noodp" />
+    <title>Loguru：替代标准logging的现代方案 - 东尼的博客</title><meta name="author" content="AndyFree96">
+<meta name="description" content="日志是软件工程中最基础也是最重要的能力之一。无论是Web服务、AI应用、数据处理任务、自动化脚本、后台Worker，都离不开日志。Python标准库提供了logging。它功能强大，但实际工程使用中经常会遇到一些问题：
+配置复杂 格式设置繁琐 文件滚动需要额外配置 多模块项目初始化麻烦 例如标准logging：
+1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 import logging logger = logging.getLogger(__name__) logger.setLevel(logging.INFO) handler = logging.FileHandler(&#39;app.log&#39;) formatter = logging.Formatter(&#39;%(asctime)s - %(levelname)s - %(message)s&#39;) handler.setFormatter(formatter) logger.addHandler(handler) logger.info(&#34;Application started&#34;) 简单记录一条日志到文件，需要很多代码。这也是为什么可以尝试用Loguru。
+"><meta name="keywords" content='Python, Loguru, 日志'>
+	<meta itemprop="name" content="Loguru：替代标准logging的现代方案">
+	<meta itemprop="description" content="日志是软件工程中最基础也是最重要的能力之一。无论是Web服务、AI应用、数据处理任务、自动化脚本、后台Worker，都离不开日志。Python标准库提供了logging。它功能强大，但实际工程使用中经常会遇到一些问题：
+配置复杂 格式设置繁琐 文件滚动需要额外配置 多模块项目初始化麻烦 例如标准logging：
+1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 import logging logger = logging.getLogger(__name__) logger.setLevel(logging.INFO) handler = logging.FileHandler(&#39;app.log&#39;) formatter = logging.Formatter(&#39;%(asctime)s - %(levelname)s - %(message)s&#39;) handler.setFormatter(formatter) logger.addHandler(handler) logger.info(&#34;Application started&#34;) 简单记录一条日志到文件，需要很多代码。这也是为什么可以尝试用Loguru。">
+	<meta itemprop="datePublished" content="2026-07-10T11:12:14+08:00">
+	<meta itemprop="dateModified" content="2026-07-10T11:12:14+08:00">
+	<meta itemprop="wordCount" content="935">
+	<meta itemprop="keywords" content="Python,Loguru,日志"><meta property="og:url" content="http://localhost:1313/python%E4%B9%8Bloguru/">
+	<meta property="og:site_name" content="东尼的博客">
+	<meta property="og:title" content="Loguru：替代标准logging的现代方案">
+	<meta property="og:description" content="日志是软件工程中最基础也是最重要的能力之一。无论是Web服务、AI应用、数据处理任务、自动化脚本、后台Worker，都离不开日志。Python标准库提供了logging。它功能强大，但实际工程使用中经常会遇到一些问题：
+配置复杂 格式设置繁琐 文件滚动需要额外配置 多模块项目初始化麻烦 例如标准logging：
+1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 import logging logger = logging.getLogger(__name__) logger.setLevel(logging.INFO) handler = logging.FileHandler(&#39;app.log&#39;) formatter = logging.Formatter(&#39;%(asctime)s - %(levelname)s - %(message)s&#39;) handler.setFormatter(formatter) logger.addHandler(handler) logger.info(&#34;Application started&#34;) 简单记录一条日志到文件，需要很多代码。这也是为什么可以尝试用Loguru。">
+	<meta property="og:locale" content="zh_CN">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="posts">
+		<meta property="article:published_time" content="2026-07-10T11:12:14+08:00">
+		<meta property="article:modified_time" content="2026-07-10T11:12:14+08:00">
+		<meta property="article:tag" content="Python">
+		<meta property="article:tag" content="Loguru">
+		<meta property="article:tag" content="日志">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Loguru：替代标准logging的现代方案">
+  <meta name="twitter:description" content="日志是软件工程中最基础也是最重要的能力之一。无论是Web服务、AI应用、数据处理任务、自动化脚本、后台Worker，都离不开日志。Python标准库提供了logging。它功能强大，但实际工程使用中经常会遇到一些问题：
+配置复杂 格式设置繁琐 文件滚动需要额外配置 多模块项目初始化麻烦 例如标准logging：
+1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 import logging logger = logging.getLogger(__name__) logger.setLevel(logging.INFO) handler = logging.FileHandler(&#39;app.log&#39;) formatter = logging.Formatter(&#39;%(asctime)s - %(levelname)s - %(message)s&#39;) handler.setFormatter(formatter) logger.addHandler(handler) logger.info(&#34;Application started&#34;) 简单记录一条日志到文件，需要很多代码。这也是为什么可以尝试用Loguru。"><meta name="twitter:creator" content="@IRONAnthony96"><meta name="application-name" content="FixIt">
+<meta name="apple-mobile-web-app-title" content="FixIt"><meta name="theme-color" data-light="#f6f8fa" data-dark="#151b23" content="#f6f8fa"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" type="text/html" href="http://localhost:1313/python%E4%B9%8Bloguru/" title="Loguru：替代标准logging的现代方案 - 东尼的博客" /><link rel="prev" type="text/html" href="http://localhost:1313/yolov1%E8%AE%BA%E6%96%87%E7%B2%BE%E8%AF%BB/" title="YOLOv1论文精读：You Only Look Once如何重新定义目标检测？" /><link rel="next" type="text/html" href="http://localhost:1313/%E6%9E%B6%E6%9E%84%E6%95%B4%E6%B4%81%E4%B9%8B%E9%81%93/" title="架构整洁之道 (Robert C. Martin)" /><link rel="alternate" type="text/markdown" href="http://localhost:1313/python%E4%B9%8Bloguru/index.md" title="Loguru：替代标准logging的现代方案 - 东尼的博客"><link rel="stylesheet" href="/css/config.css"><link rel="stylesheet" href="/css/main.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><link rel="preload" href="/js/main.js" as="script"><script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "BlogPosting",
+    "headline": "Loguru：替代标准logging的现代方案",
+    "inLanguage": "zh-CN",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "http:\/\/localhost:1313\/python%E4%B9%8Bloguru\/"
+    },"genre": "posts","keywords": "Python, Loguru, 日志","wordcount":  935 ,
+    "url": "http:\/\/localhost:1313\/python%E4%B9%8Bloguru\/","datePublished": "2026-07-10T11:12:14+08:00","dateModified": "2026-07-10T11:12:14+08:00","publisher": {
+      "@type": "Organization",
+      "name": ""},"author": {
+        "@type": "Person",
+        "name": "AndyFree96"
+      },"description": ""
+  }
+  </script><script src="/js/head/color-scheme.js"></script></head>
+  <body data-instant-intensity="viewport" data-header-desktop="sticky" data-header-mobile="auto"><div class="wrapper" data-page-style="normal"><header class="desktop animate__faster" id="header-desktop">
+  <div class="header-wrapper">
+    <div class="header-title">
+      <a href="/" title="东尼的博客" class="header-title-link"><span class="header-title-text">东尼的博客</span></a><span class="header-subtitle"></span></div>
+    <nav>
+      <ul class="menu"><li class="menu-item">
+              <a class="menu-link" href="/posts/">📕 文章</a></li><li class="menu-item">
+              <a class="menu-link" href="/categories/">🧰 分类</a></li><li class="menu-item">
+              <a class="menu-link" href="/tags/">🔖 标签</a></li><li class="menu-item">
+              <a class="menu-link" href="/book">📚 书单</a></li><li class="menu-item">
+              <a class="menu-link" href="/paper">📝 论文</a></li><li class="menu-item">
+              <a class="menu-link" href="/opencourse">👨🏻‍💻 公开课</a></li><li class="menu-item">
+              <a class="menu-link" href="/filmtv">🎞️ 影视</a></li><li class="menu-item">
+              <a class="menu-link" href="/resource">⚡️ 资源库</a></li><li class="menu-item">
+              <a class="menu-link" href="/projects">⭐ 开源</a></li><li class="menu-item">
+              <a class="menu-link" href="/about">🙋🏻‍♂️ 关于</a></li><li class="menu-item delimiter"></li><li class="menu-item search" id="search-desktop">
+            <input type="text" placeholder="搜索文章标题或内容……" id="search-input-desktop" tabindex="-1">
+            <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索" aria-controls="search-dropdown-desktop" aria-expanded="false">
+              <i class="fa-solid fa-search" aria-hidden="true"></i>
+            </a>
+            <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+              <i class="fa-solid fa-times-circle" aria-hidden="true"></i>
+            </a>
+            <span class="search-button search-loading" id="search-loading-desktop">
+              <i class="fa-solid fa-spinner fa-spin" aria-hidden="true"></i>
+            </span>
+          </li><li class="menu-item theme-switch-item">
+          <button type="button" class="theme-switch" aria-label="切换主题" title="切换主题"><i class="fa-solid fa-adjust" aria-hidden="true"></i></button>
+        </li></ul>
+    </nav>
+  </div>
+</header><header class="mobile animate__faster" id="header-mobile">
+  <div class="header-container">
+    <div class="header-wrapper">
+      <div class="header-title">
+        <a href="/" title="东尼的博客" class="header-title-link"><span class="header-title-text">东尼的博客</span></a><span class="header-subtitle"></span></div>
+      <button type="button" class="theme-switch" aria-label="切换主题"><i class="fa-solid fa-adjust" aria-hidden="true"></i></button>
+      <button type="button" class="menu-toggle" id="menu-toggle-mobile" aria-controls="menu-mobile" aria-expanded="false" aria-labelledby="menu-mobile">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <nav>
+      <ul class="menu" id="menu-mobile"><li class="search-wrapper">
+            <div class="search mobile" id="search-mobile">
+              <input type="text" placeholder="搜索文章标题或内容……" id="search-input-mobile">
+              <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索" aria-controls="search-dropdown-mobile" aria-expanded="false">
+                <i class="fa-solid fa-search" aria-hidden="true"></i>
+              </a>
+              <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                <i class="fa-solid fa-times-circle" aria-hidden="true"></i>
+              </a>
+              <span class="search-button search-loading" id="search-loading-mobile">
+                <i class="fa-solid fa-spinner fa-spin" aria-hidden="true"></i>
+              </span>
+            </div>
+            <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+              取消
+            </a>
+          </li><li class="menu-item"><a class="menu-link" href="/posts/">📕 文章</a></li><li class="menu-item"><a class="menu-link" href="/categories/">🧰 分类</a></li><li class="menu-item"><a class="menu-link" href="/tags/">🔖 标签</a></li><li class="menu-item"><a class="menu-link" href="/book">📚 书单</a></li><li class="menu-item"><a class="menu-link" href="/paper">📝 论文</a></li><li class="menu-item"><a class="menu-link" href="/opencourse">👨🏻‍💻 公开课</a></li><li class="menu-item"><a class="menu-link" href="/filmtv">🎞️ 影视</a></li><li class="menu-item"><a class="menu-link" href="/resource">⚡️ 资源库</a></li><li class="menu-item"><a class="menu-link" href="/projects">⭐ 开源</a></li><li class="menu-item"><a class="menu-link" href="/about">🙋🏻‍♂️ 关于</a></li><li class="menu-item menu-system"></li>
+      </ul>
+    </nav>
+  </div>
+</header><div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+  </div>
+  <div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+  </div><main class="fi-container"><aside class="aside-collection animate__animated animate__fadeIn animate__faster" aria-label="合集"><div class="details related-details open">
+      <div class="details-summary related-summary">
+        <i class="fa-solid fa-fire fa-fade text-danger" aria-hidden="true"></i>
+        <span class="related-title">相关内容</span><i class="details-icon fa-solid fa-angle-right" aria-hidden="true"></i></div>
+      <div class="details-content related-content">
+        <ul class="related-list"><li class="related-item">
+              <a href="/uv%E5%AE%8C%E5%85%A8%E6%8C%87%E5%8D%97/" title="uv完全指南：下一代Python包管理器">uv完全指南：下一代Python包管理器</a></li><li class="related-item">
+              <a href="/python%E4%B8%AD%E7%9A%84all/" title="Python中的__all__：模块公开API设计的关键工具">Python中的__all__：模块公开API设计的关键工具</a></li><li class="related-item">
+              <a href="/cpython%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="CPython 源码剖析：Python 运行的奥秘">CPython 源码剖析：Python 运行的奥秘</a></li><li class="related-item">
+              <a href="/python%E4%B9%8Bbeautifulsoup/" title="BeautifulSoup：Python HTML解析完全指南">BeautifulSoup：Python HTML解析完全指南</a></li><li class="related-item">
+              <a href="/python%E4%B9%8Brequests/" title="Requests：优雅发送HTTP请求">Requests：优雅发送HTTP请求</a></li><li class="related-item">
+              <a href="/python%E4%B9%8Bmatplotlib/" title="Matplotlib：绘图入门与实践">Matplotlib：绘图入门与实践</a></li><li class="related-item">
+              <a href="/python%E4%B9%8Bpandas/" title="Pandas：让数据处理变得简单">Pandas：让数据处理变得简单</a></li><li class="related-item">
+              <a href="/%E7%94%A8keras%E6%90%AD%E5%BB%BA%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" title="用Keras搭建卷积神经网络">用Keras搭建卷积神经网络</a></li><li class="related-item">
+              <a href="/tkinter%E7%AE%80%E6%98%8E%E6%95%99%E7%A8%8B/" title="Tkinter简明教程">Tkinter简明教程</a></li><li class="related-item">
+              <a href="/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E5%AD%A6%E4%B9%A0gans/" title="从零开始学习GANs">从零开始学习GANs</a></li><li class="related-item">
+              <a href="/python%E4%B9%8Bopencv/" title="OpenCV：计算机视觉入门与实践">OpenCV：计算机视觉入门与实践</a></li></ul>
+      </div>
+    </div></aside>
+
+  <article class="page single">
+    <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span title="转载" class="icon-repost"><i class="fa-solid fa-share" aria-hidden="true"></i></span><span>Loguru：替代标准logging的现代方案</span>
+      </h1></div><div class="post-meta">
+      <div class="post-meta-line"><span class="post-author"><a href="https://andyfree96.github.io/" title="作者" target="_blank" rel="author external nofollow noopener noreferrer" class="author"><img class="avatar" src='/avatar/1.jpg' alt="AndyFree96" height="16" width="16">&nbsp;AndyFree96</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E6%8A%80%E6%9C%AF%E7%A7%AF%E6%9C%A8/" class="post-category" title="分类 - 技术积木"><i class="fa-regular fa-folder" aria-hidden="true"></i> 技术积木</a></span></div><div class="post-meta-line"><span title="发布于 2026-07-10 11:12:14"><i class="fa-solid fa-calendar-days me-1" aria-hidden="true"></i><time datetime="2026-07-10">2026-07-10</time></span>&nbsp;<span title="935 字"><i class="fa-solid fa-pencil-alt me-1" aria-hidden="true"></i>约 1000 字</span>&nbsp;<span><i class="fa-regular fa-clock me-1" aria-hidden="true"></i>预计阅读 2 分钟</span>&nbsp;</div>
+    </div><div class="featured-image"><img loading="eager" src='/images/202607/7/marcreation-csxzp35N3sI-unsplash.jpg' sizes="(max-width: 680px) 100vw, (max-width: 960px) 80vw, (max-width: 1440px) 56vw, 800px" alt="/images/202607/7/marcreation-csxzp35N3sI-unsplash.jpg"></div><div class="details toc" id="toc-static" data-kept="false">
+        <div class="details-summary toc-title">
+          <span>目录</span>
+          <span><i class="details-icon fa-solid fa-angle-right" aria-hidden="true"></i></span>
+        </div>
+        <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#loguru是什么">Loguru是什么？</a></li>
+    <li><a href="#安装">安装</a></li>
+    <li><a href="#基础使用">基础使用</a></li>
+    <li><a href="#日志级别">日志级别</a></li>
+    <li><a href="#输出到文件">输出到文件</a></li>
+    <li><a href="#日志文件自动切割">日志文件自动切割</a></li>
+    <li><a href="#自动删除旧日志">自动删除旧日志</a></li>
+    <li><a href="#日志压缩">日志压缩</a></li>
+    <li><a href="#异常自动记录">异常自动记录</a></li>
+    <li><a href="#loguru--多线程">Loguru + 多线程</a></li>
+    <li><a href="#总结">总结</a></li>
+  </ul>
+</nav></div>
+      </div><div class="content" id="content"><p>日志是软件工程中最基础也是最重要的能力之一。无论是Web服务、AI应用、数据处理任务、自动化脚本、后台Worker，都离不开日志。Python标准库提供了<code>logging</code>。它功能强大，但实际工程使用中经常会遇到一些问题：</p>
+<ul>
+<li>配置复杂</li>
+<li>格式设置繁琐</li>
+<li>文件滚动需要额外配置</li>
+<li>多模块项目初始化麻烦</li>
+</ul>
+<p>例如标准logging：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-python"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="2" style="--fi-max-shown-lines:400;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">logging</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">handler</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">FileHandler</span><span class="p">(</span><span class="s1">&#39;app.log&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">formatter</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">Formatter</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%(asctime)s</span><span class="s1"> - </span><span class="si">%(levelname)s</span><span class="s1"> - </span><span class="si">%(message)s</span><span class="s1">&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">handler</span><span class="o">.</span><span class="n">setFormatter</span><span class="p">(</span><span class="n">formatter</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">logger</span><span class="o">.</span><span class="n">addHandler</span><span class="p">(</span><span class="n">handler</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&#34;Application started&#34;</span><span class="p">)</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>简单记录一条日志到文件，需要很多代码。这也是为什么可以尝试用<a href="https://loguru.readthedocs.io/en/stable/" target="_blank" rel="external nofollow noopener noreferrer">Loguru<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>。</p>
+<p><img loading="lazy" src='/images/202607/7/loguru.gif' alt="/images/202607/7/loguru.gif"></p>
+<h2 class="heading-element" id="loguru是什么"><span>Loguru是什么？</span>
+  <a href="#loguru%e6%98%af%e4%bb%80%e4%b9%88" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>Logure是一个现代Python日志库。它的核心实际理念：</p>
+<blockquote>
+<p>用一个简单、开箱即用的Logger，替代Python logging复杂配置。</p>
+</blockquote>
+<p>核心特点：</p>
+<ul>
+<li>一个全局logger</li>
+<li>无需配置Handler</li>
+<li>自动格式化</li>
+<li>异常捕获</li>
+<li>彩色输出</li>
+<li>支持结构化日志</li>
+</ul>
+<h2 class="heading-element" id="安装"><span>安装</span>
+  <a href="#%e5%ae%89%e8%a3%85" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-bash"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">pip install loguru</span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>示例：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-python"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">loguru</span> <span class="kn">import</span> <span class="n">logger</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&#34;Loguru installed successfully&#34;</span><span class="p">)</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>无需创建Logger、Handler以及Formatter。</p>
+<h2 class="heading-element" id="基础使用"><span>基础使用</span>
+  <a href="#%e5%9f%ba%e7%a1%80%e4%bd%bf%e7%94%a8" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>Loguru最简单的使用：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-python"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">loguru</span> <span class="kn">import</span> <span class="n">logger</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&#34;Debug message&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&#34;Application started&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&#34;Low memory&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&#34;Connection failed&#34;</span><span class="p">)</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p><figure><img loading="lazy" src='/images/202607/7/2.png' alt="图1 终端输出日志"><figcaption class="image-caption">图1 终端输出日志</figcaption>
+  </figure></p>
+<h2 class="heading-element" id="日志级别"><span>日志级别</span>
+  <a href="#%e6%97%a5%e5%bf%97%e7%ba%a7%e5%88%ab" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>Loguru支持常见日志等级：</p>
+<div class="table-wrapper">
+  <table>
+    <thead>
+        <tr>
+            <th>Level</th>
+            <th>用途</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>TRACE</td>
+            <td>最详细调试</td>
+        </tr>
+        <tr>
+            <td>DEBUG</td>
+            <td>调试信息</td>
+        </tr>
+        <tr>
+            <td>INFO</td>
+            <td>普通运行信息</td>
+        </tr>
+        <tr>
+            <td>SUCCESS</td>
+            <td>成功事件</td>
+        </tr>
+        <tr>
+            <td>WARNING</td>
+            <td>警告</td>
+        </tr>
+        <tr>
+            <td>ERROR</td>
+            <td>错误</td>
+        </tr>
+        <tr>
+            <td>CRITICAL</td>
+            <td>严重错误</td>
+        </tr>
+    </tbody>
+  </table>
+</div><p>其中<code>SUCCESS</code>是Loguru相比logging增加的等级。</p>
+<h2 class="heading-element" id="输出到文件"><span>输出到文件</span>
+  <a href="#%e8%be%93%e5%87%ba%e5%88%b0%e6%96%87%e4%bb%b6" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>项目通常要将日志输出到文件：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-python"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="2" style="--fi-max-shown-lines:400;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">loguru</span> <span class="kn">import</span> <span class="n">logger</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">logger</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&#34;app.log&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&#34;Debug message&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&#34;Application started&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">logger</span><span class="o">.</span><span class="n">success</span><span class="p">(</span><span class="s2">&#34;Operation completed successfully&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&#34;Low memory&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&#34;Connection failed&#34;</span><span class="p">)</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>运行后会生成<code>app.log</code>，内容如下：</p>
+<p><figure><img loading="lazy" src='/images/202607/7/3.png' alt="图2 app.log日志文件内容"><figcaption class="image-caption">图2 app.log日志文件内容</figcaption>
+  </figure></p>
+<h2 class="heading-element" id="日志文件自动切割"><span>日志文件自动切割</span>
+  <a href="#%e6%97%a5%e5%bf%97%e6%96%87%e4%bb%b6%e8%87%aa%e5%8a%a8%e5%88%87%e5%89%b2" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>生产环境日志不能无限增长。例如，每天生成一个日志文件：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-python"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">logger</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&#34;logs/app.log&#34;</span><span class="p">,</span> <span class="n">rotation</span><span class="o">=</span><span class="s2">&#34;00:00&#34;</span><span class="p">)</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>按文件大小切割。例如，超过100MB：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-python"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">logger</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&#34;logs/app.log&#34;</span><span class="p">,</span> <span class="n">rotation</span><span class="o">=</span><span class="s2">&#34;100 MB&#34;</span><span class="p">)</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>按时间保存。例如，每小时：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-python"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">logger</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&#34;logs/app.log&#34;</span><span class="p">,</span> <span class="n">rotation</span><span class="o">=</span><span class="s2">&#34;1 hour&#34;</span><span class="p">)</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><h2 class="heading-element" id="自动删除旧日志"><span>自动删除旧日志</span>
+  <a href="#%e8%87%aa%e5%8a%a8%e5%88%a0%e9%99%a4%e6%97%a7%e6%97%a5%e5%bf%97" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>生产系统通常需要保留周期。例如，保留30天：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-python"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">logger</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&#34;logs/app.log&#34;</span><span class="p">,</span> <span class="n">retention</span><span class="o">=</span><span class="s2">&#34;20 days&#34;</span><span class="p">)</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>超过时间，自动删除.</p>
+<h2 class="heading-element" id="日志压缩"><span>日志压缩</span>
+  <a href="#%e6%97%a5%e5%bf%97%e5%8e%8b%e7%bc%a9" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>为节省磁盘空间，可对文件进行压缩：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-python"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">logger</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&#34;logs/app.log&#34;</span><span class="p">,</span> <span class="n">compression</span><span class="o">=</span><span class="s2">&#34;zip&#34;</span><span class="p">)</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><h2 class="heading-element" id="异常自动记录"><span>异常自动记录</span>
+  <a href="#%e5%bc%82%e5%b8%b8%e8%87%aa%e5%8a%a8%e8%ae%b0%e5%bd%95" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>这是Loguru非常方便的功能。普通写法：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-python"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">loguru</span> <span class="kn">import</span> <span class="n">logger</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">try</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="mi">1</span> <span class="o">/</span> <span class="mi">0</span>
+</span></span><span class="line"><span class="cl"><span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="s2">&#34;An error occurred&#34;</span><span class="p">)</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>Loguru：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-python"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">loguru</span> <span class="kn">import</span> <span class="n">logger</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nd">@logger.catch</span>
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">process</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="n">a</span> <span class="o">/</span> <span class="n">b</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">process</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><h2 class="heading-element" id="loguru--多线程"><span>Loguru + 多线程</span>
+  <a href="#loguru--%e5%a4%9a%e7%ba%bf%e7%a8%8b" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-python"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="2" style="--fi-max-shown-lines:400;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">loguru</span> <span class="kn">import</span> <span class="n">logger</span>
+</span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">concurrent.futures</span> <span class="kn">import</span> <span class="n">ThreadPoolExecutor</span>
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">sys</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">worker</span><span class="p">(</span><span class="n">i</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&#34;Worker </span><span class="si">{}</span><span class="s2"> running&#34;</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">with</span> <span class="n">ThreadPoolExecutor</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span> <span class="k">as</span> <span class="n">pool</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">pool</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">worker</span><span class="p">,</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>输出：</p>
+<p><figure><img loading="lazy" src='/images/202607/7/4.png' alt="图3 多线程&#43;日志输出"><figcaption class="image-caption">图3 多线程+日志输出</figcaption>
+  </figure></p>
+<h2 class="heading-element" id="总结"><span>总结</span>
+  <a href="#%e6%80%bb%e7%bb%93" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>Loguru解决了Python日志系统中大量重复配置问题。它最大的优势：</p>
+<ul>
+<li>简单</li>
+<li>开箱即用</li>
+<li>文件管理方便</li>
+<li>异常追踪方便</li>
+</ul></div><hr class="awesome-hr" />
+    <h2 id="see-also">相关内容</h2>
+    <ul><li>
+          <a href="/uv%E5%AE%8C%E5%85%A8%E6%8C%87%E5%8D%97/" title="uv完全指南：下一代Python包管理器">uv完全指南：下一代Python包管理器</a></li><li>
+          <a href="/python%E4%B8%AD%E7%9A%84all/" title="Python中的__all__：模块公开API设计的关键工具">Python中的__all__：模块公开API设计的关键工具</a></li><li>
+          <a href="/cpython%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="CPython 源码剖析：Python 运行的奥秘">CPython 源码剖析：Python 运行的奥秘</a></li><li>
+          <a href="/python%E4%B9%8Bbeautifulsoup/" title="BeautifulSoup：Python HTML解析完全指南">BeautifulSoup：Python HTML解析完全指南</a></li><li>
+          <a href="/python%E4%B9%8Brequests/" title="Requests：优雅发送HTTP请求">Requests：优雅发送HTTP请求</a></li><li>
+          <a href="/python%E4%B9%8Bmatplotlib/" title="Matplotlib：绘图入门与实践">Matplotlib：绘图入门与实践</a></li><li>
+          <a href="/python%E4%B9%8Bpandas/" title="Pandas：让数据处理变得简单">Pandas：让数据处理变得简单</a></li><li>
+          <a href="/%E7%94%A8keras%E6%90%AD%E5%BB%BA%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" title="用Keras搭建卷积神经网络">用Keras搭建卷积神经网络</a></li><li>
+          <a href="/tkinter%E7%AE%80%E6%98%8E%E6%95%99%E7%A8%8B/" title="Tkinter简明教程">Tkinter简明教程</a></li><li>
+          <a href="/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E5%AD%A6%E4%B9%A0gans/" title="从零开始学习GANs">从零开始学习GANs</a></li><li>
+          <a href="/python%E4%B9%8Bopencv/" title="OpenCV：计算机视觉入门与实践">OpenCV：计算机视觉入门与实践</a></li></ul><div class="post-footer" id="post-footer">
+  <div class="post-info">
+    <div class="post-info-line">
+      <div class="post-info-mod"><span title="更新于 2026-07-10 11:12:14">更新于 2026-07-10&nbsp;</span>
+      </div></div><div class="post-info-line">
+        <div class="post-info-md"><span><a href="vscode://file/D:\hugo-blog\andyfree96\content\posts\Python之Loguru.md" title="在编辑器中打开" class="link-to-vscode">在编辑器中打开</a></span></div>
+        <div class="post-info-share">
+          <span><a href="javascript:void(0);" title="分享到 X" data-sharer="twitter" data-url="http://localhost:1313/python%E4%B9%8Bloguru/" data-title="Loguru：替代标准logging的现代方案" data-via="IRONAnthony96" data-hashtags="Python,Loguru,日志"><i class="fa-brands fa-x-twitter" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="http://localhost:1313/python%E4%B9%8Bloguru/" data-hashtag="Python"><i class="fa-brands fa-facebook-square" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="http://localhost:1313/python%E4%B9%8Bloguru/" data-title="Loguru：替代标准logging的现代方案" data-image="/images/202607/7/marcreation-csxzp35N3sI-unsplash.jpg"><i class="fa-brands fa-weibo" aria-hidden="true"></i></a>
+  </span>
+        </div>
+      </div></div>
+
+  <div class="post-info-more">
+    <section class="post-tags"><i class="fa-solid fa-tags me-1" aria-hidden="true"></i><a href="/tags/python/" class="post-tag" title="标签 - Python">Python</a><a href="/tags/loguru/" class="post-tag" title="标签 - Loguru">Loguru</a><a href="/tags/%E6%97%A5%E5%BF%97/" class="post-tag" title="标签 - 日志">日志</a></section>
+    <section><span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+    </section>
+  </div><div class="post-nav"><a href="/yolov1%E8%AE%BA%E6%96%87%E7%B2%BE%E8%AF%BB/" class="post-nav-item" rel="prev" title="YOLOv1论文精读：You Only Look Once如何重新定义目标检测？"><i class="fa-solid fa-angle-left" aria-hidden="true"></i>YOLOv1论文精读：You Only Look Once如何重新定义目标检测？</a><a href="/%E6%9E%B6%E6%9E%84%E6%95%B4%E6%B4%81%E4%B9%8B%E9%81%93/" class="post-nav-item" rel="next" title="架构整洁之道 (Robert C. Martin)">架构整洁之道 (Robert C. Martin)<i class="fa-solid fa-angle-right" aria-hidden="true"></i></a></div>
+</div>
+<div class="post-reward">
+    <div class="comment">请作者喝杯咖啡!</div>
+    <input type="checkbox" class="reward-input" name="reward" id="fi-reward" hidden />
+    <label class="reward-button" for="fi-reward"><i class="fa-solid fa-qrcode" aria-hidden="true"></i>赞赏</label>
+    <div class="reward-ways" data-mode="static"><div><img src='/reward/alipay.png' alt="AndyFree96 支付宝"><span data-animation>支付宝</span>
+          </div><div><img src='/reward/wechatpay.png' alt="AndyFree96 微信"><span data-animation>微信</span>
+          </div></div>
+  </div></article>
+
+  <aside class="toc" id="toc-auto" aria-label="目录"><h2 class="toc-title">目录&nbsp;<i class="toc-icon fa-solid fa-angle-down" aria-hidden="true"></i></h2>
+      <div class="toc-content" id="toc-content-auto"></div></aside><dialog id="toc-dialog" aria-labelledby="toc-dialog-title" role="dialog" closedby="any">
+      <button type="button" class="toc-close-btn" aria-label="Close Table of Contents"><i class="fa-solid fa-xmark fa-lg" aria-hidden="true"></i></button>
+      <div class="toc">
+        <h2 class="toc-title" id="toc-dialog-title">目录</h2>
+        <div class="toc-content" id="toc-content-drawer"><nav >
+  <ul>
+    <li><a href="#loguru是什么">Loguru是什么？</a></li>
+    <li><a href="#安装">安装</a></li>
+    <li><a href="#基础使用">基础使用</a></li>
+    <li><a href="#日志级别">日志级别</a></li>
+    <li><a href="#输出到文件">输出到文件</a></li>
+    <li><a href="#日志文件自动切割">日志文件自动切割</a></li>
+    <li><a href="#自动删除旧日志">自动删除旧日志</a></li>
+    <li><a href="#日志压缩">日志压缩</a></li>
+    <li><a href="#异常自动记录">异常自动记录</a></li>
+    <li><a href="#loguru--多线程">Loguru + 多线程</a></li>
+    <li><a href="#总结">总结</a></li>
+  </ul>
+</nav></div>
+      </div>
+    </dialog></main><footer class="footer">
+    <div class="footer-container"><div class="footer-line powered">由 <a href="https://gohugo.io/" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.163.1">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/hugo-fixit/FixIt" target="_blank" rel="external" title="FixIt v1.0.0-mq99hlzg">FixIt</a>
+        </div><div class="footer-line copyright" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright" aria-hidden="true"></i>
+            <span itemprop="copyrightYear">2019 - 2026</span><span class="author" itemprop="copyrightHolder">
+              <a href="https://andyfree96.github.io/" target="_blank" rel="external nofollow noopener noreferrer">AndyFree96</a></span></div></div>
+  </footer></div><div class="widgets"><div class="fixed-buttons"><button type="button" class="fixed-button back-to-top animate__faster d-none" aria-label="回到顶部"><i class="fa-solid fa-arrow-up" aria-hidden="true"></i></button><button type="button" id="toc-drawer-button" class="fixed-button toc-drawer-button d-none" aria-label="目录" aria-controls="toc-dialog" aria-expanded="false"><i class="fa-solid fa-bars" aria-hidden="true"></i></button></div><div id="mask"></div><div class="reading-progress-bar" style="left: 0;top: 0;"></div><noscript>
+    <div class="noscript-warning">该网站在启用 JavaScript 的情况下效果最佳。</div>
+  </noscript>
+</div><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script src="/lib/autocomplete/autocomplete.min.js" defer></script><script src="/lib/algoliasearch/browser.umd.js" defer></script><script src="/lib/sharer/sharer.min.js" async defer></script><script src="/lib/cookieconsent/cookieconsent.min.js" defer></script><script src="/js/lib/cookieconsent.js" defer></script><script src="/lib/cell-tooltip/cell-tooltip.umd.js" defer></script><script src="/js/config/50028e4814231536e459ef0909359b60.js" defer></script><script src="/js/lib/file-tree.js" defer></script><script src="/js/main.js" defer></script></body>
+</html>

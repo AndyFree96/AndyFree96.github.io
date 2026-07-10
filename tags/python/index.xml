@@ -8,15 +8,23 @@
     <language>zh-CN</language>
     <managingEditor>anthonyfree96@gmail.com (AndyFree96)</managingEditor>
     <webMaster>anthonyfree96@gmail.com (AndyFree96)</webMaster>
-    <lastBuildDate>Fri, 10 Jul 2026 11:12:14 +0800</lastBuildDate>
+    <lastBuildDate>Sat, 11 Jul 2026 07:14:33 +0800</lastBuildDate>
     <atom:link href="http://localhost:1313/tags/python/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Python之Loguru日志库：替代标准logging的现代方案</title>
-      <link>http://localhost:1313/python%E4%B9%8Bloguru%E6%97%A5%E5%BF%97%E5%BA%93/</link>
+      <title>Requests源码剖析：优雅发送HTTP请求实现原理</title>
+      <link>http://localhost:1313/requests%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/</link>
+      <pubDate>Sat, 11 Jul 2026 07:14:33 +0800</pubDate><author>anthonyfree96@gmail.com (AndyFree96)</author>
+      <guid>http://localhost:1313/requests%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/</guid>
+      <category domain="http://localhost:1313/categories/%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/">源码剖析</category>
+      <description>Requests源码剖析：优雅发送HTTP请求实现原理</description>
+    </item>
+    <item>
+      <title>Loguru：替代标准logging的现代方案</title>
+      <link>http://localhost:1313/python%E4%B9%8Bloguru/</link>
       <pubDate>Fri, 10 Jul 2026 11:12:14 +0800</pubDate><author>anthonyfree96@gmail.com (AndyFree96)</author>
-      <guid>http://localhost:1313/python%E4%B9%8Bloguru%E6%97%A5%E5%BF%97%E5%BA%93/</guid>
+      <guid>http://localhost:1313/python%E4%B9%8Bloguru/</guid>
       <category domain="http://localhost:1313/categories/%E6%8A%80%E6%9C%AF%E7%A7%AF%E6%9C%A8/">技术积木</category>
-      <description>&lt;p&gt;日志是软件工程中最基础也是最重要的能力之一。无论是Web服务、AI应用、数据处理任务、自动化脚本、后台Worker，都离不开日志。Python标准库提供了&lt;code&gt;logging&lt;/code&gt;。它功能强大，但实际工程使用中经常会遇到一些问题：&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;配置复杂&lt;/li&gt;&#xA;&lt;li&gt;格式设置繁琐&lt;/li&gt;&#xA;&lt;li&gt;文件滚动需要额外配置&lt;/li&gt;&#xA;&lt;li&gt;多模块项目初始化麻烦&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;p&gt;例如标准logging：&lt;/p&gt;&#xA;&lt;pre&gt;&lt;code&gt;import logging&#xD;&#xA;&#xD;&#xA;logger = logging.getLogger(__name__)&#xD;&#xA;&#xD;&#xA;logger.setLevel(logging.INFO)&#xD;&#xA;&#xD;&#xA;handler = logging.FileHandler(&amp;#39;app.log&amp;#39;)&#xD;&#xA;&#xD;&#xA;formatter = logging.Formatter(&amp;#39;%(asctime)s - %(levelname)s - %(message)s&amp;#39;)&#xD;&#xA;&#xD;&#xA;handler.setFormatter(formatter)&#xD;&#xA;&#xD;&#xA;logger.addHandler(handler)&#xD;&#xA;&#xD;&#xA;logger.info(&amp;#34;Application started&amp;#34;)&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;简单记录一条日志到文件，需要很多代码。这也是为什么可以尝试用&lt;a href=&#34;https://loguru.readthedocs.io/en/stable/&#34; target=&#34;_blank&#34; rel=&#34;external nofollow noopener noreferrer&#34;&gt;Logure&lt;i class=&#34;fa-solid fa-external-link-alt fa-xs ms-1 text-secondary&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;&lt;/a&gt;。&lt;/p&gt;</description>
+      <description>&lt;p&gt;日志是软件工程中最基础也是最重要的能力之一。无论是Web服务、AI应用、数据处理任务、自动化脚本、后台Worker，都离不开日志。Python标准库提供了&lt;code&gt;logging&lt;/code&gt;。它功能强大，但实际工程使用中经常会遇到一些问题：&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;配置复杂&lt;/li&gt;&#xA;&lt;li&gt;格式设置繁琐&lt;/li&gt;&#xA;&lt;li&gt;文件滚动需要额外配置&lt;/li&gt;&#xA;&lt;li&gt;多模块项目初始化麻烦&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;p&gt;例如标准logging：&lt;/p&gt;&#xA;&lt;pre&gt;&lt;code&gt;import logging&#xD;&#xA;&#xD;&#xA;logger = logging.getLogger(__name__)&#xD;&#xA;&#xD;&#xA;logger.setLevel(logging.INFO)&#xD;&#xA;&#xD;&#xA;handler = logging.FileHandler(&amp;#39;app.log&amp;#39;)&#xD;&#xA;&#xD;&#xA;formatter = logging.Formatter(&amp;#39;%(asctime)s - %(levelname)s - %(message)s&amp;#39;)&#xD;&#xA;&#xD;&#xA;handler.setFormatter(formatter)&#xD;&#xA;&#xD;&#xA;logger.addHandler(handler)&#xD;&#xA;&#xD;&#xA;logger.info(&amp;#34;Application started&amp;#34;)&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;简单记录一条日志到文件，需要很多代码。这也是为什么可以尝试用&lt;a href=&#34;https://loguru.readthedocs.io/en/stable/&#34; target=&#34;_blank&#34; rel=&#34;external nofollow noopener noreferrer&#34;&gt;Loguru&lt;i class=&#34;fa-solid fa-external-link-alt fa-xs ms-1 text-secondary&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;&lt;/a&gt;。&lt;/p&gt;</description>
     </item>
     <item>
       <title>uv完全指南：下一代Python包管理器</title>
@@ -43,35 +51,35 @@
       <description>&lt;p&gt;我们经常说，Python 是一门&lt;strong&gt;解释型语言&lt;/strong&gt;，但你知道它的解释器 CPython 究竟是如何工作的么？Python 的内存管理、字节码执行、垃圾回收……这些&lt;em&gt;幕后英雄&lt;/em&gt;是如何协作的？在这篇文章中，我们将通过剖析 CPython 源码，一起探索 Python 的运行本质。&lt;/p&gt;</description>
     </item>
     <item>
-      <title>BeautifulSoup库使用</title>
-      <link>http://localhost:1313/beautifulsoup%E5%BA%93%E4%BD%BF%E7%94%A8/</link>
+      <title>BeautifulSoup：Python HTML解析完全指南</title>
+      <link>http://localhost:1313/python%E4%B9%8Bbeautifulsoup/</link>
       <pubDate>Mon, 08 Nov 2021 08:36:00 +0800</pubDate><author>anthonyfree96@gmail.com (AndyFree96)</author>
-      <guid>http://localhost:1313/beautifulsoup%E5%BA%93%E4%BD%BF%E7%94%A8/</guid>
+      <guid>http://localhost:1313/python%E4%B9%8Bbeautifulsoup/</guid>
       <category domain="http://localhost:1313/categories/%E7%BD%91%E7%BB%9C%E7%88%AC%E8%99%AB/">网络爬虫</category>
       <description>&lt;p&gt;&lt;code&gt;BeautifulSoup&lt;/code&gt;是啥？它是一个可以从 HTML 或 XML 文件中提取数据的 Python 库。它能通过我们喜欢的转换器实现文档导航，查找和修改。&lt;/p&gt;</description>
     </item>
     <item>
-      <title>Requests库使用</title>
-      <link>http://localhost:1313/requests%E5%BA%93%E4%BD%BF%E7%94%A8/</link>
+      <title>Requests：优雅发送HTTP请求</title>
+      <link>http://localhost:1313/python%E4%B9%8Brequests/</link>
       <pubDate>Fri, 08 Oct 2021 08:26:24 +0800</pubDate><author>anthonyfree96@gmail.com (AndyFree96)</author>
-      <guid>http://localhost:1313/requests%E5%BA%93%E4%BD%BF%E7%94%A8/</guid>
-      <category domain="http://localhost:1313/categories/%E7%BD%91%E7%BB%9C%E7%88%AC%E8%99%AB/">网络爬虫</category>
+      <guid>http://localhost:1313/python%E4%B9%8Brequests/</guid>
+      <category domain="http://localhost:1313/categories/%E6%8A%80%E6%9C%AF%E7%A7%AF%E6%9C%A8/">技术积木</category>
       <description>&lt;ul&gt;&#xA;&lt;li&gt;&lt;strong&gt;2024/11/06 更新&lt;/strong&gt;: 修改&lt;strong&gt;JSON 响应内容&lt;/strong&gt;、&lt;strong&gt;定制请求头&lt;/strong&gt;、&lt;strong&gt;POST 请求&lt;/strong&gt;中的代码以及图片&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;p&gt;我们可以使用 Python 内置的 urllib 包来请求网络资源。它用起来比较麻烦，而且缺少很多实用的高级功能。本文我们将会介绍一个更加方便的 Python 第三方库——Requests 的使用。&lt;/p&gt;</description>
     </item>
     <item>
-      <title>Matplotlib简明教程</title>
-      <link>http://localhost:1313/matplotlib%E7%AE%80%E6%98%8E%E6%95%99%E7%A8%8B/</link>
+      <title>Matplotlib：绘图入门与实践</title>
+      <link>http://localhost:1313/python%E4%B9%8Bmatplotlib/</link>
       <pubDate>Tue, 27 Apr 2021 09:27:37 +0800</pubDate><author>anthonyfree96@gmail.com (AndyFree96)</author>
-      <guid>http://localhost:1313/matplotlib%E7%AE%80%E6%98%8E%E6%95%99%E7%A8%8B/</guid>
-      <category domain="http://localhost:1313/categories/%E6%95%B0%E6%8D%AE%E7%A7%91%E5%AD%A6/">数据科学</category>
+      <guid>http://localhost:1313/python%E4%B9%8Bmatplotlib/</guid>
+      <category domain="http://localhost:1313/categories/%E6%8A%80%E6%9C%AF%E7%A7%AF%E6%9C%A8/">技术积木</category>
       <description>&lt;p&gt;在数据科学和分析领域，图表不仅是展示数据的工具，更是讲故事的语言。Matplotlib 是 Python 中历史最悠久且功能最全面的绘图库。无论你是想画一个简单的折线图，还是需要定制复杂的多图布局，Matplotlib 都能满足你的需求。这篇文章将带你快速上手，学会用代码&lt;strong&gt;画出&lt;/strong&gt;数据的价值。&lt;/p&gt;</description>
     </item>
     <item>
-      <title>Pandas简明教程</title>
-      <link>http://localhost:1313/pandas%E7%AE%80%E6%98%8E%E6%95%99%E7%A8%8B/</link>
+      <title>Pandas：让数据处理变得简单</title>
+      <link>http://localhost:1313/python%E4%B9%8Bpandas/</link>
       <pubDate>Wed, 27 Jan 2021 09:27:09 +0800</pubDate><author>anthonyfree96@gmail.com (AndyFree96)</author>
-      <guid>http://localhost:1313/pandas%E7%AE%80%E6%98%8E%E6%95%99%E7%A8%8B/</guid>
-      <category domain="http://localhost:1313/categories/%E6%95%B0%E6%8D%AE%E7%A7%91%E5%AD%A6/">数据科学</category>
+      <guid>http://localhost:1313/python%E4%B9%8Bpandas/</guid>
+      <category domain="http://localhost:1313/categories/%E6%8A%80%E6%9C%AF%E7%A7%AF%E6%9C%A8/">技术积木</category>
       <description>&lt;p&gt;众所周知，Pandas 是最受欢迎的 Python 数据科学与分析库。Numpy 用于较低级别的科学计算。Pandas 构建于 Numpy 之上，专为实际数据分析而设计。本文总结了一些常见、方便的功能。话不多说，让我们开始吧！&lt;/p&gt;</description>
     </item>
     <item>
@@ -99,11 +107,11 @@
       <description>&lt;p&gt;生成对抗网络（GANs, generative adversarial networks）是由Ian Goodfellow等人在2014年的&lt;a href=&#34;https://arxiv.org/abs/1406.2661&#34; target=&#34;_blank&#34; rel=&#34;external nofollow noopener noreferrer&#34;&gt;Generative Adversarial Networks&lt;i class=&#34;fa-solid fa-external-link-alt fa-xs ms-1 text-secondary&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;&lt;/a&gt;一文中提出。Facebook的人工智能主管Yann Lecun对其的评价是：“机器学习在过去10年中最有趣的想法”。&lt;/p&gt;</description>
     </item>
     <item>
-      <title>OpenCV简明教程</title>
-      <link>http://localhost:1313/opencv%E7%AE%80%E6%98%8E%E6%95%99%E7%A8%8B/</link>
+      <title>OpenCV：计算机视觉入门与实践</title>
+      <link>http://localhost:1313/python%E4%B9%8Bopencv/</link>
       <pubDate>Mon, 07 Jan 2019 16:43:11 +0800</pubDate><author>anthonyfree96@gmail.com (AndyFree96)</author>
-      <guid>http://localhost:1313/opencv%E7%AE%80%E6%98%8E%E6%95%99%E7%A8%8B/</guid>
-      <category domain="http://localhost:1313/categories/opencv/">OpenCV</category>
+      <guid>http://localhost:1313/python%E4%B9%8Bopencv/</guid>
+      <category domain="http://localhost:1313/categories/%E6%8A%80%E6%9C%AF%E7%A7%AF%E6%9C%A8/">技术积木</category>
       <description>&lt;p&gt;无论我们想要学习如何将面部识别应用于视频流，还是用深度学习构建图像分类器，或者做其他一些有关图像识别的有趣项目，可能都会需要学一些 OpenCV 的知识，本文将做简单介绍。&lt;/p&gt;</description>
     </item>
   </channel>

@@ -4,12 +4,12 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
     <meta name="robots" content="noodp" />
-    <title>Python之Loguru日志库：替代标准logging的现代方案 - 东尼的博客</title><meta name="author" content="AndyFree96">
+    <title>Loguru日志库：替代标准logging的现代方案 - 东尼的博客</title><meta name="author" content="AndyFree96">
 <meta name="description" content="日志是软件工程中最基础也是最重要的能力之一。无论是Web服务、AI应用、数据处理任务、自动化脚本、后台Worker，都离不开日志。Python标准库提供了logging。它功能强大，但实际工程使用中经常会遇到一些问题：
 配置复杂 格式设置繁琐 文件滚动需要额外配置 多模块项目初始化麻烦 例如标准logging：
 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 import logging logger = logging.getLogger(__name__) logger.setLevel(logging.INFO) handler = logging.FileHandler(&#39;app.log&#39;) formatter = logging.Formatter(&#39;%(asctime)s - %(levelname)s - %(message)s&#39;) handler.setFormatter(formatter) logger.addHandler(handler) logger.info(&#34;Application started&#34;) 简单记录一条日志到文件，需要很多代码。这也是为什么可以尝试用Loguru。
 "><meta name="keywords" content='Python, Loguru, 日志'>
-	<meta itemprop="name" content="Python之Loguru日志库：替代标准logging的现代方案">
+	<meta itemprop="name" content="Loguru日志库：替代标准logging的现代方案">
 	<meta itemprop="description" content="日志是软件工程中最基础也是最重要的能力之一。无论是Web服务、AI应用、数据处理任务、自动化脚本、后台Worker，都离不开日志。Python标准库提供了logging。它功能强大，但实际工程使用中经常会遇到一些问题：
 配置复杂 格式设置繁琐 文件滚动需要额外配置 多模块项目初始化麻烦 例如标准logging：
 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 import logging logger = logging.getLogger(__name__) logger.setLevel(logging.INFO) handler = logging.FileHandler(&#39;app.log&#39;) formatter = logging.Formatter(&#39;%(asctime)s - %(levelname)s - %(message)s&#39;) handler.setFormatter(formatter) logger.addHandler(handler) logger.info(&#34;Application started&#34;) 简单记录一条日志到文件，需要很多代码。这也是为什么可以尝试用Loguru。">
@@ -18,7 +18,7 @@
 	<meta itemprop="wordCount" content="935">
 	<meta itemprop="keywords" content="Python,Loguru,日志"><meta property="og:url" content="http://localhost:1313/python%E4%B9%8Bloguru%E6%97%A5%E5%BF%97%E5%BA%93/">
 	<meta property="og:site_name" content="东尼的博客">
-	<meta property="og:title" content="Python之Loguru日志库：替代标准logging的现代方案">
+	<meta property="og:title" content="Loguru日志库：替代标准logging的现代方案">
 	<meta property="og:description" content="日志是软件工程中最基础也是最重要的能力之一。无论是Web服务、AI应用、数据处理任务、自动化脚本、后台Worker，都离不开日志。Python标准库提供了logging。它功能强大，但实际工程使用中经常会遇到一些问题：
 配置复杂 格式设置繁琐 文件滚动需要额外配置 多模块项目初始化麻烦 例如标准logging：
 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 import logging logger = logging.getLogger(__name__) logger.setLevel(logging.INFO) handler = logging.FileHandler(&#39;app.log&#39;) formatter = logging.Formatter(&#39;%(asctime)s - %(levelname)s - %(message)s&#39;) handler.setFormatter(formatter) logger.addHandler(handler) logger.info(&#34;Application started&#34;) 简单记录一条日志到文件，需要很多代码。这也是为什么可以尝试用Loguru。">
@@ -32,19 +32,19 @@
 		<meta property="article:tag" content="日志">
 
   <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="Python之Loguru日志库：替代标准logging的现代方案">
+  <meta name="twitter:title" content="Loguru日志库：替代标准logging的现代方案">
   <meta name="twitter:description" content="日志是软件工程中最基础也是最重要的能力之一。无论是Web服务、AI应用、数据处理任务、自动化脚本、后台Worker，都离不开日志。Python标准库提供了logging。它功能强大，但实际工程使用中经常会遇到一些问题：
 配置复杂 格式设置繁琐 文件滚动需要额外配置 多模块项目初始化麻烦 例如标准logging：
 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 import logging logger = logging.getLogger(__name__) logger.setLevel(logging.INFO) handler = logging.FileHandler(&#39;app.log&#39;) formatter = logging.Formatter(&#39;%(asctime)s - %(levelname)s - %(message)s&#39;) handler.setFormatter(formatter) logger.addHandler(handler) logger.info(&#34;Application started&#34;) 简单记录一条日志到文件，需要很多代码。这也是为什么可以尝试用Loguru。"><meta name="twitter:creator" content="@IRONAnthony96"><meta name="application-name" content="FixIt">
 <meta name="apple-mobile-web-app-title" content="FixIt"><meta name="theme-color" data-light="#f6f8fa" data-dark="#151b23" content="#f6f8fa"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" type="text/html" href="http://localhost:1313/python%E4%B9%8Bloguru%E6%97%A5%E5%BF%97%E5%BA%93/" title="Python之Loguru日志库：替代标准logging的现代方案 - 东尼的博客" /><link rel="prev" type="text/html" href="http://localhost:1313/yolov1%E8%AE%BA%E6%96%87%E7%B2%BE%E8%AF%BB/" title="YOLOv1论文精读：You Only Look Once如何重新定义目标检测？" /><link rel="alternate" type="text/markdown" href="http://localhost:1313/python%E4%B9%8Bloguru%E6%97%A5%E5%BF%97%E5%BA%93/index.md" title="Python之Loguru日志库：替代标准logging的现代方案 - 东尼的博客"><link rel="stylesheet" href="/css/config.css"><link rel="stylesheet" href="/css/main.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" type="text/html" href="http://localhost:1313/python%E4%B9%8Bloguru%E6%97%A5%E5%BF%97%E5%BA%93/" title="Loguru日志库：替代标准logging的现代方案 - 东尼的博客" /><link rel="prev" type="text/html" href="http://localhost:1313/yolov1%E8%AE%BA%E6%96%87%E7%B2%BE%E8%AF%BB/" title="YOLOv1论文精读：You Only Look Once如何重新定义目标检测？" /><link rel="alternate" type="text/markdown" href="http://localhost:1313/python%E4%B9%8Bloguru%E6%97%A5%E5%BF%97%E5%BA%93/index.md" title="Loguru日志库：替代标准logging的现代方案 - 东尼的博客"><link rel="stylesheet" href="/css/config.css"><link rel="stylesheet" href="/css/main.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><link rel="preload" href="/js/main.js" as="script"><script type="application/ld+json">
   {
     "@context": "http://schema.org",
     "@type": "BlogPosting",
-    "headline": "Python之Loguru日志库：替代标准logging的现代方案",
+    "headline": "Loguru日志库：替代标准logging的现代方案",
     "inLanguage": "zh-CN",
     "mainEntityOfPage": {
       "@type": "WebPage",
@@ -134,19 +134,19 @@
               <a href="/uv%E5%AE%8C%E5%85%A8%E6%8C%87%E5%8D%97/" title="uv完全指南：下一代Python包管理器">uv完全指南：下一代Python包管理器</a></li><li class="related-item">
               <a href="/python%E4%B8%AD%E7%9A%84all/" title="Python中的__all__：模块公开API设计的关键工具">Python中的__all__：模块公开API设计的关键工具</a></li><li class="related-item">
               <a href="/cpython%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="CPython 源码剖析：Python 运行的奥秘">CPython 源码剖析：Python 运行的奥秘</a></li><li class="related-item">
-              <a href="/beautifulsoup%E5%BA%93%E4%BD%BF%E7%94%A8/" title="BeautifulSoup库使用">BeautifulSoup库使用</a></li><li class="related-item">
-              <a href="/requests%E5%BA%93%E4%BD%BF%E7%94%A8/" title="Requests库使用">Requests库使用</a></li><li class="related-item">
-              <a href="/matplotlib%E7%AE%80%E6%98%8E%E6%95%99%E7%A8%8B/" title="Matplotlib简明教程">Matplotlib简明教程</a></li><li class="related-item">
-              <a href="/pandas%E7%AE%80%E6%98%8E%E6%95%99%E7%A8%8B/" title="Pandas简明教程">Pandas简明教程</a></li><li class="related-item">
+              <a href="/python%E4%B9%8Bbeautifulsoup%E6%95%99%E7%A8%8B/" title="BeautifulSoup：Python HTML解析完全指南">BeautifulSoup：Python HTML解析完全指南</a></li><li class="related-item">
+              <a href="/python%E4%B9%8Brequests%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/" title="Requests使用指南：优雅发送HTTP请求">Requests使用指南：优雅发送HTTP请求</a></li><li class="related-item">
+              <a href="/python%E4%B9%8Bmatplotlib/" title="Matplotlib绘图入门与实践">Matplotlib绘图入门与实践</a></li><li class="related-item">
+              <a href="/python%E4%B9%8Bpandas/" title="Pandas：让数据处理变得简单">Pandas：让数据处理变得简单</a></li><li class="related-item">
               <a href="/%E7%94%A8keras%E6%90%AD%E5%BB%BA%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" title="用Keras搭建卷积神经网络">用Keras搭建卷积神经网络</a></li><li class="related-item">
               <a href="/tkinter%E7%AE%80%E6%98%8E%E6%95%99%E7%A8%8B/" title="Tkinter简明教程">Tkinter简明教程</a></li><li class="related-item">
               <a href="/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E5%AD%A6%E4%B9%A0gans/" title="从零开始学习GANs">从零开始学习GANs</a></li><li class="related-item">
-              <a href="/opencv%E7%AE%80%E6%98%8E%E6%95%99%E7%A8%8B/" title="OpenCV简明教程">OpenCV简明教程</a></li></ul>
+              <a href="/python%E4%B9%8Bopencv/" title="OpenCV：计算机视觉入门与实践">OpenCV：计算机视觉入门与实践</a></li></ul>
       </div>
     </div></aside>
 
   <article class="page single">
-    <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span title="转载" class="icon-repost"><i class="fa-solid fa-share" aria-hidden="true"></i></span><span>Python之Loguru日志库：替代标准logging的现代方案</span>
+    <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span title="转载" class="icon-repost"><i class="fa-solid fa-share" aria-hidden="true"></i></span><span>Loguru日志库：替代标准logging的现代方案</span>
       </h1></div><div class="post-meta">
       <div class="post-meta-line"><span class="post-author"><a href="https://andyfree96.github.io/" title="作者" target="_blank" rel="author external nofollow noopener noreferrer" class="author"><img class="avatar" src='/avatar/1.jpg' alt="AndyFree96" height="16" width="16">&nbsp;AndyFree96</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E6%8A%80%E6%9C%AF%E7%A7%AF%E6%9C%A8/" class="post-category" title="分类 - 技术积木"><i class="fa-regular fa-folder" aria-hidden="true"></i> 技术积木</a></span></div><div class="post-meta-line"><span title="发布于 2026-07-10 11:12:14"><i class="fa-solid fa-calendar-days me-1" aria-hidden="true"></i><time datetime="2026-07-10">2026-07-10</time></span>&nbsp;<span title="935 字"><i class="fa-solid fa-pencil-alt me-1" aria-hidden="true"></i>约 1000 字</span>&nbsp;<span><i class="fa-regular fa-clock me-1" aria-hidden="true"></i>预计阅读 2 分钟</span>&nbsp;</div>
     </div><div class="featured-image"><img loading="eager" src='/images/202607/7/marcreation-csxzp35N3sI-unsplash.jpg' sizes="(max-width: 680px) 100vw, (max-width: 960px) 80vw, (max-width: 1440px) 56vw, 800px" alt="/images/202607/7/marcreation-csxzp35N3sI-unsplash.jpg"></div><div class="details toc" id="toc-static" data-kept="false">
@@ -512,23 +512,23 @@
           <a href="/uv%E5%AE%8C%E5%85%A8%E6%8C%87%E5%8D%97/" title="uv完全指南：下一代Python包管理器">uv完全指南：下一代Python包管理器</a></li><li>
           <a href="/python%E4%B8%AD%E7%9A%84all/" title="Python中的__all__：模块公开API设计的关键工具">Python中的__all__：模块公开API设计的关键工具</a></li><li>
           <a href="/cpython%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="CPython 源码剖析：Python 运行的奥秘">CPython 源码剖析：Python 运行的奥秘</a></li><li>
-          <a href="/beautifulsoup%E5%BA%93%E4%BD%BF%E7%94%A8/" title="BeautifulSoup库使用">BeautifulSoup库使用</a></li><li>
-          <a href="/requests%E5%BA%93%E4%BD%BF%E7%94%A8/" title="Requests库使用">Requests库使用</a></li><li>
-          <a href="/matplotlib%E7%AE%80%E6%98%8E%E6%95%99%E7%A8%8B/" title="Matplotlib简明教程">Matplotlib简明教程</a></li><li>
-          <a href="/pandas%E7%AE%80%E6%98%8E%E6%95%99%E7%A8%8B/" title="Pandas简明教程">Pandas简明教程</a></li><li>
+          <a href="/python%E4%B9%8Bbeautifulsoup%E6%95%99%E7%A8%8B/" title="BeautifulSoup：Python HTML解析完全指南">BeautifulSoup：Python HTML解析完全指南</a></li><li>
+          <a href="/python%E4%B9%8Brequests%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/" title="Requests使用指南：优雅发送HTTP请求">Requests使用指南：优雅发送HTTP请求</a></li><li>
+          <a href="/python%E4%B9%8Bmatplotlib/" title="Matplotlib绘图入门与实践">Matplotlib绘图入门与实践</a></li><li>
+          <a href="/python%E4%B9%8Bpandas/" title="Pandas：让数据处理变得简单">Pandas：让数据处理变得简单</a></li><li>
           <a href="/%E7%94%A8keras%E6%90%AD%E5%BB%BA%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" title="用Keras搭建卷积神经网络">用Keras搭建卷积神经网络</a></li><li>
           <a href="/tkinter%E7%AE%80%E6%98%8E%E6%95%99%E7%A8%8B/" title="Tkinter简明教程">Tkinter简明教程</a></li><li>
           <a href="/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E5%AD%A6%E4%B9%A0gans/" title="从零开始学习GANs">从零开始学习GANs</a></li><li>
-          <a href="/opencv%E7%AE%80%E6%98%8E%E6%95%99%E7%A8%8B/" title="OpenCV简明教程">OpenCV简明教程</a></li></ul><div class="post-footer" id="post-footer">
+          <a href="/python%E4%B9%8Bopencv/" title="OpenCV：计算机视觉入门与实践">OpenCV：计算机视觉入门与实践</a></li></ul><div class="post-footer" id="post-footer">
   <div class="post-info">
     <div class="post-info-line">
       <div class="post-info-mod"><span title="更新于 2026-07-10 11:12:14">更新于 2026-07-10&nbsp;</span>
       </div></div><div class="post-info-line">
         <div class="post-info-md"><span><a href="vscode://file/D:\hugo-blog\andyfree96\content\posts\Python之Loguru日志库.md" title="在编辑器中打开" class="link-to-vscode">在编辑器中打开</a></span></div>
         <div class="post-info-share">
-          <span><a href="javascript:void(0);" title="分享到 X" data-sharer="twitter" data-url="http://localhost:1313/python%E4%B9%8Bloguru%E6%97%A5%E5%BF%97%E5%BA%93/" data-title="Python之Loguru日志库：替代标准logging的现代方案" data-via="IRONAnthony96" data-hashtags="Python,Loguru,日志"><i class="fa-brands fa-x-twitter" aria-hidden="true"></i></a>
+          <span><a href="javascript:void(0);" title="分享到 X" data-sharer="twitter" data-url="http://localhost:1313/python%E4%B9%8Bloguru%E6%97%A5%E5%BF%97%E5%BA%93/" data-title="Loguru日志库：替代标准logging的现代方案" data-via="IRONAnthony96" data-hashtags="Python,Loguru,日志"><i class="fa-brands fa-x-twitter" aria-hidden="true"></i></a>
   <a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="http://localhost:1313/python%E4%B9%8Bloguru%E6%97%A5%E5%BF%97%E5%BA%93/" data-hashtag="Python"><i class="fa-brands fa-facebook-square" aria-hidden="true"></i></a>
-  <a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="http://localhost:1313/python%E4%B9%8Bloguru%E6%97%A5%E5%BF%97%E5%BA%93/" data-title="Python之Loguru日志库：替代标准logging的现代方案" data-image="/images/202607/7/marcreation-csxzp35N3sI-unsplash.jpg"><i class="fa-brands fa-weibo" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="http://localhost:1313/python%E4%B9%8Bloguru%E6%97%A5%E5%BF%97%E5%BA%93/" data-title="Loguru日志库：替代标准logging的现代方案" data-image="/images/202607/7/marcreation-csxzp35N3sI-unsplash.jpg"><i class="fa-brands fa-weibo" aria-hidden="true"></i></a>
   </span>
         </div>
       </div></div>
