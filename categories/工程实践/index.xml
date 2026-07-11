@@ -8,8 +8,24 @@
     <language>zh-CN</language>
     <managingEditor>anthonyfree96@gmail.com (AndyFree96)</managingEditor>
     <webMaster>anthonyfree96@gmail.com (AndyFree96)</webMaster>
-    <lastBuildDate>Wed, 01 Jul 2026 15:46:16 +0800</lastBuildDate>
+    <lastBuildDate>Tue, 07 Jul 2026 21:32:43 +0800</lastBuildDate>
     <atom:link href="http://localhost:1313/categories/%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>百万级CSV导入MongoDB性能实战</title>
+      <link>http://localhost:1313/%E7%99%BE%E4%B8%87%E7%BA%A7csv%E5%AF%BC%E5%85%A5mongodb%E6%80%A7%E8%83%BD%E5%AE%9E%E6%88%98/</link>
+      <pubDate>Tue, 07 Jul 2026 21:32:43 +0800</pubDate><author>anthonyfree96@gmail.com (AndyFree96)</author>
+      <guid>http://localhost:1313/%E7%99%BE%E4%B8%87%E7%BA%A7csv%E5%AF%BC%E5%85%A5mongodb%E6%80%A7%E8%83%BD%E5%AE%9E%E6%88%98/</guid>
+      <category domain="http://localhost:1313/categories/%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/">工程实践</category>
+      <description>&lt;p&gt;在日常开发中CSV导入是一个比较常见的数据处理场景。例如：&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;用户信息导入&lt;/li&gt;&#xA;&lt;li&gt;商品数据同步&lt;/li&gt;&#xA;&lt;li&gt;日志分析&lt;/li&gt;&#xA;&lt;li&gt;财务流水导入&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;p&gt;很多项目开始都会写出类似下面的代码：&lt;/p&gt;&#xA;&lt;pre&gt;&lt;code&gt;foreach(var line in FileReadLines(path))&#xD;&#xA;{&#xD;&#xA;  var user = Parse(line);&#xD;&#xA;&#xD;&#xA;  if (!Validate(user))&#xD;&#xA;    continue;&#xD;&#xA;&#xD;&#xA;    await collection.InsertOneAsync(user);&#xD;&#xA;}&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;数据只有几千条时，这段代码运行地非常流畅。然而，当数据增长到几十万甚至几百万条之后，问题便开始暴露出来：&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;CPU利用率很低&lt;/li&gt;&#xA;&lt;li&gt;MongoDB写入速度跟不上&lt;/li&gt;&#xA;&lt;li&gt;IO长时间阻塞&lt;/li&gt;&#xA;&lt;li&gt;GC次数明显增加&lt;/li&gt;&#xA;&lt;li&gt;导入时间从几秒增长到数十分钟&lt;/li&gt;&#xA;&lt;/ul&gt;</description>
+    </item>
+    <item>
+      <title>C&#43;&#43; Pimpl设计模式详解</title>
+      <link>http://localhost:1313/c-pimpl%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E8%AF%A6%E8%A7%A3/</link>
+      <pubDate>Sun, 05 Jul 2026 10:19:17 +0800</pubDate><author>anthonyfree96@gmail.com (AndyFree96)</author>
+      <guid>http://localhost:1313/c-pimpl%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E8%AF%A6%E8%A7%A3/</guid>
+      <category domain="http://localhost:1313/categories/%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/">工程实践</category>
+      <description>&lt;p&gt;在阅读一些大型 C++ 项目源码时，经常会看到类似下面这样的代码：&lt;/p&gt;&#xA;&lt;pre&gt;&lt;code&gt;class MyClass {&#xD;&#xA;public:&#xD;&#xA;  MyClass();&#xD;&#xA;  ~MyClass();&#xD;&#xA;private:&#xD;&#xA;  class Impl;&#xD;&#xA;  std::unique_ptr&amp;lt;Impl&amp;gt; impl_;&#xD;&#xA;};&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;第一次看到这种写法，很多人都会疑惑：&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;为什么真正的数据成员不放在类里面？&lt;/li&gt;&#xA;&lt;li&gt;为什么要多定义一个&lt;code&gt;Impl&lt;/code&gt;类？&lt;/li&gt;&#xA;&lt;li&gt;为什么析构函数要放到&lt;code&gt;.cpp&lt;/code&gt;中实现？&lt;/li&gt;&#xA;&lt;li&gt;这样设计有什么好处？&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;p&gt;实际上，这就是C++中非常经典的Pimpl(Pointer to Implementation)设计模式。本文将从设计思想、实现方式、优缺点以及使用场景几个方面详细介绍Pimpl。&lt;/p&gt;</description>
+    </item>
     <item>
       <title>让Hugo支持HDevelop代码高亮</title>
       <link>http://localhost:1313/%E8%AE%A9hugo%E6%94%AF%E6%8C%81hdevelop%E4%BB%A3%E7%A0%81%E9%AB%98%E4%BA%AE/</link>
@@ -17,6 +33,14 @@
       <guid>http://localhost:1313/%E8%AE%A9hugo%E6%94%AF%E6%8C%81hdevelop%E4%BB%A3%E7%A0%81%E9%AB%98%E4%BA%AE/</guid>
       <category domain="http://localhost:1313/categories/%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/">工程实践</category>
       <description>&lt;p&gt;&lt;a href=&#34;https://gohugo.io/&#34; target=&#34;_blank&#34; rel=&#34;external nofollow noopener noreferrer&#34;&gt;Hugo&lt;i class=&#34;fa-solid fa-external-link-alt fa-xs ms-1 text-secondary&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;&lt;/a&gt;基于 Chroma 实现代码高亮，对 Go、Python、C++、Matlab 等主流语言都提供了开箱即用的支持。最近阅读&lt;a href=&#34;https://andyfree96.github.io/%E6%9C%BA%E5%99%A8%E8%A7%86%E8%A7%89%E7%AE%97%E6%B3%95%E4%B8%8E%E5%BA%94%E7%94%A8/&#34; target=&#34;_blank&#34; rel=&#34;external nofollow noopener noreferrer&#34;&gt;机器视觉算法与应用 第2版 (Carsten Steger)&lt;i class=&#34;fa-solid fa-external-link-alt fa-xs ms-1 text-secondary&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;&lt;/a&gt;时，需要在博客中展示 HDevelop 代码，却发现 Hugo 默认并不支持这种语言。与其退而求其次使用普通文本展示，不如直接扩展 Hugo 的语法高亮能力。因此本文记录整个实现过程，包括：&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;Hugo如何找到对应的Lexer&lt;/li&gt;&#xA;&lt;li&gt;Chroma 的语法解析机制&lt;/li&gt;&#xA;&lt;li&gt;如何新增一个HDevelop Lexer&lt;/li&gt;&#xA;&lt;li&gt;最终让Hugo支持HDevelop代码高亮&lt;/li&gt;&#xA;&lt;/ul&gt;</description>
+    </item>
+    <item>
+      <title>如何解决 Node.js 中的 EMFILE 错误</title>
+      <link>http://localhost:1313/%E5%A6%82%E4%BD%95%E8%A7%A3%E5%86%B3-node.js-%E4%B8%AD%E7%9A%84-emfile-%E9%94%99%E8%AF%AF/</link>
+      <pubDate>Sun, 17 Aug 2025 09:19:47 +0800</pubDate><author>anthonyfree96@gmail.com (AndyFree96)</author>
+      <guid>http://localhost:1313/%E5%A6%82%E4%BD%95%E8%A7%A3%E5%86%B3-node.js-%E4%B8%AD%E7%9A%84-emfile-%E9%94%99%E8%AF%AF/</guid>
+      <category domain="http://localhost:1313/categories/%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/">工程实践</category>
+      <description>&lt;p&gt;在日常 Node.js 开发中，你有没有遇到过这样一个错误：&lt;/p&gt;&#xA;&lt;blockquote&gt;&#xA;&lt;p&gt;Error: EMFILE: too many open files&lt;/p&gt;&#xA;&lt;/blockquote&gt;&#xA;&lt;p&gt;该错误通常出现在：批量文件操作、递归复制、日志处理等场景中。为什么会出现该错误？其实是因为在操作系统中每个进程最多可以同时打开一定数量的文件或 Socket, 而当打开的文件或 Socket 超过了这个限制时，就会出现“打开文件过多”的错误，导致程序突然崩溃。这种“打开文件过多”的问题看&#xA;似简单，但如果不加处理，尤其是在批量文件处理场景下，会让我们的 Node.js 程序非常脆弱。&lt;/p&gt;</description>
     </item>
   </channel>
 </rss>

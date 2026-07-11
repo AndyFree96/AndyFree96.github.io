@@ -10,7 +10,7 @@
 	<meta itemprop="description" content="🎉 更新: 增加进程间通信2024-01-17T14:50:19&#43;08:00">
 	<meta itemprop="datePublished" content="2024-02-25T20:41:07+08:00">
 	<meta itemprop="dateModified" content="2024-02-25T20:41:07+08:00">
-	<meta itemprop="wordCount" content="16096">
+	<meta itemprop="wordCount" content="17477">
 	<meta itemprop="keywords" content="TCP/IP,计算机网络,网络编程"><meta property="og:url" content="http://localhost:1313/tcp-ip%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/">
 	<meta property="og:site_name" content="东尼的博客">
 	<meta property="og:title" content="TCP/IP网络编程 (尹圣雨)">
@@ -42,7 +42,7 @@
     "mainEntityOfPage": {
       "@type": "WebPage",
       "@id": "http:\/\/localhost:1313\/tcp-ip%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B\/"
-    },"genre": "posts","keywords": "TCP\/IP, 计算机网络, 网络编程, 读书笔记, 计算机","wordcount":  16096 ,
+    },"genre": "posts","keywords": "TCP\/IP, 计算机网络, 网络编程, 读书笔记, 计算机","wordcount":  17477 ,
     "url": "http:\/\/localhost:1313\/tcp-ip%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B\/","datePublished": "2024-02-25T20:41:07+08:00","dateModified": "2024-02-25T20:41:07+08:00","publisher": {
       "@type": "Organization",
       "name": ""},"author": {
@@ -132,7 +132,7 @@
   <article class="page single">
     <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span title="转载" class="icon-repost"><i class="fa-solid fa-share" aria-hidden="true"></i></span><span>TCP/IP网络编程 (尹圣雨)</span>
       </h1></div><div class="post-meta">
-      <div class="post-meta-line"><span class="post-author"><a href="https://andyfree96.github.io/" title="作者" target="_blank" rel="author external nofollow noopener noreferrer" class="author"><img class="avatar" src='/avatar/1.jpg' alt="AndyFree96" height="16" width="16">&nbsp;AndyFree96</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E4%B9%A6%E7%B1%8D%E7%A0%94%E8%AF%BB/" class="post-category" title="分类 - 书籍研读"><i class="fa-regular fa-folder" aria-hidden="true"></i> 书籍研读</a></span></div><div class="post-meta-line"><span title="发布于 2024-02-25 20:41:07"><i class="fa-solid fa-calendar-days me-1" aria-hidden="true"></i><time datetime="2024-02-25">2024-02-25</time></span>&nbsp;<span title="16096 字"><i class="fa-solid fa-pencil-alt me-1" aria-hidden="true"></i>约 16100 字</span>&nbsp;<span><i class="fa-regular fa-clock me-1" aria-hidden="true"></i>预计阅读 33 分钟</span>&nbsp;</div>
+      <div class="post-meta-line"><span class="post-author"><a href="https://andyfree96.github.io/" title="作者" target="_blank" rel="author external nofollow noopener noreferrer" class="author"><img class="avatar" src='/avatar/1.jpg' alt="AndyFree96" height="16" width="16">&nbsp;AndyFree96</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E4%B9%A6%E7%B1%8D%E7%A0%94%E8%AF%BB/" class="post-category" title="分类 - 书籍研读"><i class="fa-regular fa-folder" aria-hidden="true"></i> 书籍研读</a></span></div><div class="post-meta-line"><span title="发布于 2024-02-25 20:41:07"><i class="fa-solid fa-calendar-days me-1" aria-hidden="true"></i><time datetime="2024-02-25">2024-02-25</time></span>&nbsp;<span title="17477 字"><i class="fa-solid fa-pencil-alt me-1" aria-hidden="true"></i>约 17500 字</span>&nbsp;<span><i class="fa-regular fa-clock me-1" aria-hidden="true"></i>预计阅读 35 分钟</span>&nbsp;</div>
     </div><div class="featured-image"><img loading="eager" src='/images/202402/3/mos-design-VUmPf5jYPK0-unsplash.jpg' sizes="(max-width: 680px) 100vw, (max-width: 960px) 80vw, (max-width: 1440px) 56vw, 800px" alt="/images/202402/3/mos-design-VUmPf5jYPK0-unsplash.jpg"></div><div class="details toc" id="toc-static" data-kept="false">
         <div class="details-summary toc-title">
           <span>目录</span>
@@ -257,9 +257,28 @@
     <li><a href="#第-8-章-域名及网络地址">第 8 章 域名及网络地址</a>
       <ul>
         <li><a href="#域名系统">域名系统</a></li>
+        <li><a href="#ip地址和域名之间的转换">IP地址和域名之间的转换</a></li>
+        <li><a href="#利用ip地址获取域名">利用IP地址获取域名</a></li>
       </ul>
     </li>
-    <li><a href="#第-9-章-套接字的多种可选项">第 9 章 套接字的多种可选项</a></li>
+    <li><a href="#第-9-章-套接字的多种可选项">第 9 章 套接字的多种可选项</a>
+      <ul>
+        <li><a href="#套接字可选项和io缓冲大小">套接字可选项和I/O缓冲大小</a>
+          <ul>
+            <li><a href="#套接字可选项">套接字可选项</a></li>
+            <li><a href="#getsockopt--setsockopt">getsockopt &amp; setsockopt</a></li>
+            <li><a href="#so_sndbuf--so_rcvbuf">SO_SNDBUF &amp; SO_RCVBUF</a></li>
+          </ul>
+        </li>
+        <li><a href="#so_reuseaddr">SO_REUSEADDR</a></li>
+        <li><a href="#tcp_nodelay">TCP_NODELAY</a>
+          <ul>
+            <li><a href="#nagle算法">Nagle算法</a></li>
+            <li><a href="#禁用nagle算法">禁用Nagle算法</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
     <li><a href="#第-10-章-多进程服务器端">第 10 章 多进程服务器端</a>
       <ul>
         <li><a href="#进程概念及应用">进程概念及应用</a>
@@ -331,6 +350,7 @@
     <li><a href="#第-23-章-iocp">第 23 章 IOCP</a></li>
     <li><a href="#第-24-章-制作-http-服务器端">第 24 章 制作 HTTP 服务器端</a></li>
     <li><a href="#第-25-章-进阶内容">第 25 章 进阶内容</a></li>
+    <li><a href="#总结">总结</a></li>
     <li><a href="#推荐-1">推荐</a></li>
     <li><a href="#参考">参考</a></li>
   </ul>
@@ -2081,11 +2101,143 @@
     <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
   </a>
 </h3><p>DNS（Domain Name System，域名系统）是对 IP 地址和域名进行相互转换的系统，其核心是 DNS 服务器。</p>
-<h2 class="heading-element" id="第-9-章-套接字的多种可选项"><span>第 9 章 套接字的多种可选项</span>
+<h3 class="heading-element" id="ip地址和域名之间的转换"><span>IP地址和域名之间的转换</span>
+  <a href="#ip%e5%9c%b0%e5%9d%80%e5%92%8c%e5%9f%9f%e5%90%8d%e4%b9%8b%e9%97%b4%e7%9a%84%e8%bd%ac%e6%8d%a2" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p>使用以下函数可以通过传递字符串格式的域名获取IP地址。</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-c"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;netdb.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">struct</span> <span class="n">hostnet</span><span class="o">*</span> <span class="nf">gethostbyname</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">hostname</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 成功时返回hostent结构地址，失败时返回NULL指针
+</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><h3 class="heading-element" id="利用ip地址获取域名"><span>利用IP地址获取域名</span>
+  <a href="#%e5%88%a9%e7%94%a8ip%e5%9c%b0%e5%9d%80%e8%8e%b7%e5%8f%96%e5%9f%9f%e5%90%8d" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p><code>gethostbyaddr</code>函数利用IP地址获取域相关信息。</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-cpp"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;netdb.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">struct</span> <span class="nc">hostent</span><span class="o">*</span> <span class="nf">gethostbyaddr</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">addr</span><span class="p">,</span> <span class="n">socklen_t</span> <span class="n">len</span><span class="p">,</span> <span class="kt">int</span> <span class="n">family</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 成功时返回hostent结构地址，失败时返回NULL指针
+</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><h2 class="heading-element" id="第-9-章-套接字的多种可选项"><span>第 9 章 套接字的多种可选项</span>
   <a href="#%e7%ac%ac-9-%e7%ab%a0-%e5%a5%97%e6%8e%a5%e5%ad%97%e7%9a%84%e5%a4%9a%e7%a7%8d%e5%8f%af%e9%80%89%e9%a1%b9" class="heading-mark">
     <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
   </a>
-</h2><h2 class="heading-element" id="第-10-章-多进程服务器端"><span>第 10 章 多进程服务器端</span>
+</h2><h3 class="heading-element" id="套接字可选项和io缓冲大小"><span>套接字可选项和I/O缓冲大小</span>
+  <a href="#%e5%a5%97%e6%8e%a5%e5%ad%97%e5%8f%af%e9%80%89%e9%a1%b9%e5%92%8cio%e7%bc%93%e5%86%b2%e5%a4%a7%e5%b0%8f" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><h4 class="heading-element" id="套接字可选项"><span>套接字可选项</span>
+  <a href="#%e5%a5%97%e6%8e%a5%e5%ad%97%e5%8f%af%e9%80%89%e9%a1%b9" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h4><p><a href="https://notes.shichao.io/unp/ch7/" target="_blank" rel="external nofollow noopener noreferrer">Socket Options<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></p>
+<h4 class="heading-element" id="getsockopt--setsockopt"><span>getsockopt &amp; setsockopt</span>
+  <a href="#getsockopt--setsockopt" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h4><p>可选项的读取和设置通过如下2个函数完成。</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-c"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="2" style="--fi-max-shown-lines:400;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;sys/socket.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">getsockopt</span><span class="p">(</span><span class="kt">int</span> <span class="n">sock</span><span class="p">,</span> <span class="kt">int</span> <span class="n">level</span><span class="p">,</span> <span class="kt">int</span> <span class="n">optname</span><span class="p">,</span> <span class="kt">void</span><span class="o">*</span> <span class="n">optval</span><span class="p">,</span> <span class="kt">socklen_t</span><span class="o">*</span> <span class="n">optlen</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="c1">// 成功时返回0，失败时返回-1
+</span></span></span><span class="line"><span class="cl"><span class="c1">// sock 用于查看套接字文件描述符
+</span></span></span><span class="line"><span class="cl"><span class="c1">// level 要查看的可选项的协议层
+</span></span></span><span class="line"><span class="cl"><span class="c1">// optname 要查看的可选项名
+</span></span></span><span class="line"><span class="cl"><span class="c1">// opval 保存查看结果的缓冲地址值
+</span></span></span><span class="line"><span class="cl"><span class="c1">// optlen 向第四个参数optval传递的缓冲大小。调用函数后，该变量中保存通过第四个参数返回的可选项信息的字节数
+</span></span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">setsockopt</span><span class="p">(</span><span class="kt">int</span> <span class="n">sock</span><span class="p">,</span> <span class="kt">int</span> <span class="n">level</span><span class="p">,</span> <span class="kt">int</span> <span class="n">optname</span><span class="p">,</span> <span class="kt">void</span><span class="o">*</span> <span class="n">optval</span><span class="p">,</span> <span class="kt">socklen_t</span><span class="o">*</span> <span class="n">optlen</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="c1">// 成功时返回0，失败时返回-1
+</span></span></span><span class="line"><span class="cl"><span class="c1">// sock 用于更改可选项的套接字文件描述符
+</span></span></span><span class="line"><span class="cl"><span class="c1">// level 要更改的可选项协议层
+</span></span></span><span class="line"><span class="cl"><span class="c1">// optname 要更改的可选项名
+</span></span></span><span class="line"><span class="cl"><span class="c1">// opval 保存要更改的选项信息的缓冲地址值
+</span></span></span><span class="line"><span class="cl"><span class="c1">// optlen 向第四个参数optval传递的可选项信息的字节数
+</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><h4 class="heading-element" id="so_sndbuf--so_rcvbuf"><span>SO_SNDBUF &amp; SO_RCVBUF</span>
+  <a href="#so_sndbuf--so_rcvbuf" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h4><p><code>SO_RCVBUF</code>是输入缓冲大小相关可选项，<code>SO_SNDBUF</code>是输出缓冲大小相关可选项。</p>
+<h3 class="heading-element" id="so_reuseaddr"><span>SO_REUSEADDR</span>
+  <a href="#so_reuseaddr" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p>套接字经过四次握手过程后并非立即消除，而是要经过一段时间的Time-wait状态。只有先断开连接的（先发送FIN消息的）主机才经过Time-wait状态。因此，若服务器端先断开连接，则无法立即重新运行。套接字处在Time-wait过程时，相应端口是正在使用的状态。</p>
+<p>解决方案就是在套接字的可选项中更改SO_REUSEADDR的状态。适当调整该参数，可将Time-wait状态下的套接字端口号重新分配给新的套接字。SO_REUSEADDR的默认值为0（假），这就意味着无法分配Time-wait状态下的套接字端口号。因此需要将这个值改成1（真）。</p>
+<h3 class="heading-element" id="tcp_nodelay"><span>TCP_NODELAY</span>
+  <a href="#tcp_nodelay" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><h4 class="heading-element" id="nagle算法"><span>Nagle算法</span>
+  <a href="#nagle%e7%ae%97%e6%b3%95" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h4><p>为防止因数据包过多而发生网络过载，Nagle算法在1984年诞生了。它应用于TCP层。其使用与否会导致如图9-3所示差异。</p>
+<p><a class="lightgallery" target="_blank" href="/images/202402/3/1.png" title="/images/202402/3/1.png" data-thumbnail="/images/202402/3/1.png" data-sub-html="<h2>/images/202402/3/1.png</h2>"><img loading="lazy" src='/images/202402/3/1.png' alt="/images/202402/3/1.png"></a></p>
+<p>图9-3展示了通过Nagle算法发送字符串“Nagle”和未使用Nagle算法的差别。可以得到如下结论：“只有收到前一数据的ACK消息时，Nagle算法才发送下一数据”。TCP套接字默认使用Nagle算法交换数据，因此最大限度地进行缓冲，直到收到ACK。不适用Nagle算法将对网络流量产生负面影响。即使只传输1个字节的数据，其头部都有可能是几十个字节。因此，为了提高网络传输效率，必须使用Nagle算法。</p>
+<p>但Nagle算法并不是什么时候都适用。根据传输数据的特性，网络流量未受太大影响时，不使用Nagle算法要比使用它时传输速度快。最典型的是“传输大文件数据”。将文件数据传入输出缓冲不会花太多时间，不使用Nagle算法，也会装满输出缓冲时传输数据包。这不仅不会增加数据包的数量，反而会在无需等待ACK的前提下连续传输，因此可以大大提高传输速度。</p>
+<h4 class="heading-element" id="禁用nagle算法"><span>禁用Nagle算法</span>
+  <a href="#%e7%a6%81%e7%94%a8nagle%e7%ae%97%e6%b3%95" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h4><div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-c"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="kt">int</span> <span class="n">opt_val</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="nf">setsockopt</span><span class="p">(</span><span class="n">sock</span><span class="p">,</span> <span class="n">IPPROTO_TCP</span><span class="p">,</span> <span class="n">TCP_NODELAY</span><span class="p">,</span> <span class="p">(</span><span class="kt">void</span> <span class="o">*</span><span class="p">)</span><span class="o">&amp;</span><span class="n">opt_val</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">opt_val</span><span class="p">));</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><h2 class="heading-element" id="第-10-章-多进程服务器端"><span>第 10 章 多进程服务器端</span>
   <a href="#%e7%ac%ac-10-%e7%ab%a0-%e5%a4%9a%e8%bf%9b%e7%a8%8b%e6%9c%8d%e5%8a%a1%e5%99%a8%e7%ab%af" class="heading-mark">
     <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
   </a>
@@ -3833,7 +3985,16 @@
   <a href="#%e7%ac%ac-25-%e7%ab%a0-%e8%bf%9b%e9%98%b6%e5%86%85%e5%ae%b9" class="heading-mark">
     <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
   </a>
-</h2><h2 class="heading-element" id="推荐-1"><span>推荐</span>
+</h2><p>《UNIX环境高级编程》第2版 W.Richard Stevens</p>
+<p>《Windows核心编程》Jeffrey Richter</p>
+<p>《TCP/TP详解》卷1~卷3 W.Richard Stevens</p>
+<p>《TCP/IP协议族》Behrouz A. Forouzan</p>
+<h2 class="heading-element" id="总结"><span>总结</span>
+  <a href="#%e6%80%bb%e7%bb%93" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>一本极佳的网络编程的入门书籍，如果开始准备尝试网络编程的话，这本书必定不会让你失望，助你步入网络编程的大门。</p>
+<h2 class="heading-element" id="推荐-1"><span>推荐</span>
   <a href="#%e6%8e%a8%e8%8d%90-1" class="heading-mark">
     <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
   </a>
@@ -4001,9 +4162,28 @@
     <li><a href="#第-8-章-域名及网络地址">第 8 章 域名及网络地址</a>
       <ul>
         <li><a href="#域名系统">域名系统</a></li>
+        <li><a href="#ip地址和域名之间的转换">IP地址和域名之间的转换</a></li>
+        <li><a href="#利用ip地址获取域名">利用IP地址获取域名</a></li>
       </ul>
     </li>
-    <li><a href="#第-9-章-套接字的多种可选项">第 9 章 套接字的多种可选项</a></li>
+    <li><a href="#第-9-章-套接字的多种可选项">第 9 章 套接字的多种可选项</a>
+      <ul>
+        <li><a href="#套接字可选项和io缓冲大小">套接字可选项和I/O缓冲大小</a>
+          <ul>
+            <li><a href="#套接字可选项">套接字可选项</a></li>
+            <li><a href="#getsockopt--setsockopt">getsockopt &amp; setsockopt</a></li>
+            <li><a href="#so_sndbuf--so_rcvbuf">SO_SNDBUF &amp; SO_RCVBUF</a></li>
+          </ul>
+        </li>
+        <li><a href="#so_reuseaddr">SO_REUSEADDR</a></li>
+        <li><a href="#tcp_nodelay">TCP_NODELAY</a>
+          <ul>
+            <li><a href="#nagle算法">Nagle算法</a></li>
+            <li><a href="#禁用nagle算法">禁用Nagle算法</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
     <li><a href="#第-10-章-多进程服务器端">第 10 章 多进程服务器端</a>
       <ul>
         <li><a href="#进程概念及应用">进程概念及应用</a>
@@ -4075,6 +4255,7 @@
     <li><a href="#第-23-章-iocp">第 23 章 IOCP</a></li>
     <li><a href="#第-24-章-制作-http-服务器端">第 24 章 制作 HTTP 服务器端</a></li>
     <li><a href="#第-25-章-进阶内容">第 25 章 进阶内容</a></li>
+    <li><a href="#总结">总结</a></li>
     <li><a href="#推荐-1">推荐</a></li>
     <li><a href="#参考">参考</a></li>
   </ul>

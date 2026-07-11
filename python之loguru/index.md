@@ -32,7 +32,7 @@ logger.info("Application started")
 
 <!--more-->
 
-![](/images/202607/7/loguru.gif)
+![图1 Loguru官方示例](/images/202607/7/loguru.gif "图1 Loguru官方示例")
 
 ## Loguru是什么？
 
@@ -81,7 +81,7 @@ logger.warning("Low memory")
 logger.error("Connection failed")
 ```
 
-![图1 终端输出日志](/images/202607/7/2.png '图1 终端输出日志')
+![图2 终端输出日志](/images/202607/7/2.png '图2 终端输出日志')
 
 ## 日志级别
 
@@ -121,7 +121,7 @@ logger.error("Connection failed")
 
 运行后会生成`app.log`，内容如下：
 
-![图2 app.log日志文件内容](/images/202607/7/3.png '图2 app.log日志文件内容')
+![图3 app.log日志文件内容](/images/202607/7/3.png '图3 app.log日志文件内容')
 
 ## 日志文件自动切割
 
@@ -203,7 +203,7 @@ with ThreadPoolExecutor(4) as pool:
 
 输出：
 
-![图3 多线程+日志输出](/images/202607/7/4.png '图3 多线程+日志输出')
+![图4 多线程+日志输出](/images/202607/7/4.png '图4 多线程+日志输出')
 
 ## 总结
 

@@ -15,7 +15,7 @@
 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 import logging logger = logging.getLogger(__name__) logger.setLevel(logging.INFO) handler = logging.FileHandler(&#39;app.log&#39;) formatter = logging.Formatter(&#39;%(asctime)s - %(levelname)s - %(message)s&#39;) handler.setFormatter(formatter) logger.addHandler(handler) logger.info(&#34;Application started&#34;) 简单记录一条日志到文件，需要很多代码。这也是为什么可以尝试用Loguru。">
 	<meta itemprop="datePublished" content="2026-07-10T11:12:14+08:00">
 	<meta itemprop="dateModified" content="2026-07-10T11:12:14+08:00">
-	<meta itemprop="wordCount" content="935">
+	<meta itemprop="wordCount" content="947">
 	<meta itemprop="keywords" content="Python,Loguru,日志"><meta property="og:url" content="http://localhost:1313/python%E4%B9%8Bloguru/">
 	<meta property="og:site_name" content="东尼的博客">
 	<meta property="og:title" content="Loguru：替代标准logging的现代方案">
@@ -49,7 +49,7 @@
     "mainEntityOfPage": {
       "@type": "WebPage",
       "@id": "http:\/\/localhost:1313\/python%E4%B9%8Bloguru\/"
-    },"genre": "posts","keywords": "Python, Loguru, 日志","wordcount":  935 ,
+    },"genre": "posts","keywords": "Python, Loguru, 日志","wordcount":  947 ,
     "url": "http:\/\/localhost:1313\/python%E4%B9%8Bloguru\/","datePublished": "2026-07-10T11:12:14+08:00","dateModified": "2026-07-10T11:12:14+08:00","publisher": {
       "@type": "Organization",
       "name": ""},"author": {
@@ -139,7 +139,7 @@
               <a href="/python%E4%B9%8Bmatplotlib/" title="Matplotlib：绘图入门与实践">Matplotlib：绘图入门与实践</a></li><li class="related-item">
               <a href="/python%E4%B9%8Bpandas/" title="Pandas：让数据处理变得简单">Pandas：让数据处理变得简单</a></li><li class="related-item">
               <a href="/%E7%94%A8keras%E6%90%AD%E5%BB%BA%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" title="用Keras搭建卷积神经网络">用Keras搭建卷积神经网络</a></li><li class="related-item">
-              <a href="/tkinter%E7%AE%80%E6%98%8E%E6%95%99%E7%A8%8B/" title="Tkinter简明教程">Tkinter简明教程</a></li><li class="related-item">
+              <a href="/python%E4%B9%8Btkinter/" title="Tkinter：Python GUI开发简明教程">Tkinter：Python GUI开发简明教程</a></li><li class="related-item">
               <a href="/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E5%AD%A6%E4%B9%A0gans/" title="从零开始学习GANs">从零开始学习GANs</a></li><li class="related-item">
               <a href="/python%E4%B9%8Bopencv/" title="OpenCV：计算机视觉入门与实践">OpenCV：计算机视觉入门与实践</a></li></ul>
       </div>
@@ -148,7 +148,7 @@
   <article class="page single">
     <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span title="转载" class="icon-repost"><i class="fa-solid fa-share" aria-hidden="true"></i></span><span>Loguru：替代标准logging的现代方案</span>
       </h1></div><div class="post-meta">
-      <div class="post-meta-line"><span class="post-author"><a href="https://andyfree96.github.io/" title="作者" target="_blank" rel="author external nofollow noopener noreferrer" class="author"><img class="avatar" src='/avatar/1.jpg' alt="AndyFree96" height="16" width="16">&nbsp;AndyFree96</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E6%8A%80%E6%9C%AF%E7%A7%AF%E6%9C%A8/" class="post-category" title="分类 - 技术积木"><i class="fa-regular fa-folder" aria-hidden="true"></i> 技术积木</a></span></div><div class="post-meta-line"><span title="发布于 2026-07-10 11:12:14"><i class="fa-solid fa-calendar-days me-1" aria-hidden="true"></i><time datetime="2026-07-10">2026-07-10</time></span>&nbsp;<span title="935 字"><i class="fa-solid fa-pencil-alt me-1" aria-hidden="true"></i>约 1000 字</span>&nbsp;<span><i class="fa-regular fa-clock me-1" aria-hidden="true"></i>预计阅读 2 分钟</span>&nbsp;</div>
+      <div class="post-meta-line"><span class="post-author"><a href="https://andyfree96.github.io/" title="作者" target="_blank" rel="author external nofollow noopener noreferrer" class="author"><img class="avatar" src='/avatar/1.jpg' alt="AndyFree96" height="16" width="16">&nbsp;AndyFree96</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E6%8A%80%E6%9C%AF%E7%A7%AF%E6%9C%A8/" class="post-category" title="分类 - 技术积木"><i class="fa-regular fa-folder" aria-hidden="true"></i> 技术积木</a></span></div><div class="post-meta-line"><span title="发布于 2026-07-10 11:12:14"><i class="fa-solid fa-calendar-days me-1" aria-hidden="true"></i><time datetime="2026-07-10">2026-07-10</time></span>&nbsp;<span title="947 字"><i class="fa-solid fa-pencil-alt me-1" aria-hidden="true"></i>约 1000 字</span>&nbsp;<span><i class="fa-regular fa-clock me-1" aria-hidden="true"></i>预计阅读 2 分钟</span>&nbsp;</div>
     </div><div class="featured-image"><img loading="eager" src='/images/202607/7/marcreation-csxzp35N3sI-unsplash.jpg' sizes="(max-width: 680px) 100vw, (max-width: 960px) 80vw, (max-width: 1440px) 56vw, 800px" alt="/images/202607/7/marcreation-csxzp35N3sI-unsplash.jpg"></div><div class="details toc" id="toc-static" data-kept="false">
         <div class="details-summary toc-title">
           <span>目录</span>
@@ -213,7 +213,8 @@
 </span></span><span class="line"><span class="cl"><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&#34;Application started&#34;</span><span class="p">)</span></span></span></code></pre></td></tr></table></div>
 </div>
 </div><p>简单记录一条日志到文件，需要很多代码。这也是为什么可以尝试用<a href="https://loguru.readthedocs.io/en/stable/" target="_blank" rel="external nofollow noopener noreferrer">Loguru<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>。</p>
-<p><img loading="lazy" src='/images/202607/7/loguru.gif' alt="/images/202607/7/loguru.gif"></p>
+<p><figure><img loading="lazy" src='/images/202607/7/loguru.gif' alt="图1 Loguru官方示例"><figcaption class="image-caption">图1 Loguru官方示例</figcaption>
+  </figure></p>
 <h2 class="heading-element" id="loguru是什么"><span>Loguru是什么？</span>
   <a href="#loguru%e6%98%af%e4%bb%80%e4%b9%88" class="heading-mark">
     <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
@@ -283,7 +284,7 @@
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&#34;Connection failed&#34;</span><span class="p">)</span></span></span></code></pre></td></tr></table></div>
 </div>
-</div><p><figure><img loading="lazy" src='/images/202607/7/2.png' alt="图1 终端输出日志"><figcaption class="image-caption">图1 终端输出日志</figcaption>
+</div><p><figure><img loading="lazy" src='/images/202607/7/2.png' alt="图2 终端输出日志"><figcaption class="image-caption">图2 终端输出日志</figcaption>
   </figure></p>
 <h2 class="heading-element" id="日志级别"><span>日志级别</span>
   <a href="#%e6%97%a5%e5%bf%97%e7%ba%a7%e5%88%ab" class="heading-mark">
@@ -367,7 +368,7 @@
 </span></span><span class="line"><span class="cl"><span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&#34;Connection failed&#34;</span><span class="p">)</span></span></span></code></pre></td></tr></table></div>
 </div>
 </div><p>运行后会生成<code>app.log</code>，内容如下：</p>
-<p><figure><img loading="lazy" src='/images/202607/7/3.png' alt="图2 app.log日志文件内容"><figcaption class="image-caption">图2 app.log日志文件内容</figcaption>
+<p><figure><img loading="lazy" src='/images/202607/7/3.png' alt="图3 app.log日志文件内容"><figcaption class="image-caption">图3 app.log日志文件内容</figcaption>
   </figure></p>
 <h2 class="heading-element" id="日志文件自动切割"><span>日志文件自动切割</span>
   <a href="#%e6%97%a5%e5%bf%97%e6%96%87%e4%bb%b6%e8%87%aa%e5%8a%a8%e5%88%87%e5%89%b2" class="heading-mark">
@@ -494,7 +495,7 @@
 </span></span><span class="line"><span class="cl">    <span class="n">pool</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">worker</span><span class="p">,</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span></span></span></code></pre></td></tr></table></div>
 </div>
 </div><p>输出：</p>
-<p><figure><img loading="lazy" src='/images/202607/7/4.png' alt="图3 多线程&#43;日志输出"><figcaption class="image-caption">图3 多线程+日志输出</figcaption>
+<p><figure><img loading="lazy" src='/images/202607/7/4.png' alt="图4 多线程&#43;日志输出"><figcaption class="image-caption">图4 多线程+日志输出</figcaption>
   </figure></p>
 <h2 class="heading-element" id="总结"><span>总结</span>
   <a href="#%e6%80%bb%e7%bb%93" class="heading-mark">
@@ -517,7 +518,7 @@
           <a href="/python%E4%B9%8Bmatplotlib/" title="Matplotlib：绘图入门与实践">Matplotlib：绘图入门与实践</a></li><li>
           <a href="/python%E4%B9%8Bpandas/" title="Pandas：让数据处理变得简单">Pandas：让数据处理变得简单</a></li><li>
           <a href="/%E7%94%A8keras%E6%90%AD%E5%BB%BA%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" title="用Keras搭建卷积神经网络">用Keras搭建卷积神经网络</a></li><li>
-          <a href="/tkinter%E7%AE%80%E6%98%8E%E6%95%99%E7%A8%8B/" title="Tkinter简明教程">Tkinter简明教程</a></li><li>
+          <a href="/python%E4%B9%8Btkinter/" title="Tkinter：Python GUI开发简明教程">Tkinter：Python GUI开发简明教程</a></li><li>
           <a href="/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E5%AD%A6%E4%B9%A0gans/" title="从零开始学习GANs">从零开始学习GANs</a></li><li>
           <a href="/python%E4%B9%8Bopencv/" title="OpenCV：计算机视觉入门与实践">OpenCV：计算机视觉入门与实践</a></li></ul><div class="post-footer" id="post-footer">
   <div class="post-info">

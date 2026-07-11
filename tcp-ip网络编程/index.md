@@ -1073,7 +1073,91 @@ void ErrorHandling(const char* message) {
 
 DNS（Domain Name System，域名系统）是对 IP 地址和域名进行相互转换的系统，其核心是 DNS 服务器。
 
+### IP地址和域名之间的转换
+
+使用以下函数可以通过传递字符串格式的域名获取IP地址。
+
+```c
+#include <netdb.h>
+
+struct hostnet* gethostbyname(const char* hostname);
+
+// 成功时返回hostent结构地址，失败时返回NULL指针
+```
+
+### 利用IP地址获取域名
+
+`gethostbyaddr`函数利用IP地址获取域相关信息。
+
+```cpp
+#include <netdb.h>
+
+struct hostent* gethostbyaddr(const char* addr, socklen_t len, int family);
+
+// 成功时返回hostent结构地址，失败时返回NULL指针
+```
+
 ## 第 9 章 套接字的多种可选项
+
+### 套接字可选项和I/O缓冲大小
+
+#### 套接字可选项
+
+[Socket Options](https://notes.shichao.io/unp/ch7/)
+
+#### getsockopt & setsockopt
+
+可选项的读取和设置通过如下2个函数完成。
+
+```c
+#include <sys/socket.h>
+
+int getsockopt(int sock, int level, int optname, void* optval, socklen_t* optlen);
+// 成功时返回0，失败时返回-1
+// sock 用于查看套接字文件描述符
+// level 要查看的可选项的协议层
+// optname 要查看的可选项名
+// opval 保存查看结果的缓冲地址值
+// optlen 向第四个参数optval传递的缓冲大小。调用函数后，该变量中保存通过第四个参数返回的可选项信息的字节数
+
+int setsockopt(int sock, int level, int optname, void* optval, socklen_t* optlen);
+// 成功时返回0，失败时返回-1
+// sock 用于更改可选项的套接字文件描述符
+// level 要更改的可选项协议层
+// optname 要更改的可选项名
+// opval 保存要更改的选项信息的缓冲地址值
+// optlen 向第四个参数optval传递的可选项信息的字节数
+```
+
+#### SO_SNDBUF & SO_RCVBUF
+
+`SO_RCVBUF`是输入缓冲大小相关可选项，`SO_SNDBUF`是输出缓冲大小相关可选项。
+
+### SO_REUSEADDR
+
+套接字经过四次握手过程后并非立即消除，而是要经过一段时间的Time-wait状态。只有先断开连接的（先发送FIN消息的）主机才经过Time-wait状态。因此，若服务器端先断开连接，则无法立即重新运行。套接字处在Time-wait过程时，相应端口是正在使用的状态。
+
+解决方案就是在套接字的可选项中更改SO_REUSEADDR的状态。适当调整该参数，可将Time-wait状态下的套接字端口号重新分配给新的套接字。SO_REUSEADDR的默认值为0（假），这就意味着无法分配Time-wait状态下的套接字端口号。因此需要将这个值改成1（真）。
+
+
+### TCP_NODELAY
+
+#### Nagle算法
+
+为防止因数据包过多而发生网络过载，Nagle算法在1984年诞生了。它应用于TCP层。其使用与否会导致如图9-3所示差异。
+
+![](/images/202402/3/1.png)
+
+图9-3展示了通过Nagle算法发送字符串“Nagle”和未使用Nagle算法的差别。可以得到如下结论：“只有收到前一数据的ACK消息时，Nagle算法才发送下一数据”。TCP套接字默认使用Nagle算法交换数据，因此最大限度地进行缓冲，直到收到ACK。不适用Nagle算法将对网络流量产生负面影响。即使只传输1个字节的数据，其头部都有可能是几十个字节。因此，为了提高网络传输效率，必须使用Nagle算法。
+
+但Nagle算法并不是什么时候都适用。根据传输数据的特性，网络流量未受太大影响时，不使用Nagle算法要比使用它时传输速度快。最典型的是“传输大文件数据”。将文件数据传入输出缓冲不会花太多时间，不使用Nagle算法，也会装满输出缓冲时传输数据包。这不仅不会增加数据包的数量，反而会在无需等待ACK的前提下连续传输，因此可以大大提高传输速度。
+
+#### 禁用Nagle算法
+
+```c
+int opt_val = 1;
+setsockopt(sock, IPPROTO_TCP, TCP_NODELAY, (void *)&opt_val, sizeof(opt_val));
+```
 
 ## 第 10 章 多进程服务器端
 
@@ -2092,6 +2176,18 @@ void error_handling(char *message)
 ## 第 24 章 制作 HTTP 服务器端
 
 ## 第 25 章 进阶内容
+
+《UNIX环境高级编程》第2版 W.Richard Stevens
+
+《Windows核心编程》Jeffrey Richter
+
+《TCP/TP详解》卷1~卷3 W.Richard Stevens
+
+《TCP/IP协议族》Behrouz A. Forouzan
+
+## 总结
+
+一本极佳的网络编程的入门书籍，如果开始准备尝试网络编程的话，这本书必定不会让你失望，助你步入网络编程的大门。
 
 ## 推荐
 
