@@ -15,7 +15,7 @@
 论文地址：https://arxiv.org/pdf/1506.02640">
 	<meta itemprop="datePublished" content="2026-07-09T11:34:55+08:00">
 	<meta itemprop="dateModified" content="2026-07-09T11:34:55+08:00">
-	<meta itemprop="wordCount" content="3091">
+	<meta itemprop="wordCount" content="3162">
 	<meta itemprop="keywords" content="YOLO,目标检测,计算机视觉,深度学习,AI算法,论文精读"><meta property="og:url" content="http://localhost:1313/yolov1%E8%AE%BA%E6%96%87%E7%B2%BE%E8%AF%BB/">
 	<meta property="og:site_name" content="东尼的博客">
 	<meta property="og:title" content="YOLOv1论文精读：You Only Look Once如何重新定义目标检测？">
@@ -52,7 +52,7 @@
     "mainEntityOfPage": {
       "@type": "WebPage",
       "@id": "http:\/\/localhost:1313\/yolov1%E8%AE%BA%E6%96%87%E7%B2%BE%E8%AF%BB\/"
-    },"genre": "posts","keywords": "YOLO, 目标检测, 计算机视觉, 深度学习, AI算法, 论文精读","wordcount":  3091 ,
+    },"genre": "posts","keywords": "YOLO, 目标检测, 计算机视觉, 深度学习, AI算法, 论文精读","wordcount":  3162 ,
     "url": "http:\/\/localhost:1313\/yolov1%E8%AE%BA%E6%96%87%E7%B2%BE%E8%AF%BB\/","datePublished": "2026-07-09T11:34:55+08:00","dateModified": "2026-07-09T11:34:55+08:00","publisher": {
       "@type": "Organization",
       "name": ""},"author": {
@@ -144,7 +144,7 @@
   <article class="page single">
     <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span title="转载" class="icon-repost"><i class="fa-solid fa-share" aria-hidden="true"></i></span><span>YOLOv1论文精读：You Only Look Once如何重新定义目标检测？</span>
       </h1></div><div class="post-meta">
-      <div class="post-meta-line"><span class="post-author"><a href="https://andyfree96.github.io/" title="作者" target="_blank" rel="author external nofollow noopener noreferrer" class="author"><img class="avatar" src='/avatar/1.jpg' alt="AndyFree96" height="16" width="16">&nbsp;AndyFree96</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E8%AE%BA%E6%96%87%E7%B2%BE%E8%AF%BB/" class="post-category" title="分类 - 论文精读"><i class="fa-regular fa-folder" aria-hidden="true"></i> 论文精读</a></span></div><div class="post-meta-line"><span title="发布于 2026-07-09 11:34:55"><i class="fa-solid fa-calendar-days me-1" aria-hidden="true"></i><time datetime="2026-07-09">2026-07-09</time></span>&nbsp;<span title="3091 字"><i class="fa-solid fa-pencil-alt me-1" aria-hidden="true"></i>约 3100 字</span>&nbsp;<span><i class="fa-regular fa-clock me-1" aria-hidden="true"></i>预计阅读 7 分钟</span>&nbsp;</div>
+      <div class="post-meta-line"><span class="post-author"><a href="https://andyfree96.github.io/" title="作者" target="_blank" rel="author external nofollow noopener noreferrer" class="author"><img class="avatar" src='/avatar/1.jpg' alt="AndyFree96" height="16" width="16">&nbsp;AndyFree96</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E8%AE%BA%E6%96%87%E7%B2%BE%E8%AF%BB/" class="post-category" title="分类 - 论文精读"><i class="fa-regular fa-folder" aria-hidden="true"></i> 论文精读</a></span></div><div class="post-meta-line"><span title="发布于 2026-07-09 11:34:55"><i class="fa-solid fa-calendar-days me-1" aria-hidden="true"></i><time datetime="2026-07-09">2026-07-09</time></span>&nbsp;<span title="3162 字"><i class="fa-solid fa-pencil-alt me-1" aria-hidden="true"></i>约 3200 字</span>&nbsp;<span><i class="fa-regular fa-clock me-1" aria-hidden="true"></i>预计阅读 7 分钟</span>&nbsp;</div>
     </div><div class="featured-image"><img loading="eager" src='/images/202607/6/anthony-adu-a5CEwd8ESns-unsplash.jpg' sizes="(max-width: 680px) 100vw, (max-width: 960px) 80vw, (max-width: 1440px) 56vw, 800px" alt="/images/202607/6/anthony-adu-a5CEwd8ESns-unsplash.jpg"></div><div class="details toc" id="toc-static" data-kept="false">
         <div class="details-summary toc-title">
           <span>目录</span>
@@ -165,8 +165,9 @@
     <li><a href="#5-训练过程">5. 训练过程</a></li>
     <li><a href="#6-推理过程">6. 推理过程</a></li>
     <li><a href="#7-源码实现">7. 源码实现</a></li>
-    <li><a href="#8-总结">8. 总结</a></li>
-    <li><a href="#9-推荐">9. 推荐</a></li>
+    <li><a href="#8-不足之处">8. 不足之处</a></li>
+    <li><a href="#9-总结">9. 总结</a></li>
+    <li><a href="#10-推荐">10. 推荐</a></li>
   </ul>
 </nav></div>
       </div><div class="content" id="content"><blockquote>
@@ -336,7 +337,7 @@
 </h2><p>YOLOv1主要由24个卷积层和2个全连接层组成<sup id="fnref1:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">2</a></sup>：</p>
 <p><figure><img loading="lazy" src='/images/202607/6/7.png' alt="图6 YOLOv1网络架构"><figcaption class="image-caption">图6 YOLOv1网络架构</figcaption>
   </figure></p>
-<p>输入<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>448</mn><mo>×</mo><mn>448</mn><mo>×</mo><mn>3</mn></mrow><annotation encoding="application/x-tex">448 \times 448 \times 3</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">448</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">448</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">3</span></span></span></span>，输出<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>7</mn><mo>×</mo><mn>7</mn><mo>×</mo><mo>∗</mo><mn>30</mn></mrow><annotation encoding="application/x-tex">7 \times 7 \times * 30</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">7</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">7</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">∗</span><span class="mord">30</span></span></span></span>。</p>
+<p>输入<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>448</mn><mo>×</mo><mn>448</mn><mo>×</mo><mn>3</mn></mrow><annotation encoding="application/x-tex">448 \times 448 \times 3</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">448</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">448</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">3</span></span></span></span>，输出<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>7</mn><mo>×</mo><mn>7</mn><mo>×</mo><mn>30</mn></mrow><annotation encoding="application/x-tex">7 \times 7 \times 30</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">7</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">7</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">30</span></span></span></span>。</p>
 <h2 class="heading-element" id="4-loss函数"><span>4. Loss函数</span>
   <a href="#4-loss%e5%87%bd%e6%95%b0" class="heading-mark">
     <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
@@ -438,6 +439,7 @@ Dropout 的作用是防止各层神经元之间产生协同适应（Co-adaptatio
     <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
   </a>
 </h2><p>可参考<a href="https://github.com/explainingai-code/Yolov1-PyTorch" target="_blank" rel="external nofollow noopener noreferrer">Yolov1-PyTorch<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>实现。</p>
+<p><a href="https://www.robots.ox.ac.uk/~vgg/projects/pascal/VOC/voc2007/" target="_blank" rel="external nofollow noopener noreferrer">PASCAL VOC 2007<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>数据集。</p>
 <div class="shortcode-tabs">
   <tab-container default-tab="1" placement="bottom" type="segment"><button class="tab-button" type="button" role="tab" id="tab-id-1" aria-selected="false">models/yolo.py</button><button class="tab-button" type="button" role="tab" id="tab-id-2" aria-selected="true">loss/yolov1_loss.py</button><div role="tabpanel" aria-labelledby="tab-id-1" class="tab-panel"><div class="code-block highlight line-nos-hidden" data-mode="classic" data-copyable="true"><div class="chroma">
 <div class="code-header language-py"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
@@ -454,8 +456,13 @@ Dropout 的作用是防止各层神经元之间产生协同适应（Co-adaptatio
 </div>
 </div></div></tab-container>
 </div>
-<h2 class="heading-element" id="8-总结"><span>8. 总结</span>
-  <a href="#8-%e6%80%bb%e7%bb%93" class="heading-mark">
+<h2 class="heading-element" id="8-不足之处"><span>8. 不足之处</span>
+  <a href="#8-%e4%b8%8d%e8%b6%b3%e4%b9%8b%e5%a4%84" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>YOLOv1与STA(state-of-the-art)检测系统相比准确率上还是不够。此外，在小物体检测上也不够精准。</p>
+<h2 class="heading-element" id="9-总结"><span>9. 总结</span>
+  <a href="#9-%e6%80%bb%e7%bb%93" class="heading-mark">
     <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
   </a>
 </h2><p>YOLOV1最重要的三个思想是：</p>
@@ -464,8 +471,8 @@ Dropout 的作用是防止各层神经元之间产生协同适应（Co-adaptatio
 <li><strong>整张图划分为Grid Cell</strong>：目标中心落在哪个网格，哪个网格就负责预测该目标。</li>
 <li><strong>一次前向传播完成预测</strong>：网络一次输出所有预测框和类别，再通过NMS得到最终结果，因此速度远远快于当时的两阶段检测器。</li>
 </ol>
-<h2 class="heading-element" id="9-推荐"><span>9. 推荐</span>
-  <a href="#9-%e6%8e%a8%e8%8d%90" class="heading-mark">
+<h2 class="heading-element" id="10-推荐"><span>10. 推荐</span>
+  <a href="#10-%e6%8e%a8%e8%8d%90" class="heading-mark">
     <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
   </a>
 </h2><p><a href="https://medium.com/@sachinsoni600517/concept-of-yolov1-the-evolution-of-real-time-object-detection-d773770ef773" target="_blank" rel="external nofollow noopener noreferrer">Concept of YOLOv1:The Evolution of Real-Time Object Detection<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></p>
@@ -537,8 +544,9 @@ Dropout 的作用是防止各层神经元之间产生协同适应（Co-adaptatio
     <li><a href="#5-训练过程">5. 训练过程</a></li>
     <li><a href="#6-推理过程">6. 推理过程</a></li>
     <li><a href="#7-源码实现">7. 源码实现</a></li>
-    <li><a href="#8-总结">8. 总结</a></li>
-    <li><a href="#9-推荐">9. 推荐</a></li>
+    <li><a href="#8-不足之处">8. 不足之处</a></li>
+    <li><a href="#9-总结">9. 总结</a></li>
+    <li><a href="#10-推荐">10. 推荐</a></li>
   </ul>
 </nav></div>
       </div>
