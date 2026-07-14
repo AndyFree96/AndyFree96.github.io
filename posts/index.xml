@@ -8,8 +8,24 @@
     <language>zh-CN</language>
     <managingEditor>anthonyfree96@gmail.com (AndyFree96)</managingEditor>
     <webMaster>anthonyfree96@gmail.com (AndyFree96)</webMaster>
-    <lastBuildDate>Tue, 14 Jul 2026 08:47:15 +0800</lastBuildDate>
+    <lastBuildDate>Wed, 15 Jul 2026 06:06:22 +0800</lastBuildDate>
     <atom:link href="http://localhost:1313/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>代码整洁之道 (Robert C. Martin)</title>
+      <link>http://localhost:1313/%E4%BB%A3%E7%A0%81%E6%95%B4%E6%B4%81%E4%B9%8B%E9%81%93/</link>
+      <pubDate>Wed, 15 Jul 2026 06:06:22 +0800</pubDate><author>anthonyfree96@gmail.com (AndyFree96)</author>
+      <guid>http://localhost:1313/%E4%BB%A3%E7%A0%81%E6%95%B4%E6%B4%81%E4%B9%8B%E9%81%93/</guid>
+      <category domain="http://localhost:1313/categories/%E4%B9%A6%E7%B1%8D%E7%A0%94%E8%AF%BB/">书籍研读</category>
+      <description>&lt;p&gt;在软件开发过程中，代码并不是写完提交之后就结束了。一个项目真正的生命周期，往往伴随着持续的修改、扩展和维护。需求会不断变化，新的功能会不断加入，&lt;strong&gt;原本简单的模块可能逐渐变得复杂&lt;/strong&gt;。如果代码经过良好的设计和整理，随着时间推移，系统会慢慢演变成难以理解、难以修改，甚至无人敢触碰“遗留代码”。&lt;/p&gt;&#xA;&lt;p&gt;正如软件工程领域常说的一句话：&lt;/p&gt;&#xA;&lt;blockquote&gt;&#xA;&lt;p&gt;代码的第一读者是人，第二读者才是机器。&lt;/p&gt;&#xA;&lt;/blockquote&gt;&#xA;&lt;p&gt;计算机只关心代码是否能够正确运行，而开发人员需要面对代码背后的意图、结构以及未来变化的可能性。一段能够运行的代码，并不一定是一段优秀的代码。&lt;/p&gt;&#xA;&lt;p&gt;由Robert C. Martin(人称Uncle Bob)编写的&lt;a href=&#34;https://book.douban.com/subject/34986245/&#34; target=&#34;_blank&#34; rel=&#34;external nofollow noopener noreferrer&#34;&gt;《代码整洁之道》&lt;i class=&#34;fa-solid fa-external-link-alt fa-xs ms-1 text-secondary&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;&lt;/a&gt;正是围绕这一问题展开讨论。本书从变量命名、函数设计、类的职责划分，到错误处理、测试、架构设计等多个方面，系统总结了如何编写更加清晰、可维护的软件代码。&lt;/p&gt;&#xA;&lt;p&gt;书中提出：&lt;/p&gt;&#xA;&lt;blockquote&gt;&#xA;&lt;p&gt;“Clean code always looks like it was written by someone who cares.”&lt;/p&gt;&#xA;&lt;/blockquote&gt;&#xA;&lt;p&gt;优秀的代码不仅仅是满足需求，更体现了开发者对软件质量的关注。在实际开发中，我们经常会遇到这样的代码：&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;一个几百行甚至上千行的函数&lt;/li&gt;&#xA;&lt;li&gt;一个承担几十种职责的巨大类&lt;/li&gt;&#xA;&lt;li&gt;大量重复逻辑散落在项目各处&lt;/li&gt;&#xA;&lt;li&gt;修改一个小需求，却需要影响多个模块&lt;/li&gt;&#xA;&lt;li&gt;新成员接手项目，需要花费大量时间理解代码&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;p&gt;这些问题并不是某一天突然出现的，而是在一次次“先实现功能，以后再优化”的过程中逐渐累积形成的。&lt;a href=&#34;https://book.douban.com/subject/34986245/&#34; target=&#34;_blank&#34; rel=&#34;external nofollow noopener noreferrer&#34;&gt;《代码整洁之道》&lt;i class=&#34;fa-solid fa-external-link-alt fa-xs ms-1 text-secondary&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;&lt;/a&gt;提供了一套思考方式：&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;如何通过命名让代码表达真实意图&lt;/li&gt;&#xA;&lt;li&gt;如何设计短小、专注的函数&lt;/li&gt;&#xA;&lt;li&gt;如何让类保持单一职责&lt;/li&gt;&#xA;&lt;li&gt;如何降低模块之间的耦合&lt;/li&gt;&#xA;&lt;li&gt;如何通过测试保护代码质量&lt;/li&gt;&#xA;&lt;li&gt;如何让软件具备持续演进的能力&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;p&gt;学习整洁代码，并不是为了追求代码形式上的“漂亮”，而是为了降低软件长期维护的成本，让系统能够面对未来的不确定变化。在本文中，我将结合书中的核心思想，并结合实际工程开发中的案例，对&lt;a href=&#34;https://book.douban.com/subject/34986245/&#34; target=&#34;_blank&#34; rel=&#34;external nofollow noopener noreferrer&#34;&gt;《代码整洁之道》&lt;i class=&#34;fa-solid fa-external-link-alt fa-xs ms-1 text-secondary&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;&lt;/a&gt;进行深入学习和总结，希望能够探索：&lt;/p&gt;&#xA;&lt;blockquote&gt;&#xA;&lt;p&gt;什么样的代码才是真正适合长期维护的软件代码？&lt;/p&gt;&#xA;&lt;/blockquote&gt;</description>
+    </item>
+    <item>
+      <title>重构 改善既有代码的艺术 第2版 (Martin Fowler)</title>
+      <link>http://localhost:1313/%E9%87%8D%E6%9E%84/</link>
+      <pubDate>Wed, 15 Jul 2026 06:05:35 +0800</pubDate><author>anthonyfree96@gmail.com (AndyFree96)</author>
+      <guid>http://localhost:1313/%E9%87%8D%E6%9E%84/</guid>
+      <category domain="http://localhost:1313/categories/%E4%B9%A6%E7%B1%8D%E7%A0%94%E8%AF%BB/">书籍研读</category>
+      <description>重构 改善既有代码的艺术 第2版 (Martin Fowler)</description>
+    </item>
     <item>
       <title>NETworkManager源码剖析：一个网络管理工具的实现细节</title>
       <link>http://localhost:1313/networkmanager%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/</link>

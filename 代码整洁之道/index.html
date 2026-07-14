@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+    <meta name="robots" content="noodp" />
+    <title>代码整洁之道 (Robert C. Martin) - 东尼的博客</title><meta name="author" content="AndyFree96">
+<meta name="description" content="在软件开发过程中，代码并不是写完提交之后就结束了。一个项目真正的生命周期，往往伴随着持续的修改、扩展和维护。需求会不断变化，新的功能会不断加入，原本简单的模块可能逐渐变得复杂。如果代码经过良好的设计和整理，随着时间推移，系统会慢慢演变成难以理解、难以修改，甚至无人敢触碰“遗留代码”。
+正如软件工程领域常说的一句话：
+代码的第一读者是人，第二读者才是机器。
+计算机只关心代码是否能够正确运行，而开发人员需要面对代码背后的意图、结构以及未来变化的可能性。一段能够运行的代码，并不一定是一段优秀的代码。
+由Robert C. Martin(人称Uncle Bob)编写的《代码整洁之道》正是围绕这一问题展开讨论。本书从变量命名、函数设计、类的职责划分，到错误处理、测试、架构设计等多个方面，系统总结了如何编写更加清晰、可维护的软件代码。
+书中提出：
+“Clean code always looks like it was written by someone who cares.”
+优秀的代码不仅仅是满足需求，更体现了开发者对软件质量的关注。在实际开发中，我们经常会遇到这样的代码：
+一个几百行甚至上千行的函数 一个承担几十种职责的巨大类 大量重复逻辑散落在项目各处 修改一个小需求，却需要影响多个模块 新成员接手项目，需要花费大量时间理解代码 这些问题并不是某一天突然出现的，而是在一次次“先实现功能，以后再优化”的过程中逐渐累积形成的。《代码整洁之道》提供了一套思考方式：
+如何通过命名让代码表达真实意图 如何设计短小、专注的函数 如何让类保持单一职责 如何降低模块之间的耦合 如何通过测试保护代码质量 如何让软件具备持续演进的能力 学习整洁代码，并不是为了追求代码形式上的“漂亮”，而是为了降低软件长期维护的成本，让系统能够面对未来的不确定变化。在本文中，我将结合书中的核心思想，并结合实际工程开发中的案例，对《代码整洁之道》进行深入学习和总结，希望能够探索：
+什么样的代码才是真正适合长期维护的软件代码？
+"><meta name="keywords" content='软件工程, 代码质量, 编程规范, 整洁代码, 软件设计'>
+	<meta itemprop="name" content="代码整洁之道 (Robert C. Martin)">
+	<meta itemprop="description" content="在软件开发过程中，代码并不是写完提交之后就结束了。一个项目真正的生命周期，往往伴随着持续的修改、扩展和维护。需求会不断变化，新的功能会不断加入，原本简单的模块可能逐渐变得复杂。如果代码经过良好的设计和整理，随着时间推移，系统会慢慢演变成难以理解、难以修改，甚至无人敢触碰“遗留代码”。
+正如软件工程领域常说的一句话：
+代码的第一读者是人，第二读者才是机器。
+计算机只关心代码是否能够正确运行，而开发人员需要面对代码背后的意图、结构以及未来变化的可能性。一段能够运行的代码，并不一定是一段优秀的代码。
+由Robert C. Martin(人称Uncle Bob)编写的《代码整洁之道》正是围绕这一问题展开讨论。本书从变量命名、函数设计、类的职责划分，到错误处理、测试、架构设计等多个方面，系统总结了如何编写更加清晰、可维护的软件代码。
+书中提出：
+“Clean code always looks like it was written by someone who cares.”
+优秀的代码不仅仅是满足需求，更体现了开发者对软件质量的关注。在实际开发中，我们经常会遇到这样的代码：
+一个几百行甚至上千行的函数 一个承担几十种职责的巨大类 大量重复逻辑散落在项目各处 修改一个小需求，却需要影响多个模块 新成员接手项目，需要花费大量时间理解代码 这些问题并不是某一天突然出现的，而是在一次次“先实现功能，以后再优化”的过程中逐渐累积形成的。《代码整洁之道》提供了一套思考方式：
+如何通过命名让代码表达真实意图 如何设计短小、专注的函数 如何让类保持单一职责 如何降低模块之间的耦合 如何通过测试保护代码质量 如何让软件具备持续演进的能力 学习整洁代码，并不是为了追求代码形式上的“漂亮”，而是为了降低软件长期维护的成本，让系统能够面对未来的不确定变化。在本文中，我将结合书中的核心思想，并结合实际工程开发中的案例，对《代码整洁之道》进行深入学习和总结，希望能够探索：
+什么样的代码才是真正适合长期维护的软件代码？">
+	<meta itemprop="datePublished" content="2026-07-15T06:06:22+08:00">
+	<meta itemprop="dateModified" content="2026-07-15T06:06:22+08:00">
+	<meta itemprop="wordCount" content="995">
+	<meta itemprop="keywords" content="软件工程,代码质量,编程规范,整洁代码,软件设计"><meta property="og:url" content="http://localhost:1313/%E4%BB%A3%E7%A0%81%E6%95%B4%E6%B4%81%E4%B9%8B%E9%81%93/">
+	<meta property="og:site_name" content="东尼的博客">
+	<meta property="og:title" content="代码整洁之道 (Robert C. Martin)">
+	<meta property="og:description" content="在软件开发过程中，代码并不是写完提交之后就结束了。一个项目真正的生命周期，往往伴随着持续的修改、扩展和维护。需求会不断变化，新的功能会不断加入，原本简单的模块可能逐渐变得复杂。如果代码经过良好的设计和整理，随着时间推移，系统会慢慢演变成难以理解、难以修改，甚至无人敢触碰“遗留代码”。
+正如软件工程领域常说的一句话：
+代码的第一读者是人，第二读者才是机器。
+计算机只关心代码是否能够正确运行，而开发人员需要面对代码背后的意图、结构以及未来变化的可能性。一段能够运行的代码，并不一定是一段优秀的代码。
+由Robert C. Martin(人称Uncle Bob)编写的《代码整洁之道》正是围绕这一问题展开讨论。本书从变量命名、函数设计、类的职责划分，到错误处理、测试、架构设计等多个方面，系统总结了如何编写更加清晰、可维护的软件代码。
+书中提出：
+“Clean code always looks like it was written by someone who cares.”
+优秀的代码不仅仅是满足需求，更体现了开发者对软件质量的关注。在实际开发中，我们经常会遇到这样的代码：
+一个几百行甚至上千行的函数 一个承担几十种职责的巨大类 大量重复逻辑散落在项目各处 修改一个小需求，却需要影响多个模块 新成员接手项目，需要花费大量时间理解代码 这些问题并不是某一天突然出现的，而是在一次次“先实现功能，以后再优化”的过程中逐渐累积形成的。《代码整洁之道》提供了一套思考方式：
+如何通过命名让代码表达真实意图 如何设计短小、专注的函数 如何让类保持单一职责 如何降低模块之间的耦合 如何通过测试保护代码质量 如何让软件具备持续演进的能力 学习整洁代码，并不是为了追求代码形式上的“漂亮”，而是为了降低软件长期维护的成本，让系统能够面对未来的不确定变化。在本文中，我将结合书中的核心思想，并结合实际工程开发中的案例，对《代码整洁之道》进行深入学习和总结，希望能够探索：
+什么样的代码才是真正适合长期维护的软件代码？">
+	<meta property="og:locale" content="zh_CN">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="posts">
+		<meta property="article:published_time" content="2026-07-15T06:06:22+08:00">
+		<meta property="article:modified_time" content="2026-07-15T06:06:22+08:00">
+		<meta property="article:tag" content="软件工程">
+		<meta property="article:tag" content="代码质量">
+		<meta property="article:tag" content="编程规范">
+		<meta property="article:tag" content="整洁代码">
+		<meta property="article:tag" content="软件设计">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="代码整洁之道 (Robert C. Martin)">
+  <meta name="twitter:description" content="在软件开发过程中，代码并不是写完提交之后就结束了。一个项目真正的生命周期，往往伴随着持续的修改、扩展和维护。需求会不断变化，新的功能会不断加入，原本简单的模块可能逐渐变得复杂。如果代码经过良好的设计和整理，随着时间推移，系统会慢慢演变成难以理解、难以修改，甚至无人敢触碰“遗留代码”。
+正如软件工程领域常说的一句话：
+代码的第一读者是人，第二读者才是机器。
+计算机只关心代码是否能够正确运行，而开发人员需要面对代码背后的意图、结构以及未来变化的可能性。一段能够运行的代码，并不一定是一段优秀的代码。
+由Robert C. Martin(人称Uncle Bob)编写的《代码整洁之道》正是围绕这一问题展开讨论。本书从变量命名、函数设计、类的职责划分，到错误处理、测试、架构设计等多个方面，系统总结了如何编写更加清晰、可维护的软件代码。
+书中提出：
+“Clean code always looks like it was written by someone who cares.”
+优秀的代码不仅仅是满足需求，更体现了开发者对软件质量的关注。在实际开发中，我们经常会遇到这样的代码：
+一个几百行甚至上千行的函数 一个承担几十种职责的巨大类 大量重复逻辑散落在项目各处 修改一个小需求，却需要影响多个模块 新成员接手项目，需要花费大量时间理解代码 这些问题并不是某一天突然出现的，而是在一次次“先实现功能，以后再优化”的过程中逐渐累积形成的。《代码整洁之道》提供了一套思考方式：
+如何通过命名让代码表达真实意图 如何设计短小、专注的函数 如何让类保持单一职责 如何降低模块之间的耦合 如何通过测试保护代码质量 如何让软件具备持续演进的能力 学习整洁代码，并不是为了追求代码形式上的“漂亮”，而是为了降低软件长期维护的成本，让系统能够面对未来的不确定变化。在本文中，我将结合书中的核心思想，并结合实际工程开发中的案例，对《代码整洁之道》进行深入学习和总结，希望能够探索：
+什么样的代码才是真正适合长期维护的软件代码？"><meta name="twitter:creator" content="@IRONAnthony96"><meta name="application-name" content="FixIt">
+<meta name="apple-mobile-web-app-title" content="FixIt"><meta name="theme-color" data-light="#f6f8fa" data-dark="#151b23" content="#f6f8fa"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" type="text/html" href="http://localhost:1313/%E4%BB%A3%E7%A0%81%E6%95%B4%E6%B4%81%E4%B9%8B%E9%81%93/" title="代码整洁之道 (Robert C. Martin) - 东尼的博客" /><link rel="prev" type="text/html" href="http://localhost:1313/%E9%87%8D%E6%9E%84/" title="重构 改善既有代码的艺术 第2版 (Martin Fowler)" /><link rel="alternate" type="text/markdown" href="http://localhost:1313/%E4%BB%A3%E7%A0%81%E6%95%B4%E6%B4%81%E4%B9%8B%E9%81%93/index.md" title="代码整洁之道 (Robert C. Martin) - 东尼的博客"><link rel="stylesheet" href="/css/config.css"><link rel="stylesheet" href="/css/main.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><link rel="preload" href="/js/main.js" as="script"><script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "BlogPosting",
+    "headline": "代码整洁之道 (Robert C. Martin)",
+    "inLanguage": "zh-CN",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "http:\/\/localhost:1313\/%E4%BB%A3%E7%A0%81%E6%95%B4%E6%B4%81%E4%B9%8B%E9%81%93\/"
+    },"genre": "posts","keywords": "软件工程, 代码质量, 编程规范, 整洁代码, 软件设计","wordcount":  995 ,
+    "url": "http:\/\/localhost:1313\/%E4%BB%A3%E7%A0%81%E6%95%B4%E6%B4%81%E4%B9%8B%E9%81%93\/","datePublished": "2026-07-15T06:06:22+08:00","dateModified": "2026-07-15T06:06:22+08:00","publisher": {
+      "@type": "Organization",
+      "name": ""},"author": {
+        "@type": "Person",
+        "name": "AndyFree96"
+      },"description": ""
+  }
+  </script><script src="/js/head/color-scheme.js"></script></head>
+  <body data-instant-intensity="viewport" data-header-desktop="sticky" data-header-mobile="auto"><div class="wrapper" data-page-style="normal"><header class="desktop animate__faster" id="header-desktop">
+  <div class="header-wrapper">
+    <div class="header-title">
+      <a href="/" title="东尼的博客" class="header-title-link"><span class="header-title-text">东尼的博客</span></a><span class="header-subtitle"></span></div>
+    <nav>
+      <ul class="menu"><li class="menu-item">
+              <a class="menu-link" href="/posts/">📕 文章</a></li><li class="menu-item">
+              <a class="menu-link" href="/categories/">🧰 分类</a></li><li class="menu-item">
+              <a class="menu-link" href="/tags/">🔖 标签</a></li><li class="menu-item">
+              <a class="menu-link" href="/book">📚 书单</a></li><li class="menu-item">
+              <a class="menu-link" href="/paper">📝 论文</a></li><li class="menu-item">
+              <a class="menu-link" href="/opencourse">👨🏻‍💻 公开课</a></li><li class="menu-item">
+              <a class="menu-link" href="/filmtv">🎞️ 影视</a></li><li class="menu-item">
+              <a class="menu-link" href="/resource">⚡️ 资源库</a></li><li class="menu-item">
+              <a class="menu-link" href="/projects">⭐ 开源</a></li><li class="menu-item">
+              <a class="menu-link" href="/about">🙋🏻‍♂️ 关于</a></li><li class="menu-item delimiter"></li><li class="menu-item search" id="search-desktop">
+            <input type="text" placeholder="搜索文章标题或内容……" id="search-input-desktop" tabindex="-1">
+            <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索" aria-controls="search-dropdown-desktop" aria-expanded="false">
+              <i class="fa-solid fa-search" aria-hidden="true"></i>
+            </a>
+            <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+              <i class="fa-solid fa-times-circle" aria-hidden="true"></i>
+            </a>
+            <span class="search-button search-loading" id="search-loading-desktop">
+              <i class="fa-solid fa-spinner fa-spin" aria-hidden="true"></i>
+            </span>
+          </li><li class="menu-item theme-switch-item">
+          <button type="button" class="theme-switch" aria-label="切换主题" title="切换主题"><i class="fa-solid fa-adjust" aria-hidden="true"></i></button>
+        </li></ul>
+    </nav>
+  </div>
+</header><header class="mobile animate__faster" id="header-mobile">
+  <div class="header-container">
+    <div class="header-wrapper">
+      <div class="header-title">
+        <a href="/" title="东尼的博客" class="header-title-link"><span class="header-title-text">东尼的博客</span></a><span class="header-subtitle"></span></div>
+      <button type="button" class="theme-switch" aria-label="切换主题"><i class="fa-solid fa-adjust" aria-hidden="true"></i></button>
+      <button type="button" class="menu-toggle" id="menu-toggle-mobile" aria-controls="menu-mobile" aria-expanded="false" aria-labelledby="menu-mobile">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <nav>
+      <ul class="menu" id="menu-mobile"><li class="search-wrapper">
+            <div class="search mobile" id="search-mobile">
+              <input type="text" placeholder="搜索文章标题或内容……" id="search-input-mobile">
+              <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索" aria-controls="search-dropdown-mobile" aria-expanded="false">
+                <i class="fa-solid fa-search" aria-hidden="true"></i>
+              </a>
+              <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                <i class="fa-solid fa-times-circle" aria-hidden="true"></i>
+              </a>
+              <span class="search-button search-loading" id="search-loading-mobile">
+                <i class="fa-solid fa-spinner fa-spin" aria-hidden="true"></i>
+              </span>
+            </div>
+            <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+              取消
+            </a>
+          </li><li class="menu-item"><a class="menu-link" href="/posts/">📕 文章</a></li><li class="menu-item"><a class="menu-link" href="/categories/">🧰 分类</a></li><li class="menu-item"><a class="menu-link" href="/tags/">🔖 标签</a></li><li class="menu-item"><a class="menu-link" href="/book">📚 书单</a></li><li class="menu-item"><a class="menu-link" href="/paper">📝 论文</a></li><li class="menu-item"><a class="menu-link" href="/opencourse">👨🏻‍💻 公开课</a></li><li class="menu-item"><a class="menu-link" href="/filmtv">🎞️ 影视</a></li><li class="menu-item"><a class="menu-link" href="/resource">⚡️ 资源库</a></li><li class="menu-item"><a class="menu-link" href="/projects">⭐ 开源</a></li><li class="menu-item"><a class="menu-link" href="/about">🙋🏻‍♂️ 关于</a></li><li class="menu-item menu-system"></li>
+      </ul>
+    </nav>
+  </div>
+</header><div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+  </div>
+  <div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+  </div><main class="fi-container"><aside class="aside-collection animate__animated animate__fadeIn animate__faster" aria-label="合集"><div class="details related-details open">
+      <div class="details-summary related-summary">
+        <i class="fa-solid fa-fire fa-fade text-danger" aria-hidden="true"></i>
+        <span class="related-title">相关内容</span><i class="details-icon fa-solid fa-angle-right" aria-hidden="true"></i></div>
+      <div class="details-content related-content">
+        <ul class="related-list"><li class="related-item">
+              <a href="/%E9%87%8D%E6%9E%84/" title="重构 改善既有代码的艺术 第2版 (Martin Fowler)">重构 改善既有代码的艺术 第2版 (Martin Fowler)</a></li><li class="related-item">
+              <a href="/%E4%BB%8E%E9%9B%B6%E6%90%AD%E5%BB%BAtypescript%E5%B7%A5%E7%A8%8B/" title="从零搭建TypeScript工程">从零搭建TypeScript工程</a></li><li class="related-item">
+              <a href="/%E7%BC%96%E5%86%99%E5%8F%AF%E8%AF%BB%E4%BB%A3%E7%A0%81%E7%9A%84%E8%89%BA%E6%9C%AF/" title="编写可读代码的艺术 (Dustin Boswell / Trevor Foucher)">编写可读代码的艺术 (Dustin Boswell / Trevor Foucher)</a></li></ul>
+      </div>
+    </div></aside>
+
+  <article class="page single">
+    <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span title="转载" class="icon-repost"><i class="fa-solid fa-share" aria-hidden="true"></i></span><span>代码整洁之道 (Robert C. Martin)</span>
+      </h1></div><div class="post-meta">
+      <div class="post-meta-line"><span class="post-author"><a href="https://andyfree96.github.io/" title="作者" target="_blank" rel="author external nofollow noopener noreferrer" class="author"><img class="avatar" src='/avatar/1.jpg' alt="AndyFree96" height="16" width="16">&nbsp;AndyFree96</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E4%B9%A6%E7%B1%8D%E7%A0%94%E8%AF%BB/" class="post-category" title="分类 - 书籍研读"><i class="fa-regular fa-folder" aria-hidden="true"></i> 书籍研读</a></span></div><div class="post-meta-line"><span title="发布于 2026-07-15 06:06:22"><i class="fa-solid fa-calendar-days me-1" aria-hidden="true"></i><time datetime="2026-07-15">2026-07-15</time></span>&nbsp;<span title="995 字"><i class="fa-solid fa-pencil-alt me-1" aria-hidden="true"></i>约 1000 字</span>&nbsp;<span><i class="fa-regular fa-clock me-1" aria-hidden="true"></i>预计阅读 2 分钟</span>&nbsp;</div>
+    </div><div class="featured-image"><img loading="eager" src='/images/202607/16/red-zeppelin-yLCUleNSTf0-unsplash.jpg' sizes="(max-width: 680px) 100vw, (max-width: 960px) 80vw, (max-width: 1440px) 56vw, 800px" alt="/images/202607/16/red-zeppelin-yLCUleNSTf0-unsplash.jpg"></div><div class="details toc" id="toc-static" data-kept="false">
+        <div class="details-summary toc-title">
+          <span>目录</span>
+          <span><i class="details-icon fa-solid fa-angle-right" aria-hidden="true"></i></span>
+        </div>
+        <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#第1章-整洁代码">第1章 整洁代码</a>
+      <ul>
+        <li><a href="#15-我们是作者">1.5 我们是作者</a></li>
+        <li><a href="#16-童子军军规">1.6 童子军军规</a></li>
+      </ul>
+    </li>
+    <li><a href="#第2章-有意义的命名">第2章 有意义的命名</a></li>
+    <li><a href="#第3章-函数">第3章 函数</a></li>
+    <li><a href="#第4章-注释">第4章 注释</a></li>
+    <li><a href="#第5章-格式">第5章 格式</a></li>
+    <li><a href="#第6章-对象和数据结构">第6章 对象和数据结构</a></li>
+    <li><a href="#第7章-错误处理">第7章 错误处理</a></li>
+    <li><a href="#第8章-边界">第8章 边界</a></li>
+    <li><a href="#第9章-单元测试">第9章 单元测试</a></li>
+    <li><a href="#第10章-类">第10章 类</a></li>
+    <li><a href="#第11章-系统">第11章 系统</a></li>
+    <li><a href="#第12章-迭代">第12章 迭代</a></li>
+    <li><a href="#第13章-并发编程">第13章 并发编程</a></li>
+    <li><a href="#第14章-逐步改进">第14章 逐步改进</a></li>
+    <li><a href="#第15章-junit内幕">第15章 JUnit内幕</a></li>
+    <li><a href="#第16章-重构serialdate">第16章 重构SerialDate</a></li>
+    <li><a href="#第17章-味道与启发">第17章 味道与启发</a></li>
+    <li><a href="#附录a-并发编程ii">附录A 并发编程II</a></li>
+    <li></li>
+  </ul>
+</nav></div>
+      </div><div class="content" id="content"><p>在软件开发过程中，代码并不是写完提交之后就结束了。一个项目真正的生命周期，往往伴随着持续的修改、扩展和维护。需求会不断变化，新的功能会不断加入，<strong>原本简单的模块可能逐渐变得复杂</strong>。如果代码经过良好的设计和整理，随着时间推移，系统会慢慢演变成难以理解、难以修改，甚至无人敢触碰“遗留代码”。</p>
+<p>正如软件工程领域常说的一句话：</p>
+<blockquote>
+<p>代码的第一读者是人，第二读者才是机器。</p>
+</blockquote>
+<p>计算机只关心代码是否能够正确运行，而开发人员需要面对代码背后的意图、结构以及未来变化的可能性。一段能够运行的代码，并不一定是一段优秀的代码。</p>
+<p>由Robert C. Martin(人称Uncle Bob)编写的<a href="https://book.douban.com/subject/34986245/" target="_blank" rel="external nofollow noopener noreferrer">《代码整洁之道》<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>正是围绕这一问题展开讨论。本书从变量命名、函数设计、类的职责划分，到错误处理、测试、架构设计等多个方面，系统总结了如何编写更加清晰、可维护的软件代码。</p>
+<p>书中提出：</p>
+<blockquote>
+<p>“Clean code always looks like it was written by someone who cares.”</p>
+</blockquote>
+<p>优秀的代码不仅仅是满足需求，更体现了开发者对软件质量的关注。在实际开发中，我们经常会遇到这样的代码：</p>
+<ul>
+<li>一个几百行甚至上千行的函数</li>
+<li>一个承担几十种职责的巨大类</li>
+<li>大量重复逻辑散落在项目各处</li>
+<li>修改一个小需求，却需要影响多个模块</li>
+<li>新成员接手项目，需要花费大量时间理解代码</li>
+</ul>
+<p>这些问题并不是某一天突然出现的，而是在一次次“先实现功能，以后再优化”的过程中逐渐累积形成的。<a href="https://book.douban.com/subject/34986245/" target="_blank" rel="external nofollow noopener noreferrer">《代码整洁之道》<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>提供了一套思考方式：</p>
+<ul>
+<li>如何通过命名让代码表达真实意图</li>
+<li>如何设计短小、专注的函数</li>
+<li>如何让类保持单一职责</li>
+<li>如何降低模块之间的耦合</li>
+<li>如何通过测试保护代码质量</li>
+<li>如何让软件具备持续演进的能力</li>
+</ul>
+<p>学习整洁代码，并不是为了追求代码形式上的“漂亮”，而是为了降低软件长期维护的成本，让系统能够面对未来的不确定变化。在本文中，我将结合书中的核心思想，并结合实际工程开发中的案例，对<a href="https://book.douban.com/subject/34986245/" target="_blank" rel="external nofollow noopener noreferrer">《代码整洁之道》<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>进行深入学习和总结，希望能够探索：</p>
+<blockquote>
+<p>什么样的代码才是真正适合长期维护的软件代码？</p>
+</blockquote>
+<h2 class="heading-element" id="第1章-整洁代码"><span>第1章 整洁代码</span>
+  <a href="#%e7%ac%ac1%e7%ab%a0-%e6%95%b4%e6%b4%81%e4%bb%a3%e7%a0%81" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><h3 class="heading-element" id="15-我们是作者"><span>1.5 我们是作者</span>
+  <a href="#15-%e6%88%91%e4%bb%ac%e6%98%af%e4%bd%9c%e8%80%85" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p>读和写花费时间的比例超过10:1。</p>
+<p>要想干的快，要想早点做完，要想轻松些代码，先让代码易读吧。</p>
+<h3 class="heading-element" id="16-童子军军规"><span>1.6 童子军军规</span>
+  <a href="#16-%e7%ab%a5%e5%ad%90%e5%86%9b%e5%86%9b%e8%a7%84" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p>“让营地比你来时干净。”</p>
+<h2 class="heading-element" id="第2章-有意义的命名"><span>第2章 有意义的命名</span>
+  <a href="#%e7%ac%ac2%e7%ab%a0-%e6%9c%89%e6%84%8f%e4%b9%89%e7%9a%84%e5%91%bd%e5%90%8d" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><h2 class="heading-element" id="第3章-函数"><span>第3章 函数</span>
+  <a href="#%e7%ac%ac3%e7%ab%a0-%e5%87%bd%e6%95%b0" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><h2 class="heading-element" id="第4章-注释"><span>第4章 注释</span>
+  <a href="#%e7%ac%ac4%e7%ab%a0-%e6%b3%a8%e9%87%8a" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><h2 class="heading-element" id="第5章-格式"><span>第5章 格式</span>
+  <a href="#%e7%ac%ac5%e7%ab%a0-%e6%a0%bc%e5%bc%8f" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><h2 class="heading-element" id="第6章-对象和数据结构"><span>第6章 对象和数据结构</span>
+  <a href="#%e7%ac%ac6%e7%ab%a0-%e5%af%b9%e8%b1%a1%e5%92%8c%e6%95%b0%e6%8d%ae%e7%bb%93%e6%9e%84" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><h2 class="heading-element" id="第7章-错误处理"><span>第7章 错误处理</span>
+  <a href="#%e7%ac%ac7%e7%ab%a0-%e9%94%99%e8%af%af%e5%a4%84%e7%90%86" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><h2 class="heading-element" id="第8章-边界"><span>第8章 边界</span>
+  <a href="#%e7%ac%ac8%e7%ab%a0-%e8%be%b9%e7%95%8c" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><h2 class="heading-element" id="第9章-单元测试"><span>第9章 单元测试</span>
+  <a href="#%e7%ac%ac9%e7%ab%a0-%e5%8d%95%e5%85%83%e6%b5%8b%e8%af%95" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><h2 class="heading-element" id="第10章-类"><span>第10章 类</span>
+  <a href="#%e7%ac%ac10%e7%ab%a0-%e7%b1%bb" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><h2 class="heading-element" id="第11章-系统"><span>第11章 系统</span>
+  <a href="#%e7%ac%ac11%e7%ab%a0-%e7%b3%bb%e7%bb%9f" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><h2 class="heading-element" id="第12章-迭代"><span>第12章 迭代</span>
+  <a href="#%e7%ac%ac12%e7%ab%a0-%e8%bf%ad%e4%bb%a3" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><h2 class="heading-element" id="第13章-并发编程"><span>第13章 并发编程</span>
+  <a href="#%e7%ac%ac13%e7%ab%a0-%e5%b9%b6%e5%8f%91%e7%bc%96%e7%a8%8b" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><h2 class="heading-element" id="第14章-逐步改进"><span>第14章 逐步改进</span>
+  <a href="#%e7%ac%ac14%e7%ab%a0-%e9%80%90%e6%ad%a5%e6%94%b9%e8%bf%9b" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><h2 class="heading-element" id="第15章-junit内幕"><span>第15章 JUnit内幕</span>
+  <a href="#%e7%ac%ac15%e7%ab%a0-junit%e5%86%85%e5%b9%95" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><h2 class="heading-element" id="第16章-重构serialdate"><span>第16章 重构SerialDate</span>
+  <a href="#%e7%ac%ac16%e7%ab%a0-%e9%87%8d%e6%9e%84serialdate" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><h2 class="heading-element" id="第17章-味道与启发"><span>第17章 味道与启发</span>
+  <a href="#%e7%ac%ac17%e7%ab%a0-%e5%91%b3%e9%81%93%e4%b8%8e%e5%90%af%e5%8f%91" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><h2 class="heading-element" id="附录a-并发编程ii"><span>附录A 并发编程II</span>
+  <a href="#%e9%99%84%e5%bd%95a-%e5%b9%b6%e5%8f%91%e7%bc%96%e7%a8%8bii" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><h2 class="heading-element"><span></span>
+  <a href="#" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2></div><hr class="awesome-hr" />
+    <h2 id="see-also">相关内容</h2>
+    <ul><li>
+          <a href="/%E9%87%8D%E6%9E%84/" title="重构 改善既有代码的艺术 第2版 (Martin Fowler)">重构 改善既有代码的艺术 第2版 (Martin Fowler)</a></li><li>
+          <a href="/%E4%BB%8E%E9%9B%B6%E6%90%AD%E5%BB%BAtypescript%E5%B7%A5%E7%A8%8B/" title="从零搭建TypeScript工程">从零搭建TypeScript工程</a></li><li>
+          <a href="/%E7%BC%96%E5%86%99%E5%8F%AF%E8%AF%BB%E4%BB%A3%E7%A0%81%E7%9A%84%E8%89%BA%E6%9C%AF/" title="编写可读代码的艺术 (Dustin Boswell / Trevor Foucher)">编写可读代码的艺术 (Dustin Boswell / Trevor Foucher)</a></li></ul><div class="post-footer" id="post-footer">
+  <div class="post-info">
+    <div class="post-info-line">
+      <div class="post-info-mod"><span title="更新于 2026-07-15 06:06:22">更新于 2026-07-15&nbsp;</span>
+      </div></div><div class="post-info-line">
+        <div class="post-info-md"><span><a href="vscode://file/D:\hugo-blog\andyfree96\content\posts\代码整洁之道.md" title="在编辑器中打开" class="link-to-vscode">在编辑器中打开</a></span></div>
+        <div class="post-info-share">
+          <span><a href="javascript:void(0);" title="分享到 X" data-sharer="twitter" data-url="http://localhost:1313/%E4%BB%A3%E7%A0%81%E6%95%B4%E6%B4%81%E4%B9%8B%E9%81%93/" data-title="代码整洁之道 (Robert C. Martin)" data-via="IRONAnthony96" data-hashtags="软件工程,代码质量,编程规范,整洁代码,软件设计"><i class="fa-brands fa-x-twitter" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="http://localhost:1313/%E4%BB%A3%E7%A0%81%E6%95%B4%E6%B4%81%E4%B9%8B%E9%81%93/" data-hashtag="软件工程"><i class="fa-brands fa-facebook-square" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="http://localhost:1313/%E4%BB%A3%E7%A0%81%E6%95%B4%E6%B4%81%E4%B9%8B%E9%81%93/" data-title="代码整洁之道 (Robert C. Martin)" data-image="/images/202607/16/red-zeppelin-yLCUleNSTf0-unsplash.jpg"><i class="fa-brands fa-weibo" aria-hidden="true"></i></a>
+  </span>
+        </div>
+      </div></div>
+
+  <div class="post-info-more">
+    <section class="post-tags"><i class="fa-solid fa-tags me-1" aria-hidden="true"></i><a href="/tags/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/" class="post-tag" title="标签 - 软件工程">软件工程</a><a href="/tags/%E4%BB%A3%E7%A0%81%E8%B4%A8%E9%87%8F/" class="post-tag" title="标签 - 代码质量">代码质量</a><a href="/tags/%E7%BC%96%E7%A8%8B%E8%A7%84%E8%8C%83/" class="post-tag" title="标签 - 编程规范">编程规范</a><a href="/tags/%E6%95%B4%E6%B4%81%E4%BB%A3%E7%A0%81/" class="post-tag" title="标签 - 整洁代码">整洁代码</a><a href="/tags/%E8%BD%AF%E4%BB%B6%E8%AE%BE%E8%AE%A1/" class="post-tag" title="标签 - 软件设计">软件设计</a></section>
+    <section><span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+    </section>
+  </div><div class="post-nav"><a href="/%E9%87%8D%E6%9E%84/" class="post-nav-item" rel="prev" title="重构 改善既有代码的艺术 第2版 (Martin Fowler)"><i class="fa-solid fa-angle-left" aria-hidden="true"></i>重构 改善既有代码的艺术 第2版 (Martin Fowler)</a></div>
+</div>
+<div class="post-reward">
+    <div class="comment">请作者喝杯咖啡!</div>
+    <input type="checkbox" class="reward-input" name="reward" id="fi-reward" hidden />
+    <label class="reward-button" for="fi-reward"><i class="fa-solid fa-qrcode" aria-hidden="true"></i>赞赏</label>
+    <div class="reward-ways" data-mode="static"><div><img src='/reward/alipay.png' alt="AndyFree96 支付宝"><span data-animation>支付宝</span>
+          </div><div><img src='/reward/wechatpay.png' alt="AndyFree96 微信"><span data-animation>微信</span>
+          </div></div>
+  </div></article>
+
+  <aside class="toc" id="toc-auto" aria-label="目录"><h2 class="toc-title">目录&nbsp;<i class="toc-icon fa-solid fa-angle-down" aria-hidden="true"></i></h2>
+      <div class="toc-content" id="toc-content-auto"></div></aside><dialog id="toc-dialog" aria-labelledby="toc-dialog-title" role="dialog" closedby="any">
+      <button type="button" class="toc-close-btn" aria-label="Close Table of Contents"><i class="fa-solid fa-xmark fa-lg" aria-hidden="true"></i></button>
+      <div class="toc">
+        <h2 class="toc-title" id="toc-dialog-title">目录</h2>
+        <div class="toc-content" id="toc-content-drawer"><nav >
+  <ul>
+    <li><a href="#第1章-整洁代码">第1章 整洁代码</a>
+      <ul>
+        <li><a href="#15-我们是作者">1.5 我们是作者</a></li>
+        <li><a href="#16-童子军军规">1.6 童子军军规</a></li>
+      </ul>
+    </li>
+    <li><a href="#第2章-有意义的命名">第2章 有意义的命名</a></li>
+    <li><a href="#第3章-函数">第3章 函数</a></li>
+    <li><a href="#第4章-注释">第4章 注释</a></li>
+    <li><a href="#第5章-格式">第5章 格式</a></li>
+    <li><a href="#第6章-对象和数据结构">第6章 对象和数据结构</a></li>
+    <li><a href="#第7章-错误处理">第7章 错误处理</a></li>
+    <li><a href="#第8章-边界">第8章 边界</a></li>
+    <li><a href="#第9章-单元测试">第9章 单元测试</a></li>
+    <li><a href="#第10章-类">第10章 类</a></li>
+    <li><a href="#第11章-系统">第11章 系统</a></li>
+    <li><a href="#第12章-迭代">第12章 迭代</a></li>
+    <li><a href="#第13章-并发编程">第13章 并发编程</a></li>
+    <li><a href="#第14章-逐步改进">第14章 逐步改进</a></li>
+    <li><a href="#第15章-junit内幕">第15章 JUnit内幕</a></li>
+    <li><a href="#第16章-重构serialdate">第16章 重构SerialDate</a></li>
+    <li><a href="#第17章-味道与启发">第17章 味道与启发</a></li>
+    <li><a href="#附录a-并发编程ii">附录A 并发编程II</a></li>
+    <li></li>
+  </ul>
+</nav></div>
+      </div>
+    </dialog></main><footer class="footer">
+    <div class="footer-container"><div class="footer-line powered">由 <a href="https://gohugo.io/" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.163.1">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/hugo-fixit/FixIt" target="_blank" rel="external" title="FixIt v1.0.0-mq99hlzg">FixIt</a>
+        </div><div class="footer-line copyright" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright" aria-hidden="true"></i>
+            <span itemprop="copyrightYear">2019 - 2026</span><span class="author" itemprop="copyrightHolder">
+              <a href="https://andyfree96.github.io/" target="_blank" rel="external nofollow noopener noreferrer">AndyFree96</a></span></div></div>
+  </footer></div><div class="widgets"><div class="fixed-buttons"><button type="button" class="fixed-button back-to-top animate__faster d-none" aria-label="回到顶部"><i class="fa-solid fa-arrow-up" aria-hidden="true"></i></button><button type="button" id="toc-drawer-button" class="fixed-button toc-drawer-button d-none" aria-label="目录" aria-controls="toc-dialog" aria-expanded="false"><i class="fa-solid fa-bars" aria-hidden="true"></i></button></div><div id="mask"></div><div class="reading-progress-bar" style="left: 0;top: 0;"></div><noscript>
+    <div class="noscript-warning">该网站在启用 JavaScript 的情况下效果最佳。</div>
+  </noscript>
+</div><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script src="/lib/autocomplete/autocomplete.min.js" defer></script><script src="/lib/algoliasearch/browser.umd.js" defer></script><script src="/lib/sharer/sharer.min.js" async defer></script><script src="/lib/cookieconsent/cookieconsent.min.js" defer></script><script src="/js/lib/cookieconsent.js" defer></script><script src="/lib/cell-tooltip/cell-tooltip.umd.js" defer></script><script src="/js/config/dc726bf946aefb513e4d1da8ffff9c3f.js" defer></script><script src="/js/lib/file-tree.js" defer></script><script src="/js/main.js" defer></script></body>
+</html>
