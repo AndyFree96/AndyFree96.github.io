@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+    <meta name="robots" content="noodp" />
+    <title>NETworkManager源码剖析：一个网络管理工具的实现细节 - 东尼的博客</title><meta name="author" content="AndyFree96">
+<meta name="description" content="在 GitHub 闲逛时，我偶然发现了NETworkManager这个开源项目。作为一款网络管理和故障排查工具，它已经积累了超过 8.5k Star，足以说明社区对它的认可。更让我感兴趣的是，这个项目采用 C# &#43; WPF 进行开发，与我当前正在深入学习和实践的技术栈高度契合。因此，我产生了一个想法：通过深入分析 NETworkManager 的源码，探索一个成熟的 WPF 桌面应用是如何进行架构设计、模块划分以及工程实践的。接下来，我将以 NETworkManager 为切入点，逐步拆解它在 WPF UI 设计、MVVM 架构、依赖注入、配置管理、网络通信、异步编程以及工程化实践 等方面的实现，希望能够从优秀的开源项目中学习桌面应用开发的最佳实践。
+"><meta name="keywords" content='C#, WPF, MVVM, 网络管理, 源码剖析'>
+	<meta itemprop="name" content="NETworkManager源码剖析：一个网络管理工具的实现细节">
+	<meta itemprop="description" content="在 GitHub 闲逛时，我偶然发现了NETworkManager这个开源项目。作为一款网络管理和故障排查工具，它已经积累了超过 8.5k Star，足以说明社区对它的认可。更让我感兴趣的是，这个项目采用 C# &#43; WPF 进行开发，与我当前正在深入学习和实践的技术栈高度契合。因此，我产生了一个想法：通过深入分析 NETworkManager 的源码，探索一个成熟的 WPF 桌面应用是如何进行架构设计、模块划分以及工程实践的。接下来，我将以 NETworkManager 为切入点，逐步拆解它在 WPF UI 设计、MVVM 架构、依赖注入、配置管理、网络通信、异步编程以及工程化实践 等方面的实现，希望能够从优秀的开源项目中学习桌面应用开发的最佳实践。">
+	<meta itemprop="datePublished" content="2026-07-14T08:47:15+08:00">
+	<meta itemprop="dateModified" content="2026-07-14T08:47:15+08:00">
+	<meta itemprop="wordCount" content="2182">
+	<meta itemprop="keywords" content="C#,WPF,MVVM,网络管理,源码剖析"><meta property="og:url" content="http://localhost:1313/networkmanager%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/">
+	<meta property="og:site_name" content="东尼的博客">
+	<meta property="og:title" content="NETworkManager源码剖析：一个网络管理工具的实现细节">
+	<meta property="og:description" content="在 GitHub 闲逛时，我偶然发现了NETworkManager这个开源项目。作为一款网络管理和故障排查工具，它已经积累了超过 8.5k Star，足以说明社区对它的认可。更让我感兴趣的是，这个项目采用 C# &#43; WPF 进行开发，与我当前正在深入学习和实践的技术栈高度契合。因此，我产生了一个想法：通过深入分析 NETworkManager 的源码，探索一个成熟的 WPF 桌面应用是如何进行架构设计、模块划分以及工程实践的。接下来，我将以 NETworkManager 为切入点，逐步拆解它在 WPF UI 设计、MVVM 架构、依赖注入、配置管理、网络通信、异步编程以及工程化实践 等方面的实现，希望能够从优秀的开源项目中学习桌面应用开发的最佳实践。">
+	<meta property="og:locale" content="zh_CN">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="posts">
+		<meta property="article:published_time" content="2026-07-14T08:47:15+08:00">
+		<meta property="article:modified_time" content="2026-07-14T08:47:15+08:00">
+		<meta property="article:tag" content="C#">
+		<meta property="article:tag" content="WPF">
+		<meta property="article:tag" content="MVVM">
+		<meta property="article:tag" content="网络管理">
+		<meta property="article:tag" content="源码剖析">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="NETworkManager源码剖析：一个网络管理工具的实现细节">
+  <meta name="twitter:description" content="在 GitHub 闲逛时，我偶然发现了NETworkManager这个开源项目。作为一款网络管理和故障排查工具，它已经积累了超过 8.5k Star，足以说明社区对它的认可。更让我感兴趣的是，这个项目采用 C# &#43; WPF 进行开发，与我当前正在深入学习和实践的技术栈高度契合。因此，我产生了一个想法：通过深入分析 NETworkManager 的源码，探索一个成熟的 WPF 桌面应用是如何进行架构设计、模块划分以及工程实践的。接下来，我将以 NETworkManager 为切入点，逐步拆解它在 WPF UI 设计、MVVM 架构、依赖注入、配置管理、网络通信、异步编程以及工程化实践 等方面的实现，希望能够从优秀的开源项目中学习桌面应用开发的最佳实践。"><meta name="twitter:creator" content="@IRONAnthony96"><meta name="application-name" content="FixIt">
+<meta name="apple-mobile-web-app-title" content="FixIt"><meta name="theme-color" data-light="#f6f8fa" data-dark="#151b23" content="#f6f8fa"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" type="text/html" href="http://localhost:1313/networkmanager%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="NETworkManager源码剖析：一个网络管理工具的实现细节 - 东尼的博客" /><link rel="prev" type="text/html" href="http://localhost:1313/vscode%E5%AE%8C%E5%85%A8%E6%8C%87%E5%8D%97/" title="Visual Studio Code完全指南" /><link rel="alternate" type="text/markdown" href="http://localhost:1313/networkmanager%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/index.md" title="NETworkManager源码剖析：一个网络管理工具的实现细节 - 东尼的博客"><link rel="stylesheet" href="/css/config.css"><link rel="stylesheet" href="/css/main.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><link rel="preload" href="/js/main.js" as="script"><script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "BlogPosting",
+    "headline": "NETworkManager源码剖析：一个网络管理工具的实现细节",
+    "inLanguage": "zh-CN",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "http:\/\/localhost:1313\/networkmanager%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90\/"
+    },"genre": "posts","keywords": "C#, WPF, MVVM, 网络管理, 源码剖析","wordcount":  2182 ,
+    "url": "http:\/\/localhost:1313\/networkmanager%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90\/","datePublished": "2026-07-14T08:47:15+08:00","dateModified": "2026-07-14T08:47:15+08:00","publisher": {
+      "@type": "Organization",
+      "name": ""},"author": {
+        "@type": "Person",
+        "name": "AndyFree96"
+      },"description": ""
+  }
+  </script><script src="/js/head/color-scheme.js"></script></head>
+  <body data-instant-intensity="viewport" data-header-desktop="sticky" data-header-mobile="auto"><div class="wrapper" data-page-style="normal"><header class="desktop animate__faster" id="header-desktop">
+  <div class="header-wrapper">
+    <div class="header-title">
+      <a href="/" title="东尼的博客" class="header-title-link"><span class="header-title-text">东尼的博客</span></a><span class="header-subtitle"></span></div>
+    <nav>
+      <ul class="menu"><li class="menu-item">
+              <a class="menu-link" href="/posts/">📕 文章</a></li><li class="menu-item">
+              <a class="menu-link" href="/categories/">🧰 分类</a></li><li class="menu-item">
+              <a class="menu-link" href="/tags/">🔖 标签</a></li><li class="menu-item">
+              <a class="menu-link" href="/book">📚 书单</a></li><li class="menu-item">
+              <a class="menu-link" href="/paper">📝 论文</a></li><li class="menu-item">
+              <a class="menu-link" href="/opencourse">👨🏻‍💻 公开课</a></li><li class="menu-item">
+              <a class="menu-link" href="/filmtv">🎞️ 影视</a></li><li class="menu-item">
+              <a class="menu-link" href="/resource">⚡️ 资源库</a></li><li class="menu-item">
+              <a class="menu-link" href="/projects">⭐ 开源</a></li><li class="menu-item">
+              <a class="menu-link" href="/about">🙋🏻‍♂️ 关于</a></li><li class="menu-item delimiter"></li><li class="menu-item search" id="search-desktop">
+            <input type="text" placeholder="搜索文章标题或内容……" id="search-input-desktop" tabindex="-1">
+            <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索" aria-controls="search-dropdown-desktop" aria-expanded="false">
+              <i class="fa-solid fa-search" aria-hidden="true"></i>
+            </a>
+            <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+              <i class="fa-solid fa-times-circle" aria-hidden="true"></i>
+            </a>
+            <span class="search-button search-loading" id="search-loading-desktop">
+              <i class="fa-solid fa-spinner fa-spin" aria-hidden="true"></i>
+            </span>
+          </li><li class="menu-item theme-switch-item">
+          <button type="button" class="theme-switch" aria-label="切换主题" title="切换主题"><i class="fa-solid fa-adjust" aria-hidden="true"></i></button>
+        </li></ul>
+    </nav>
+  </div>
+</header><header class="mobile animate__faster" id="header-mobile">
+  <div class="header-container">
+    <div class="header-wrapper">
+      <div class="header-title">
+        <a href="/" title="东尼的博客" class="header-title-link"><span class="header-title-text">东尼的博客</span></a><span class="header-subtitle"></span></div>
+      <button type="button" class="theme-switch" aria-label="切换主题"><i class="fa-solid fa-adjust" aria-hidden="true"></i></button>
+      <button type="button" class="menu-toggle" id="menu-toggle-mobile" aria-controls="menu-mobile" aria-expanded="false" aria-labelledby="menu-mobile">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <nav>
+      <ul class="menu" id="menu-mobile"><li class="search-wrapper">
+            <div class="search mobile" id="search-mobile">
+              <input type="text" placeholder="搜索文章标题或内容……" id="search-input-mobile">
+              <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索" aria-controls="search-dropdown-mobile" aria-expanded="false">
+                <i class="fa-solid fa-search" aria-hidden="true"></i>
+              </a>
+              <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                <i class="fa-solid fa-times-circle" aria-hidden="true"></i>
+              </a>
+              <span class="search-button search-loading" id="search-loading-mobile">
+                <i class="fa-solid fa-spinner fa-spin" aria-hidden="true"></i>
+              </span>
+            </div>
+            <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+              取消
+            </a>
+          </li><li class="menu-item"><a class="menu-link" href="/posts/">📕 文章</a></li><li class="menu-item"><a class="menu-link" href="/categories/">🧰 分类</a></li><li class="menu-item"><a class="menu-link" href="/tags/">🔖 标签</a></li><li class="menu-item"><a class="menu-link" href="/book">📚 书单</a></li><li class="menu-item"><a class="menu-link" href="/paper">📝 论文</a></li><li class="menu-item"><a class="menu-link" href="/opencourse">👨🏻‍💻 公开课</a></li><li class="menu-item"><a class="menu-link" href="/filmtv">🎞️ 影视</a></li><li class="menu-item"><a class="menu-link" href="/resource">⚡️ 资源库</a></li><li class="menu-item"><a class="menu-link" href="/projects">⭐ 开源</a></li><li class="menu-item"><a class="menu-link" href="/about">🙋🏻‍♂️ 关于</a></li><li class="menu-item menu-system"></li>
+      </ul>
+    </nav>
+  </div>
+</header><div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+  </div>
+  <div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+  </div><main class="fi-container"><aside class="aside-collection animate__animated animate__fadeIn animate__faster" aria-label="合集"><div class="details related-details open">
+      <div class="details-summary related-summary">
+        <i class="fa-solid fa-fire fa-fade text-danger" aria-hidden="true"></i>
+        <span class="related-title">相关内容</span><i class="details-icon fa-solid fa-angle-right" aria-hidden="true"></i></div>
+      <div class="details-content related-content">
+        <ul class="related-list"><li class="related-item">
+              <a href="/downloader%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="Downloader源码剖析：一个下载器的实现原理">Downloader源码剖析：一个下载器的实现原理</a></li><li class="related-item">
+              <a href="/dotnetty%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="DotNetty源码剖析：高性能网络框架的秘密">DotNetty源码剖析：高性能网络框架的秘密</a></li><li class="related-item">
+              <a href="/requests%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="Requests源码剖析：优雅发送HTTP请求实现原理">Requests源码剖析：优雅发送HTTP请求实现原理</a></li><li class="related-item">
+              <a href="/hugo%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="Hugo源码剖析：世界最快静态站点生成器的实现原理">Hugo源码剖析：世界最快静态站点生成器的实现原理</a></li><li class="related-item">
+              <a href="/redis%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="Redis源码剖析：一个高性能服务器的设计哲学">Redis源码剖析：一个高性能服务器的设计哲学</a></li><li class="related-item">
+              <a href="/leveldb%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="LevelDB源码剖析：Google如何设计一个高性能嵌入式数据库">LevelDB源码剖析：Google如何设计一个高性能嵌入式数据库</a></li><li class="related-item">
+              <a href="/c%23%E9%AB%98%E6%95%88%E7%BC%96%E7%A8%8B/" title="C#高效编程 改进C#代码的50个行之有效的办法 第2版 (Bill Wagner)">C#高效编程 改进C#代码的50个行之有效的办法 第2版 (Bill Wagner)</a></li><li class="related-item">
+              <a href="/shadowsocks%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="Shadowsocks源码剖析：一个轻量级代理工具背后的网络编程设计">Shadowsocks源码剖析：一个轻量级代理工具背后的网络编程设计</a></li><li class="related-item">
+              <a href="/node.js%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="Node.js 源码剖析：非阻塞世界的引擎密码">Node.js 源码剖析：非阻塞世界的引擎密码</a></li><li class="related-item">
+              <a href="/cpython%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="CPython 源码剖析：Python 运行的奥秘">CPython 源码剖析：Python 运行的奥秘</a></li><li class="related-item">
+              <a href="/launch-editor%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="launch-editor源码剖析：快速打开编辑器的实现原理">launch-editor源码剖析：快速打开编辑器的实现原理</a></li><li class="related-item">
+              <a href="/json-server%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="json-server源码剖析：快速构建REST API背后的原理">json-server源码剖析：快速构建REST API背后的原理</a></li><li class="related-item">
+              <a href="/csv2%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="csv2 源码剖析：轻量级 CSV 处理的高效之道">csv2 源码剖析：轻量级 CSV 处理的高效之道</a></li><li class="related-item">
+              <a href="/c%23%E4%B8%AD%E7%9A%84nameof%E8%BF%90%E7%AE%97%E7%AC%A6/" title="C#中的nameof运算符">C#中的nameof运算符</a></li></ul>
+      </div>
+    </div></aside>
+
+  <article class="page single">
+    <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span title="转载" class="icon-repost"><i class="fa-solid fa-share" aria-hidden="true"></i></span><span>NETworkManager源码剖析：一个网络管理工具的实现细节</span>
+      </h1></div><div class="post-meta">
+      <div class="post-meta-line"><span class="post-author"><a href="https://andyfree96.github.io/" title="作者" target="_blank" rel="author external nofollow noopener noreferrer" class="author"><img class="avatar" src='/avatar/1.jpg' alt="AndyFree96" height="16" width="16">&nbsp;AndyFree96</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" class="post-category" title="分类 - 源码剖析"><i class="fa-regular fa-folder" aria-hidden="true"></i> 源码剖析</a></span></div><div class="post-meta-line"><span title="发布于 2026-07-14 08:47:15"><i class="fa-solid fa-calendar-days me-1" aria-hidden="true"></i><time datetime="2026-07-14">2026-07-14</time></span>&nbsp;<span title="2182 字"><i class="fa-solid fa-pencil-alt me-1" aria-hidden="true"></i>约 2200 字</span>&nbsp;<span><i class="fa-regular fa-clock me-1" aria-hidden="true"></i>预计阅读 5 分钟</span>&nbsp;</div>
+    </div><div class="featured-image"><img loading="eager" src='/images/202607/15/maverick-frame-GswoB8XDnBc-unsplash.jpg' sizes="(max-width: 680px) 100vw, (max-width: 960px) 80vw, (max-width: 1440px) 56vw, 800px" alt="/images/202607/15/maverick-frame-GswoB8XDnBc-unsplash.jpg"></div><div class="details toc" id="toc-static" data-kept="false">
+        <div class="details-summary toc-title">
+          <span>目录</span>
+          <span><i class="details-icon fa-solid fa-angle-right" aria-hidden="true"></i></span>
+        </div>
+        <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-networkmanager启动时到底发生了什么">1. NETworkManager启动时，到底发生了什么？</a>
+      <ul>
+        <li><a href="#application_startup">Application_Startup</a></li>
+        <li><a href="#application_exit">Application_Exit</a></li>
+        <li><a href="#save">Save</a></li>
+        <li><a href="#onsessionending">OnSessionEnding</a></li>
+      </ul>
+    </li>
+    <li><a href="#2-日志保存在什么位置">2. 日志保存在什么位置？</a></li>
+    <li><a href="#3-仪表盘界面中的ip地址是如何获取的">3. 仪表盘界面中的IP地址是如何获取的？</a></li>
+  </ul>
+</nav></div>
+      </div><div class="content" id="content"><p>在 GitHub 闲逛时，我偶然发现了<a href="https://borntoberoot.net/NETworkManager/" target="_blank" rel="external nofollow noopener noreferrer">NETworkManager<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>这个开源项目。作为一款网络管理和故障排查工具，它已经积累了超过 8.5k Star，足以说明社区对它的认可。更让我感兴趣的是，这个项目采用 C# + WPF 进行开发，与我当前正在深入学习和实践的技术栈高度契合。因此，我产生了一个想法：通过深入分析 NETworkManager 的源码，探索一个成熟的 WPF 桌面应用是如何进行架构设计、模块划分以及工程实践的。接下来，我将以 NETworkManager 为切入点，逐步拆解它在 WPF UI 设计、MVVM 架构、依赖注入、配置管理、网络通信、异步编程以及工程化实践 等方面的实现，希望能够从优秀的开源项目中学习桌面应用开发的最佳实践。</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-bash"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">git clone --recurse-submodules https://github.com/BornToBeRoot/NETworkManager.git</span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>将项目Clone到本地，整个解决方案结构如下：</p>
+<p><figure><img loading="lazy" src='/images/202607/15/1.png' alt="图1 NETworkManager项目整体结构"><figcaption class="image-caption">图1 NETworkManager项目整体结构</figcaption>
+  </figure></p>
+<p>解决方案下包含了多个子项目，说明将实现逻辑进行了合理拆分，进行了模块化设计。</p>
+<h2 class="heading-element" id="1-networkmanager启动时到底发生了什么"><span>1. NETworkManager启动时，到底发生了什么？</span>
+  <a href="#1-networkmanager%e5%90%af%e5%8a%a8%e6%97%b6%e5%88%b0%e5%ba%95%e5%8f%91%e7%94%9f%e4%ba%86%e4%bb%80%e4%b9%88" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>WPF应用生命周期大致如下：</p>
+<div class="code-tabs diagram-tabs" data-diagram="mermaid">
+    <div class="tabs-header">
+      <div class="tabs-items">
+        <span class="tab-item active" data-tab="diagram" title="图表">图表</span>
+        <span class="tab-item" data-tab="code" title="代码">代码</span>
+      </div>
+      <div class="tabs-actions">
+        <button type="button" class="action-btn diagram-zoom-out-btn" aria-label="缩小" title="缩小"><i class="fa-solid fa-magnifying-glass-minus" aria-hidden="true"></i></button>
+        <button type="button" class="action-btn diagram-zoom-in-btn" aria-label="放大" title="放大"><i class="fa-solid fa-magnifying-glass-plus" aria-hidden="true"></i></button>
+        <button type="button" class="action-btn diagram-reset-btn" aria-label="重置" title="重置"><i class="fa-solid fa-arrows-rotate" aria-hidden="true"></i></button>
+        <button type="button" class="action-btn diagram-download-btn" aria-label="下载 SVG" title="下载 SVG"><i class="fa-solid fa-download" aria-hidden="true"></i></button>
+      </div>
+    </div>
+    <div class="tabs-content">
+      <div class="code-block diagram-view active" data-filename="mermaid.mmd">
+        <div class="diagram-container">
+          <pre class="mermaid">flowchart TD
+    A[Application_Startup] --> B[创建Window]
+    B --> C[用户正常使用]
+    C --> D[Application_Exit]
+    D --> E[程序结束]</pre>
+          <pre class="mermaid-dark">flowchart TD
+    A[Application_Startup] --> B[创建Window]
+    B --> C[用户正常使用]
+    C --> D[Application_Exit]
+    D --> E[程序结束]</pre>
+          <pre class="mermaid-neutral">flowchart TD
+    A[Application_Startup] --> B[创建Window]
+    B --> C[用户正常使用]
+    C --> D[Application_Exit]
+    D --> E[程序结束]</pre>
+        </div>
+      </div><div class="code-block highlight diagram-code" data-mode="classic" data-copyable="true" copyable="true" fullscreen="true" filename="mermaid.mmd"><div class="chroma">
+<div class="code-header language-text"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">flowchart TD
+</span></span><span class="line"><span class="cl">    A[Application_Startup] --&gt; B[创建Window]
+</span></span><span class="line"><span class="cl">    B --&gt; C[用户正常使用]
+</span></span><span class="line"><span class="cl">    C --&gt; D[Application_Exit]
+</span></span><span class="line"><span class="cl">    D --&gt; E[程序结束]</span></span></code></pre></td></tr></table></div>
+</div>
+</div></div>
+  </div><p>在Visual Studio 2026按F5调试启动后，首先映入眼帘的是启动画面窗口：</p>
+<p><figure><img loading="lazy" src='/images/202607/15/2.png' alt="图2 NETworkManager启动画面窗口"><figcaption class="image-caption">图2 NETworkManager启动画面窗口</figcaption>
+  </figure></p>
+<p>接着就会出现隐私政策设置界面：</p>
+<p><figure><img loading="lazy" src='/images/202607/15/3.png' alt="图3 隐私政策设置界面"><figcaption class="image-caption">图3 隐私政策设置界面</figcaption>
+  </figure></p>
+<p>点击“继续”后就进入到了主界面(仪表盘)：</p>
+<p><figure><img loading="lazy" src='/images/202607/15/4.png' alt="图4 NETworkManager主界面"><figcaption class="image-caption">图4 NETworkManager主界面</figcaption>
+  </figure></p>
+<p>NETworkManager项目的<code>App.xaml.cs</code>中包含了软件启动时的逻辑，里面主要包含了<code>Application_Startup</code>、<code>OnSessionEnding</code>、<code>Application_Exit</code>和<code>Save</code>等4个方法。</p>
+<h3 class="heading-element" id="application_startup"><span>Application_Startup</span>
+  <a href="#application_startup" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p>设置了全局异常捕获：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-c#"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c#" data-lang="c#"><span class="line"><span class="cl"><span class="n">AppDomain</span><span class="p">.</span><span class="n">CurrentDomain</span><span class="p">.</span><span class="n">UnhandledException</span> <span class="p">+=</span> <span class="p">(</span><span class="n">_</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span> <span class="p">=&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Log</span><span class="p">.</span><span class="n">Fatal</span><span class="p">(</span><span class="s">&#34;Unhandled exception occured!&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">Log</span><span class="p">.</span><span class="n">Fatal</span><span class="p">(</span><span class="s">$&#34;Exception raised by: {args.ExceptionObject}&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>等待旧进程退出：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-c#"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="2" style="--fi-max-shown-lines:400;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c#" data-lang="c#"><span class="line"><span class="cl"><span class="k">if</span> <span class="p">(</span><span class="n">CommandLineManager</span><span class="p">.</span><span class="n">Current</span><span class="p">.</span><span class="n">RestartPid</span> <span class="p">!=</span> <span class="p">-</span><span class="m">1</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Log</span><span class="p">.</span><span class="n">Info</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">        <span class="s">$&#34;Waiting for another NETworkManager process with Pid {CommandLineManager.Current.RestartPid} to exit...&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="kt">var</span> <span class="n">processList</span> <span class="p">=</span> <span class="n">Process</span><span class="p">.</span><span class="n">GetProcesses</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">var</span> <span class="n">process</span> <span class="p">=</span> <span class="n">processList</span><span class="p">.</span><span class="n">FirstOrDefault</span><span class="p">(</span><span class="n">x</span> <span class="p">=&gt;</span> <span class="n">x</span><span class="p">.</span><span class="n">Id</span> <span class="p">==</span> <span class="n">CommandLineManager</span><span class="p">.</span><span class="n">Current</span><span class="p">.</span><span class="n">RestartPid</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">process</span><span class="p">?.</span><span class="n">WaitForExit</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">Log</span><span class="p">.</span><span class="n">Info</span><span class="p">(</span><span class="s">$&#34;NETworkManager process with Pid {CommandLineManager.Current.RestartPid} has been exited.&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>单实例检测：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-c#"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c#" data-lang="c#"><span class="line"><span class="cl"><span class="n">_mutex</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Mutex</span><span class="p">(</span><span class="kc">true</span><span class="p">,</span> <span class="s">&#34;{&#34;</span> <span class="p">+</span> <span class="n">Guid</span> <span class="p">+</span> <span class="s">&#34;}&#34;</span><span class="p">);</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>防止用户点击两次exe，两个程序运行。第一次创建<code>Mutex</code>成功，第二次创建<code>Mutex</code>失败。于是：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-c#"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="2" style="--fi-max-shown-lines:400;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c#" data-lang="c#"><span class="line"><span class="cl"><span class="kt">var</span> <span class="n">mutexIsAcquired</span> <span class="p">=</span> <span class="n">_mutex</span><span class="p">.</span><span class="n">WaitOne</span><span class="p">(</span><span class="n">TimeSpan</span><span class="p">.</span><span class="n">Zero</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">Log</span><span class="p">.</span><span class="n">Info</span><span class="p">(</span><span class="s">$&#34;Mutex value for {Guid} is {mutexIsAcquired}&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// Release mutex</span>
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="p">(</span><span class="n">mutexIsAcquired</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">_mutex</span><span class="p">.</span><span class="n">ReleaseMutex</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// If another instance is running, bring it to the foreground</span>
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="p">(!</span><span class="n">mutexIsAcquired</span> <span class="p">&amp;&amp;</span> <span class="p">!</span><span class="n">SettingsManager</span><span class="p">.</span><span class="n">Current</span><span class="p">.</span><span class="n">Window_MultipleInstances</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// Bring the already running application into the foreground</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Log</span><span class="p">.</span><span class="n">Info</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">        <span class="s">&#34;Another NETworkManager process is already running. Trying to bring the window to the foreground...&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">SingleInstance</span><span class="p">.</span><span class="n">PostMessage</span><span class="p">(</span><span class="n">SingleInstance</span><span class="p">.</span><span class="n">HWND_BROADCAST</span><span class="p">,</span> <span class="n">SingleInstance</span><span class="p">.</span><span class="n">WM_SHOWME</span><span class="p">,</span> <span class="n">IntPtr</span><span class="p">.</span><span class="n">Zero</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="n">IntPtr</span><span class="p">.</span><span class="n">Zero</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// Close the application                </span>
+</span></span><span class="line"><span class="cl">    <span class="n">_singleInstanceClose</span> <span class="p">=</span> <span class="kc">true</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Shutdown</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">return</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>接下来会显示启动画面窗口和主窗口：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-c#"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="2" style="--fi-max-shown-lines:400;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c#" data-lang="c#"><span class="line"><span class="cl"><span class="c1">// Show splash screen</span>
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="p">(</span><span class="n">SettingsManager</span><span class="p">.</span><span class="n">Current</span><span class="p">.</span><span class="n">SplashScreen_Enabled</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Log</span><span class="p">.</span><span class="n">Info</span><span class="p">(</span><span class="s">&#34;Show SplashScreen while application is loading...&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">new</span> <span class="n">SplashScreen</span><span class="p">(</span><span class="s">@&#34;SplashScreen.png&#34;</span><span class="p">).</span><span class="n">Show</span><span class="p">(</span><span class="kc">true</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// Show main window</span>
+</span></span><span class="line"><span class="cl"><span class="n">Log</span><span class="p">.</span><span class="n">Info</span><span class="p">(</span><span class="s">&#34;Set StartupUri to MainWindow.xaml...&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="n">StartupUri</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Uri</span><span class="p">(</span><span class="s">&#34;MainWindow.xaml&#34;</span><span class="p">,</span> <span class="n">UriKind</span><span class="p">.</span><span class="n">Relative</span><span class="p">);</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>启动流程如下：</p>
+<div class="code-tabs diagram-tabs" data-diagram="mermaid">
+    <div class="tabs-header">
+      <div class="tabs-items">
+        <span class="tab-item active" data-tab="diagram" title="图表">图表</span>
+        <span class="tab-item" data-tab="code" title="代码">代码</span>
+      </div>
+      <div class="tabs-actions">
+        <button type="button" class="action-btn diagram-zoom-out-btn" aria-label="缩小" title="缩小"><i class="fa-solid fa-magnifying-glass-minus" aria-hidden="true"></i></button>
+        <button type="button" class="action-btn diagram-zoom-in-btn" aria-label="放大" title="放大"><i class="fa-solid fa-magnifying-glass-plus" aria-hidden="true"></i></button>
+        <button type="button" class="action-btn diagram-reset-btn" aria-label="重置" title="重置"><i class="fa-solid fa-arrows-rotate" aria-hidden="true"></i></button>
+        <button type="button" class="action-btn diagram-download-btn" aria-label="下载 SVG" title="下载 SVG"><i class="fa-solid fa-download" aria-hidden="true"></i></button>
+      </div>
+    </div>
+    <div class="tabs-content">
+      <div class="code-block diagram-view active" data-filename="mermaid.mmd">
+        <div class="diagram-container">
+          <pre class="mermaid">flowchart TD
+    A[Application_Startup] --> B[启动日志]
+    B --> C[异常捕获]
+    C --> D[检查旧实例]
+    D --> E[加载Policy]
+    E --> F[加载Settings]
+    F --> G[升级配置]
+    G --> H[初始化语言]
+    H --> I[单实例检测]
+    I --> J[启动后台任务]
+    J --> K[调整线程池]
+    K --> L[SplashScreen]
+    L --> M[MainWindow]</pre>
+          <pre class="mermaid-dark">flowchart TD
+    A[Application_Startup] --> B[启动日志]
+    B --> C[异常捕获]
+    C --> D[检查旧实例]
+    D --> E[加载Policy]
+    E --> F[加载Settings]
+    F --> G[升级配置]
+    G --> H[初始化语言]
+    H --> I[单实例检测]
+    I --> J[启动后台任务]
+    J --> K[调整线程池]
+    K --> L[SplashScreen]
+    L --> M[MainWindow]</pre>
+          <pre class="mermaid-neutral">flowchart TD
+    A[Application_Startup] --> B[启动日志]
+    B --> C[异常捕获]
+    C --> D[检查旧实例]
+    D --> E[加载Policy]
+    E --> F[加载Settings]
+    F --> G[升级配置]
+    G --> H[初始化语言]
+    H --> I[单实例检测]
+    I --> J[启动后台任务]
+    J --> K[调整线程池]
+    K --> L[SplashScreen]
+    L --> M[MainWindow]</pre>
+        </div>
+      </div><div class="code-block highlight diagram-code" data-mode="classic" data-copyable="true" copyable="true" fullscreen="true" filename="mermaid.mmd"><div class="chroma">
+<div class="code-header language-text"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="2" style="--fi-max-shown-lines:400;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">flowchart TD
+</span></span><span class="line"><span class="cl">    A[Application_Startup] --&gt; B[启动日志]
+</span></span><span class="line"><span class="cl">    B --&gt; C[异常捕获]
+</span></span><span class="line"><span class="cl">    C --&gt; D[检查旧实例]
+</span></span><span class="line"><span class="cl">    D --&gt; E[加载Policy]
+</span></span><span class="line"><span class="cl">    E --&gt; F[加载Settings]
+</span></span><span class="line"><span class="cl">    F --&gt; G[升级配置]
+</span></span><span class="line"><span class="cl">    G --&gt; H[初始化语言]
+</span></span><span class="line"><span class="cl">    H --&gt; I[单实例检测]
+</span></span><span class="line"><span class="cl">    I --&gt; J[启动后台任务]
+</span></span><span class="line"><span class="cl">    J --&gt; K[调整线程池]
+</span></span><span class="line"><span class="cl">    K --&gt; L[SplashScreen]
+</span></span><span class="line"><span class="cl">    L --&gt; M[MainWindow]</span></span></code></pre></td></tr></table></div>
+</div>
+</div></div>
+  </div><p><code>Policy</code>从exe所在目录的<code>config.json</code>加载，而LocalSettings从<code>用户家目录\\AppData\\Local\\NETworkManager\\Settings.json</code>文件加载，Settings从<code>用户家目录\\Documents\\NETworkManager\\Settings\\Settings.json</code>文件加载。</p>
+<h3 class="heading-element" id="application_exit"><span>Application_Exit</span>
+  <a href="#application_exit" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p><code>Application_Exit</code>会在应用退出时调用，主要调用了<code>Save</code>，在退出时保存程序设置和配置文件。</p>
+<h3 class="heading-element" id="save"><span>Save</span>
+  <a href="#save" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p><code>Save</code>如果检测到更改，会保存应用程序设置和配置文件数据。</p>
+<h3 class="heading-element" id="onsessionending"><span>OnSessionEnding</span>
+  <a href="#onsessionending" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p><code>OnSessionEnding</code>会在Windows注销或者Windows关机时被调用。</p>
+<h2 class="heading-element" id="2-日志保存在什么位置"><span>2. 日志保存在什么位置？</span>
+  <a href="#2-%e6%97%a5%e5%bf%97%e4%bf%9d%e5%ad%98%e5%9c%a8%e4%bb%80%e4%b9%88%e4%bd%8d%e7%bd%ae" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>NETworkerManager使用的是<a href="https://logging.apache.org/log4net/index.html" target="_blank" rel="external nofollow noopener noreferrer">log4net<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>日志库。在项目的根目录下有一个<code>log4net.config</code>文件用于配置日志：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-xml"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="2" style="--fi-max-shown-lines:400;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-xml" data-lang="xml"><span class="line"><span class="cl"><span class="nt">&lt;log4net&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;root&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="c">&lt;!-- Log level: ALL, DEBUG, INFO, WARN, ERROR, FATAL, OFF --&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;level</span> <span class="na">value=</span><span class="s">&#34;INFO&#34;</span><span class="nt">/&gt;</span>        
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;appender-ref</span> <span class="na">ref=</span><span class="s">&#34;console&#34;</span><span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;appender-ref</span> <span class="na">ref=</span><span class="s">&#34;file&#34;</span><span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;/root&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;appender</span> <span class="na">name=</span><span class="s">&#34;console&#34;</span> <span class="na">type=</span><span class="s">&#34;log4net.Appender.ConsoleAppender&#34;</span><span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;layout</span> <span class="na">type=</span><span class="s">&#34;log4net.Layout.PatternLayout&#34;</span><span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&lt;conversionPattern</span> <span class="na">value=</span><span class="s">&#34;%date [%thread] %-5level %logger - %message%newline&#34;</span><span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;/layout&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;/appender&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;appender</span> <span class="na">name=</span><span class="s">&#34;file&#34;</span> <span class="na">type=</span><span class="s">&#34;log4net.Appender.RollingFileAppender&#34;</span><span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;file</span> <span class="na">value=</span><span class="s">&#34;${LocalAppData}\\NETworkManager\NETworkManager.log&#34;</span><span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;appendToFile</span> <span class="na">value=</span><span class="s">&#34;true&#34;</span><span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;rollingStyle</span> <span class="na">value=</span><span class="s">&#34;Size&#34;</span><span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;maxSizeRollBackups</span> <span class="na">value=</span><span class="s">&#34;5&#34;</span><span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;maximumFileSize</span> <span class="na">value=</span><span class="s">&#34;10MB&#34;</span><span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;staticLogFileName</span> <span class="na">value=</span><span class="s">&#34;true&#34;</span><span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;layout</span> <span class="na">type=</span><span class="s">&#34;log4net.Layout.PatternLayout&#34;</span><span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&lt;conversionPattern</span> <span class="na">value=</span><span class="s">&#34;%date [%thread] %-5level %logger - %message%newline&#34;</span><span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;/layout&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;/appender&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="nt">&lt;/log4net&gt;</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>日志保存在<code>${LocalAppData}\\NETworkManager</code>目录中。</p>
+<h2 class="heading-element" id="3-仪表盘界面中的ip地址是如何获取的"><span>3. 仪表盘界面中的IP地址是如何获取的？</span>
+  <a href="#3-%e4%bb%aa%e8%a1%a8%e7%9b%98%e7%95%8c%e9%9d%a2%e4%b8%ad%e7%9a%84ip%e5%9c%b0%e5%9d%80%e6%98%af%e5%a6%82%e4%bd%95%e8%8e%b7%e5%8f%96%e7%9a%84" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>如4所示，仪表盘界面中的IPv4、IPv6以及DNS地址是如何获取的呢？<code>ViewModels/NetworkConnectionWidgetViewModel.cs</code>可以找到答案。</p></div><hr class="awesome-hr" />
+    <h2 id="see-also">相关内容</h2>
+    <ul><li>
+          <a href="/downloader%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="Downloader源码剖析：一个下载器的实现原理">Downloader源码剖析：一个下载器的实现原理</a></li><li>
+          <a href="/dotnetty%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="DotNetty源码剖析：高性能网络框架的秘密">DotNetty源码剖析：高性能网络框架的秘密</a></li><li>
+          <a href="/requests%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="Requests源码剖析：优雅发送HTTP请求实现原理">Requests源码剖析：优雅发送HTTP请求实现原理</a></li><li>
+          <a href="/hugo%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="Hugo源码剖析：世界最快静态站点生成器的实现原理">Hugo源码剖析：世界最快静态站点生成器的实现原理</a></li><li>
+          <a href="/redis%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="Redis源码剖析：一个高性能服务器的设计哲学">Redis源码剖析：一个高性能服务器的设计哲学</a></li><li>
+          <a href="/leveldb%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="LevelDB源码剖析：Google如何设计一个高性能嵌入式数据库">LevelDB源码剖析：Google如何设计一个高性能嵌入式数据库</a></li><li>
+          <a href="/c%23%E9%AB%98%E6%95%88%E7%BC%96%E7%A8%8B/" title="C#高效编程 改进C#代码的50个行之有效的办法 第2版 (Bill Wagner)">C#高效编程 改进C#代码的50个行之有效的办法 第2版 (Bill Wagner)</a></li><li>
+          <a href="/shadowsocks%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="Shadowsocks源码剖析：一个轻量级代理工具背后的网络编程设计">Shadowsocks源码剖析：一个轻量级代理工具背后的网络编程设计</a></li><li>
+          <a href="/node.js%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="Node.js 源码剖析：非阻塞世界的引擎密码">Node.js 源码剖析：非阻塞世界的引擎密码</a></li><li>
+          <a href="/cpython%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="CPython 源码剖析：Python 运行的奥秘">CPython 源码剖析：Python 运行的奥秘</a></li><li>
+          <a href="/launch-editor%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="launch-editor源码剖析：快速打开编辑器的实现原理">launch-editor源码剖析：快速打开编辑器的实现原理</a></li><li>
+          <a href="/json-server%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="json-server源码剖析：快速构建REST API背后的原理">json-server源码剖析：快速构建REST API背后的原理</a></li><li>
+          <a href="/csv2%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="csv2 源码剖析：轻量级 CSV 处理的高效之道">csv2 源码剖析：轻量级 CSV 处理的高效之道</a></li><li>
+          <a href="/c%23%E4%B8%AD%E7%9A%84nameof%E8%BF%90%E7%AE%97%E7%AC%A6/" title="C#中的nameof运算符">C#中的nameof运算符</a></li></ul><div class="post-footer" id="post-footer">
+  <div class="post-info">
+    <div class="post-info-line">
+      <div class="post-info-mod"><span title="更新于 2026-07-14 08:47:15">更新于 2026-07-14&nbsp;</span>
+      </div></div><div class="post-info-line">
+        <div class="post-info-md"><span><a href="vscode://file/D:\hugo-blog\andyfree96\content\posts\NETworkManager源码剖析.md" title="在编辑器中打开" class="link-to-vscode">在编辑器中打开</a></span></div>
+        <div class="post-info-share">
+          <span><a href="javascript:void(0);" title="分享到 X" data-sharer="twitter" data-url="http://localhost:1313/networkmanager%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="NETworkManager源码剖析：一个网络管理工具的实现细节" data-via="IRONAnthony96" data-hashtags="C#,WPF,MVVM,网络管理,源码剖析"><i class="fa-brands fa-x-twitter" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="http://localhost:1313/networkmanager%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-hashtag="C#"><i class="fa-brands fa-facebook-square" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="http://localhost:1313/networkmanager%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="NETworkManager源码剖析：一个网络管理工具的实现细节" data-image="/images/202607/15/maverick-frame-GswoB8XDnBc-unsplash.jpg"><i class="fa-brands fa-weibo" aria-hidden="true"></i></a>
+  </span>
+        </div>
+      </div></div>
+
+  <div class="post-info-more">
+    <section class="post-tags"><i class="fa-solid fa-tags me-1" aria-hidden="true"></i><a href="/tags/c%23/" class="post-tag" title="标签 - C#">C#</a><a href="/tags/wpf/" class="post-tag" title="标签 - WPF">WPF</a><a href="/tags/mvvm/" class="post-tag" title="标签 - MVVM">MVVM</a><a href="/tags/%E7%BD%91%E7%BB%9C%E7%AE%A1%E7%90%86/" class="post-tag" title="标签 - 网络管理">网络管理</a><a href="/tags/%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" class="post-tag" title="标签 - 源码剖析">源码剖析</a></section>
+    <section><span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+    </section>
+  </div><div class="post-nav"><a href="/vscode%E5%AE%8C%E5%85%A8%E6%8C%87%E5%8D%97/" class="post-nav-item" rel="prev" title="Visual Studio Code完全指南"><i class="fa-solid fa-angle-left" aria-hidden="true"></i>Visual Studio Code完全指南</a></div>
+</div>
+<div class="post-reward">
+    <div class="comment">请作者喝杯咖啡!</div>
+    <input type="checkbox" class="reward-input" name="reward" id="fi-reward" hidden />
+    <label class="reward-button" for="fi-reward"><i class="fa-solid fa-qrcode" aria-hidden="true"></i>赞赏</label>
+    <div class="reward-ways" data-mode="static"><div><img src='/reward/alipay.png' alt="AndyFree96 支付宝"><span data-animation>支付宝</span>
+          </div><div><img src='/reward/wechatpay.png' alt="AndyFree96 微信"><span data-animation>微信</span>
+          </div></div>
+  </div></article>
+
+  <aside class="toc" id="toc-auto" aria-label="目录"><h2 class="toc-title">目录&nbsp;<i class="toc-icon fa-solid fa-angle-down" aria-hidden="true"></i></h2>
+      <div class="toc-content" id="toc-content-auto"></div></aside><dialog id="toc-dialog" aria-labelledby="toc-dialog-title" role="dialog" closedby="any">
+      <button type="button" class="toc-close-btn" aria-label="Close Table of Contents"><i class="fa-solid fa-xmark fa-lg" aria-hidden="true"></i></button>
+      <div class="toc">
+        <h2 class="toc-title" id="toc-dialog-title">目录</h2>
+        <div class="toc-content" id="toc-content-drawer"><nav >
+  <ul>
+    <li><a href="#1-networkmanager启动时到底发生了什么">1. NETworkManager启动时，到底发生了什么？</a>
+      <ul>
+        <li><a href="#application_startup">Application_Startup</a></li>
+        <li><a href="#application_exit">Application_Exit</a></li>
+        <li><a href="#save">Save</a></li>
+        <li><a href="#onsessionending">OnSessionEnding</a></li>
+      </ul>
+    </li>
+    <li><a href="#2-日志保存在什么位置">2. 日志保存在什么位置？</a></li>
+    <li><a href="#3-仪表盘界面中的ip地址是如何获取的">3. 仪表盘界面中的IP地址是如何获取的？</a></li>
+  </ul>
+</nav></div>
+      </div>
+    </dialog></main><footer class="footer">
+    <div class="footer-container"><div class="footer-line powered">由 <a href="https://gohugo.io/" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.163.1">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/hugo-fixit/FixIt" target="_blank" rel="external" title="FixIt v1.0.0-mq99hlzg">FixIt</a>
+        </div><div class="footer-line copyright" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright" aria-hidden="true"></i>
+            <span itemprop="copyrightYear">2019 - 2026</span><span class="author" itemprop="copyrightHolder">
+              <a href="https://andyfree96.github.io/" target="_blank" rel="external nofollow noopener noreferrer">AndyFree96</a></span></div></div>
+  </footer></div><div class="widgets"><div class="fixed-buttons"><button type="button" class="fixed-button back-to-top animate__faster d-none" aria-label="回到顶部"><i class="fa-solid fa-arrow-up" aria-hidden="true"></i></button><button type="button" id="toc-drawer-button" class="fixed-button toc-drawer-button d-none" aria-label="目录" aria-controls="toc-dialog" aria-expanded="false"><i class="fa-solid fa-bars" aria-hidden="true"></i></button></div><div id="mask"></div><div class="reading-progress-bar" style="left: 0;top: 0;"></div><noscript>
+    <div class="noscript-warning">该网站在启用 JavaScript 的情况下效果最佳。</div>
+  </noscript>
+</div><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script src="/lib/autocomplete/autocomplete.min.js" defer></script><script src="/lib/algoliasearch/browser.umd.js" defer></script><script src="/lib/sharer/sharer.min.js" async defer></script><script src="/lib/cookieconsent/cookieconsent.min.js" defer></script><script src="/js/lib/cookieconsent.js" defer></script><script src="/lib/cell-tooltip/cell-tooltip.umd.js" defer></script><script src="/js/config/a40678482c5e2c386239ed43c02108f4.js" defer></script><script src="/js/lib/file-tree.js" defer></script><script src="/lib/panzoom/panzoom.min.js" defer></script><script src="/js/lib/mermaid-bootstrap.js" defer type="module"></script><script src="/js/main.js" defer></script></body>
+</html>
