@@ -1139,7 +1139,6 @@ int setsockopt(int sock, int level, int optname, void* optval, socklen_t* optlen
 
 解决方案就是在套接字的可选项中更改SO_REUSEADDR的状态。适当调整该参数，可将Time-wait状态下的套接字端口号重新分配给新的套接字。SO_REUSEADDR的默认值为0（假），这就意味着无法分配Time-wait状态下的套接字端口号。因此需要将这个值改成1（真）。
 
-
 ### TCP_NODELAY
 
 #### Nagle算法
@@ -2165,7 +2164,7 @@ void error_handling(char *message)
 
 ![](/images/202402/3/2.png)
 
-## 第 13 章 多种 I/O 函数
+<!-- ## 第 13 章 多种 I/O 函数
 
 ## 第 14 章 多播与广播
 
@@ -2187,7 +2186,7 @@ void error_handling(char *message)
 
 ## 第 23 章 IOCP
 
-## 第 24 章 制作 HTTP 服务器端
+## 第 24 章 制作 HTTP 服务器端 -->
 
 ## 第 25 章 进阶内容
 

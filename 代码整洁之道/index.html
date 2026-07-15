@@ -16,7 +16,7 @@
 一个几百行甚至上千行的函数 一个承担几十种职责的巨大类 大量重复逻辑散落在项目各处 修改一个小需求，却需要影响多个模块 新成员接手项目，需要花费大量时间理解代码 这些问题并不是某一天突然出现的，而是在一次次“先实现功能，以后再优化”的过程中逐渐累积形成的。《代码整洁之道》提供了一套思考方式：
 如何通过命名让代码表达真实意图 如何设计短小、专注的函数 如何让类保持单一职责 如何降低模块之间的耦合 如何通过测试保护代码质量 如何让软件具备持续演进的能力 学习整洁代码，并不是为了追求代码形式上的“漂亮”，而是为了降低软件长期维护的成本，让系统能够面对未来的不确定变化。在本文中，我将结合书中的核心思想，并结合实际工程开发中的案例，对《代码整洁之道》进行深入学习和总结，希望能够探索：
 什么样的代码才是真正适合长期维护的软件代码？
-"><meta name="keywords" content='软件工程, 代码质量, 编程规范, 整洁代码, 软件设计'>
+"><meta name="keywords" content='软件工程, 代码质量, 编程规范, 整洁代码, 软件设计, 读书笔记, 计算机'>
 	<meta itemprop="name" content="代码整洁之道 (Robert C. Martin)">
 	<meta itemprop="description" content="在软件开发过程中，代码并不是写完提交之后就结束了。一个项目真正的生命周期，往往伴随着持续的修改、扩展和维护。需求会不断变化，新的功能会不断加入，原本简单的模块可能逐渐变得复杂。如果代码经过良好的设计和整理，随着时间推移，系统会慢慢演变成难以理解、难以修改，甚至无人敢触碰“遗留代码”。
 正如软件工程领域常说的一句话：
@@ -31,8 +31,8 @@
 什么样的代码才是真正适合长期维护的软件代码？">
 	<meta itemprop="datePublished" content="2026-07-15T06:06:22+08:00">
 	<meta itemprop="dateModified" content="2026-07-15T06:06:22+08:00">
-	<meta itemprop="wordCount" content="995">
-	<meta itemprop="keywords" content="软件工程,代码质量,编程规范,整洁代码,软件设计"><meta property="og:url" content="http://localhost:1313/%E4%BB%A3%E7%A0%81%E6%95%B4%E6%B4%81%E4%B9%8B%E9%81%93/">
+	<meta itemprop="wordCount" content="2745">
+	<meta itemprop="keywords" content="软件工程,代码质量,编程规范,整洁代码,软件设计,读书笔记,计算机"><meta property="og:url" content="http://localhost:1313/%E4%BB%A3%E7%A0%81%E6%95%B4%E6%B4%81%E4%B9%8B%E9%81%93/">
 	<meta property="og:site_name" content="东尼的博客">
 	<meta property="og:title" content="代码整洁之道 (Robert C. Martin)">
 	<meta property="og:description" content="在软件开发过程中，代码并不是写完提交之后就结束了。一个项目真正的生命周期，往往伴随着持续的修改、扩展和维护。需求会不断变化，新的功能会不断加入，原本简单的模块可能逐渐变得复杂。如果代码经过良好的设计和整理，随着时间推移，系统会慢慢演变成难以理解、难以修改，甚至无人敢触碰“遗留代码”。
@@ -56,6 +56,7 @@
 		<meta property="article:tag" content="编程规范">
 		<meta property="article:tag" content="整洁代码">
 		<meta property="article:tag" content="软件设计">
+		<meta property="article:tag" content="读书笔记">
 
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="代码整洁之道 (Robert C. Martin)">
@@ -72,7 +73,7 @@
 什么样的代码才是真正适合长期维护的软件代码？"><meta name="twitter:creator" content="@IRONAnthony96"><meta name="application-name" content="FixIt">
 <meta name="apple-mobile-web-app-title" content="FixIt"><meta name="theme-color" data-light="#f6f8fa" data-dark="#151b23" content="#f6f8fa"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" type="text/html" href="http://localhost:1313/%E4%BB%A3%E7%A0%81%E6%95%B4%E6%B4%81%E4%B9%8B%E9%81%93/" title="代码整洁之道 (Robert C. Martin) - 东尼的博客" /><link rel="prev" type="text/html" href="http://localhost:1313/%E9%87%8D%E6%9E%84/" title="重构 改善既有代码的艺术 第2版 (Martin Fowler)" /><link rel="alternate" type="text/markdown" href="http://localhost:1313/%E4%BB%A3%E7%A0%81%E6%95%B4%E6%B4%81%E4%B9%8B%E9%81%93/index.md" title="代码整洁之道 (Robert C. Martin) - 东尼的博客"><link rel="stylesheet" href="/css/config.css"><link rel="stylesheet" href="/css/main.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" type="text/html" href="http://localhost:1313/%E4%BB%A3%E7%A0%81%E6%95%B4%E6%B4%81%E4%B9%8B%E9%81%93/" title="代码整洁之道 (Robert C. Martin) - 东尼的博客" /><link rel="prev" type="text/html" href="http://localhost:1313/%E9%87%8D%E6%9E%84/" title="重构 改善既有代码的艺术 第2版 (Martin Fowler)" /><link rel="next" type="text/html" href="http://localhost:1313/%E6%B7%B1%E5%85%A5system.net.networkinformation%E8%8E%B7%E5%8F%96%E7%B3%BB%E7%BB%9F%E7%BD%91%E7%BB%9C%E4%BF%A1%E6%81%AF/" title="C#编程实践(一)：深入System.Net.NetworkInformation获取系统网络信息" /><link rel="alternate" type="text/markdown" href="http://localhost:1313/%E4%BB%A3%E7%A0%81%E6%95%B4%E6%B4%81%E4%B9%8B%E9%81%93/index.md" title="代码整洁之道 (Robert C. Martin) - 东尼的博客"><link rel="stylesheet" href="/css/config.css"><link rel="stylesheet" href="/css/main.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><link rel="preload" href="/js/main.js" as="script"><script type="application/ld+json">
   {
@@ -83,7 +84,7 @@
     "mainEntityOfPage": {
       "@type": "WebPage",
       "@id": "http:\/\/localhost:1313\/%E4%BB%A3%E7%A0%81%E6%95%B4%E6%B4%81%E4%B9%8B%E9%81%93\/"
-    },"genre": "posts","keywords": "软件工程, 代码质量, 编程规范, 整洁代码, 软件设计","wordcount":  995 ,
+    },"genre": "posts","keywords": "软件工程, 代码质量, 编程规范, 整洁代码, 软件设计, 读书笔记, 计算机","wordcount":  2745 ,
     "url": "http:\/\/localhost:1313\/%E4%BB%A3%E7%A0%81%E6%95%B4%E6%B4%81%E4%B9%8B%E9%81%93\/","datePublished": "2026-07-15T06:06:22+08:00","dateModified": "2026-07-15T06:06:22+08:00","publisher": {
       "@type": "Organization",
       "name": ""},"author": {
@@ -166,15 +167,32 @@
       <div class="details-content related-content">
         <ul class="related-list"><li class="related-item">
               <a href="/%E9%87%8D%E6%9E%84/" title="重构 改善既有代码的艺术 第2版 (Martin Fowler)">重构 改善既有代码的艺术 第2版 (Martin Fowler)</a></li><li class="related-item">
+              <a href="/%E7%BC%96%E5%86%99%E5%8F%AF%E8%AF%BB%E4%BB%A3%E7%A0%81%E7%9A%84%E8%89%BA%E6%9C%AF/" title="编写可读代码的艺术 (Dustin Boswell / Trevor Foucher)">编写可读代码的艺术 (Dustin Boswell / Trevor Foucher)</a></li><li class="related-item">
+              <a href="/c%23%E9%AB%98%E6%95%88%E7%BC%96%E7%A8%8B/" title="C#高效编程 改进C#代码的50个行之有效的办法 第2版 (Bill Wagner)">C#高效编程 改进C#代码的50个行之有效的办法 第2版 (Bill Wagner)</a></li><li class="related-item">
+              <a href="/%E8%81%AA%E6%98%8E%E7%9A%84%E6%8A%95%E8%B5%84%E8%80%85/" title="聪明的投资者 第4版 (Benjamin Graham)">聪明的投资者 第4版 (Benjamin Graham)</a></li><li class="related-item">
               <a href="/%E4%BB%8E%E9%9B%B6%E6%90%AD%E5%BB%BAtypescript%E5%B7%A5%E7%A8%8B/" title="从零搭建TypeScript工程">从零搭建TypeScript工程</a></li><li class="related-item">
-              <a href="/%E7%BC%96%E5%86%99%E5%8F%AF%E8%AF%BB%E4%BB%A3%E7%A0%81%E7%9A%84%E8%89%BA%E6%9C%AF/" title="编写可读代码的艺术 (Dustin Boswell / Trevor Foucher)">编写可读代码的艺术 (Dustin Boswell / Trevor Foucher)</a></li></ul>
+              <a href="/%E6%9E%B6%E6%9E%84%E6%95%B4%E6%B4%81%E4%B9%8B%E9%81%93/" title="架构整洁之道 (Robert C. Martin)">架构整洁之道 (Robert C. Martin)</a></li><li class="related-item">
+              <a href="/effective-python/" title="Effective Python 第2版 (Brett Slatkin)">Effective Python 第2版 (Brett Slatkin)</a></li><li class="related-item">
+              <a href="/%E6%B5%81%E7%95%85%E7%9A%84python/" title="流畅的Python 第2版 (Luciano Ramalho)">流畅的Python 第2版 (Luciano Ramalho)</a></li><li class="related-item">
+              <a href="/vue.js%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/" title="Vue.js设计与实现 (霍春阳)">Vue.js设计与实现 (霍春阳)</a></li><li class="related-item">
+              <a href="/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" title="计算机网络：自顶向下方法 第8版 (James F·Kurose / Keith W. Ross)">计算机网络：自顶向下方法 第8版 (James F·Kurose / Keith W. Ross)</a></li><li class="related-item">
+              <a href="/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F/" title="深入理解计算机系统 第3版 (Randal E. Bryant / David O&#39;Hallaron)">深入理解计算机系统 第3版 (Randal E. Bryant / David O&#39;Hallaron)</a></li><li class="related-item">
+              <a href="/%E4%B8%80%E4%B8%AA%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%AE%9E%E7%8E%B0/" title="Orange&#39;S 一个操作系统的实现 (于渊)">Orange&#39;S 一个操作系统的实现 (于渊)</a></li><li class="related-item">
+              <a href="/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B/" title="UNIX环境高级编程 第3版 (W.Richard Stevens / Stephen A.Rago)">UNIX环境高级编程 第3版 (W.Richard Stevens / Stephen A.Rago)</a></li><li class="related-item">
+              <a href="/tcp-ip%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" title="TCP/IP网络编程 (尹圣雨)">TCP/IP网络编程 (尹圣雨)</a></li><li class="related-item">
+              <a href="/%E5%AD%A6%E4%B9%A0javascript%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" title="学习JavaScript数据结构与算法 第3版 (Loiane Groner)">学习JavaScript数据结构与算法 第3版 (Loiane Groner)</a></li><li class="related-item">
+              <a href="/%E6%B7%B1%E5%85%A5%E8%A7%A3%E6%9E%90css/" title="深入解析CSS (Keith J. Grant)">深入解析CSS (Keith J. Grant)</a></li><li class="related-item">
+              <a href="/%E7%BB%8F%E7%90%86%E5%AD%A6%E5%8E%9F%E7%90%86-%E5%BE%AE%E8%A7%82%E7%BB%8F%E6%B5%8E%E5%AD%A6%E5%88%86%E5%86%8C/" title="经理学原理 微观经济学分册 第8版 (格里高里·曼昆)">经理学原理 微观经济学分册 第8版 (格里高里·曼昆)</a></li><li class="related-item">
+              <a href="/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E5%AD%A6%E6%9C%BA%E6%A2%B0/" title="从零开始学机械 (门田和雄)">从零开始学机械 (门田和雄)</a></li><li class="related-item">
+              <a href="/%E5%B0%8F%E5%BC%BA%E5%8D%87%E8%81%8C%E8%AE%B0/" title="小强升职记 升级版 (邹小强)">小强升职记 升级版 (邹小强)</a></li><li class="related-item">
+              <a href="/%E6%9C%BA%E5%99%A8%E8%A7%86%E8%A7%89%E7%AE%97%E6%B3%95%E4%B8%8E%E5%BA%94%E7%94%A8/" title="机器视觉算法与应用 第2版 (Carsten Steger)">机器视觉算法与应用 第2版 (Carsten Steger)</a></li></ul>
       </div>
     </div></aside>
 
   <article class="page single">
     <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span title="转载" class="icon-repost"><i class="fa-solid fa-share" aria-hidden="true"></i></span><span>代码整洁之道 (Robert C. Martin)</span>
       </h1></div><div class="post-meta">
-      <div class="post-meta-line"><span class="post-author"><a href="https://andyfree96.github.io/" title="作者" target="_blank" rel="author external nofollow noopener noreferrer" class="author"><img class="avatar" src='/avatar/1.jpg' alt="AndyFree96" height="16" width="16">&nbsp;AndyFree96</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E4%B9%A6%E7%B1%8D%E7%A0%94%E8%AF%BB/" class="post-category" title="分类 - 书籍研读"><i class="fa-regular fa-folder" aria-hidden="true"></i> 书籍研读</a></span></div><div class="post-meta-line"><span title="发布于 2026-07-15 06:06:22"><i class="fa-solid fa-calendar-days me-1" aria-hidden="true"></i><time datetime="2026-07-15">2026-07-15</time></span>&nbsp;<span title="995 字"><i class="fa-solid fa-pencil-alt me-1" aria-hidden="true"></i>约 1000 字</span>&nbsp;<span><i class="fa-regular fa-clock me-1" aria-hidden="true"></i>预计阅读 2 分钟</span>&nbsp;</div>
+      <div class="post-meta-line"><span class="post-author"><a href="https://andyfree96.github.io/" title="作者" target="_blank" rel="author external nofollow noopener noreferrer" class="author"><img class="avatar" src='/avatar/1.jpg' alt="AndyFree96" height="16" width="16">&nbsp;AndyFree96</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E4%B9%A6%E7%B1%8D%E7%A0%94%E8%AF%BB/" class="post-category" title="分类 - 书籍研读"><i class="fa-regular fa-folder" aria-hidden="true"></i> 书籍研读</a></span></div><div class="post-meta-line"><span title="发布于 2026-07-15 06:06:22"><i class="fa-solid fa-calendar-days me-1" aria-hidden="true"></i><time datetime="2026-07-15">2026-07-15</time></span>&nbsp;<span title="2745 字"><i class="fa-solid fa-pencil-alt me-1" aria-hidden="true"></i>约 2800 字</span>&nbsp;<span><i class="fa-regular fa-clock me-1" aria-hidden="true"></i>预计阅读 6 分钟</span>&nbsp;</div>
     </div><div class="featured-image"><img loading="eager" src='/images/202607/16/red-zeppelin-yLCUleNSTf0-unsplash.jpg' sizes="(max-width: 680px) 100vw, (max-width: 960px) 80vw, (max-width: 1440px) 56vw, 800px" alt="/images/202607/16/red-zeppelin-yLCUleNSTf0-unsplash.jpg"></div><div class="details toc" id="toc-static" data-kept="false">
         <div class="details-summary toc-title">
           <span>目录</span>
@@ -188,7 +206,26 @@
         <li><a href="#16-童子军军规">1.6 童子军军规</a></li>
       </ul>
     </li>
-    <li><a href="#第2章-有意义的命名">第2章 有意义的命名</a></li>
+    <li><a href="#第2章-有意义的命名">第2章 有意义的命名</a>
+      <ul>
+        <li><a href="#22-名副其实">2.2 名副其实</a></li>
+        <li><a href="#23-避免误导">2.3 避免误导</a></li>
+        <li><a href="#24-做有意义的区分">2.4 做有意义的区分</a></li>
+        <li><a href="#25-使用读的出来的名称">2.5 使用读的出来的名称</a></li>
+        <li><a href="#26-使用可搜索的名称">2.6 使用可搜索的名称</a></li>
+        <li><a href="#27-避免使用编码">2.7 避免使用编码</a></li>
+        <li><a href="#28-避免思维映射">2.8 避免思维映射</a></li>
+        <li><a href="#29-类名">2.9 类名</a></li>
+        <li><a href="#210-方法名">2.10 方法名</a></li>
+        <li><a href="#211-别扮可爱">2.11 别扮可爱</a></li>
+        <li><a href="#212-每个概念对应一个词">2.12 每个概念对应一个词</a></li>
+        <li><a href="#213-别用双关语">2.13 别用双关语</a></li>
+        <li><a href="#214-使用解决方案领域名称">2.14 使用解决方案领域名称</a></li>
+        <li><a href="#215-使用源自所涉问题领域的名称">2.15 使用源自所涉问题领域的名称</a></li>
+        <li><a href="#216-添加有意义的语境">2.16 添加有意义的语境</a></li>
+        <li><a href="#217-不要添加没用的语境">2.17 不要添加没用的语境</a></li>
+      </ul>
+    </li>
     <li><a href="#第3章-函数">第3章 函数</a></li>
     <li><a href="#第4章-注释">第4章 注释</a></li>
     <li><a href="#第5章-格式">第5章 格式</a></li>
@@ -205,7 +242,6 @@
     <li><a href="#第16章-重构serialdate">第16章 重构SerialDate</a></li>
     <li><a href="#第17章-味道与启发">第17章 味道与启发</a></li>
     <li><a href="#附录a-并发编程ii">附录A 并发编程II</a></li>
-    <li></li>
   </ul>
 </nav></div>
       </div><div class="content" id="content"><p>在软件开发过程中，代码并不是写完提交之后就结束了。一个项目真正的生命周期，往往伴随着持续的修改、扩展和维护。需求会不断变化，新的功能会不断加入，<strong>原本简单的模块可能逐渐变得复杂</strong>。如果代码经过良好的设计和整理，随着时间推移，系统会慢慢演变成难以理解、难以修改，甚至无人敢触碰“遗留代码”。</p>
@@ -259,7 +295,218 @@
   <a href="#%e7%ac%ac2%e7%ab%a0-%e6%9c%89%e6%84%8f%e4%b9%89%e7%9a%84%e5%91%bd%e5%90%8d" class="heading-mark">
     <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
   </a>
-</h2><h2 class="heading-element" id="第3章-函数"><span>第3章 函数</span>
+</h2><h3 class="heading-element" id="22-名副其实"><span>2.2 名副其实</span>
+  <a href="#22-%e5%90%8d%e5%89%af%e5%85%b6%e5%ae%9e" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p>变量、函数或类的名称应该已经答复了所有的大问题。它该告诉你，它为什么存在，它做什么事，应该怎么用。如果名称需要注释来补充，那就不算是名副其实。<ins>看到名字，不看实现，也应该大致知道它的职责</ins>。</p>
+<h3 class="heading-element" id="23-避免误导"><span>2.3 避免误导</span>
+  <a href="#23-%e9%81%bf%e5%85%8d%e8%af%af%e5%af%bc" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p>不要用那些会让人产生错误理解的名称。一个好的名字不仅要表达正确的信息，还不能暗示错误的信息。名字传递的信息必须和实际行为一致。</p>
+<p>例如：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-c#"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c#" data-lang="c#"><span class="line"><span class="cl"><span class="kt">var</span> <span class="n">users</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Dictionary</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="n">User</span><span class="p">&gt;();</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>变量名<code>user</code>看起来像一个用户集合，但实际上是一个字典，更好的：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-c#"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c#" data-lang="c#"><span class="line"><span class="cl"><span class="kt">var</span> <span class="n">usersById</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Dictionary</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="n">User</span><span class="p">&gt;();</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><h3 class="heading-element" id="24-做有意义的区分"><span>2.4 做有意义的区分</span>
+  <a href="#24-%e5%81%9a%e6%9c%89%e6%84%8f%e4%b9%89%e7%9a%84%e5%8c%ba%e5%88%86" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p>如果两个名字表示不同的东西，那么它们必须体现出真正的区别；不要为了“看起来不同”而添加没有意义的区分。也就是说：名字之间的差异必须传达信息，否则就是噪声。</p>
+<p>很多代码为了避免重名，会随便加一些后缀：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-c#"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c#" data-lang="c#"><span class="line"><span class="cl"><span class="n">Customer</span> <span class="n">customer1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="n">Customer</span> <span class="n">customer2</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="n">Customer</span> <span class="n">customer3</span><span class="p">;</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>这些名字虽然不同，但是没有任何信息，数字只是为了满足编译器。应该：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-c#"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c#" data-lang="c#"><span class="line"><span class="cl"><span class="n">Customer</span> <span class="n">billingCustomer</span><span class="p">;</span> <span class="c1">// 付款客户</span>
+</span></span><span class="line"><span class="cl"><span class="n">Customer</span> <span class="n">shippingCustomer</span><span class="p">;</span> <span class="c1">// 收货客户</span>
+</span></span><span class="line"><span class="cl"><span class="n">Customer</span> <span class="n">guestCustomer</span><span class="p">;</span> <span class="c1">// 访客客户</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><h3 class="heading-element" id="25-使用读的出来的名称"><span>2.5 使用读的出来的名称</span>
+  <a href="#25-%e4%bd%bf%e7%94%a8%e8%af%bb%e7%9a%84%e5%87%ba%e6%9d%a5%e7%9a%84%e5%90%8d%e7%a7%b0" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p>名字应该能够被正常读出来，这样人们才能在交流、讨论和思考代码时自然使用它。</p>
+<h3 class="heading-element" id="26-使用可搜索的名称"><span>2.6 使用可搜索的名称</span>
+  <a href="#26-%e4%bd%bf%e7%94%a8%e5%8f%af%e6%90%9c%e7%b4%a2%e7%9a%84%e5%90%8d%e7%a7%b0" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p>单字母名称和数字常量有个问题，那就是很难在一大篇文字中找出来。</p>
+<p>若变量或常量可能在代码中多处使用，则应赋其以便于搜索的名称。</p>
+<h3 class="heading-element" id="27-避免使用编码"><span>2.7 避免使用编码</span>
+  <a href="#27-%e9%81%bf%e5%85%8d%e4%bd%bf%e7%94%a8%e7%bc%96%e7%a0%81" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p>把类型信息或者作用域信息编码到名字中，只会额外增加理解这些名字的成本。</p>
+<p>经过编码的名字通常难以发音，也容易输入错误。</p>
+<p>匈牙利命名法、成员前缀(例如<code>m_</code>前缀标明成员变量)、接口和实现(例如以<code>I</code>开头标明是接口)不必盲目遵守。</p>
+<p>注：这里的编码不是指字符编码(UTF-8、ASCII)，而是指<ins>把额外的信息塞进名字里面的一种命名约定</ins>。例如：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-c#"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c#" data-lang="c#"><span class="line"><span class="cl"><span class="kt">string</span> <span class="n">strName</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="n">iCount</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="kt">bool</span> <span class="n">bEnabled</span><span class="p">;</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>这里<code>str</code>表示<code>string</code>，<code>i</code>表示<code>int</code>，<code>b</code>表示<code>bool</code>，作者认为:</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-c#"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c#" data-lang="c#"><span class="line"><span class="cl"><span class="kt">string</span> <span class="n">name</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="n">count</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="kt">bool</span> <span class="n">enabled</span><span class="p">;</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>更好！</p>
+<h3 class="heading-element" id="28-避免思维映射"><span>2.8 避免思维映射</span>
+  <a href="#28-%e9%81%bf%e5%85%8d%e6%80%9d%e7%bb%b4%e6%98%a0%e5%b0%84" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p>名称应当尽可能直接表达真实含义，而不是让读者在脑海中进行额外转换。</p>
+<p>例如：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-c#"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c#" data-lang="c#"><span class="line"><span class="cl"><span class="kt">int</span> <span class="n">d</span><span class="p">;</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>如果看到：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-c#"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c#" data-lang="c#"><span class="line"><span class="cl"><span class="n">d</span> <span class="p">=</span> <span class="m">5</span><span class="p">;</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>读者大脑可能需要寻找上下文<code>d</code>是表示<code>days</code>？还是<code>distance</code>？</p>
+<h3 class="heading-element" id="29-类名"><span>2.9 类名</span>
+  <a href="#29-%e7%b1%bb%e5%90%8d" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p>类名和对象应该名词或名词短语，不应当是动词。例如<code>Customer</code>、<code>WikiPage</code>、<code>Account</code>和<code>AddressParser</code>。避免使用<code>Manager</code>、<code>Processor</code>、<code>Data</code>或<code>Info</code>这样的类名。</p>
+<h3 class="heading-element" id="210-方法名"><span>2.10 方法名</span>
+  <a href="#210-%e6%96%b9%e6%b3%95%e5%90%8d" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p>方法名应当是动词或动词短语，如<code>postPayment</code>、<code>deletePage</code>或<code>save</code>。</p>
+<h3 class="heading-element" id="211-别扮可爱"><span>2.11 别扮可爱</span>
+  <a href="#211-%e5%88%ab%e6%89%ae%e5%8f%af%e7%88%b1" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p>不要为了追求有趣、炫技或者个性化，而使用难以理解的命名。</p>
+<p>代码不是展示幽默感的地方，命名应该清晰、准确、专业，而不是俏皮。</p>
+<h3 class="heading-element" id="212-每个概念对应一个词"><span>2.12 每个概念对应一个词</span>
+  <a href="#212-%e6%af%8f%e4%b8%aa%e6%a6%82%e5%bf%b5%e5%af%b9%e5%ba%94%e4%b8%80%e4%b8%aa%e8%af%8d" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p>给每个抽象概念选一个词，并且一以贯之。对于那些会用到你代码的程序员，一以贯之的命名法简直是天降福音。</p>
+<h3 class="heading-element" id="213-别用双关语"><span>2.13 别用双关语</span>
+  <a href="#213-%e5%88%ab%e7%94%a8%e5%8f%8c%e5%85%b3%e8%af%ad" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p>避免将同一个单词用于不同目的。同一术语用于不同概念，基本上就是双关语了。</p>
+<p>代码作者应当尽力写出易于理解的代码。我们想把代码写得让别人能一目尽览，而不必殚精竭虑地研究。</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-java"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">List</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">boolean</span><span class="w"> </span><span class="nf">add</span><span class="p">(</span><span class="n">Object</span><span class="w"> </span><span class="n">element</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>这里<code>add</code>表示添加一个元素到集合。但是：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-java"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">Product</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">add</span><span class="p">(</span><span class="n">Product</span><span class="w"> </span><span class="n">product</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>如果这里<code>add</code>表示两个产品合并，那么就属于是“双关”了。使用<code>combine</code>就清晰多了。</p>
+<h3 class="heading-element" id="214-使用解决方案领域名称"><span>2.14 使用解决方案领域名称</span>
+  <a href="#214-%e4%bd%bf%e7%94%a8%e8%a7%a3%e5%86%b3%e6%96%b9%e6%a1%88%e9%a2%86%e5%9f%9f%e5%90%8d%e7%a7%b0" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p>优先使用计算机科学、软件工程、算法、设计模式等领域中的专业术语来命名，而不是使用业务之外的模糊名称。简单来说，<ins>程序员应该用程序员能理解的词命名</ins>。</p>
+<h3 class="heading-element" id="215-使用源自所涉问题领域的名称"><span>2.15 使用源自所涉问题领域的名称</span>
+  <a href="#215-%e4%bd%bf%e7%94%a8%e6%ba%90%e8%87%aa%e6%89%80%e6%b6%89%e9%97%ae%e9%a2%98%e9%a2%86%e5%9f%9f%e7%9a%84%e5%90%8d%e7%a7%b0" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p>当没有合适的计算机科学术语可以表达时，应该使用业务领域中的专业术语来命名。</p>
+<p>解决方案领域(Solution Domain)名称：软件工程中的术语。</p>
+<p>问题领域(Problem Domain)名称：业务、行业中的术语。</p>
+<h3 class="heading-element" id="216-添加有意义的语境"><span>2.16 添加有意义的语境</span>
+  <a href="#216-%e6%b7%bb%e5%8a%a0%e6%9c%89%e6%84%8f%e4%b9%89%e7%9a%84%e8%af%ad%e5%a2%83" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p>有时候，一个变量、函数或类的名字本身并不能表达完整含义，需要通过增加有意义的上下文来帮助读者理解。换句话说：不要让读者依靠猜测上下文来理解名字，而应该通过命名主动提供必要的信息。</p>
+<p>例如：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-c#"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c#" data-lang="c#"><span class="line"><span class="cl"><span class="n">id</span> <span class="p">=</span> <span class="m">123</span><span class="p">;</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>单独看<code>id</code>没有意义，到底是用户ID，产品ID，还是订单ID？需要上下文！如果是<code>userId = 123</code>或<code>productOrderId = 123</code>就更加明确。</p>
+<h3 class="heading-element" id="217-不要添加没用的语境"><span>2.17 不要添加没用的语境</span>
+  <a href="#217-%e4%b8%8d%e8%a6%81%e6%b7%bb%e5%8a%a0%e6%b2%a1%e7%94%a8%e7%9a%84%e8%af%ad%e5%a2%83" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p>只要短名称足够清楚，就要比长名称好，别给名称添加不必要的语境。</p>
+<p>例如：<code>userId</code>已经足够明确，如果写<code>customerUserIdentificationNumber</code>就有点过度了。</p>
+<h2 class="heading-element" id="第3章-函数"><span>第3章 函数</span>
   <a href="#%e7%ac%ac3%e7%ab%a0-%e5%87%bd%e6%95%b0" class="heading-mark">
     <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
   </a>
@@ -323,23 +570,36 @@
   <a href="#%e9%99%84%e5%bd%95a-%e5%b9%b6%e5%8f%91%e7%bc%96%e7%a8%8bii" class="heading-mark">
     <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
   </a>
-</h2><h2 class="heading-element"><span></span>
-  <a href="#" class="heading-mark">
-    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
-  </a>
 </h2></div><hr class="awesome-hr" />
     <h2 id="see-also">相关内容</h2>
     <ul><li>
           <a href="/%E9%87%8D%E6%9E%84/" title="重构 改善既有代码的艺术 第2版 (Martin Fowler)">重构 改善既有代码的艺术 第2版 (Martin Fowler)</a></li><li>
+          <a href="/%E7%BC%96%E5%86%99%E5%8F%AF%E8%AF%BB%E4%BB%A3%E7%A0%81%E7%9A%84%E8%89%BA%E6%9C%AF/" title="编写可读代码的艺术 (Dustin Boswell / Trevor Foucher)">编写可读代码的艺术 (Dustin Boswell / Trevor Foucher)</a></li><li>
+          <a href="/c%23%E9%AB%98%E6%95%88%E7%BC%96%E7%A8%8B/" title="C#高效编程 改进C#代码的50个行之有效的办法 第2版 (Bill Wagner)">C#高效编程 改进C#代码的50个行之有效的办法 第2版 (Bill Wagner)</a></li><li>
+          <a href="/%E8%81%AA%E6%98%8E%E7%9A%84%E6%8A%95%E8%B5%84%E8%80%85/" title="聪明的投资者 第4版 (Benjamin Graham)">聪明的投资者 第4版 (Benjamin Graham)</a></li><li>
           <a href="/%E4%BB%8E%E9%9B%B6%E6%90%AD%E5%BB%BAtypescript%E5%B7%A5%E7%A8%8B/" title="从零搭建TypeScript工程">从零搭建TypeScript工程</a></li><li>
-          <a href="/%E7%BC%96%E5%86%99%E5%8F%AF%E8%AF%BB%E4%BB%A3%E7%A0%81%E7%9A%84%E8%89%BA%E6%9C%AF/" title="编写可读代码的艺术 (Dustin Boswell / Trevor Foucher)">编写可读代码的艺术 (Dustin Boswell / Trevor Foucher)</a></li></ul><div class="post-footer" id="post-footer">
+          <a href="/%E6%9E%B6%E6%9E%84%E6%95%B4%E6%B4%81%E4%B9%8B%E9%81%93/" title="架构整洁之道 (Robert C. Martin)">架构整洁之道 (Robert C. Martin)</a></li><li>
+          <a href="/effective-python/" title="Effective Python 第2版 (Brett Slatkin)">Effective Python 第2版 (Brett Slatkin)</a></li><li>
+          <a href="/%E6%B5%81%E7%95%85%E7%9A%84python/" title="流畅的Python 第2版 (Luciano Ramalho)">流畅的Python 第2版 (Luciano Ramalho)</a></li><li>
+          <a href="/vue.js%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/" title="Vue.js设计与实现 (霍春阳)">Vue.js设计与实现 (霍春阳)</a></li><li>
+          <a href="/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" title="计算机网络：自顶向下方法 第8版 (James F·Kurose / Keith W. Ross)">计算机网络：自顶向下方法 第8版 (James F·Kurose / Keith W. Ross)</a></li><li>
+          <a href="/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F/" title="深入理解计算机系统 第3版 (Randal E. Bryant / David O&#39;Hallaron)">深入理解计算机系统 第3版 (Randal E. Bryant / David O&#39;Hallaron)</a></li><li>
+          <a href="/%E4%B8%80%E4%B8%AA%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%AE%9E%E7%8E%B0/" title="Orange&#39;S 一个操作系统的实现 (于渊)">Orange&#39;S 一个操作系统的实现 (于渊)</a></li><li>
+          <a href="/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B/" title="UNIX环境高级编程 第3版 (W.Richard Stevens / Stephen A.Rago)">UNIX环境高级编程 第3版 (W.Richard Stevens / Stephen A.Rago)</a></li><li>
+          <a href="/tcp-ip%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" title="TCP/IP网络编程 (尹圣雨)">TCP/IP网络编程 (尹圣雨)</a></li><li>
+          <a href="/%E5%AD%A6%E4%B9%A0javascript%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" title="学习JavaScript数据结构与算法 第3版 (Loiane Groner)">学习JavaScript数据结构与算法 第3版 (Loiane Groner)</a></li><li>
+          <a href="/%E6%B7%B1%E5%85%A5%E8%A7%A3%E6%9E%90css/" title="深入解析CSS (Keith J. Grant)">深入解析CSS (Keith J. Grant)</a></li><li>
+          <a href="/%E7%BB%8F%E7%90%86%E5%AD%A6%E5%8E%9F%E7%90%86-%E5%BE%AE%E8%A7%82%E7%BB%8F%E6%B5%8E%E5%AD%A6%E5%88%86%E5%86%8C/" title="经理学原理 微观经济学分册 第8版 (格里高里·曼昆)">经理学原理 微观经济学分册 第8版 (格里高里·曼昆)</a></li><li>
+          <a href="/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E5%AD%A6%E6%9C%BA%E6%A2%B0/" title="从零开始学机械 (门田和雄)">从零开始学机械 (门田和雄)</a></li><li>
+          <a href="/%E5%B0%8F%E5%BC%BA%E5%8D%87%E8%81%8C%E8%AE%B0/" title="小强升职记 升级版 (邹小强)">小强升职记 升级版 (邹小强)</a></li><li>
+          <a href="/%E6%9C%BA%E5%99%A8%E8%A7%86%E8%A7%89%E7%AE%97%E6%B3%95%E4%B8%8E%E5%BA%94%E7%94%A8/" title="机器视觉算法与应用 第2版 (Carsten Steger)">机器视觉算法与应用 第2版 (Carsten Steger)</a></li></ul><div class="post-footer" id="post-footer">
   <div class="post-info">
     <div class="post-info-line">
       <div class="post-info-mod"><span title="更新于 2026-07-15 06:06:22">更新于 2026-07-15&nbsp;</span>
       </div></div><div class="post-info-line">
         <div class="post-info-md"><span><a href="vscode://file/D:\hugo-blog\andyfree96\content\posts\代码整洁之道.md" title="在编辑器中打开" class="link-to-vscode">在编辑器中打开</a></span></div>
         <div class="post-info-share">
-          <span><a href="javascript:void(0);" title="分享到 X" data-sharer="twitter" data-url="http://localhost:1313/%E4%BB%A3%E7%A0%81%E6%95%B4%E6%B4%81%E4%B9%8B%E9%81%93/" data-title="代码整洁之道 (Robert C. Martin)" data-via="IRONAnthony96" data-hashtags="软件工程,代码质量,编程规范,整洁代码,软件设计"><i class="fa-brands fa-x-twitter" aria-hidden="true"></i></a>
+          <span><a href="javascript:void(0);" title="分享到 X" data-sharer="twitter" data-url="http://localhost:1313/%E4%BB%A3%E7%A0%81%E6%95%B4%E6%B4%81%E4%B9%8B%E9%81%93/" data-title="代码整洁之道 (Robert C. Martin)" data-via="IRONAnthony96" data-hashtags="软件工程,代码质量,编程规范,整洁代码,软件设计,读书笔记,计算机"><i class="fa-brands fa-x-twitter" aria-hidden="true"></i></a>
   <a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="http://localhost:1313/%E4%BB%A3%E7%A0%81%E6%95%B4%E6%B4%81%E4%B9%8B%E9%81%93/" data-hashtag="软件工程"><i class="fa-brands fa-facebook-square" aria-hidden="true"></i></a>
   <a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="http://localhost:1313/%E4%BB%A3%E7%A0%81%E6%95%B4%E6%B4%81%E4%B9%8B%E9%81%93/" data-title="代码整洁之道 (Robert C. Martin)" data-image="/images/202607/16/red-zeppelin-yLCUleNSTf0-unsplash.jpg"><i class="fa-brands fa-weibo" aria-hidden="true"></i></a>
   </span>
@@ -347,10 +607,10 @@
       </div></div>
 
   <div class="post-info-more">
-    <section class="post-tags"><i class="fa-solid fa-tags me-1" aria-hidden="true"></i><a href="/tags/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/" class="post-tag" title="标签 - 软件工程">软件工程</a><a href="/tags/%E4%BB%A3%E7%A0%81%E8%B4%A8%E9%87%8F/" class="post-tag" title="标签 - 代码质量">代码质量</a><a href="/tags/%E7%BC%96%E7%A8%8B%E8%A7%84%E8%8C%83/" class="post-tag" title="标签 - 编程规范">编程规范</a><a href="/tags/%E6%95%B4%E6%B4%81%E4%BB%A3%E7%A0%81/" class="post-tag" title="标签 - 整洁代码">整洁代码</a><a href="/tags/%E8%BD%AF%E4%BB%B6%E8%AE%BE%E8%AE%A1/" class="post-tag" title="标签 - 软件设计">软件设计</a></section>
+    <section class="post-tags"><i class="fa-solid fa-tags me-1" aria-hidden="true"></i><a href="/tags/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/" class="post-tag" title="标签 - 软件工程">软件工程</a><a href="/tags/%E4%BB%A3%E7%A0%81%E8%B4%A8%E9%87%8F/" class="post-tag" title="标签 - 代码质量">代码质量</a><a href="/tags/%E7%BC%96%E7%A8%8B%E8%A7%84%E8%8C%83/" class="post-tag" title="标签 - 编程规范">编程规范</a><a href="/tags/%E6%95%B4%E6%B4%81%E4%BB%A3%E7%A0%81/" class="post-tag" title="标签 - 整洁代码">整洁代码</a><a href="/tags/%E8%BD%AF%E4%BB%B6%E8%AE%BE%E8%AE%A1/" class="post-tag" title="标签 - 软件设计">软件设计</a><a href="/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" class="post-tag" title="标签 - 读书笔记">读书笔记</a><a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA/" class="post-tag" title="标签 - 计算机">计算机</a></section>
     <section><span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
     </section>
-  </div><div class="post-nav"><a href="/%E9%87%8D%E6%9E%84/" class="post-nav-item" rel="prev" title="重构 改善既有代码的艺术 第2版 (Martin Fowler)"><i class="fa-solid fa-angle-left" aria-hidden="true"></i>重构 改善既有代码的艺术 第2版 (Martin Fowler)</a></div>
+  </div><div class="post-nav"><a href="/%E9%87%8D%E6%9E%84/" class="post-nav-item" rel="prev" title="重构 改善既有代码的艺术 第2版 (Martin Fowler)"><i class="fa-solid fa-angle-left" aria-hidden="true"></i>重构 改善既有代码的艺术 第2版 (Martin Fowler)</a><a href="/%E6%B7%B1%E5%85%A5system.net.networkinformation%E8%8E%B7%E5%8F%96%E7%B3%BB%E7%BB%9F%E7%BD%91%E7%BB%9C%E4%BF%A1%E6%81%AF/" class="post-nav-item" rel="next" title="C#编程实践(一)：深入System.Net.NetworkInformation获取系统网络信息">C#编程实践(一)：深入System.Net.NetworkInformation获取系统网络信息<i class="fa-solid fa-angle-right" aria-hidden="true"></i></a></div>
 </div>
 <div class="post-reward">
     <div class="comment">请作者喝杯咖啡!</div>
@@ -374,7 +634,26 @@
         <li><a href="#16-童子军军规">1.6 童子军军规</a></li>
       </ul>
     </li>
-    <li><a href="#第2章-有意义的命名">第2章 有意义的命名</a></li>
+    <li><a href="#第2章-有意义的命名">第2章 有意义的命名</a>
+      <ul>
+        <li><a href="#22-名副其实">2.2 名副其实</a></li>
+        <li><a href="#23-避免误导">2.3 避免误导</a></li>
+        <li><a href="#24-做有意义的区分">2.4 做有意义的区分</a></li>
+        <li><a href="#25-使用读的出来的名称">2.5 使用读的出来的名称</a></li>
+        <li><a href="#26-使用可搜索的名称">2.6 使用可搜索的名称</a></li>
+        <li><a href="#27-避免使用编码">2.7 避免使用编码</a></li>
+        <li><a href="#28-避免思维映射">2.8 避免思维映射</a></li>
+        <li><a href="#29-类名">2.9 类名</a></li>
+        <li><a href="#210-方法名">2.10 方法名</a></li>
+        <li><a href="#211-别扮可爱">2.11 别扮可爱</a></li>
+        <li><a href="#212-每个概念对应一个词">2.12 每个概念对应一个词</a></li>
+        <li><a href="#213-别用双关语">2.13 别用双关语</a></li>
+        <li><a href="#214-使用解决方案领域名称">2.14 使用解决方案领域名称</a></li>
+        <li><a href="#215-使用源自所涉问题领域的名称">2.15 使用源自所涉问题领域的名称</a></li>
+        <li><a href="#216-添加有意义的语境">2.16 添加有意义的语境</a></li>
+        <li><a href="#217-不要添加没用的语境">2.17 不要添加没用的语境</a></li>
+      </ul>
+    </li>
     <li><a href="#第3章-函数">第3章 函数</a></li>
     <li><a href="#第4章-注释">第4章 注释</a></li>
     <li><a href="#第5章-格式">第5章 格式</a></li>
@@ -391,7 +670,6 @@
     <li><a href="#第16章-重构serialdate">第16章 重构SerialDate</a></li>
     <li><a href="#第17章-味道与启发">第17章 味道与启发</a></li>
     <li><a href="#附录a-并发编程ii">附录A 并发编程II</a></li>
-    <li></li>
   </ul>
 </nav></div>
       </div>

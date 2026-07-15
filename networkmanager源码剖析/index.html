@@ -11,7 +11,7 @@
 	<meta itemprop="description" content="在 GitHub 闲逛时，我偶然发现了NETworkManager这个开源项目。作为一款网络管理和故障排查工具，它已经积累了超过 8.5k Star，足以说明社区对它的认可。更让我感兴趣的是，这个项目采用 C# &#43; WPF 进行开发，与我当前正在深入学习和实践的技术栈高度契合。因此，我产生了一个想法：通过深入分析 NETworkManager 的源码，探索一个成熟的 WPF 桌面应用是如何进行架构设计、模块划分以及工程实践的。接下来，我将以 NETworkManager 为切入点，逐步拆解它在 WPF UI 设计、MVVM 架构、依赖注入、配置管理、网络通信、异步编程以及工程化实践 等方面的实现，希望能够从优秀的开源项目中学习桌面应用开发的最佳实践。">
 	<meta itemprop="datePublished" content="2026-07-14T08:47:15+08:00">
 	<meta itemprop="dateModified" content="2026-07-14T08:47:15+08:00">
-	<meta itemprop="wordCount" content="2182">
+	<meta itemprop="wordCount" content="4119">
 	<meta itemprop="keywords" content="C#,WPF,MVVM,网络管理,源码剖析"><meta property="og:url" content="http://localhost:1313/networkmanager%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/">
 	<meta property="og:site_name" content="东尼的博客">
 	<meta property="og:title" content="NETworkManager源码剖析：一个网络管理工具的实现细节">
@@ -43,7 +43,7 @@
     "mainEntityOfPage": {
       "@type": "WebPage",
       "@id": "http:\/\/localhost:1313\/networkmanager%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90\/"
-    },"genre": "posts","keywords": "C#, WPF, MVVM, 网络管理, 源码剖析","wordcount":  2182 ,
+    },"genre": "posts","keywords": "C#, WPF, MVVM, 网络管理, 源码剖析","wordcount":  4119 ,
     "url": "http:\/\/localhost:1313\/networkmanager%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90\/","datePublished": "2026-07-14T08:47:15+08:00","dateModified": "2026-07-14T08:47:15+08:00","publisher": {
       "@type": "Organization",
       "name": ""},"author": {
@@ -145,7 +145,7 @@
   <article class="page single">
     <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span title="转载" class="icon-repost"><i class="fa-solid fa-share" aria-hidden="true"></i></span><span>NETworkManager源码剖析：一个网络管理工具的实现细节</span>
       </h1></div><div class="post-meta">
-      <div class="post-meta-line"><span class="post-author"><a href="https://andyfree96.github.io/" title="作者" target="_blank" rel="author external nofollow noopener noreferrer" class="author"><img class="avatar" src='/avatar/1.jpg' alt="AndyFree96" height="16" width="16">&nbsp;AndyFree96</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" class="post-category" title="分类 - 源码剖析"><i class="fa-regular fa-folder" aria-hidden="true"></i> 源码剖析</a></span></div><div class="post-meta-line"><span title="发布于 2026-07-14 08:47:15"><i class="fa-solid fa-calendar-days me-1" aria-hidden="true"></i><time datetime="2026-07-14">2026-07-14</time></span>&nbsp;<span title="2182 字"><i class="fa-solid fa-pencil-alt me-1" aria-hidden="true"></i>约 2200 字</span>&nbsp;<span><i class="fa-regular fa-clock me-1" aria-hidden="true"></i>预计阅读 5 分钟</span>&nbsp;</div>
+      <div class="post-meta-line"><span class="post-author"><a href="https://andyfree96.github.io/" title="作者" target="_blank" rel="author external nofollow noopener noreferrer" class="author"><img class="avatar" src='/avatar/1.jpg' alt="AndyFree96" height="16" width="16">&nbsp;AndyFree96</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" class="post-category" title="分类 - 源码剖析"><i class="fa-regular fa-folder" aria-hidden="true"></i> 源码剖析</a></span></div><div class="post-meta-line"><span title="发布于 2026-07-14 08:47:15"><i class="fa-solid fa-calendar-days me-1" aria-hidden="true"></i><time datetime="2026-07-14">2026-07-14</time></span>&nbsp;<span title="4119 字"><i class="fa-solid fa-pencil-alt me-1" aria-hidden="true"></i>约 4200 字</span>&nbsp;<span><i class="fa-regular fa-clock me-1" aria-hidden="true"></i>预计阅读 9 分钟</span>&nbsp;</div>
     </div><div class="featured-image"><img loading="eager" src='/images/202607/15/maverick-frame-GswoB8XDnBc-unsplash.jpg' sizes="(max-width: 680px) 100vw, (max-width: 960px) 80vw, (max-width: 1440px) 56vw, 800px" alt="/images/202607/15/maverick-frame-GswoB8XDnBc-unsplash.jpg"></div><div class="details toc" id="toc-static" data-kept="false">
         <div class="details-summary toc-title">
           <span>目录</span>
@@ -163,6 +163,7 @@
     </li>
     <li><a href="#2-日志保存在什么位置">2. 日志保存在什么位置？</a></li>
     <li><a href="#3-仪表盘界面中的ip地址是如何获取的">3. 仪表盘界面中的IP地址是如何获取的？</a></li>
+    <li><a href="#4-网络接口选项中的接口带宽是如何测出来的">4. 网络接口选项中的接口带宽是如何测出来的？</a></li>
   </ul>
 </nav></div>
       </div><div class="content" id="content"><p>在 GitHub 闲逛时，我偶然发现了<a href="https://borntoberoot.net/NETworkManager/" target="_blank" rel="external nofollow noopener noreferrer">NETworkManager<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>这个开源项目。作为一款网络管理和故障排查工具，它已经积累了超过 8.5k Star，足以说明社区对它的认可。更让我感兴趣的是，这个项目采用 C# + WPF 进行开发，与我当前正在深入学习和实践的技术栈高度契合。因此，我产生了一个想法：通过深入分析 NETworkManager 的源码，探索一个成熟的 WPF 桌面应用是如何进行架构设计、模块划分以及工程实践的。接下来，我将以 NETworkManager 为切入点，逐步拆解它在 WPF UI 设计、MVVM 架构、依赖注入、配置管理、网络通信、异步编程以及工程化实践 等方面的实现，希望能够从优秀的开源项目中学习桌面应用开发的最佳实践。</p>
@@ -343,7 +344,7 @@
 </span></span><span class="line"><span class="cl">    <span class="n">SingleInstance</span><span class="p">.</span><span class="n">PostMessage</span><span class="p">(</span><span class="n">SingleInstance</span><span class="p">.</span><span class="n">HWND_BROADCAST</span><span class="p">,</span> <span class="n">SingleInstance</span><span class="p">.</span><span class="n">WM_SHOWME</span><span class="p">,</span> <span class="n">IntPtr</span><span class="p">.</span><span class="n">Zero</span><span class="p">,</span>
 </span></span><span class="line"><span class="cl">        <span class="n">IntPtr</span><span class="p">.</span><span class="n">Zero</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">    <span class="c1">// Close the application                </span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// Close the application</span>
 </span></span><span class="line"><span class="cl">    <span class="n">_singleInstanceClose</span> <span class="p">=</span> <span class="kc">true</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">    <span class="n">Shutdown</span><span class="p">();</span>
 </span></span><span class="line"><span class="cl">
@@ -517,7 +518,7 @@
 <pre tabindex="0" class="chroma"><code class="language-xml" data-lang="xml"><span class="line"><span class="cl"><span class="nt">&lt;log4net&gt;</span>
 </span></span><span class="line"><span class="cl">    <span class="nt">&lt;root&gt;</span>
 </span></span><span class="line"><span class="cl">        <span class="c">&lt;!-- Log level: ALL, DEBUG, INFO, WARN, ERROR, FATAL, OFF --&gt;</span>
-</span></span><span class="line"><span class="cl">        <span class="nt">&lt;level</span> <span class="na">value=</span><span class="s">&#34;INFO&#34;</span><span class="nt">/&gt;</span>        
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;level</span> <span class="na">value=</span><span class="s">&#34;INFO&#34;</span><span class="nt">/&gt;</span>
 </span></span><span class="line"><span class="cl">        <span class="nt">&lt;appender-ref</span> <span class="na">ref=</span><span class="s">&#34;console&#34;</span><span class="nt">/&gt;</span>
 </span></span><span class="line"><span class="cl">        <span class="nt">&lt;appender-ref</span> <span class="na">ref=</span><span class="s">&#34;file&#34;</span><span class="nt">/&gt;</span>
 </span></span><span class="line"><span class="cl">    <span class="nt">&lt;/root&gt;</span>
@@ -544,7 +545,401 @@
   <a href="#3-%e4%bb%aa%e8%a1%a8%e7%9b%98%e7%95%8c%e9%9d%a2%e4%b8%ad%e7%9a%84ip%e5%9c%b0%e5%9d%80%e6%98%af%e5%a6%82%e4%bd%95%e8%8e%b7%e5%8f%96%e7%9a%84" class="heading-mark">
     <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
   </a>
-</h2><p>如4所示，仪表盘界面中的IPv4、IPv6以及DNS地址是如何获取的呢？<code>ViewModels/NetworkConnectionWidgetViewModel.cs</code>可以找到答案。</p></div><hr class="awesome-hr" />
+</h2><p>如图4所示，仪表盘界面中的IPv4、IPv6以及DNS地址是如何获取的呢？<code>ViewModels/NetworkConnectionWidgetViewModel.cs</code>可以找到答案，调用了<code>CheckConnectionComputerAsync</code>、<code>CheckConnectionRouterAsync</code>以及<code>CheckConnectionInternetAsync</code>分别获取图4所示的计算机、网关/路由、Internet的IPv4、IPv6地址和DNS信息。</p>
+<p>NETworkManager代码非常规范，值得我们学习。以<code>CheckConnectionComputerAsync</code>为例，整个函数的逻辑按块进行组织并附上了注释例如<code>// Init variables</code>、<code>//  Detect local IPv4 address</code>等，读者一看注释便知接下来的代码块功能是什么，大大降低的读者的心智负担。另外，函数、变量的命名也十分清晰，一看便知其作用。</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-c#"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="3" style="--fi-max-shown-lines:400;--fi-line-digit:3;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">  1
+</span><span class="lnt">  2
+</span><span class="lnt">  3
+</span><span class="lnt">  4
+</span><span class="lnt">  5
+</span><span class="lnt">  6
+</span><span class="lnt">  7
+</span><span class="lnt">  8
+</span><span class="lnt">  9
+</span><span class="lnt"> 10
+</span><span class="lnt"> 11
+</span><span class="lnt"> 12
+</span><span class="lnt"> 13
+</span><span class="lnt"> 14
+</span><span class="lnt"> 15
+</span><span class="lnt"> 16
+</span><span class="lnt"> 17
+</span><span class="lnt"> 18
+</span><span class="lnt"> 19
+</span><span class="lnt"> 20
+</span><span class="lnt"> 21
+</span><span class="lnt"> 22
+</span><span class="lnt"> 23
+</span><span class="lnt"> 24
+</span><span class="lnt"> 25
+</span><span class="lnt"> 26
+</span><span class="lnt"> 27
+</span><span class="lnt"> 28
+</span><span class="lnt"> 29
+</span><span class="lnt"> 30
+</span><span class="lnt"> 31
+</span><span class="lnt"> 32
+</span><span class="lnt"> 33
+</span><span class="lnt"> 34
+</span><span class="lnt"> 35
+</span><span class="lnt"> 36
+</span><span class="lnt"> 37
+</span><span class="lnt"> 38
+</span><span class="lnt"> 39
+</span><span class="lnt"> 40
+</span><span class="lnt"> 41
+</span><span class="lnt"> 42
+</span><span class="lnt"> 43
+</span><span class="lnt"> 44
+</span><span class="lnt"> 45
+</span><span class="lnt"> 46
+</span><span class="lnt"> 47
+</span><span class="lnt"> 48
+</span><span class="lnt"> 49
+</span><span class="lnt"> 50
+</span><span class="lnt"> 51
+</span><span class="lnt"> 52
+</span><span class="lnt"> 53
+</span><span class="lnt"> 54
+</span><span class="lnt"> 55
+</span><span class="lnt"> 56
+</span><span class="lnt"> 57
+</span><span class="lnt"> 58
+</span><span class="lnt"> 59
+</span><span class="lnt"> 60
+</span><span class="lnt"> 61
+</span><span class="lnt"> 62
+</span><span class="lnt"> 63
+</span><span class="lnt"> 64
+</span><span class="lnt"> 65
+</span><span class="lnt"> 66
+</span><span class="lnt"> 67
+</span><span class="lnt"> 68
+</span><span class="lnt"> 69
+</span><span class="lnt"> 70
+</span><span class="lnt"> 71
+</span><span class="lnt"> 72
+</span><span class="lnt"> 73
+</span><span class="lnt"> 74
+</span><span class="lnt"> 75
+</span><span class="lnt"> 76
+</span><span class="lnt"> 77
+</span><span class="lnt"> 78
+</span><span class="lnt"> 79
+</span><span class="lnt"> 80
+</span><span class="lnt"> 81
+</span><span class="lnt"> 82
+</span><span class="lnt"> 83
+</span><span class="lnt"> 84
+</span><span class="lnt"> 85
+</span><span class="lnt"> 86
+</span><span class="lnt"> 87
+</span><span class="lnt"> 88
+</span><span class="lnt"> 89
+</span><span class="lnt"> 90
+</span><span class="lnt"> 91
+</span><span class="lnt"> 92
+</span><span class="lnt"> 93
+</span><span class="lnt"> 94
+</span><span class="lnt"> 95
+</span><span class="lnt"> 96
+</span><span class="lnt"> 97
+</span><span class="lnt"> 98
+</span><span class="lnt"> 99
+</span><span class="lnt">100
+</span><span class="lnt">101
+</span><span class="lnt">102
+</span><span class="lnt">103
+</span><span class="lnt">104
+</span><span class="lnt">105
+</span><span class="lnt">106
+</span><span class="lnt">107
+</span><span class="lnt">108
+</span><span class="lnt">109
+</span><span class="lnt">110
+</span><span class="lnt">111
+</span><span class="lnt">112
+</span><span class="lnt">113
+</span><span class="lnt">114
+</span><span class="lnt">115
+</span><span class="lnt">116
+</span><span class="lnt">117
+</span><span class="lnt">118
+</span><span class="lnt">119
+</span><span class="lnt">120
+</span><span class="lnt">121
+</span><span class="lnt">122
+</span><span class="lnt">123
+</span><span class="lnt">124
+</span><span class="lnt">125
+</span><span class="lnt">126
+</span><span class="lnt">127
+</span><span class="lnt">128
+</span><span class="lnt">129
+</span><span class="lnt">130
+</span><span class="lnt">131
+</span><span class="lnt">132
+</span><span class="lnt">133
+</span><span class="lnt">134
+</span><span class="lnt">135
+</span><span class="lnt">136
+</span><span class="lnt">137
+</span><span class="lnt">138
+</span><span class="lnt">139
+</span><span class="lnt">140
+</span><span class="lnt">141
+</span><span class="lnt">142
+</span><span class="lnt">143
+</span><span class="lnt">144
+</span><span class="lnt">145
+</span><span class="lnt">146
+</span><span class="lnt">147
+</span><span class="lnt">148
+</span><span class="lnt">149
+</span><span class="lnt">150
+</span><span class="lnt">151
+</span><span class="lnt">152
+</span><span class="lnt">153
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c#" data-lang="c#"><span class="line"><span class="cl">    <span class="cs">/// &lt;summary&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="cs">/// Checks the computer connection.</span>
+</span></span><span class="line"><span class="cl">    <span class="cs">/// &lt;/summary&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="cs">/// &lt;param name=&#34;ct&#34;&gt;The cancellation token.&lt;/param&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="cs">/// &lt;returns&gt;A task representing the asynchronous operation.&lt;/returns&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">private</span> <span class="n">Task</span> <span class="n">CheckConnectionComputerAsync</span><span class="p">(</span><span class="n">CancellationToken</span> <span class="n">ct</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">Task</span><span class="p">.</span><span class="n">Run</span><span class="p">(</span><span class="kd">async</span> <span class="p">()</span> <span class="p">=&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">Log</span><span class="p">.</span><span class="n">Debug</span><span class="p">(</span><span class="s">&#34;CheckConnectionComputerAsync - Checking local connection...&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            <span class="c1">// Init variables</span>
+</span></span><span class="line"><span class="cl">            <span class="n">IsComputerIPv4Checking</span> <span class="p">=</span> <span class="kc">true</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="n">ComputerIPv4</span> <span class="p">=</span> <span class="s">&#34;&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="n">ComputerIPv4State</span> <span class="p">=</span> <span class="n">ConnectionState</span><span class="p">.</span><span class="n">None</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            <span class="n">IsComputerIPv6Checking</span> <span class="p">=</span> <span class="kc">true</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="n">ComputerIPv6</span> <span class="p">=</span> <span class="s">&#34;&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="n">ComputerIPv6State</span> <span class="p">=</span> <span class="n">ConnectionState</span><span class="p">.</span><span class="n">None</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            <span class="n">IsComputerDNSChecking</span> <span class="p">=</span> <span class="kc">true</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="n">ComputerDNS</span> <span class="p">=</span> <span class="s">&#34;&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="n">ComputerDNSState</span> <span class="p">=</span> <span class="n">ConnectionState</span><span class="p">.</span><span class="n">None</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            <span class="c1">// Detect local IPv4 address</span>
+</span></span><span class="line"><span class="cl">            <span class="n">Log</span><span class="p">.</span><span class="n">Debug</span><span class="p">(</span><span class="s">&#34;CheckConnectionComputerAsync - Detecting local IPv4 address...&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            <span class="kt">var</span> <span class="n">detectedLocalIPv4Address</span> <span class="p">=</span>
+</span></span><span class="line"><span class="cl">                <span class="k">await</span> <span class="n">NetworkInterface</span><span class="p">.</span><span class="n">DetectLocalIPAddressBasedOnRoutingAsync</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">                    <span class="n">IPAddress</span><span class="p">.</span><span class="n">Parse</span><span class="p">(</span><span class="n">SettingsManager</span><span class="p">.</span><span class="n">Current</span><span class="p">.</span><span class="n">Dashboard_PublicIPv4Address</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="n">detectedLocalIPv4Address</span> <span class="p">==</span> <span class="kc">null</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">Log</span><span class="p">.</span><span class="n">Debug</span><span class="p">(</span><span class="s">&#34;CheckConnectionComputerAsync - Local IPv4 address detection via routing failed, trying network interfaces...&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">                <span class="n">detectedLocalIPv4Address</span> <span class="p">=</span> <span class="k">await</span> <span class="n">NetworkInterface</span><span class="p">.</span><span class="n">DetectLocalIPAddressFromNetworkInterfaceAsync</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">                    <span class="n">AddressFamily</span><span class="p">.</span><span class="n">InterNetwork</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="n">detectedLocalIPv4Address</span> <span class="p">!=</span> <span class="kc">null</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">Log</span><span class="p">.</span><span class="n">Debug</span><span class="p">(</span><span class="s">&#34;CheckConnectionComputerAsync - Local IPv4 address detected: &#34;</span> <span class="p">+</span> <span class="n">detectedLocalIPv4Address</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">                <span class="n">ComputerIPv4</span> <span class="p">=</span> <span class="n">detectedLocalIPv4Address</span><span class="p">.</span><span class="n">ToString</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">                <span class="n">ComputerIPv4State</span> <span class="p">=</span> <span class="kt">string</span><span class="p">.</span><span class="n">IsNullOrEmpty</span><span class="p">(</span><span class="n">ComputerIPv4</span><span class="p">)</span> <span class="p">?</span> <span class="n">ConnectionState</span><span class="p">.</span><span class="n">Critical</span> <span class="p">:</span> <span class="n">ConnectionState</span><span class="p">.</span><span class="n">OK</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="k">else</span>
+</span></span><span class="line"><span class="cl">            <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">Log</span><span class="p">.</span><span class="n">Debug</span><span class="p">(</span><span class="s">&#34;CheckConnectionComputerAsync - Local IPv4 address not detected.&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">                <span class="n">ComputerIPv4</span> <span class="p">=</span> <span class="s">&#34;-/-&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="n">ComputerIPv4State</span> <span class="p">=</span> <span class="n">ConnectionState</span><span class="p">.</span><span class="n">Critical</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            <span class="n">IsComputerIPv4Checking</span> <span class="p">=</span> <span class="kc">false</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="n">ct</span><span class="p">.</span><span class="n">IsCancellationRequested</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">                <span class="n">ct</span><span class="p">.</span><span class="n">ThrowIfCancellationRequested</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            <span class="c1">// Detect local IPv6 address</span>
+</span></span><span class="line"><span class="cl">            <span class="n">Log</span><span class="p">.</span><span class="n">Debug</span><span class="p">(</span><span class="s">&#34;CheckConnectionComputerAsync - Detecting local IPv6 address...&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            <span class="kt">var</span> <span class="n">detectedLocalIPv6Address</span> <span class="p">=</span>
+</span></span><span class="line"><span class="cl">                <span class="k">await</span> <span class="n">NetworkInterface</span><span class="p">.</span><span class="n">DetectLocalIPAddressBasedOnRoutingAsync</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">                    <span class="n">IPAddress</span><span class="p">.</span><span class="n">Parse</span><span class="p">(</span><span class="n">SettingsManager</span><span class="p">.</span><span class="n">Current</span><span class="p">.</span><span class="n">Dashboard_PublicIPv6Address</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="n">detectedLocalIPv6Address</span> <span class="p">==</span> <span class="kc">null</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">Log</span><span class="p">.</span><span class="n">Debug</span><span class="p">(</span><span class="s">&#34;CheckConnectionComputerAsync - Local IPv6 address detection via routing failed, trying network interfaces...&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">                <span class="n">detectedLocalIPv6Address</span> <span class="p">=</span> <span class="k">await</span> <span class="n">NetworkInterface</span><span class="p">.</span><span class="n">DetectLocalIPAddressFromNetworkInterfaceAsync</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">                    <span class="n">AddressFamily</span><span class="p">.</span><span class="n">InterNetworkV6</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="n">detectedLocalIPv6Address</span> <span class="p">!=</span> <span class="kc">null</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">Log</span><span class="p">.</span><span class="n">Debug</span><span class="p">(</span><span class="s">&#34;CheckConnectionComputerAsync - Local IPv6 address detected: &#34;</span> <span class="p">+</span> <span class="n">detectedLocalIPv6Address</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">                <span class="n">ComputerIPv6</span> <span class="p">=</span> <span class="n">detectedLocalIPv6Address</span><span class="p">.</span><span class="n">ToString</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">                <span class="n">ComputerIPv6State</span> <span class="p">=</span> <span class="kt">string</span><span class="p">.</span><span class="n">IsNullOrEmpty</span><span class="p">(</span><span class="n">ComputerIPv6</span><span class="p">)</span> <span class="p">?</span> <span class="n">ConnectionState</span><span class="p">.</span><span class="n">Critical</span> <span class="p">:</span> <span class="n">ConnectionState</span><span class="p">.</span><span class="n">OK</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="k">else</span>
+</span></span><span class="line"><span class="cl">            <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">Log</span><span class="p">.</span><span class="n">Debug</span><span class="p">(</span><span class="s">&#34;CheckConnectionComputerAsync - Local IPv6 address not detected.&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">                <span class="n">ComputerIPv6</span> <span class="p">=</span> <span class="s">&#34;-/-&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="n">ComputerIPv6State</span> <span class="p">=</span> <span class="n">ConnectionState</span><span class="p">.</span><span class="n">Critical</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            <span class="n">IsComputerIPv6Checking</span> <span class="p">=</span> <span class="kc">false</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="n">ct</span><span class="p">.</span><span class="n">IsCancellationRequested</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">                <span class="n">ct</span><span class="p">.</span><span class="n">ThrowIfCancellationRequested</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            <span class="c1">// Try to resolve local DNS based on IPv4</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="n">ComputerIPv4State</span> <span class="p">==</span> <span class="n">ConnectionState</span><span class="p">.</span><span class="n">OK</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">Log</span><span class="p">.</span><span class="n">Debug</span><span class="p">(</span><span class="s">&#34;CheckConnectionComputerAsync - Resolving local DNS based on IPv4...&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">                <span class="kt">var</span> <span class="n">dnsResult</span> <span class="p">=</span> <span class="k">await</span> <span class="n">DNSClient</span><span class="p">.</span><span class="n">GetInstance</span><span class="p">().</span><span class="n">ResolvePtrAsync</span><span class="p">(</span><span class="n">IPAddress</span><span class="p">.</span><span class="n">Parse</span><span class="p">(</span><span class="n">ComputerIPv4</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">                <span class="k">if</span> <span class="p">(!</span><span class="n">dnsResult</span><span class="p">.</span><span class="n">HasError</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">                <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                    <span class="n">Log</span><span class="p">.</span><span class="n">Debug</span><span class="p">(</span><span class="s">&#34;CheckConnectionComputerAsync - Local DNS based on IPv4 resolved: &#34;</span> <span class="p">+</span> <span class="n">dnsResult</span><span class="p">.</span><span class="n">Value</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">                    <span class="n">ComputerDNS</span> <span class="p">=</span> <span class="n">dnsResult</span><span class="p">.</span><span class="n">Value</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                    <span class="n">ComputerDNSState</span> <span class="p">=</span> <span class="n">ConnectionState</span><span class="p">.</span><span class="n">OK</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="p">}</span>
+</span></span><span class="line"><span class="cl">                <span class="k">else</span>
+</span></span><span class="line"><span class="cl">                <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                    <span class="n">Log</span><span class="p">.</span><span class="n">Debug</span><span class="p">(</span><span class="s">&#34;CheckConnectionComputerAsync - Local DNS based on IPv4 not resolved.&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="k">else</span>
+</span></span><span class="line"><span class="cl">            <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">Log</span><span class="p">.</span><span class="n">Debug</span><span class="p">(</span><span class="s">&#34;CheckConnectionComputerAsync - Local DNS based on IPv4 not resolved due to invalid IPv4 address.&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            <span class="c1">// Try to resolve local DNS based on IPv6 if IPv4 failed</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="kt">string</span><span class="p">.</span><span class="n">IsNullOrEmpty</span><span class="p">(</span><span class="n">ComputerDNS</span><span class="p">)</span> <span class="p">&amp;&amp;</span> <span class="n">ComputerIPv6State</span> <span class="p">==</span> <span class="n">ConnectionState</span><span class="p">.</span><span class="n">OK</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">Log</span><span class="p">.</span><span class="n">Debug</span><span class="p">(</span><span class="s">&#34;CheckConnectionComputerAsync - Resolving local DNS based on IPv6...&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">                <span class="kt">var</span> <span class="n">dnsResult</span> <span class="p">=</span> <span class="k">await</span> <span class="n">DNSClient</span><span class="p">.</span><span class="n">GetInstance</span><span class="p">().</span><span class="n">ResolvePtrAsync</span><span class="p">(</span><span class="n">IPAddress</span><span class="p">.</span><span class="n">Parse</span><span class="p">(</span><span class="n">ComputerIPv6</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">                <span class="k">if</span> <span class="p">(!</span><span class="n">dnsResult</span><span class="p">.</span><span class="n">HasError</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">                <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                    <span class="n">Log</span><span class="p">.</span><span class="n">Debug</span><span class="p">(</span><span class="s">&#34;CheckConnectionComputerAsync - Local DNS based on IPv6 resolved: &#34;</span> <span class="p">+</span> <span class="n">dnsResult</span><span class="p">.</span><span class="n">Value</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">                    <span class="n">ComputerDNS</span> <span class="p">=</span> <span class="n">dnsResult</span><span class="p">.</span><span class="n">Value</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                    <span class="n">ComputerDNSState</span> <span class="p">=</span> <span class="n">ConnectionState</span><span class="p">.</span><span class="n">OK</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="p">}</span>
+</span></span><span class="line"><span class="cl">                <span class="k">else</span>
+</span></span><span class="line"><span class="cl">                <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                    <span class="n">Log</span><span class="p">.</span><span class="n">Debug</span><span class="p">(</span><span class="s">&#34;CheckConnectionComputerAsync - Local DNS based on IPv6 not resolved.&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="k">else</span>
+</span></span><span class="line"><span class="cl">            <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">Log</span><span class="p">.</span><span class="n">Debug</span><span class="p">(</span><span class="s">&#34;CheckConnectionComputerAsync - Local DNS based on IPv6 not resolved due to IPv4 DNS resolved or invalid IPv6 address&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="kt">string</span><span class="p">.</span><span class="n">IsNullOrEmpty</span><span class="p">(</span><span class="n">ComputerDNS</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">            <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">ComputerDNS</span> <span class="p">=</span> <span class="s">&#34;-/-&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="n">ComputerDNSState</span> <span class="p">=</span> <span class="n">ConnectionState</span><span class="p">.</span><span class="n">Critical</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            <span class="n">IsComputerDNSChecking</span> <span class="p">=</span> <span class="kc">false</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            <span class="n">Log</span><span class="p">.</span><span class="n">Debug</span><span class="p">(</span><span class="s">&#34;CheckConnectionComputerAsync - Local connection check completed.&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="p">},</span> <span class="n">ct</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>为获取IPv4地址，准备了两种方式：一种是<code>DetectLocalIPAddressBasedOnRoutingAsync</code>创建UDP套接字确定本机IP，另一种是<code>DetectLocalIPAddressFromNetworkInterfaceAsync</code>配合<code>Microsoft.PowerShell.SDK</code>，用C#实现了类似Windows <code>ipconfig /all</code> + PowerShell <code>Get-NetConnectionProfile</code>的效果。</p>
+<h2 class="heading-element" id="4-网络接口选项中的接口带宽是如何测出来的"><span>4. 网络接口选项中的接口带宽是如何测出来的？</span>
+  <a href="#4-%e7%bd%91%e7%bb%9c%e6%8e%a5%e5%8f%a3%e9%80%89%e9%a1%b9%e4%b8%ad%e7%9a%84%e6%8e%a5%e5%8f%a3%e5%b8%a6%e5%ae%bd%e6%98%af%e5%a6%82%e4%bd%95%e6%b5%8b%e5%87%ba%e6%9d%a5%e7%9a%84" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p><figure><img loading="lazy" src='/images/202607/15/5.png' alt="图5 接口带宽界面"><figcaption class="image-caption">图5 接口带宽界面</figcaption>
+  </figure></p>
+<p>如图5所示，网络接口选项中包含了一个接口带宽界面，其中的速度是如何得到的？<code>NETworkManager.Models/Network/BandwidthMeter.cs</code>中<code>BandwidthMeter</code>的<code>Update</code>方法可以找到答案。</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-c#"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="2" style="--fi-max-shown-lines:400;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c#" data-lang="c#"><span class="line"><span class="cl"><span class="n">IPInterfaceStatistics</span> <span class="n">stats</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">try</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// IPStatistics covers both IPv4 and IPv6 traffic on the interface.</span>
+</span></span><span class="line"><span class="cl">    <span class="n">stats</span> <span class="p">=</span> <span class="n">_networkInterface</span><span class="p">.</span><span class="n">GetIPStatistics</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="k">catch</span> <span class="p">(</span><span class="n">NetworkInformationException</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// Transient failure (e.g. adapter going down) - skip this tick.</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">var</span> <span class="n">totalBytesSent</span> <span class="p">=</span> <span class="n">stats</span><span class="p">.</span><span class="n">BytesSent</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="kt">var</span> <span class="n">totalBytesReceived</span> <span class="p">=</span> <span class="n">stats</span><span class="p">.</span><span class="n">BytesReceived</span><span class="p">;</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p><code>System.Net.NetworkInformation.NetworkInterface</code>类的<code>GetIPStatistics</code>方法可以获取到一些统计信息，其中就包括已发送的字节数和已接收的字节数。为了得到速度，可以计算在<code>t</code>时间段内发送字节数和接收字节数的差异与<code>t</code>的比值。</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-c#"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="2" style="--fi-max-shown-lines:400;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c#" data-lang="c#"><span class="line"><span class="cl"><span class="kt">var</span> <span class="n">elapsedSeconds</span> <span class="p">=</span> <span class="n">_stopwatch</span><span class="p">.</span><span class="n">Elapsed</span><span class="p">.</span><span class="n">TotalSeconds</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="n">_stopwatch</span><span class="p">.</span><span class="n">Restart</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// T时刻发送的字节数是_previousBytesSent</span>
+</span></span><span class="line"><span class="cl"><span class="c1">// T+elapsedSeconds时刻发送的字节数是totalBytesSent</span>
+</span></span><span class="line"><span class="cl"><span class="kt">var</span> <span class="n">deltaSent</span> <span class="p">=</span> <span class="n">Math</span><span class="p">.</span><span class="n">Max</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="n">totalBytesSent</span> <span class="p">-</span> <span class="n">_previousBytesSent</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="c1">// T时刻接收的字节数是_previousBytesReceived</span>
+</span></span><span class="line"><span class="cl"><span class="c1">// T+elapsedSeconds时刻发送的字节数是totalBytesReceived</span>
+</span></span><span class="line"><span class="cl"><span class="kt">var</span> <span class="n">deltaReceived</span> <span class="p">=</span> <span class="n">Math</span><span class="p">.</span><span class="n">Max</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="n">totalBytesReceived</span> <span class="p">-</span> <span class="n">_previousBytesReceived</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">var</span> <span class="n">byteSentSpeed</span> <span class="p">=</span> <span class="n">elapsedSeconds</span> <span class="p">&gt;</span> <span class="m">0</span> <span class="p">?</span> <span class="p">(</span><span class="kt">long</span><span class="p">)(</span><span class="n">deltaSent</span> <span class="p">/</span> <span class="n">elapsedSeconds</span><span class="p">)</span> <span class="p">:</span> <span class="m">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="kt">var</span> <span class="n">byteReceivedSpeed</span> <span class="p">=</span> <span class="n">elapsedSeconds</span> <span class="p">&gt;</span> <span class="m">0</span> <span class="p">?</span> <span class="p">(</span><span class="kt">long</span><span class="p">)(</span><span class="n">deltaReceived</span> <span class="p">/</span> <span class="n">elapsedSeconds</span><span class="p">)</span> <span class="p">:</span> <span class="m">0</span><span class="p">;</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p><code>BandwidthMeter</code>中有一个<code>_timer</code>定时器，默认每隔1秒就会调用1次<code>Update</code>函数。该类还定义了一个<code>UpdateSpeed</code>事件，而<code>NETworkManager/ViewModels/NetworkInterfaceViewModel.cs</code>的<code>NetworkInterfaceViewModel</code>订阅了该事件：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-c#"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c#" data-lang="c#"><span class="line"><span class="cl"><span class="n">_bandwidthMeter</span><span class="p">.</span><span class="n">UpdateSpeed</span> <span class="p">+=</span> <span class="n">BandwidthMeter_UpdateSpeed</span><span class="p">;</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>这意味着每隔1秒<code>BandwidthMeter_UpdateSpeed</code>方法就会被调用1次。<code>BandwidthMeter_UpdateSpeed</code>主要包含了一些图表数据更新的逻辑，这就是为什么我们可以看到图表的曲线一直在刷新变化。这里的图表看起来比较精美，用的是<a href="https://livecharts.dev/" target="_blank" rel="external nofollow noopener noreferrer">LiveCharts2<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>，一个现代化的 .NET 数据可视化图表库。</p></div><hr class="awesome-hr" />
     <h2 id="see-also">相关内容</h2>
     <ul><li>
           <a href="/downloader%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="Downloader源码剖析：一个下载器的实现原理">Downloader源码剖析：一个下载器的实现原理</a></li><li>
@@ -606,6 +1001,7 @@
     </li>
     <li><a href="#2-日志保存在什么位置">2. 日志保存在什么位置？</a></li>
     <li><a href="#3-仪表盘界面中的ip地址是如何获取的">3. 仪表盘界面中的IP地址是如何获取的？</a></li>
+    <li><a href="#4-网络接口选项中的接口带宽是如何测出来的">4. 网络接口选项中的接口带宽是如何测出来的？</a></li>
   </ul>
 </nav></div>
       </div>

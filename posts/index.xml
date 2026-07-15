@@ -8,8 +8,16 @@
     <language>zh-CN</language>
     <managingEditor>anthonyfree96@gmail.com (AndyFree96)</managingEditor>
     <webMaster>anthonyfree96@gmail.com (AndyFree96)</webMaster>
-    <lastBuildDate>Wed, 15 Jul 2026 06:06:22 +0800</lastBuildDate>
+    <lastBuildDate>Wed, 15 Jul 2026 13:49:16 +0800</lastBuildDate>
     <atom:link href="http://localhost:1313/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>C#编程实践(一)：深入System.Net.NetworkInformation获取系统网络信息</title>
+      <link>http://localhost:1313/%E6%B7%B1%E5%85%A5system.net.networkinformation%E8%8E%B7%E5%8F%96%E7%B3%BB%E7%BB%9F%E7%BD%91%E7%BB%9C%E4%BF%A1%E6%81%AF/</link>
+      <pubDate>Wed, 15 Jul 2026 13:49:16 +0800</pubDate><author>anthonyfree96@gmail.com (AndyFree96)</author>
+      <guid>http://localhost:1313/%E6%B7%B1%E5%85%A5system.net.networkinformation%E8%8E%B7%E5%8F%96%E7%B3%BB%E7%BB%9F%E7%BD%91%E7%BB%9C%E4%BF%A1%E6%81%AF/</guid>
+      <category domain="http://localhost:1313/categories/%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/">工程实践</category>
+      <description>&lt;p&gt;在工业软件、设备控制系统、网络诊断工具开发中，经常需要获取当前计算机的网络状态，例如：&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;当前有哪些网卡？&lt;/li&gt;&#xA;&lt;li&gt;网卡是否连接？&lt;/li&gt;&#xA;&lt;li&gt;IP地址是多少？&lt;/li&gt;&#xA;&lt;li&gt;MAC地址是多少？&lt;/li&gt;&#xA;&lt;li&gt;网络连接速度是多少？&lt;/li&gt;&#xA;&lt;li&gt;DNS、网关、DHCP信息是什么？&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;p&gt;.NET提供了一个非常方便的命名空间&lt;code&gt;System.Net.NetworkInformation&lt;/code&gt;，其中核心类：&lt;/p&gt;&#xA;&lt;table&gt;&#xA;&#x9;&lt;thead&gt;&#xA;&#x9;&#x9;&#x9;&lt;tr&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;th style=&#34;text-align: left&#34;&gt;类&lt;/th&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;th style=&#34;text-align: left&#34;&gt;作用&lt;/th&gt;&#xA;&#x9;&#x9;&#x9;&lt;/tr&gt;&#xA;&#x9;&lt;/thead&gt;&#xA;&#x9;&lt;tbody&gt;&#xA;&#x9;&#x9;&#x9;&lt;tr&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td style=&#34;text-align: left&#34;&gt;NetworkInterface&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td style=&#34;text-align: left&#34;&gt;获取网卡信息&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&lt;/tr&gt;&#xA;&#x9;&#x9;&#x9;&lt;tr&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td style=&#34;text-align: left&#34;&gt;IPInterfaceProperties&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td style=&#34;text-align: left&#34;&gt;获取 IP 配置&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&lt;/tr&gt;&#xA;&#x9;&#x9;&#x9;&lt;tr&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td style=&#34;text-align: left&#34;&gt;IPAddressInformation&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td style=&#34;text-align: left&#34;&gt;获取 IP 地址状态&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&lt;/tr&gt;&#xA;&#x9;&#x9;&#x9;&lt;tr&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td style=&#34;text-align: left&#34;&gt;PhysicalAddress&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td style=&#34;text-align: left&#34;&gt;获取 MAC 地址&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&lt;/tr&gt;&#xA;&#x9;&#x9;&#x9;&lt;tr&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td style=&#34;text-align: left&#34;&gt;NetworkChange&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&lt;td style=&#34;text-align: left&#34;&gt;监听网络变化&lt;/td&gt;&#xA;&#x9;&#x9;&#x9;&lt;/tr&gt;&#xA;&#x9;&lt;/tbody&gt;&#xA;&lt;/table&gt;&#xA;&lt;p&gt;本文将系统介绍如何使用这些API构建一个网络信息采集工具。&lt;/p&gt;</description>
+    </item>
     <item>
       <title>代码整洁之道 (Robert C. Martin)</title>
       <link>http://localhost:1313/%E4%BB%A3%E7%A0%81%E6%95%B4%E6%B4%81%E4%B9%8B%E9%81%93/</link>

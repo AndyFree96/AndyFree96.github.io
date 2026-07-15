@@ -10,8 +10,8 @@
 <meta name="description" content="安东尼的博客，分享生活中的一些有意思的事儿！">
 	<meta itemprop="name" content="东尼的博客">
 	<meta itemprop="description" content="安东尼的博客，分享生活中的一些有意思的事儿！">
-	<meta itemprop="datePublished" content="2026-07-15T06:06:22+08:00">
-	<meta itemprop="dateModified" content="2026-07-15T06:06:22+08:00"><meta property="og:url" content="http://localhost:1313/">
+	<meta itemprop="datePublished" content="2026-07-15T13:49:16+08:00">
+	<meta itemprop="dateModified" content="2026-07-15T13:49:16+08:00"><meta property="og:url" content="http://localhost:1313/">
 	<meta property="og:site_name" content="东尼的博客">
 	<meta property="og:title" content="东尼的博客">
 	<meta property="og:description" content="安东尼的博客，分享生活中的一些有意思的事儿！">
@@ -110,6 +110,52 @@
   </a><a href="/index.xml" title="RSS" target="_blank" rel="me"><i class="fa-solid fa-rss" aria-hidden="true"></i>
   </a></div></div>
 <article class="single summary" itemscope itemtype="http://schema.org/Article"><div class="featured-image-preview">
+        <a href="/%E6%B7%B1%E5%85%A5system.net.networkinformation%E8%8E%B7%E5%8F%96%E7%B3%BB%E7%BB%9F%E7%BD%91%E7%BB%9C%E4%BF%A1%E6%81%AF/" aria-label="C#编程实践(一)：深入System.Net.NetworkInformation获取系统网络信息"><img loading="eager" src='/images/202607/18/paul-lichtblau-oUsElFLrE_s-unsplash.jpg' sizes="(max-width: 680px) 100vw, (max-width: 960px) 80vw, (max-width: 1440px) 56vw, 800px" alt="Featured image for C#编程实践(一)：深入System.Net.NetworkInformation获取系统网络信息" height="336" width="800"></a>
+      </div><h2 class="single-title" itemprop="name headline"><span title="转载" class="icon-repost"><i class="fa-solid fa-share" aria-hidden="true"></i></span><a href="/%E6%B7%B1%E5%85%A5system.net.networkinformation%E8%8E%B7%E5%8F%96%E7%B3%BB%E7%BB%9F%E7%BD%91%E7%BB%9C%E4%BF%A1%E6%81%AF/">C#编程实践(一)：深入System.Net.NetworkInformation获取系统网络信息</a>
+  </h2><div class="post-meta"><span class="post-author"><a href="https://andyfree96.github.io/" title="作者" target="_blank" rel="author external nofollow noopener noreferrer" class="author"><img class="avatar" src='/avatar/1.jpg' alt="AndyFree96" height="16" width="16">&nbsp;AndyFree96</a></span>&nbsp;<span class="post-publish" title='2026-07-15 13:49:16'>发布于 <time datetime="2026-07-15">2026-07-15</time></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/" class="post-category" title="分类 - 工程实践"><i class="fa-regular fa-folder" aria-hidden="true"></i> 工程实践</a></span></div><div class="content"><p>在工业软件、设备控制系统、网络诊断工具开发中，经常需要获取当前计算机的网络状态，例如：</p>
+<ul>
+<li>当前有哪些网卡？</li>
+<li>网卡是否连接？</li>
+<li>IP地址是多少？</li>
+<li>MAC地址是多少？</li>
+<li>网络连接速度是多少？</li>
+<li>DNS、网关、DHCP信息是什么？</li>
+</ul>
+<p>.NET提供了一个非常方便的命名空间<code>System.Net.NetworkInformation</code>，其中核心类：</p>
+<div class="table-wrapper">
+  <table>
+    <thead>
+        <tr>
+            <th style="text-align: left">类</th>
+            <th style="text-align: left">作用</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td style="text-align: left">NetworkInterface</td>
+            <td style="text-align: left">获取网卡信息</td>
+        </tr>
+        <tr>
+            <td style="text-align: left">IPInterfaceProperties</td>
+            <td style="text-align: left">获取 IP 配置</td>
+        </tr>
+        <tr>
+            <td style="text-align: left">IPAddressInformation</td>
+            <td style="text-align: left">获取 IP 地址状态</td>
+        </tr>
+        <tr>
+            <td style="text-align: left">PhysicalAddress</td>
+            <td style="text-align: left">获取 MAC 地址</td>
+        </tr>
+        <tr>
+            <td style="text-align: left">NetworkChange</td>
+            <td style="text-align: left">监听网络变化</td>
+        </tr>
+    </tbody>
+  </table>
+</div><p>本文将系统介绍如何使用这些API构建一个网络信息采集工具。</p></div><div class="post-footer">
+    <a href="/%E6%B7%B1%E5%85%A5system.net.networkinformation%E8%8E%B7%E5%8F%96%E7%B3%BB%E7%BB%9F%E7%BD%91%E7%BB%9C%E4%BF%A1%E6%81%AF/">阅读全文</a><div class="post-tags"><i class="fa-solid fa-tags me-1" aria-hidden="true"></i><a href='/tags/c%23/' class="post-tag">C#</a><a href='/tags/.net/' class="post-tag">.NET</a><a href='/tags/ipv4/' class="post-tag">IPv4</a><a href='/tags/mac/' class="post-tag">MAC</a><a href='/tags/dns/' class="post-tag">DNS</a></div></div>
+</article><article class="single summary" itemscope itemtype="http://schema.org/Article"><div class="featured-image-preview">
         <a href="/%E4%BB%A3%E7%A0%81%E6%95%B4%E6%B4%81%E4%B9%8B%E9%81%93/" aria-label="代码整洁之道 (Robert C. Martin)"><img loading="eager" src='/images/202607/16/red-zeppelin-yLCUleNSTf0-unsplash.jpg' sizes="(max-width: 680px) 100vw, (max-width: 960px) 80vw, (max-width: 1440px) 56vw, 800px" alt="Featured image for 代码整洁之道 (Robert C. Martin)" height="336" width="800"></a>
       </div><h2 class="single-title" itemprop="name headline"><span title="转载" class="icon-repost"><i class="fa-solid fa-share" aria-hidden="true"></i></span><a href="/%E4%BB%A3%E7%A0%81%E6%95%B4%E6%B4%81%E4%B9%8B%E9%81%93/">代码整洁之道 (Robert C. Martin)</a>
   </h2><div class="post-meta"><span class="post-author"><a href="https://andyfree96.github.io/" title="作者" target="_blank" rel="author external nofollow noopener noreferrer" class="author"><img class="avatar" src='/avatar/1.jpg' alt="AndyFree96" height="16" width="16">&nbsp;AndyFree96</a></span>&nbsp;<span class="post-publish" title='2026-07-15 06:06:22'>发布于 <time datetime="2026-07-15">2026-07-15</time></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E4%B9%A6%E7%B1%8D%E7%A0%94%E8%AF%BB/" class="post-category" title="分类 - 书籍研读"><i class="fa-regular fa-folder" aria-hidden="true"></i> 书籍研读</a></span></div><div class="content"><p>在软件开发过程中，代码并不是写完提交之后就结束了。一个项目真正的生命周期，往往伴随着持续的修改、扩展和维护。需求会不断变化，新的功能会不断加入，<strong>原本简单的模块可能逐渐变得复杂</strong>。如果代码经过良好的设计和整理，随着时间推移，系统会慢慢演变成难以理解、难以修改，甚至无人敢触碰“遗留代码”。</p>
@@ -144,12 +190,12 @@
 <blockquote>
 <p>什么样的代码才是真正适合长期维护的软件代码？</p>
 </blockquote></div><div class="post-footer">
-    <a href="/%E4%BB%A3%E7%A0%81%E6%95%B4%E6%B4%81%E4%B9%8B%E9%81%93/">阅读全文</a><div class="post-tags"><i class="fa-solid fa-tags me-1" aria-hidden="true"></i><a href='/tags/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/' class="post-tag">软件工程</a><a href='/tags/%E4%BB%A3%E7%A0%81%E8%B4%A8%E9%87%8F/' class="post-tag">代码质量</a><a href='/tags/%E7%BC%96%E7%A8%8B%E8%A7%84%E8%8C%83/' class="post-tag">编程规范</a><a href='/tags/%E6%95%B4%E6%B4%81%E4%BB%A3%E7%A0%81/' class="post-tag">整洁代码</a><a href='/tags/%E8%BD%AF%E4%BB%B6%E8%AE%BE%E8%AE%A1/' class="post-tag">软件设计</a></div></div>
+    <a href="/%E4%BB%A3%E7%A0%81%E6%95%B4%E6%B4%81%E4%B9%8B%E9%81%93/">阅读全文</a><div class="post-tags"><i class="fa-solid fa-tags me-1" aria-hidden="true"></i><a href='/tags/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/' class="post-tag">软件工程</a><a href='/tags/%E4%BB%A3%E7%A0%81%E8%B4%A8%E9%87%8F/' class="post-tag">代码质量</a><a href='/tags/%E7%BC%96%E7%A8%8B%E8%A7%84%E8%8C%83/' class="post-tag">编程规范</a><a href='/tags/%E6%95%B4%E6%B4%81%E4%BB%A3%E7%A0%81/' class="post-tag">整洁代码</a><a href='/tags/%E8%BD%AF%E4%BB%B6%E8%AE%BE%E8%AE%A1/' class="post-tag">软件设计</a><a href='/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/' class="post-tag">读书笔记</a><a href='/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA/' class="post-tag">计算机</a></div></div>
 </article><article class="single summary" itemscope itemtype="http://schema.org/Article"><div class="featured-image-preview">
         <a href="/%E9%87%8D%E6%9E%84/" aria-label="重构 改善既有代码的艺术 第2版 (Martin Fowler)"><img loading="eager" src='/images/202607/17/milan-malfait-ivTKnx8rLII-unsplash.jpg' sizes="(max-width: 680px) 100vw, (max-width: 960px) 80vw, (max-width: 1440px) 56vw, 800px" alt="Featured image for 重构 改善既有代码的艺术 第2版 (Martin Fowler)" height="336" width="800"></a>
       </div><h2 class="single-title" itemprop="name headline"><span title="转载" class="icon-repost"><i class="fa-solid fa-share" aria-hidden="true"></i></span><a href="/%E9%87%8D%E6%9E%84/">重构 改善既有代码的艺术 第2版 (Martin Fowler)</a>
   </h2><div class="post-meta"><span class="post-author"><a href="https://andyfree96.github.io/" title="作者" target="_blank" rel="author external nofollow noopener noreferrer" class="author"><img class="avatar" src='/avatar/1.jpg' alt="AndyFree96" height="16" width="16">&nbsp;AndyFree96</a></span>&nbsp;<span class="post-publish" title='2026-07-15 06:05:35'>发布于 <time datetime="2026-07-15">2026-07-15</time></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E4%B9%A6%E7%B1%8D%E7%A0%94%E8%AF%BB/" class="post-category" title="分类 - 书籍研读"><i class="fa-regular fa-folder" aria-hidden="true"></i> 书籍研读</a></span></div><div class="content"></div><div class="post-footer">
-    <a href="/%E9%87%8D%E6%9E%84/">阅读全文</a><div class="post-tags"><i class="fa-solid fa-tags me-1" aria-hidden="true"></i><a href='/tags/%E9%87%8D%E6%9E%84/' class="post-tag">重构</a><a href='/tags/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/' class="post-tag">软件工程</a><a href='/tags/%E4%BB%A3%E7%A0%81%E8%B4%A8%E9%87%8F/' class="post-tag">代码质量</a><a href='/tags/%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99/' class="post-tag">设计原则</a><a href='/tags/%E8%BD%AF%E4%BB%B6%E6%9E%B6%E6%9E%84/' class="post-tag">软件架构</a></div></div>
+    <a href="/%E9%87%8D%E6%9E%84/">阅读全文</a><div class="post-tags"><i class="fa-solid fa-tags me-1" aria-hidden="true"></i><a href='/tags/%E9%87%8D%E6%9E%84/' class="post-tag">重构</a><a href='/tags/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/' class="post-tag">软件工程</a><a href='/tags/%E4%BB%A3%E7%A0%81%E8%B4%A8%E9%87%8F/' class="post-tag">代码质量</a><a href='/tags/%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99/' class="post-tag">设计原则</a><a href='/tags/%E8%BD%AF%E4%BB%B6%E6%9E%B6%E6%9E%84/' class="post-tag">软件架构</a><a href='/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/' class="post-tag">读书笔记</a><a href='/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA/' class="post-tag">计算机</a></div></div>
 </article><article class="single summary" itemscope itemtype="http://schema.org/Article"><div class="featured-image-preview">
         <a href="/networkmanager%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" aria-label="NETworkManager源码剖析：一个网络管理工具的实现细节"><img loading="eager" src='/images/202607/15/maverick-frame-GswoB8XDnBc-unsplash.jpg' sizes="(max-width: 680px) 100vw, (max-width: 960px) 80vw, (max-width: 1440px) 56vw, 800px" alt="Featured image for NETworkManager源码剖析：一个网络管理工具的实现细节" height="336" width="800"></a>
       </div><h2 class="single-title" itemprop="name headline"><span title="转载" class="icon-repost"><i class="fa-solid fa-share" aria-hidden="true"></i></span><a href="/networkmanager%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/">NETworkManager源码剖析：一个网络管理工具的实现细节</a>
@@ -236,7 +282,7 @@
 <p>作者：Joseph Redmon, Santosh Divvala, Ross Girshick, Ali Farhadi</p>
 <p>论文地址：<a href="https://arxiv.org/pdf/1506.02640" target="_blank" rel="external nofollow noopener noreferrer">https://arxiv.org/pdf/1506.02640<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></p>
 </blockquote></div><div class="post-footer">
-    <a href="/yolov1%E8%AE%BA%E6%96%87%E7%B2%BE%E8%AF%BB/">阅读全文</a><div class="post-tags"><i class="fa-solid fa-tags me-1" aria-hidden="true"></i><a href='/tags/yolo/' class="post-tag">YOLO</a><a href='/tags/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/' class="post-tag">目标检测</a><a href='/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/' class="post-tag">计算机视觉</a><a href='/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/' class="post-tag">深度学习</a><a href='/tags/ai%E7%AE%97%E6%B3%95/' class="post-tag">AI算法</a><a href='/tags/%E8%AE%BA%E6%96%87%E7%B2%BE%E8%AF%BB/' class="post-tag">论文精读</a></div></div>
+    <a href="/yolov1%E8%AE%BA%E6%96%87%E7%B2%BE%E8%AF%BB/">阅读全文</a><div class="post-tags"><i class="fa-solid fa-tags me-1" aria-hidden="true"></i><a href='/tags/yolo/' class="post-tag">YOLO</a><a href='/tags/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/' class="post-tag">目标检测</a><a href='/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/' class="post-tag">计算机视觉</a><a href='/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/' class="post-tag">深度学习</a><a href='/tags/ai/' class="post-tag">AI</a><a href='/tags/%E8%AE%BA%E6%96%87%E7%B2%BE%E8%AF%BB/' class="post-tag">论文精读</a></div></div>
 </article><article class="single summary" itemscope itemtype="http://schema.org/Article"><div class="featured-image-preview">
         <a href="/uv%E5%AE%8C%E5%85%A8%E6%8C%87%E5%8D%97/" aria-label="uv完全指南：下一代Python包管理器"><img loading="eager" src='/images/202607/5/la-la-I17-Jb0zuwQ-unsplash.jpg' sizes="(max-width: 680px) 100vw, (max-width: 960px) 80vw, (max-width: 1440px) 56vw, 800px" alt="Featured image for uv完全指南：下一代Python包管理器" height="336" width="800"></a>
       </div><h2 class="single-title" itemprop="name headline"><span title="转载" class="icon-repost"><i class="fa-solid fa-share" aria-hidden="true"></i></span><a href="/uv%E5%AE%8C%E5%85%A8%E6%8C%87%E5%8D%97/">uv完全指南：下一代Python包管理器</a>
@@ -366,11 +412,6 @@
       </div><h2 class="single-title" itemprop="name headline"><span title="转载" class="icon-repost"><i class="fa-solid fa-share" aria-hidden="true"></i></span><a href="/dotnetty%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/">DotNetty源码剖析：高性能网络框架的秘密</a>
   </h2><div class="post-meta"><span class="post-author"><a href="https://andyfree96.github.io/" title="作者" target="_blank" rel="author external nofollow noopener noreferrer" class="author"><img class="avatar" src='/avatar/1.jpg' alt="AndyFree96" height="16" width="16">&nbsp;AndyFree96</a></span>&nbsp;<span class="post-publish" title='2026-06-25 13:46:15'>发布于 <time datetime="2026-06-25">2026-06-25</time></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" class="post-category" title="分类 - 源码剖析"><i class="fa-regular fa-folder" aria-hidden="true"></i> 源码剖析</a></span></div><div class="content"></div><div class="post-footer">
     <a href="/dotnetty%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/">阅读全文</a><div class="post-tags"><i class="fa-solid fa-tags me-1" aria-hidden="true"></i><a href='/tags/dotnetty/' class="post-tag">DotNetty</a><a href='/tags/.net/' class="post-tag">.NET</a><a href='/tags/c%23/' class="post-tag">C#</a><a href='/tags/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/' class="post-tag">网络编程</a><a href='/tags/reactor/' class="post-tag">Reactor</a><a href='/tags/netty/' class="post-tag">Netty</a><a href='/tags/%E9%AB%98%E6%80%A7%E8%83%BD/' class="post-tag">高性能</a><a href='/tags/%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B/' class="post-tag">异步编程</a><a href='/tags/tcp/' class="post-tag">TCP</a><a href='/tags/%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1/' class="post-tag">架构设计</a><a href='/tags/%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/' class="post-tag">源码剖析</a></div></div>
-</article><article class="single summary" itemscope itemtype="http://schema.org/Article"><div class="featured-image-preview">
-        <a href="/redis%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" aria-label="Redis源码剖析：一个高性能服务器的设计哲学"><img loading="eager" src='/images/202606/13/puscas-adryan-W5m2KwELu6M-unsplash.jpg' sizes="(max-width: 680px) 100vw, (max-width: 960px) 80vw, (max-width: 1440px) 56vw, 800px" alt="Featured image for Redis源码剖析：一个高性能服务器的设计哲学" height="336" width="800"></a>
-      </div><h2 class="single-title" itemprop="name headline"><span title="转载" class="icon-repost"><i class="fa-solid fa-share" aria-hidden="true"></i></span><a href="/redis%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/">Redis源码剖析：一个高性能服务器的设计哲学</a>
-  </h2><div class="post-meta"><span class="post-author"><a href="https://andyfree96.github.io/" title="作者" target="_blank" rel="author external nofollow noopener noreferrer" class="author"><img class="avatar" src='/avatar/1.jpg' alt="AndyFree96" height="16" width="16">&nbsp;AndyFree96</a></span>&nbsp;<span class="post-publish" title='2026-06-25 13:28:30'>发布于 <time datetime="2026-06-25">2026-06-25</time></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" class="post-category" title="分类 - 源码剖析"><i class="fa-regular fa-folder" aria-hidden="true"></i> 源码剖析</a></span></div><div class="content"></div><div class="post-footer">
-    <a href="/redis%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/">阅读全文</a><div class="post-tags"><i class="fa-solid fa-tags me-1" aria-hidden="true"></i><a href='/tags/redis/' class="post-tag">Redis</a><a href='/tags/c/' class="post-tag">C</a><a href='/tags/%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%9E%B6%E6%9E%84/' class="post-tag">服务器架构</a><a href='/tags/%E9%AB%98%E6%80%A7%E8%83%BD/' class="post-tag">高性能</a><a href='/tags/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/' class="post-tag">内存管理</a><a href='/tags/%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/' class="post-tag">系统设计</a><a href='/tags/%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/' class="post-tag">源码剖析</a></div></div>
 </article><ul class="pagination"><li class="page-item active">
           <span class="page-link">
             <a href="/">1</a>
