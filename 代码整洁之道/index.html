@@ -31,7 +31,7 @@
 什么样的代码才是真正适合长期维护的软件代码？">
 	<meta itemprop="datePublished" content="2026-07-15T06:06:22+08:00">
 	<meta itemprop="dateModified" content="2026-07-15T06:06:22+08:00">
-	<meta itemprop="wordCount" content="2745">
+	<meta itemprop="wordCount" content="2846">
 	<meta itemprop="keywords" content="软件工程,代码质量,编程规范,整洁代码,软件设计,读书笔记,计算机"><meta property="og:url" content="http://localhost:1313/%E4%BB%A3%E7%A0%81%E6%95%B4%E6%B4%81%E4%B9%8B%E9%81%93/">
 	<meta property="og:site_name" content="东尼的博客">
 	<meta property="og:title" content="代码整洁之道 (Robert C. Martin)">
@@ -84,7 +84,7 @@
     "mainEntityOfPage": {
       "@type": "WebPage",
       "@id": "http:\/\/localhost:1313\/%E4%BB%A3%E7%A0%81%E6%95%B4%E6%B4%81%E4%B9%8B%E9%81%93\/"
-    },"genre": "posts","keywords": "软件工程, 代码质量, 编程规范, 整洁代码, 软件设计, 读书笔记, 计算机","wordcount":  2745 ,
+    },"genre": "posts","keywords": "软件工程, 代码质量, 编程规范, 整洁代码, 软件设计, 读书笔记, 计算机","wordcount":  2846 ,
     "url": "http:\/\/localhost:1313\/%E4%BB%A3%E7%A0%81%E6%95%B4%E6%B4%81%E4%B9%8B%E9%81%93\/","datePublished": "2026-07-15T06:06:22+08:00","dateModified": "2026-07-15T06:06:22+08:00","publisher": {
       "@type": "Organization",
       "name": ""},"author": {
@@ -192,7 +192,7 @@
   <article class="page single">
     <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span title="转载" class="icon-repost"><i class="fa-solid fa-share" aria-hidden="true"></i></span><span>代码整洁之道 (Robert C. Martin)</span>
       </h1></div><div class="post-meta">
-      <div class="post-meta-line"><span class="post-author"><a href="https://andyfree96.github.io/" title="作者" target="_blank" rel="author external nofollow noopener noreferrer" class="author"><img class="avatar" src='/avatar/1.jpg' alt="AndyFree96" height="16" width="16">&nbsp;AndyFree96</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E4%B9%A6%E7%B1%8D%E7%A0%94%E8%AF%BB/" class="post-category" title="分类 - 书籍研读"><i class="fa-regular fa-folder" aria-hidden="true"></i> 书籍研读</a></span></div><div class="post-meta-line"><span title="发布于 2026-07-15 06:06:22"><i class="fa-solid fa-calendar-days me-1" aria-hidden="true"></i><time datetime="2026-07-15">2026-07-15</time></span>&nbsp;<span title="2745 字"><i class="fa-solid fa-pencil-alt me-1" aria-hidden="true"></i>约 2800 字</span>&nbsp;<span><i class="fa-regular fa-clock me-1" aria-hidden="true"></i>预计阅读 6 分钟</span>&nbsp;</div>
+      <div class="post-meta-line"><span class="post-author"><a href="https://andyfree96.github.io/" title="作者" target="_blank" rel="author external nofollow noopener noreferrer" class="author"><img class="avatar" src='/avatar/1.jpg' alt="AndyFree96" height="16" width="16">&nbsp;AndyFree96</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E4%B9%A6%E7%B1%8D%E7%A0%94%E8%AF%BB/" class="post-category" title="分类 - 书籍研读"><i class="fa-regular fa-folder" aria-hidden="true"></i> 书籍研读</a></span></div><div class="post-meta-line"><span title="发布于 2026-07-15 06:06:22"><i class="fa-solid fa-calendar-days me-1" aria-hidden="true"></i><time datetime="2026-07-15">2026-07-15</time></span>&nbsp;<span title="2846 字"><i class="fa-solid fa-pencil-alt me-1" aria-hidden="true"></i>约 2900 字</span>&nbsp;<span><i class="fa-regular fa-clock me-1" aria-hidden="true"></i>预计阅读 6 分钟</span>&nbsp;</div>
     </div><div class="featured-image"><img loading="eager" src='/images/202607/16/red-zeppelin-yLCUleNSTf0-unsplash.jpg' sizes="(max-width: 680px) 100vw, (max-width: 960px) 80vw, (max-width: 1440px) 56vw, 800px" alt="/images/202607/16/red-zeppelin-yLCUleNSTf0-unsplash.jpg"></div><div class="details toc" id="toc-static" data-kept="false">
         <div class="details-summary toc-title">
           <span>目录</span>
@@ -226,7 +226,11 @@
         <li><a href="#217-不要添加没用的语境">2.17 不要添加没用的语境</a></li>
       </ul>
     </li>
-    <li><a href="#第3章-函数">第3章 函数</a></li>
+    <li><a href="#第3章-函数">第3章 函数</a>
+      <ul>
+        <li><a href="#31-短小">3.1 短小</a></li>
+      </ul>
+    </li>
     <li><a href="#第4章-注释">第4章 注释</a></li>
     <li><a href="#第5章-格式">第5章 格式</a></li>
     <li><a href="#第6章-对象和数据结构">第6章 对象和数据结构</a></li>
@@ -510,7 +514,14 @@
   <a href="#%e7%ac%ac3%e7%ab%a0-%e5%87%bd%e6%95%b0" class="heading-mark">
     <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
   </a>
-</h2><h2 class="heading-element" id="第4章-注释"><span>第4章 注释</span>
+</h2><h3 class="heading-element" id="31-短小"><span>3.1 短小</span>
+  <a href="#31-%e7%9f%ad%e5%b0%8f" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p>函数的第一规则是要短小。</p>
+<p><code>if</code>语句、<code>else</code>语句、<code>while</code>语句等，其中的代码应该只有一行。该行大抵应该是一个函数调用语句。</p>
+<p>函数不应该大到可以容纳嵌套结构。所以，函数的缩进层级不应该多于一层或两层。</p>
+<h2 class="heading-element" id="第4章-注释"><span>第4章 注释</span>
   <a href="#%e7%ac%ac4%e7%ab%a0-%e6%b3%a8%e9%87%8a" class="heading-mark">
     <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
   </a>
@@ -654,7 +665,11 @@
         <li><a href="#217-不要添加没用的语境">2.17 不要添加没用的语境</a></li>
       </ul>
     </li>
-    <li><a href="#第3章-函数">第3章 函数</a></li>
+    <li><a href="#第3章-函数">第3章 函数</a>
+      <ul>
+        <li><a href="#31-短小">3.1 短小</a></li>
+      </ul>
+    </li>
     <li><a href="#第4章-注释">第4章 注释</a></li>
     <li><a href="#第5章-格式">第5章 格式</a></li>
     <li><a href="#第6章-对象和数据结构">第6章 对象和数据结构</a></li>
