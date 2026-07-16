@@ -38,27 +38,27 @@
 
 | #   | 标题                                                    | 年份 | 论文                                     | 代码                                                                     | 状态 |
 | :-- | :------------------------------------------------------ | :--- | :--------------------------------------- | :----------------------------------------------------------------------- | :--- |
-| 1   | You Only Look Once: Unified, Real-Time Object Detection | 2015 | [Link](https://arxiv.org/abs/1506.02640) | [Link](https://github.com/abeardear/pytorch-YOLO-v1)                     | ✅   |
-| 2   | YOLOv4: Optimal Speed and Accuracy of Object Detection  | 2020 | [Link](https://arxiv.org/abs/2004.10934) | [Link](https://github.com/AlexeyAB/darknet)                              | ❎   |
-| 3   | A Neural Algorithm of Artistic Style                    | 2015 | [Link](https://arxiv.org/abs/1508.06576) | [Link](https://github.com/Kautenja/a-neural-algorithm-of-artistic-style) | ❎   |
+| 1   | You Only Look Once: Unified, Real-Time Object Detection | 2015 | [下载](https://arxiv.org/abs/1506.02640) | [下载](https://github.com/abeardear/pytorch-YOLO-v1)                     | ✅ [笔记](/yolov1论文精读/) |
+| 2   | YOLOv4: Optimal Speed and Accuracy of Object Detection  | 2020 | [下载](https://arxiv.org/abs/2004.10934) | [下载](https://github.com/AlexeyAB/darknet)                              | ❎   |
+| 3   | A Neural Algorithm of Artistic Style                    | 2015 | [下载](https://arxiv.org/abs/1508.06576) | [下载](https://github.com/Kautenja/a-neural-algorithm-of-artistic-style) | ❎   |
 
 ### 2025
 
 | #   | 标题                                                       | 年份 | 论文                                                                                                   | 代码 | 状态 |
 | :-- | :--------------------------------------------------------- | :--- | :----------------------------------------------------------------------------------------------------- | :--- | :--- |
-| 1   | The Google File System                                     | 2003 | [Link](https://static.googleusercontent.com/media/research.google.com/en//archive/gfs-sosp2003.pdf)    | 无   | ❎   |
-| 2   | What Every Programmer Should Know About Memory             | 2007 | [Link](https://people.freebsd.org/~lstewart/articles/cpumemory.pdf)                                    | 无   | ❎   |
-| 3   | Bigtable: A Distributed Storage System for Structured Data | 2006 | [Link](https://static.googleusercontent.com/media/research.google.com/en//archive/bigtable-osdi06.pdf) | 无   | ❎   |
-| 4   | Why Functional Programming Matters                         | 1990 | [Link](https://www.cs.utexas.edu/~shmat/courses/cs345/whyfp.pdf)                                       | 无   | ❎   |
+| 1   | The Google File System                                     | 2003 | [下载](https://static.googleusercontent.com/media/research.google.com/en//archive/gfs-sosp2003.pdf)    | 无   | ❎   |
+| 2   | What Every Programmer Should Know About Memory             | 2007 | [下载](https://people.freebsd.org/~lstewart/articles/cpumemory.pdf)                                    | 无   | ❎   |
+| 3   | Bigtable: A Distributed Storage System for Structured Data | 2006 | [下载](https://static.googleusercontent.com/media/research.google.com/en//archive/bigtable-osdi06.pdf) | 无   | ❎   |
+| 4   | Why Functional Programming Matters                         | 1990 | [下载](https://www.cs.utexas.edu/~shmat/courses/cs345/whyfp.pdf)                                       | 无   | ❎   |
 
 ### 2026
 
 | #   | 标题                                                       | 年份 | 论文                                                       | 代码 | 状态 |
 | :-- | :--------------------------------------------------------- | :--- | :--------------------------------------------------------- | :--- | :--- |
-| 1   | The Log-Structured Merge-Tree (LSM-Tree)                   | 1996 | [Link](https://www.cs.umb.edu/~poneil/lsmtree.pdf)         | 无   | ❎   |
-| 2   | The Ubiquitous B-Tree                                      | 1979 | [Link](https://dl.acm.org/doi/pdf/10.1145/356770.356776)   | 无   | ❎   |
-| 3   | Space/time trade-offs in hash coding with allowable errors | 1970 | [Link](https://dl.acm.org/doi/pdf/10.1145/362686.362692)   | 无   | ❎   |
-| 4   | Dynamo: Amazon's highly available key-value store          | 2007 | [Link](https://dl.acm.org/doi/pdf/10.1145/1323293.1294281) | 无   | ❎   |
+| 1   | The Log-Structured Merge-Tree (LSM-Tree)                   | 1996 | [下载](https://www.cs.umb.edu/~poneil/lsmtree.pdf)         | 无   | ❎   |
+| 2   | The Ubiquitous B-Tree                                      | 1979 | [下载](https://dl.acm.org/doi/pdf/10.1145/356770.356776)   | 无   | ❎   |
+| 3   | Space/time trade-offs in hash coding with allowable errors | 1970 | [下载](https://dl.acm.org/doi/pdf/10.1145/362686.362692)   | 无   | ❎   |
+| 4   | Dynamo: Amazon's highly available key-value store          | 2007 | [下载](https://dl.acm.org/doi/pdf/10.1145/1323293.1294281) | 无   | ❎   |
 
 
 ---

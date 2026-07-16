@@ -398,6 +398,13 @@ _bandwidthMeter.UpdateSpeed += BandwidthMeter_UpdateSpeed;
 
 这意味着每隔1秒`BandwidthMeter_UpdateSpeed`方法就会被调用1次。`BandwidthMeter_UpdateSpeed`主要包含了一些图表数据更新的逻辑，这就是为什么我们可以看到图表的曲线一直在刷新变化。这里的图表看起来比较精美，用的是[LiveCharts2](https://livecharts.dev/)，一个现代化的 .NET 数据可视化图表库。
 
+## 5. NETworkManager是如何管理众多功能页面的？
+
+## 6. 语言切换,如何做到不用修改代码？
+
+## 7. 软件如何实现自动更新？
+
+
 
 ---
 

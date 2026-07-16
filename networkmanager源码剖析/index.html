@@ -11,7 +11,7 @@
 	<meta itemprop="description" content="在 GitHub 闲逛时，我偶然发现了NETworkManager这个开源项目。作为一款网络管理和故障排查工具，它已经积累了超过 8.5k Star，足以说明社区对它的认可。更让我感兴趣的是，这个项目采用 C# &#43; WPF 进行开发，与我当前正在深入学习和实践的技术栈高度契合。因此，我产生了一个想法：通过深入分析 NETworkManager 的源码，探索一个成熟的 WPF 桌面应用是如何进行架构设计、模块划分以及工程实践的。接下来，我将以 NETworkManager 为切入点，逐步拆解它在 WPF UI 设计、MVVM 架构、依赖注入、配置管理、网络通信、异步编程以及工程化实践 等方面的实现，希望能够从优秀的开源项目中学习桌面应用开发的最佳实践。">
 	<meta itemprop="datePublished" content="2026-07-14T08:47:15+08:00">
 	<meta itemprop="dateModified" content="2026-07-14T08:47:15+08:00">
-	<meta itemprop="wordCount" content="4119">
+	<meta itemprop="wordCount" content="4176">
 	<meta itemprop="keywords" content="C#,WPF,MVVM,网络管理,源码剖析"><meta property="og:url" content="http://localhost:1313/networkmanager%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/">
 	<meta property="og:site_name" content="东尼的博客">
 	<meta property="og:title" content="NETworkManager源码剖析：一个网络管理工具的实现细节">
@@ -43,7 +43,7 @@
     "mainEntityOfPage": {
       "@type": "WebPage",
       "@id": "http:\/\/localhost:1313\/networkmanager%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90\/"
-    },"genre": "posts","keywords": "C#, WPF, MVVM, 网络管理, 源码剖析","wordcount":  4119 ,
+    },"genre": "posts","keywords": "C#, WPF, MVVM, 网络管理, 源码剖析","wordcount":  4176 ,
     "url": "http:\/\/localhost:1313\/networkmanager%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90\/","datePublished": "2026-07-14T08:47:15+08:00","dateModified": "2026-07-14T08:47:15+08:00","publisher": {
       "@type": "Organization",
       "name": ""},"author": {
@@ -145,7 +145,7 @@
   <article class="page single">
     <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span title="转载" class="icon-repost"><i class="fa-solid fa-share" aria-hidden="true"></i></span><span>NETworkManager源码剖析：一个网络管理工具的实现细节</span>
       </h1></div><div class="post-meta">
-      <div class="post-meta-line"><span class="post-author"><a href="https://andyfree96.github.io/" title="作者" target="_blank" rel="author external nofollow noopener noreferrer" class="author"><img class="avatar" src='/avatar/1.jpg' alt="AndyFree96" height="16" width="16">&nbsp;AndyFree96</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" class="post-category" title="分类 - 源码剖析"><i class="fa-regular fa-folder" aria-hidden="true"></i> 源码剖析</a></span></div><div class="post-meta-line"><span title="发布于 2026-07-14 08:47:15"><i class="fa-solid fa-calendar-days me-1" aria-hidden="true"></i><time datetime="2026-07-14">2026-07-14</time></span>&nbsp;<span title="4119 字"><i class="fa-solid fa-pencil-alt me-1" aria-hidden="true"></i>约 4200 字</span>&nbsp;<span><i class="fa-regular fa-clock me-1" aria-hidden="true"></i>预计阅读 9 分钟</span>&nbsp;</div>
+      <div class="post-meta-line"><span class="post-author"><a href="https://andyfree96.github.io/" title="作者" target="_blank" rel="author external nofollow noopener noreferrer" class="author"><img class="avatar" src='/avatar/1.jpg' alt="AndyFree96" height="16" width="16">&nbsp;AndyFree96</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" class="post-category" title="分类 - 源码剖析"><i class="fa-regular fa-folder" aria-hidden="true"></i> 源码剖析</a></span></div><div class="post-meta-line"><span title="发布于 2026-07-14 08:47:15"><i class="fa-solid fa-calendar-days me-1" aria-hidden="true"></i><time datetime="2026-07-14">2026-07-14</time></span>&nbsp;<span title="4176 字"><i class="fa-solid fa-pencil-alt me-1" aria-hidden="true"></i>约 4200 字</span>&nbsp;<span><i class="fa-regular fa-clock me-1" aria-hidden="true"></i>预计阅读 9 分钟</span>&nbsp;</div>
     </div><div class="featured-image"><img loading="eager" src='/images/202607/15/maverick-frame-GswoB8XDnBc-unsplash.jpg' sizes="(max-width: 680px) 100vw, (max-width: 960px) 80vw, (max-width: 1440px) 56vw, 800px" alt="/images/202607/15/maverick-frame-GswoB8XDnBc-unsplash.jpg"></div><div class="details toc" id="toc-static" data-kept="false">
         <div class="details-summary toc-title">
           <span>目录</span>
@@ -164,6 +164,9 @@
     <li><a href="#2-日志保存在什么位置">2. 日志保存在什么位置？</a></li>
     <li><a href="#3-仪表盘界面中的ip地址是如何获取的">3. 仪表盘界面中的IP地址是如何获取的？</a></li>
     <li><a href="#4-网络接口选项中的接口带宽是如何测出来的">4. 网络接口选项中的接口带宽是如何测出来的？</a></li>
+    <li><a href="#5-networkmanager是如何管理众多功能页面的">5. NETworkManager是如何管理众多功能页面的？</a></li>
+    <li><a href="#6-语言切换如何做到不用修改代码">6. 语言切换,如何做到不用修改代码？</a></li>
+    <li><a href="#7-软件如何实现自动更新">7. 软件如何实现自动更新？</a></li>
   </ul>
 </nav></div>
       </div><div class="content" id="content"><p>在 GitHub 闲逛时，我偶然发现了<a href="https://borntoberoot.net/NETworkManager/" target="_blank" rel="external nofollow noopener noreferrer">NETworkManager<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>这个开源项目。作为一款网络管理和故障排查工具，它已经积累了超过 8.5k Star，足以说明社区对它的认可。更让我感兴趣的是，这个项目采用 C# + WPF 进行开发，与我当前正在深入学习和实践的技术栈高度契合。因此，我产生了一个想法：通过深入分析 NETworkManager 的源码，探索一个成熟的 WPF 桌面应用是如何进行架构设计、模块划分以及工程实践的。接下来，我将以 NETworkManager 为切入点，逐步拆解它在 WPF UI 设计、MVVM 架构、依赖注入、配置管理、网络通信、异步编程以及工程化实践 等方面的实现，希望能够从优秀的开源项目中学习桌面应用开发的最佳实践。</p>
@@ -939,7 +942,20 @@
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-c#" data-lang="c#"><span class="line"><span class="cl"><span class="n">_bandwidthMeter</span><span class="p">.</span><span class="n">UpdateSpeed</span> <span class="p">+=</span> <span class="n">BandwidthMeter_UpdateSpeed</span><span class="p">;</span></span></span></code></pre></td></tr></table></div>
 </div>
-</div><p>这意味着每隔1秒<code>BandwidthMeter_UpdateSpeed</code>方法就会被调用1次。<code>BandwidthMeter_UpdateSpeed</code>主要包含了一些图表数据更新的逻辑，这就是为什么我们可以看到图表的曲线一直在刷新变化。这里的图表看起来比较精美，用的是<a href="https://livecharts.dev/" target="_blank" rel="external nofollow noopener noreferrer">LiveCharts2<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>，一个现代化的 .NET 数据可视化图表库。</p></div><hr class="awesome-hr" />
+</div><p>这意味着每隔1秒<code>BandwidthMeter_UpdateSpeed</code>方法就会被调用1次。<code>BandwidthMeter_UpdateSpeed</code>主要包含了一些图表数据更新的逻辑，这就是为什么我们可以看到图表的曲线一直在刷新变化。这里的图表看起来比较精美，用的是<a href="https://livecharts.dev/" target="_blank" rel="external nofollow noopener noreferrer">LiveCharts2<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>，一个现代化的 .NET 数据可视化图表库。</p>
+<h2 class="heading-element" id="5-networkmanager是如何管理众多功能页面的"><span>5. NETworkManager是如何管理众多功能页面的？</span>
+  <a href="#5-networkmanager%e6%98%af%e5%a6%82%e4%bd%95%e7%ae%a1%e7%90%86%e4%bc%97%e5%a4%9a%e5%8a%9f%e8%83%bd%e9%a1%b5%e9%9d%a2%e7%9a%84" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><h2 class="heading-element" id="6-语言切换如何做到不用修改代码"><span>6. 语言切换,如何做到不用修改代码？</span>
+  <a href="#6-%e8%af%ad%e8%a8%80%e5%88%87%e6%8d%a2%e5%a6%82%e4%bd%95%e5%81%9a%e5%88%b0%e4%b8%8d%e7%94%a8%e4%bf%ae%e6%94%b9%e4%bb%a3%e7%a0%81" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><h2 class="heading-element" id="7-软件如何实现自动更新"><span>7. 软件如何实现自动更新？</span>
+  <a href="#7-%e8%bd%af%e4%bb%b6%e5%a6%82%e4%bd%95%e5%ae%9e%e7%8e%b0%e8%87%aa%e5%8a%a8%e6%9b%b4%e6%96%b0" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2></div><hr class="awesome-hr" />
     <h2 id="see-also">相关内容</h2>
     <ul><li>
           <a href="/downloader%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="Downloader源码剖析：一个下载器的实现原理">Downloader源码剖析：一个下载器的实现原理</a></li><li>
@@ -1002,6 +1018,9 @@
     <li><a href="#2-日志保存在什么位置">2. 日志保存在什么位置？</a></li>
     <li><a href="#3-仪表盘界面中的ip地址是如何获取的">3. 仪表盘界面中的IP地址是如何获取的？</a></li>
     <li><a href="#4-网络接口选项中的接口带宽是如何测出来的">4. 网络接口选项中的接口带宽是如何测出来的？</a></li>
+    <li><a href="#5-networkmanager是如何管理众多功能页面的">5. NETworkManager是如何管理众多功能页面的？</a></li>
+    <li><a href="#6-语言切换如何做到不用修改代码">6. 语言切换,如何做到不用修改代码？</a></li>
+    <li><a href="#7-软件如何实现自动更新">7. 软件如何实现自动更新？</a></li>
   </ul>
 </nav></div>
       </div>
