@@ -4,7 +4,7 @@
 ```timeline
 events:
   - timestamp: 2026-06-16T13:31:19+08:00
-    content: ":tada: 更新: [推荐](#推荐)增加阮一峰老师两篇关于Git的文章[Git分支管理策略](https://www.runyifeng.com/blog/2012/07/git.html)和[Git使用规范流程](https://www.ruanyifeng.com/blog/2015/08/git-use-process.html)以及另外一篇[Git之GitFlow工作流](https://blog.csdn.net/sunyctf/article/details/130587970)"
+    content: ":tada: 更新: [推荐](#推荐)增加阮一峰老师两篇关于Git的文章[Git分支管理策略](https://www.ruanyifeng.com/blog/2012/07/git.html)和[Git使用规范流程](https://www.ruanyifeng.com/blog/2015/08/git-use-process.html)以及另外一篇[Git之GitFlow工作流](https://blog.csdn.net/sunyctf/article/details/130587970)"
     type: danger
 ```
 
@@ -189,7 +189,7 @@ Git 注意到我们修改了`hello_world.py`。我们可以提交所做的修改
 
 以闯关+可视化的形式学习 Git 相关知识。
 
-[Git分支管理策略](https://www.runyifeng.com/blog/2012/07/git.html)：如何管理分支。
+[Git分支管理策略](https://www.ruanyifeng.com/blog/2012/07/git.html)：如何管理分支。
 
 [Git使用规范流程](https://www.ruanyifeng.com/blog/2015/08/git-use-process.html)：如何规范使用Git。
 

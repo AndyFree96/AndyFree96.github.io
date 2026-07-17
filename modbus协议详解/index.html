@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+    <meta name="robots" content="noodp" />
+    <title>Modbus协议详解：从入门到实战 - 东尼的博客</title><meta name="author" content="AndyFree96">
+<meta name="description" content="在工业自动化领域，无论是 PLC、HMI、变频器、伺服驱动器、仪器仪表，还是机器视觉设备，你经常会看到Modbus的身影。例如：PLC与上位机通信、PLC与上位机通信、PLC与IO模块通信等等。几乎所有的工业设备都会支持Modbus。在初次接触Modbus后，产生了很多疑问：
+什么是Modbus？ RTU和TCP有什么区别？ 主站和从站是什么意思？ 本文将采用问题驱动的方式，带你一步步理解Modbus。
+"><meta name="keywords" content='Modbus, 工业通信, TCP/IP, 工业自动化, PLC'>
+	<meta itemprop="name" content="Modbus协议详解：从入门到实战">
+	<meta itemprop="description" content="在工业自动化领域，无论是 PLC、HMI、变频器、伺服驱动器、仪器仪表，还是机器视觉设备，你经常会看到Modbus的身影。例如：PLC与上位机通信、PLC与上位机通信、PLC与IO模块通信等等。几乎所有的工业设备都会支持Modbus。在初次接触Modbus后，产生了很多疑问：
+什么是Modbus？ RTU和TCP有什么区别？ 主站和从站是什么意思？ 本文将采用问题驱动的方式，带你一步步理解Modbus。">
+	<meta itemprop="datePublished" content="2026-07-17T06:24:08+08:00">
+	<meta itemprop="dateModified" content="2026-07-17T06:24:08+08:00">
+	<meta itemprop="wordCount" content="1919">
+	<meta itemprop="keywords" content="Modbus,工业通信,TCP/IP,工业自动化,PLC"><meta property="og:url" content="http://localhost:1313/modbus%E5%8D%8F%E8%AE%AE%E8%AF%A6%E8%A7%A3/">
+	<meta property="og:site_name" content="东尼的博客">
+	<meta property="og:title" content="Modbus协议详解：从入门到实战">
+	<meta property="og:description" content="在工业自动化领域，无论是 PLC、HMI、变频器、伺服驱动器、仪器仪表，还是机器视觉设备，你经常会看到Modbus的身影。例如：PLC与上位机通信、PLC与上位机通信、PLC与IO模块通信等等。几乎所有的工业设备都会支持Modbus。在初次接触Modbus后，产生了很多疑问：
+什么是Modbus？ RTU和TCP有什么区别？ 主站和从站是什么意思？ 本文将采用问题驱动的方式，带你一步步理解Modbus。">
+	<meta property="og:locale" content="zh_CN">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="posts">
+		<meta property="article:published_time" content="2026-07-17T06:24:08+08:00">
+		<meta property="article:modified_time" content="2026-07-17T06:24:08+08:00">
+		<meta property="article:tag" content="Modbus">
+		<meta property="article:tag" content="工业通信">
+		<meta property="article:tag" content="TCP/IP">
+		<meta property="article:tag" content="工业自动化">
+		<meta property="article:tag" content="PLC">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Modbus协议详解：从入门到实战">
+  <meta name="twitter:description" content="在工业自动化领域，无论是 PLC、HMI、变频器、伺服驱动器、仪器仪表，还是机器视觉设备，你经常会看到Modbus的身影。例如：PLC与上位机通信、PLC与上位机通信、PLC与IO模块通信等等。几乎所有的工业设备都会支持Modbus。在初次接触Modbus后，产生了很多疑问：
+什么是Modbus？ RTU和TCP有什么区别？ 主站和从站是什么意思？ 本文将采用问题驱动的方式，带你一步步理解Modbus。"><meta name="twitter:creator" content="@IRONAnthony96"><meta name="application-name" content="FixIt">
+<meta name="apple-mobile-web-app-title" content="FixIt"><meta name="theme-color" data-light="#f6f8fa" data-dark="#151b23" content="#f6f8fa"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" type="text/html" href="http://localhost:1313/modbus%E5%8D%8F%E8%AE%AE%E8%AF%A6%E8%A7%A3/" title="Modbus协议详解：从入门到实战 - 东尼的博客" /><link rel="prev" type="text/html" href="http://localhost:1313/%E4%BB%8Eserialport%E5%88%B0%E5%B7%A5%E4%B8%9A%E7%BA%A7%E9%80%9A%E4%BF%A1%E6%A1%86%E6%9E%B6%E8%AE%BE%E8%AE%A1/" title="C#编程实践(二)：从SerialPort到工业级通信框架设计" /><link rel="next" type="text/html" href="http://localhost:1313/%E6%8C%91%E6%88%98%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%AB%9E%E8%B5%9B/" title="挑战程序设计竞赛 第2版 (秋叶拓哉 / 岩田阳一 / 北川宜稔)" /><link rel="alternate" type="text/markdown" href="http://localhost:1313/modbus%E5%8D%8F%E8%AE%AE%E8%AF%A6%E8%A7%A3/index.md" title="Modbus协议详解：从入门到实战 - 东尼的博客"><link rel="stylesheet" href="/css/config.css"><link rel="stylesheet" href="/css/main.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><link rel="preload" href="/js/main.js" as="script"><script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "BlogPosting",
+    "headline": "Modbus协议详解：从入门到实战",
+    "inLanguage": "zh-CN",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "http:\/\/localhost:1313\/modbus%E5%8D%8F%E8%AE%AE%E8%AF%A6%E8%A7%A3\/"
+    },"genre": "posts","keywords": "Modbus, 工业通信, TCP\/IP, 工业自动化, PLC","wordcount":  1919 ,
+    "url": "http:\/\/localhost:1313\/modbus%E5%8D%8F%E8%AE%AE%E8%AF%A6%E8%A7%A3\/","datePublished": "2026-07-17T06:24:08+08:00","dateModified": "2026-07-17T06:24:08+08:00","publisher": {
+      "@type": "Organization",
+      "name": ""},"author": {
+        "@type": "Person",
+        "name": "AndyFree96"
+      },"description": ""
+  }
+  </script><script src="/js/head/color-scheme.js"></script></head>
+  <body data-instant-intensity="viewport" data-header-desktop="sticky" data-header-mobile="auto"><div class="wrapper" data-page-style="normal"><header class="desktop animate__faster" id="header-desktop">
+  <div class="header-wrapper">
+    <div class="header-title">
+      <a href="/" title="东尼的博客" class="header-title-link"><span class="header-title-text">东尼的博客</span></a><span class="header-subtitle"></span></div>
+    <nav>
+      <ul class="menu"><li class="menu-item">
+              <a class="menu-link" href="/posts/">📕 文章</a></li><li class="menu-item">
+              <a class="menu-link" href="/categories/">🧰 分类</a></li><li class="menu-item">
+              <a class="menu-link" href="/tags/">🔖 标签</a></li><li class="menu-item">
+              <a class="menu-link" href="/book">📚 书单</a></li><li class="menu-item">
+              <a class="menu-link" href="/paper">📝 论文</a></li><li class="menu-item">
+              <a class="menu-link" href="/opencourse">👨🏻‍💻 公开课</a></li><li class="menu-item">
+              <a class="menu-link" href="/filmtv">🎞️ 影视</a></li><li class="menu-item">
+              <a class="menu-link" href="/resource">⚡️ 资源库</a></li><li class="menu-item">
+              <a class="menu-link" href="/projects">⭐ 开源</a></li><li class="menu-item">
+              <a class="menu-link" href="/about">🙋🏻‍♂️ 关于</a></li><li class="menu-item delimiter"></li><li class="menu-item search" id="search-desktop">
+            <input type="text" placeholder="搜索文章标题或内容……" id="search-input-desktop" tabindex="-1">
+            <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索" aria-controls="search-dropdown-desktop" aria-expanded="false">
+              <i class="fa-solid fa-search" aria-hidden="true"></i>
+            </a>
+            <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+              <i class="fa-solid fa-times-circle" aria-hidden="true"></i>
+            </a>
+            <span class="search-button search-loading" id="search-loading-desktop">
+              <i class="fa-solid fa-spinner fa-spin" aria-hidden="true"></i>
+            </span>
+          </li><li class="menu-item theme-switch-item">
+          <button type="button" class="theme-switch" aria-label="切换主题" title="切换主题"><i class="fa-solid fa-adjust" aria-hidden="true"></i></button>
+        </li></ul>
+    </nav>
+  </div>
+</header><header class="mobile animate__faster" id="header-mobile">
+  <div class="header-container">
+    <div class="header-wrapper">
+      <div class="header-title">
+        <a href="/" title="东尼的博客" class="header-title-link"><span class="header-title-text">东尼的博客</span></a><span class="header-subtitle"></span></div>
+      <button type="button" class="theme-switch" aria-label="切换主题"><i class="fa-solid fa-adjust" aria-hidden="true"></i></button>
+      <button type="button" class="menu-toggle" id="menu-toggle-mobile" aria-controls="menu-mobile" aria-expanded="false" aria-labelledby="menu-mobile">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <nav>
+      <ul class="menu" id="menu-mobile"><li class="search-wrapper">
+            <div class="search mobile" id="search-mobile">
+              <input type="text" placeholder="搜索文章标题或内容……" id="search-input-mobile">
+              <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索" aria-controls="search-dropdown-mobile" aria-expanded="false">
+                <i class="fa-solid fa-search" aria-hidden="true"></i>
+              </a>
+              <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                <i class="fa-solid fa-times-circle" aria-hidden="true"></i>
+              </a>
+              <span class="search-button search-loading" id="search-loading-mobile">
+                <i class="fa-solid fa-spinner fa-spin" aria-hidden="true"></i>
+              </span>
+            </div>
+            <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+              取消
+            </a>
+          </li><li class="menu-item"><a class="menu-link" href="/posts/">📕 文章</a></li><li class="menu-item"><a class="menu-link" href="/categories/">🧰 分类</a></li><li class="menu-item"><a class="menu-link" href="/tags/">🔖 标签</a></li><li class="menu-item"><a class="menu-link" href="/book">📚 书单</a></li><li class="menu-item"><a class="menu-link" href="/paper">📝 论文</a></li><li class="menu-item"><a class="menu-link" href="/opencourse">👨🏻‍💻 公开课</a></li><li class="menu-item"><a class="menu-link" href="/filmtv">🎞️ 影视</a></li><li class="menu-item"><a class="menu-link" href="/resource">⚡️ 资源库</a></li><li class="menu-item"><a class="menu-link" href="/projects">⭐ 开源</a></li><li class="menu-item"><a class="menu-link" href="/about">🙋🏻‍♂️ 关于</a></li><li class="menu-item menu-system"></li>
+      </ul>
+    </nav>
+  </div>
+</header><div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+  </div>
+  <div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+  </div><main class="fi-container"><aside class="aside-collection animate__animated animate__fadeIn animate__faster" aria-label="合集"><div class="details related-details open">
+      <div class="details-summary related-summary">
+        <i class="fa-solid fa-fire fa-fade text-danger" aria-hidden="true"></i>
+        <span class="related-title">相关内容</span><i class="details-icon fa-solid fa-angle-right" aria-hidden="true"></i></div>
+      <div class="details-content related-content">
+        <ul class="related-list"><li class="related-item">
+              <a href="/%E4%BB%8Eserialport%E5%88%B0%E5%B7%A5%E4%B8%9A%E7%BA%A7%E9%80%9A%E4%BF%A1%E6%A1%86%E6%9E%B6%E8%AE%BE%E8%AE%A1/" title="C#编程实践(二)：从SerialPort到工业级通信框架设计">C#编程实践(二)：从SerialPort到工业级通信框架设计</a></li><li class="related-item">
+              <a href="/shadowsocks-windows%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="shadowsocks-windows源码剖析：一个C#网络代理客户端是如何工作的？">shadowsocks-windows源码剖析：一个C#网络代理客户端是如何工作的？</a></li><li class="related-item">
+              <a href="/tcp-ip%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" title="TCP/IP网络编程 (尹圣雨)">TCP/IP网络编程 (尹圣雨)</a></li></ul>
+      </div>
+    </div></aside>
+
+  <article class="page single">
+    <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span title="转载" class="icon-repost"><i class="fa-solid fa-share" aria-hidden="true"></i></span><span>Modbus协议详解：从入门到实战</span>
+      </h1></div><div class="post-meta">
+      <div class="post-meta-line"><span class="post-author"><a href="https://andyfree96.github.io/" title="作者" target="_blank" rel="author external nofollow noopener noreferrer" class="author"><img class="avatar" src='/avatar/1.jpg' alt="AndyFree96" height="16" width="16">&nbsp;AndyFree96</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E9%80%9A%E4%BF%A1%E5%8D%8F%E8%AE%AE/" class="post-category" title="分类 - 通信协议"><i class="fa-regular fa-folder" aria-hidden="true"></i> 通信协议</a></span></div><div class="post-meta-line"><span title="发布于 2026-07-17 06:24:08"><i class="fa-solid fa-calendar-days me-1" aria-hidden="true"></i><time datetime="2026-07-17">2026-07-17</time></span>&nbsp;<span title="1919 字"><i class="fa-solid fa-pencil-alt me-1" aria-hidden="true"></i>约 2000 字</span>&nbsp;<span><i class="fa-regular fa-clock me-1" aria-hidden="true"></i>预计阅读 4 分钟</span>&nbsp;</div>
+    </div><div class="featured-image"><img loading="eager" src='/images/202607/22/tim-mossholder-O4sLv36-k1w-unsplash.jpg' sizes="(max-width: 680px) 100vw, (max-width: 960px) 80vw, (max-width: 1440px) 56vw, 800px" alt="/images/202607/22/tim-mossholder-O4sLv36-k1w-unsplash.jpg"></div><div class="details toc" id="toc-static" data-kept="false">
+        <div class="details-summary toc-title">
+          <span>目录</span>
+          <span><i class="details-icon fa-solid fa-angle-right" aria-hidden="true"></i></span>
+        </div>
+        <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#什么是modbus">什么是Modbus？</a></li>
+    <li><a href="#modbus协议有哪些版本">Modbus协议有哪些版本？</a></li>
+    <li><a href="#为什么工业上喜欢用modbus">为什么工业上喜欢用Modbus？</a></li>
+    <li><a href="#modbus消息帧的格式是什么样的">Modbus消息帧的格式是什么样的？</a></li>
+    <li><a href="#modbus功能码有哪些">Modbus功能码有哪些？</a></li>
+    <li><a href="#有哪些数据类型">有哪些数据类型？</a></li>
+    <li><a href="#c如何使用modbus">C#如何使用Modbus？</a></li>
+    <li><a href="#机器视觉项目中如何使用modbus">机器视觉项目中如何使用Modbus？</a></li>
+    <li><a href="#使用modbus时常见的坑">使用Modbus时常见的坑</a>
+      <ul>
+        <li><a href="#1-寄存器地址偏移">1. 寄存器地址偏移</a></li>
+        <li><a href="#2-字节序">2. 字节序</a></li>
+        <li><a href="#3-串口参数不一致">3. 串口参数不一致</a></li>
+        <li><a href="#4-站号配置错误">4. 站号配置错误</a></li>
+        <li><a href="#5-rtu帧间隔">5. RTU帧间隔</a></li>
+        <li><a href="#6-异常码处理">6. 异常码处理</a></li>
+      </ul>
+    </li>
+    <li><a href="#推荐">推荐</a></li>
+    <li><a href="#参考">参考</a></li>
+  </ul>
+</nav></div>
+      </div><div class="content" id="content"><p>在工业自动化领域，无论是 PLC、HMI、变频器、伺服驱动器、仪器仪表，还是机器视觉设备，你经常会看到Modbus的身影。例如：PLC与上位机通信、PLC与上位机通信、PLC与IO模块通信等等。几乎所有的工业设备都会支持Modbus。在初次接触Modbus后，产生了很多疑问：</p>
+<ul>
+<li>什么是Modbus？</li>
+<li>RTU和TCP有什么区别？</li>
+<li>主站和从站是什么意思？</li>
+</ul>
+<p>本文将采用问题驱动的方式，带你一步步理解Modbus。</p>
+<h2 class="heading-element" id="什么是modbus"><span>什么是Modbus？</span>
+  <a href="#%e4%bb%80%e4%b9%88%e6%98%afmodbus" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>Modbus是一种广泛应用于工业自动化和控制系统的通信协议，由Modicon于1979年制定而成。其定义了允许不同设备交换数据的通用规则，这些规则是公开的，不依赖于特定的制造商。目前已经成为工业领域事实上的标准。在Modbus通信中，发送请求的设备称为主设备(客户机)，响应请求的设备称为从设备(服务器)。主设备向特定从设备发送读或写请求启动通信，从设备处理请求并返回响应。</p>
+<p><figure><img loading="lazy" src='/images/202607/22/img_02_01.jpg' alt="图1 主从设备通信"><figcaption class="image-caption">图1 主从设备通信</figcaption>
+  </figure></p>
+<h2 class="heading-element" id="modbus协议有哪些版本"><span>Modbus协议有哪些版本？</span>
+  <a href="#modbus%e5%8d%8f%e8%ae%ae%e6%9c%89%e5%93%aa%e4%ba%9b%e7%89%88%e6%9c%ac" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>Modbus协议有多个版本，主要有：</p>
+<ul>
+<li>Modbus RTU(Remote Terminal Unit)：基于串口通信(如RS-232、RS-485)的协议。数据以二进制格式法案送，传输效率高，通常用于串行链路。</li>
+<li>Modbus ASCII：与Modbus RTU类似，但数据以ASCII码格式发送，传输效率较低，但易于调试。</li>
+<li>Modbus TCP/IP：基于以太网的版本，采用TCP/IP协议栈来传输Modbus数据包，适用于局域网或广域网环境。允许更灵活的网络拓扑，并支持更多设备接入。</li>
+</ul>
+<p><figure><img loading="lazy" src='/images/202607/22/img_04_01.jpg' alt="图2 Modbus协议版本"><figcaption class="image-caption">图2 Modbus协议版本</figcaption>
+  </figure></p>
+<h2 class="heading-element" id="为什么工业上喜欢用modbus"><span>为什么工业上喜欢用Modbus？</span>
+  <a href="#%e4%b8%ba%e4%bb%80%e4%b9%88%e5%b7%a5%e4%b8%9a%e4%b8%8a%e5%96%9c%e6%ac%a2%e7%94%a8modbus" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>在工业应用中选择Modbus主要有5个原因：</p>
+<ol>
+<li>开放和免费的规范</li>
+<li>简单的协议结构，支持简单的实现和调试</li>
+<li>多厂商环境的高兼容性</li>
+<li>可灵活选择RTU或TCP通信</li>
+<li>与远程I/O的兼容性强，可扩展性好</li>
+</ol>
+<h2 class="heading-element" id="modbus消息帧的格式是什么样的"><span>Modbus消息帧的格式是什么样的？</span>
+  <a href="#modbus%e6%b6%88%e6%81%af%e5%b8%a7%e7%9a%84%e6%a0%bc%e5%bc%8f%e6%98%af%e4%bb%80%e4%b9%88%e6%a0%b7%e7%9a%84" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p><figure><img loading="lazy" src='/images/202607/22/figure_018.jpg' alt="图3 Modbus消息帧格式"><figcaption class="image-caption">图3 Modbus消息帧格式</figcaption>
+  </figure></p>
+<p>Modbus消息包括以下几个部分：</p>
+<ul>
+<li>地址域：用于标识目标设备的地址</li>
+<li>功能码：定义要执行的操作，例如读取寄存器、写入数据等</li>
+<li>数据域：根据功能码携带相应的数据(如寄存器地址、寄存器值)</li>
+<li>校验码：用于确保数据传输的完整性</li>
+</ul>
+<h2 class="heading-element" id="modbus功能码有哪些"><span>Modbus功能码有哪些？</span>
+  <a href="#modbus%e5%8a%9f%e8%83%bd%e7%a0%81%e6%9c%89%e5%93%aa%e4%ba%9b" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>常用的功能码：</p>
+<div class="table-wrapper">
+  <table>
+    <thead>
+        <tr>
+            <th style="text-align: left">功能码</th>
+            <th style="text-align: left">作用</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td style="text-align: left">01</td>
+            <td style="text-align: left">读 Coil</td>
+        </tr>
+        <tr>
+            <td style="text-align: left">02</td>
+            <td style="text-align: left">读离散输入</td>
+        </tr>
+        <tr>
+            <td style="text-align: left">03</td>
+            <td style="text-align: left">读 Holding Register</td>
+        </tr>
+        <tr>
+            <td style="text-align: left">04</td>
+            <td style="text-align: left">读 Input Register</td>
+        </tr>
+        <tr>
+            <td style="text-align: left">05</td>
+            <td style="text-align: left">写单个 Coil</td>
+        </tr>
+        <tr>
+            <td style="text-align: left">06</td>
+            <td style="text-align: left">写单个 Register</td>
+        </tr>
+        <tr>
+            <td style="text-align: left">15</td>
+            <td style="text-align: left">写多个 Coil</td>
+        </tr>
+        <tr>
+            <td style="text-align: left">16</td>
+            <td style="text-align: left">写多个 Register</td>
+        </tr>
+    </tbody>
+  </table>
+</div><h2 class="heading-element" id="有哪些数据类型"><span>有哪些数据类型？</span>
+  <a href="#%e6%9c%89%e5%93%aa%e4%ba%9b%e6%95%b0%e6%8d%ae%e7%b1%bb%e5%9e%8b" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><div class="table-wrapper">
+  <table>
+    <thead>
+        <tr>
+            <th style="text-align: left">数据区域</th>
+            <th style="text-align: left">中文</th>
+            <th style="text-align: left">数据大小</th>
+            <th style="text-align: left">读写</th>
+            <th style="text-align: left">作用</th>
+            <th style="text-align: left">功能码</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td style="text-align: left">Coil</td>
+            <td style="text-align: left">线圈</td>
+            <td style="text-align: left">1 bit</td>
+            <td style="text-align: left">可读写</td>
+            <td style="text-align: left">一个可以被控制的开关量输出。例如：启动电机、打开气缸、打开报警灯</td>
+            <td style="text-align: left">01 / 05 / 15</td>
+        </tr>
+        <tr>
+            <td style="text-align: left">Discrete Input</td>
+            <td style="text-align: left">离散输入</td>
+            <td style="text-align: left">1 bit</td>
+            <td style="text-align: left">只读</td>
+            <td style="text-align: left">外部设备输入的开关状态。例如：光电开关、急停按钮</td>
+            <td style="text-align: left">02</td>
+        </tr>
+        <tr>
+            <td style="text-align: left">Input Register</td>
+            <td style="text-align: left">输入寄存器</td>
+            <td style="text-align: left">16 bit</td>
+            <td style="text-align: left">只读</td>
+            <td style="text-align: left">外部设备采集的数据。例如：温度、压力、电流</td>
+            <td style="text-align: left">04</td>
+        </tr>
+        <tr>
+            <td style="text-align: left">Holding Register</td>
+            <td style="text-align: left">保持寄存器</td>
+            <td style="text-align: left">16 bit</td>
+            <td style="text-align: left">可读写</td>
+            <td style="text-align: left">可以保存并修改的数据。比如：设备参数(速度、压力设定值、报警阈值)</td>
+            <td style="text-align: left">03 / 06 / 16</td>
+        </tr>
+    </tbody>
+  </table>
+</div><h2 class="heading-element" id="c如何使用modbus"><span>C#如何使用Modbus？</span>
+  <a href="#c%e5%a6%82%e4%bd%95%e4%bd%bf%e7%94%a8modbus" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>最简单的方法是使用第三方库。例如：<a href="https://nmodbus.github.io/api/NModbus.html" target="_blank" rel="external nofollow noopener noreferrer">NModbus<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>、<a href="https://www.nuget.org/packages/EasyModbusTCP" target="_blank" rel="external nofollow noopener noreferrer">EasyModbusTCP<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>。</p>
+<p>读取保持寄存器(TCP版)：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-c#"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="2" style="--fi-max-shown-lines:400;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c#" data-lang="c#"><span class="line"><span class="cl"><span class="k">using</span> <span class="nn">NModbus</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">using</span> <span class="nn">System.Net.Sockets</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">namespace</span> <span class="nn">ModbusDemo</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">internal</span> <span class="k">class</span> <span class="nc">Program</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="kd">static</span> <span class="k">void</span> <span class="n">Main</span><span class="p">(</span><span class="kt">string</span><span class="p">[]</span> <span class="n">args</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">using</span> <span class="nn">var</span> <span class="n">tcpClient</span> <span class="p">=</span> <span class="k">new</span> <span class="n">TcpClient</span><span class="p">(</span><span class="s">&#34;192.168.1.10&#34;</span><span class="p">,</span> <span class="m">502</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="kt">var</span> <span class="n">factory</span> <span class="p">=</span> <span class="k">new</span> <span class="n">ModbusFactory</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">            <span class="kt">var</span> <span class="n">master</span> <span class="p">=</span> <span class="n">factory</span><span class="p">.</span><span class="n">CreateMaster</span><span class="p">(</span><span class="n">tcpClient</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            <span class="kt">ushort</span><span class="p">[]</span> <span class="n">values</span> <span class="p">=</span> <span class="n">master</span><span class="p">.</span><span class="n">ReadHoldingRegisters</span><span class="p">(</span><span class="n">slaveAddress</span><span class="p">:</span> <span class="m">1</span><span class="p">,</span> <span class="n">startAddress</span><span class="p">:</span> <span class="m">0</span><span class="p">,</span> <span class="n">numberOfPoints</span><span class="p">:</span> <span class="m">2</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            <span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="n">values</span><span class="p">[</span><span class="m">0</span><span class="p">]);</span>
+</span></span><span class="line"><span class="cl">            <span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="n">values</span><span class="p">[</span><span class="m">1</span><span class="p">]);</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>读取保持寄存器(RTU版)：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-c#"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="2" style="--fi-max-shown-lines:400;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c#" data-lang="c#"><span class="line"><span class="cl"><span class="k">using</span> <span class="nn">NModbus</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">using</span> <span class="nn">NModbus.Serial</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">using</span> <span class="nn">System.IO.Ports</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">namespace</span> <span class="nn">ModbusDemo</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">internal</span> <span class="k">class</span> <span class="nc">Program</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="kd">static</span> <span class="k">void</span> <span class="n">Main</span><span class="p">(</span><span class="kt">string</span><span class="p">[]</span> <span class="n">args</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">SerialPort</span> <span class="n">port</span> <span class="p">=</span> <span class="k">new</span><span class="p">(</span><span class="s">&#34;COM1&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">BaudRate</span> <span class="p">=</span> <span class="m">9600</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">                <span class="n">Parity</span> <span class="p">=</span> <span class="n">Parity</span><span class="p">.</span><span class="n">None</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">                <span class="n">DataBits</span> <span class="p">=</span> <span class="m">8</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">                <span class="n">StopBits</span> <span class="p">=</span> <span class="n">StopBits</span><span class="p">.</span><span class="n">One</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            <span class="n">port</span><span class="p">.</span><span class="n">Open</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            <span class="kt">var</span> <span class="n">factory</span> <span class="p">=</span> <span class="k">new</span> <span class="n">ModbusFactory</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">            <span class="kt">var</span> <span class="n">master</span> <span class="p">=</span> <span class="n">factory</span><span class="p">.</span><span class="n">CreateRtuMaster</span><span class="p">(</span><span class="n">port</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="kt">ushort</span><span class="p">[]</span> <span class="n">data</span> <span class="p">=</span> <span class="n">master</span><span class="p">.</span><span class="n">ReadHoldingRegisters</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="m">10</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="m">0</span><span class="p">]);</span>
+</span></span><span class="line"><span class="cl">            <span class="n">Console</span><span class="p">.</span><span class="n">ReadLine</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><h2 class="heading-element" id="机器视觉项目中如何使用modbus"><span>机器视觉项目中如何使用Modbus？</span>
+  <a href="#%e6%9c%ba%e5%99%a8%e8%a7%86%e8%a7%89%e9%a1%b9%e7%9b%ae%e4%b8%ad%e5%a6%82%e4%bd%95%e4%bd%bf%e7%94%a8modbus" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>在机器视觉软件中，Modbus经常用于与PLC进行数据交互。</p>
+<p>典型流程如下：</p>
+<p><figure><img loading="lazy" src='/images/202607/22/1.png' alt="图4 机器视觉项目典型流程"><figcaption class="image-caption">图4 机器视觉项目典型流程</figcaption>
+  </figure></p>
+<div class="table-wrapper">
+  <table>
+    <thead>
+        <tr>
+            <th style="text-align: left">地址</th>
+            <th style="text-align: left">含义</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td style="text-align: left">Coil 00001</td>
+            <td style="text-align: left">拍照触发</td>
+        </tr>
+        <tr>
+            <td style="text-align: left">Coil 00002</td>
+            <td style="text-align: left">检测完成</td>
+        </tr>
+        <tr>
+            <td style="text-align: left">Coil 00003</td>
+            <td style="text-align: left">OK</td>
+        </tr>
+        <tr>
+            <td style="text-align: left">Coil 00004</td>
+            <td style="text-align: left">NG</td>
+        </tr>
+        <tr>
+            <td style="text-align: left">Holding Register 40001</td>
+            <td style="text-align: left">X 偏移</td>
+        </tr>
+        <tr>
+            <td style="text-align: left">Holding Register 40002</td>
+            <td style="text-align: left">Y 偏移</td>
+        </tr>
+        <tr>
+            <td style="text-align: left">Holding Register 40003</td>
+            <td style="text-align: left">角度</td>
+        </tr>
+        <tr>
+            <td style="text-align: left">Holding Register 40004</td>
+            <td style="text-align: left">缺陷类型</td>
+        </tr>
+        <tr>
+            <td style="text-align: left">Holding Register 40005</td>
+            <td style="text-align: left">检测耗时(ms)</td>
+        </tr>
+    </tbody>
+  </table>
+</div><p>这种方式实现简单、兼容性好，是工业视觉软件中比较常见的通信方案之一。</p>
+<h2 class="heading-element" id="使用modbus时常见的坑"><span>使用Modbus时常见的坑</span>
+  <a href="#%e4%bd%bf%e7%94%a8modbus%e6%97%b6%e5%b8%b8%e8%a7%81%e7%9a%84%e5%9d%91" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><h3 class="heading-element" id="1-寄存器地址偏移"><span>1. 寄存器地址偏移</span>
+  <a href="#1-%e5%af%84%e5%ad%98%e5%99%a8%e5%9c%b0%e5%9d%80%e5%81%8f%e7%a7%bb" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p>有些设备文档从<code>40001</code>开始编号，API却要求传入<code>0</code>作为起始地址；还有些设备直接使用从<code>1</code>开始的地址。一定要确认厂商文档的地址规则。</p>
+<h3 class="heading-element" id="2-字节序"><span>2. 字节序</span>
+  <a href="#2-%e5%ad%97%e8%8a%82%e5%ba%8f" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p>对于<code>Int32</code>、<code>Float</code>、<code>Double</code>等跨多个寄存器的数据，不同厂商可能采用不同的寄存器顺序(高字在前/低字在前)和字节顺序，需要根据设备说明进行解析。</p>
+<h3 class="heading-element" id="3-串口参数不一致"><span>3. 串口参数不一致</span>
+  <a href="#3-%e4%b8%b2%e5%8f%a3%e5%8f%82%e6%95%b0%e4%b8%8d%e4%b8%80%e8%87%b4" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p>波特率、数据位、停止位、校验位必须与设备配置一致，否则无法通信。</p>
+<h3 class="heading-element" id="4-站号配置错误"><span>4. 站号配置错误</span>
+  <a href="#4-%e7%ab%99%e5%8f%b7%e9%85%8d%e7%bd%ae%e9%94%99%e8%af%af" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p>同一条RS485总线上，每个从站必须具有唯一地址。</p>
+<h3 class="heading-element" id="5-rtu帧间隔"><span>5. RTU帧间隔</span>
+  <a href="#5-rtu%e5%b8%a7%e9%97%b4%e9%9a%94" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p>Modbus RTU要求报文之间保持规定的静默时间，否则部分设备可能无法正确识别报文边界。</p>
+<h3 class="heading-element" id="6-异常码处理"><span>6. 异常码处理</span>
+  <a href="#6-%e5%bc%82%e5%b8%b8%e7%a0%81%e5%a4%84%e7%90%86" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p>不要只判断是否收到了响应，还要检查是否为异常响应，并根据异常码进行日志记录和错误处理。</p>
+<h2 class="heading-element" id="推荐"><span>推荐</span>
+  <a href="#%e6%8e%a8%e8%8d%90" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p><a href="https://docs.emqx.com/en/neuronex/latest/configuration/introduction.html" target="_blank" rel="external nofollow noopener noreferrer">Data Collection<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></p>
+<p><a href="https://controllerstech.com/modbus-tcp-protocol-explained/" target="_blank" rel="external nofollow noopener noreferrer">Modbus TCP Protocol Explained: Frame Structure, MBAP Header, and Function Codes<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></p>
+<p><a href="https://scadaprotocols.com/modbus-protocol-guide/" target="_blank" rel="external nofollow noopener noreferrer">Modbus Protocol Explained: RTU, TCP, ASCII, Frames, Function Codes &amp; Examples<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></p>
+<h2 class="heading-element" id="参考"><span>参考</span>
+  <a href="#%e5%8f%82%e8%80%83" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p><a href="https://www.modbustools.com/modbus.html" target="_blank" rel="external nofollow noopener noreferrer">Modbus Protocol Description<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></p>
+<p><a href="https://www.contec.com/cn/support/blog/2026/26030900_modbus/" target="_blank" rel="external nofollow noopener noreferrer">Modbus全面解析基础知识与关键实现要点<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></p>
+<p><a href="https://www.ni.com/zh-cn/shop/seamlessly-connect-to-third-party-devices-and-supervisory-system/the-modbus-protocol-in-depth.html" target="_blank" rel="external nofollow noopener noreferrer">深入解读Modbus协议<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></p>
+<p><a href="https://blog.redisant.cn/docs/modbus-tutorial/" target="_blank" rel="external nofollow noopener noreferrer">Modbus初学者教程<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></p></div><hr class="awesome-hr" />
+    <h2 id="see-also">相关内容</h2>
+    <ul><li>
+          <a href="/%E4%BB%8Eserialport%E5%88%B0%E5%B7%A5%E4%B8%9A%E7%BA%A7%E9%80%9A%E4%BF%A1%E6%A1%86%E6%9E%B6%E8%AE%BE%E8%AE%A1/" title="C#编程实践(二)：从SerialPort到工业级通信框架设计">C#编程实践(二)：从SerialPort到工业级通信框架设计</a></li><li>
+          <a href="/shadowsocks-windows%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="shadowsocks-windows源码剖析：一个C#网络代理客户端是如何工作的？">shadowsocks-windows源码剖析：一个C#网络代理客户端是如何工作的？</a></li><li>
+          <a href="/tcp-ip%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" title="TCP/IP网络编程 (尹圣雨)">TCP/IP网络编程 (尹圣雨)</a></li></ul><div class="post-footer" id="post-footer">
+  <div class="post-info">
+    <div class="post-info-line">
+      <div class="post-info-mod"><span title="更新于 2026-07-17 06:24:08">更新于 2026-07-17&nbsp;</span>
+      </div></div><div class="post-info-line">
+        <div class="post-info-md"><span><a href="vscode://file/D:\hugo-blog\andyfree96\content\posts\Modbus协议详解.md" title="在编辑器中打开" class="link-to-vscode">在编辑器中打开</a></span></div>
+        <div class="post-info-share">
+          <span><a href="javascript:void(0);" title="分享到 X" data-sharer="twitter" data-url="http://localhost:1313/modbus%E5%8D%8F%E8%AE%AE%E8%AF%A6%E8%A7%A3/" data-title="Modbus协议详解：从入门到实战" data-via="IRONAnthony96" data-hashtags="Modbus,工业通信,TCP/IP,工业自动化,PLC"><i class="fa-brands fa-x-twitter" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="http://localhost:1313/modbus%E5%8D%8F%E8%AE%AE%E8%AF%A6%E8%A7%A3/" data-hashtag="Modbus"><i class="fa-brands fa-facebook-square" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="http://localhost:1313/modbus%E5%8D%8F%E8%AE%AE%E8%AF%A6%E8%A7%A3/" data-title="Modbus协议详解：从入门到实战" data-image="/images/202607/22/tim-mossholder-O4sLv36-k1w-unsplash.jpg"><i class="fa-brands fa-weibo" aria-hidden="true"></i></a>
+  </span>
+        </div>
+      </div></div>
+
+  <div class="post-info-more">
+    <section class="post-tags"><i class="fa-solid fa-tags me-1" aria-hidden="true"></i><a href="/tags/modbus/" class="post-tag" title="标签 - Modbus">Modbus</a><a href="/tags/%E5%B7%A5%E4%B8%9A%E9%80%9A%E4%BF%A1/" class="post-tag" title="标签 - 工业通信">工业通信</a><a href="/tags/tcp/ip/" class="post-tag" title="标签 - TCP/IP">TCP/IP</a><a href="/tags/%E5%B7%A5%E4%B8%9A%E8%87%AA%E5%8A%A8%E5%8C%96/" class="post-tag" title="标签 - 工业自动化">工业自动化</a><a href="/tags/plc/" class="post-tag" title="标签 - PLC">PLC</a></section>
+    <section><span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+    </section>
+  </div><div class="post-nav"><a href="/%E4%BB%8Eserialport%E5%88%B0%E5%B7%A5%E4%B8%9A%E7%BA%A7%E9%80%9A%E4%BF%A1%E6%A1%86%E6%9E%B6%E8%AE%BE%E8%AE%A1/" class="post-nav-item" rel="prev" title="C#编程实践(二)：从SerialPort到工业级通信框架设计"><i class="fa-solid fa-angle-left" aria-hidden="true"></i>C#编程实践(二)：从SerialPort到工业级通信框架设计</a><a href="/%E6%8C%91%E6%88%98%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%AB%9E%E8%B5%9B/" class="post-nav-item" rel="next" title="挑战程序设计竞赛 第2版 (秋叶拓哉 / 岩田阳一 / 北川宜稔)">挑战程序设计竞赛 第2版 (秋叶拓哉 / 岩田阳一 / 北川宜稔)<i class="fa-solid fa-angle-right" aria-hidden="true"></i></a></div>
+</div>
+<div class="post-reward">
+    <div class="comment">请作者喝杯咖啡!</div>
+    <input type="checkbox" class="reward-input" name="reward" id="fi-reward" hidden />
+    <label class="reward-button" for="fi-reward"><i class="fa-solid fa-qrcode" aria-hidden="true"></i>赞赏</label>
+    <div class="reward-ways" data-mode="static"><div><img src='/reward/alipay.png' alt="AndyFree96 支付宝"><span data-animation>支付宝</span>
+          </div><div><img src='/reward/wechatpay.png' alt="AndyFree96 微信"><span data-animation>微信</span>
+          </div></div>
+  </div></article>
+
+  <aside class="toc" id="toc-auto" aria-label="目录"><h2 class="toc-title">目录&nbsp;<i class="toc-icon fa-solid fa-angle-down" aria-hidden="true"></i></h2>
+      <div class="toc-content" id="toc-content-auto"></div></aside><dialog id="toc-dialog" aria-labelledby="toc-dialog-title" role="dialog" closedby="any">
+      <button type="button" class="toc-close-btn" aria-label="Close Table of Contents"><i class="fa-solid fa-xmark fa-lg" aria-hidden="true"></i></button>
+      <div class="toc">
+        <h2 class="toc-title" id="toc-dialog-title">目录</h2>
+        <div class="toc-content" id="toc-content-drawer"><nav >
+  <ul>
+    <li><a href="#什么是modbus">什么是Modbus？</a></li>
+    <li><a href="#modbus协议有哪些版本">Modbus协议有哪些版本？</a></li>
+    <li><a href="#为什么工业上喜欢用modbus">为什么工业上喜欢用Modbus？</a></li>
+    <li><a href="#modbus消息帧的格式是什么样的">Modbus消息帧的格式是什么样的？</a></li>
+    <li><a href="#modbus功能码有哪些">Modbus功能码有哪些？</a></li>
+    <li><a href="#有哪些数据类型">有哪些数据类型？</a></li>
+    <li><a href="#c如何使用modbus">C#如何使用Modbus？</a></li>
+    <li><a href="#机器视觉项目中如何使用modbus">机器视觉项目中如何使用Modbus？</a></li>
+    <li><a href="#使用modbus时常见的坑">使用Modbus时常见的坑</a>
+      <ul>
+        <li><a href="#1-寄存器地址偏移">1. 寄存器地址偏移</a></li>
+        <li><a href="#2-字节序">2. 字节序</a></li>
+        <li><a href="#3-串口参数不一致">3. 串口参数不一致</a></li>
+        <li><a href="#4-站号配置错误">4. 站号配置错误</a></li>
+        <li><a href="#5-rtu帧间隔">5. RTU帧间隔</a></li>
+        <li><a href="#6-异常码处理">6. 异常码处理</a></li>
+      </ul>
+    </li>
+    <li><a href="#推荐">推荐</a></li>
+    <li><a href="#参考">参考</a></li>
+  </ul>
+</nav></div>
+      </div>
+    </dialog></main><footer class="footer">
+    <div class="footer-container"><div class="footer-line powered">由 <a href="https://gohugo.io/" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.163.1">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/hugo-fixit/FixIt" target="_blank" rel="external" title="FixIt v1.0.0-mq99hlzg">FixIt</a>
+        </div><div class="footer-line copyright" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright" aria-hidden="true"></i>
+            <span itemprop="copyrightYear">2019 - 2026</span><span class="author" itemprop="copyrightHolder">
+              <a href="https://andyfree96.github.io/" target="_blank" rel="external nofollow noopener noreferrer">AndyFree96</a></span></div></div>
+  </footer></div><div class="widgets"><div class="fixed-buttons"><button type="button" class="fixed-button back-to-top animate__faster d-none" aria-label="回到顶部"><i class="fa-solid fa-arrow-up" aria-hidden="true"></i></button><button type="button" id="toc-drawer-button" class="fixed-button toc-drawer-button d-none" aria-label="目录" aria-controls="toc-dialog" aria-expanded="false"><i class="fa-solid fa-bars" aria-hidden="true"></i></button></div><div id="mask"></div><div class="reading-progress-bar" style="left: 0;top: 0;"></div><noscript>
+    <div class="noscript-warning">该网站在启用 JavaScript 的情况下效果最佳。</div>
+  </noscript>
+</div><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script src="/lib/autocomplete/autocomplete.min.js" defer></script><script src="/lib/algoliasearch/browser.umd.js" defer></script><script src="/lib/sharer/sharer.min.js" async defer></script><script src="/lib/cookieconsent/cookieconsent.min.js" defer></script><script src="/js/lib/cookieconsent.js" defer></script><script src="/lib/cell-tooltip/cell-tooltip.umd.js" defer></script><script src="/js/config/a2ea69f6e3ef00e1cc9de0618602e8f1.js" defer></script><script src="/js/lib/file-tree.js" defer></script><script src="/js/main.js" defer></script></body>
+</html>
