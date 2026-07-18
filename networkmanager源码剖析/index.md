@@ -404,6 +404,11 @@ _bandwidthMeter.UpdateSpeed += BandwidthMeter_UpdateSpeed;
 
 ## 7. 软件如何实现自动更新？
 
+## 番外
+
+### 1. `.editorconfig`是什么？
+
+`.editorconfig`是[EditorConfig](https://editorconfig.org/)的配置文件，能够让不同编辑器保持编辑风格一致。比如：用四个空格缩进、用utf-8编码等等。
 
 
 ---

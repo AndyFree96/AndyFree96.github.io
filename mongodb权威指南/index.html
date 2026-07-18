@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+    <meta name="robots" content="noodp" />
+    <title>MongoDB权威指南 第3版 (Shannon Bradshaw / Eoin Brazil / Kristina Chodorow) - 东尼的博客</title><meta name="author" content="AndyFree96">
+<meta name="description" content="MongoDB 是当前最流行的 NoSQL 数据库之一，它采用文档模型存储数据，通过灵活的数据结构、高性能的索引机制以及完善的分布式能力，广泛应用于互联网应用、大数据处理和实时业务场景。但想真正理解 MongoDB，仅仅掌握 CRUD 操作和查询语法是不够的。MongoDB 背后涉及许多数据库核心概念：文档模型设计、BSON存储、索引原理、WiredTiger存储引擎、MVCC并发控制、副本集以及分片架构等。本文将结合《MongoDB权威指南》，从使用实践逐步深入底层原理，探索 MongoDB 的设计思想以及它如何解决现代应用中的数据存储和扩展问题。
+"><meta name="keywords" content='MongoDB, 数据库, 面向文档, 读书笔记, 计算机'>
+	<meta itemprop="name" content="MongoDB权威指南 第3版 (Shannon Bradshaw / Eoin Brazil / Kristina Chodorow)">
+	<meta itemprop="description" content="MongoDB 是当前最流行的 NoSQL 数据库之一，它采用文档模型存储数据，通过灵活的数据结构、高性能的索引机制以及完善的分布式能力，广泛应用于互联网应用、大数据处理和实时业务场景。但想真正理解 MongoDB，仅仅掌握 CRUD 操作和查询语法是不够的。MongoDB 背后涉及许多数据库核心概念：文档模型设计、BSON存储、索引原理、WiredTiger存储引擎、MVCC并发控制、副本集以及分片架构等。本文将结合《MongoDB权威指南》，从使用实践逐步深入底层原理，探索 MongoDB 的设计思想以及它如何解决现代应用中的数据存储和扩展问题。">
+	<meta itemprop="datePublished" content="2026-07-17T13:32:25+08:00">
+	<meta itemprop="dateModified" content="2026-07-17T13:32:25+08:00">
+	<meta itemprop="wordCount" content="2340">
+	<meta itemprop="keywords" content="MongoDB,数据库,面向文档,读书笔记,计算机"><meta property="og:url" content="http://localhost:1313/mongodb%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97/">
+	<meta property="og:site_name" content="东尼的博客">
+	<meta property="og:title" content="MongoDB权威指南 第3版 (Shannon Bradshaw / Eoin Brazil / Kristina Chodorow)">
+	<meta property="og:description" content="MongoDB 是当前最流行的 NoSQL 数据库之一，它采用文档模型存储数据，通过灵活的数据结构、高性能的索引机制以及完善的分布式能力，广泛应用于互联网应用、大数据处理和实时业务场景。但想真正理解 MongoDB，仅仅掌握 CRUD 操作和查询语法是不够的。MongoDB 背后涉及许多数据库核心概念：文档模型设计、BSON存储、索引原理、WiredTiger存储引擎、MVCC并发控制、副本集以及分片架构等。本文将结合《MongoDB权威指南》，从使用实践逐步深入底层原理，探索 MongoDB 的设计思想以及它如何解决现代应用中的数据存储和扩展问题。">
+	<meta property="og:locale" content="zh_CN">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="posts">
+		<meta property="article:published_time" content="2026-07-17T13:32:25+08:00">
+		<meta property="article:modified_time" content="2026-07-17T13:32:25+08:00">
+		<meta property="article:tag" content="MongoDB">
+		<meta property="article:tag" content="数据库">
+		<meta property="article:tag" content="面向文档">
+		<meta property="article:tag" content="读书笔记">
+		<meta property="article:tag" content="计算机">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="MongoDB权威指南 第3版 (Shannon Bradshaw / Eoin Brazil / Kristina Chodorow)">
+  <meta name="twitter:description" content="MongoDB 是当前最流行的 NoSQL 数据库之一，它采用文档模型存储数据，通过灵活的数据结构、高性能的索引机制以及完善的分布式能力，广泛应用于互联网应用、大数据处理和实时业务场景。但想真正理解 MongoDB，仅仅掌握 CRUD 操作和查询语法是不够的。MongoDB 背后涉及许多数据库核心概念：文档模型设计、BSON存储、索引原理、WiredTiger存储引擎、MVCC并发控制、副本集以及分片架构等。本文将结合《MongoDB权威指南》，从使用实践逐步深入底层原理，探索 MongoDB 的设计思想以及它如何解决现代应用中的数据存储和扩展问题。"><meta name="twitter:creator" content="@IRONAnthony96"><meta name="application-name" content="FixIt">
+<meta name="apple-mobile-web-app-title" content="FixIt"><meta name="theme-color" data-light="#f6f8fa" data-dark="#151b23" content="#f6f8fa"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" type="text/html" href="http://localhost:1313/mongodb%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97/" title="MongoDB权威指南 第3版 (Shannon Bradshaw / Eoin Brazil / Kristina Chodorow) - 东尼的博客" /><link rel="prev" type="text/html" href="http://localhost:1313/%E6%8C%91%E6%88%98%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%AB%9E%E8%B5%9B/" title="挑战程序设计竞赛 第2版 (秋叶拓哉 / 岩田阳一 / 北川宜稔)" /><link rel="next" type="text/html" href="http://localhost:1313/redis%E5%BC%80%E5%8F%91%E4%B8%8E%E8%BF%90%E7%BB%B4/" title="Redis开发与运维 (付磊 / 张益军)" /><link rel="alternate" type="text/markdown" href="http://localhost:1313/mongodb%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97/index.md" title="MongoDB权威指南 第3版 (Shannon Bradshaw / Eoin Brazil / Kristina Chodorow) - 东尼的博客"><link rel="stylesheet" href="/css/config.css"><link rel="stylesheet" href="/css/main.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><link rel="preload" href="/js/main.js" as="script"><script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "BlogPosting",
+    "headline": "MongoDB权威指南 第3版 (Shannon Bradshaw / Eoin Brazil / Kristina Chodorow)",
+    "inLanguage": "zh-CN",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "http:\/\/localhost:1313\/mongodb%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97\/"
+    },"genre": "posts","keywords": "MongoDB, 数据库, 面向文档, 读书笔记, 计算机","wordcount":  2340 ,
+    "url": "http:\/\/localhost:1313\/mongodb%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97\/","datePublished": "2026-07-17T13:32:25+08:00","dateModified": "2026-07-17T13:32:25+08:00","publisher": {
+      "@type": "Organization",
+      "name": ""},"author": {
+        "@type": "Person",
+        "name": "AndyFree96"
+      },"description": ""
+  }
+  </script><script src="/js/head/color-scheme.js"></script></head>
+  <body data-instant-intensity="viewport" data-header-desktop="sticky" data-header-mobile="auto"><div class="wrapper" data-page-style="normal"><header class="desktop animate__faster" id="header-desktop">
+  <div class="header-wrapper">
+    <div class="header-title">
+      <a href="/" title="东尼的博客" class="header-title-link"><span class="header-title-text">东尼的博客</span></a><span class="header-subtitle"></span></div>
+    <nav>
+      <ul class="menu"><li class="menu-item">
+              <a class="menu-link" href="/posts/">📕 文章</a></li><li class="menu-item">
+              <a class="menu-link" href="/categories/">🧰 分类</a></li><li class="menu-item">
+              <a class="menu-link" href="/tags/">🔖 标签</a></li><li class="menu-item">
+              <a class="menu-link" href="/book">📚 书单</a></li><li class="menu-item">
+              <a class="menu-link" href="/paper">📝 论文</a></li><li class="menu-item">
+              <a class="menu-link" href="/opencourse">👨🏻‍💻 公开课</a></li><li class="menu-item">
+              <a class="menu-link" href="/filmtv">🎞️ 影视</a></li><li class="menu-item">
+              <a class="menu-link" href="/resource">⚡️ 资源库</a></li><li class="menu-item">
+              <a class="menu-link" href="/projects">⭐ 开源</a></li><li class="menu-item">
+              <a class="menu-link" href="/about">🙋🏻‍♂️ 关于</a></li><li class="menu-item delimiter"></li><li class="menu-item search" id="search-desktop">
+            <input type="text" placeholder="搜索文章标题或内容……" id="search-input-desktop" tabindex="-1">
+            <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索" aria-controls="search-dropdown-desktop" aria-expanded="false">
+              <i class="fa-solid fa-search" aria-hidden="true"></i>
+            </a>
+            <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+              <i class="fa-solid fa-times-circle" aria-hidden="true"></i>
+            </a>
+            <span class="search-button search-loading" id="search-loading-desktop">
+              <i class="fa-solid fa-spinner fa-spin" aria-hidden="true"></i>
+            </span>
+          </li><li class="menu-item theme-switch-item">
+          <button type="button" class="theme-switch" aria-label="切换主题" title="切换主题"><i class="fa-solid fa-adjust" aria-hidden="true"></i></button>
+        </li></ul>
+    </nav>
+  </div>
+</header><header class="mobile animate__faster" id="header-mobile">
+  <div class="header-container">
+    <div class="header-wrapper">
+      <div class="header-title">
+        <a href="/" title="东尼的博客" class="header-title-link"><span class="header-title-text">东尼的博客</span></a><span class="header-subtitle"></span></div>
+      <button type="button" class="theme-switch" aria-label="切换主题"><i class="fa-solid fa-adjust" aria-hidden="true"></i></button>
+      <button type="button" class="menu-toggle" id="menu-toggle-mobile" aria-controls="menu-mobile" aria-expanded="false" aria-labelledby="menu-mobile">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <nav>
+      <ul class="menu" id="menu-mobile"><li class="search-wrapper">
+            <div class="search mobile" id="search-mobile">
+              <input type="text" placeholder="搜索文章标题或内容……" id="search-input-mobile">
+              <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索" aria-controls="search-dropdown-mobile" aria-expanded="false">
+                <i class="fa-solid fa-search" aria-hidden="true"></i>
+              </a>
+              <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                <i class="fa-solid fa-times-circle" aria-hidden="true"></i>
+              </a>
+              <span class="search-button search-loading" id="search-loading-mobile">
+                <i class="fa-solid fa-spinner fa-spin" aria-hidden="true"></i>
+              </span>
+            </div>
+            <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+              取消
+            </a>
+          </li><li class="menu-item"><a class="menu-link" href="/posts/">📕 文章</a></li><li class="menu-item"><a class="menu-link" href="/categories/">🧰 分类</a></li><li class="menu-item"><a class="menu-link" href="/tags/">🔖 标签</a></li><li class="menu-item"><a class="menu-link" href="/book">📚 书单</a></li><li class="menu-item"><a class="menu-link" href="/paper">📝 论文</a></li><li class="menu-item"><a class="menu-link" href="/opencourse">👨🏻‍💻 公开课</a></li><li class="menu-item"><a class="menu-link" href="/filmtv">🎞️ 影视</a></li><li class="menu-item"><a class="menu-link" href="/resource">⚡️ 资源库</a></li><li class="menu-item"><a class="menu-link" href="/projects">⭐ 开源</a></li><li class="menu-item"><a class="menu-link" href="/about">🙋🏻‍♂️ 关于</a></li><li class="menu-item menu-system"></li>
+      </ul>
+    </nav>
+  </div>
+</header><div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+  </div>
+  <div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+  </div><main class="fi-container"><aside class="aside-collection animate__animated animate__fadeIn animate__faster" aria-label="合集"><div class="details related-details open">
+      <div class="details-summary related-summary">
+        <i class="fa-solid fa-fire fa-fade text-danger" aria-hidden="true"></i>
+        <span class="related-title">相关内容</span><i class="details-icon fa-solid fa-angle-right" aria-hidden="true"></i></div>
+      <div class="details-content related-content">
+        <ul class="related-list"><li class="related-item">
+              <a href="/%E6%8C%91%E6%88%98%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%AB%9E%E8%B5%9B/" title="挑战程序设计竞赛 第2版 (秋叶拓哉 / 岩田阳一 / 北川宜稔)">挑战程序设计竞赛 第2版 (秋叶拓哉 / 岩田阳一 / 北川宜稔)</a></li><li class="related-item">
+              <a href="/%E4%BF%AE%E6%94%B9%E4%BB%A3%E7%A0%81%E7%9A%84%E8%89%BA%E6%9C%AF/" title="修改代码的艺术 (Michael C. Feathers)">修改代码的艺术 (Michael C. Feathers)</a></li><li class="related-item">
+              <a href="/%E4%BB%A3%E7%A0%81%E6%95%B4%E6%B4%81%E4%B9%8B%E9%81%93/" title="代码整洁之道 (Robert C. Martin)">代码整洁之道 (Robert C. Martin)</a></li><li class="related-item">
+              <a href="/%E9%87%8D%E6%9E%84/" title="重构 改善既有代码的艺术 第2版 (Martin Fowler)">重构 改善既有代码的艺术 第2版 (Martin Fowler)</a></li><li class="related-item">
+              <a href="/c%23%E9%AB%98%E6%95%88%E7%BC%96%E7%A8%8B/" title="C#高效编程 改进C#代码的50个行之有效的办法 第2版 (Bill Wagner)">C#高效编程 改进C#代码的50个行之有效的办法 第2版 (Bill Wagner)</a></li><li class="related-item">
+              <a href="/%E7%99%BE%E4%B8%87%E7%BA%A7csv%E5%AF%BC%E5%85%A5mongodb%E6%80%A7%E8%83%BD%E5%AE%9E%E6%88%98/" title="百万级CSV导入MongoDB性能实战">百万级CSV导入MongoDB性能实战</a></li><li class="related-item">
+              <a href="/%E8%81%AA%E6%98%8E%E7%9A%84%E6%8A%95%E8%B5%84%E8%80%85/" title="聪明的投资者 第4版 (Benjamin Graham)">聪明的投资者 第4版 (Benjamin Graham)</a></li><li class="related-item">
+              <a href="/%E6%9E%B6%E6%9E%84%E6%95%B4%E6%B4%81%E4%B9%8B%E9%81%93/" title="架构整洁之道 (Robert C. Martin)">架构整洁之道 (Robert C. Martin)</a></li><li class="related-item">
+              <a href="/effective-python/" title="Effective Python 第2版 (Brett Slatkin)">Effective Python 第2版 (Brett Slatkin)</a></li><li class="related-item">
+              <a href="/%E6%B5%81%E7%95%85%E7%9A%84python/" title="流畅的Python 第2版 (Luciano Ramalho)">流畅的Python 第2版 (Luciano Ramalho)</a></li><li class="related-item">
+              <a href="/vue.js%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/" title="Vue.js设计与实现 (霍春阳)">Vue.js设计与实现 (霍春阳)</a></li><li class="related-item">
+              <a href="/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" title="计算机网络：自顶向下方法 第8版 (James F·Kurose / Keith W. Ross)">计算机网络：自顶向下方法 第8版 (James F·Kurose / Keith W. Ross)</a></li><li class="related-item">
+              <a href="/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F/" title="深入理解计算机系统 第3版 (Randal E. Bryant / David O&#39;Hallaron)">深入理解计算机系统 第3版 (Randal E. Bryant / David O&#39;Hallaron)</a></li><li class="related-item">
+              <a href="/%E7%BC%96%E5%86%99%E5%8F%AF%E8%AF%BB%E4%BB%A3%E7%A0%81%E7%9A%84%E8%89%BA%E6%9C%AF/" title="编写可读代码的艺术 (Dustin Boswell / Trevor Foucher)">编写可读代码的艺术 (Dustin Boswell / Trevor Foucher)</a></li><li class="related-item">
+              <a href="/%E4%B8%80%E4%B8%AA%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%AE%9E%E7%8E%B0/" title="Orange&#39;S 一个操作系统的实现 (于渊)">Orange&#39;S 一个操作系统的实现 (于渊)</a></li><li class="related-item">
+              <a href="/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B/" title="UNIX环境高级编程 第3版 (W.Richard Stevens / Stephen A.Rago)">UNIX环境高级编程 第3版 (W.Richard Stevens / Stephen A.Rago)</a></li><li class="related-item">
+              <a href="/tcp-ip%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" title="TCP/IP网络编程 (尹圣雨)">TCP/IP网络编程 (尹圣雨)</a></li><li class="related-item">
+              <a href="/%E5%AD%A6%E4%B9%A0javascript%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" title="学习JavaScript数据结构与算法 第3版 (Loiane Groner)">学习JavaScript数据结构与算法 第3版 (Loiane Groner)</a></li><li class="related-item">
+              <a href="/%E6%B7%B1%E5%85%A5%E8%A7%A3%E6%9E%90css/" title="深入解析CSS (Keith J. Grant)">深入解析CSS (Keith J. Grant)</a></li><li class="related-item">
+              <a href="/%E7%BB%8F%E7%90%86%E5%AD%A6%E5%8E%9F%E7%90%86-%E5%BE%AE%E8%A7%82%E7%BB%8F%E6%B5%8E%E5%AD%A6%E5%88%86%E5%86%8C/" title="经理学原理 微观经济学分册 第8版 (格里高里·曼昆)">经理学原理 微观经济学分册 第8版 (格里高里·曼昆)</a></li></ul>
+      </div>
+    </div></aside>
+
+  <article class="page single">
+    <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span title="转载" class="icon-repost"><i class="fa-solid fa-share" aria-hidden="true"></i></span><span>MongoDB权威指南 第3版 (Shannon Bradshaw / Eoin Brazil / Kristina Chodorow)</span>
+      </h1></div><div class="post-meta">
+      <div class="post-meta-line"><span class="post-author"><a href="https://andyfree96.github.io/" title="作者" target="_blank" rel="author external nofollow noopener noreferrer" class="author"><img class="avatar" src='/avatar/1.jpg' alt="AndyFree96" height="16" width="16">&nbsp;AndyFree96</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E4%B9%A6%E7%B1%8D%E7%A0%94%E8%AF%BB/" class="post-category" title="分类 - 书籍研读"><i class="fa-regular fa-folder" aria-hidden="true"></i> 书籍研读</a></span></div><div class="post-meta-line"><span title="发布于 2026-07-17 13:32:25"><i class="fa-solid fa-calendar-days me-1" aria-hidden="true"></i><time datetime="2026-07-17">2026-07-17</time></span>&nbsp;<span title="2340 字"><i class="fa-solid fa-pencil-alt me-1" aria-hidden="true"></i>约 2400 字</span>&nbsp;<span><i class="fa-regular fa-clock me-1" aria-hidden="true"></i>预计阅读 5 分钟</span>&nbsp;</div>
+    </div><div class="featured-image"><img loading="eager" src='/images/202607/24/microsoft-copilot-o2MBk6J-Iqc-unsplash.jpg' sizes="(max-width: 680px) 100vw, (max-width: 960px) 80vw, (max-width: 1440px) 56vw, 800px" alt="/images/202607/24/microsoft-copilot-o2MBk6J-Iqc-unsplash.jpg"></div><div class="details toc" id="toc-static" data-kept="false">
+        <div class="details-summary toc-title">
+          <span>目录</span>
+          <span><i class="details-icon fa-solid fa-angle-right" aria-hidden="true"></i></span>
+        </div>
+        <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#第一部分-mongodb入门">第一部分 MongoDB入门</a>
+      <ul>
+        <li><a href="#第1章-mongodb简介">第1章 MongoDB简介</a>
+          <ul>
+            <li><a href="#11-易于使用">1.1 易于使用</a></li>
+            <li><a href="#12-易于扩展">1.2 易于扩展</a></li>
+            <li><a href="#13-功能丰富">1.3 功能丰富</a></li>
+            <li><a href="#14-性能卓越">1.4 性能卓越</a></li>
+          </ul>
+        </li>
+        <li><a href="#第2章-入门指南">第2章 入门指南</a>
+          <ul>
+            <li><a href="#21-文档">2.1 文档</a></li>
+            <li><a href="#22-集合">2.2 集合</a></li>
+            <li><a href="#23-数据库">2.3 数据库</a></li>
+            <li><a href="#25-mongodb-shell">2.5 MongoDB Shell</a></li>
+            <li><a href="#27-使用mongodb-shell">2.7 使用MongoDB Shell</a></li>
+          </ul>
+        </li>
+        <li><a href="#第3章-创建更新和删除文档">第3章 创建、更新和删除文档</a>
+          <ul>
+            <li><a href="#31-插入文档">3.1 插入文档</a></li>
+            <li><a href="#32-删除文档">3.2 删除文档</a></li>
+            <li><a href="#33-更新文档">3.3 更新文档</a></li>
+          </ul>
+        </li>
+        <li><a href="#第4章-查询">第4章 查询</a></li>
+      </ul>
+    </li>
+    <li><a href="#第二部分-设计应用程序">第二部分 设计应用程序</a>
+      <ul>
+        <li><a href="#第5章-索引">第5章 索引</a></li>
+        <li><a href="#第6章-特殊的索引和集合类型">第6章 特殊的索引和集合类型</a></li>
+        <li><a href="#第7章-聚合框架">第7章 聚合框架</a></li>
+        <li><a href="#第8章-事务">第8章 事务</a></li>
+        <li><a href="#第9章-应用程序设计">第9章 应用程序设计</a></li>
+      </ul>
+    </li>
+    <li><a href="#第三部分-复制">第三部分 复制</a>
+      <ul>
+        <li><a href="#第10章-创建副本集">第10章 创建副本集</a></li>
+        <li><a href="#第11章-副本集的组成">第11章 副本集的组成</a></li>
+        <li><a href="#第12章-从应用程序连接副本集">第12章 从应用程序连接副本集</a></li>
+        <li><a href="#第13章-管理">第13章 管理</a></li>
+      </ul>
+    </li>
+    <li><a href="#第四部分-分片">第四部分 分片</a>
+      <ul>
+        <li><a href="#第14章-分片简介">第14章 分片简介</a></li>
+        <li><a href="#第15章-配置分片">第15章 配置分片</a></li>
+        <li><a href="#第16章-选择片键">第16章 选择片键</a></li>
+        <li><a href="#第17章-分片管理">第17章 分片管理</a></li>
+      </ul>
+    </li>
+    <li><a href="#第五部分-应用程序管理">第五部分 应用程序管理</a>
+      <ul>
+        <li><a href="#第18章-了解应用程序的动态">第18章 了解应用程序的动态</a></li>
+        <li><a href="#第19章-mongodb安全介绍">第19章 MongoDB安全介绍</a></li>
+        <li><a href="#第20章-持久性">第20章 持久性</a></li>
+      </ul>
+    </li>
+    <li><a href="#第六部分-服务器端管理">第六部分 服务器端管理</a>
+      <ul>
+        <li><a href="#第21章-在生产环境中设置mongodb">第21章 在生产环境中设置MongoDB</a></li>
+        <li><a href="#第22章-监控mongodb">第22章 监控MongoDB</a></li>
+        <li><a href="#第23章-备份">第23章 备份</a></li>
+        <li><a href="#第24章-部署mongodb">第24章 部署MongoDB</a></li>
+      </ul>
+    </li>
+    <li><a href="#附录b-深入mongodb">附录B 深入MongoDB</a></li>
+    <li><a href="#推荐">推荐</a></li>
+  </ul>
+</nav></div>
+      </div><div class="content" id="content"><p>MongoDB 是当前最流行的 NoSQL 数据库之一，它采用文档模型存储数据，通过灵活的数据结构、高性能的索引机制以及完善的分布式能力，广泛应用于互联网应用、大数据处理和实时业务场景。但想真正理解 MongoDB，仅仅掌握 CRUD 操作和查询语法是不够的。MongoDB 背后涉及许多数据库核心概念：文档模型设计、BSON存储、索引原理、WiredTiger存储引擎、MVCC并发控制、副本集以及分片架构等。本文将结合<a href="https://book.douban.com/subject/35688800/" target="_blank" rel="external nofollow noopener noreferrer">《MongoDB权威指南》<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>，从使用实践逐步深入底层原理，探索 MongoDB 的设计思想以及它如何解决现代应用中的数据存储和扩展问题。</p>
+<h2 class="heading-element" id="第一部分-mongodb入门"><span>第一部分 MongoDB入门</span>
+  <a href="#%e7%ac%ac%e4%b8%80%e9%83%a8%e5%88%86-mongodb%e5%85%a5%e9%97%a8" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><h3 class="heading-element" id="第1章-mongodb简介"><span>第1章 MongoDB简介</span>
+  <a href="#%e7%ac%ac1%e7%ab%a0-mongodb%e7%ae%80%e4%bb%8b" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><h4 class="heading-element" id="11-易于使用"><span>1.1 易于使用</span>
+  <a href="#11-%e6%98%93%e4%ba%8e%e4%bd%bf%e7%94%a8" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h4><p>MongoDB不是关系数据库，而是<ins>面向文档</ins>(document-oriented)的数据库。便于扩展是MongoDB没有使用关系模型的主要原因。</p>
+<p>通过嵌入文档和数组，面向文档的方式可以仅用一条记录来表示复杂的层次关系，与面向对象语言的开发人员思考数据的方式非常契合。</p>
+<p>MongoDB没有预定义模式(predefined schema)：文档键值的类型和大小不是固定的。按需添加或删除字段变得更容易。</p>
+<h4 class="heading-element" id="12-易于扩展"><span>1.2 易于扩展</span>
+  <a href="#12-%e6%98%93%e4%ba%8e%e6%89%a9%e5%b1%95" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h4><p>数据快速增长，如何扩展数据库？可以归结为两种选择：纵向扩展(提高配置)和横向扩展(将数据分布到更多机器上)。MongoDB的设计采用了横向扩展。面向文档的数据模型使跨多台服务器拆分数据更容易。MongoDB会自动平衡跨集群和数据和负载，自动重新分配文档，并将读写操作路由到正确的机器上，如图1-1所示。</p>
+<p><figure><img loading="lazy" src='/images/202607/24/1-1.png' alt="图1-1 使用分片将MongoDB横向扩展至多台服务器"><figcaption class="image-caption">图1-1 使用分片将MongoDB横向扩展至多台服务器</figcaption>
+  </figure></p>
+<p>MongoDB是一个集群还是单个节点对应用程序来说都是透明的。</p>
+<h4 class="heading-element" id="13-功能丰富"><span>1.3 功能丰富</span>
+  <a href="#13-%e5%8a%9f%e8%83%bd%e4%b8%b0%e5%af%8c" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h4><p>MongoDB是通用型数据库，除了创建、读取、更新和删除数据外，还提供了数据管理系统的常见功能和许多其他独特的功能。</p>
+<ul>
+<li>索引</li>
+<li>聚合</li>
+<li>特殊的集合和索引类型</li>
+<li>文件存储</li>
+</ul>
+<h4 class="heading-element" id="14-性能卓越"><span>1.4 性能卓越</span>
+  <a href="#14-%e6%80%a7%e8%83%bd%e5%8d%93%e8%b6%8a" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h4><p>MongoDB在其WiredTiger存储引擎中使用了机会锁，以最大限度地提高并发和吞吐量。它会使用尽可能多的RAM作为缓存，并尝试为查询自动选择正确的索引。</p>
+<p>什么是机会锁？</p>
+<p>机会锁的思想：假设冲突很少发生，大家先自由执行，最后提交时检查有没有别人改过。也就是先做事情，提交时检查有没有冲突。有的话，就会回滚/重试。没有，就成功修改。</p>
+<h3 class="heading-element" id="第2章-入门指南"><span>第2章 入门指南</span>
+  <a href="#%e7%ac%ac2%e7%ab%a0-%e5%85%a5%e9%97%a8%e6%8c%87%e5%8d%97" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><h4 class="heading-element" id="21-文档"><span>2.1 文档</span>
+  <a href="#21-%e6%96%87%e6%a1%a3" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h4><p>文档是MongoDB的核心概念：它是一组有序键值的集合。</p>
+<h4 class="heading-element" id="22-集合"><span>2.2 集合</span>
+  <a href="#22-%e9%9b%86%e5%90%88" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h4><p>集合就是一组文档。如果将文档比作关系数据库中的行，那么集合就相当于一张表。</p>
+<h4 class="heading-element" id="23-数据库"><span>2.3 数据库</span>
+  <a href="#23-%e6%95%b0%e6%8d%ae%e5%ba%93" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h4><p>MongoDB使用集合对文档进行分组，使用数据库对集合进行分组。</p>
+<h4 class="heading-element" id="25-mongodb-shell"><span>2.5 MongoDB Shell</span>
+  <a href="#25-mongodb-shell" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h4><p>MongoDB Shell可在<a href="https://www.mongodb.com/try/download/shell" target="_blank" rel="external nofollow noopener noreferrer">此处<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>下载安装。要启动Shell，直接在终端运行<code>mongosh</code>。Shell是一个功能齐全的JavaScript解释器，能够运行任意的JavaScript程序。</p>
+<p>启动时，Shell会连接到MongoDB服务器端的<code>test</code>数据库，并将此数据库连接赋值给全局变量<code>db</code>。要查看<code>db</code>当前指向哪个数据库，请键入<code>db</code>并按回车键：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-bash"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">&gt; db
+</span></span><span class="line"><span class="cl">test</span></span></code></pre></td></tr></table></div>
+</div>
+</div><p><code>show dbs</code>可查看到所有的数据库</p>
+<p><code>use video</code>中的<code>use</code>用于切换数据库。</p>
+<p><code>show collections</code>可查看到当前数据库的所有集合。</p>
+<p><code>insertOne</code>函数可以将一个文档添加到集合中。</p>
+<p><code>find</code>和<code>findOne</code>方法可用于查询集合中的文档。</p>
+<p><code>updateOne</code>可以修改文档，会接受至少两个参数：第一个用于查找要更新文档的限定条件，第二个用于描述要进行更新的文档。</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-js"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="line"><span class="cl"><span class="nx">db</span><span class="p">.</span><span class="nx">movie</span><span class="p">.</span><span class="nx">updateOne</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">	<span class="p">{</span> <span class="nx">title</span><span class="o">:</span> <span class="s2">&#34;Star Wars: Episode IV - A New Hope&#34;</span> <span class="p">},</span>
+</span></span><span class="line"><span class="cl">	<span class="p">{</span> <span class="nx">$set</span><span class="o">:</span> <span class="p">{</span> <span class="nx">reviews</span><span class="o">:</span> <span class="p">[]</span> <span class="p">}</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">);</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p><code>deleteOne</code>和<code>deleteMany</code>方法会从数据库中永久删除文档。都采用一个指定删除条件的过滤文档作为参数。</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-js"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="line"><span class="cl"><span class="nx">db</span><span class="p">.</span><span class="nx">movies</span><span class="p">.</span><span class="nx">deleteOne</span><span class="p">({</span><span class="nx">title</span><span class="o">:</span> <span class="s2">&#34;Star Wars&#34;</span><span class="p">});</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><h4 class="heading-element" id="27-使用mongodb-shell"><span>2.7 使用MongoDB Shell</span>
+  <a href="#27-%e4%bd%bf%e7%94%a8mongodb-shell" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h4><p>Shell可以连接到机器可以访问的任何MongoDB实例，要想连接到其他机器或端口上的MongoDB服务，需要在启动Shell时指定主机名、端口和数据库：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-bash"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">mongosh localhost:27017/movies</span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>此时，<code>db</code>就指向了<code>localhost:27017</code>上的<code>movies</code>数据库。</p>
+<p>使用<code>--nodb</code>参数启动Shell，那么它在启动时就不会连接任何数据库：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-bash"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">mongosh --nodb</span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>Shell内置了帮助文档，可以输入<code>help</code>命令进行访问。</p>
+<p><code>db.help()</code>可以查看数据库级别的帮助信息，使用<code>db.foo.help()</code>查看集合级别的帮助信息。</p>
+<p>MongoDB Shell可以配合<a href="https://www.mongodb.com/docs/mongodb-shell/write-scripts/" target="_blank" rel="external nofollow noopener noreferrer">脚本<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>一起使用。</p>
+<h3 class="heading-element" id="第3章-创建更新和删除文档"><span>第3章 创建、更新和删除文档</span>
+  <a href="#%e7%ac%ac3%e7%ab%a0-%e5%88%9b%e5%bb%ba%e6%9b%b4%e6%96%b0%e5%92%8c%e5%88%a0%e9%99%a4%e6%96%87%e6%a1%a3" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><h4 class="heading-element" id="31-插入文档"><span>3.1 插入文档</span>
+  <a href="#31-%e6%8f%92%e5%85%a5%e6%96%87%e6%a1%a3" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h4><div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-js"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="line"><span class="cl"><span class="nx">db</span><span class="p">.</span><span class="nx">movies</span><span class="p">.</span><span class="nx">insertOne</span><span class="p">({</span><span class="s2">&#34;title&#34;</span><span class="o">:</span> <span class="s2">&#34;Stand by Me&#34;</span><span class="p">})</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nx">db</span><span class="p">.</span><span class="nx">movies</span><span class="p">.</span><span class="nx">drop</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nx">db</span><span class="p">.</span><span class="nx">movies</span><span class="p">.</span><span class="nx">insertMany</span><span class="p">([{</span><span class="s2">&#34;title&#34;</span><span class="o">:</span> <span class="s2">&#34;Ghostbusters&#34;</span><span class="p">},</span> <span class="p">{</span><span class="s2">&#34;title&#34;</span><span class="o">:</span> <span class="s2">&#34;E.T.&#34;</span><span class="p">}])</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><h4 class="heading-element" id="32-删除文档"><span>3.2 删除文档</span>
+  <a href="#32-%e5%88%a0%e9%99%a4%e6%96%87%e6%a1%a3" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h4><div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-js"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="line"><span class="cl"><span class="nx">db</span><span class="p">.</span><span class="nx">movies</span><span class="p">.</span><span class="nx">deleteOne</span><span class="p">({</span><span class="s2">&#34;_id&#34;</span><span class="o">:</span> <span class="nx">ObjectId</span><span class="p">(</span><span class="s1">&#39;6a59ded8541a7ff3e944d53b&#39;</span><span class="p">)})</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nx">db</span><span class="p">.</span><span class="nx">movies</span><span class="p">.</span><span class="nx">deleteMany</span><span class="p">({</span><span class="s2">&#34;year&#34;</span><span class="o">:</span> <span class="mi">1984</span><span class="p">})</span> 
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nx">db</span><span class="p">.</span><span class="nx">movies</span><span class="p">.</span><span class="nx">deleteMany</span><span class="p">({})</span> <span class="c1">// 删除一个集合中的所有文档
+</span></span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nx">db</span><span class="p">.</span><span class="nx">movies</span><span class="p">.</span><span class="nx">drop</span><span class="p">()</span> <span class="c1">// 如果想清空整个集合，可使用drop直接删除集合
+</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><h4 class="heading-element" id="33-更新文档"><span>3.3 更新文档</span>
+  <a href="#33-%e6%9b%b4%e6%96%b0%e6%96%87%e6%a1%a3" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h4><p><code>replaceOne</code>会用新文档完全替换匹配的文档。</p>
+<p><code>$set</code>用来设置一个字段的值。</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-js"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="line"><span class="cl"><span class="nx">db</span><span class="p">.</span><span class="nx">user</span><span class="p">.</span><span class="nx">updateOne</span><span class="p">({</span><span class="s2">&#34;name&#34;</span><span class="o">:</span> <span class="s2">&#34;joe&#34;</span><span class="p">},</span> <span class="p">{</span><span class="s2">&#34;$set&#34;</span><span class="o">:</span> <span class="p">{</span><span class="s2">&#34;favorite book&#34;</span><span class="o">:</span> <span class="s2">&#34;Green Eggs and Ham&#34;</span><span class="p">}})</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p><code>$unset</code>将键完全删除。</p>
+<p><code>$inc</code>运算符可以递增键值。</p>
+<p><code>$push</code>往数组里增加元素。</p>
+<p><code>$pop</code>从数组中删除元素。</p>
+<p><code>upsert</code>是一种特殊类型的更新。如果找不到与筛选条件相匹配的文档，则会以这个条件和更新文档为基础来创建一个新文档；如果找到了匹配的文档，则进行正常的更新。</p>
+<p><code>findOneAndDelete</code>、<code>findOneAndReplace</code>和<code>findOneAndUpdate</code>可以原子地获取已修改文档的值。</p>
+<h3 class="heading-element" id="第4章-查询"><span>第4章 查询</span>
+  <a href="#%e7%ac%ac4%e7%ab%a0-%e6%9f%a5%e8%af%a2" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><h2 class="heading-element" id="第二部分-设计应用程序"><span>第二部分 设计应用程序</span>
+  <a href="#%e7%ac%ac%e4%ba%8c%e9%83%a8%e5%88%86-%e8%ae%be%e8%ae%a1%e5%ba%94%e7%94%a8%e7%a8%8b%e5%ba%8f" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><h3 class="heading-element" id="第5章-索引"><span>第5章 索引</span>
+  <a href="#%e7%ac%ac5%e7%ab%a0-%e7%b4%a2%e5%bc%95" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><h3 class="heading-element" id="第6章-特殊的索引和集合类型"><span>第6章 特殊的索引和集合类型</span>
+  <a href="#%e7%ac%ac6%e7%ab%a0-%e7%89%b9%e6%ae%8a%e7%9a%84%e7%b4%a2%e5%bc%95%e5%92%8c%e9%9b%86%e5%90%88%e7%b1%bb%e5%9e%8b" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><h3 class="heading-element" id="第7章-聚合框架"><span>第7章 聚合框架</span>
+  <a href="#%e7%ac%ac7%e7%ab%a0-%e8%81%9a%e5%90%88%e6%a1%86%e6%9e%b6" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><h3 class="heading-element" id="第8章-事务"><span>第8章 事务</span>
+  <a href="#%e7%ac%ac8%e7%ab%a0-%e4%ba%8b%e5%8a%a1" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><h3 class="heading-element" id="第9章-应用程序设计"><span>第9章 应用程序设计</span>
+  <a href="#%e7%ac%ac9%e7%ab%a0-%e5%ba%94%e7%94%a8%e7%a8%8b%e5%ba%8f%e8%ae%be%e8%ae%a1" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><h2 class="heading-element" id="第三部分-复制"><span>第三部分 复制</span>
+  <a href="#%e7%ac%ac%e4%b8%89%e9%83%a8%e5%88%86-%e5%a4%8d%e5%88%b6" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><h3 class="heading-element" id="第10章-创建副本集"><span>第10章 创建副本集</span>
+  <a href="#%e7%ac%ac10%e7%ab%a0-%e5%88%9b%e5%bb%ba%e5%89%af%e6%9c%ac%e9%9b%86" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><h3 class="heading-element" id="第11章-副本集的组成"><span>第11章 副本集的组成</span>
+  <a href="#%e7%ac%ac11%e7%ab%a0-%e5%89%af%e6%9c%ac%e9%9b%86%e7%9a%84%e7%bb%84%e6%88%90" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><h3 class="heading-element" id="第12章-从应用程序连接副本集"><span>第12章 从应用程序连接副本集</span>
+  <a href="#%e7%ac%ac12%e7%ab%a0-%e4%bb%8e%e5%ba%94%e7%94%a8%e7%a8%8b%e5%ba%8f%e8%bf%9e%e6%8e%a5%e5%89%af%e6%9c%ac%e9%9b%86" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><h3 class="heading-element" id="第13章-管理"><span>第13章 管理</span>
+  <a href="#%e7%ac%ac13%e7%ab%a0-%e7%ae%a1%e7%90%86" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><h2 class="heading-element" id="第四部分-分片"><span>第四部分 分片</span>
+  <a href="#%e7%ac%ac%e5%9b%9b%e9%83%a8%e5%88%86-%e5%88%86%e7%89%87" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><h3 class="heading-element" id="第14章-分片简介"><span>第14章 分片简介</span>
+  <a href="#%e7%ac%ac14%e7%ab%a0-%e5%88%86%e7%89%87%e7%ae%80%e4%bb%8b" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><h3 class="heading-element" id="第15章-配置分片"><span>第15章 配置分片</span>
+  <a href="#%e7%ac%ac15%e7%ab%a0-%e9%85%8d%e7%bd%ae%e5%88%86%e7%89%87" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><h3 class="heading-element" id="第16章-选择片键"><span>第16章 选择片键</span>
+  <a href="#%e7%ac%ac16%e7%ab%a0-%e9%80%89%e6%8b%a9%e7%89%87%e9%94%ae" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><h3 class="heading-element" id="第17章-分片管理"><span>第17章 分片管理</span>
+  <a href="#%e7%ac%ac17%e7%ab%a0-%e5%88%86%e7%89%87%e7%ae%a1%e7%90%86" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><h2 class="heading-element" id="第五部分-应用程序管理"><span>第五部分 应用程序管理</span>
+  <a href="#%e7%ac%ac%e4%ba%94%e9%83%a8%e5%88%86-%e5%ba%94%e7%94%a8%e7%a8%8b%e5%ba%8f%e7%ae%a1%e7%90%86" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><h3 class="heading-element" id="第18章-了解应用程序的动态"><span>第18章 了解应用程序的动态</span>
+  <a href="#%e7%ac%ac18%e7%ab%a0-%e4%ba%86%e8%a7%a3%e5%ba%94%e7%94%a8%e7%a8%8b%e5%ba%8f%e7%9a%84%e5%8a%a8%e6%80%81" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><h3 class="heading-element" id="第19章-mongodb安全介绍"><span>第19章 MongoDB安全介绍</span>
+  <a href="#%e7%ac%ac19%e7%ab%a0-mongodb%e5%ae%89%e5%85%a8%e4%bb%8b%e7%bb%8d" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><h3 class="heading-element" id="第20章-持久性"><span>第20章 持久性</span>
+  <a href="#%e7%ac%ac20%e7%ab%a0-%e6%8c%81%e4%b9%85%e6%80%a7" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><h2 class="heading-element" id="第六部分-服务器端管理"><span>第六部分 服务器端管理</span>
+  <a href="#%e7%ac%ac%e5%85%ad%e9%83%a8%e5%88%86-%e6%9c%8d%e5%8a%a1%e5%99%a8%e7%ab%af%e7%ae%a1%e7%90%86" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><h3 class="heading-element" id="第21章-在生产环境中设置mongodb"><span>第21章 在生产环境中设置MongoDB</span>
+  <a href="#%e7%ac%ac21%e7%ab%a0-%e5%9c%a8%e7%94%9f%e4%ba%a7%e7%8e%af%e5%a2%83%e4%b8%ad%e8%ae%be%e7%bd%aemongodb" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><h3 class="heading-element" id="第22章-监控mongodb"><span>第22章 监控MongoDB</span>
+  <a href="#%e7%ac%ac22%e7%ab%a0-%e7%9b%91%e6%8e%a7mongodb" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><h3 class="heading-element" id="第23章-备份"><span>第23章 备份</span>
+  <a href="#%e7%ac%ac23%e7%ab%a0-%e5%a4%87%e4%bb%bd" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><h3 class="heading-element" id="第24章-部署mongodb"><span>第24章 部署MongoDB</span>
+  <a href="#%e7%ac%ac24%e7%ab%a0-%e9%83%a8%e7%bd%b2mongodb" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><h2 class="heading-element" id="附录b-深入mongodb"><span>附录B 深入MongoDB</span>
+  <a href="#%e9%99%84%e5%bd%95b-%e6%b7%b1%e5%85%a5mongodb" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><h2 class="heading-element" id="推荐"><span>推荐</span>
+  <a href="#%e6%8e%a8%e8%8d%90" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p><a href="https://www.mongodb.com/docs/" target="_blank" rel="external nofollow noopener noreferrer">MongoDB Docs<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></p></div><hr class="awesome-hr" />
+    <h2 id="see-also">相关内容</h2>
+    <ul><li>
+          <a href="/%E6%8C%91%E6%88%98%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%AB%9E%E8%B5%9B/" title="挑战程序设计竞赛 第2版 (秋叶拓哉 / 岩田阳一 / 北川宜稔)">挑战程序设计竞赛 第2版 (秋叶拓哉 / 岩田阳一 / 北川宜稔)</a></li><li>
+          <a href="/%E4%BF%AE%E6%94%B9%E4%BB%A3%E7%A0%81%E7%9A%84%E8%89%BA%E6%9C%AF/" title="修改代码的艺术 (Michael C. Feathers)">修改代码的艺术 (Michael C. Feathers)</a></li><li>
+          <a href="/%E4%BB%A3%E7%A0%81%E6%95%B4%E6%B4%81%E4%B9%8B%E9%81%93/" title="代码整洁之道 (Robert C. Martin)">代码整洁之道 (Robert C. Martin)</a></li><li>
+          <a href="/%E9%87%8D%E6%9E%84/" title="重构 改善既有代码的艺术 第2版 (Martin Fowler)">重构 改善既有代码的艺术 第2版 (Martin Fowler)</a></li><li>
+          <a href="/c%23%E9%AB%98%E6%95%88%E7%BC%96%E7%A8%8B/" title="C#高效编程 改进C#代码的50个行之有效的办法 第2版 (Bill Wagner)">C#高效编程 改进C#代码的50个行之有效的办法 第2版 (Bill Wagner)</a></li><li>
+          <a href="/%E7%99%BE%E4%B8%87%E7%BA%A7csv%E5%AF%BC%E5%85%A5mongodb%E6%80%A7%E8%83%BD%E5%AE%9E%E6%88%98/" title="百万级CSV导入MongoDB性能实战">百万级CSV导入MongoDB性能实战</a></li><li>
+          <a href="/%E8%81%AA%E6%98%8E%E7%9A%84%E6%8A%95%E8%B5%84%E8%80%85/" title="聪明的投资者 第4版 (Benjamin Graham)">聪明的投资者 第4版 (Benjamin Graham)</a></li><li>
+          <a href="/%E6%9E%B6%E6%9E%84%E6%95%B4%E6%B4%81%E4%B9%8B%E9%81%93/" title="架构整洁之道 (Robert C. Martin)">架构整洁之道 (Robert C. Martin)</a></li><li>
+          <a href="/effective-python/" title="Effective Python 第2版 (Brett Slatkin)">Effective Python 第2版 (Brett Slatkin)</a></li><li>
+          <a href="/%E6%B5%81%E7%95%85%E7%9A%84python/" title="流畅的Python 第2版 (Luciano Ramalho)">流畅的Python 第2版 (Luciano Ramalho)</a></li><li>
+          <a href="/vue.js%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/" title="Vue.js设计与实现 (霍春阳)">Vue.js设计与实现 (霍春阳)</a></li><li>
+          <a href="/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" title="计算机网络：自顶向下方法 第8版 (James F·Kurose / Keith W. Ross)">计算机网络：自顶向下方法 第8版 (James F·Kurose / Keith W. Ross)</a></li><li>
+          <a href="/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F/" title="深入理解计算机系统 第3版 (Randal E. Bryant / David O&#39;Hallaron)">深入理解计算机系统 第3版 (Randal E. Bryant / David O&#39;Hallaron)</a></li><li>
+          <a href="/%E7%BC%96%E5%86%99%E5%8F%AF%E8%AF%BB%E4%BB%A3%E7%A0%81%E7%9A%84%E8%89%BA%E6%9C%AF/" title="编写可读代码的艺术 (Dustin Boswell / Trevor Foucher)">编写可读代码的艺术 (Dustin Boswell / Trevor Foucher)</a></li><li>
+          <a href="/%E4%B8%80%E4%B8%AA%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%AE%9E%E7%8E%B0/" title="Orange&#39;S 一个操作系统的实现 (于渊)">Orange&#39;S 一个操作系统的实现 (于渊)</a></li><li>
+          <a href="/unix%E7%8E%AF%E5%A2%83%E9%AB%98%E7%BA%A7%E7%BC%96%E7%A8%8B/" title="UNIX环境高级编程 第3版 (W.Richard Stevens / Stephen A.Rago)">UNIX环境高级编程 第3版 (W.Richard Stevens / Stephen A.Rago)</a></li><li>
+          <a href="/tcp-ip%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" title="TCP/IP网络编程 (尹圣雨)">TCP/IP网络编程 (尹圣雨)</a></li><li>
+          <a href="/%E5%AD%A6%E4%B9%A0javascript%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" title="学习JavaScript数据结构与算法 第3版 (Loiane Groner)">学习JavaScript数据结构与算法 第3版 (Loiane Groner)</a></li><li>
+          <a href="/%E6%B7%B1%E5%85%A5%E8%A7%A3%E6%9E%90css/" title="深入解析CSS (Keith J. Grant)">深入解析CSS (Keith J. Grant)</a></li><li>
+          <a href="/%E7%BB%8F%E7%90%86%E5%AD%A6%E5%8E%9F%E7%90%86-%E5%BE%AE%E8%A7%82%E7%BB%8F%E6%B5%8E%E5%AD%A6%E5%88%86%E5%86%8C/" title="经理学原理 微观经济学分册 第8版 (格里高里·曼昆)">经理学原理 微观经济学分册 第8版 (格里高里·曼昆)</a></li></ul><div class="post-footer" id="post-footer">
+  <div class="post-info">
+    <div class="post-info-line">
+      <div class="post-info-mod"><span title="更新于 2026-07-17 13:32:25">更新于 2026-07-17&nbsp;</span>
+      </div></div><div class="post-info-line">
+        <div class="post-info-md"><span><a href="vscode://file/D:\hugo-blog\andyfree96\content\posts\MongoDB权威指南.md" title="在编辑器中打开" class="link-to-vscode">在编辑器中打开</a></span></div>
+        <div class="post-info-share">
+          <span><a href="javascript:void(0);" title="分享到 X" data-sharer="twitter" data-url="http://localhost:1313/mongodb%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97/" data-title="MongoDB权威指南 第3版 (Shannon Bradshaw / Eoin Brazil / Kristina Chodorow)" data-via="IRONAnthony96" data-hashtags="MongoDB,数据库,面向文档,读书笔记,计算机"><i class="fa-brands fa-x-twitter" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="http://localhost:1313/mongodb%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97/" data-hashtag="MongoDB"><i class="fa-brands fa-facebook-square" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="http://localhost:1313/mongodb%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97/" data-title="MongoDB权威指南 第3版 (Shannon Bradshaw / Eoin Brazil / Kristina Chodorow)" data-image="/images/202607/24/microsoft-copilot-o2MBk6J-Iqc-unsplash.jpg"><i class="fa-brands fa-weibo" aria-hidden="true"></i></a>
+  </span>
+        </div>
+      </div></div>
+
+  <div class="post-info-more">
+    <section class="post-tags"><i class="fa-solid fa-tags me-1" aria-hidden="true"></i><a href="/tags/mongodb/" class="post-tag" title="标签 - MongoDB">MongoDB</a><a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" class="post-tag" title="标签 - 数据库">数据库</a><a href="/tags/%E9%9D%A2%E5%90%91%E6%96%87%E6%A1%A3/" class="post-tag" title="标签 - 面向文档">面向文档</a><a href="/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" class="post-tag" title="标签 - 读书笔记">读书笔记</a><a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA/" class="post-tag" title="标签 - 计算机">计算机</a></section>
+    <section><span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+    </section>
+  </div><div class="post-nav"><a href="/%E6%8C%91%E6%88%98%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%AB%9E%E8%B5%9B/" class="post-nav-item" rel="prev" title="挑战程序设计竞赛 第2版 (秋叶拓哉 / 岩田阳一 / 北川宜稔)"><i class="fa-solid fa-angle-left" aria-hidden="true"></i>挑战程序设计竞赛 第2版 (秋叶拓哉 / 岩田阳一 / 北川宜稔)</a><a href="/redis%E5%BC%80%E5%8F%91%E4%B8%8E%E8%BF%90%E7%BB%B4/" class="post-nav-item" rel="next" title="Redis开发与运维 (付磊 / 张益军)">Redis开发与运维 (付磊 / 张益军)<i class="fa-solid fa-angle-right" aria-hidden="true"></i></a></div>
+</div>
+<div class="post-reward">
+    <div class="comment">请作者喝杯咖啡!</div>
+    <input type="checkbox" class="reward-input" name="reward" id="fi-reward" hidden />
+    <label class="reward-button" for="fi-reward"><i class="fa-solid fa-qrcode" aria-hidden="true"></i>赞赏</label>
+    <div class="reward-ways" data-mode="static"><div><img src='/reward/alipay.png' alt="AndyFree96 支付宝"><span data-animation>支付宝</span>
+          </div><div><img src='/reward/wechatpay.png' alt="AndyFree96 微信"><span data-animation>微信</span>
+          </div></div>
+  </div></article>
+
+  <aside class="toc" id="toc-auto" aria-label="目录"><h2 class="toc-title">目录&nbsp;<i class="toc-icon fa-solid fa-angle-down" aria-hidden="true"></i></h2>
+      <div class="toc-content" id="toc-content-auto"></div></aside><dialog id="toc-dialog" aria-labelledby="toc-dialog-title" role="dialog" closedby="any">
+      <button type="button" class="toc-close-btn" aria-label="Close Table of Contents"><i class="fa-solid fa-xmark fa-lg" aria-hidden="true"></i></button>
+      <div class="toc">
+        <h2 class="toc-title" id="toc-dialog-title">目录</h2>
+        <div class="toc-content" id="toc-content-drawer"><nav >
+  <ul>
+    <li><a href="#第一部分-mongodb入门">第一部分 MongoDB入门</a>
+      <ul>
+        <li><a href="#第1章-mongodb简介">第1章 MongoDB简介</a>
+          <ul>
+            <li><a href="#11-易于使用">1.1 易于使用</a></li>
+            <li><a href="#12-易于扩展">1.2 易于扩展</a></li>
+            <li><a href="#13-功能丰富">1.3 功能丰富</a></li>
+            <li><a href="#14-性能卓越">1.4 性能卓越</a></li>
+          </ul>
+        </li>
+        <li><a href="#第2章-入门指南">第2章 入门指南</a>
+          <ul>
+            <li><a href="#21-文档">2.1 文档</a></li>
+            <li><a href="#22-集合">2.2 集合</a></li>
+            <li><a href="#23-数据库">2.3 数据库</a></li>
+            <li><a href="#25-mongodb-shell">2.5 MongoDB Shell</a></li>
+            <li><a href="#27-使用mongodb-shell">2.7 使用MongoDB Shell</a></li>
+          </ul>
+        </li>
+        <li><a href="#第3章-创建更新和删除文档">第3章 创建、更新和删除文档</a>
+          <ul>
+            <li><a href="#31-插入文档">3.1 插入文档</a></li>
+            <li><a href="#32-删除文档">3.2 删除文档</a></li>
+            <li><a href="#33-更新文档">3.3 更新文档</a></li>
+          </ul>
+        </li>
+        <li><a href="#第4章-查询">第4章 查询</a></li>
+      </ul>
+    </li>
+    <li><a href="#第二部分-设计应用程序">第二部分 设计应用程序</a>
+      <ul>
+        <li><a href="#第5章-索引">第5章 索引</a></li>
+        <li><a href="#第6章-特殊的索引和集合类型">第6章 特殊的索引和集合类型</a></li>
+        <li><a href="#第7章-聚合框架">第7章 聚合框架</a></li>
+        <li><a href="#第8章-事务">第8章 事务</a></li>
+        <li><a href="#第9章-应用程序设计">第9章 应用程序设计</a></li>
+      </ul>
+    </li>
+    <li><a href="#第三部分-复制">第三部分 复制</a>
+      <ul>
+        <li><a href="#第10章-创建副本集">第10章 创建副本集</a></li>
+        <li><a href="#第11章-副本集的组成">第11章 副本集的组成</a></li>
+        <li><a href="#第12章-从应用程序连接副本集">第12章 从应用程序连接副本集</a></li>
+        <li><a href="#第13章-管理">第13章 管理</a></li>
+      </ul>
+    </li>
+    <li><a href="#第四部分-分片">第四部分 分片</a>
+      <ul>
+        <li><a href="#第14章-分片简介">第14章 分片简介</a></li>
+        <li><a href="#第15章-配置分片">第15章 配置分片</a></li>
+        <li><a href="#第16章-选择片键">第16章 选择片键</a></li>
+        <li><a href="#第17章-分片管理">第17章 分片管理</a></li>
+      </ul>
+    </li>
+    <li><a href="#第五部分-应用程序管理">第五部分 应用程序管理</a>
+      <ul>
+        <li><a href="#第18章-了解应用程序的动态">第18章 了解应用程序的动态</a></li>
+        <li><a href="#第19章-mongodb安全介绍">第19章 MongoDB安全介绍</a></li>
+        <li><a href="#第20章-持久性">第20章 持久性</a></li>
+      </ul>
+    </li>
+    <li><a href="#第六部分-服务器端管理">第六部分 服务器端管理</a>
+      <ul>
+        <li><a href="#第21章-在生产环境中设置mongodb">第21章 在生产环境中设置MongoDB</a></li>
+        <li><a href="#第22章-监控mongodb">第22章 监控MongoDB</a></li>
+        <li><a href="#第23章-备份">第23章 备份</a></li>
+        <li><a href="#第24章-部署mongodb">第24章 部署MongoDB</a></li>
+      </ul>
+    </li>
+    <li><a href="#附录b-深入mongodb">附录B 深入MongoDB</a></li>
+    <li><a href="#推荐">推荐</a></li>
+  </ul>
+</nav></div>
+      </div>
+    </dialog></main><footer class="footer">
+    <div class="footer-container"><div class="footer-line powered">由 <a href="https://gohugo.io/" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.163.1">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/hugo-fixit/FixIt" target="_blank" rel="external" title="FixIt v1.0.0-mq99hlzg">FixIt</a>
+        </div><div class="footer-line copyright" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright" aria-hidden="true"></i>
+            <span itemprop="copyrightYear">2019 - 2026</span><span class="author" itemprop="copyrightHolder">
+              <a href="https://andyfree96.github.io/" target="_blank" rel="external nofollow noopener noreferrer">AndyFree96</a></span></div></div>
+  </footer></div><div class="widgets"><div class="fixed-buttons"><button type="button" class="fixed-button back-to-top animate__faster d-none" aria-label="回到顶部"><i class="fa-solid fa-arrow-up" aria-hidden="true"></i></button><button type="button" id="toc-drawer-button" class="fixed-button toc-drawer-button d-none" aria-label="目录" aria-controls="toc-dialog" aria-expanded="false"><i class="fa-solid fa-bars" aria-hidden="true"></i></button></div><div id="mask"></div><div class="reading-progress-bar" style="left: 0;top: 0;"></div><noscript>
+    <div class="noscript-warning">该网站在启用 JavaScript 的情况下效果最佳。</div>
+  </noscript>
+</div><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script src="/lib/autocomplete/autocomplete.min.js" defer></script><script src="/lib/algoliasearch/browser.umd.js" defer></script><script src="/lib/sharer/sharer.min.js" async defer></script><script src="/lib/cookieconsent/cookieconsent.min.js" defer></script><script src="/js/lib/cookieconsent.js" defer></script><script src="/lib/cell-tooltip/cell-tooltip.umd.js" defer></script><script src="/js/config/4b5e956a6e023665df1a689dbdec9f32.js" defer></script><script src="/js/lib/file-tree.js" defer></script><script src="/js/main.js" defer></script></body>
+</html>

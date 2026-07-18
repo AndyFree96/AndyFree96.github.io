@@ -145,7 +145,7 @@ vim /etc/shadowsocks-r/config.json
 
 ![](/images/202008/1/20.png)
 
-打开浏览器访问谷歌：https://www.google.com/
+打开浏览器访问[谷歌](https://www.google.com/)。
 
 ![](/images/202008/1/21.png)
 
