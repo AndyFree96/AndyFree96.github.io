@@ -11,7 +11,7 @@
 	<meta itemprop="description" content="MongoDB 是当前最流行的 NoSQL 数据库之一，它采用文档模型存储数据，通过灵活的数据结构、高性能的索引机制以及完善的分布式能力，广泛应用于互联网应用、大数据处理和实时业务场景。但想真正理解 MongoDB，仅仅掌握 CRUD 操作和查询语法是不够的。MongoDB 背后涉及许多数据库核心概念：文档模型设计、BSON存储、索引原理、WiredTiger存储引擎、MVCC并发控制、副本集以及分片架构等。本文将结合《MongoDB权威指南》，从使用实践逐步深入底层原理，探索 MongoDB 的设计思想以及它如何解决现代应用中的数据存储和扩展问题。">
 	<meta itemprop="datePublished" content="2026-07-17T13:32:25+08:00">
 	<meta itemprop="dateModified" content="2026-07-17T13:32:25+08:00">
-	<meta itemprop="wordCount" content="2340">
+	<meta itemprop="wordCount" content="2977">
 	<meta itemprop="keywords" content="MongoDB,数据库,面向文档,读书笔记,计算机"><meta property="og:url" content="http://localhost:1313/mongodb%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97/">
 	<meta property="og:site_name" content="东尼的博客">
 	<meta property="og:title" content="MongoDB权威指南 第3版 (Shannon Bradshaw / Eoin Brazil / Kristina Chodorow)">
@@ -43,7 +43,7 @@
     "mainEntityOfPage": {
       "@type": "WebPage",
       "@id": "http:\/\/localhost:1313\/mongodb%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97\/"
-    },"genre": "posts","keywords": "MongoDB, 数据库, 面向文档, 读书笔记, 计算机","wordcount":  2340 ,
+    },"genre": "posts","keywords": "MongoDB, 数据库, 面向文档, 读书笔记, 计算机","wordcount":  2977 ,
     "url": "http:\/\/localhost:1313\/mongodb%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97\/","datePublished": "2026-07-17T13:32:25+08:00","dateModified": "2026-07-17T13:32:25+08:00","publisher": {
       "@type": "Organization",
       "name": ""},"author": {
@@ -151,7 +151,7 @@
   <article class="page single">
     <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span title="转载" class="icon-repost"><i class="fa-solid fa-share" aria-hidden="true"></i></span><span>MongoDB权威指南 第3版 (Shannon Bradshaw / Eoin Brazil / Kristina Chodorow)</span>
       </h1></div><div class="post-meta">
-      <div class="post-meta-line"><span class="post-author"><a href="https://andyfree96.github.io/" title="作者" target="_blank" rel="author external nofollow noopener noreferrer" class="author"><img class="avatar" src='/avatar/1.jpg' alt="AndyFree96" height="16" width="16">&nbsp;AndyFree96</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E4%B9%A6%E7%B1%8D%E7%A0%94%E8%AF%BB/" class="post-category" title="分类 - 书籍研读"><i class="fa-regular fa-folder" aria-hidden="true"></i> 书籍研读</a></span></div><div class="post-meta-line"><span title="发布于 2026-07-17 13:32:25"><i class="fa-solid fa-calendar-days me-1" aria-hidden="true"></i><time datetime="2026-07-17">2026-07-17</time></span>&nbsp;<span title="2340 字"><i class="fa-solid fa-pencil-alt me-1" aria-hidden="true"></i>约 2400 字</span>&nbsp;<span><i class="fa-regular fa-clock me-1" aria-hidden="true"></i>预计阅读 5 分钟</span>&nbsp;</div>
+      <div class="post-meta-line"><span class="post-author"><a href="https://andyfree96.github.io/" title="作者" target="_blank" rel="author external nofollow noopener noreferrer" class="author"><img class="avatar" src='/avatar/1.jpg' alt="AndyFree96" height="16" width="16">&nbsp;AndyFree96</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E4%B9%A6%E7%B1%8D%E7%A0%94%E8%AF%BB/" class="post-category" title="分类 - 书籍研读"><i class="fa-regular fa-folder" aria-hidden="true"></i> 书籍研读</a></span></div><div class="post-meta-line"><span title="发布于 2026-07-17 13:32:25"><i class="fa-solid fa-calendar-days me-1" aria-hidden="true"></i><time datetime="2026-07-17">2026-07-17</time></span>&nbsp;<span title="2977 字"><i class="fa-solid fa-pencil-alt me-1" aria-hidden="true"></i>约 3000 字</span>&nbsp;<span><i class="fa-regular fa-clock me-1" aria-hidden="true"></i>预计阅读 6 分钟</span>&nbsp;</div>
     </div><div class="featured-image"><img loading="eager" src='/images/202607/24/microsoft-copilot-o2MBk6J-Iqc-unsplash.jpg' sizes="(max-width: 680px) 100vw, (max-width: 960px) 80vw, (max-width: 1440px) 56vw, 800px" alt="/images/202607/24/microsoft-copilot-o2MBk6J-Iqc-unsplash.jpg"></div><div class="details toc" id="toc-static" data-kept="false">
         <div class="details-summary toc-title">
           <span>目录</span>
@@ -185,7 +185,13 @@
             <li><a href="#33-更新文档">3.3 更新文档</a></li>
           </ul>
         </li>
-        <li><a href="#第4章-查询">第4章 查询</a></li>
+        <li><a href="#第4章-查询">第4章 查询</a>
+          <ul>
+            <li><a href="#41-find简介">4.1 find简介</a></li>
+            <li><a href="#42-查询条件">4.2 查询条件</a></li>
+            <li><a href="#45-游标">4.5 游标</a></li>
+          </ul>
+        </li>
       </ul>
     </li>
     <li><a href="#第二部分-设计应用程序">第二部分 设计应用程序</a>
@@ -323,8 +329,8 @@
 </span></code></pre></td>
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="line"><span class="cl"><span class="nx">db</span><span class="p">.</span><span class="nx">movie</span><span class="p">.</span><span class="nx">updateOne</span><span class="p">(</span>
-</span></span><span class="line"><span class="cl">	<span class="p">{</span> <span class="nx">title</span><span class="o">:</span> <span class="s2">&#34;Star Wars: Episode IV - A New Hope&#34;</span> <span class="p">},</span>
-</span></span><span class="line"><span class="cl">	<span class="p">{</span> <span class="nx">$set</span><span class="o">:</span> <span class="p">{</span> <span class="nx">reviews</span><span class="o">:</span> <span class="p">[]</span> <span class="p">}</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">{</span> <span class="nx">title</span><span class="o">:</span> <span class="s1">&#39;Star Wars: Episode IV - A New Hope&#39;</span> <span class="p">},</span>
+</span></span><span class="line"><span class="cl">  <span class="p">{</span> <span class="nx">$set</span><span class="o">:</span> <span class="p">{</span> <span class="nx">reviews</span><span class="o">:</span> <span class="p">[]</span> <span class="p">}</span> <span class="p">},</span>
 </span></span><span class="line"><span class="cl"><span class="p">);</span></span></span></code></pre></td></tr></table></div>
 </div>
 </div><p><code>deleteOne</code>和<code>deleteMany</code>方法会从数据库中永久删除文档。都采用一个指定删除条件的过滤文档作为参数。</p>
@@ -333,7 +339,7 @@
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="line"><span class="cl"><span class="nx">db</span><span class="p">.</span><span class="nx">movies</span><span class="p">.</span><span class="nx">deleteOne</span><span class="p">({</span><span class="nx">title</span><span class="o">:</span> <span class="s2">&#34;Star Wars&#34;</span><span class="p">});</span></span></span></code></pre></td></tr></table></div>
+<pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="line"><span class="cl"><span class="nx">db</span><span class="p">.</span><span class="nx">movies</span><span class="p">.</span><span class="nx">deleteOne</span><span class="p">({</span> <span class="nx">title</span><span class="o">:</span> <span class="s1">&#39;Star Wars&#39;</span> <span class="p">});</span></span></span></code></pre></td></tr></table></div>
 </div>
 </div><h4 class="heading-element" id="27-使用mongodb-shell"><span>2.7 使用MongoDB Shell</span>
   <a href="#27-%e4%bd%bf%e7%94%a8mongodb-shell" class="heading-mark">
@@ -376,11 +382,11 @@
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="line"><span class="cl"><span class="nx">db</span><span class="p">.</span><span class="nx">movies</span><span class="p">.</span><span class="nx">insertOne</span><span class="p">({</span><span class="s2">&#34;title&#34;</span><span class="o">:</span> <span class="s2">&#34;Stand by Me&#34;</span><span class="p">})</span>
+<pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="line"><span class="cl"><span class="nx">db</span><span class="p">.</span><span class="nx">movies</span><span class="p">.</span><span class="nx">insertOne</span><span class="p">({</span> <span class="nx">title</span><span class="o">:</span> <span class="s1">&#39;Stand by Me&#39;</span> <span class="p">});</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="nx">db</span><span class="p">.</span><span class="nx">movies</span><span class="p">.</span><span class="nx">drop</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="nx">db</span><span class="p">.</span><span class="nx">movies</span><span class="p">.</span><span class="nx">drop</span><span class="p">();</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="nx">db</span><span class="p">.</span><span class="nx">movies</span><span class="p">.</span><span class="nx">insertMany</span><span class="p">([{</span><span class="s2">&#34;title&#34;</span><span class="o">:</span> <span class="s2">&#34;Ghostbusters&#34;</span><span class="p">},</span> <span class="p">{</span><span class="s2">&#34;title&#34;</span><span class="o">:</span> <span class="s2">&#34;E.T.&#34;</span><span class="p">}])</span></span></span></code></pre></td></tr></table></div>
+</span></span><span class="line"><span class="cl"><span class="nx">db</span><span class="p">.</span><span class="nx">movies</span><span class="p">.</span><span class="nx">insertMany</span><span class="p">([{</span> <span class="nx">title</span><span class="o">:</span> <span class="s1">&#39;Ghostbusters&#39;</span> <span class="p">},</span> <span class="p">{</span> <span class="nx">title</span><span class="o">:</span> <span class="s1">&#39;E.T.&#39;</span> <span class="p">}]);</span></span></span></code></pre></td></tr></table></div>
 </div>
 </div><h4 class="heading-element" id="32-删除文档"><span>3.2 删除文档</span>
   <a href="#32-%e5%88%a0%e9%99%a4%e6%96%87%e6%a1%a3" class="heading-mark">
@@ -397,13 +403,13 @@
 </span><span class="lnt">7
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="line"><span class="cl"><span class="nx">db</span><span class="p">.</span><span class="nx">movies</span><span class="p">.</span><span class="nx">deleteOne</span><span class="p">({</span><span class="s2">&#34;_id&#34;</span><span class="o">:</span> <span class="nx">ObjectId</span><span class="p">(</span><span class="s1">&#39;6a59ded8541a7ff3e944d53b&#39;</span><span class="p">)})</span>
+<pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="line"><span class="cl"><span class="nx">db</span><span class="p">.</span><span class="nx">movies</span><span class="p">.</span><span class="nx">deleteOne</span><span class="p">({</span> <span class="nx">_id</span><span class="o">:</span> <span class="nx">ObjectId</span><span class="p">(</span><span class="s1">&#39;6a59ded8541a7ff3e944d53b&#39;</span><span class="p">)</span> <span class="p">});</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="nx">db</span><span class="p">.</span><span class="nx">movies</span><span class="p">.</span><span class="nx">deleteMany</span><span class="p">({</span><span class="s2">&#34;year&#34;</span><span class="o">:</span> <span class="mi">1984</span><span class="p">})</span> 
+</span></span><span class="line"><span class="cl"><span class="nx">db</span><span class="p">.</span><span class="nx">movies</span><span class="p">.</span><span class="nx">deleteMany</span><span class="p">({</span> <span class="nx">year</span><span class="o">:</span> <span class="mi">1984</span> <span class="p">});</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="nx">db</span><span class="p">.</span><span class="nx">movies</span><span class="p">.</span><span class="nx">deleteMany</span><span class="p">({})</span> <span class="c1">// 删除一个集合中的所有文档
+</span></span><span class="line"><span class="cl"><span class="nx">db</span><span class="p">.</span><span class="nx">movies</span><span class="p">.</span><span class="nx">deleteMany</span><span class="p">({});</span> <span class="c1">// 删除一个集合中的所有文档
 </span></span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="nx">db</span><span class="p">.</span><span class="nx">movies</span><span class="p">.</span><span class="nx">drop</span><span class="p">()</span> <span class="c1">// 如果想清空整个集合，可使用drop直接删除集合
+</span></span><span class="line"><span class="cl"><span class="nx">db</span><span class="p">.</span><span class="nx">movies</span><span class="p">.</span><span class="nx">drop</span><span class="p">();</span> <span class="c1">// 如果想清空整个集合，可使用drop直接删除集合
 </span></span></span></code></pre></td></tr></table></div>
 </div>
 </div><h4 class="heading-element" id="33-更新文档"><span>3.3 更新文档</span>
@@ -415,9 +421,15 @@
 <div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
 <div class="code-header language-js"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="line"><span class="cl"><span class="nx">db</span><span class="p">.</span><span class="nx">user</span><span class="p">.</span><span class="nx">updateOne</span><span class="p">({</span><span class="s2">&#34;name&#34;</span><span class="o">:</span> <span class="s2">&#34;joe&#34;</span><span class="p">},</span> <span class="p">{</span><span class="s2">&#34;$set&#34;</span><span class="o">:</span> <span class="p">{</span><span class="s2">&#34;favorite book&#34;</span><span class="o">:</span> <span class="s2">&#34;Green Eggs and Ham&#34;</span><span class="p">}})</span></span></span></code></pre></td></tr></table></div>
+<pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="line"><span class="cl"><span class="nx">db</span><span class="p">.</span><span class="nx">user</span><span class="p">.</span><span class="nx">updateOne</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">  <span class="p">{</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;joe&#39;</span> <span class="p">},</span>
+</span></span><span class="line"><span class="cl">  <span class="p">{</span> <span class="nx">$set</span><span class="o">:</span> <span class="p">{</span> <span class="s1">&#39;favorite book&#39;</span><span class="o">:</span> <span class="s1">&#39;Green Eggs and Ham&#39;</span> <span class="p">}</span> <span class="p">},</span>
+</span></span><span class="line"><span class="cl"><span class="p">);</span></span></span></code></pre></td></tr></table></div>
 </div>
 </div><p><code>$unset</code>将键完全删除。</p>
 <p><code>$inc</code>运算符可以递增键值。</p>
@@ -429,7 +441,87 @@
   <a href="#%e7%ac%ac4%e7%ab%a0-%e6%9f%a5%e8%af%a2" class="heading-mark">
     <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
   </a>
-</h3><h2 class="heading-element" id="第二部分-设计应用程序"><span>第二部分 设计应用程序</span>
+</h3><h4 class="heading-element" id="41-find简介"><span>4.1 find简介</span>
+  <a href="#41-find%e7%ae%80%e4%bb%8b" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h4><p>MongoDB使用<code>find</code>方法进行查询。返回集合中文档的一个子集，子集的范围从0个文档到整个文档。要返回哪些文档由<code>find</code>的第一个参数决定，该参数是一个用于指定查条件的文档。</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-js"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="line"><span class="cl"><span class="nx">db</span><span class="p">.</span><span class="nx">users</span><span class="p">.</span><span class="nx">find</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nx">db</span><span class="p">.</span><span class="nx">users</span><span class="p">.</span><span class="nx">find</span><span class="p">({</span> <span class="nx">age</span><span class="o">:</span> <span class="mi">27</span> <span class="p">});</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nx">db</span><span class="p">.</span><span class="nx">users</span><span class="p">.</span><span class="nx">find</span><span class="p">({</span> <span class="nx">age</span><span class="o">:</span> <span class="mi">27</span><span class="p">,</span> <span class="nx">username</span><span class="o">:</span> <span class="s1">&#39;joe&#39;</span> <span class="p">});</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>可通过<code>find</code>(或<code>findOne</code>)的第二个参数指定需要的返回的键。</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-js"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="line"><span class="cl"><span class="nx">db</span><span class="p">.</span><span class="nx">users</span><span class="p">.</span><span class="nx">find</span><span class="p">({},</span> <span class="p">{</span> <span class="nx">username</span><span class="o">:</span> <span class="mi">1</span><span class="p">,</span> <span class="nx">email</span><span class="o">:</span> <span class="mi">1</span> <span class="p">});</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><h4 class="heading-element" id="42-查询条件"><span>4.2 查询条件</span>
+  <a href="#42-%e6%9f%a5%e8%af%a2%e6%9d%a1%e4%bb%b6" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h4><p><code>$lt</code>、<code>lte</code>、<code>$gt</code>、<code>$gte</code>、<code>$ne</code>都属于比较运算符，分别对应小于、小于等于、大于、大于等于、不等于，可以将它们组合使用以查找一个范围内的值。</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-js"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="line"><span class="cl"><span class="nx">db</span><span class="p">.</span><span class="nx">users</span><span class="p">.</span><span class="nx">find</span><span class="p">({</span> <span class="nx">age</span><span class="o">:</span> <span class="p">{</span> <span class="nx">$gte</span><span class="o">:</span> <span class="mi">18</span><span class="p">,</span> <span class="nx">$lte</span><span class="o">:</span> <span class="mi">30</span> <span class="p">}</span> <span class="p">});</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p><code>$in</code>可以用来查询一个键的多个值。<code>$nin</code>会返回与数组中所有条件都不匹配的文档。</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-js"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="line"><span class="cl"><span class="nx">db</span><span class="p">.</span><span class="nx">raffle</span><span class="p">.</span><span class="nx">find</span><span class="p">({</span> <span class="nx">ticket_no</span><span class="o">:</span> <span class="p">{</span> <span class="nx">$in</span><span class="o">:</span> <span class="p">[</span><span class="mi">125</span><span class="p">,</span> <span class="mi">365</span><span class="p">,</span> <span class="mi">778</span><span class="p">]</span> <span class="p">}</span> <span class="p">});</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nx">db</span><span class="p">.</span><span class="nx">raffle</span><span class="p">.</span><span class="nx">find</span><span class="p">({</span> <span class="nx">ticket_no</span><span class="o">:</span> <span class="p">{</span> <span class="nx">$nin</span><span class="o">:</span> <span class="p">[</span><span class="mi">125</span><span class="p">,</span> <span class="mi">365</span><span class="p">,</span> <span class="mi">778</span><span class="p">]</span> <span class="p">}</span> <span class="p">});</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p><code>$in</code>能对单个键进行OR查询，而<code>$or</code>可以在多个键中查询任意的给定值。</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-js"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="line"><span class="cl"><span class="nx">db</span><span class="p">.</span><span class="nx">raffle</span><span class="p">.</span><span class="nx">find</span><span class="p">({</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">or</span><span class="o">:</span> <span class="p">[{</span> <span class="nx">ticket_no</span><span class="o">:</span> <span class="p">{</span> <span class="nx">$in</span><span class="o">:</span> <span class="p">[</span><span class="mi">125</span><span class="p">,</span> <span class="mi">365</span><span class="p">,</span> <span class="mi">778</span><span class="p">]</span> <span class="p">}</span> <span class="p">},</span> <span class="p">{</span> <span class="nx">winner</span><span class="o">:</span> <span class="kc">true</span> <span class="p">}],</span>
+</span></span><span class="line"><span class="cl"><span class="p">});</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>OR类查询如果第一个参数能够匹配尽可能多的文档，则其<strong>效率最高</strong>。虽然总是可以用<code>$or</code>，但有可能就应该用<code>$in</code>，因为查询器可以更<strong>高效</strong>地对其进行处理。</p>
+<p><code>$not</code>是一个元条件运算符，可以用于任何其他条件之上。</p>
+<p>取模运算符<code>$mod</code>会将查询的值除以第一个给定值，如果余数等于第二个给定值，则匹配成功。</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-js"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="line"><span class="cl"><span class="nx">db</span><span class="p">.</span><span class="nx">users</span><span class="p">.</span><span class="nx">find</span><span class="p">({</span> <span class="nx">id_num</span><span class="o">:</span> <span class="p">{</span> <span class="nx">$not</span><span class="o">:</span> <span class="p">{</span> <span class="nx">$mod</span><span class="o">:</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="p">}</span> <span class="p">}</span> <span class="p">});</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><h4 class="heading-element" id="45-游标"><span>4.5 游标</span>
+  <a href="#45-%e6%b8%b8%e6%a0%87" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h4><p>游标可以理解为查询结果的迭代器(Iterator)，它并不是一次性把所有数据都返回给客户端，而是指向查询结果集中的一个“指针”，客户端可以通过它逐批获取数据。</p>
+<p>MongoDB会使用游标返回<code>find</code>的执行结果。</p>
+<h2 class="heading-element" id="第二部分-设计应用程序"><span>第二部分 设计应用程序</span>
   <a href="#%e7%ac%ac%e4%ba%8c%e9%83%a8%e5%88%86-%e8%ae%be%e8%ae%a1%e5%ba%94%e7%94%a8%e7%a8%8b%e5%ba%8f" class="heading-mark">
     <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
   </a>
@@ -621,7 +713,13 @@
             <li><a href="#33-更新文档">3.3 更新文档</a></li>
           </ul>
         </li>
-        <li><a href="#第4章-查询">第4章 查询</a></li>
+        <li><a href="#第4章-查询">第4章 查询</a>
+          <ul>
+            <li><a href="#41-find简介">4.1 find简介</a></li>
+            <li><a href="#42-查询条件">4.2 查询条件</a></li>
+            <li><a href="#45-游标">4.5 游标</a></li>
+          </ul>
+        </li>
       </ul>
     </li>
     <li><a href="#第二部分-设计应用程序">第二部分 设计应用程序</a>

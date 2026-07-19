@@ -735,7 +735,9 @@ builder.Name("Anthony").Position("Developer");
 Console.WriteLine(builder.Build());
 ```
 
-会遇到编译失败`'PersonBuilder' does not contain a definition for 'Position'`。因为`builder.Name("Anthony")`返回的是`PersonInfoBuilder`。
+会遇到编译失败`'PersonBuilder' does not contain a definition for 'Position'`。
+
+因为`builder.Name("Anthony")`返回的是`PersonInfoBuilder`。
 
 我们可以用**递归泛型(Recursive Generics)**解决这个问题，其核心思想是**让基类知道自己的派生类型**。形式为`Base<T>`，其中`T`为当前派生类。例如：
 

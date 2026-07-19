@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+    <meta name="robots" content="noodp" />
+    <title>PowerShell根据端口查找进程 - 东尼的博客</title><meta name="author" content="AndyFree96">
+<meta name="description" content="在日常开发启动后端服务时，经常会遇到类似EADDRINUSE: address already in use :::3000的问题。这类问题的本质是：
+某个进程已经占用了目标端口，需要找到该进程并进行处理。
+本文介绍如何使用PowerShell(pwsh)快速根据端口查找对应进程，并进一步查看、停止进程。
+"><meta name="keywords" content='PowerShell, 命令行, 脚本, 端口, 进程'>
+	<meta itemprop="name" content="PowerShell根据端口查找进程">
+	<meta itemprop="description" content="在日常开发启动后端服务时，经常会遇到类似EADDRINUSE: address already in use :::3000的问题。这类问题的本质是：
+某个进程已经占用了目标端口，需要找到该进程并进行处理。
+本文介绍如何使用PowerShell(pwsh)快速根据端口查找对应进程，并进一步查看、停止进程。">
+	<meta itemprop="datePublished" content="2026-07-19T09:33:51+08:00">
+	<meta itemprop="dateModified" content="2026-07-19T09:33:51+08:00">
+	<meta itemprop="wordCount" content="1252">
+	<meta itemprop="keywords" content="PowerShell,命令行,脚本,端口,进程"><meta property="og:url" content="http://localhost:1313/powershell%E6%A0%B9%E6%8D%AE%E7%AB%AF%E5%8F%A3%E6%9F%A5%E6%89%BE%E8%BF%9B%E7%A8%8B/">
+	<meta property="og:site_name" content="东尼的博客">
+	<meta property="og:title" content="PowerShell根据端口查找进程">
+	<meta property="og:description" content="在日常开发启动后端服务时，经常会遇到类似EADDRINUSE: address already in use :::3000的问题。这类问题的本质是：
+某个进程已经占用了目标端口，需要找到该进程并进行处理。
+本文介绍如何使用PowerShell(pwsh)快速根据端口查找对应进程，并进一步查看、停止进程。">
+	<meta property="og:locale" content="zh_CN">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="posts">
+		<meta property="article:published_time" content="2026-07-19T09:33:51+08:00">
+		<meta property="article:modified_time" content="2026-07-19T09:33:51+08:00">
+		<meta property="article:tag" content="PowerShell">
+		<meta property="article:tag" content="命令行">
+		<meta property="article:tag" content="脚本">
+		<meta property="article:tag" content="端口">
+		<meta property="article:tag" content="进程">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="PowerShell根据端口查找进程">
+  <meta name="twitter:description" content="在日常开发启动后端服务时，经常会遇到类似EADDRINUSE: address already in use :::3000的问题。这类问题的本质是：
+某个进程已经占用了目标端口，需要找到该进程并进行处理。
+本文介绍如何使用PowerShell(pwsh)快速根据端口查找对应进程，并进一步查看、停止进程。"><meta name="twitter:creator" content="@IRONAnthony96"><meta name="application-name" content="FixIt">
+<meta name="apple-mobile-web-app-title" content="FixIt"><meta name="theme-color" data-light="#f6f8fa" data-dark="#151b23" content="#f6f8fa"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" type="text/html" href="http://localhost:1313/powershell%E6%A0%B9%E6%8D%AE%E7%AB%AF%E5%8F%A3%E6%9F%A5%E6%89%BE%E8%BF%9B%E7%A8%8B/" title="PowerShell根据端口查找进程 - 东尼的博客" /><link rel="prev" type="text/html" href="http://localhost:1313/douyin%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="douyin源码剖析：Vue3 &#43; Pinia仿抖音工程实践" /><link rel="alternate" type="text/markdown" href="http://localhost:1313/powershell%E6%A0%B9%E6%8D%AE%E7%AB%AF%E5%8F%A3%E6%9F%A5%E6%89%BE%E8%BF%9B%E7%A8%8B/index.md" title="PowerShell根据端口查找进程 - 东尼的博客"><link rel="stylesheet" href="/css/config.css"><link rel="stylesheet" href="/css/main.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><link rel="preload" href="/js/main.js" as="script"><script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "BlogPosting",
+    "headline": "PowerShell根据端口查找进程",
+    "inLanguage": "zh-CN",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "http:\/\/localhost:1313\/powershell%E6%A0%B9%E6%8D%AE%E7%AB%AF%E5%8F%A3%E6%9F%A5%E6%89%BE%E8%BF%9B%E7%A8%8B\/"
+    },"genre": "posts","keywords": "PowerShell, 命令行, 脚本, 端口, 进程","wordcount":  1252 ,
+    "url": "http:\/\/localhost:1313\/powershell%E6%A0%B9%E6%8D%AE%E7%AB%AF%E5%8F%A3%E6%9F%A5%E6%89%BE%E8%BF%9B%E7%A8%8B\/","datePublished": "2026-07-19T09:33:51+08:00","dateModified": "2026-07-19T09:33:51+08:00","publisher": {
+      "@type": "Organization",
+      "name": ""},"author": {
+        "@type": "Person",
+        "name": "AndyFree96"
+      },"description": ""
+  }
+  </script><script src="/js/head/color-scheme.js"></script></head>
+  <body data-instant-intensity="viewport" data-header-desktop="sticky" data-header-mobile="auto"><div class="wrapper" data-page-style="normal"><header class="desktop animate__faster" id="header-desktop">
+  <div class="header-wrapper">
+    <div class="header-title">
+      <a href="/" title="东尼的博客" class="header-title-link"><span class="header-title-text">东尼的博客</span></a><span class="header-subtitle"></span></div>
+    <nav>
+      <ul class="menu"><li class="menu-item">
+              <a class="menu-link" href="/posts/">📕 文章</a></li><li class="menu-item">
+              <a class="menu-link" href="/categories/">🧰 分类</a></li><li class="menu-item">
+              <a class="menu-link" href="/tags/">🔖 标签</a></li><li class="menu-item">
+              <a class="menu-link" href="/book">📚 书单</a></li><li class="menu-item">
+              <a class="menu-link" href="/paper">📝 论文</a></li><li class="menu-item">
+              <a class="menu-link" href="/opencourse">👨🏻‍💻 公开课</a></li><li class="menu-item">
+              <a class="menu-link" href="/filmtv">🎞️ 影视</a></li><li class="menu-item">
+              <a class="menu-link" href="/resource">⚡️ 资源库</a></li><li class="menu-item">
+              <a class="menu-link" href="/projects">⭐ 开源</a></li><li class="menu-item">
+              <a class="menu-link" href="/about">🙋🏻‍♂️ 关于</a></li><li class="menu-item delimiter"></li><li class="menu-item search" id="search-desktop">
+            <input type="text" placeholder="搜索文章标题或内容……" id="search-input-desktop" tabindex="-1">
+            <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索" aria-controls="search-dropdown-desktop" aria-expanded="false">
+              <i class="fa-solid fa-search" aria-hidden="true"></i>
+            </a>
+            <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+              <i class="fa-solid fa-times-circle" aria-hidden="true"></i>
+            </a>
+            <span class="search-button search-loading" id="search-loading-desktop">
+              <i class="fa-solid fa-spinner fa-spin" aria-hidden="true"></i>
+            </span>
+          </li><li class="menu-item theme-switch-item">
+          <button type="button" class="theme-switch" aria-label="切换主题" title="切换主题"><i class="fa-solid fa-adjust" aria-hidden="true"></i></button>
+        </li></ul>
+    </nav>
+  </div>
+</header><header class="mobile animate__faster" id="header-mobile">
+  <div class="header-container">
+    <div class="header-wrapper">
+      <div class="header-title">
+        <a href="/" title="东尼的博客" class="header-title-link"><span class="header-title-text">东尼的博客</span></a><span class="header-subtitle"></span></div>
+      <button type="button" class="theme-switch" aria-label="切换主题"><i class="fa-solid fa-adjust" aria-hidden="true"></i></button>
+      <button type="button" class="menu-toggle" id="menu-toggle-mobile" aria-controls="menu-mobile" aria-expanded="false" aria-labelledby="menu-mobile">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <nav>
+      <ul class="menu" id="menu-mobile"><li class="search-wrapper">
+            <div class="search mobile" id="search-mobile">
+              <input type="text" placeholder="搜索文章标题或内容……" id="search-input-mobile">
+              <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索" aria-controls="search-dropdown-mobile" aria-expanded="false">
+                <i class="fa-solid fa-search" aria-hidden="true"></i>
+              </a>
+              <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                <i class="fa-solid fa-times-circle" aria-hidden="true"></i>
+              </a>
+              <span class="search-button search-loading" id="search-loading-mobile">
+                <i class="fa-solid fa-spinner fa-spin" aria-hidden="true"></i>
+              </span>
+            </div>
+            <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+              取消
+            </a>
+          </li><li class="menu-item"><a class="menu-link" href="/posts/">📕 文章</a></li><li class="menu-item"><a class="menu-link" href="/categories/">🧰 分类</a></li><li class="menu-item"><a class="menu-link" href="/tags/">🔖 标签</a></li><li class="menu-item"><a class="menu-link" href="/book">📚 书单</a></li><li class="menu-item"><a class="menu-link" href="/paper">📝 论文</a></li><li class="menu-item"><a class="menu-link" href="/opencourse">👨🏻‍💻 公开课</a></li><li class="menu-item"><a class="menu-link" href="/filmtv">🎞️ 影视</a></li><li class="menu-item"><a class="menu-link" href="/resource">⚡️ 资源库</a></li><li class="menu-item"><a class="menu-link" href="/projects">⭐ 开源</a></li><li class="menu-item"><a class="menu-link" href="/about">🙋🏻‍♂️ 关于</a></li><li class="menu-item menu-system"></li>
+      </ul>
+    </nav>
+  </div>
+</header><div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+  </div>
+  <div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+  </div><main class="fi-container"><aside class="aside-collection animate__animated animate__fadeIn animate__faster" aria-label="合集"><div class="details related-details open">
+      <div class="details-summary related-summary">
+        <i class="fa-solid fa-fire fa-fade text-danger" aria-hidden="true"></i>
+        <span class="related-title">相关内容</span><i class="details-icon fa-solid fa-angle-right" aria-hidden="true"></i></div>
+      <div class="details-content related-content">
+        <ul class="related-list"><li class="related-item">
+              <a href="/powershell%E8%84%9A%E6%9C%AC%E5%AE%9E%E8%B7%B5%E6%8C%87%E5%8D%97/" title="PowerShell脚本实践指南">PowerShell脚本实践指南</a></li><li class="related-item">
+              <a href="/%E5%A6%82%E4%BD%95%E6%9F%A5%E7%9C%8Bpowershell%E7%9A%84%E7%89%88%E6%9C%AC/" title="如何查看PowerShell的版本">如何查看PowerShell的版本</a></li><li class="related-item">
+              <a href="/%E7%94%A8powershell%E7%8E%A9%E8%BD%AC%E6%96%87%E4%BB%B6%E5%A4%84%E7%90%86/" title="用PowerShell玩转文件处理">用PowerShell玩转文件处理</a></li><li class="related-item">
+              <a href="/%E6%9C%89%E6%84%8F%E6%80%9D%E7%9A%84linux%E5%91%BD%E4%BB%A4%E8%A1%8C/" title="有意思的Linux命令行">有意思的Linux命令行</a></li></ul>
+      </div>
+    </div></aside>
+
+  <article class="page single">
+    <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span title="转载" class="icon-repost"><i class="fa-solid fa-share" aria-hidden="true"></i></span><span>PowerShell根据端口查找进程</span>
+      </h1></div><div class="post-meta">
+      <div class="post-meta-line"><span class="post-author"><a href="https://andyfree96.github.io/" title="作者" target="_blank" rel="author external nofollow noopener noreferrer" class="author"><img class="avatar" src='/avatar/1.jpg' alt="AndyFree96" height="16" width="16">&nbsp;AndyFree96</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/powershell/" class="post-category" title="分类 - PowerShell"><i class="fa-regular fa-folder" aria-hidden="true"></i> PowerShell</a></span></div><div class="post-meta-line"><span title="发布于 2026-07-19 09:33:51"><i class="fa-solid fa-calendar-days me-1" aria-hidden="true"></i><time datetime="2026-07-19">2026-07-19</time></span>&nbsp;<span title="1252 字"><i class="fa-solid fa-pencil-alt me-1" aria-hidden="true"></i>约 1300 字</span>&nbsp;<span><i class="fa-regular fa-clock me-1" aria-hidden="true"></i>预计阅读 3 分钟</span>&nbsp;</div>
+    </div><div class="featured-image"><img loading="eager" src='/images/202607/28/the-metropolitan-museum-of-art-qxDjAyCnTQ4-unsplash.jpg' sizes="(max-width: 680px) 100vw, (max-width: 960px) 80vw, (max-width: 1440px) 56vw, 800px" alt="/images/202607/28/the-metropolitan-museum-of-art-qxDjAyCnTQ4-unsplash.jpg"></div><div class="details toc" id="toc-static" data-kept="false">
+        <div class="details-summary toc-title">
+          <span>目录</span>
+          <span><i class="details-icon fa-solid fa-angle-right" aria-hidden="true"></i></span>
+        </div>
+        <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#使用get-nettcpconnection查找端口">使用Get-NetTCPConnection查找端口</a></li>
+    <li><a href="#根据pid查看进程信息">根据PID查看进程信息</a></li>
+    <li><a href="#一条命令完成端口进行查询">一条命令完成端口→进行查询</a></li>
+    <li><a href="#查看所有监听端口">查看所有监听端口</a></li>
+    <li><a href="#查看所有端口对应的进程">查看所有端口对应的进程</a></li>
+    <li><a href="#使用netstat方式">使用netstat方式</a></li>
+    <li><a href="#根据端口直接结束进程">根据端口直接结束进程</a></li>
+    <li><a href="#封装为powershell工具函数">封装为PowerShell工具函数</a></li>
+    <li><a href="#常用命令速查表">常用命令速查表</a></li>
+  </ul>
+</nav></div>
+      </div><div class="content" id="content"><p>在日常开发启动后端服务时，经常会遇到类似<code>EADDRINUSE: address already in use :::3000</code>的问题。这类问题的本质是：</p>
+<blockquote>
+<p>某个进程已经占用了目标端口，需要找到该进程并进行处理。</p>
+</blockquote>
+<p>本文介绍如何使用PowerShell(pwsh)快速根据端口查找对应进程，并进一步查看、停止进程。</p>
+<p>端口(Port)操作系统用于区分网络连接的逻辑编号。</p>
+<p><figure><img loading="lazy" src='/images/202607/28/0030-18-common-ports-you-must-know.png' alt="图1 常见端口号"><figcaption class="image-caption">图1 常见端口号</figcaption>
+  </figure></p>
+<p>进程(Process)是正在运行的程序实例，每个进程都有唯一的PID(Process ID)。</p>
+<h2 class="heading-element" id="使用get-nettcpconnection查找端口"><span>使用Get-NetTCPConnection查找端口</span>
+  <a href="#%e4%bd%bf%e7%94%a8get-nettcpconnection%e6%9f%a5%e6%89%be%e7%ab%af%e5%8f%a3" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>PowerShell提供了<code>Get-NetTCPConnection</code>用于查询TCP连接状态。</p>
+<p>查看指定端口：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-pwsh"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-pwsh" data-lang="pwsh"><span class="line"><span class="cl"><span class="nb">Get-NetTCPConnection</span> <span class="n">-LocalPort</span> <span class="mf">1313</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>输出：</p>
+<p><figure><img loading="lazy" src='/images/202607/28/1.png' alt="图2 查看1313端口"><figcaption class="image-caption">图2 查看1313端口</figcaption>
+  </figure></p>
+<p>关键字段：</p>
+<div class="table-wrapper">
+  <table>
+    <thead>
+        <tr>
+            <th style="text-align: left">字段</th>
+            <th style="text-align: left">含义</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td style="text-align: left">LocalPort</td>
+            <td style="text-align: left">本地端口</td>
+        </tr>
+        <tr>
+            <td style="text-align: left">State</td>
+            <td style="text-align: left">连接状态</td>
+        </tr>
+        <tr>
+            <td style="text-align: left">OwningProcess</td>
+            <td style="text-align: left">占用该端口的 PID</td>
+        </tr>
+    </tbody>
+  </table>
+</div><p>这里<code>OwningProcess = 24456</code>表示PID为24456的进程占用了1313端口。</p>
+<h2 class="heading-element" id="根据pid查看进程信息"><span>根据PID查看进程信息</span>
+  <a href="#%e6%a0%b9%e6%8d%aepid%e6%9f%a5%e7%9c%8b%e8%bf%9b%e7%a8%8b%e4%bf%a1%e6%81%af" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>拿到PID后：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-pwsh"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-pwsh" data-lang="pwsh"><span class="line"><span class="cl"><span class="nb">Get-Process</span> <span class="n">-Id</span> <span class="mf">24456</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>输出：</p>
+<p><figure><img loading="lazy" src='/images/202607/28/2.png' alt="图3 PID为24456的进程"><figcaption class="image-caption">图3 PID为24456的进程</figcaption>
+  </figure></p>
+<p>说明<a href="https://gohugo.io/" target="_blank" rel="external nofollow noopener noreferrer">hugo<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>正在监听1313端口。</p>
+<h2 class="heading-element" id="一条命令完成端口进行查询"><span>一条命令完成端口→进行查询</span>
+  <a href="#%e4%b8%80%e6%9d%a1%e5%91%bd%e4%bb%a4%e5%ae%8c%e6%88%90%e7%ab%af%e5%8f%a3%e8%bf%9b%e8%a1%8c%e6%9f%a5%e8%af%a2" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>实际开发中，我们通常希望一步完成输入端口，直接显示占用进程。</p>
+<p>比如查询1313：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-pwsh"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-pwsh" data-lang="pwsh"><span class="line"><span class="cl"><span class="nb">Get-Process</span> <span class="n">-Id</span> <span class="p">(</span><span class="nb">Get-NetTCPConnection</span> <span class="n">-LocalPort</span> <span class="mf">1313</span><span class="p">).</span><span class="n">OwningProcess</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><h2 class="heading-element" id="查看所有监听端口"><span>查看所有监听端口</span>
+  <a href="#%e6%9f%a5%e7%9c%8b%e6%89%80%e6%9c%89%e7%9b%91%e5%90%ac%e7%ab%af%e5%8f%a3" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>如果不知道哪个端口冲突，可以查看系统所有监听端口：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-pwsh"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-pwsh" data-lang="pwsh"><span class="line"><span class="cl"><span class="nb">Get-NetTCPConnection</span> <span class="n">-State</span> <span class="n">Listen</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p><figure><img loading="lazy" src='/images/202607/28/3.png' alt="图4 系统所有监听端口"><figcaption class="image-caption">图4 系统所有监听端口</figcaption>
+  </figure></p>
+<h2 class="heading-element" id="查看所有端口对应的进程"><span>查看所有端口对应的进程</span>
+  <a href="#%e6%9f%a5%e7%9c%8b%e6%89%80%e6%9c%89%e7%ab%af%e5%8f%a3%e5%af%b9%e5%ba%94%e7%9a%84%e8%bf%9b%e7%a8%8b" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>可以进一步组合：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-pwsh"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="2" style="--fi-max-shown-lines:400;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-pwsh" data-lang="pwsh"><span class="line"><span class="cl"><span class="nb">Get-NetTCPConnection</span> <span class="n">-State</span> <span class="n">Listen</span> <span class="p">|</span> <span class="nb">ForEach-Object</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nv">$process</span> <span class="p">=</span> <span class="nb">Get-Process</span> <span class="p">`</span>
+</span></span><span class="line"><span class="cl">        <span class="n">-Id</span> <span class="nv">$_</span><span class="p">.</span><span class="py">OwningProcess</span> <span class="p">`</span>
+</span></span><span class="line"><span class="cl">        <span class="n">-ErrorAction</span> <span class="n">SilentlyContinue</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="p">[</span><span class="no">PSCustomObject</span><span class="p">]</span><span class="vm">@</span><span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">Port</span> <span class="p">=</span> <span class="nv">$_</span><span class="p">.</span><span class="py">LocalPort</span>
+</span></span><span class="line"><span class="cl">        <span class="n">PID</span> <span class="p">=</span> <span class="nv">$_</span><span class="p">.</span><span class="py">OwningProcess</span>
+</span></span><span class="line"><span class="cl">        <span class="k">Process</span> <span class="p">=</span> <span class="nv">$process</span><span class="p">.</span><span class="py">ProcessName</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>输出：</p>
+<p><figure><img loading="lazy" src='/images/202607/28/4.png' alt="图5 所有端口对应进程"><figcaption class="image-caption">图5 所有端口对应进程</figcaption>
+  </figure></p>
+<h2 class="heading-element" id="使用netstat方式"><span>使用netstat方式</span>
+  <a href="#%e4%bd%bf%e7%94%a8netstat%e6%96%b9%e5%bc%8f" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>也可使用Window传统工具<code>netstat</code>查看端口：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-pwsh"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-pwsh" data-lang="pwsh"><span class="line"><span class="cl"><span class="n">netstat</span> <span class="n">-ano</span> <span class="p">|</span> <span class="n">findstr</span> <span class="mf">1313</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>结果：</p>
+<p><figure><img loading="lazy" src='/images/202607/28/5.png' alt="图6 netstat查看端口"><figcaption class="image-caption">图6 netstat查看端口</figcaption>
+  </figure></p>
+<p>然后：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-pwsh"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-pwsh" data-lang="pwsh"><span class="line"><span class="cl"><span class="n">tasklist</span> <span class="p">/</span><span class="n">FI</span> <span class="s2">&#34;PID eq 24456&#34;</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>可查看到进程的详情。</p>
+<h2 class="heading-element" id="根据端口直接结束进程"><span>根据端口直接结束进程</span>
+  <a href="#%e6%a0%b9%e6%8d%ae%e7%ab%af%e5%8f%a3%e7%9b%b4%e6%8e%a5%e7%bb%93%e6%9d%9f%e8%bf%9b%e7%a8%8b" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>例如关闭占用1313端口的进程：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-pwsh"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-pwsh" data-lang="pwsh"><span class="line"><span class="cl"><span class="nb">Stop-Process</span> <span class="n">-Id</span> <span class="p">(</span><span class="nb">Get-NetTCPConnection</span> <span class="n">-LocalPort</span> <span class="mf">1313</span><span class="p">).</span><span class="py">OwningProcess</span> <span class="n">-Force</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>执行后，端口立即释放。</p>
+<h2 class="heading-element" id="封装为powershell工具函数"><span>封装为PowerShell工具函数</span>
+  <a href="#%e5%b0%81%e8%a3%85%e4%b8%bapowershell%e5%b7%a5%e5%85%b7%e5%87%bd%e6%95%b0" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>为了使用方便，可以封装为一个函数：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-pwsh"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="2" style="--fi-max-shown-lines:400;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-pwsh" data-lang="pwsh"><span class="line"><span class="cl"><span class="kd">function</span><span class="w"> </span><span class="nb">Get-PortProcess</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">param</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">        <span class="p">[</span><span class="nb">Parameter</span><span class="p">(</span><span class="na">Mandatory</span><span class="p">)]</span>
+</span></span><span class="line"><span class="cl">        <span class="p">[</span><span class="no">int</span><span class="p">]</span><span class="nv">$Port</span>
+</span></span><span class="line"><span class="cl">    <span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nv">$connection</span> <span class="p">=</span> <span class="nb">Get-NetTCPConnection</span> <span class="p">`</span>
+</span></span><span class="line"><span class="cl">        <span class="n">-LocalPort</span> <span class="nv">$Port</span> <span class="p">`</span>
+</span></span><span class="line"><span class="cl">        <span class="n">-ErrorAction</span> <span class="n">SilentlyContinue</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="vm">$null</span> <span class="o">-eq</span> <span class="nv">$connection</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="nb">Write-Host</span> <span class="s2">&#34;No process found on port </span><span class="nv">$Port</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nb">Get-Process</span> <span class="n">-Id</span> <span class="nv">$connection</span><span class="p">.</span><span class="py">OwningProcess</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nb">Export-ModuleMember</span> <span class="n">-Function</span> <span class="nb">Get-PortProcess</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>将上述内容保存为<code>PortProcess.psm1</code>文件，将其放在<code>$env:PSModulePath</code>包含的路径里。</p>
+<p><figure><img loading="lazy" src='/images/202607/28/6.png' alt="图7 PowerShell默认模块加载路径"><figcaption class="image-caption">图7 PowerShell默认模块加载路径</figcaption>
+  </figure></p>
+<p>我选择的是<code>C:\Users\Administrator\Documents\PowerShell\Modules</code>。</p>
+<p><figure><img loading="lazy" src='/images/202607/28/7.png' alt="图8 PortProcess.psm1文件存放路径"><figcaption class="image-caption">图8 PortProcess.psm1文件存放路径</figcaption>
+  </figure></p>
+<p>接着，在PowerShell Profile中引入<code>PortProcess</code>：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-pwsh"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-pwsh" data-lang="pwsh"><span class="line"><span class="cl"><span class="nb">Import-Module</span> <span class="n">PortProcess</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>这样每次启动PowerShell我们就可以直接用<code>Get-PortProcess PORT</code>啦！</p>
+<div class="details admonition note open">
+    <div class="details-summary admonition-title"><i class="icon fa-solid fa-pencil-alt" aria-hidden="true"></i>注意<i class="details-icon fa-solid fa-angle-right" aria-hidden="true"></i></div><div class="details-content">
+      <div class="admonition-content"><p>有可能本机没有PowerShell Profile文件，可用<code>Test-Path $PROFILE</code>查验。如果返回的是<code>False</code>，使用<code>New-Item -Path $PROFILE -ItemType File -Force</code>新建即可。然后，用<code>notepad $PROFILE</code>用记事本打开该文件。</p></div>
+    </div>
+</div><h2 class="heading-element" id="常用命令速查表"><span>常用命令速查表</span>
+  <a href="#%e5%b8%b8%e7%94%a8%e5%91%bd%e4%bb%a4%e9%80%9f%e6%9f%a5%e8%a1%a8" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><div class="table-wrapper">
+  <table>
+    <thead>
+        <tr>
+            <th style="text-align: left">目的</th>
+            <th style="text-align: left">命令</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td style="text-align: left">查询端口</td>
+            <td style="text-align: left"><code>Get-NetTCPConnection -LocalPort PORT</code></td>
+        </tr>
+        <tr>
+            <td style="text-align: left">查询 PID 对应进程</td>
+            <td style="text-align: left"><code>Get-Process -Id PID</code></td>
+        </tr>
+        <tr>
+            <td style="text-align: left">端口直接查进程</td>
+            <td style="text-align: left"><code>Get-Process -Id (Get-NetTCPConnection -LocalPort PORT).OwningProcess</code></td>
+        </tr>
+        <tr>
+            <td style="text-align: left">查看所有监听端口</td>
+            <td style="text-align: left"><code>Get-NetTCPConnection -State Listen</code></td>
+        </tr>
+        <tr>
+            <td style="text-align: left">netstat 查询</td>
+            <td style="text-align: left"><code>netstat -ano | findstr :PORT</code></td>
+        </tr>
+        <tr>
+            <td style="text-align: left">结束端口进程</td>
+            <td style="text-align: left"><code>Stop-Process -Id PID -Force</code></td>
+        </tr>
+    </tbody>
+  </table>
+</div></div><hr class="awesome-hr" />
+    <h2 id="see-also">相关内容</h2>
+    <ul><li>
+          <a href="/powershell%E8%84%9A%E6%9C%AC%E5%AE%9E%E8%B7%B5%E6%8C%87%E5%8D%97/" title="PowerShell脚本实践指南">PowerShell脚本实践指南</a></li><li>
+          <a href="/%E5%A6%82%E4%BD%95%E6%9F%A5%E7%9C%8Bpowershell%E7%9A%84%E7%89%88%E6%9C%AC/" title="如何查看PowerShell的版本">如何查看PowerShell的版本</a></li><li>
+          <a href="/%E7%94%A8powershell%E7%8E%A9%E8%BD%AC%E6%96%87%E4%BB%B6%E5%A4%84%E7%90%86/" title="用PowerShell玩转文件处理">用PowerShell玩转文件处理</a></li><li>
+          <a href="/%E6%9C%89%E6%84%8F%E6%80%9D%E7%9A%84linux%E5%91%BD%E4%BB%A4%E8%A1%8C/" title="有意思的Linux命令行">有意思的Linux命令行</a></li></ul><div class="post-footer" id="post-footer">
+  <div class="post-info">
+    <div class="post-info-line">
+      <div class="post-info-mod"><span title="更新于 2026-07-19 09:33:51">更新于 2026-07-19&nbsp;</span>
+      </div></div><div class="post-info-line">
+        <div class="post-info-md"><span><a href="vscode://file/D:\hugo-blog\andyfree96\content\posts\PowerShell根据端口查找进程.md" title="在编辑器中打开" class="link-to-vscode">在编辑器中打开</a></span></div>
+        <div class="post-info-share">
+          <span><a href="javascript:void(0);" title="分享到 X" data-sharer="twitter" data-url="http://localhost:1313/powershell%E6%A0%B9%E6%8D%AE%E7%AB%AF%E5%8F%A3%E6%9F%A5%E6%89%BE%E8%BF%9B%E7%A8%8B/" data-title="PowerShell根据端口查找进程" data-via="IRONAnthony96" data-hashtags="PowerShell,命令行,脚本,端口,进程"><i class="fa-brands fa-x-twitter" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="http://localhost:1313/powershell%E6%A0%B9%E6%8D%AE%E7%AB%AF%E5%8F%A3%E6%9F%A5%E6%89%BE%E8%BF%9B%E7%A8%8B/" data-hashtag="PowerShell"><i class="fa-brands fa-facebook-square" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="http://localhost:1313/powershell%E6%A0%B9%E6%8D%AE%E7%AB%AF%E5%8F%A3%E6%9F%A5%E6%89%BE%E8%BF%9B%E7%A8%8B/" data-title="PowerShell根据端口查找进程" data-image="/images/202607/28/the-metropolitan-museum-of-art-qxDjAyCnTQ4-unsplash.jpg"><i class="fa-brands fa-weibo" aria-hidden="true"></i></a>
+  </span>
+        </div>
+      </div></div>
+
+  <div class="post-info-more">
+    <section class="post-tags"><i class="fa-solid fa-tags me-1" aria-hidden="true"></i><a href="/tags/powershell/" class="post-tag" title="标签 - PowerShell">PowerShell</a><a href="/tags/%E5%91%BD%E4%BB%A4%E8%A1%8C/" class="post-tag" title="标签 - 命令行">命令行</a><a href="/tags/%E8%84%9A%E6%9C%AC/" class="post-tag" title="标签 - 脚本">脚本</a><a href="/tags/%E7%AB%AF%E5%8F%A3/" class="post-tag" title="标签 - 端口">端口</a><a href="/tags/%E8%BF%9B%E7%A8%8B/" class="post-tag" title="标签 - 进程">进程</a></section>
+    <section><span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+    </section>
+  </div><div class="post-nav"><a href="/douyin%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" class="post-nav-item" rel="prev" title="douyin源码剖析：Vue3 &#43; Pinia仿抖音工程实践"><i class="fa-solid fa-angle-left" aria-hidden="true"></i>douyin源码剖析：Vue3 &#43; Pinia仿抖音工程实践</a></div>
+</div>
+<div class="post-reward">
+    <div class="comment">请作者喝杯咖啡!</div>
+    <input type="checkbox" class="reward-input" name="reward" id="fi-reward" hidden />
+    <label class="reward-button" for="fi-reward"><i class="fa-solid fa-qrcode" aria-hidden="true"></i>赞赏</label>
+    <div class="reward-ways" data-mode="static"><div><img src='/reward/alipay.png' alt="AndyFree96 支付宝"><span data-animation>支付宝</span>
+          </div><div><img src='/reward/wechatpay.png' alt="AndyFree96 微信"><span data-animation>微信</span>
+          </div></div>
+  </div></article>
+
+  <aside class="toc" id="toc-auto" aria-label="目录"><h2 class="toc-title">目录&nbsp;<i class="toc-icon fa-solid fa-angle-down" aria-hidden="true"></i></h2>
+      <div class="toc-content" id="toc-content-auto"></div></aside><dialog id="toc-dialog" aria-labelledby="toc-dialog-title" role="dialog" closedby="any">
+      <button type="button" class="toc-close-btn" aria-label="Close Table of Contents"><i class="fa-solid fa-xmark fa-lg" aria-hidden="true"></i></button>
+      <div class="toc">
+        <h2 class="toc-title" id="toc-dialog-title">目录</h2>
+        <div class="toc-content" id="toc-content-drawer"><nav >
+  <ul>
+    <li><a href="#使用get-nettcpconnection查找端口">使用Get-NetTCPConnection查找端口</a></li>
+    <li><a href="#根据pid查看进程信息">根据PID查看进程信息</a></li>
+    <li><a href="#一条命令完成端口进行查询">一条命令完成端口→进行查询</a></li>
+    <li><a href="#查看所有监听端口">查看所有监听端口</a></li>
+    <li><a href="#查看所有端口对应的进程">查看所有端口对应的进程</a></li>
+    <li><a href="#使用netstat方式">使用netstat方式</a></li>
+    <li><a href="#根据端口直接结束进程">根据端口直接结束进程</a></li>
+    <li><a href="#封装为powershell工具函数">封装为PowerShell工具函数</a></li>
+    <li><a href="#常用命令速查表">常用命令速查表</a></li>
+  </ul>
+</nav></div>
+      </div>
+    </dialog></main><footer class="footer">
+    <div class="footer-container"><div class="footer-line powered">由 <a href="https://gohugo.io/" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.163.1">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/hugo-fixit/FixIt" target="_blank" rel="external" title="FixIt v1.0.0-mq99hlzg">FixIt</a>
+        </div><div class="footer-line copyright" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright" aria-hidden="true"></i>
+            <span itemprop="copyrightYear">2019 - 2026</span><span class="author" itemprop="copyrightHolder">
+              <a href="https://andyfree96.github.io/" target="_blank" rel="external nofollow noopener noreferrer">AndyFree96</a></span></div></div>
+  </footer></div><div class="widgets"><div class="fixed-buttons"><button type="button" class="fixed-button back-to-top animate__faster d-none" aria-label="回到顶部"><i class="fa-solid fa-arrow-up" aria-hidden="true"></i></button><button type="button" id="toc-drawer-button" class="fixed-button toc-drawer-button d-none" aria-label="目录" aria-controls="toc-dialog" aria-expanded="false"><i class="fa-solid fa-bars" aria-hidden="true"></i></button></div><div id="mask"></div><div class="reading-progress-bar" style="left: 0;top: 0;"></div><noscript>
+    <div class="noscript-warning">该网站在启用 JavaScript 的情况下效果最佳。</div>
+  </noscript>
+</div><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script src="/lib/autocomplete/autocomplete.min.js" defer></script><script src="/lib/algoliasearch/browser.umd.js" defer></script><script src="/lib/sharer/sharer.min.js" async defer></script><script src="/lib/cookieconsent/cookieconsent.min.js" defer></script><script src="/js/lib/cookieconsent.js" defer></script><script src="/lib/cell-tooltip/cell-tooltip.umd.js" defer></script><script src="/js/config/95be47745848eae2b83f020ae0d4703d.js" defer></script><script src="/js/lib/file-tree.js" defer></script><script src="/js/main.js" defer></script></body>
+</html>
