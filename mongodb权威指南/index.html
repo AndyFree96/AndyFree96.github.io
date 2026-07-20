@@ -11,7 +11,7 @@
 	<meta itemprop="description" content="MongoDB 是当前最流行的 NoSQL 数据库之一，它采用文档模型存储数据，通过灵活的数据结构、高性能的索引机制以及完善的分布式能力，广泛应用于互联网应用、大数据处理和实时业务场景。但想真正理解 MongoDB，仅仅掌握 CRUD 操作和查询语法是不够的。MongoDB 背后涉及许多数据库核心概念：文档模型设计、BSON存储、索引原理、WiredTiger存储引擎、MVCC并发控制、副本集以及分片架构等。本文将结合《MongoDB权威指南》，从使用实践逐步深入底层原理，探索 MongoDB 的设计思想以及它如何解决现代应用中的数据存储和扩展问题。">
 	<meta itemprop="datePublished" content="2026-07-17T13:32:25+08:00">
 	<meta itemprop="dateModified" content="2026-07-17T13:32:25+08:00">
-	<meta itemprop="wordCount" content="2977">
+	<meta itemprop="wordCount" content="3484">
 	<meta itemprop="keywords" content="MongoDB,数据库,面向文档,读书笔记,计算机"><meta property="og:url" content="http://localhost:1313/mongodb%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97/">
 	<meta property="og:site_name" content="东尼的博客">
 	<meta property="og:title" content="MongoDB权威指南 第3版 (Shannon Bradshaw / Eoin Brazil / Kristina Chodorow)">
@@ -43,7 +43,7 @@
     "mainEntityOfPage": {
       "@type": "WebPage",
       "@id": "http:\/\/localhost:1313\/mongodb%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97\/"
-    },"genre": "posts","keywords": "MongoDB, 数据库, 面向文档, 读书笔记, 计算机","wordcount":  2977 ,
+    },"genre": "posts","keywords": "MongoDB, 数据库, 面向文档, 读书笔记, 计算机","wordcount":  3484 ,
     "url": "http:\/\/localhost:1313\/mongodb%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97\/","datePublished": "2026-07-17T13:32:25+08:00","dateModified": "2026-07-17T13:32:25+08:00","publisher": {
       "@type": "Organization",
       "name": ""},"author": {
@@ -151,7 +151,7 @@
   <article class="page single">
     <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span title="转载" class="icon-repost"><i class="fa-solid fa-share" aria-hidden="true"></i></span><span>MongoDB权威指南 第3版 (Shannon Bradshaw / Eoin Brazil / Kristina Chodorow)</span>
       </h1></div><div class="post-meta">
-      <div class="post-meta-line"><span class="post-author"><a href="https://andyfree96.github.io/" title="作者" target="_blank" rel="author external nofollow noopener noreferrer" class="author"><img class="avatar" src='/avatar/1.jpg' alt="AndyFree96" height="16" width="16">&nbsp;AndyFree96</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E4%B9%A6%E7%B1%8D%E7%A0%94%E8%AF%BB/" class="post-category" title="分类 - 书籍研读"><i class="fa-regular fa-folder" aria-hidden="true"></i> 书籍研读</a></span></div><div class="post-meta-line"><span title="发布于 2026-07-17 13:32:25"><i class="fa-solid fa-calendar-days me-1" aria-hidden="true"></i><time datetime="2026-07-17">2026-07-17</time></span>&nbsp;<span title="2977 字"><i class="fa-solid fa-pencil-alt me-1" aria-hidden="true"></i>约 3000 字</span>&nbsp;<span><i class="fa-regular fa-clock me-1" aria-hidden="true"></i>预计阅读 6 分钟</span>&nbsp;</div>
+      <div class="post-meta-line"><span class="post-author"><a href="https://andyfree96.github.io/" title="作者" target="_blank" rel="author external nofollow noopener noreferrer" class="author"><img class="avatar" src='/avatar/1.jpg' alt="AndyFree96" height="16" width="16">&nbsp;AndyFree96</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E4%B9%A6%E7%B1%8D%E7%A0%94%E8%AF%BB/" class="post-category" title="分类 - 书籍研读"><i class="fa-regular fa-folder" aria-hidden="true"></i> 书籍研读</a></span></div><div class="post-meta-line"><span title="发布于 2026-07-17 13:32:25"><i class="fa-solid fa-calendar-days me-1" aria-hidden="true"></i><time datetime="2026-07-17">2026-07-17</time></span>&nbsp;<span title="3484 字"><i class="fa-solid fa-pencil-alt me-1" aria-hidden="true"></i>约 3500 字</span>&nbsp;<span><i class="fa-regular fa-clock me-1" aria-hidden="true"></i>预计阅读 7 分钟</span>&nbsp;</div>
     </div><div class="featured-image"><img loading="eager" src='/images/202607/24/microsoft-copilot-o2MBk6J-Iqc-unsplash.jpg' sizes="(max-width: 680px) 100vw, (max-width: 960px) 80vw, (max-width: 1440px) 56vw, 800px" alt="/images/202607/24/microsoft-copilot-o2MBk6J-Iqc-unsplash.jpg"></div><div class="details toc" id="toc-static" data-kept="false">
         <div class="details-summary toc-title">
           <span>目录</span>
@@ -196,9 +196,24 @@
     </li>
     <li><a href="#第二部分-设计应用程序">第二部分 设计应用程序</a>
       <ul>
-        <li><a href="#第5章-索引">第5章 索引</a></li>
+        <li><a href="#第5章-索引">第5章 索引</a>
+          <ul>
+            <li><a href="#51-索引简介">5.1 索引简介</a>
+              <ul>
+                <li><a href="#原则1等值查询字段放前面">原则1：等值查询字段放前面</a></li>
+                <li><a href="#原则2范围查询字段放后面">原则2：范围查询字段放后面</a></li>
+                <li><a href="#原则3排序字段尽量放索引里">原则3：排序字段尽量放索引里</a></li>
+              </ul>
+            </li>
+          </ul>
+        </li>
         <li><a href="#第6章-特殊的索引和集合类型">第6章 特殊的索引和集合类型</a></li>
-        <li><a href="#第7章-聚合框架">第7章 聚合框架</a></li>
+        <li><a href="#第7章-聚合框架">第7章 聚合框架</a>
+          <ul>
+            <li><a href="#72-阶段入门常见操作">7.2 阶段入门：常见操作</a></li>
+            <li><a href="#73-unwind">7.3 $unwind</a></li>
+          </ul>
+        </li>
         <li><a href="#第8章-事务">第8章 事务</a></li>
         <li><a href="#第9章-应用程序设计">第9章 应用程序设计</a></li>
       </ul>
@@ -529,19 +544,130 @@
   <a href="#%e7%ac%ac5%e7%ab%a0-%e7%b4%a2%e5%bc%95" class="heading-mark">
     <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
   </a>
-</h3><h3 class="heading-element" id="第6章-特殊的索引和集合类型"><span>第6章 特殊的索引和集合类型</span>
+</h3><h4 class="heading-element" id="51-索引简介"><span>5.1 索引简介</span>
+  <a href="#51-%e7%b4%a2%e5%bc%95%e7%ae%80%e4%bb%8b" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h4><p>索引设计的三个核心原则：</p>
+<h5 class="heading-element" id="原则1等值查询字段放前面"><span>原则1：等值查询字段放前面</span>
+  <a href="#%e5%8e%9f%e5%88%991%e7%ad%89%e5%80%bc%e6%9f%a5%e8%af%a2%e5%ad%97%e6%ae%b5%e6%94%be%e5%89%8d%e9%9d%a2" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h5><p>例如，业务查询：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-js"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="line"><span class="cl"><span class="nx">db</span><span class="p">.</span><span class="nx">orders</span><span class="p">.</span><span class="nx">find</span><span class="p">({</span><span class="nx">userId</span><span class="o">:</span> <span class="mi">10001</span><span class="p">,</span> <span class="nx">status</span><span class="o">:</span> <span class="s2">&#34;SUCCESS&#34;</span><span class="p">})</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>设计：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-js"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="line"><span class="cl"><span class="nx">db</span><span class="p">.</span><span class="nx">orders</span><span class="p">.</span><span class="nx">createIndex</span><span class="p">({</span><span class="nx">userId</span><span class="o">:</span> <span class="mi">1</span><span class="p">,</span> <span class="nx">status</span><span class="o">:</span> <span class="mi">1</span><span class="p">})</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><h5 class="heading-element" id="原则2范围查询字段放后面"><span>原则2：范围查询字段放后面</span>
+  <a href="#%e5%8e%9f%e5%88%992%e8%8c%83%e5%9b%b4%e6%9f%a5%e8%af%a2%e5%ad%97%e6%ae%b5%e6%94%be%e5%90%8e%e9%9d%a2" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h5><p>例如，查询：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-js"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">userId</span><span class="o">:</span><span class="mi">10001</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">createTime</span><span class="o">:</span><span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">$gte</span><span class="o">:</span><span class="s2">&#34;2026-01-01&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>推荐：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-js"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">userId</span><span class="o">:</span> <span class="mi">1</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">createTime</span><span class="o">:</span> <span class="o">-</span><span class="mi">1</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><h5 class="heading-element" id="原则3排序字段尽量放索引里"><span>原则3：排序字段尽量放索引里</span>
+  <a href="#%e5%8e%9f%e5%88%993%e6%8e%92%e5%ba%8f%e5%ad%97%e6%ae%b5%e5%b0%bd%e9%87%8f%e6%94%be%e7%b4%a2%e5%bc%95%e9%87%8c" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h5><p>例如，查询：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-js"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="line"><span class="cl"><span class="nx">db</span><span class="p">.</span><span class="nx">orders</span><span class="p">.</span><span class="nx">find</span><span class="p">({</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">userId</span><span class="o">:</span> <span class="mi">100</span>
+</span></span><span class="line"><span class="cl"><span class="p">}).</span><span class="nx">sort</span><span class="p">({</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">createTime</span><span class="o">:</span> <span class="o">-</span><span class="mi">1</span>
+</span></span><span class="line"><span class="cl"><span class="p">}).</span><span class="nx">limit</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>推荐：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-js"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-js" data-lang="js"><span class="line"><span class="cl"><span class="nx">db</span><span class="p">.</span><span class="nx">orders</span><span class="p">.</span><span class="nx">createIndex</span><span class="p">({</span><span class="nx">userId</span><span class="o">:</span> <span class="mi">1</span><span class="p">,</span> <span class="nx">createTime</span><span class="o">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">})</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>MongoDB索引设计经典原则：ESR(E = Equality, S = Sort, R = Range)。</p>
+<h3 class="heading-element" id="第6章-特殊的索引和集合类型"><span>第6章 特殊的索引和集合类型</span>
   <a href="#%e7%ac%ac6%e7%ab%a0-%e7%89%b9%e6%ae%8a%e7%9a%84%e7%b4%a2%e5%bc%95%e5%92%8c%e9%9b%86%e5%90%88%e7%b1%bb%e5%9e%8b" class="heading-mark">
     <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
   </a>
-</h3><h3 class="heading-element" id="第7章-聚合框架"><span>第7章 聚合框架</span>
+</h3><p>地理空间索引、全文搜索索引、固定集合、TTL索引、使用GridFS存储文件</p>
+<h3 class="heading-element" id="第7章-聚合框架"><span>第7章 聚合框架</span>
   <a href="#%e7%ac%ac7%e7%ab%a0-%e8%81%9a%e5%90%88%e6%a1%86%e6%9e%b6" class="heading-mark">
     <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
   </a>
-</h3><h3 class="heading-element" id="第8章-事务"><span>第8章 事务</span>
+</h3><h4 class="heading-element" id="72-阶段入门常见操作"><span>7.2 阶段入门：常见操作</span>
+  <a href="#72-%e9%98%b6%e6%ae%b5%e5%85%a5%e9%97%a8%e5%b8%b8%e8%a7%81%e6%93%8d%e4%bd%9c" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h4><p>匹配(match)、投射(project)、排序(sort)、跳过(skip)和限制(limit)这5个阶段。</p>
+<h4 class="heading-element" id="73-unwind"><span>7.3 $unwind</span>
+  <a href="#73-unwind" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h4><p>在聚合管道中处理数组字段时，通常需要包含一个或多个展开(unwind)阶段。这允许我们将指定数组字段中的每个元素都形成一个输出文档。</p>
+<p><figure><img loading="lazy" src='/images/202607/24/7-4.png' alt="图7-4 $unwind会从输入文档中获取一个数组，并为该数组中的每个元素创建一个输出文档"><figcaption class="image-caption">图7-4 &dollar;unwind会从输入文档中获取一个数组，并为该数组中的每个元素创建一个输出文档</figcaption>
+  </figure></p>
+<h3 class="heading-element" id="第8章-事务"><span>第8章 事务</span>
   <a href="#%e7%ac%ac8%e7%ab%a0-%e4%ba%8b%e5%8a%a1" class="heading-mark">
     <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
   </a>
-</h3><h3 class="heading-element" id="第9章-应用程序设计"><span>第9章 应用程序设计</span>
+</h3><p>什么时候使用事务，核心不是看“有几个操作”，而是看：</p>
+<blockquote>
+<p>这些操作是否必须作为一个不可分割的业务事件，要么全部成功，要么全部失败。</p>
+</blockquote>
+<p>MongoDB设计理念是：</p>
+<blockquote>
+<p>优先通过合理的数据模型(嵌入文档)避免事务；只有跨文档一致性无法避免时才使用事务。</p>
+</blockquote>
+<h3 class="heading-element" id="第9章-应用程序设计"><span>第9章 应用程序设计</span>
   <a href="#%e7%ac%ac9%e7%ab%a0-%e5%ba%94%e7%94%a8%e7%a8%8b%e5%ba%8f%e8%ae%be%e8%ae%a1" class="heading-mark">
     <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
   </a>
@@ -724,9 +850,24 @@
     </li>
     <li><a href="#第二部分-设计应用程序">第二部分 设计应用程序</a>
       <ul>
-        <li><a href="#第5章-索引">第5章 索引</a></li>
+        <li><a href="#第5章-索引">第5章 索引</a>
+          <ul>
+            <li><a href="#51-索引简介">5.1 索引简介</a>
+              <ul>
+                <li><a href="#原则1等值查询字段放前面">原则1：等值查询字段放前面</a></li>
+                <li><a href="#原则2范围查询字段放后面">原则2：范围查询字段放后面</a></li>
+                <li><a href="#原则3排序字段尽量放索引里">原则3：排序字段尽量放索引里</a></li>
+              </ul>
+            </li>
+          </ul>
+        </li>
         <li><a href="#第6章-特殊的索引和集合类型">第6章 特殊的索引和集合类型</a></li>
-        <li><a href="#第7章-聚合框架">第7章 聚合框架</a></li>
+        <li><a href="#第7章-聚合框架">第7章 聚合框架</a>
+          <ul>
+            <li><a href="#72-阶段入门常见操作">7.2 阶段入门：常见操作</a></li>
+            <li><a href="#73-unwind">7.3 $unwind</a></li>
+          </ul>
+        </li>
         <li><a href="#第8章-事务">第8章 事务</a></li>
         <li><a href="#第9章-应用程序设计">第9章 应用程序设计</a></li>
       </ul>

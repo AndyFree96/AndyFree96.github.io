@@ -15,7 +15,7 @@
 为什么会出现这个设计模式？ 它解决了什么设计问题？ 它的核心思想是什么？ 在 C#/.NET 中通常如何实现？ 它有哪些优点、缺点以及适用场景？ 与其他设计模式之间有什么联系与区别？ 希望通过这篇文章，不仅能够完整记录自己的学习过程，也能够帮助读者从设计思想而非模式名称的角度理解设计模式，在实际项目中真正做到根据问题选择设计，而不是为了使用模式而使用模式。">
 	<meta itemprop="datePublished" content="2026-07-18T07:01:37+08:00">
 	<meta itemprop="dateModified" content="2026-07-18T07:01:37+08:00">
-	<meta itemprop="wordCount" content="6379">
+	<meta itemprop="wordCount" content="7005">
 	<meta itemprop="keywords" content=".NET,C#,设计模式,在线课程"><meta property="og:url" content="http://localhost:1313/design-patterns-in-csharp-and-dotnet/">
 	<meta property="og:site_name" content="东尼的博客">
 	<meta property="og:title" content="Design Patterns in C# and .NET (Dmitri Nesteruk)">
@@ -50,7 +50,7 @@
     "mainEntityOfPage": {
       "@type": "WebPage",
       "@id": "http:\/\/localhost:1313\/design-patterns-in-csharp-and-dotnet\/"
-    },"genre": "posts","keywords": ".NET, C#, 设计模式, 在线课程","wordcount":  6379 ,
+    },"genre": "posts","keywords": ".NET, C#, 设计模式, 在线课程","wordcount":  7005 ,
     "url": "http:\/\/localhost:1313\/design-patterns-in-csharp-and-dotnet\/","datePublished": "2026-07-18T07:01:37+08:00","dateModified": "2026-07-18T07:01:37+08:00","publisher": {
       "@type": "Organization",
       "name": ""},"author": {
@@ -148,7 +148,7 @@
   <article class="page single">
     <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span title="转载" class="icon-repost"><i class="fa-solid fa-share" aria-hidden="true"></i></span><span>Design Patterns in C# and .NET (Dmitri Nesteruk)</span>
       </h1></div><div class="post-meta">
-      <div class="post-meta-line"><span class="post-author"><a href="https://andyfree96.github.io/" title="作者" target="_blank" rel="author external nofollow noopener noreferrer" class="author"><img class="avatar" src='/avatar/1.jpg' alt="AndyFree96" height="16" width="16">&nbsp;AndyFree96</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E5%9C%A8%E7%BA%BF%E8%AF%BE%E7%A8%8B/" class="post-category" title="分类 - 在线课程"><i class="fa-regular fa-folder" aria-hidden="true"></i> 在线课程</a></span></div><div class="post-meta-line"><span title="发布于 2026-07-18 07:01:37"><i class="fa-solid fa-calendar-days me-1" aria-hidden="true"></i><time datetime="2026-07-18">2026-07-18</time></span>&nbsp;<span title="6379 字"><i class="fa-solid fa-pencil-alt me-1" aria-hidden="true"></i>约 6400 字</span>&nbsp;<span><i class="fa-regular fa-clock me-1" aria-hidden="true"></i>预计阅读 13 分钟</span>&nbsp;</div>
+      <div class="post-meta-line"><span class="post-author"><a href="https://andyfree96.github.io/" title="作者" target="_blank" rel="author external nofollow noopener noreferrer" class="author"><img class="avatar" src='/avatar/1.jpg' alt="AndyFree96" height="16" width="16">&nbsp;AndyFree96</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E5%9C%A8%E7%BA%BF%E8%AF%BE%E7%A8%8B/" class="post-category" title="分类 - 在线课程"><i class="fa-regular fa-folder" aria-hidden="true"></i> 在线课程</a></span></div><div class="post-meta-line"><span title="发布于 2026-07-18 07:01:37"><i class="fa-solid fa-calendar-days me-1" aria-hidden="true"></i><time datetime="2026-07-18">2026-07-18</time></span>&nbsp;<span title="7005 字"><i class="fa-solid fa-pencil-alt me-1" aria-hidden="true"></i>约 7100 字</span>&nbsp;<span><i class="fa-regular fa-clock me-1" aria-hidden="true"></i>预计阅读 14 分钟</span>&nbsp;</div>
     </div><div class="featured-image"><img loading="eager" src='/images/202607/26/bruce-barrow-UvuRRR-SkKQ-unsplash.jpg' sizes="(max-width: 680px) 100vw, (max-width: 960px) 80vw, (max-width: 1440px) 56vw, 800px" alt="/images/202607/26/bruce-barrow-UvuRRR-SkKQ-unsplash.jpg"></div><div class="details toc" id="toc-static" data-kept="false">
         <div class="details-summary toc-title">
           <span>目录</span>
@@ -175,6 +175,8 @@
         <li><a href="#fluent-builder-inheritance-with-recursive-generics-递归泛型实现的流式构建器继承">Fluent Builder Inheritance with Recursive Generics 递归泛型实现的流式构建器继承</a></li>
         <li><a href="#stepwise-builder-分步构建器">Stepwise Builder 分步构建器</a></li>
         <li><a href="#functional-builder-函数式构建器">Functional Builder 函数式构建器</a></li>
+        <li><a href="#faceted-builder-分面构建器">Faceted Builder 分面构建器</a></li>
+        <li><a href="#summary-总结-1">Summary 总结</a></li>
       </ul>
     </li>
   </ul>
@@ -1896,7 +1898,263 @@
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-c#" data-lang="c#"><span class="line"><span class="cl"><span class="kt">var</span> <span class="n">person</span> <span class="p">=</span> <span class="k">new</span> <span class="n">PersonBuilder</span><span class="p">().</span><span class="n">Called</span><span class="p">(</span><span class="s">&#34;Anthony&#34;</span><span class="p">).</span><span class="n">WorkAs</span><span class="p">(</span><span class="s">&#34;Architect&#34;</span><span class="p">).</span><span class="n">Build</span><span class="p">();</span></span></span></code></pre></td></tr></table></div>
 </div>
-</div></div><hr class="awesome-hr" />
+</div><p>我们可以让其泛型化，以便可以在不同场景下通用：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-c#"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="2" style="--fi-max-shown-lines:400;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c#" data-lang="c#"><span class="line"><span class="cl"><span class="kd">public</span> <span class="kd">abstract</span> <span class="k">class</span> <span class="nc">FunctionalBuilder</span><span class="p">&lt;</span><span class="n">TSubject</span><span class="p">,</span> <span class="n">TSelf</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">where</span> <span class="n">TSelf</span><span class="p">:</span> <span class="n">FunctionalBuilder</span><span class="p">&lt;</span><span class="n">TSubject</span><span class="p">,</span> <span class="n">TSelf</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">where</span> <span class="n">TSubject</span><span class="p">:</span> <span class="k">new</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">private</span> <span class="k">readonly</span> <span class="n">List</span><span class="p">&lt;</span><span class="n">Func</span><span class="p">&lt;</span><span class="n">TSubject</span><span class="p">,</span> <span class="n">TSubject</span><span class="p">&gt;&gt;</span> <span class="n">actions</span> <span class="p">=</span> <span class="p">[];</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">public</span> <span class="n">TSelf</span> <span class="n">Do</span><span class="p">(</span><span class="n">Action</span><span class="p">&lt;</span><span class="n">TSubject</span><span class="p">&gt;</span> <span class="n">action</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="n">AddAction</span><span class="p">(</span><span class="n">action</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="kd">private</span> <span class="n">TSelf</span> <span class="n">AddAction</span><span class="p">(</span><span class="n">Action</span><span class="p">&lt;</span><span class="n">TSubject</span><span class="p">&gt;</span> <span class="n">action</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">actions</span><span class="p">.</span><span class="n">Add</span><span class="p">(</span><span class="n">p</span> <span class="p">=&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">action</span><span class="p">(</span><span class="n">p</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="n">p</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">});</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="p">(</span><span class="n">TSelf</span><span class="p">)</span><span class="k">this</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="kd">public</span> <span class="n">TSubject</span> <span class="n">Build</span><span class="p">()</span> <span class="p">=&gt;</span> <span class="n">actions</span><span class="p">.</span><span class="n">Aggregate</span><span class="p">(</span><span class="k">new</span> <span class="n">TSubject</span><span class="p">(),</span> <span class="p">(</span><span class="n">person</span><span class="p">,</span> <span class="n">func</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="n">func</span><span class="p">(</span><span class="n">person</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">public</span> <span class="kd">sealed</span> <span class="k">class</span> <span class="nc">PersonBuilder</span> <span class="p">:</span> <span class="n">FunctionalBuilder</span><span class="p">&lt;</span><span class="n">Person</span><span class="p">,</span> <span class="n">PersonBuilder</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">public</span> <span class="n">PersonBuilder</span> <span class="n">Called</span><span class="p">(</span><span class="kt">string</span> <span class="n">name</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="n">Do</span><span class="p">(</span><span class="n">p</span> <span class="p">=&gt;</span> <span class="n">p</span><span class="p">.</span><span class="n">Name</span> <span class="p">=</span> <span class="n">name</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="kd">public</span> <span class="n">PersonBuilder</span> <span class="n">WorkAs</span><span class="p">(</span><span class="kt">string</span> <span class="n">position</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="n">Do</span><span class="p">(</span><span class="n">p</span> <span class="p">=&gt;</span> <span class="n">p</span><span class="p">.</span><span class="n">Position</span> <span class="p">=</span> <span class="n">position</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><h3 class="heading-element" id="faceted-builder-分面构建器"><span>Faceted Builder 分面构建器</span>
+  <a href="#faceted-builder-%e5%88%86%e9%9d%a2%e6%9e%84%e5%bb%ba%e5%99%a8" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p>Faceted Builder主要解决的问题是：</p>
+<blockquote>
+<p>当一个对象需要构建的信息来自多个不同维度(Facet)时，将不同维度的构建逻辑拆分成多个专门的Builder，避免一个Builder变得臃肿。</p>
+</blockquote>
+<p>假设创建一个员工：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-c#"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="2" style="--fi-max-shown-lines:400;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c#" data-lang="c#"><span class="line"><span class="cl"><span class="kd">public</span> <span class="k">class</span> <span class="nc">Person</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">public</span> <span class="kt">string</span> <span class="n">Name</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">public</span> <span class="kt">string</span> <span class="n">Street</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">public</span> <span class="kt">string</span> <span class="n">City</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="kd">public</span> <span class="kt">string</span> <span class="n">Company</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">public</span> <span class="kt">string</span> <span class="n">Position</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="kd">public</span> <span class="kt">string</span> <span class="n">Email</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">public</span> <span class="kt">string</span> <span class="n">Phone</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="kd">public</span> <span class="kd">override</span> <span class="kt">string</span> <span class="n">ToString</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="s">$&#34;{nameof(Name)}: {Name}, {nameof(Company)}: {Company}&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>如果使用普通Builder：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-c#"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c#" data-lang="c#"><span class="line"><span class="cl"><span class="n">PersonBuilder</span>
+</span></span><span class="line"><span class="cl">    <span class="p">.</span><span class="n">WithName</span><span class="p">(</span><span class="s">&#34;Anthony&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">.</span><span class="n">WithAddress</span><span class="p">(</span><span class="s">&#34;Singapore&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">.</span><span class="n">WithCompany</span><span class="p">(</span><span class="s">&#34;OpenAI&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">.</span><span class="n">WithPosition</span><span class="p">(</span><span class="s">&#34;Engineer&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">.</span><span class="n">WithEmail</span><span class="p">(</span><span class="s">&#34;xxx&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">.</span><span class="n">WithPhone</span><span class="p">(</span><span class="s">&#34;xxx&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">.</span><span class="n">Build</span><span class="p">();</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>方法越来越多，职责越来越乱，不容易维护。这违反了单一职责原则。</p>
+<p>Faceted Builder将Builder拆分成多个面，比如<code>PersonInfo</code>、<code>AddressFacet</code>以及<code>JobFacet</code>，每个Builder负责一个维度。</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-c#"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="2" style="--fi-max-shown-lines:400;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c#" data-lang="c#"><span class="line"><span class="cl"><span class="kd">public</span> <span class="k">class</span> <span class="nc">PersonBuilder</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">protected</span> <span class="n">Person</span> <span class="n">person</span> <span class="p">=</span> <span class="k">new</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="kd">public</span> <span class="n">Person</span> <span class="n">Build</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">person</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="kd">public</span> <span class="n">PersonInfoBulder</span> <span class="n">Info</span> <span class="p">=&gt;</span> <span class="k">new</span> <span class="n">PersonInfoBulder</span><span class="p">(</span><span class="n">person</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">public</span> <span class="n">PersonJobBuilder</span> <span class="n">Job</span> <span class="p">=&gt;</span> <span class="k">new</span> <span class="n">PersonJobBuilder</span><span class="p">(</span><span class="n">person</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">public</span> <span class="k">class</span> <span class="nc">PersonInfoBulder</span><span class="p">:</span> <span class="n">PersonBuilder</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="kd">public</span> <span class="n">PersonInfoBulder</span><span class="p">(</span><span class="n">Person</span> <span class="n">person</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">this</span><span class="p">.</span><span class="n">person</span> <span class="p">=</span> <span class="n">person</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="kd">public</span> <span class="n">PersonInfoBulder</span> <span class="n">Name</span><span class="p">(</span><span class="kt">string</span> <span class="n">name</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">person</span><span class="p">.</span><span class="n">Name</span> <span class="p">=</span> <span class="n">name</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="k">this</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">public</span> <span class="k">class</span> <span class="nc">PersonJobBuilder</span><span class="p">:</span> <span class="n">PersonBuilder</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="kd">public</span> <span class="n">PersonJobBuilder</span><span class="p">(</span><span class="n">Person</span> <span class="n">person</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">this</span><span class="p">.</span><span class="n">person</span> <span class="p">=</span> <span class="n">person</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="kd">public</span> <span class="n">PersonJobBuilder</span> <span class="n">WorksAt</span><span class="p">(</span><span class="kt">string</span> <span class="n">company</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">person</span><span class="p">.</span><span class="n">Company</span> <span class="p">=</span> <span class="n">company</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="k">this</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="kd">public</span> <span class="n">PersonJobBuilder</span> <span class="n">As</span><span class="p">(</span><span class="kt">string</span> <span class="n">position</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">person</span><span class="p">.</span><span class="n">Position</span> <span class="p">=</span> <span class="n">position</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="k">this</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>使用：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-c#"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c#" data-lang="c#"><span class="line"><span class="cl"><span class="kt">var</span> <span class="n">person</span> <span class="p">=</span> <span class="k">new</span> <span class="n">PersonBuilder</span><span class="p">().</span><span class="n">Info</span><span class="p">.</span><span class="n">Name</span><span class="p">(</span><span class="s">&#34;Anthony&#34;</span><span class="p">).</span><span class="n">Job</span><span class="p">.</span><span class="n">WorksAt</span><span class="p">(</span><span class="s">&#34;BBC&#34;</span><span class="p">).</span><span class="n">As</span><span class="p">(</span><span class="s">&#34;Developer&#34;</span><span class="p">).</span><span class="n">Build</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="n">person</span><span class="p">);</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><h3 class="heading-element" id="summary-总结-1"><span>Summary 总结</span>
+  <a href="#summary-%e6%80%bb%e7%bb%93-1" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><ul>
+<li>A builder is a separate component for building an object</li>
+<li>Can either give builder a constructor or return it via a static function</li>
+<li>To make builder fluent, return this</li>
+<li>Different facets of an object can be built with different builders working in tandem via a base class</li>
+</ul></div><hr class="awesome-hr" />
     <h2 id="see-also">相关内容</h2>
     <ul><li>
           <a href="/%E6%B7%B1%E5%85%A5system.net.networkinformation%E8%8E%B7%E5%8F%96%E7%B3%BB%E7%BB%9F%E7%BD%91%E7%BB%9C%E4%BF%A1%E6%81%AF/" title="C#编程实践(一)：深入System.Net.NetworkInformation获取系统网络信息">C#编程实践(一)：深入System.Net.NetworkInformation获取系统网络信息</a></li><li>
@@ -1963,6 +2221,8 @@
         <li><a href="#fluent-builder-inheritance-with-recursive-generics-递归泛型实现的流式构建器继承">Fluent Builder Inheritance with Recursive Generics 递归泛型实现的流式构建器继承</a></li>
         <li><a href="#stepwise-builder-分步构建器">Stepwise Builder 分步构建器</a></li>
         <li><a href="#functional-builder-函数式构建器">Functional Builder 函数式构建器</a></li>
+        <li><a href="#faceted-builder-分面构建器">Faceted Builder 分面构建器</a></li>
+        <li><a href="#summary-总结-1">Summary 总结</a></li>
       </ul>
     </li>
   </ul>
