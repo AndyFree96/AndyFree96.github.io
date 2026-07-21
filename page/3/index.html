@@ -10,8 +10,8 @@
 <meta name="description" content="安东尼的博客，分享生活中的一些有意思的事儿！">
 	<meta itemprop="name" content="东尼的博客">
 	<meta itemprop="description" content="安东尼的博客，分享生活中的一些有意思的事儿！">
-	<meta itemprop="datePublished" content="2026-07-20T15:11:12+08:00">
-	<meta itemprop="dateModified" content="2026-07-20T15:11:12+08:00"><meta property="og:url" content="http://localhost:1313/">
+	<meta itemprop="datePublished" content="2026-07-21T11:14:21+08:00">
+	<meta itemprop="dateModified" content="2026-07-21T11:14:21+08:00"><meta property="og:url" content="http://localhost:1313/">
 	<meta property="og:site_name" content="东尼的博客">
 	<meta property="og:title" content="东尼的博客">
 	<meta property="og:description" content="安东尼的博客，分享生活中的一些有意思的事儿！">
@@ -110,6 +110,45 @@
   </a><a href="/index.xml" title="RSS" target="_blank" rel="me"><i class="fa-solid fa-rss" aria-hidden="true"></i>
   </a></div></div>
 <article class="single summary" itemscope itemtype="http://schema.org/Article"><div class="featured-image-preview">
+        <a href="/vue.js%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/" aria-label="Vue.js设计与实现 (霍春阳)"><img loading="eager" src='/images/202606/6/ngoc-nguyen-phuong-h11YgfllYSA-unsplash.jpg' sizes="(max-width: 680px) 100vw, (max-width: 960px) 80vw, (max-width: 1440px) 56vw, 800px" alt="Featured image for Vue.js设计与实现 (霍春阳)" height="336" width="800"></a>
+      </div><h2 class="single-title" itemprop="name headline"><span title="转载" class="icon-repost"><i class="fa-solid fa-share" aria-hidden="true"></i></span><a href="/vue.js%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/">Vue.js设计与实现 (霍春阳)</a>
+  </h2><div class="post-meta"><span class="post-author"><a href="https://andyfree96.github.io/" title="作者" target="_blank" rel="author external nofollow noopener noreferrer" class="author"><img class="avatar" src='/avatar/1.jpg' alt="AndyFree96" height="16" width="16">&nbsp;AndyFree96</a></span>&nbsp;<span class="post-publish" title='2026-06-17 06:19:04'>发布于 <time datetime="2026-06-17">2026-06-17</time></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E4%B9%A6%E7%B1%8D%E7%A0%94%E8%AF%BB/" class="post-category" title="分类 - 书籍研读"><i class="fa-regular fa-folder" aria-hidden="true"></i> 书籍研读</a></span></div><div class="content"><p>在前端开发领域，<a href="https://vuejs.org/" target="_blank" rel="external nofollow noopener noreferrer">Vue.js<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>一直以其易用性和渐进式设计理念受到开发者的喜爱。很多开发者从学习模板语法、组件开发、状态管理开始使用 Vue，但当我们真正深入大型项目开发时，往往会遇到一些更底层的问题：</p>
+<ul>
+<li>Vue 的响应式系统为什么能够自动追踪依赖？</li>
+<li>一个简单的 <code>{{ message }}</code> 插值表达式背后经历了哪些过程？</li>
+<li>Vue 是如何将模板编译成可执行代码的？</li>
+<li>为什么 Vue 需要虚拟 DOM？它真的一定比直接操作 DOM 快吗？</li>
+<li>组件更新时，框架如何精确找到需要更新的部分？</li>
+<li><code>effect</code>、<code>computed</code>、<code>watch</code>这些 API 背后的实现原理是什么？</li>
+</ul>
+<p>解答这些问题，是我阅读<a href="https://github.com/hcysunyang" target="_blank" rel="external nofollow noopener noreferrer">霍春阳<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>老师<a href="https://book.douban.com/subject/35768338/" target="_blank" rel="external nofollow noopener noreferrer">《Vue.js设计与实现》<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>这本书的主要原因。与传统的 Vue 使用教程不同，这本书并不是告诉你“如何写 Vue”，而是带你站在框架设计者的角度，重新审视一个现代前端框架是如何构建出来的。阅读过程中最大的感受是：一个看似简单的 API 背后，往往隐藏着大量设计权衡。</p>
+<p>例如，我们每天使用的：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-vue"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-vue" data-lang="vue"><span class="line"><span class="cl"><span class="kr">const</span> <span class="nx">count</span> <span class="o">=</span> <span class="nx">ref</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nx">effect</span><span class="p">(()</span> <span class="p">=&gt;</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">count</span><span class="p">.</span><span class="nx">value</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">})</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>看起来只是数据变化后自动执行函数，但为了实现这个能力，框架内部需要解决：</p>
+<ul>
+<li>如何记录当前正在执行的副作用函数？</li>
+<li>如何建立数据与副作用之间的关联？</li>
+<li>数据变化时如何找到对应的更新任务？</li>
+<li>多次变化如何避免重复执行？</li>
+<li>嵌套依赖如何正确处理？</li>
+</ul>
+<p>最终形成了一套完整的响应式系统。这本书让我重新认识了“框架”这个概念：<ins>框架并不是简单的工具集合，而是一系列围绕开发体验、性能、扩展性和工程实践做出的设计选择</ins>。</p></div><div class="post-footer">
+    <a href="/vue.js%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/">阅读全文</a><div class="post-tags"><i class="fa-solid fa-tags me-1" aria-hidden="true"></i><a href='/tags/vue/' class="post-tag">Vue</a><a href='/tags/%E6%A1%86%E6%9E%B6%E8%AE%BE%E8%AE%A1/' class="post-tag">框架设计</a><a href='/tags/%E5%93%8D%E5%BA%94%E7%B3%BB%E7%BB%9F/' class="post-tag">响应系统</a><a href='/tags/%E6%B8%B2%E6%9F%93%E5%99%A8/' class="post-tag">渲染器</a><a href='/tags/%E7%BB%84%E4%BB%B6%E5%8C%96/' class="post-tag">组件化</a><a href='/tags/%E7%BC%96%E8%AF%91%E5%99%A8/' class="post-tag">编译器</a><a href='/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/' class="post-tag">读书笔记</a><a href='/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA/' class="post-tag">计算机</a></div></div>
+</article><article class="single summary" itemscope itemtype="http://schema.org/Article"><div class="featured-image-preview">
         <a href="/%E6%9C%BA%E5%99%A8%E8%A7%86%E8%A7%89%E7%AE%97%E6%B3%95%E4%B8%8E%E5%BA%94%E7%94%A8/" aria-label="机器视觉算法与应用 第2版 (Carsten Steger)"><img loading="eager" src='/images/202606/5/microsoft-copilot-8UnGiO4yesk-unsplash.jpg' sizes="(max-width: 680px) 100vw, (max-width: 960px) 80vw, (max-width: 1440px) 56vw, 800px" alt="Featured image for 机器视觉算法与应用 第2版 (Carsten Steger)" height="336" width="800"></a>
       </div><h2 class="single-title" itemprop="name headline"><span title="转载" class="icon-repost"><i class="fa-solid fa-share" aria-hidden="true"></i></span><a href="/%E6%9C%BA%E5%99%A8%E8%A7%86%E8%A7%89%E7%AE%97%E6%B3%95%E4%B8%8E%E5%BA%94%E7%94%A8/">机器视觉算法与应用 第2版 (Carsten Steger)</a>
   </h2><div class="post-meta"><span class="post-author"><a href="https://andyfree96.github.io/" title="作者" target="_blank" rel="author external nofollow noopener noreferrer" class="author"><img class="avatar" src='/avatar/1.jpg' alt="AndyFree96" height="16" width="16">&nbsp;AndyFree96</a></span>&nbsp;<span class="post-publish" title='2026-06-15 16:24:32'>发布于 <time datetime="2026-06-15">2026-06-15</time></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E4%B9%A6%E7%B1%8D%E7%A0%94%E8%AF%BB/" class="post-category" title="分类 - 书籍研读"><i class="fa-regular fa-folder" aria-hidden="true"></i> 书籍研读</a></span></div><div class="content"><p>在工业自动化设备开发过程中，机器视觉往往是决定设备精度和稳定性的关键环节。很多时候，我们面对一个视觉检测需求，第一反应可能是：“有没有一个现成的算子可以解决？”。边缘检测、模板匹配、Blob分析……这些算法在 Halcon、OpenCV 等视觉库中已经被封装得非常方便。但随着项目复杂度提升，真正困难的问题逐渐浮现：</p>
@@ -308,11 +347,6 @@
       </div><h2 class="single-title" itemprop="name headline"><span title="转载" class="icon-repost"><i class="fa-solid fa-share" aria-hidden="true"></i></span><a href="/json-server%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/">json-server源码剖析：快速构建REST API背后的原理</a>
   </h2><div class="post-meta"><span class="post-author"><a href="https://andyfree96.github.io/" title="作者" target="_blank" rel="author external nofollow noopener noreferrer" class="author"><img class="avatar" src='/avatar/1.jpg' alt="AndyFree96" height="16" width="16">&nbsp;AndyFree96</a></span>&nbsp;<span class="post-publish" title='2025-07-31 16:47:36'>发布于 <time datetime="2025-07-31">2025-07-31</time></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" class="post-category" title="分类 - 源码剖析"><i class="fa-regular fa-folder" aria-hidden="true"></i> 源码剖析</a></span></div><div class="content"><p>在前端开发中，构建一套完整的后端接口往往耗时费力，而 <a href="https://github.com/typicode/json-server" target="_blank" rel="external nofollow noopener noreferrer">json-server<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>正是为了解决这一痛点而生。只需一个 JSON 文件，它就能快速生成一个 REST API 服务，被广泛用于前端开发、原型验证、接口测试等场景。本文将深入剖析 <a href="https://github.com/typicode/json-server" target="_blank" rel="external nofollow noopener noreferrer">json-server<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>的源码，一起理解它是如何工作的，并从中学习一些开发技巧。</p></div><div class="post-footer">
     <a href="/json-server%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/">阅读全文</a><div class="post-tags"><i class="fa-solid fa-tags me-1" aria-hidden="true"></i><a href='/tags/node.js/' class="post-tag">Node.js</a><a href='/tags/typescript/' class="post-tag">TypeScript</a><a href='/tags/restful-api/' class="post-tag">RESTful API</a><a href='/tags/json-server/' class="post-tag">JSON Server</a><a href='/tags/%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/' class="post-tag">源码剖析</a></div></div>
-</article><article class="single summary" itemscope itemtype="http://schema.org/Article"><div class="featured-image-preview">
-        <a href="/%E7%94%A8powershell%E7%8E%A9%E8%BD%AC%E6%96%87%E4%BB%B6%E5%A4%84%E7%90%86/" aria-label="用PowerShell玩转文件处理"><img loading="eager" src='/images/202507/1/neom-xDQKvPjxtxo-unsplash.jpg' sizes="(max-width: 680px) 100vw, (max-width: 960px) 80vw, (max-width: 1440px) 56vw, 800px" alt="Featured image for 用PowerShell玩转文件处理" height="336" width="800"></a>
-      </div><h2 class="single-title" itemprop="name headline"><span title="转载" class="icon-repost"><i class="fa-solid fa-share" aria-hidden="true"></i></span><a href="/%E7%94%A8powershell%E7%8E%A9%E8%BD%AC%E6%96%87%E4%BB%B6%E5%A4%84%E7%90%86/">用PowerShell玩转文件处理</a>
-  </h2><div class="post-meta"><span class="post-author"><a href="https://andyfree96.github.io/" title="作者" target="_blank" rel="author external nofollow noopener noreferrer" class="author"><img class="avatar" src='/avatar/1.jpg' alt="AndyFree96" height="16" width="16">&nbsp;AndyFree96</a></span>&nbsp;<span class="post-publish" title='2025-07-28 19:16:29'>发布于 <time datetime="2025-07-28">2025-07-28</time></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/powershell/" class="post-category" title="分类 - PowerShell"><i class="fa-regular fa-folder" aria-hidden="true"></i> PowerShell</a></span></div><div class="content"><p>PowerShell 是一个功能强大的自动化脚本平台，不仅可以管理系统和服务，还可以轻松高效地处理各种文件操作。无论你是系统管理员、开发者，还是数据分析师，掌握 PowerShell 的文件处理能力都能让你的工作事半功倍。本文将带你系统性地了解如何用 PowerShell 玩转文件处理，从基础操作到进阶技巧，让你轻松驾驭文件的读取、修改、管理与批处理任务。</p></div><div class="post-footer">
-    <a href="/%E7%94%A8powershell%E7%8E%A9%E8%BD%AC%E6%96%87%E4%BB%B6%E5%A4%84%E7%90%86/">阅读全文</a><div class="post-tags"><i class="fa-solid fa-tags me-1" aria-hidden="true"></i><a href='/tags/powershell/' class="post-tag">PowerShell</a><a href='/tags/%E6%96%87%E4%BB%B6%E5%A4%84%E7%90%86/' class="post-tag">文件处理</a><a href='/tags/%E5%91%BD%E4%BB%A4%E8%A1%8C/' class="post-tag">命令行</a></div></div>
 </article><ul class="pagination"><li class="page-item">
           <span class="page-link">
             <a href="/">1</a>

@@ -11,7 +11,7 @@
 	<meta itemprop="description" content="在 GitHub 闲逛时，我偶然发现了NETworkManager这个开源项目。作为一款网络管理和故障排查工具，它已经积累了超过 8.5k Star，足以说明社区对它的认可。更让我感兴趣的是，这个项目采用 C# &#43; WPF 进行开发，与我当前正在深入学习和实践的技术栈高度契合。因此，我产生了一个想法：通过深入分析 NETworkManager 的源码，探索一个成熟的 WPF 桌面应用是如何进行架构设计、模块划分以及工程实践的。接下来，我将以 NETworkManager 为切入点，逐步拆解它在 WPF UI 设计、MVVM 架构、依赖注入、配置管理、网络通信、异步编程以及工程化实践 等方面的实现，希望能够从优秀的开源项目中学习桌面应用开发的最佳实践。">
 	<meta itemprop="datePublished" content="2026-07-14T08:47:15+08:00">
 	<meta itemprop="dateModified" content="2026-07-14T08:47:15+08:00">
-	<meta itemprop="wordCount" content="4267">
+	<meta itemprop="wordCount" content="4569">
 	<meta itemprop="keywords" content="C#,WPF,MVVM,网络管理,源码剖析"><meta property="og:url" content="http://localhost:1313/networkmanager%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/">
 	<meta property="og:site_name" content="东尼的博客">
 	<meta property="og:title" content="NETworkManager源码剖析：一个网络管理工具的实现细节">
@@ -43,7 +43,7 @@
     "mainEntityOfPage": {
       "@type": "WebPage",
       "@id": "http:\/\/localhost:1313\/networkmanager%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90\/"
-    },"genre": "posts","keywords": "C#, WPF, MVVM, 网络管理, 源码剖析","wordcount":  4267 ,
+    },"genre": "posts","keywords": "C#, WPF, MVVM, 网络管理, 源码剖析","wordcount":  4569 ,
     "url": "http:\/\/localhost:1313\/networkmanager%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90\/","datePublished": "2026-07-14T08:47:15+08:00","dateModified": "2026-07-14T08:47:15+08:00","publisher": {
       "@type": "Organization",
       "name": ""},"author": {
@@ -130,7 +130,7 @@
               <a href="/requests%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="Requests源码剖析：优雅发送HTTP请求实现原理">Requests源码剖析：优雅发送HTTP请求实现原理</a></li><li class="related-item">
               <a href="/hugo%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="Hugo源码剖析：世界最快静态站点生成器的实现原理">Hugo源码剖析：世界最快静态站点生成器的实现原理</a></li><li class="related-item">
               <a href="/redis%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="Redis源码剖析：一个高性能服务器的设计哲学">Redis源码剖析：一个高性能服务器的设计哲学</a></li><li class="related-item">
-              <a href="/leveldb%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="LevelDB源码剖析：Google如何设计一个高性能嵌入式数据库">LevelDB源码剖析：Google如何设计一个高性能嵌入式数据库</a></li><li class="related-item">
+              <a href="/leveldb%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="LevelDB源码剖析：如何设计一个高性能嵌入式数据库">LevelDB源码剖析：如何设计一个高性能嵌入式数据库</a></li><li class="related-item">
               <a href="/c%23%E9%AB%98%E6%95%88%E7%BC%96%E7%A8%8B/" title="C#高效编程 改进C#代码的50个行之有效的办法 第2版 (Bill Wagner)">C#高效编程 改进C#代码的50个行之有效的办法 第2版 (Bill Wagner)</a></li><li class="related-item">
               <a href="/shadowsocks%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="Shadowsocks源码剖析：一个轻量级代理工具背后的网络编程设计">Shadowsocks源码剖析：一个轻量级代理工具背后的网络编程设计</a></li><li class="related-item">
               <a href="/node.js%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="Node.js 源码剖析：非阻塞世界的引擎密码">Node.js 源码剖析：非阻塞世界的引擎密码</a></li><li class="related-item">
@@ -145,7 +145,7 @@
   <article class="page single">
     <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span title="转载" class="icon-repost"><i class="fa-solid fa-share" aria-hidden="true"></i></span><span>NETworkManager源码剖析：一个网络管理工具的实现细节</span>
       </h1></div><div class="post-meta">
-      <div class="post-meta-line"><span class="post-author"><a href="https://andyfree96.github.io/" title="作者" target="_blank" rel="author external nofollow noopener noreferrer" class="author"><img class="avatar" src='/avatar/1.jpg' alt="AndyFree96" height="16" width="16">&nbsp;AndyFree96</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" class="post-category" title="分类 - 源码剖析"><i class="fa-regular fa-folder" aria-hidden="true"></i> 源码剖析</a></span></div><div class="post-meta-line"><span title="发布于 2026-07-14 08:47:15"><i class="fa-solid fa-calendar-days me-1" aria-hidden="true"></i><time datetime="2026-07-14">2026-07-14</time></span>&nbsp;<span title="4267 字"><i class="fa-solid fa-pencil-alt me-1" aria-hidden="true"></i>约 4300 字</span>&nbsp;<span><i class="fa-regular fa-clock me-1" aria-hidden="true"></i>预计阅读 9 分钟</span>&nbsp;</div>
+      <div class="post-meta-line"><span class="post-author"><a href="https://andyfree96.github.io/" title="作者" target="_blank" rel="author external nofollow noopener noreferrer" class="author"><img class="avatar" src='/avatar/1.jpg' alt="AndyFree96" height="16" width="16">&nbsp;AndyFree96</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" class="post-category" title="分类 - 源码剖析"><i class="fa-regular fa-folder" aria-hidden="true"></i> 源码剖析</a></span></div><div class="post-meta-line"><span title="发布于 2026-07-14 08:47:15"><i class="fa-solid fa-calendar-days me-1" aria-hidden="true"></i><time datetime="2026-07-14">2026-07-14</time></span>&nbsp;<span title="4569 字"><i class="fa-solid fa-pencil-alt me-1" aria-hidden="true"></i>约 4600 字</span>&nbsp;<span><i class="fa-regular fa-clock me-1" aria-hidden="true"></i>预计阅读 10 分钟</span>&nbsp;</div>
     </div><div class="featured-image"><img loading="eager" src='/images/202607/15/maverick-frame-GswoB8XDnBc-unsplash.jpg' sizes="(max-width: 680px) 100vw, (max-width: 960px) 80vw, (max-width: 1440px) 56vw, 800px" alt="/images/202607/15/maverick-frame-GswoB8XDnBc-unsplash.jpg"></div><div class="details toc" id="toc-static" data-kept="false">
         <div class="details-summary toc-title">
           <span>目录</span>
@@ -960,7 +960,110 @@
   <a href="#7-%e8%bd%af%e4%bb%b6%e5%a6%82%e4%bd%95%e5%ae%9e%e7%8e%b0%e8%87%aa%e5%8a%a8%e6%9b%b4%e6%96%b0" class="heading-mark">
     <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
   </a>
-</h2><h2 class="heading-element" id="番外"><span>番外</span>
+</h2><p><code>MainWindow.xaml.cs</code>中定义了一个<code>CheckForUpdates</code>函数用于检测软件是否要更新：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-c#"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="2" style="--fi-max-shown-lines:400;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c#" data-lang="c#"><span class="line"><span class="cl"><span class="kd">private</span> <span class="k">void</span> <span class="n">CheckForUpdates</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">var</span> <span class="n">updater</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Updater</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">updater</span><span class="p">.</span><span class="n">UpdateAvailable</span> <span class="p">+=</span> <span class="n">Updater_UpdateAvailable</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">updater</span><span class="p">.</span><span class="n">CheckOnGitHub</span><span class="p">(</span><span class="n">Properties</span><span class="p">.</span><span class="n">Resources</span><span class="p">.</span><span class="n">NETworkManager_GitHub_User</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="n">Properties</span><span class="p">.</span><span class="n">Resources</span><span class="p">.</span><span class="n">NETworkManager_GitHub_Repo</span><span class="p">,</span> <span class="n">AssemblyManager</span><span class="p">.</span><span class="n">Current</span><span class="p">.</span><span class="n">Version</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="n">SettingsManager</span><span class="p">.</span><span class="n">Current</span><span class="p">.</span><span class="n">Update_CheckForPreReleases</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>主要逻辑就是比较当前版本与Github Release最新版本，如果更低则说明要更新，具体逻辑如下：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-c#"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="2" style="--fi-max-shown-lines:400;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c#" data-lang="c#"><span class="line"><span class="cl">    <span class="kd">public</span> <span class="k">void</span> <span class="n">CheckOnGitHub</span><span class="p">(</span><span class="kt">string</span> <span class="n">userName</span><span class="p">,</span> <span class="kt">string</span> <span class="n">projectName</span><span class="p">,</span> <span class="n">Version</span> <span class="n">currentVersion</span><span class="p">,</span> <span class="kt">bool</span> <span class="n">includePreRelease</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">Task</span><span class="p">.</span><span class="n">Run</span><span class="p">(()</span> <span class="p">=&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">try</span>
+</span></span><span class="line"><span class="cl">            <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">Log</span><span class="p">.</span><span class="n">Info</span><span class="p">(</span><span class="s">&#34;Checking for new version on GitHub...&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">                <span class="c1">// Create GitHub client</span>
+</span></span><span class="line"><span class="cl">                <span class="kt">var</span> <span class="n">client</span> <span class="p">=</span> <span class="k">new</span> <span class="n">GitHubClient</span><span class="p">(</span><span class="k">new</span> <span class="n">ProductHeaderValue</span><span class="p">(</span><span class="n">userName</span> <span class="p">+</span> <span class="s">&#34;_&#34;</span> <span class="p">+</span> <span class="n">projectName</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">                <span class="c1">// Get latest or pre-release version</span>
+</span></span><span class="line"><span class="cl">                <span class="kt">var</span> <span class="n">release</span> <span class="p">=</span> <span class="n">includePreRelease</span>
+</span></span><span class="line"><span class="cl">                    <span class="p">?</span> <span class="n">client</span><span class="p">.</span><span class="n">Repository</span><span class="p">.</span><span class="n">Release</span><span class="p">.</span><span class="n">GetAll</span><span class="p">(</span><span class="n">userName</span><span class="p">,</span> <span class="n">projectName</span><span class="p">).</span><span class="n">Result</span><span class="p">[</span><span class="m">0</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">                    <span class="p">:</span> <span class="n">client</span><span class="p">.</span><span class="n">Repository</span><span class="p">.</span><span class="n">Release</span><span class="p">.</span><span class="n">GetLatest</span><span class="p">(</span><span class="n">userName</span><span class="p">,</span> <span class="n">projectName</span><span class="p">).</span><span class="n">Result</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">                <span class="c1">// Compare versions (tag=2021.2.15.0, version=2021.2.15.0)</span>
+</span></span><span class="line"><span class="cl">                <span class="k">if</span> <span class="p">(</span><span class="k">new</span> <span class="n">Version</span><span class="p">(</span><span class="n">release</span><span class="p">.</span><span class="n">TagName</span><span class="p">)</span> <span class="p">&gt;</span> <span class="n">currentVersion</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">                <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                    <span class="n">Log</span><span class="p">.</span><span class="n">Info</span><span class="p">(</span><span class="s">$&#34;Version \&#34;</span><span class="p">{</span><span class="n">release</span><span class="p">.</span><span class="n">TagName</span><span class="p">}</span><span class="err">\</span><span class="s">&#34; is available!&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                    <span class="n">OnUpdateAvailable</span><span class="p">(</span><span class="k">new</span> <span class="n">UpdateAvailableArgs</span><span class="p">(</span><span class="n">release</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">                <span class="p">}</span>
+</span></span><span class="line"><span class="cl">                <span class="k">else</span>
+</span></span><span class="line"><span class="cl">                <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                    <span class="n">Log</span><span class="p">.</span><span class="n">Info</span><span class="p">(</span><span class="s">&#34;No newer version found!&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                    <span class="n">OnNoUpdateAvailable</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">                <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="k">catch</span> <span class="p">(</span><span class="n">Exception</span> <span class="n">ex</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">Log</span><span class="p">.</span><span class="n">Error</span><span class="p">(</span><span class="s">&#34;Error while checking for new version on GitHub!&#34;</span><span class="p">,</span> <span class="n">ex</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                <span class="n">OnError</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="p">});</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>为了获取Github上最新Release版本，使用了一个名为<a href="https://github.com/octokit/octokit.net" target="_blank" rel="external nofollow noopener noreferrer">Octokit<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>的三方库。</p>
+<h2 class="heading-element" id="番外"><span>番外</span>
   <a href="#%e7%95%aa%e5%a4%96" class="heading-mark">
     <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
   </a>
@@ -976,7 +1079,7 @@
           <a href="/requests%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="Requests源码剖析：优雅发送HTTP请求实现原理">Requests源码剖析：优雅发送HTTP请求实现原理</a></li><li>
           <a href="/hugo%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="Hugo源码剖析：世界最快静态站点生成器的实现原理">Hugo源码剖析：世界最快静态站点生成器的实现原理</a></li><li>
           <a href="/redis%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="Redis源码剖析：一个高性能服务器的设计哲学">Redis源码剖析：一个高性能服务器的设计哲学</a></li><li>
-          <a href="/leveldb%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="LevelDB源码剖析：Google如何设计一个高性能嵌入式数据库">LevelDB源码剖析：Google如何设计一个高性能嵌入式数据库</a></li><li>
+          <a href="/leveldb%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="LevelDB源码剖析：如何设计一个高性能嵌入式数据库">LevelDB源码剖析：如何设计一个高性能嵌入式数据库</a></li><li>
           <a href="/c%23%E9%AB%98%E6%95%88%E7%BC%96%E7%A8%8B/" title="C#高效编程 改进C#代码的50个行之有效的办法 第2版 (Bill Wagner)">C#高效编程 改进C#代码的50个行之有效的办法 第2版 (Bill Wagner)</a></li><li>
           <a href="/shadowsocks%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="Shadowsocks源码剖析：一个轻量级代理工具背后的网络编程设计">Shadowsocks源码剖析：一个轻量级代理工具背后的网络编程设计</a></li><li>
           <a href="/node.js%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="Node.js 源码剖析：非阻塞世界的引擎密码">Node.js 源码剖析：非阻塞世界的引擎密码</a></li><li>

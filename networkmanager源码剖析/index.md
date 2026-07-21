@@ -404,6 +404,63 @@ _bandwidthMeter.UpdateSpeed += BandwidthMeter_UpdateSpeed;
 
 ## 7. 软件如何实现自动更新？
 
+`MainWindow.xaml.cs`中定义了一个`CheckForUpdates`函数用于检测软件是否要更新：
+
+```c#
+private void CheckForUpdates()
+{
+    var updater = new Updater();
+
+    updater.UpdateAvailable += Updater_UpdateAvailable;
+
+    updater.CheckOnGitHub(Properties.Resources.NETworkManager_GitHub_User,
+        Properties.Resources.NETworkManager_GitHub_Repo, AssemblyManager.Current.Version,
+        SettingsManager.Current.Update_CheckForPreReleases);
+}
+```
+
+主要逻辑就是比较当前版本与Github Release最新版本，如果更低则说明要更新，具体逻辑如下：
+```c#
+    public void CheckOnGitHub(string userName, string projectName, Version currentVersion, bool includePreRelease)
+    {
+        Task.Run(() =>
+        {
+            try
+            {
+                Log.Info("Checking for new version on GitHub...");
+
+                // Create GitHub client
+                var client = new GitHubClient(new ProductHeaderValue(userName + "_" + projectName));
+
+                // Get latest or pre-release version
+                var release = includePreRelease
+                    ? client.Repository.Release.GetAll(userName, projectName).Result[0]
+                    : client.Repository.Release.GetLatest(userName, projectName).Result;
+
+                // Compare versions (tag=2021.2.15.0, version=2021.2.15.0)
+                if (new Version(release.TagName) > currentVersion)
+                {
+                    Log.Info($"Version \"{release.TagName}\" is available!");
+                    OnUpdateAvailable(new UpdateAvailableArgs(release));
+                }
+                else
+                {
+                    Log.Info("No newer version found!");
+                    OnNoUpdateAvailable();
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error("Error while checking for new version on GitHub!", ex);
+                OnError();
+            }
+        });
+    }
+```
+
+为了获取Github上最新Release版本，使用了一个名为[Octokit](https://github.com/octokit/octokit.net)的三方库。
+
+
 ## 番外
 
 ### 1. `.editorconfig`是什么？
