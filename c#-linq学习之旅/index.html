@@ -1,0 +1,963 @@
+<!DOCTYPE html>
+<html itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+    <meta name="robots" content="noodp" />
+    <title>C# LINQ学习之旅：从集合操作到声明式编程 - 东尼的博客</title><meta name="author" content="AndyFree96">
+<meta name="description" content="在C#的发展过程中，有一个非常重要的转折点，那便是从「如何操作数据」转向「描述想要什么数据」。在LINQ出现之前，我们通常需要通过循环、条件判断、临时变量等方式完成数据查询。例如：
+1 2 3 4 5 6 7 8 9 List&lt;User&gt; result = new(); foreach (var user in users) { if (user.Age &gt; 18) { result.Add(user); } } 而LINQ提供了一种完全不同的思考方式：
+1 var result = users.Where(x =&gt; x.Age &gt; 18); 我们不再关注如何遍历集合，而关于我需要哪些数据，这就是LINQ带来的核心变化：从命令式编程(Imperative Programming)转向声明式编程(Declarative Programming)，本文将记录了学习LINQ的过程。
+"><meta name="keywords" content='C#, LINQ, .NET, Lambda表达式, 函数式编程, 声明式编程'>
+	<meta itemprop="name" content="C# LINQ学习之旅：从集合操作到声明式编程">
+	<meta itemprop="description" content="在C#的发展过程中，有一个非常重要的转折点，那便是从「如何操作数据」转向「描述想要什么数据」。在LINQ出现之前，我们通常需要通过循环、条件判断、临时变量等方式完成数据查询。例如：
+1 2 3 4 5 6 7 8 9 List&lt;User&gt; result = new(); foreach (var user in users) { if (user.Age &gt; 18) { result.Add(user); } } 而LINQ提供了一种完全不同的思考方式：
+1 var result = users.Where(x =&gt; x.Age &gt; 18); 我们不再关注如何遍历集合，而关于我需要哪些数据，这就是LINQ带来的核心变化：从命令式编程(Imperative Programming)转向声明式编程(Declarative Programming)，本文将记录了学习LINQ的过程。">
+	<meta itemprop="datePublished" content="2026-07-22T09:52:37+08:00">
+	<meta itemprop="dateModified" content="2026-07-22T09:52:37+08:00">
+	<meta itemprop="wordCount" content="1456">
+	<meta itemprop="keywords" content="C#,LINQ,.NET,Lambda表达式,函数式编程,声明式编程"><meta property="og:url" content="http://localhost:1313/c%23-linq%E5%AD%A6%E4%B9%A0%E4%B9%8B%E6%97%85/">
+	<meta property="og:site_name" content="东尼的博客">
+	<meta property="og:title" content="C# LINQ学习之旅：从集合操作到声明式编程">
+	<meta property="og:description" content="在C#的发展过程中，有一个非常重要的转折点，那便是从「如何操作数据」转向「描述想要什么数据」。在LINQ出现之前，我们通常需要通过循环、条件判断、临时变量等方式完成数据查询。例如：
+1 2 3 4 5 6 7 8 9 List&lt;User&gt; result = new(); foreach (var user in users) { if (user.Age &gt; 18) { result.Add(user); } } 而LINQ提供了一种完全不同的思考方式：
+1 var result = users.Where(x =&gt; x.Age &gt; 18); 我们不再关注如何遍历集合，而关于我需要哪些数据，这就是LINQ带来的核心变化：从命令式编程(Imperative Programming)转向声明式编程(Declarative Programming)，本文将记录了学习LINQ的过程。">
+	<meta property="og:locale" content="zh_CN">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="posts">
+		<meta property="article:published_time" content="2026-07-22T09:52:37+08:00">
+		<meta property="article:modified_time" content="2026-07-22T09:52:37+08:00">
+		<meta property="article:tag" content="C#">
+		<meta property="article:tag" content="LINQ">
+		<meta property="article:tag" content=".NET">
+		<meta property="article:tag" content="Lambda表达式">
+		<meta property="article:tag" content="函数式编程">
+		<meta property="article:tag" content="声明式编程">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="C# LINQ学习之旅：从集合操作到声明式编程">
+  <meta name="twitter:description" content="在C#的发展过程中，有一个非常重要的转折点，那便是从「如何操作数据」转向「描述想要什么数据」。在LINQ出现之前，我们通常需要通过循环、条件判断、临时变量等方式完成数据查询。例如：
+1 2 3 4 5 6 7 8 9 List&lt;User&gt; result = new(); foreach (var user in users) { if (user.Age &gt; 18) { result.Add(user); } } 而LINQ提供了一种完全不同的思考方式：
+1 var result = users.Where(x =&gt; x.Age &gt; 18); 我们不再关注如何遍历集合，而关于我需要哪些数据，这就是LINQ带来的核心变化：从命令式编程(Imperative Programming)转向声明式编程(Declarative Programming)，本文将记录了学习LINQ的过程。"><meta name="twitter:creator" content="@IRONAnthony96"><meta name="application-name" content="FixIt">
+<meta name="apple-mobile-web-app-title" content="FixIt"><meta name="theme-color" data-light="#f6f8fa" data-dark="#151b23" content="#f6f8fa"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" type="text/html" href="http://localhost:1313/c%23-linq%E5%AD%A6%E4%B9%A0%E4%B9%8B%E6%97%85/" title="C# LINQ学习之旅：从集合操作到声明式编程 - 东尼的博客" /><link rel="prev" type="text/html" href="http://localhost:1313/%E4%BB%8Eleveldb%E5%BC%80%E5%A7%8B%E5%AD%A6%E4%B9%A0cmake/" title="从LevelDB CMakeFiles.txt开始学习CMake：C&#43;&#43;项目构建系统入门" /><link rel="next" type="text/html" href="http://localhost:1313/machine-learning-2026-spring/" title="Machine Learning 2026 Spring (李宏毅)" /><link rel="alternate" type="text/markdown" href="http://localhost:1313/c%23-linq%E5%AD%A6%E4%B9%A0%E4%B9%8B%E6%97%85/index.md" title="C# LINQ学习之旅：从集合操作到声明式编程 - 东尼的博客"><link rel="stylesheet" href="/css/config.css"><link rel="stylesheet" href="/css/main.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><link rel="preload" href="/js/main.js" as="script"><script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "BlogPosting",
+    "headline": "C# LINQ学习之旅：从集合操作到声明式编程",
+    "inLanguage": "zh-CN",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "http:\/\/localhost:1313\/c%23-linq%E5%AD%A6%E4%B9%A0%E4%B9%8B%E6%97%85\/"
+    },"genre": "posts","keywords": "C#, LINQ, .NET, Lambda表达式, 函数式编程, 声明式编程","wordcount":  1456 ,
+    "url": "http:\/\/localhost:1313\/c%23-linq%E5%AD%A6%E4%B9%A0%E4%B9%8B%E6%97%85\/","datePublished": "2026-07-22T09:52:37+08:00","dateModified": "2026-07-22T09:52:37+08:00","publisher": {
+      "@type": "Organization",
+      "name": ""},"author": {
+        "@type": "Person",
+        "name": "AndyFree96"
+      },"description": ""
+  }
+  </script><script src="/js/head/color-scheme.js"></script></head>
+  <body data-instant-intensity="viewport" data-header-desktop="sticky" data-header-mobile="auto"><div class="wrapper" data-page-style="normal"><header class="desktop animate__faster" id="header-desktop">
+  <div class="header-wrapper">
+    <div class="header-title">
+      <a href="/" title="东尼的博客" class="header-title-link"><span class="header-title-text">东尼的博客</span></a><span class="header-subtitle"></span></div>
+    <nav>
+      <ul class="menu"><li class="menu-item">
+              <a class="menu-link" href="/posts/">📕 文章</a></li><li class="menu-item">
+              <a class="menu-link" href="/categories/">🧰 分类</a></li><li class="menu-item">
+              <a class="menu-link" href="/tags/">🔖 标签</a></li><li class="menu-item">
+              <a class="menu-link" href="/book">📚 书单</a></li><li class="menu-item">
+              <a class="menu-link" href="/paper">📝 论文</a></li><li class="menu-item">
+              <a class="menu-link" href="/opencourse">👨🏻‍💻 公开课</a></li><li class="menu-item">
+              <a class="menu-link" href="/filmtv">🎞️ 影视</a></li><li class="menu-item">
+              <a class="menu-link" href="/resource">⚡️ 资源库</a></li><li class="menu-item">
+              <a class="menu-link" href="/projects">⭐ 开源</a></li><li class="menu-item">
+              <a class="menu-link" href="/about">🙋🏻‍♂️ 关于</a></li><li class="menu-item delimiter"></li><li class="menu-item search" id="search-desktop">
+            <input type="text" placeholder="搜索文章标题或内容……" id="search-input-desktop" tabindex="-1">
+            <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索" aria-controls="search-dropdown-desktop" aria-expanded="false">
+              <i class="fa-solid fa-search" aria-hidden="true"></i>
+            </a>
+            <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+              <i class="fa-solid fa-times-circle" aria-hidden="true"></i>
+            </a>
+            <span class="search-button search-loading" id="search-loading-desktop">
+              <i class="fa-solid fa-spinner fa-spin" aria-hidden="true"></i>
+            </span>
+          </li><li class="menu-item theme-switch-item">
+          <button type="button" class="theme-switch" aria-label="切换主题" title="切换主题"><i class="fa-solid fa-adjust" aria-hidden="true"></i></button>
+        </li></ul>
+    </nav>
+  </div>
+</header><header class="mobile animate__faster" id="header-mobile">
+  <div class="header-container">
+    <div class="header-wrapper">
+      <div class="header-title">
+        <a href="/" title="东尼的博客" class="header-title-link"><span class="header-title-text">东尼的博客</span></a><span class="header-subtitle"></span></div>
+      <button type="button" class="theme-switch" aria-label="切换主题"><i class="fa-solid fa-adjust" aria-hidden="true"></i></button>
+      <button type="button" class="menu-toggle" id="menu-toggle-mobile" aria-controls="menu-mobile" aria-expanded="false" aria-labelledby="menu-mobile">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <nav>
+      <ul class="menu" id="menu-mobile"><li class="search-wrapper">
+            <div class="search mobile" id="search-mobile">
+              <input type="text" placeholder="搜索文章标题或内容……" id="search-input-mobile">
+              <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索" aria-controls="search-dropdown-mobile" aria-expanded="false">
+                <i class="fa-solid fa-search" aria-hidden="true"></i>
+              </a>
+              <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                <i class="fa-solid fa-times-circle" aria-hidden="true"></i>
+              </a>
+              <span class="search-button search-loading" id="search-loading-mobile">
+                <i class="fa-solid fa-spinner fa-spin" aria-hidden="true"></i>
+              </span>
+            </div>
+            <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+              取消
+            </a>
+          </li><li class="menu-item"><a class="menu-link" href="/posts/">📕 文章</a></li><li class="menu-item"><a class="menu-link" href="/categories/">🧰 分类</a></li><li class="menu-item"><a class="menu-link" href="/tags/">🔖 标签</a></li><li class="menu-item"><a class="menu-link" href="/book">📚 书单</a></li><li class="menu-item"><a class="menu-link" href="/paper">📝 论文</a></li><li class="menu-item"><a class="menu-link" href="/opencourse">👨🏻‍💻 公开课</a></li><li class="menu-item"><a class="menu-link" href="/filmtv">🎞️ 影视</a></li><li class="menu-item"><a class="menu-link" href="/resource">⚡️ 资源库</a></li><li class="menu-item"><a class="menu-link" href="/projects">⭐ 开源</a></li><li class="menu-item"><a class="menu-link" href="/about">🙋🏻‍♂️ 关于</a></li><li class="menu-item menu-system"></li>
+      </ul>
+    </nav>
+  </div>
+</header><div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+  </div>
+  <div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+  </div><main class="fi-container"><aside class="aside-collection animate__animated animate__fadeIn animate__faster" aria-label="合集"><div class="details related-details open">
+      <div class="details-summary related-summary">
+        <i class="fa-solid fa-fire fa-fade text-danger" aria-hidden="true"></i>
+        <span class="related-title">相关内容</span><i class="details-icon fa-solid fa-angle-right" aria-hidden="true"></i></div>
+      <div class="details-content related-content">
+        <ul class="related-list"><li class="related-item">
+              <a href="/design-patterns-in-csharp-and-dotnet/" title="Design Patterns in C# and .NET (Dmitri Nesteruk)">Design Patterns in C# and .NET (Dmitri Nesteruk)</a></li><li class="related-item">
+              <a href="/%E6%B7%B1%E5%85%A5system.net.networkinformation%E8%8E%B7%E5%8F%96%E7%B3%BB%E7%BB%9F%E7%BD%91%E7%BB%9C%E4%BF%A1%E6%81%AF/" title="C#编程实践(一)：深入System.Net.NetworkInformation获取系统网络信息">C#编程实践(一)：深入System.Net.NetworkInformation获取系统网络信息</a></li><li class="related-item">
+              <a href="/dotnetty%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="DotNetty源码剖析：高性能网络框架的秘密">DotNetty源码剖析：高性能网络框架的秘密</a></li><li class="related-item">
+              <a href="/modbus%E5%8D%8F%E8%AE%AE%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E5%AE%9E%E6%88%98/" title="C#编程实践(三)：Modbus协议从入门到实战">C#编程实践(三)：Modbus协议从入门到实战</a></li><li class="related-item">
+              <a href="/%E4%BB%8Eserialport%E5%88%B0%E5%B7%A5%E4%B8%9A%E7%BA%A7%E9%80%9A%E4%BF%A1%E6%A1%86%E6%9E%B6%E8%AE%BE%E8%AE%A1/" title="C#编程实践(二)：从SerialPort到工业级通信框架设计">C#编程实践(二)：从SerialPort到工业级通信框架设计</a></li><li class="related-item">
+              <a href="/shadowsocks-windows%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="shadowsocks-windows源码剖析：一个C#网络代理客户端是如何工作的？">shadowsocks-windows源码剖析：一个C#网络代理客户端是如何工作的？</a></li><li class="related-item">
+              <a href="/networkmanager%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="NETworkManager源码剖析：一个网络管理工具的实现细节">NETworkManager源码剖析：一个网络管理工具的实现细节</a></li><li class="related-item">
+              <a href="/%E6%B5%81%E7%95%85%E7%9A%84python/" title="流畅的Python 第2版 (Luciano Ramalho)">流畅的Python 第2版 (Luciano Ramalho)</a></li><li class="related-item">
+              <a href="/c%23%E9%AB%98%E6%95%88%E7%BC%96%E7%A8%8B/" title="C#高效编程 改进C#代码的50个行之有效的办法 第2版 (Bill Wagner)">C#高效编程 改进C#代码的50个行之有效的办法 第2版 (Bill Wagner)</a></li><li class="related-item">
+              <a href="/downloader%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="Downloader源码剖析：一个下载器的实现原理">Downloader源码剖析：一个下载器的实现原理</a></li><li class="related-item">
+              <a href="/c%23%E4%B8%AD%E7%9A%84nameof%E8%BF%90%E7%AE%97%E7%AC%A6/" title="C#中的nameof运算符">C#中的nameof运算符</a></li></ul>
+      </div>
+    </div></aside>
+
+  <article class="page single">
+    <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span title="转载" class="icon-repost"><i class="fa-solid fa-share" aria-hidden="true"></i></span><span>C# LINQ学习之旅：从集合操作到声明式编程</span>
+      </h1></div><div class="post-meta">
+      <div class="post-meta-line"><span class="post-author"><a href="https://andyfree96.github.io/" title="作者" target="_blank" rel="author external nofollow noopener noreferrer" class="author"><img class="avatar" src='/avatar/1.jpg' alt="AndyFree96" height="16" width="16">&nbsp;AndyFree96</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/c%23/" class="post-category" title="分类 - C#"><i class="fa-regular fa-folder" aria-hidden="true"></i> C#</a></span></div><div class="post-meta-line"><span title="发布于 2026-07-22 09:52:37"><i class="fa-solid fa-calendar-days me-1" aria-hidden="true"></i><time datetime="2026-07-22">2026-07-22</time></span>&nbsp;<span title="1456 字"><i class="fa-solid fa-pencil-alt me-1" aria-hidden="true"></i>约 1500 字</span>&nbsp;<span><i class="fa-regular fa-clock me-1" aria-hidden="true"></i>预计阅读 3 分钟</span>&nbsp;</div>
+    </div><div class="featured-image"><img loading="eager" src='/images/202607/32/the-metropolitan-museum-of-art-mlDDrItkUrE-unsplash.jpg' sizes="(max-width: 680px) 100vw, (max-width: 960px) 80vw, (max-width: 1440px) 56vw, 800px" alt="/images/202607/32/the-metropolitan-museum-of-art-mlDDrItkUrE-unsplash.jpg"></div><div class="details toc" id="toc-static" data-kept="false">
+        <div class="details-summary toc-title">
+          <span>目录</span>
+          <span><i class="details-icon fa-solid fa-angle-right" aria-hidden="true"></i></span>
+        </div>
+        <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#为什么需要linq">为什么需要LINQ？</a></li>
+    <li><a href="#什么是linq">什么是LINQ？</a></li>
+    <li><a href="#linq的两种写法">LINQ的两种写法</a>
+      <ul>
+        <li><a href="#查询表达式">查询表达式</a></li>
+        <li><a href="#方法语法">方法语法</a></li>
+      </ul>
+    </li>
+    <li><a href="#linq的核心扩展方法--lambda表达式">LINQ的核心：扩展方法 + Lambda表达式</a>
+      <ul>
+        <li><a href="#扩展方法">扩展方法</a></li>
+        <li><a href="#lambda表达式">Lambda表达式</a></li>
+      </ul>
+    </li>
+    <li><a href="#linq常用操作分类">LINQ常用操作分类</a>
+      <ul>
+        <li><a href="#filter-过滤">Filter 过滤</a></li>
+        <li><a href="#projection-投影转换">Projection 投影/转换</a></li>
+        <li><a href="#sorting-排序">Sorting 排序</a></li>
+        <li><a href="#grouping-分组">Grouping 分组</a></li>
+        <li><a href="#joining-连接">Joining 连接</a></li>
+        <li><a href="#set-operations-集合操作">Set Operations 集合操作</a></li>
+        <li><a href="#element-operations-元素获取">Element Operations 元素获取</a></li>
+        <li><a href="#quantifier-operations-条件判断">Quantifier Operations 条件判断</a></li>
+        <li><a href="#aggregation-聚合统计">Aggregation 聚合统计</a></li>
+        <li><a href="#partitioning-分页截取">Partitioning 分页/截取</a></li>
+        <li><a href="#generation-生成">Generation 生成</a></li>
+        <li><a href="#conversion-转换">Conversion 转换</a></li>
+        <li><a href="#equality-operations-序列比较">Equality Operations 序列比较</a></li>
+        <li><a href="#concatenation-连接">Concatenation 连接</a></li>
+      </ul>
+    </li>
+    <li><a href="#推荐">推荐</a></li>
+    <li><a href="#参考">参考</a></li>
+  </ul>
+</nav></div>
+      </div><div class="content" id="content"><p>在C#的发展过程中，有一个非常重要的转折点，那便是从「如何操作数据」转向「描述想要什么数据」。在LINQ出现之前，我们通常需要通过循环、条件判断、临时变量等方式完成数据查询。例如：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-c#"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c#" data-lang="c#"><span class="line"><span class="cl"><span class="n">List</span><span class="p">&lt;</span><span class="n">User</span><span class="p">&gt;</span> <span class="n">result</span> <span class="p">=</span> <span class="k">new</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">foreach</span> <span class="p">(</span><span class="kt">var</span> <span class="n">user</span> <span class="k">in</span> <span class="n">users</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">user</span><span class="p">.</span><span class="n">Age</span> <span class="p">&gt;</span> <span class="m">18</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">result</span><span class="p">.</span><span class="n">Add</span><span class="p">(</span><span class="n">user</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>而LINQ提供了一种完全不同的思考方式：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-c#"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c#" data-lang="c#"><span class="line"><span class="cl"><span class="kt">var</span> <span class="n">result</span> <span class="p">=</span> <span class="n">users</span><span class="p">.</span><span class="n">Where</span><span class="p">(</span><span class="n">x</span> <span class="p">=&gt;</span> <span class="n">x</span><span class="p">.</span><span class="n">Age</span> <span class="p">&gt;</span> <span class="m">18</span><span class="p">);</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>我们不再关注如何遍历集合，而关于我需要哪些数据，这就是LINQ带来的核心变化：从<strong>命令式编程(Imperative Programming)<strong>转向</strong>声明式编程(Declarative Programming)</strong>，本文将记录了学习LINQ的过程。</p>
+<h2 class="heading-element" id="为什么需要linq"><span>为什么需要LINQ？</span>
+  <a href="#%e4%b8%ba%e4%bb%80%e4%b9%88%e9%9c%80%e8%a6%81linq" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>传统C#开发中，不同数据源有不同的操作方式：</p>
+<div class="table-wrapper">
+  <table>
+    <thead>
+        <tr>
+            <th style="text-align: left">数据源</th>
+            <th style="text-align: left">查询方式</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td style="text-align: left">内存集合</td>
+            <td style="text-align: left">foreach</td>
+        </tr>
+        <tr>
+            <td style="text-align: left">SQL数据库</td>
+            <td style="text-align: left">SQL</td>
+        </tr>
+        <tr>
+            <td style="text-align: left">XML</td>
+            <td style="text-align: left">XPath</td>
+        </tr>
+        <tr>
+            <td style="text-align: left">对象模型</td>
+            <td style="text-align: left">方法调用</td>
+        </tr>
+    </tbody>
+  </table>
+</div><p>LINQ的出现统一了数据查询方式。</p>
+<p><figure><img loading="lazy" src='/images/202607/32/LINQContentImage-1024x663.png' alt="图1 不同数据源都支持LINQ"><figcaption class="image-caption">图1 不同数据源都支持LINQ</figcaption>
+  </figure></p>
+<h2 class="heading-element" id="什么是linq"><span>什么是LINQ？</span>
+  <a href="#%e4%bb%80%e4%b9%88%e6%98%aflinq" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>LINQ(Language Integrated Query，语言集成查询)，它不是一个单独的库，而是一组语言特性和标准查询操作。</p>
+<h2 class="heading-element" id="linq的两种写法"><span>LINQ的两种写法</span>
+  <a href="#linq%e7%9a%84%e4%b8%a4%e7%a7%8d%e5%86%99%e6%b3%95" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>LINQ提供两种语法—— <strong>查询表达式(Query Syntax)</strong> 和 <strong>方法语法(Method Syntax)</strong>。</p>
+<h3 class="heading-element" id="查询表达式"><span>查询表达式</span>
+  <a href="#%e6%9f%a5%e8%af%a2%e8%a1%a8%e8%be%be%e5%bc%8f" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p>类似SQL：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-c#"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c#" data-lang="c#"><span class="line"><span class="cl"><span class="kt">var</span> <span class="n">result</span> <span class="p">=</span> <span class="k">from</span> <span class="n">user</span> <span class="k">in</span> <span class="n">users</span> <span class="k">where</span> <span class="n">user</span><span class="p">.</span><span class="n">age</span> <span class="p">&gt;</span> <span class="m">18</span> <span class="k">select</span> <span class="n">user</span><span class="p">;</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>优点是接近SQL，对复杂查询比较直观。缺点是功能有限，最终还是转换成方法调用。</p>
+<h3 class="heading-element" id="方法语法"><span>方法语法</span>
+  <a href="#%e6%96%b9%e6%b3%95%e8%af%ad%e6%b3%95" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-c#"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c#" data-lang="c#"><span class="line"><span class="cl"><span class="kt">var</span> <span class="n">result</span> <span class="p">=</span> <span class="n">users</span><span class="p">.</span><span class="n">Where</span><span class="p">(</span><span class="n">user</span> <span class="p">=&gt;</span> <span class="n">user</span><span class="p">.</span><span class="n">age</span> <span class="p">&gt;</span> <span class="m">18</span><span class="p">).</span><span class="n">Select</span><span class="p">(</span><span class="n">user</span> <span class="p">=&gt;</span> <span class="n">user</span><span class="p">.</span><span class="n">Name</span><span class="p">);</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>LINQ查询表达式只是方法的语法糖。</p>
+<h2 class="heading-element" id="linq的核心扩展方法--lambda表达式"><span>LINQ的核心：扩展方法 + Lambda表达式</span>
+  <a href="#linq%e7%9a%84%e6%a0%b8%e5%bf%83%e6%89%a9%e5%b1%95%e6%96%b9%e6%b3%95--lambda%e8%a1%a8%e8%be%be%e5%bc%8f" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>LINQ的核心是扩展方法(Extension Method)和Lambda表达式(Lambda Expression)这两个语言特性的结合。</p>
+<h3 class="heading-element" id="扩展方法"><span>扩展方法</span>
+  <a href="#%e6%89%a9%e5%b1%95%e6%96%b9%e6%b3%95" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p>例如：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-c#"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c#" data-lang="c#"><span class="line"><span class="cl"><span class="kd">public</span> <span class="kd">static</span> <span class="n">IEnumerable</span><span class="p">&lt;</span><span class="n">T</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="n">Where</span><span class="p">&lt;</span><span class="n">T</span><span class="p">&gt;(</span>
+</span></span><span class="line"><span class="cl">    <span class="k">this</span> <span class="n">IEnumerable</span><span class="p">&lt;</span><span class="n">T</span><span class="p">&gt;</span> <span class="n">source</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Func</span><span class="p">&lt;</span><span class="n">T</span><span class="p">,</span><span class="kt">bool</span><span class="p">&gt;</span> <span class="n">predicate</span><span class="p">)</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>所以<code>users.Where(...)</code>，实际上是<code>Enumerable.Where(users, ...)</code>。</p>
+<h3 class="heading-element" id="lambda表达式"><span>Lambda表达式</span>
+  <a href="#lambda%e8%a1%a8%e8%be%be%e5%bc%8f" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p>例如：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-c#"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c#" data-lang="c#"><span class="line"><span class="cl"><span class="n">x</span> <span class="p">=&gt;</span> <span class="n">x</span><span class="p">.</span><span class="n">Age</span> <span class="p">&gt;</span> <span class="m">18</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>等价：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-c#"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c#" data-lang="c#"><span class="line"><span class="cl"><span class="kt">bool</span> <span class="n">Check</span><span class="p">(</span><span class="n">User</span> <span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="k">return</span> <span class="n">x</span><span class="p">.</span><span class="n">Age</span> <span class="p">&gt;</span> <span class="m">18</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>所以<code>user.Where(x =&gt; x.Age &gt; 18)</code>本质上是把一个判断函数传递给<code>Where</code>。</p>
+<h2 class="heading-element" id="linq常用操作分类"><span>LINQ常用操作分类</span>
+  <a href="#linq%e5%b8%b8%e7%94%a8%e6%93%8d%e4%bd%9c%e5%88%86%e7%b1%bb" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><h3 class="heading-element" id="filter-过滤"><span>Filter 过滤</span>
+  <a href="#filter-%e8%bf%87%e6%bb%a4" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><div class="table-wrapper">
+  <table>
+    <thead>
+        <tr>
+            <th style="text-align: left">方法</th>
+            <th style="text-align: left">说明</th>
+            <th style="text-align: left">示例</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td style="text-align: left"><code>Where</code></td>
+            <td style="text-align: left">根据条件过滤元素</td>
+            <td style="text-align: left"><code>users.Where(x =&gt; x.Age &gt; 18)</code></td>
+        </tr>
+        <tr>
+            <td style="text-align: left"><code>OfType&lt;T&gt;</code></td>
+            <td style="text-align: left">按类型过滤</td>
+            <td style="text-align: left"><code>objects.OfType&lt;string&gt;()</code></td>
+        </tr>
+    </tbody>
+  </table>
+</div><h3 class="heading-element" id="projection-投影转换"><span>Projection 投影/转换</span>
+  <a href="#projection-%e6%8a%95%e5%bd%b1%e8%bd%ac%e6%8d%a2" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><div class="table-wrapper">
+  <table>
+    <thead>
+        <tr>
+            <th style="text-align: left">方法</th>
+            <th style="text-align: left">说明</th>
+            <th style="text-align: left">示例</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td style="text-align: left"><code>Select</code></td>
+            <td style="text-align: left">一对一转换</td>
+            <td style="text-align: left"><code>users.Select(x =&gt; x.Name)</code></td>
+        </tr>
+        <tr>
+            <td style="text-align: left"><code>SelectMany</code></td>
+            <td style="text-align: left">展开嵌套集合（一对多转换）</td>
+            <td style="text-align: left"><code>users.SelectMany(x =&gt; x.Orders)</code></td>
+        </tr>
+    </tbody>
+  </table>
+</div><h3 class="heading-element" id="sorting-排序"><span>Sorting 排序</span>
+  <a href="#sorting-%e6%8e%92%e5%ba%8f" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><div class="table-wrapper">
+  <table>
+    <thead>
+        <tr>
+            <th style="text-align: left">方法</th>
+            <th style="text-align: left">说明</th>
+            <th style="text-align: left">示例</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td style="text-align: left"><code>OrderBy</code></td>
+            <td style="text-align: left">升序排序</td>
+            <td style="text-align: left"><code>users.OrderBy(x =&gt; x.Age)</code></td>
+        </tr>
+        <tr>
+            <td style="text-align: left"><code>OrderByDescending</code></td>
+            <td style="text-align: left">降序排序</td>
+            <td style="text-align: left"><code>users.OrderByDescending(x =&gt; x.Age)</code></td>
+        </tr>
+        <tr>
+            <td style="text-align: left"><code>ThenBy</code></td>
+            <td style="text-align: left">第二排序条件</td>
+            <td style="text-align: left"><code>.ThenBy(x =&gt; x.Name)</code></td>
+        </tr>
+        <tr>
+            <td style="text-align: left"><code>ThenByDescending</code></td>
+            <td style="text-align: left">第二排序条件降序</td>
+            <td style="text-align: left"><code>.ThenByDescending(x =&gt; x.Score)</code></td>
+        </tr>
+        <tr>
+            <td style="text-align: left"><code>Reverse</code></td>
+            <td style="text-align: left">反转序列</td>
+            <td style="text-align: left"><code>list.Reverse()</code></td>
+        </tr>
+    </tbody>
+  </table>
+</div><h3 class="heading-element" id="grouping-分组"><span>Grouping 分组</span>
+  <a href="#grouping-%e5%88%86%e7%bb%84" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><div class="table-wrapper">
+  <table>
+    <thead>
+        <tr>
+            <th style="text-align: left">方法</th>
+            <th style="text-align: left">说明</th>
+            <th style="text-align: left">示例</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td style="text-align: left"><code>GroupBy</code></td>
+            <td style="text-align: left">根据 Key 分组</td>
+            <td style="text-align: left"><code>users.GroupBy(x =&gt; x.Department)</code></td>
+        </tr>
+        <tr>
+            <td style="text-align: left"><code>ToLookup</code></td>
+            <td style="text-align: left">创建 Key-Value 查询表</td>
+            <td style="text-align: left"><code>users.ToLookup(x =&gt; x.Department)</code></td>
+        </tr>
+    </tbody>
+  </table>
+</div><h3 class="heading-element" id="joining-连接"><span>Joining 连接</span>
+  <a href="#joining-%e8%bf%9e%e6%8e%a5" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><div class="table-wrapper">
+  <table>
+    <thead>
+        <tr>
+            <th style="text-align: left">方法</th>
+            <th style="text-align: left">说明</th>
+            <th style="text-align: left">类似 SQL</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td style="text-align: left"><code>Join</code></td>
+            <td style="text-align: left">内连接两个集合</td>
+            <td style="text-align: left">INNER JOIN</td>
+        </tr>
+        <tr>
+            <td style="text-align: left"><code>GroupJoin</code></td>
+            <td style="text-align: left">分组连接</td>
+            <td style="text-align: left">LEFT JOIN + GROUP</td>
+        </tr>
+        <tr>
+            <td style="text-align: left"><code>Zip</code></td>
+            <td style="text-align: left">按位置合并两个集合</td>
+            <td style="text-align: left">-</td>
+        </tr>
+    </tbody>
+  </table>
+</div><h3 class="heading-element" id="set-operations-集合操作"><span>Set Operations 集合操作</span>
+  <a href="#set-operations-%e9%9b%86%e5%90%88%e6%93%8d%e4%bd%9c" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><div class="table-wrapper">
+  <table>
+    <thead>
+        <tr>
+            <th style="text-align: left">方法</th>
+            <th style="text-align: left">说明</th>
+            <th style="text-align: left">示例</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td style="text-align: left"><code>Distinct</code></td>
+            <td style="text-align: left">去重</td>
+            <td style="text-align: left"><code>numbers.Distinct()</code></td>
+        </tr>
+        <tr>
+            <td style="text-align: left"><code>Union</code></td>
+            <td style="text-align: left">并集（去重）</td>
+            <td style="text-align: left"><code>a.Union(b)</code></td>
+        </tr>
+        <tr>
+            <td style="text-align: left"><code>Intersect</code></td>
+            <td style="text-align: left">交集</td>
+            <td style="text-align: left"><code>a.Intersect(b)</code></td>
+        </tr>
+        <tr>
+            <td style="text-align: left"><code>Except</code></td>
+            <td style="text-align: left">差集</td>
+            <td style="text-align: left"><code>a.Except(b)</code></td>
+        </tr>
+    </tbody>
+  </table>
+</div><h3 class="heading-element" id="element-operations-元素获取"><span>Element Operations 元素获取</span>
+  <a href="#element-operations-%e5%85%83%e7%b4%a0%e8%8e%b7%e5%8f%96" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><div class="table-wrapper">
+  <table>
+    <thead>
+        <tr>
+            <th style="text-align: left">方法</th>
+            <th style="text-align: left">说明</th>
+            <th style="text-align: left">无结果行为</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td style="text-align: left"><code>First</code></td>
+            <td style="text-align: left">获取第一个元素</td>
+            <td style="text-align: left">抛异常</td>
+        </tr>
+        <tr>
+            <td style="text-align: left"><code>FirstOrDefault</code></td>
+            <td style="text-align: left">获取第一个元素</td>
+            <td style="text-align: left">返回默认值</td>
+        </tr>
+        <tr>
+            <td style="text-align: left"><code>Last</code></td>
+            <td style="text-align: left">获取最后元素</td>
+            <td style="text-align: left">抛异常</td>
+        </tr>
+        <tr>
+            <td style="text-align: left"><code>LastOrDefault</code></td>
+            <td style="text-align: left">获取最后元素</td>
+            <td style="text-align: left">返回默认值</td>
+        </tr>
+        <tr>
+            <td style="text-align: left"><code>Single</code></td>
+            <td style="text-align: left">获取唯一元素</td>
+            <td style="text-align: left">0个或多个异常</td>
+        </tr>
+        <tr>
+            <td style="text-align: left"><code>SingleOrDefault</code></td>
+            <td style="text-align: left">获取唯一元素</td>
+            <td style="text-align: left">返回默认值</td>
+        </tr>
+        <tr>
+            <td style="text-align: left"><code>ElementAt</code></td>
+            <td style="text-align: left">根据索引获取</td>
+            <td style="text-align: left">越界异常</td>
+        </tr>
+        <tr>
+            <td style="text-align: left"><code>ElementAtOrDefault</code></td>
+            <td style="text-align: left">根据索引获取</td>
+            <td style="text-align: left">返回默认值</td>
+        </tr>
+        <tr>
+            <td style="text-align: left"><code>DefaultIfEmpty</code></td>
+            <td style="text-align: left">空集合提供默认值</td>
+            <td style="text-align: left">-</td>
+        </tr>
+    </tbody>
+  </table>
+</div><h3 class="heading-element" id="quantifier-operations-条件判断"><span>Quantifier Operations 条件判断</span>
+  <a href="#quantifier-operations-%e6%9d%a1%e4%bb%b6%e5%88%a4%e6%96%ad" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><div class="table-wrapper">
+  <table>
+    <thead>
+        <tr>
+            <th style="text-align: left">方法</th>
+            <th style="text-align: left">说明</th>
+            <th style="text-align: left">示例</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td style="text-align: left"><code>Any</code></td>
+            <td style="text-align: left">是否存在满足条件的数据</td>
+            <td style="text-align: left"><code>users.Any(x=&gt;x.Age&gt;18)</code></td>
+        </tr>
+        <tr>
+            <td style="text-align: left"><code>All</code></td>
+            <td style="text-align: left">是否全部满足条件</td>
+            <td style="text-align: left"><code>users.All(x=&gt;x.Active)</code></td>
+        </tr>
+        <tr>
+            <td style="text-align: left"><code>Contains</code></td>
+            <td style="text-align: left">是否包含元素</td>
+            <td style="text-align: left"><code>list.Contains(id)</code></td>
+        </tr>
+    </tbody>
+  </table>
+</div><h3 class="heading-element" id="aggregation-聚合统计"><span>Aggregation 聚合统计</span>
+  <a href="#aggregation-%e8%81%9a%e5%90%88%e7%bb%9f%e8%ae%a1" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><div class="table-wrapper">
+  <table>
+    <thead>
+        <tr>
+            <th style="text-align: left">方法</th>
+            <th style="text-align: left">说明</th>
+            <th style="text-align: left">示例</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td style="text-align: left"><code>Count</code></td>
+            <td style="text-align: left">数量统计</td>
+            <td style="text-align: left"><code>users.Count()</code></td>
+        </tr>
+        <tr>
+            <td style="text-align: left"><code>LongCount</code></td>
+            <td style="text-align: left">长整型数量统计</td>
+            <td style="text-align: left"><code>items.LongCount()</code></td>
+        </tr>
+        <tr>
+            <td style="text-align: left"><code>Sum</code></td>
+            <td style="text-align: left">求和</td>
+            <td style="text-align: left"><code>orders.Sum(x=&gt;x.Price)</code></td>
+        </tr>
+        <tr>
+            <td style="text-align: left"><code>Average</code></td>
+            <td style="text-align: left">平均值</td>
+            <td style="text-align: left"><code>scores.Average()</code></td>
+        </tr>
+        <tr>
+            <td style="text-align: left"><code>Min</code></td>
+            <td style="text-align: left">最小值</td>
+            <td style="text-align: left"><code>scores.Min()</code></td>
+        </tr>
+        <tr>
+            <td style="text-align: left"><code>Max</code></td>
+            <td style="text-align: left">最大值</td>
+            <td style="text-align: left"><code>scores.Max()</code></td>
+        </tr>
+        <tr>
+            <td style="text-align: left"><code>Aggregate</code></td>
+            <td style="text-align: left">自定义聚合</td>
+            <td style="text-align: left">字符串拼接</td>
+        </tr>
+    </tbody>
+  </table>
+</div><h3 class="heading-element" id="partitioning-分页截取"><span>Partitioning 分页/截取</span>
+  <a href="#partitioning-%e5%88%86%e9%a1%b5%e6%88%aa%e5%8f%96" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><div class="table-wrapper">
+  <table>
+    <thead>
+        <tr>
+            <th style="text-align: left">方法</th>
+            <th style="text-align: left">说明</th>
+            <th style="text-align: left">示例</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td style="text-align: left"><code>Take</code></td>
+            <td style="text-align: left">获取前 N 个</td>
+            <td style="text-align: left"><code>.Take(10)</code></td>
+        </tr>
+        <tr>
+            <td style="text-align: left"><code>TakeLast</code></td>
+            <td style="text-align: left">获取最后 N 个</td>
+            <td style="text-align: left"><code>.TakeLast(10)</code></td>
+        </tr>
+        <tr>
+            <td style="text-align: left"><code>Skip</code></td>
+            <td style="text-align: left">跳过前 N 个</td>
+            <td style="text-align: left"><code>.Skip(10)</code></td>
+        </tr>
+        <tr>
+            <td style="text-align: left"><code>SkipLast</code></td>
+            <td style="text-align: left">跳过最后 N 个</td>
+            <td style="text-align: left"><code>.SkipLast(10)</code></td>
+        </tr>
+        <tr>
+            <td style="text-align: left"><code>TakeWhile</code></td>
+            <td style="text-align: left">满足条件持续获取</td>
+            <td style="text-align: left"><code>.TakeWhile(x=&gt;x&lt;10)</code></td>
+        </tr>
+        <tr>
+            <td style="text-align: left"><code>SkipWhile</code></td>
+            <td style="text-align: left">满足条件持续跳过</td>
+            <td style="text-align: left"><code>.SkipWhile(x=&gt;x&lt;10)</code></td>
+        </tr>
+    </tbody>
+  </table>
+</div><h3 class="heading-element" id="generation-生成"><span>Generation 生成</span>
+  <a href="#generation-%e7%94%9f%e6%88%90" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><div class="table-wrapper">
+  <table>
+    <thead>
+        <tr>
+            <th style="text-align: left">方法</th>
+            <th style="text-align: left">说明</th>
+            <th style="text-align: left">示例</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td style="text-align: left"><code>Empty&lt;T&gt;</code></td>
+            <td style="text-align: left">创建空集合</td>
+            <td style="text-align: left"><code>Enumerable.Empty&lt;User&gt;()</code></td>
+        </tr>
+        <tr>
+            <td style="text-align: left"><code>Range</code></td>
+            <td style="text-align: left">创建整数序列</td>
+            <td style="text-align: left"><code>Enumerable.Range(1,10)</code></td>
+        </tr>
+        <tr>
+            <td style="text-align: left"><code>Repeat</code></td>
+            <td style="text-align: left">重复生成元素</td>
+            <td style="text-align: left"><code>Enumerable.Repeat(&quot;A&quot;,5)</code></td>
+        </tr>
+    </tbody>
+  </table>
+</div><h3 class="heading-element" id="conversion-转换"><span>Conversion 转换</span>
+  <a href="#conversion-%e8%bd%ac%e6%8d%a2" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><div class="table-wrapper">
+  <table>
+    <thead>
+        <tr>
+            <th style="text-align: left">方法</th>
+            <th style="text-align: left">说明</th>
+            <th style="text-align: left">示例</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td style="text-align: left"><code>ToList</code></td>
+            <td style="text-align: left">转换为 List</td>
+            <td style="text-align: left"><code>.ToList()</code></td>
+        </tr>
+        <tr>
+            <td style="text-align: left"><code>ToArray</code></td>
+            <td style="text-align: left">转换为数组</td>
+            <td style="text-align: left"><code>.ToArray()</code></td>
+        </tr>
+        <tr>
+            <td style="text-align: left"><code>ToDictionary</code></td>
+            <td style="text-align: left">转换为字典</td>
+            <td style="text-align: left"><code>.ToDictionary(x=&gt;x.Id)</code></td>
+        </tr>
+        <tr>
+            <td style="text-align: left"><code>ToHashSet</code></td>
+            <td style="text-align: left">转换为 HashSet</td>
+            <td style="text-align: left"><code>.ToHashSet()</code></td>
+        </tr>
+        <tr>
+            <td style="text-align: left"><code>Cast&lt;T&gt;</code></td>
+            <td style="text-align: left">强制类型转换</td>
+            <td style="text-align: left"><code>.Cast&lt;User&gt;()</code></td>
+        </tr>
+        <tr>
+            <td style="text-align: left"><code>AsEnumerable</code></td>
+            <td style="text-align: left">转换为 IEnumerable</td>
+            <td style="text-align: left"><code>.AsEnumerable()</code></td>
+        </tr>
+        <tr>
+            <td style="text-align: left"><code>AsQueryable</code></td>
+            <td style="text-align: left">转换为 IQueryable</td>
+            <td style="text-align: left"><code>.AsQueryable()</code></td>
+        </tr>
+    </tbody>
+  </table>
+</div><h3 class="heading-element" id="equality-operations-序列比较"><span>Equality Operations 序列比较</span>
+  <a href="#equality-operations-%e5%ba%8f%e5%88%97%e6%af%94%e8%be%83" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><div class="table-wrapper">
+  <table>
+    <thead>
+        <tr>
+            <th style="text-align: left">方法</th>
+            <th style="text-align: left">说明</th>
+            <th style="text-align: left">示例</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td style="text-align: left"><code>SequenceEqual</code></td>
+            <td style="text-align: left">判断两个序列内容是否完全一致</td>
+            <td style="text-align: left"><code>a.SequenceEqual(b)</code></td>
+        </tr>
+    </tbody>
+  </table>
+</div><h3 class="heading-element" id="concatenation-连接"><span>Concatenation 连接</span>
+  <a href="#concatenation-%e8%bf%9e%e6%8e%a5" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><div class="table-wrapper">
+  <table>
+    <thead>
+        <tr>
+            <th style="text-align: left">方法</th>
+            <th style="text-align: left">说明</th>
+            <th style="text-align: left">区别</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td style="text-align: left"><code>Concat</code></td>
+            <td style="text-align: left">连接两个序列</td>
+            <td style="text-align: left">不去重</td>
+        </tr>
+        <tr>
+            <td style="text-align: left"><code>Union</code></td>
+            <td style="text-align: left">合并集合</td>
+            <td style="text-align: left">去重</td>
+        </tr>
+    </tbody>
+  </table>
+</div><h2 class="heading-element" id="推荐"><span>推荐</span>
+  <a href="#%e6%8e%a8%e8%8d%90" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p><a href="https://book.douban.com/subject/3810446/" target="_blank" rel="external nofollow noopener noreferrer">LINQ实战<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></p>
+<h2 class="heading-element" id="参考"><span>参考</span>
+  <a href="#%e5%8f%82%e8%80%83" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p><a href="https://www.csharptutorial.net/csharp-linq/" target="_blank" rel="external nofollow noopener noreferrer">C# LINQ<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></p>
+<p><a href="https://dotnettutorials.net/course/linq/" target="_blank" rel="external nofollow noopener noreferrer">DOTNET Tutorials LINQ<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></p></div><hr class="awesome-hr" />
+    <h2 id="see-also">相关内容</h2>
+    <ul><li>
+          <a href="/design-patterns-in-csharp-and-dotnet/" title="Design Patterns in C# and .NET (Dmitri Nesteruk)">Design Patterns in C# and .NET (Dmitri Nesteruk)</a></li><li>
+          <a href="/%E6%B7%B1%E5%85%A5system.net.networkinformation%E8%8E%B7%E5%8F%96%E7%B3%BB%E7%BB%9F%E7%BD%91%E7%BB%9C%E4%BF%A1%E6%81%AF/" title="C#编程实践(一)：深入System.Net.NetworkInformation获取系统网络信息">C#编程实践(一)：深入System.Net.NetworkInformation获取系统网络信息</a></li><li>
+          <a href="/dotnetty%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="DotNetty源码剖析：高性能网络框架的秘密">DotNetty源码剖析：高性能网络框架的秘密</a></li><li>
+          <a href="/modbus%E5%8D%8F%E8%AE%AE%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E5%AE%9E%E6%88%98/" title="C#编程实践(三)：Modbus协议从入门到实战">C#编程实践(三)：Modbus协议从入门到实战</a></li><li>
+          <a href="/%E4%BB%8Eserialport%E5%88%B0%E5%B7%A5%E4%B8%9A%E7%BA%A7%E9%80%9A%E4%BF%A1%E6%A1%86%E6%9E%B6%E8%AE%BE%E8%AE%A1/" title="C#编程实践(二)：从SerialPort到工业级通信框架设计">C#编程实践(二)：从SerialPort到工业级通信框架设计</a></li><li>
+          <a href="/shadowsocks-windows%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="shadowsocks-windows源码剖析：一个C#网络代理客户端是如何工作的？">shadowsocks-windows源码剖析：一个C#网络代理客户端是如何工作的？</a></li><li>
+          <a href="/networkmanager%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="NETworkManager源码剖析：一个网络管理工具的实现细节">NETworkManager源码剖析：一个网络管理工具的实现细节</a></li><li>
+          <a href="/%E6%B5%81%E7%95%85%E7%9A%84python/" title="流畅的Python 第2版 (Luciano Ramalho)">流畅的Python 第2版 (Luciano Ramalho)</a></li><li>
+          <a href="/c%23%E9%AB%98%E6%95%88%E7%BC%96%E7%A8%8B/" title="C#高效编程 改进C#代码的50个行之有效的办法 第2版 (Bill Wagner)">C#高效编程 改进C#代码的50个行之有效的办法 第2版 (Bill Wagner)</a></li><li>
+          <a href="/downloader%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="Downloader源码剖析：一个下载器的实现原理">Downloader源码剖析：一个下载器的实现原理</a></li><li>
+          <a href="/c%23%E4%B8%AD%E7%9A%84nameof%E8%BF%90%E7%AE%97%E7%AC%A6/" title="C#中的nameof运算符">C#中的nameof运算符</a></li></ul><div class="post-footer" id="post-footer">
+  <div class="post-info">
+    <div class="post-info-line">
+      <div class="post-info-mod"><span title="更新于 2026-07-22 09:52:37">更新于 2026-07-22&nbsp;</span>
+      </div></div><div class="post-info-line">
+        <div class="post-info-md"><span><a href="vscode://file/D:\hugo-blog\andyfree96\content\posts\C#-LINQ学习之旅.md" title="在编辑器中打开" class="link-to-vscode">在编辑器中打开</a></span></div>
+        <div class="post-info-share">
+          <span><a href="javascript:void(0);" title="分享到 X" data-sharer="twitter" data-url="http://localhost:1313/c%23-linq%E5%AD%A6%E4%B9%A0%E4%B9%8B%E6%97%85/" data-title="C# LINQ学习之旅：从集合操作到声明式编程" data-via="IRONAnthony96" data-hashtags="C#,LINQ,.NET,Lambda表达式,函数式编程,声明式编程"><i class="fa-brands fa-x-twitter" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="http://localhost:1313/c%23-linq%E5%AD%A6%E4%B9%A0%E4%B9%8B%E6%97%85/" data-hashtag="C#"><i class="fa-brands fa-facebook-square" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="http://localhost:1313/c%23-linq%E5%AD%A6%E4%B9%A0%E4%B9%8B%E6%97%85/" data-title="C# LINQ学习之旅：从集合操作到声明式编程" data-image="/images/202607/32/the-metropolitan-museum-of-art-mlDDrItkUrE-unsplash.jpg"><i class="fa-brands fa-weibo" aria-hidden="true"></i></a>
+  </span>
+        </div>
+      </div></div>
+
+  <div class="post-info-more">
+    <section class="post-tags"><i class="fa-solid fa-tags me-1" aria-hidden="true"></i><a href="/tags/c%23/" class="post-tag" title="标签 - C#">C#</a><a href="/tags/linq/" class="post-tag" title="标签 - LINQ">LINQ</a><a href="/tags/.net/" class="post-tag" title="标签 - .NET">.NET</a><a href="/tags/lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F/" class="post-tag" title="标签 - Lambda表达式">Lambda表达式</a><a href="/tags/%E5%87%BD%E6%95%B0%E5%BC%8F%E7%BC%96%E7%A8%8B/" class="post-tag" title="标签 - 函数式编程">函数式编程</a><a href="/tags/%E5%A3%B0%E6%98%8E%E5%BC%8F%E7%BC%96%E7%A8%8B/" class="post-tag" title="标签 - 声明式编程">声明式编程</a></section>
+    <section><span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+    </section>
+  </div><div class="post-nav"><a href="/%E4%BB%8Eleveldb%E5%BC%80%E5%A7%8B%E5%AD%A6%E4%B9%A0cmake/" class="post-nav-item" rel="prev" title="从LevelDB CMakeFiles.txt开始学习CMake：C&#43;&#43;项目构建系统入门"><i class="fa-solid fa-angle-left" aria-hidden="true"></i>从LevelDB CMakeFiles.txt开始学习CMake：C&#43;&#43;项目构建系统入门</a><a href="/machine-learning-2026-spring/" class="post-nav-item" rel="next" title="Machine Learning 2026 Spring (李宏毅)">Machine Learning 2026 Spring (李宏毅)<i class="fa-solid fa-angle-right" aria-hidden="true"></i></a></div>
+</div>
+<div class="post-reward">
+    <div class="comment">请作者喝杯咖啡!</div>
+    <input type="checkbox" class="reward-input" name="reward" id="fi-reward" hidden />
+    <label class="reward-button" for="fi-reward"><i class="fa-solid fa-qrcode" aria-hidden="true"></i>赞赏</label>
+    <div class="reward-ways" data-mode="static"><div><img src='/reward/alipay.png' alt="AndyFree96 支付宝"><span data-animation>支付宝</span>
+          </div><div><img src='/reward/wechatpay.png' alt="AndyFree96 微信"><span data-animation>微信</span>
+          </div></div>
+  </div></article>
+
+  <aside class="toc" id="toc-auto" aria-label="目录"><h2 class="toc-title">目录&nbsp;<i class="toc-icon fa-solid fa-angle-down" aria-hidden="true"></i></h2>
+      <div class="toc-content" id="toc-content-auto"></div></aside><dialog id="toc-dialog" aria-labelledby="toc-dialog-title" role="dialog" closedby="any">
+      <button type="button" class="toc-close-btn" aria-label="Close Table of Contents"><i class="fa-solid fa-xmark fa-lg" aria-hidden="true"></i></button>
+      <div class="toc">
+        <h2 class="toc-title" id="toc-dialog-title">目录</h2>
+        <div class="toc-content" id="toc-content-drawer"><nav >
+  <ul>
+    <li><a href="#为什么需要linq">为什么需要LINQ？</a></li>
+    <li><a href="#什么是linq">什么是LINQ？</a></li>
+    <li><a href="#linq的两种写法">LINQ的两种写法</a>
+      <ul>
+        <li><a href="#查询表达式">查询表达式</a></li>
+        <li><a href="#方法语法">方法语法</a></li>
+      </ul>
+    </li>
+    <li><a href="#linq的核心扩展方法--lambda表达式">LINQ的核心：扩展方法 + Lambda表达式</a>
+      <ul>
+        <li><a href="#扩展方法">扩展方法</a></li>
+        <li><a href="#lambda表达式">Lambda表达式</a></li>
+      </ul>
+    </li>
+    <li><a href="#linq常用操作分类">LINQ常用操作分类</a>
+      <ul>
+        <li><a href="#filter-过滤">Filter 过滤</a></li>
+        <li><a href="#projection-投影转换">Projection 投影/转换</a></li>
+        <li><a href="#sorting-排序">Sorting 排序</a></li>
+        <li><a href="#grouping-分组">Grouping 分组</a></li>
+        <li><a href="#joining-连接">Joining 连接</a></li>
+        <li><a href="#set-operations-集合操作">Set Operations 集合操作</a></li>
+        <li><a href="#element-operations-元素获取">Element Operations 元素获取</a></li>
+        <li><a href="#quantifier-operations-条件判断">Quantifier Operations 条件判断</a></li>
+        <li><a href="#aggregation-聚合统计">Aggregation 聚合统计</a></li>
+        <li><a href="#partitioning-分页截取">Partitioning 分页/截取</a></li>
+        <li><a href="#generation-生成">Generation 生成</a></li>
+        <li><a href="#conversion-转换">Conversion 转换</a></li>
+        <li><a href="#equality-operations-序列比较">Equality Operations 序列比较</a></li>
+        <li><a href="#concatenation-连接">Concatenation 连接</a></li>
+      </ul>
+    </li>
+    <li><a href="#推荐">推荐</a></li>
+    <li><a href="#参考">参考</a></li>
+  </ul>
+</nav></div>
+      </div>
+    </dialog></main><footer class="footer">
+    <div class="footer-container"><div class="footer-line powered">由 <a href="https://gohugo.io/" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.163.1">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/hugo-fixit/FixIt" target="_blank" rel="external" title="FixIt v1.0.0-mq99hlzg">FixIt</a>
+        </div><div class="footer-line copyright" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright" aria-hidden="true"></i>
+            <span itemprop="copyrightYear">2019 - 2026</span><span class="author" itemprop="copyrightHolder">
+              <a href="https://andyfree96.github.io/" target="_blank" rel="external nofollow noopener noreferrer">AndyFree96</a></span></div></div>
+  </footer></div><div class="widgets"><div class="fixed-buttons"><button type="button" class="fixed-button back-to-top animate__faster d-none" aria-label="回到顶部"><i class="fa-solid fa-arrow-up" aria-hidden="true"></i></button><button type="button" id="toc-drawer-button" class="fixed-button toc-drawer-button d-none" aria-label="目录" aria-controls="toc-dialog" aria-expanded="false"><i class="fa-solid fa-bars" aria-hidden="true"></i></button></div><div id="mask"></div><div class="reading-progress-bar" style="left: 0;top: 0;"></div><noscript>
+    <div class="noscript-warning">该网站在启用 JavaScript 的情况下效果最佳。</div>
+  </noscript>
+</div><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script src="/lib/autocomplete/autocomplete.min.js" defer></script><script src="/lib/algoliasearch/browser.umd.js" defer></script><script src="/lib/sharer/sharer.min.js" async defer></script><script src="/lib/cookieconsent/cookieconsent.min.js" defer></script><script src="/js/lib/cookieconsent.js" defer></script><script src="/lib/cell-tooltip/cell-tooltip.umd.js" defer></script><script src="/js/config/7f433bc22b7c39b7e9aa3cb6d40b79f7.js" defer></script><script src="/js/lib/file-tree.js" defer></script><script src="/js/main.js" defer></script></body>
+</html>

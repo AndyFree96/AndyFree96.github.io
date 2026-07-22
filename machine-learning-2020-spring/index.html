@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+    <meta name="robots" content="noodp" />
+    <title>Machine Learning 2020 Spring (李宏毅) - 东尼的博客</title><meta name="author" content="AndyFree96">
+<meta name="description" content="人工智能的发展，本质上是一场关于“如何让机器具备学习能力”的探索。从最初基于规则的专家系统，到统计学习方法，再到如今以深度神经网络、大规模预训练模型为代表的人工智能浪潮，机器学习技术不断突破边界。而理解这些技术背后的核心思想，并不仅仅是掌握某个算法或者调用某个框架，更重要的是理解：
+机器究竟是如何从数据中学习规律，并利用这些规律完成预测、决策和创造的？
+李宏毅老师的《Machine Learning 2020》课程一直是机器学习领域极具影响力的入门课程之一。课程内容覆盖广泛，从最基础的回归(Regression)、分类(Classification)、梯度下降(Gradient Descent)等机器学习核心概念开始，逐步深入到深度学习(Deep Learning)的模型结构、训练方法以及近年来人工智能领域的重要研究方向。本课程内容跨度非常大，几乎覆盖了现代机器学习的重要方向。从传统机器学习 → 深度学习 → 表示学习 → 自监督学习 → 生成模型 → 迁移学习 → 元学习 → 强化学习，形成了一条完整的知识体系。
+"><meta name="keywords" content='机器学习, 深度学习, 台湾大学'>
+	<meta itemprop="name" content="Machine Learning 2020 Spring (李宏毅)">
+	<meta itemprop="description" content="人工智能的发展，本质上是一场关于“如何让机器具备学习能力”的探索。从最初基于规则的专家系统，到统计学习方法，再到如今以深度神经网络、大规模预训练模型为代表的人工智能浪潮，机器学习技术不断突破边界。而理解这些技术背后的核心思想，并不仅仅是掌握某个算法或者调用某个框架，更重要的是理解：
+机器究竟是如何从数据中学习规律，并利用这些规律完成预测、决策和创造的？
+李宏毅老师的《Machine Learning 2020》课程一直是机器学习领域极具影响力的入门课程之一。课程内容覆盖广泛，从最基础的回归(Regression)、分类(Classification)、梯度下降(Gradient Descent)等机器学习核心概念开始，逐步深入到深度学习(Deep Learning)的模型结构、训练方法以及近年来人工智能领域的重要研究方向。本课程内容跨度非常大，几乎覆盖了现代机器学习的重要方向。从传统机器学习 → 深度学习 → 表示学习 → 自监督学习 → 生成模型 → 迁移学习 → 元学习 → 强化学习，形成了一条完整的知识体系。">
+	<meta itemprop="datePublished" content="2021-07-22T14:11:40+08:00">
+	<meta itemprop="dateModified" content="2021-07-22T14:11:40+08:00">
+	<meta itemprop="wordCount" content="735">
+	<meta itemprop="keywords" content="机器学习,深度学习,台湾大学"><meta property="og:url" content="http://localhost:1313/machine-learning-2020-spring/">
+	<meta property="og:site_name" content="东尼的博客">
+	<meta property="og:title" content="Machine Learning 2020 Spring (李宏毅)">
+	<meta property="og:description" content="人工智能的发展，本质上是一场关于“如何让机器具备学习能力”的探索。从最初基于规则的专家系统，到统计学习方法，再到如今以深度神经网络、大规模预训练模型为代表的人工智能浪潮，机器学习技术不断突破边界。而理解这些技术背后的核心思想，并不仅仅是掌握某个算法或者调用某个框架，更重要的是理解：
+机器究竟是如何从数据中学习规律，并利用这些规律完成预测、决策和创造的？
+李宏毅老师的《Machine Learning 2020》课程一直是机器学习领域极具影响力的入门课程之一。课程内容覆盖广泛，从最基础的回归(Regression)、分类(Classification)、梯度下降(Gradient Descent)等机器学习核心概念开始，逐步深入到深度学习(Deep Learning)的模型结构、训练方法以及近年来人工智能领域的重要研究方向。本课程内容跨度非常大，几乎覆盖了现代机器学习的重要方向。从传统机器学习 → 深度学习 → 表示学习 → 自监督学习 → 生成模型 → 迁移学习 → 元学习 → 强化学习，形成了一条完整的知识体系。">
+	<meta property="og:locale" content="zh_CN">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="posts">
+		<meta property="article:published_time" content="2021-07-22T14:11:40+08:00">
+		<meta property="article:modified_time" content="2021-07-22T14:11:40+08:00">
+		<meta property="article:tag" content="机器学习">
+		<meta property="article:tag" content="深度学习">
+		<meta property="article:tag" content="台湾大学">
+		<meta property="article:tag" content="课程笔记">
+		<meta property="article:tag" content="公开课">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Machine Learning 2020 Spring (李宏毅)">
+  <meta name="twitter:description" content="人工智能的发展，本质上是一场关于“如何让机器具备学习能力”的探索。从最初基于规则的专家系统，到统计学习方法，再到如今以深度神经网络、大规模预训练模型为代表的人工智能浪潮，机器学习技术不断突破边界。而理解这些技术背后的核心思想，并不仅仅是掌握某个算法或者调用某个框架，更重要的是理解：
+机器究竟是如何从数据中学习规律，并利用这些规律完成预测、决策和创造的？
+李宏毅老师的《Machine Learning 2020》课程一直是机器学习领域极具影响力的入门课程之一。课程内容覆盖广泛，从最基础的回归(Regression)、分类(Classification)、梯度下降(Gradient Descent)等机器学习核心概念开始，逐步深入到深度学习(Deep Learning)的模型结构、训练方法以及近年来人工智能领域的重要研究方向。本课程内容跨度非常大，几乎覆盖了现代机器学习的重要方向。从传统机器学习 → 深度学习 → 表示学习 → 自监督学习 → 生成模型 → 迁移学习 → 元学习 → 强化学习，形成了一条完整的知识体系。"><meta name="twitter:creator" content="@IRONAnthony96"><meta name="application-name" content="FixIt">
+<meta name="apple-mobile-web-app-title" content="FixIt"><meta name="theme-color" data-light="#f6f8fa" data-dark="#151b23" content="#f6f8fa"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" type="text/html" href="http://localhost:1313/machine-learning-2020-spring/" title="Machine Learning 2020 Spring (李宏毅) - 东尼的博客" /><link rel="prev" type="text/html" href="http://localhost:1313/python%E4%B9%8Bmatplotlib/" title="Matplotlib：绘图入门与实践" /><link rel="next" type="text/html" href="http://localhost:1313/python%E4%B9%8Brequests/" title="Requests：优雅发送HTTP请求" /><link rel="alternate" type="text/markdown" href="http://localhost:1313/machine-learning-2020-spring/index.md" title="Machine Learning 2020 Spring (李宏毅) - 东尼的博客"><link rel="stylesheet" href="/css/config.css"><link rel="stylesheet" href="/css/main.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><link rel="preload" href="/js/main.js" as="script"><script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "BlogPosting",
+    "headline": "Machine Learning 2020 Spring (李宏毅)",
+    "inLanguage": "zh-CN",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "http:\/\/localhost:1313\/machine-learning-2020-spring\/"
+    },"genre": "posts","keywords": "机器学习, 深度学习, 台湾大学, 课程笔记, 公开课","wordcount":  735 ,
+    "url": "http:\/\/localhost:1313\/machine-learning-2020-spring\/","datePublished": "2021-07-22T14:11:40+08:00","dateModified": "2021-07-22T14:11:40+08:00","publisher": {
+      "@type": "Organization",
+      "name": ""},"author": {
+        "@type": "Person",
+        "name": "AndyFree96"
+      },"description": ""
+  }
+  </script><script src="/js/head/color-scheme.js"></script></head>
+  <body data-instant-intensity="viewport" data-header-desktop="sticky" data-header-mobile="auto"><div class="wrapper" data-page-style="normal"><header class="desktop animate__faster" id="header-desktop">
+  <div class="header-wrapper">
+    <div class="header-title">
+      <a href="/" title="东尼的博客" class="header-title-link"><span class="header-title-text">东尼的博客</span></a><span class="header-subtitle"></span></div>
+    <nav>
+      <ul class="menu"><li class="menu-item">
+              <a class="menu-link" href="/posts/">📕 文章</a></li><li class="menu-item">
+              <a class="menu-link" href="/categories/">🧰 分类</a></li><li class="menu-item">
+              <a class="menu-link" href="/tags/">🔖 标签</a></li><li class="menu-item">
+              <a class="menu-link" href="/book">📚 书单</a></li><li class="menu-item">
+              <a class="menu-link" href="/paper">📝 论文</a></li><li class="menu-item">
+              <a class="menu-link" href="/opencourse">👨🏻‍💻 公开课</a></li><li class="menu-item">
+              <a class="menu-link" href="/filmtv">🎞️ 影视</a></li><li class="menu-item">
+              <a class="menu-link" href="/resource">⚡️ 资源库</a></li><li class="menu-item">
+              <a class="menu-link" href="/projects">⭐ 开源</a></li><li class="menu-item">
+              <a class="menu-link" href="/about">🙋🏻‍♂️ 关于</a></li><li class="menu-item delimiter"></li><li class="menu-item search" id="search-desktop">
+            <input type="text" placeholder="搜索文章标题或内容……" id="search-input-desktop" tabindex="-1">
+            <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索" aria-controls="search-dropdown-desktop" aria-expanded="false">
+              <i class="fa-solid fa-search" aria-hidden="true"></i>
+            </a>
+            <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+              <i class="fa-solid fa-times-circle" aria-hidden="true"></i>
+            </a>
+            <span class="search-button search-loading" id="search-loading-desktop">
+              <i class="fa-solid fa-spinner fa-spin" aria-hidden="true"></i>
+            </span>
+          </li><li class="menu-item theme-switch-item">
+          <button type="button" class="theme-switch" aria-label="切换主题" title="切换主题"><i class="fa-solid fa-adjust" aria-hidden="true"></i></button>
+        </li></ul>
+    </nav>
+  </div>
+</header><header class="mobile animate__faster" id="header-mobile">
+  <div class="header-container">
+    <div class="header-wrapper">
+      <div class="header-title">
+        <a href="/" title="东尼的博客" class="header-title-link"><span class="header-title-text">东尼的博客</span></a><span class="header-subtitle"></span></div>
+      <button type="button" class="theme-switch" aria-label="切换主题"><i class="fa-solid fa-adjust" aria-hidden="true"></i></button>
+      <button type="button" class="menu-toggle" id="menu-toggle-mobile" aria-controls="menu-mobile" aria-expanded="false" aria-labelledby="menu-mobile">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <nav>
+      <ul class="menu" id="menu-mobile"><li class="search-wrapper">
+            <div class="search mobile" id="search-mobile">
+              <input type="text" placeholder="搜索文章标题或内容……" id="search-input-mobile">
+              <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索" aria-controls="search-dropdown-mobile" aria-expanded="false">
+                <i class="fa-solid fa-search" aria-hidden="true"></i>
+              </a>
+              <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                <i class="fa-solid fa-times-circle" aria-hidden="true"></i>
+              </a>
+              <span class="search-button search-loading" id="search-loading-mobile">
+                <i class="fa-solid fa-spinner fa-spin" aria-hidden="true"></i>
+              </span>
+            </div>
+            <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+              取消
+            </a>
+          </li><li class="menu-item"><a class="menu-link" href="/posts/">📕 文章</a></li><li class="menu-item"><a class="menu-link" href="/categories/">🧰 分类</a></li><li class="menu-item"><a class="menu-link" href="/tags/">🔖 标签</a></li><li class="menu-item"><a class="menu-link" href="/book">📚 书单</a></li><li class="menu-item"><a class="menu-link" href="/paper">📝 论文</a></li><li class="menu-item"><a class="menu-link" href="/opencourse">👨🏻‍💻 公开课</a></li><li class="menu-item"><a class="menu-link" href="/filmtv">🎞️ 影视</a></li><li class="menu-item"><a class="menu-link" href="/resource">⚡️ 资源库</a></li><li class="menu-item"><a class="menu-link" href="/projects">⭐ 开源</a></li><li class="menu-item"><a class="menu-link" href="/about">🙋🏻‍♂️ 关于</a></li><li class="menu-item menu-system"></li>
+      </ul>
+    </nav>
+  </div>
+</header><div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+  </div>
+  <div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+  </div><main class="fi-container"><aside class="aside-collection animate__animated animate__fadeIn animate__faster" aria-label="合集"><div class="details related-details open">
+      <div class="details-summary related-summary">
+        <i class="fa-solid fa-fire fa-fade text-danger" aria-hidden="true"></i>
+        <span class="related-title">相关内容</span><i class="details-icon fa-solid fa-angle-right" aria-hidden="true"></i></div>
+      <div class="details-content related-content">
+        <ul class="related-list"><li class="related-item">
+              <a href="/%E7%94%A8keras%E6%90%AD%E5%BB%BA%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" title="用Keras搭建卷积神经网络">用Keras搭建卷积神经网络</a></li><li class="related-item">
+              <a href="/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E5%AD%A6%E4%B9%A0gans/" title="从零开始学习GANs">从零开始学习GANs</a></li></ul>
+      </div>
+    </div></aside>
+
+  <article class="page single">
+    <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span title="转载" class="icon-repost"><i class="fa-solid fa-share" aria-hidden="true"></i></span><span>Machine Learning 2020 Spring (李宏毅)</span>
+      </h1><p class="single-subtitle animate__animated animate__fadeIn">从机器学习基础到深度学习</p></div><div class="post-meta">
+      <div class="post-meta-line"><span class="post-author"><a href="https://andyfree96.github.io/" title="作者" target="_blank" rel="author external nofollow noopener noreferrer" class="author"><img class="avatar" src='/avatar/1.jpg' alt="AndyFree96" height="16" width="16">&nbsp;AndyFree96</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E5%85%AC%E5%BC%80%E8%AF%BE/" class="post-category" title="分类 - 公开课"><i class="fa-regular fa-folder" aria-hidden="true"></i> 公开课</a></span></div><div class="post-meta-line"><span title="发布于 2021-07-22 14:11:40"><i class="fa-solid fa-calendar-days me-1" aria-hidden="true"></i><time datetime="2021-07-22">2021-07-22</time></span>&nbsp;<span title="735 字"><i class="fa-solid fa-pencil-alt me-1" aria-hidden="true"></i>约 800 字</span>&nbsp;<span><i class="fa-regular fa-clock me-1" aria-hidden="true"></i>预计阅读 2 分钟</span>&nbsp;</div>
+    </div><div class="featured-image"><img loading="eager" src='/images/202107/1/rowan-heuvel-meLAGRj_vDk-unsplash.jpg' sizes="(max-width: 680px) 100vw, (max-width: 960px) 80vw, (max-width: 1440px) 56vw, 800px" alt="/images/202107/1/rowan-heuvel-meLAGRj_vDk-unsplash.jpg"></div><div class="details toc" id="toc-static" data-kept="false">
+        <div class="details-summary toc-title">
+          <span>目录</span>
+          <span><i class="details-icon fa-solid fa-angle-right" aria-hidden="true"></i></span>
+        </div>
+        <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#课程大纲">课程大纲</a></li>
+  </ul>
+</nav></div>
+      </div><div class="content" id="content"><p>人工智能的发展，本质上是一场关于“如何让机器具备学习能力”的探索。从最初基于规则的专家系统，到统计学习方法，再到如今以深度神经网络、大规模预训练模型为代表的人工智能浪潮，机器学习技术不断突破边界。而理解这些技术背后的核心思想，并不仅仅是掌握某个算法或者调用某个框架，更重要的是理解：</p>
+<blockquote>
+<p>机器究竟是如何从数据中学习规律，并利用这些规律完成预测、决策和创造的？</p>
+</blockquote>
+<p>李宏毅老师的<a href="https://speech.ee.ntu.edu.tw/~hylee/ml/2020-spring.php" target="_blank" rel="external nofollow noopener noreferrer">《Machine Learning 2020》<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>课程一直是机器学习领域极具影响力的入门课程之一。课程内容覆盖广泛，从最基础的回归(Regression)、分类(Classification)、梯度下降(Gradient Descent)等机器学习核心概念开始，逐步深入到深度学习(Deep Learning)的模型结构、训练方法以及近年来人工智能领域的重要研究方向。本课程内容跨度非常大，几乎覆盖了现代机器学习的重要方向。从传统机器学习 → 深度学习 → 表示学习 → 自监督学习 → 生成模型 → 迁移学习 → 元学习 → 强化学习，形成了一条完整的知识体系。</p>
+<h2 class="heading-element" id="课程大纲"><span>课程大纲</span>
+  <a href="#%e8%af%be%e7%a8%8b%e5%a4%a7%e7%ba%b2" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><div class="table-wrapper">
+  <table>
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Online Videos</th>
+            <th>HW Example</th>
+            <th>Intro of HW</th>
+            <th>TA Lecture</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Intro</td>
+            <td><a href="https://youtu.be/c9TwBeWAj_U" target="_blank" rel="external nofollow noopener noreferrer">Introduction<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> <a href="https://speech.ee.ntu.edu.tw/~tlkagk/courses/ML2020/introduction.pdf" target="_blank" rel="external nofollow noopener noreferrer">(slide)<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> <a href="https://youtu.be/Bms0Fnol5nE" target="_blank" rel="external nofollow noopener noreferrer">Rule<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> <a href="https://speech.ee.ntu.edu.tw/~tlkagk/courses/ML2020/rule.pdf" target="_blank" rel="external nofollow noopener noreferrer">(slide)<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></td>
+            <td><a href="https://colab.research.google.com/drive/1i41Whco5KIb7EuntKYwTVORAkAwCmlkF" target="_blank" rel="external nofollow noopener noreferrer">Google Drive 檔案存取<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>HW1</td>
+            <td><a href="https://youtu.be/fegAeph9UaA" target="_blank" rel="external nofollow noopener noreferrer">Regression<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> <a href="https://speech.ee.ntu.edu.tw/~tlkagk/courses/ML_2017/Lecture/Regression.pdf" target="_blank" rel="external nofollow noopener noreferrer">(slide)<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> <a href="https://youtu.be/D_S6y0Jm6dQ" target="_blank" rel="external nofollow noopener noreferrer">Basic Concept<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> <a href="https://speech.ee.ntu.edu.tw/~tlkagk/courses/ML_2016/Lecture/Bias%20and%20Variance%20(v2).pdf" target="_blank" rel="external nofollow noopener noreferrer">(slide)<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></td>
+            <td><a href="https://colab.research.google.com/drive/131sSqmrmWXfjFZ3jWSELl8cm0Ox5ah3C" target="_blank" rel="external nofollow noopener noreferrer">Regression<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></td>
+            <td><a href="https://docs.google.com/presentation/d/18MG1wSTTx8AentGnMfIRUp8ipo8bLpgAj16bJoqW-b0/edit?usp=sharing" target="_blank" rel="external nofollow noopener noreferrer">(slide)<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> <a href="https://youtu.be/QfU-qXINCvs" target="_blank" rel="external nofollow noopener noreferrer">video<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>NA</td>
+            <td><a href="https://youtu.be/yKKNr-QKz2Q" target="_blank" rel="external nofollow noopener noreferrer">Gradient Descent 1<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> <a href="https://youtu.be/1_HBTJyWgNA" target="_blank" rel="external nofollow noopener noreferrer">2<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> <a href="https://youtu.be/wzPAInDF_gI" target="_blank" rel="external nofollow noopener noreferrer">3<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> <a href="https://speech.ee.ntu.edu.tw/~tlkagk/courses/ML_2016/Lecture/Gradient%20Descent%20(v2).pdf" target="_blank" rel="external nofollow noopener noreferrer">(slide)<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></td>
+            <td></td>
+            <td></td>
+            <td><a href="https://youtu.be/4pUmZ8hXlHM" target="_blank" rel="external nofollow noopener noreferrer">More about Gradient Descent 1<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> <a href="https://youtu.be/e03YKGHXnL8" target="_blank" rel="external nofollow noopener noreferrer">2<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> <a href="https://speech.ee.ntu.edu.tw/~tlkagk/courses/ML2020/Optimization.pdf" target="_blank" rel="external nofollow noopener noreferrer">(slide)<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></td>
+        </tr>
+        <tr>
+            <td>HW2</td>
+            <td><a href="https://youtu.be/fZAZUYEeIMg" target="_blank" rel="external nofollow noopener noreferrer">Classification 1<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> <a href="https://youtu.be/hSXFuypLukA" target="_blank" rel="external nofollow noopener noreferrer">2<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> <a href="https://speech.ee.ntu.edu.tw/~tlkagk/courses/ML_2016/Lecture/Classification%20(v3).pdf" target="_blank" rel="external nofollow noopener noreferrer">(slide) 1<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> <a href="https://speech.ee.ntu.edu.tw/~tlkagk/courses/ML_2016/Lecture/Logistic%20Regression%20(v3).pdf" target="_blank" rel="external nofollow noopener noreferrer">2<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></td>
+            <td><a href="https://colab.research.google.com/drive/1JaMKJU7hvnDoUfZjvUKzm9u-JLeX6B2C" target="_blank" rel="external nofollow noopener noreferrer">Classification<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></td>
+            <td><a href="https://docs.google.com/presentation/d/1dQVeHfIfUUWxMSg58frKBBeg2OD4N7SD0YP3LYMM7AA/edit?usp=sharing" target="_blank" rel="external nofollow noopener noreferrer">(slide)<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> <a href="https://youtu.be/0_dbrUYoVow" target="_blank" rel="external nofollow noopener noreferrer">video<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>Torch</td>
+            <td><a href="https://youtu.be/Dr-WRlEFefw" target="_blank" rel="external nofollow noopener noreferrer">DL<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> <a href="https://speech.ee.ntu.edu.tw/~tlkagk/courses/ML_2016/Lecture/DL%20(v2).pdf" target="_blank" rel="external nofollow noopener noreferrer">(slide)<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> <a href="https://youtu.be/ibJpTrp5mcE" target="_blank" rel="external nofollow noopener noreferrer">Backprop<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> <a href="https://speech.ee.ntu.edu.tw/~tlkagk/courses/ML_2016/Lecture/BP.pdf" target="_blank" rel="external nofollow noopener noreferrer">(slide)<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> <a href="https://youtu.be/xki61j7z-30" target="_blank" rel="external nofollow noopener noreferrer">Tips<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> <a href="https://speech.ee.ntu.edu.tw/~tlkagk/courses/ML_2017/Lecture/DNN%20tip.pdf" target="_blank" rel="external nofollow noopener noreferrer">(slide)<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> <a href="https://youtu.be/XsC9byQkUH8" target="_blank" rel="external nofollow noopener noreferrer">Why Deep<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> <a href="https://speech.ee.ntu.edu.tw/~tlkagk/courses/ML_2017/Lecture/Why.pdf" target="_blank" rel="external nofollow noopener noreferrer">(slide)<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></td>
+            <td><a href="https://speech.ee.ntu.edu.tw/~tlkagk/courses/ML2020/PyTorch_Introduction.(slide)s.html" target="_blank" rel="external nofollow noopener noreferrer">(slide)<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> <a href="https://colab.research.google.com/drive/1Xed5YSpLsLfkn66OhhyNzr05VE89enng" target="_blank" rel="external nofollow noopener noreferrer">colab<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> <a href="https://youtu.be/kQeezFrNoOg" target="_blank" rel="external nofollow noopener noreferrer">video<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> <a href="https://hackmd.io/@rh0jTfFDTO6SteMDq91tgg/HkDRHKLrU" target="_blank" rel="external nofollow noopener noreferrer">cheatsheet<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>HW3</td>
+            <td><a href="https://youtu.be/FrKWiRv254g" target="_blank" rel="external nofollow noopener noreferrer">CNN<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> <a href="https://speech.ee.ntu.edu.tw/~tlkagk/courses/ML_2017/Lecture/CNN.pdf" target="_blank" rel="external nofollow noopener noreferrer">(slide)<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></td>
+            <td><a href="https://colab.research.google.com/drive/16a3G7Hh8Pv1X1PhZAUBEnZEkXThzDeHJ" target="_blank" rel="external nofollow noopener noreferrer">CNN<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></td>
+            <td><a href="https://docs.google.com/presentation/d/1_6TJrFs3JGBsJpdRGLK1Fy_EiJlNvLm_lTZ9sjLsaKE/edit?usp=sharing" target="_blank" rel="external nofollow noopener noreferrer">(slide)<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> <a href="https://youtu.be/L_ebtE4qk14" target="_blank" rel="external nofollow noopener noreferrer">video<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></td>
+            <td><a href="https://youtu.be/eybCCtNKwzA" target="_blank" rel="external nofollow noopener noreferrer">GNN 1<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> <a href="https://youtu.be/M9ht8vsVEw8" target="_blank" rel="external nofollow noopener noreferrer">2<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> <a href="https://speech.ee.ntu.edu.tw/~tlkagk/courses/ML2020/GNN.pdf" target="_blank" rel="external nofollow noopener noreferrer">(slide)<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></td>
+        </tr>
+        <tr>
+            <td>HW4</td>
+            <td><a href="https://www.youtube.com/watch?v=xCGidAeyS4M&feature=youtu.be" target="_blank" rel="external nofollow noopener noreferrer">RNN 1<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> <a href="https://www.youtube.com/watch?v=rTqmWlnwz_0&feature=youtu.be" target="_blank" rel="external nofollow noopener noreferrer">2<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> <a href="https://speech.ee.ntu.edu.tw/~tlkagk/courses/ML_2016/Lecture/RNN%20(v2).pdf" target="_blank" rel="external nofollow noopener noreferrer">(slide)<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> <a href="https://youtu.be/fX_guE7JNnY" target="_blank" rel="external nofollow noopener noreferrer">Semi-supervised (<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> <a href="https://speech.ee.ntu.edu.tw/~tlkagk/courses/ML_2016/Lecture/semi%20(v3).pdf" target="_blank" rel="external nofollow noopener noreferrer">(slide)<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> <a href="https://youtu.be/X7PH3NuYW0Q" target="_blank" rel="external nofollow noopener noreferrer">Word Embedding (<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> <a href="https://speech.ee.ntu.edu.tw/~tlkagk/courses/ML_2017/Lecture/word2vec%20(v2).pdf" target="_blank" rel="external nofollow noopener noreferrer">(slide)<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></td>
+            <td><a href="https://colab.research.google.com/drive/16d1Xox0OW-VNuxDn1pvy2UXFIPfieCb9" target="_blank" rel="external nofollow noopener noreferrer">RNN<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></td>
+            <td><a href="https://docs.google.com/presentation/d/1W5-D0hqchrkVgQxwNLBDlydamCHx5yetzmwbUiksBAA/edit?usp=sharing" target="_blank" rel="external nofollow noopener noreferrer">(slide)<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> <a href="https://youtu.be/P1Lg5l5IPec" target="_blank" rel="external nofollow noopener noreferrer">video<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>HW5</td>
+            <td><a href="https://youtu.be/lnjrn3bF9lA" target="_blank" rel="external nofollow noopener noreferrer">Explainable AI<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> <a href="https://speech.ee.ntu.edu.tw/~tlkagk/courses/ML_2019/Lecture/XAI%20(v7).pdf" target="_blank" rel="external nofollow noopener noreferrer">(slide)<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></td>
+            <td><a href="https://colab.research.google.com/drive/1FbuTOevZTUO3IEVJLwSfwCdGnrBf3Qwv" target="_blank" rel="external nofollow noopener noreferrer">Explainable AI<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></td>
+            <td><a href="https://docs.google.com/presentation/d/1VClvgyilAvohextY0tM3gD7YemXGSUrzLV0E8RjDnMU/edit?usp=sharing" target="_blank" rel="external nofollow noopener noreferrer">(slide)<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> <a href="https://youtu.be/HFyPZjB-Ex4" target="_blank" rel="external nofollow noopener noreferrer">video<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></td>
+            <td><a href="https://youtu.be/LsdiOt0wiWM" target="_blank" rel="external nofollow noopener noreferrer">More about Explainable AI<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> <a href="https://docs.google.com/presentation/d/1oWsL_Yxp0P_l3OsiwMFOmVz02ZZJb86yYcndbUSL7Kc/edit?usp=sharing" target="_blank" rel="external nofollow noopener noreferrer">(slide)<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></td>
+        </tr>
+        <tr>
+            <td>HW6</td>
+            <td><a href="https://youtu.be/NI6yb0WgMBM" target="_blank" rel="external nofollow noopener noreferrer">Adversarial Attack<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> <a href="https://speech.ee.ntu.edu.tw/~tlkagk/courses/ML_2019/Lecture/Attack%20(v8).pdf" target="_blank" rel="external nofollow noopener noreferrer">(slide)<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></td>
+            <td><a href="https://colab.research.google.com/drive/1ePbuJwBwVsHkfztpXKjKuqaEZ3h27F_A" target="_blank" rel="external nofollow noopener noreferrer">Adversarial Attack<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></td>
+            <td><a href="https://docs.google.com/presentation/d/1aQNgb0dA6aAplW3U8l1wxc6LDjo7gpEOyEL5zlLJwcg/edit?usp=sharing" target="_blank" rel="external nofollow noopener noreferrer">(slide)<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> <a href="https://youtu.be/etW_kpTYetE" target="_blank" rel="external nofollow noopener noreferrer">video<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></td>
+            <td><a href="https://youtu.be/tfpKIZIWidA" target="_blank" rel="external nofollow noopener noreferrer">More about Adversarial Attack 1<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> <a href="https://youtu.be/PaHhMlxFPyU" target="_blank" rel="external nofollow noopener noreferrer">2<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> <a href="https://docs.google.com/presentation/d/1uK9WBUsZtmux-GH5GjqJx8vUKwAY-NrjLHMR0FkSV7Y/edit?usp=sharing" target="_blank" rel="external nofollow noopener noreferrer">(slide)<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></td>
+        </tr>
+        <tr>
+            <td>HW7</td>
+            <td><a href="https://youtu.be/dPp8rCAnU_A" target="_blank" rel="external nofollow noopener noreferrer">Network Compression<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> <a href="https://speech.ee.ntu.edu.tw/~tlkagk/courses/ML_2019/Lecture/Small%20(v6).pdf" target="_blank" rel="external nofollow noopener noreferrer">(slide)<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></td>
+            <td><a href="https://colab.research.google.com/drive/1lJS0ApIyi7eZ2b3GMyGxjPShI8jXM2UC" target="_blank" rel="external nofollow noopener noreferrer">Network Compression 1<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> <a href="https://colab.research.google.com/drive/1iuEkPP-SvCopHEN9X6xiPA8E6eACbL5u" target="_blank" rel="external nofollow noopener noreferrer">2<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> <a href="https://colab.research.google.com/drive/1CIn-Qqn9LBz-0f71Skm4vmdTDnE17uwy" target="_blank" rel="external nofollow noopener noreferrer">3<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> <a href="https://colab.research.google.com/drive/1G1_I5xoxnX4xfLUmQjxCZKw40rRjjZMQ" target="_blank" rel="external nofollow noopener noreferrer">4<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></td>
+            <td><a href="https://docs.google.com/presentation/d/1n5gc0uk3ysoOzfH2kd56DJwj-BE6le_CXiBboK9g8Hk/edit?usp=sharing" target="_blank" rel="external nofollow noopener noreferrer">(slide)<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> <a href="https://youtu.be/Y-a3CZI-wrM" target="_blank" rel="external nofollow noopener noreferrer">video<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></td>
+            <td><a href="https://youtu.be/9CCn9uPfJ64" target="_blank" rel="external nofollow noopener noreferrer">More about Network Compression 1<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> <a href="https://youtu.be/w6gdV2_PtsE" target="_blank" rel="external nofollow noopener noreferrer">2<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> <a href="https://(slide)s.com/arvinliu/model-compression" target="_blank" rel="external nofollow noopener noreferrer">(slide)<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></td>
+        </tr>
+        <tr>
+            <td>HW8</td>
+            <td><a href="https://youtu.be/f1KUUz7v8g4" target="_blank" rel="external nofollow noopener noreferrer">Seq2seq<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> <a href="https://speech.ee.ntu.edu.tw/~tlkagk/courses/MLDS_2017/Lecture/Attain%20(v5).pdf" target="_blank" rel="external nofollow noopener noreferrer">(slide)<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> <a href="https://youtu.be/VdOyqNQ9aww" target="_blank" rel="external nofollow noopener noreferrer">Pointer (option)<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> <a href="https://speech.ee.ntu.edu.tw/~tlkagk/courses/MLDS_2018/Lecture/Pointer.pdf" target="_blank" rel="external nofollow noopener noreferrer">(slide)<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> <a href="https://youtu.be/z0uOq2wEGcc" target="_blank" rel="external nofollow noopener noreferrer">Recursive (option)<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> <a href="https://speech.ee.ntu.edu.tw/~tlkagk/courses/MLDS_2018/Lecture/Recursive.pdf" target="_blank" rel="external nofollow noopener noreferrer">(slide)<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> <a href="https://youtu.be/ugWDIIOHtPA" target="_blank" rel="external nofollow noopener noreferrer">Transformer<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> <a href="https://speech.ee.ntu.edu.tw/~tlkagk/courses/ML_2019/Lecture/Transformer%20(v5).pdf" target="_blank" rel="external nofollow noopener noreferrer">(slide)<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></td>
+            <td><a href="https://colab.research.google.com/drive/11iwJbQv9iScRo6kGP7YfyHaaorlHhzMT" target="_blank" rel="external nofollow noopener noreferrer">Seq2seq<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></td>
+            <td><a href="https://docs.google.com/presentation/d/1xshFEjpgRgpB-lZNbdRV_BNP0rmh5sAnz4eZHgS5Cs0/edit?usp=sharing" target="_blank" rel="external nofollow noopener noreferrer">(slide)<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> <a href="https://youtu.be/-g6eg7Pv8uA" target="_blank" rel="external nofollow noopener noreferrer">video<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></td>
+            <td><a href="https://youtu.be/lluMBz5AoOg" target="_blank" rel="external nofollow noopener noreferrer">Transformer and its variant<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> <a href="https://docs.google.com/presentation/d/1saF8O0TFQDTLmLpoeOPdsQylXimxyGp5yOMFNexEXkg/edit?usp=sharing" target="_blank" rel="external nofollow noopener noreferrer">(slide)<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></td>
+        </tr>
+        <tr>
+            <td>HW9</td>
+            <td><a href="https://youtu.be/iwh5o_M4BNU" target="_blank" rel="external nofollow noopener noreferrer">Dimension Reduction<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> <a href="https://speech.ee.ntu.edu.tw/~tlkagk/courses/ML_2017/Lecture/PCA%20(v3).pdf" target="_blank" rel="external nofollow noopener noreferrer">(slide)<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> <a href="https://youtu.be/GBUEjkpoxXc" target="_blank" rel="external nofollow noopener noreferrer">Neighbor Embedding<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> <a href="https://speech.ee.ntu.edu.tw/~tlkagk/courses/ML_2017/Lecture/TSNE.pdf" target="_blank" rel="external nofollow noopener noreferrer">(slide)<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> <a href="https://youtu.be/Tk5B4seA-AU" target="_blank" rel="external nofollow noopener noreferrer">Auto-encoder<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> <a href="https://speech.ee.ntu.edu.tw/~tlkagk/courses/ML_2017/Lecture/auto.pdf" target="_blank" rel="external nofollow noopener noreferrer">(slide)<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> <a href="https://youtu.be/6ZWu4L7XOiQ" target="_blank" rel="external nofollow noopener noreferrer">More Auto-encoder<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> <a href="https://speech.ee.ntu.edu.tw/~tlkagk/courses/ML_2019/Lecture/Auto%20(v3).pdf" target="_blank" rel="external nofollow noopener noreferrer">(slide)<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> <a href="https://youtu.be/UYPa347-DdE" target="_blank" rel="external nofollow noopener noreferrer">BERT<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> <a href="https://speech.ee.ntu.edu.tw/~tlkagk/courses/ML_2019/Lecture/BERT%20(v3).pdf" target="_blank" rel="external nofollow noopener noreferrer">(slide)<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></td>
+            <td><a href="https://colab.research.google.com/drive/1sHOS6NFIBW5aZGz5RePyexFe28MvaPU6#scrollTo=w8WjVvaONQ-m" target="_blank" rel="external nofollow noopener noreferrer">Unsupervised Learning<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></td>
+            <td><a href="https://docs.google.com/presentation/d/1ULbTKqn7ikFOTU-r0DoqAca6lej3QmLWwORfcr-0F3o/edit?usp=sharing" target="_blank" rel="external nofollow noopener noreferrer">(slide)<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> <a href="https://youtu.be/2g5VmgRBiM0" target="_blank" rel="external nofollow noopener noreferrer">video<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></td>
+            <td><a href="https://www.youtube.com/watch?v=ZGnKfoUb7h8" target="_blank" rel="external nofollow noopener noreferrer">Self-supervised Learning<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> <a href="https://docs.google.com/presentation/d/1qq8t8a3decJfJyA6t9wCRJfNDkvAnbg1WxTFvx0hG4g/edit?usp=sharing" target="_blank" rel="external nofollow noopener noreferrer">(slide)<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></td>
+        </tr>
+        <tr>
+            <td>HW10</td>
+            <td><a href="https://youtu.be/gDp2LXGnVLQ" target="_blank" rel="external nofollow noopener noreferrer">Anomaly Detection<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> <a href="https://speech.ee.ntu.edu.tw/~tlkagk/courses/ML_2019/Lecture/Detection%20(v9).pdf" target="_blank" rel="external nofollow noopener noreferrer">(slide)<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></td>
+            <td><a href="https://colab.research.google.com/drive/12D52GgTwb4k75mRCSM_y8ykqHvqk_gOJ" target="_blank" rel="external nofollow noopener noreferrer">Anomaly Detection<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></td>
+            <td><a href="https://docs.google.com/presentation/d/1kvYOBycYRs9P-nWrlZNnwmdnnAO6w69jKjCxmTRlNqU/edit?usp=sharing" target="_blank" rel="external nofollow noopener noreferrer">(slide)<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> <a href="https://youtu.be/gJSwigETXDs" target="_blank" rel="external nofollow noopener noreferrer">video<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></td>
+            <td><a href="https://youtu.be/-C8RUrWb7F8" target="_blank" rel="external nofollow noopener noreferrer">More about Anomaly Detection<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> <a href="https://docs.google.com/presentation/d/1kpAp9k_cDJ-lGASgsY4VGKy7Q8oab3nbn0P8e9pN6lk/edit?usp=sharing" target="_blank" rel="external nofollow noopener noreferrer">(slide)<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></td>
+        </tr>
+        <tr>
+            <td>HW11</td>
+            <td><a href="https://www.youtube.com/watch?v=DQNNMiAP5lw&list=PLJV_el3uVTsMq6JEFPW35BCiOQTsoqwNw" target="_blank" rel="external nofollow noopener noreferrer">GAN (10 videos)<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> <a href="https://speech.ee.ntu.edu.tw/~tlkagk/courses/MLDS_2018/Lecture/GAN%20(v2).pdf" target="_blank" rel="external nofollow noopener noreferrer">(slide) 1<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> <a href="https://speech.ee.ntu.edu.tw/~tlkagk/courses/MLDS_2018/Lecture/CGAN.pdf" target="_blank" rel="external nofollow noopener noreferrer">2<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> <a href="https://speech.ee.ntu.edu.tw/~tlkagk/courses/MLDS_2018/Lecture/CycleGAN.pdf" target="_blank" rel="external nofollow noopener noreferrer">3<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> <a href="https://speech.ee.ntu.edu.tw/~tlkagk/courses/MLDS_2018/Lecture/GANtheory%20(v2).pdf" target="_blank" rel="external nofollow noopener noreferrer">4<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> <a href="https://speech.ee.ntu.edu.tw/~tlkagk/courses/MLDS_2018/Lecture/fGAN.pdf" target="_blank" rel="external nofollow noopener noreferrer">5<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> <a href="https://speech.ee.ntu.edu.tw/~tlkagk/courses/MLDS_2018/Lecture/WGAN%20(v2).pdf" target="_blank" rel="external nofollow noopener noreferrer">6<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> <a href="https://speech.ee.ntu.edu.tw/~tlkagk/courses/MLDS_2018/Lecture/GANfeature.pdf" target="_blank" rel="external nofollow noopener noreferrer">7<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> <a href="https://speech.ee.ntu.edu.tw/~tlkagk/courses/MLDS_2018/Lecture/PhotoEditing.pdf" target="_blank" rel="external nofollow noopener noreferrer">8<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> <a href="https://speech.ee.ntu.edu.tw/~tlkagk/courses/MLDS_2018/Lecture/GANSeqNew.pdf" target="_blank" rel="external nofollow noopener noreferrer">9<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> <a href="https://speech.ee.ntu.edu.tw/~tlkagk/courses/MLDS_2018/Lecture/GANEvaluation.pdf" target="_blank" rel="external nofollow noopener noreferrer">10<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> <a href="https://youtu.be/uXY18nzdSsM" target="_blank" rel="external nofollow noopener noreferrer">Flow-based<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> <a href="https://speech.ee.ntu.edu.tw/~tlkagk/courses/ML_2019/Lecture/FLOW%20(v7).pdf" target="_blank" rel="external nofollow noopener noreferrer">(slide)<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></td>
+            <td><a href="https://colab.research.google.com/drive/1JYY_HHtVSSOLixZfLwkxiWTRdPHJCS2t" target="_blank" rel="external nofollow noopener noreferrer">GAN<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></td>
+            <td><a href="https://docs.google.com/presentation/d/1uiyajjlvamCqbXscMbcZC5mqqC138jDPEapAjDuXHTM/edit?usp=sharing" target="_blank" rel="external nofollow noopener noreferrer">(slide)<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> <a href="https://youtu.be/ByguarFA8GU" target="_blank" rel="external nofollow noopener noreferrer">video<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></td>
+            <td><a href="https://youtu.be/hTNE8iFXEMU" target="_blank" rel="external nofollow noopener noreferrer">More about GAN<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> <a href="https://docs.google.com/presentation/d/1ij3aOHl4Jf5zKwL6NewXCZvC5kVsiU-pMHFBNXsqyYA/edit?usp=sharing" target="_blank" rel="external nofollow noopener noreferrer">(slide)<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></td>
+        </tr>
+        <tr>
+            <td>HW12</td>
+            <td><a href="https://youtu.be/qD6iD4TFsdQ" target="_blank" rel="external nofollow noopener noreferrer">Transfer Learning<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> <a href="https://speech.ee.ntu.edu.tw/~tlkagk/courses/ML_2017/Lecture/transfer.pdf" target="_blank" rel="external nofollow noopener noreferrer">(slide)<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></td>
+            <td><a href="https://colab.research.google.com/drive/1cTdIDT_fsBWGbaljhPSmBI6gwkw-tQ2H" target="_blank" rel="external nofollow noopener noreferrer">Transfer Learning<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></td>
+            <td><a href="https://docs.google.com/presentation/d/1EdSZBRQqJhvpS9-x1pASnO5P4-O-j-_OPIf7KytcGmg/edit?usp=sharing" target="_blank" rel="external nofollow noopener noreferrer">(slide)<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> <a href="https://youtu.be/mX4mJQO2S5U" target="_blank" rel="external nofollow noopener noreferrer">video<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></td>
+            <td><a href="https://youtu.be/gvfLq4sPW4k" target="_blank" rel="external nofollow noopener noreferrer">Domain Adaptation 1<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> <a href="https://youtu.be/-DQBMAULXX8" target="_blank" rel="external nofollow noopener noreferrer">2<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> <a href="https://drive.google.com/file/d/15wlfUtTmnb4cEAHZtNJ9_jJE26nSNhAX/view?usp=sharing" target="_blank" rel="external nofollow noopener noreferrer">(slide)<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></td>
+        </tr>
+        <tr>
+            <td>HW13</td>
+            <td><a href="https://youtu.be/EkAqYbpCYAc" target="_blank" rel="external nofollow noopener noreferrer">Meta Learning - MAML<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> <a href="https://speech.ee.ntu.edu.tw/~tlkagk/courses/ML_2019/Lecture/Meta1%20(v6).pdf" target="_blank" rel="external nofollow noopener noreferrer">(slide)<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> <a href="https://youtu.be/NjZygLDXxjg" target="_blank" rel="external nofollow noopener noreferrer">Meta Learning - Gradient Descent and Metric-based (option)<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> <a href="https://speech.ee.ntu.edu.tw/~tlkagk/courses/ML_2019/Lecture/Meta2%20(v4).pdf" target="_blank" rel="external nofollow noopener noreferrer">(slide)<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></td>
+            <td><a href="https://colab.research.google.com/drive/1MFJwRdOTefd6UOYRsNjdc7BWuB7Qe3lY" target="_blank" rel="external nofollow noopener noreferrer">Meta 1<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> <a href="https://colab.research.google.com/drive/1OcF5TQCCd7WNK0cbXyzYxAzWpMKW_r8B" target="_blank" rel="external nofollow noopener noreferrer">2<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></td>
+            <td><a href="https://docs.google.com/presentation/d/1nqZBCsDWbq-a892py5LoqESNkUCRMFvIc_q2iaAxD_w/edit?usp=sharing" target="_blank" rel="external nofollow noopener noreferrer">(slide)<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> <a href="https://youtu.be/JtUMoR4CQEI" target="_blank" rel="external nofollow noopener noreferrer">video 1<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> <a href="https://youtu.be/CzkuNX5Ijdk" target="_blank" rel="external nofollow noopener noreferrer">2<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> <a href="https://youtu.be/kqu3S7M_esE" target="_blank" rel="external nofollow noopener noreferrer">3<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></td>
+            <td><a href="https://www.youtube.com/watch?v=QBbeIsiqw-U" target="_blank" rel="external nofollow noopener noreferrer">More about Meta 1<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> <a href="https://www.youtube.com/watch?v=w0-7BO09kdo" target="_blank" rel="external nofollow noopener noreferrer">2<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> <a href="https://speech.ee.ntu.edu.tw/~tlkagk/courses/ML2020/Meta_learning_and_more.pdf" target="_blank" rel="external nofollow noopener noreferrer">(slide)<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></td>
+        </tr>
+        <tr>
+            <td>HW14</td>
+            <td><a href="https://youtu.be/7qT5P9KJnWo" target="_blank" rel="external nofollow noopener noreferrer">Life-long Learning<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> <a href="https://speech.ee.ntu.edu.tw/~tlkagk/courses/ML_2019/Lecture/Lifelong%20Learning%20(v9).pdf" target="_blank" rel="external nofollow noopener noreferrer">(slide)<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></td>
+            <td><a href="https://colab.research.google.com/drive/110YbEQbibXaFWPoDKEP3ZKPuyEzFap6U#scrollTo=LD5roJkIvoRj" target="_blank" rel="external nofollow noopener noreferrer">Life-long<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></td>
+            <td><a href="https://docs.google.com/presentation/d/13JmcOZ9i_m5xJbRBKNMAKE1fIzGhyaeLck3frY0B2xY/edit?usp=sharing" target="_blank" rel="external nofollow noopener noreferrer">(slide)<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> <a href="https://youtu.be/B2b2k_UihEc" target="_blank" rel="external nofollow noopener noreferrer">video<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></td>
+            <td><a href="https://youtu.be/SX6_1-mvkWk" target="_blank" rel="external nofollow noopener noreferrer">More about Life-long<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> <a href="https://speech.ee.ntu.edu.tw/~tlkagk/courses/ML2020/MoreLL.pdf" target="_blank" rel="external nofollow noopener noreferrer">(slide)<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></td>
+        </tr>
+        <tr>
+            <td>HW15</td>
+            <td><a href="https://youtu.be/W8XF3ME8G2I" target="_blank" rel="external nofollow noopener noreferrer">RL 1<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> <a href="https://youtu.be/y8UPGr36ccI" target="_blank" rel="external nofollow noopener noreferrer">2<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> <a href="https://youtu.be/2-JNBzCq77c" target="_blank" rel="external nofollow noopener noreferrer">3<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> <a href="https://speech.ee.ntu.edu.tw/~tlkagk/courses/ML_2017/Lecture/RL%20(v4).pdf" target="_blank" rel="external nofollow noopener noreferrer">(slide)<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> <a href="https://www.youtube.com/watch?v=z95ZYgPgXOY&list=PLJV_el3uVTsODxQFgzMzPLa16h6B8kWM_" target="_blank" rel="external nofollow noopener noreferrer">Advanced Version (8 videos, option)<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> <a href="https://speech.ee.ntu.edu.tw/~tlkagk/courses/MLDS_2018/Lecture/PPO%20(v3).pdf" target="_blank" rel="external nofollow noopener noreferrer">(slide) 1<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> <a href="https://speech.ee.ntu.edu.tw/~tlkagk/courses/MLDS_2018/Lecture/QLearning%20(v2).pdf" target="_blank" rel="external nofollow noopener noreferrer">2<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> <a href="https://speech.ee.ntu.edu.tw/~tlkagk/courses/MLDS_2018/Lecture/AC.pdf" target="_blank" rel="external nofollow noopener noreferrer">3<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> <a href="https://speech.ee.ntu.edu.tw/~tlkagk/courses/MLDS_2018/Lecture/Reward%20(v3).pdf" target="_blank" rel="external nofollow noopener noreferrer">4<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> <a href="https://speech.ee.ntu.edu.tw/~tlkagk/courses/MLDS_2018/Lecture/IRL%20(v2).pdf" target="_blank" rel="external nofollow noopener noreferrer">5<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></td>
+            <td><a href="https://colab.research.google.com/drive/1Q5H0NI5b_NrT1ZUxEuFMd8ASTbow55Qj" target="_blank" rel="external nofollow noopener noreferrer">RL<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></td>
+            <td><a href="https://docs.google.com/presentation/d/1_KtX0PxZhzOqi1fJXdh2QW8GOFMcRu4NRn3uwo0FuDg/edit?usp=sharing" target="_blank" rel="external nofollow noopener noreferrer">(slide)<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> <a href="https://youtu.be/NHvSxdrDtfw" target="_blank" rel="external nofollow noopener noreferrer">video<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></td>
+            <td><a href="https://youtu.be/ZR2AZgupIpc" target="_blank" rel="external nofollow noopener noreferrer">More about RL<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a> <a href="https://docs.google.com/presentation/d/1uMEtjj2hblAY76FDa4yBTSEv8HFk7h_R53x0KUkc9DU/edit?usp=sharing" target="_blank" rel="external nofollow noopener noreferrer">(slide)<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></td>
+        </tr>
+    </tbody>
+  </table>
+</div></div><hr class="awesome-hr" />
+    <h2 id="see-also">相关内容</h2>
+    <ul><li>
+          <a href="/%E7%94%A8keras%E6%90%AD%E5%BB%BA%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" title="用Keras搭建卷积神经网络">用Keras搭建卷积神经网络</a></li><li>
+          <a href="/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E5%AD%A6%E4%B9%A0gans/" title="从零开始学习GANs">从零开始学习GANs</a></li></ul><div class="post-footer" id="post-footer">
+  <div class="post-info">
+    <div class="post-info-line">
+      <div class="post-info-mod"><span title="更新于 2021-07-22 14:11:40">更新于 2021-07-22&nbsp;</span>
+      </div></div><div class="post-info-line">
+        <div class="post-info-md"><span><a href="vscode://file/D:\hugo-blog\andyfree96\content\posts\machine-learning-2020-spring.md" title="在编辑器中打开" class="link-to-vscode">在编辑器中打开</a></span></div>
+        <div class="post-info-share">
+          <span><a href="javascript:void(0);" title="分享到 X" data-sharer="twitter" data-url="http://localhost:1313/machine-learning-2020-spring/" data-title="Machine Learning 2020 Spring (李宏毅)" data-via="IRONAnthony96" data-hashtags="机器学习,深度学习,台湾大学,课程笔记,公开课"><i class="fa-brands fa-x-twitter" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="http://localhost:1313/machine-learning-2020-spring/" data-hashtag="机器学习"><i class="fa-brands fa-facebook-square" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="http://localhost:1313/machine-learning-2020-spring/" data-title="Machine Learning 2020 Spring (李宏毅)" data-image="/images/202107/1/rowan-heuvel-meLAGRj_vDk-unsplash.jpg"><i class="fa-brands fa-weibo" aria-hidden="true"></i></a>
+  </span>
+        </div>
+      </div></div>
+
+  <div class="post-info-more">
+    <section class="post-tags"><i class="fa-solid fa-tags me-1" aria-hidden="true"></i><a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" class="post-tag" title="标签 - 机器学习">机器学习</a><a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" class="post-tag" title="标签 - 深度学习">深度学习</a><a href="/tags/%E5%8F%B0%E6%B9%BE%E5%A4%A7%E5%AD%A6/" class="post-tag" title="标签 - 台湾大学">台湾大学</a><a href="/tags/%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/" class="post-tag" title="标签 - 课程笔记">课程笔记</a><a href="/tags/%E5%85%AC%E5%BC%80%E8%AF%BE/" class="post-tag" title="标签 - 公开课">公开课</a></section>
+    <section><span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+    </section>
+  </div><div class="post-nav"><a href="/python%E4%B9%8Bmatplotlib/" class="post-nav-item" rel="prev" title="Matplotlib：绘图入门与实践"><i class="fa-solid fa-angle-left" aria-hidden="true"></i>Matplotlib：绘图入门与实践</a><a href="/python%E4%B9%8Brequests/" class="post-nav-item" rel="next" title="Requests：优雅发送HTTP请求">Requests：优雅发送HTTP请求<i class="fa-solid fa-angle-right" aria-hidden="true"></i></a></div>
+</div>
+<div class="post-reward">
+    <div class="comment">请作者喝杯咖啡!</div>
+    <input type="checkbox" class="reward-input" name="reward" id="fi-reward" hidden />
+    <label class="reward-button" for="fi-reward"><i class="fa-solid fa-qrcode" aria-hidden="true"></i>赞赏</label>
+    <div class="reward-ways" data-mode="static"><div><img src='/reward/alipay.png' alt="AndyFree96 支付宝"><span data-animation>支付宝</span>
+          </div><div><img src='/reward/wechatpay.png' alt="AndyFree96 微信"><span data-animation>微信</span>
+          </div></div>
+  </div></article>
+
+  <aside class="toc" id="toc-auto" aria-label="目录"><h2 class="toc-title">目录&nbsp;<i class="toc-icon fa-solid fa-angle-down" aria-hidden="true"></i></h2>
+      <div class="toc-content" id="toc-content-auto"></div></aside><dialog id="toc-dialog" aria-labelledby="toc-dialog-title" role="dialog" closedby="any">
+      <button type="button" class="toc-close-btn" aria-label="Close Table of Contents"><i class="fa-solid fa-xmark fa-lg" aria-hidden="true"></i></button>
+      <div class="toc">
+        <h2 class="toc-title" id="toc-dialog-title">目录</h2>
+        <div class="toc-content" id="toc-content-drawer"><nav >
+  <ul>
+    <li><a href="#课程大纲">课程大纲</a></li>
+  </ul>
+</nav></div>
+      </div>
+    </dialog></main><footer class="footer">
+    <div class="footer-container"><div class="footer-line powered">由 <a href="https://gohugo.io/" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.163.1">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/hugo-fixit/FixIt" target="_blank" rel="external" title="FixIt v1.0.0-mq99hlzg">FixIt</a>
+        </div><div class="footer-line copyright" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright" aria-hidden="true"></i>
+            <span itemprop="copyrightYear">2019 - 2026</span><span class="author" itemprop="copyrightHolder">
+              <a href="https://andyfree96.github.io/" target="_blank" rel="external nofollow noopener noreferrer">AndyFree96</a></span></div></div>
+  </footer></div><div class="widgets"><div class="fixed-buttons"><button type="button" class="fixed-button back-to-top animate__faster d-none" aria-label="回到顶部"><i class="fa-solid fa-arrow-up" aria-hidden="true"></i></button><button type="button" id="toc-drawer-button" class="fixed-button toc-drawer-button d-none" aria-label="目录" aria-controls="toc-dialog" aria-expanded="false"><i class="fa-solid fa-bars" aria-hidden="true"></i></button></div><div id="mask"></div><div class="reading-progress-bar" style="left: 0;top: 0;"></div><noscript>
+    <div class="noscript-warning">该网站在启用 JavaScript 的情况下效果最佳。</div>
+  </noscript>
+</div><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script src="/lib/autocomplete/autocomplete.min.js" defer></script><script src="/lib/algoliasearch/browser.umd.js" defer></script><script src="/lib/sharer/sharer.min.js" async defer></script><script src="/lib/cookieconsent/cookieconsent.min.js" defer></script><script src="/js/lib/cookieconsent.js" defer></script><script src="/lib/cell-tooltip/cell-tooltip.umd.js" defer></script><script src="/js/config/bad544b259e77a40470c264a4ad315cb.js" defer></script><script src="/js/lib/file-tree.js" defer></script><script src="/js/main.js" defer></script></body>
+</html>

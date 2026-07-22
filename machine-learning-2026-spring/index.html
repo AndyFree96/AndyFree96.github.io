@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+    <meta name="robots" content="noodp" />
+    <title>Machine Learning 2026 Spring (李宏毅) - 东尼的博客</title><meta name="author" content="AndyFree96">
+<meta name="description" content="人工智能的发展正在经历一次深刻的范式转变。过去十年，机器学习的核心目标更多集中在训练一个能够完成特定任务的模型：给模型大量数据，通过优化算法调整参数，让模型学会分类、预测、生成文本或理解图像。然而，以 ChatGPT 为代表的大语言模型(Large Language Model, LLM)的出现，让 AI 的角色发生了变化：
+AI 不再只是一个被动响应问题的模型，而正在逐渐成为能够规划、调用工具、持续学习并完成复杂任务的智能体(Agent)。
+在这个快速演进的时代，我们不仅需要理解“如何使用模型”，更需要深入理解：
+一个 AI Agent 是如何构建的？ 大模型内部的 Transformer 架构如何支撑如此强大的能力？ 为什么模型推论速度如此重要？如何进行模型加速？ 当输入长度达到几十万甚至百万 Token 时，模型如何处理超长上下文？ 我们如何通过数据、反馈和训练方法教育模型？ 模型是否能够像人类一样持续学习，实现自我成长？ 这些问题，正是李宏毅老师《Machine Learning 2026 Spring》课程试图探索的方向。本课程不再局限于传统机器学习中的监督学习、优化算法或模型训练流程，而是聚焦当前人工智能领域最前沿的问题：
+AI Agent：让模型具备规划、推理和执行能力 深入模型内部架构：如何优化推论效率 超长上下文处理：探索模型面对海量信息时的能力边界 模型教育(Teaching Models)：研究如何通过数据、反馈和训练方法塑造模型行为 模型自我成长(Model Self-Improvement)：探索未来 AI 是否能够自主提升能力 希望通过这系列学习笔记，不只是记录课程内容，更希望从工程实践和系统设计的角度，理解现代 AI 系统背后的技术原理。
+"><meta name="keywords" content='机器学习, 深度学习, 台湾大学'>
+	<meta itemprop="name" content="Machine Learning 2026 Spring (李宏毅)">
+	<meta itemprop="description" content="人工智能的发展正在经历一次深刻的范式转变。过去十年，机器学习的核心目标更多集中在训练一个能够完成特定任务的模型：给模型大量数据，通过优化算法调整参数，让模型学会分类、预测、生成文本或理解图像。然而，以 ChatGPT 为代表的大语言模型(Large Language Model, LLM)的出现，让 AI 的角色发生了变化：
+AI 不再只是一个被动响应问题的模型，而正在逐渐成为能够规划、调用工具、持续学习并完成复杂任务的智能体(Agent)。
+在这个快速演进的时代，我们不仅需要理解“如何使用模型”，更需要深入理解：
+一个 AI Agent 是如何构建的？ 大模型内部的 Transformer 架构如何支撑如此强大的能力？ 为什么模型推论速度如此重要？如何进行模型加速？ 当输入长度达到几十万甚至百万 Token 时，模型如何处理超长上下文？ 我们如何通过数据、反馈和训练方法教育模型？ 模型是否能够像人类一样持续学习，实现自我成长？ 这些问题，正是李宏毅老师《Machine Learning 2026 Spring》课程试图探索的方向。本课程不再局限于传统机器学习中的监督学习、优化算法或模型训练流程，而是聚焦当前人工智能领域最前沿的问题：
+AI Agent：让模型具备规划、推理和执行能力 深入模型内部架构：如何优化推论效率 超长上下文处理：探索模型面对海量信息时的能力边界 模型教育(Teaching Models)：研究如何通过数据、反馈和训练方法塑造模型行为 模型自我成长(Model Self-Improvement)：探索未来 AI 是否能够自主提升能力 希望通过这系列学习笔记，不只是记录课程内容，更希望从工程实践和系统设计的角度，理解现代 AI 系统背后的技术原理。">
+	<meta itemprop="datePublished" content="2026-07-22T14:21:54+08:00">
+	<meta itemprop="dateModified" content="2026-07-22T14:21:54+08:00">
+	<meta itemprop="wordCount" content="660">
+	<meta itemprop="keywords" content="机器学习,深度学习,台湾大学"><meta property="og:url" content="http://localhost:1313/machine-learning-2026-spring/">
+	<meta property="og:site_name" content="东尼的博客">
+	<meta property="og:title" content="Machine Learning 2026 Spring (李宏毅)">
+	<meta property="og:description" content="人工智能的发展正在经历一次深刻的范式转变。过去十年，机器学习的核心目标更多集中在训练一个能够完成特定任务的模型：给模型大量数据，通过优化算法调整参数，让模型学会分类、预测、生成文本或理解图像。然而，以 ChatGPT 为代表的大语言模型(Large Language Model, LLM)的出现，让 AI 的角色发生了变化：
+AI 不再只是一个被动响应问题的模型，而正在逐渐成为能够规划、调用工具、持续学习并完成复杂任务的智能体(Agent)。
+在这个快速演进的时代，我们不仅需要理解“如何使用模型”，更需要深入理解：
+一个 AI Agent 是如何构建的？ 大模型内部的 Transformer 架构如何支撑如此强大的能力？ 为什么模型推论速度如此重要？如何进行模型加速？ 当输入长度达到几十万甚至百万 Token 时，模型如何处理超长上下文？ 我们如何通过数据、反馈和训练方法教育模型？ 模型是否能够像人类一样持续学习，实现自我成长？ 这些问题，正是李宏毅老师《Machine Learning 2026 Spring》课程试图探索的方向。本课程不再局限于传统机器学习中的监督学习、优化算法或模型训练流程，而是聚焦当前人工智能领域最前沿的问题：
+AI Agent：让模型具备规划、推理和执行能力 深入模型内部架构：如何优化推论效率 超长上下文处理：探索模型面对海量信息时的能力边界 模型教育(Teaching Models)：研究如何通过数据、反馈和训练方法塑造模型行为 模型自我成长(Model Self-Improvement)：探索未来 AI 是否能够自主提升能力 希望通过这系列学习笔记，不只是记录课程内容，更希望从工程实践和系统设计的角度，理解现代 AI 系统背后的技术原理。">
+	<meta property="og:locale" content="zh_CN">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="posts">
+		<meta property="article:published_time" content="2026-07-22T14:21:54+08:00">
+		<meta property="article:modified_time" content="2026-07-22T14:21:54+08:00">
+		<meta property="article:tag" content="机器学习">
+		<meta property="article:tag" content="深度学习">
+		<meta property="article:tag" content="台湾大学">
+		<meta property="article:tag" content="课程笔记">
+		<meta property="article:tag" content="公开课">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Machine Learning 2026 Spring (李宏毅)">
+  <meta name="twitter:description" content="人工智能的发展正在经历一次深刻的范式转变。过去十年，机器学习的核心目标更多集中在训练一个能够完成特定任务的模型：给模型大量数据，通过优化算法调整参数，让模型学会分类、预测、生成文本或理解图像。然而，以 ChatGPT 为代表的大语言模型(Large Language Model, LLM)的出现，让 AI 的角色发生了变化：
+AI 不再只是一个被动响应问题的模型，而正在逐渐成为能够规划、调用工具、持续学习并完成复杂任务的智能体(Agent)。
+在这个快速演进的时代，我们不仅需要理解“如何使用模型”，更需要深入理解：
+一个 AI Agent 是如何构建的？ 大模型内部的 Transformer 架构如何支撑如此强大的能力？ 为什么模型推论速度如此重要？如何进行模型加速？ 当输入长度达到几十万甚至百万 Token 时，模型如何处理超长上下文？ 我们如何通过数据、反馈和训练方法教育模型？ 模型是否能够像人类一样持续学习，实现自我成长？ 这些问题，正是李宏毅老师《Machine Learning 2026 Spring》课程试图探索的方向。本课程不再局限于传统机器学习中的监督学习、优化算法或模型训练流程，而是聚焦当前人工智能领域最前沿的问题：
+AI Agent：让模型具备规划、推理和执行能力 深入模型内部架构：如何优化推论效率 超长上下文处理：探索模型面对海量信息时的能力边界 模型教育(Teaching Models)：研究如何通过数据、反馈和训练方法塑造模型行为 模型自我成长(Model Self-Improvement)：探索未来 AI 是否能够自主提升能力 希望通过这系列学习笔记，不只是记录课程内容，更希望从工程实践和系统设计的角度，理解现代 AI 系统背后的技术原理。"><meta name="twitter:creator" content="@IRONAnthony96"><meta name="application-name" content="FixIt">
+<meta name="apple-mobile-web-app-title" content="FixIt"><meta name="theme-color" data-light="#f6f8fa" data-dark="#151b23" content="#f6f8fa"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" type="text/html" href="http://localhost:1313/machine-learning-2026-spring/" title="Machine Learning 2026 Spring (李宏毅) - 东尼的博客" /><link rel="prev" type="text/html" href="http://localhost:1313/c%23-linq%E5%AD%A6%E4%B9%A0%E4%B9%8B%E6%97%85/" title="C# LINQ学习之旅：从集合操作到声明式编程" /><link rel="alternate" type="text/markdown" href="http://localhost:1313/machine-learning-2026-spring/index.md" title="Machine Learning 2026 Spring (李宏毅) - 东尼的博客"><link rel="stylesheet" href="/css/config.css"><link rel="stylesheet" href="/css/main.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><link rel="preload" href="/js/main.js" as="script"><script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "BlogPosting",
+    "headline": "Machine Learning 2026 Spring (李宏毅)",
+    "inLanguage": "zh-CN",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "http:\/\/localhost:1313\/machine-learning-2026-spring\/"
+    },"genre": "posts","keywords": "机器学习, 深度学习, 台湾大学, 课程笔记, 公开课","wordcount":  660 ,
+    "url": "http:\/\/localhost:1313\/machine-learning-2026-spring\/","datePublished": "2026-07-22T14:21:54+08:00","dateModified": "2026-07-22T14:21:54+08:00","publisher": {
+      "@type": "Organization",
+      "name": ""},"author": {
+        "@type": "Person",
+        "name": "AndyFree96"
+      },"description": ""
+  }
+  </script><script src="/js/head/color-scheme.js"></script></head>
+  <body data-instant-intensity="viewport" data-header-desktop="sticky" data-header-mobile="auto"><div class="wrapper" data-page-style="normal"><header class="desktop animate__faster" id="header-desktop">
+  <div class="header-wrapper">
+    <div class="header-title">
+      <a href="/" title="东尼的博客" class="header-title-link"><span class="header-title-text">东尼的博客</span></a><span class="header-subtitle"></span></div>
+    <nav>
+      <ul class="menu"><li class="menu-item">
+              <a class="menu-link" href="/posts/">📕 文章</a></li><li class="menu-item">
+              <a class="menu-link" href="/categories/">🧰 分类</a></li><li class="menu-item">
+              <a class="menu-link" href="/tags/">🔖 标签</a></li><li class="menu-item">
+              <a class="menu-link" href="/book">📚 书单</a></li><li class="menu-item">
+              <a class="menu-link" href="/paper">📝 论文</a></li><li class="menu-item">
+              <a class="menu-link" href="/opencourse">👨🏻‍💻 公开课</a></li><li class="menu-item">
+              <a class="menu-link" href="/filmtv">🎞️ 影视</a></li><li class="menu-item">
+              <a class="menu-link" href="/resource">⚡️ 资源库</a></li><li class="menu-item">
+              <a class="menu-link" href="/projects">⭐ 开源</a></li><li class="menu-item">
+              <a class="menu-link" href="/about">🙋🏻‍♂️ 关于</a></li><li class="menu-item delimiter"></li><li class="menu-item search" id="search-desktop">
+            <input type="text" placeholder="搜索文章标题或内容……" id="search-input-desktop" tabindex="-1">
+            <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索" aria-controls="search-dropdown-desktop" aria-expanded="false">
+              <i class="fa-solid fa-search" aria-hidden="true"></i>
+            </a>
+            <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+              <i class="fa-solid fa-times-circle" aria-hidden="true"></i>
+            </a>
+            <span class="search-button search-loading" id="search-loading-desktop">
+              <i class="fa-solid fa-spinner fa-spin" aria-hidden="true"></i>
+            </span>
+          </li><li class="menu-item theme-switch-item">
+          <button type="button" class="theme-switch" aria-label="切换主题" title="切换主题"><i class="fa-solid fa-adjust" aria-hidden="true"></i></button>
+        </li></ul>
+    </nav>
+  </div>
+</header><header class="mobile animate__faster" id="header-mobile">
+  <div class="header-container">
+    <div class="header-wrapper">
+      <div class="header-title">
+        <a href="/" title="东尼的博客" class="header-title-link"><span class="header-title-text">东尼的博客</span></a><span class="header-subtitle"></span></div>
+      <button type="button" class="theme-switch" aria-label="切换主题"><i class="fa-solid fa-adjust" aria-hidden="true"></i></button>
+      <button type="button" class="menu-toggle" id="menu-toggle-mobile" aria-controls="menu-mobile" aria-expanded="false" aria-labelledby="menu-mobile">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <nav>
+      <ul class="menu" id="menu-mobile"><li class="search-wrapper">
+            <div class="search mobile" id="search-mobile">
+              <input type="text" placeholder="搜索文章标题或内容……" id="search-input-mobile">
+              <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索" aria-controls="search-dropdown-mobile" aria-expanded="false">
+                <i class="fa-solid fa-search" aria-hidden="true"></i>
+              </a>
+              <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                <i class="fa-solid fa-times-circle" aria-hidden="true"></i>
+              </a>
+              <span class="search-button search-loading" id="search-loading-mobile">
+                <i class="fa-solid fa-spinner fa-spin" aria-hidden="true"></i>
+              </span>
+            </div>
+            <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+              取消
+            </a>
+          </li><li class="menu-item"><a class="menu-link" href="/posts/">📕 文章</a></li><li class="menu-item"><a class="menu-link" href="/categories/">🧰 分类</a></li><li class="menu-item"><a class="menu-link" href="/tags/">🔖 标签</a></li><li class="menu-item"><a class="menu-link" href="/book">📚 书单</a></li><li class="menu-item"><a class="menu-link" href="/paper">📝 论文</a></li><li class="menu-item"><a class="menu-link" href="/opencourse">👨🏻‍💻 公开课</a></li><li class="menu-item"><a class="menu-link" href="/filmtv">🎞️ 影视</a></li><li class="menu-item"><a class="menu-link" href="/resource">⚡️ 资源库</a></li><li class="menu-item"><a class="menu-link" href="/projects">⭐ 开源</a></li><li class="menu-item"><a class="menu-link" href="/about">🙋🏻‍♂️ 关于</a></li><li class="menu-item menu-system"></li>
+      </ul>
+    </nav>
+  </div>
+</header><div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+  </div>
+  <div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+  </div><main class="fi-container"><aside class="aside-collection animate__animated animate__fadeIn animate__faster" aria-label="合集"><div class="details related-details open">
+      <div class="details-summary related-summary">
+        <i class="fa-solid fa-fire fa-fade text-danger" aria-hidden="true"></i>
+        <span class="related-title">相关内容</span><i class="details-icon fa-solid fa-angle-right" aria-hidden="true"></i></div>
+      <div class="details-content related-content">
+        <ul class="related-list"><li class="related-item">
+              <a href="/machine-learning-2020-spring/" title="Machine Learning 2020 Spring (李宏毅)">Machine Learning 2020 Spring (李宏毅)</a></li><li class="related-item">
+              <a href="/yolov1%E8%AE%BA%E6%96%87%E7%B2%BE%E8%AF%BB/" title="YOLOv1论文精读：You Only Look Once如何重新定义目标检测？">YOLOv1论文精读：You Only Look Once如何重新定义目标检测？</a></li><li class="related-item">
+              <a href="/%E7%94%A8keras%E6%90%AD%E5%BB%BA%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" title="用Keras搭建卷积神经网络">用Keras搭建卷积神经网络</a></li><li class="related-item">
+              <a href="/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E5%AD%A6%E4%B9%A0gans/" title="从零开始学习GANs">从零开始学习GANs</a></li><li class="related-item">
+              <a href="/cs61a-structure-and-interpretation-of-computer-programs/" title="CS61A：Structure and Interpretation of Computer Programs">CS61A：Structure and Interpretation of Computer Programs</a></li></ul>
+      </div>
+    </div></aside>
+
+  <article class="page single">
+    <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span title="转载" class="icon-repost"><i class="fa-solid fa-share" aria-hidden="true"></i></span><span>Machine Learning 2026 Spring (李宏毅)</span>
+      </h1><p class="single-subtitle animate__animated animate__fadeIn">从AI Agent到模型自我成长</p></div><div class="post-meta">
+      <div class="post-meta-line"><span class="post-author"><a href="https://andyfree96.github.io/" title="作者" target="_blank" rel="author external nofollow noopener noreferrer" class="author"><img class="avatar" src='/avatar/1.jpg' alt="AndyFree96" height="16" width="16">&nbsp;AndyFree96</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E5%85%AC%E5%BC%80%E8%AF%BE/" class="post-category" title="分类 - 公开课"><i class="fa-regular fa-folder" aria-hidden="true"></i> 公开课</a></span></div><div class="post-meta-line"><span title="发布于 2026-07-22 14:21:54"><i class="fa-solid fa-calendar-days me-1" aria-hidden="true"></i><time datetime="2026-07-22">2026-07-22</time></span>&nbsp;<span title="660 字"><i class="fa-solid fa-pencil-alt me-1" aria-hidden="true"></i>约 700 字</span>&nbsp;<span><i class="fa-regular fa-clock me-1" aria-hidden="true"></i>预计阅读 2 分钟</span>&nbsp;</div>
+    </div><div class="featured-image"><img loading="eager" src='/images/202607/33/paul-lichtblau-4x7j4mdLVLU-unsplash.jpg' sizes="(max-width: 680px) 100vw, (max-width: 960px) 80vw, (max-width: 1440px) 56vw, 800px" alt="/images/202607/33/paul-lichtblau-4x7j4mdLVLU-unsplash.jpg"></div><div class="details toc" id="toc-static" data-kept="false">
+        <div class="details-summary toc-title">
+          <span>目录</span>
+          <span><i class="details-icon fa-solid fa-angle-right" aria-hidden="true"></i></span>
+        </div>
+        <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#参考">参考</a></li>
+  </ul>
+</nav></div>
+      </div><div class="content" id="content"><p>人工智能的发展正在经历一次深刻的范式转变。过去十年，机器学习的核心目标更多集中在训练一个能够完成特定任务的模型：给模型大量数据，通过优化算法调整参数，让模型学会分类、预测、生成文本或理解图像。然而，以 ChatGPT 为代表的大语言模型(Large Language Model, LLM)的出现，让 AI 的角色发生了变化：</p>
+<blockquote>
+<p>AI 不再只是一个被动响应问题的模型，而正在逐渐成为能够规划、调用工具、持续学习并完成复杂任务的智能体(Agent)。</p>
+</blockquote>
+<p>在这个快速演进的时代，我们不仅需要理解“如何使用模型”，更需要深入理解：</p>
+<ul>
+<li>一个 AI Agent 是如何构建的？</li>
+<li>大模型内部的 Transformer 架构如何支撑如此强大的能力？</li>
+<li>为什么模型推论速度如此重要？如何进行模型加速？</li>
+<li>当输入长度达到几十万甚至百万 Token 时，模型如何处理超长上下文？</li>
+<li>我们如何通过数据、反馈和训练方法教育模型？</li>
+<li>模型是否能够像人类一样持续学习，实现自我成长？</li>
+</ul>
+<p>这些问题，正是李宏毅老师<a href="https://speech.ee.ntu.edu.tw/~hylee/ml/2026-spring.php" target="_blank" rel="external nofollow noopener noreferrer">《Machine Learning 2026 Spring》<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>课程试图探索的方向。本课程不再局限于传统机器学习中的监督学习、优化算法或模型训练流程，而是聚焦当前人工智能领域最前沿的问题：</p>
+<ul>
+<li>AI Agent：让模型具备规划、推理和执行能力</li>
+<li>深入模型内部架构：如何优化推论效率</li>
+<li>超长上下文处理：探索模型面对海量信息时的能力边界</li>
+<li>模型教育(Teaching Models)：研究如何通过数据、反馈和训练方法塑造模型行为</li>
+<li>模型自我成长(Model Self-Improvement)：探索未来 AI 是否能够自主提升能力</li>
+</ul>
+<p>希望通过这系列学习笔记，不只是记录课程内容，更希望从工程实践和系统设计的角度，理解现代 AI 系统背后的技术原理。</p>
+<h2 class="heading-element" id="参考"><span>参考</span>
+  <a href="#%e5%8f%82%e8%80%83" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p><a href="https://speech.ee.ntu.edu.tw/~hylee/ml/2026-spring.php" target="_blank" rel="external nofollow noopener noreferrer">Machine Learning 2026 Spring<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></p></div><hr class="awesome-hr" />
+    <h2 id="see-also">相关内容</h2>
+    <ul><li>
+          <a href="/machine-learning-2020-spring/" title="Machine Learning 2020 Spring (李宏毅)">Machine Learning 2020 Spring (李宏毅)</a></li><li>
+          <a href="/yolov1%E8%AE%BA%E6%96%87%E7%B2%BE%E8%AF%BB/" title="YOLOv1论文精读：You Only Look Once如何重新定义目标检测？">YOLOv1论文精读：You Only Look Once如何重新定义目标检测？</a></li><li>
+          <a href="/%E7%94%A8keras%E6%90%AD%E5%BB%BA%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" title="用Keras搭建卷积神经网络">用Keras搭建卷积神经网络</a></li><li>
+          <a href="/%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E5%AD%A6%E4%B9%A0gans/" title="从零开始学习GANs">从零开始学习GANs</a></li><li>
+          <a href="/cs61a-structure-and-interpretation-of-computer-programs/" title="CS61A：Structure and Interpretation of Computer Programs">CS61A：Structure and Interpretation of Computer Programs</a></li></ul><div class="post-footer" id="post-footer">
+  <div class="post-info">
+    <div class="post-info-line">
+      <div class="post-info-mod"><span title="更新于 2026-07-22 14:21:54">更新于 2026-07-22&nbsp;</span>
+      </div></div><div class="post-info-line">
+        <div class="post-info-md"><span><a href="vscode://file/D:\hugo-blog\andyfree96\content\posts\machine-learning-2026-spring.md" title="在编辑器中打开" class="link-to-vscode">在编辑器中打开</a></span></div>
+        <div class="post-info-share">
+          <span><a href="javascript:void(0);" title="分享到 X" data-sharer="twitter" data-url="http://localhost:1313/machine-learning-2026-spring/" data-title="Machine Learning 2026 Spring (李宏毅)" data-via="IRONAnthony96" data-hashtags="机器学习,深度学习,台湾大学,课程笔记,公开课"><i class="fa-brands fa-x-twitter" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="http://localhost:1313/machine-learning-2026-spring/" data-hashtag="机器学习"><i class="fa-brands fa-facebook-square" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="http://localhost:1313/machine-learning-2026-spring/" data-title="Machine Learning 2026 Spring (李宏毅)" data-image="/images/202607/33/paul-lichtblau-4x7j4mdLVLU-unsplash.jpg"><i class="fa-brands fa-weibo" aria-hidden="true"></i></a>
+  </span>
+        </div>
+      </div></div>
+
+  <div class="post-info-more">
+    <section class="post-tags"><i class="fa-solid fa-tags me-1" aria-hidden="true"></i><a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" class="post-tag" title="标签 - 机器学习">机器学习</a><a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" class="post-tag" title="标签 - 深度学习">深度学习</a><a href="/tags/%E5%8F%B0%E6%B9%BE%E5%A4%A7%E5%AD%A6/" class="post-tag" title="标签 - 台湾大学">台湾大学</a><a href="/tags/%E8%AF%BE%E7%A8%8B%E7%AC%94%E8%AE%B0/" class="post-tag" title="标签 - 课程笔记">课程笔记</a><a href="/tags/%E5%85%AC%E5%BC%80%E8%AF%BE/" class="post-tag" title="标签 - 公开课">公开课</a></section>
+    <section><span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+    </section>
+  </div><div class="post-nav"><a href="/c%23-linq%E5%AD%A6%E4%B9%A0%E4%B9%8B%E6%97%85/" class="post-nav-item" rel="prev" title="C# LINQ学习之旅：从集合操作到声明式编程"><i class="fa-solid fa-angle-left" aria-hidden="true"></i>C# LINQ学习之旅：从集合操作到声明式编程</a></div>
+</div>
+<div class="post-reward">
+    <div class="comment">请作者喝杯咖啡!</div>
+    <input type="checkbox" class="reward-input" name="reward" id="fi-reward" hidden />
+    <label class="reward-button" for="fi-reward"><i class="fa-solid fa-qrcode" aria-hidden="true"></i>赞赏</label>
+    <div class="reward-ways" data-mode="static"><div><img src='/reward/alipay.png' alt="AndyFree96 支付宝"><span data-animation>支付宝</span>
+          </div><div><img src='/reward/wechatpay.png' alt="AndyFree96 微信"><span data-animation>微信</span>
+          </div></div>
+  </div></article>
+
+  <aside class="toc" id="toc-auto" aria-label="目录"><h2 class="toc-title">目录&nbsp;<i class="toc-icon fa-solid fa-angle-down" aria-hidden="true"></i></h2>
+      <div class="toc-content" id="toc-content-auto"></div></aside><dialog id="toc-dialog" aria-labelledby="toc-dialog-title" role="dialog" closedby="any">
+      <button type="button" class="toc-close-btn" aria-label="Close Table of Contents"><i class="fa-solid fa-xmark fa-lg" aria-hidden="true"></i></button>
+      <div class="toc">
+        <h2 class="toc-title" id="toc-dialog-title">目录</h2>
+        <div class="toc-content" id="toc-content-drawer"><nav >
+  <ul>
+    <li><a href="#参考">参考</a></li>
+  </ul>
+</nav></div>
+      </div>
+    </dialog></main><footer class="footer">
+    <div class="footer-container"><div class="footer-line powered">由 <a href="https://gohugo.io/" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.163.1">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/hugo-fixit/FixIt" target="_blank" rel="external" title="FixIt v1.0.0-mq99hlzg">FixIt</a>
+        </div><div class="footer-line copyright" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright" aria-hidden="true"></i>
+            <span itemprop="copyrightYear">2019 - 2026</span><span class="author" itemprop="copyrightHolder">
+              <a href="https://andyfree96.github.io/" target="_blank" rel="external nofollow noopener noreferrer">AndyFree96</a></span></div></div>
+  </footer></div><div class="widgets"><div class="fixed-buttons"><button type="button" class="fixed-button back-to-top animate__faster d-none" aria-label="回到顶部"><i class="fa-solid fa-arrow-up" aria-hidden="true"></i></button><button type="button" id="toc-drawer-button" class="fixed-button toc-drawer-button d-none" aria-label="目录" aria-controls="toc-dialog" aria-expanded="false"><i class="fa-solid fa-bars" aria-hidden="true"></i></button></div><div id="mask"></div><div class="reading-progress-bar" style="left: 0;top: 0;"></div><noscript>
+    <div class="noscript-warning">该网站在启用 JavaScript 的情况下效果最佳。</div>
+  </noscript>
+</div><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script src="/lib/autocomplete/autocomplete.min.js" defer></script><script src="/lib/algoliasearch/browser.umd.js" defer></script><script src="/lib/sharer/sharer.min.js" async defer></script><script src="/lib/cookieconsent/cookieconsent.min.js" defer></script><script src="/js/lib/cookieconsent.js" defer></script><script src="/lib/cell-tooltip/cell-tooltip.umd.js" defer></script><script src="/js/config/773f9191850e2fb7928fd5f134c962e5.js" defer></script><script src="/js/lib/file-tree.js" defer></script><script src="/js/main.js" defer></script></body>
+</html>
