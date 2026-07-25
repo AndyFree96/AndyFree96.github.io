@@ -2,6 +2,7 @@
 
 
 [shadowsocks-windows](https://github.com/shadowsocks/shadowsocks-windows)是一个经典的C#网络代理客户端项目，它将SOCKS5代理、TCP/UDP Relay、加密通信、系统代理管理以及Windows桌面应用结合在一起。本文通过问题驱动的方式阅读源码，深入分析其架构设计、网络通信模型以及C#工程实践，探索一个成熟的开源项目是如何实现高性能、稳定的网络代理能力。
+
 <!--more-->
 
 ## 1. 启动后到底发生了什么？
@@ -23,6 +24,17 @@
 ## 9. 加密算法如何做到可替代？
 
 ## 10. 一个配置文件如何驱动整个程序？
+
+## 番外
+
+### 如何获取进程对应的可执行程序路径？
+
+引入`System.Diagnostics`命名空间。
+
+```c#
+public static readonly string ExecutablePath = Process.GetCurrentProcess().MainModule?.FileName;
+public static readonly string WorkingDirectory = Path.GetDirectoryName(ExecutablePath);
+```
 
 
 ---

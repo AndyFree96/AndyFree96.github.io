@@ -27,12 +27,12 @@
       <description>&lt;p&gt;在阅读一些大型 C++ 项目源码时，经常会看到类似下面这样的代码：&lt;/p&gt;&#xA;&lt;pre&gt;&lt;code&gt;class MyClass {&#xD;&#xA;public:&#xD;&#xA;  MyClass();&#xD;&#xA;  ~MyClass();&#xD;&#xA;private:&#xD;&#xA;  class Impl;&#xD;&#xA;  std::unique_ptr&amp;lt;Impl&amp;gt; impl_;&#xD;&#xA;};&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;第一次看到这种写法，很多人都会疑惑：&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;为什么真正的数据成员不放在类里面？&lt;/li&gt;&#xA;&lt;li&gt;为什么要多定义一个&lt;code&gt;Impl&lt;/code&gt;类？&lt;/li&gt;&#xA;&lt;li&gt;为什么析构函数要放到&lt;code&gt;.cpp&lt;/code&gt;中实现？&lt;/li&gt;&#xA;&lt;li&gt;这样设计有什么好处？&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;p&gt;实际上，这就是C++中非常经典的Pimpl(Pointer to Implementation)设计模式。本文将从设计思想、实现方式、优缺点以及使用场景几个方面详细介绍Pimpl。&lt;/p&gt;</description>
     </item>
     <item>
-      <title>LevelDB源码剖析：如何设计一个高性能嵌入式数据库</title>
+      <title>LevelDB源码剖析：从零实现MiniLevelDB理解LSM-Tree存储引擎设计</title>
       <link>http://localhost:1313/leveldb%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/</link>
       <pubDate>Thu, 25 Jun 2026 12:59:10 +0800</pubDate><author>anthonyfree96@gmail.com (AndyFree96)</author>
       <guid>http://localhost:1313/leveldb%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/</guid>
       <category domain="http://localhost:1313/categories/%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/">源码剖析</category>
-      <description>LevelDB源码剖析：如何设计一个高性能嵌入式数据库</description>
+      <description>LevelDB源码剖析：从零实现MiniLevelDB理解LSM-Tree存储引擎设计</description>
     </item>
     <item>
       <title>csv2 源码剖析：轻量级 CSV 处理的高效之道</title>

@@ -1,4 +1,4 @@
-# C#编程实践(一)：深入System.Net.NetworkInformation获取系统网络信息
+# 深入System.Net.NetworkInformation获取系统网络信息
 
 
 在工业软件、设备控制系统、网络诊断工具开发中，经常需要获取当前计算机的网络状态，例如：

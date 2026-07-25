@@ -400,7 +400,119 @@ _bandwidthMeter.UpdateSpeed += BandwidthMeter_UpdateSpeed;
 
 ## 5. NETworkManager是如何管理众多功能页面的？
 
+程序左侧的菜单使用了`ListView`组件：
+
+```xml {title="NETworkManager/MainWindow.xaml"}
+<ListView x:Name="ListViewApplication" ItemsSource="{Binding Applications}"
+          SelectedItem="{Binding SelectedApplication, Mode=TwoWay}"
+          SelectionMode="Single"
+          BorderThickness="0"
+          dd:DragDrop.IsDragSource="True"
+          dd:DragDrop.IsDropTarget="True"> 
+          ...... 
+</ListView>
+```
+
+该组件绑定了`SelectedApplication`，其定义如下：
+
+```c#
+   public ApplicationInfo SelectedApplication
+   {
+       get;
+       set
+       {
+           // Do not change the application view if the application view is loading
+           if (_isApplicationViewLoading)
+               return;
+
+           // Should only be null if we try to re-set the selected application via search
+           if (value == null && !_applicationViewIsEmpty)
+               return;
+
+           // Don't update the application view if the application is the same
+           if (Equals(value, field))
+               return;
+
+           if (value != null && !_applicationViewIsEmpty)
+           {
+               // Hide the old application view
+               if (field != null)
+                   OnApplicationViewHide(field.Name);
+
+               // Show the new application view
+               OnApplicationViewVisible(value.Name);
+
+               // Store the last selected application name
+               ConfigurationManager.Current.CurrentApplication = value.Name;
+           }
+
+           field = value;
+           OnPropertyChanged();
+       }
+   }
+```
+
+页面的显示由`OnApplicationViewVisible(value.Name)`决定，`OnApplicationViewVisible`会根据点击菜单的不同，将`ContentControlApplication.Content`的值设置为对应的页面。
+
+```c#
+  private void OnApplicationViewVisible(ApplicationName name)
+  {
+      switch (name)
+      {
+          case ApplicationName.Dashboard:
+              if (_dashboardView == null)
+                  _dashboardView = new DashboardView();
+              else
+                  _dashboardView.OnViewVisible();
+
+              ContentControlApplication.Content = _dashboardView;
+              break;
+          case ApplicationName.NetworkInterface:
+              if (_networkInterfaceView == null)
+                  _networkInterfaceView = new NetworkInterfaceView();
+              else
+                  _networkInterfaceView.OnViewVisible();
+
+              ContentControlApplication.Content = _networkInterfaceView;
+              break;
+          // ......
+      }
+  }
+```
+
+而`ContentControlApplication`是`NETworkManager/MainWindow.xaml`中定义的一个`ContentControl`内容容器控件而已(常用于页面切换)：
+
+```xml {title="NETworkManager/MainWindow.xaml"}
+<asf:AirspacePanel Grid.Column="1" Grid.Row="0"
+                    FixAirspace="{Binding Source={x:Static settings:ConfigurationManager.Current}, Path=FixAirspace}">
+    <ContentControl x:Name="ContentControlApplication" />
+</asf:AirspacePanel>
+```
+
 ## 6. 语言切换,如何做到不用修改代码？
+
+`NETworkManager/MainWindow.xaml.cs`的`MainWindow`构造函数对WPF 控件的语言环境进行了设置：
+
+```c#
+// Language metadata
+LanguageProperty.OverrideMetadata(typeof(FrameworkElement),
+    new FrameworkPropertyMetadata(
+        XmlLanguage.GetLanguage(LocalizationManager.GetInstance().Culture.IetfLanguageTag)));
+```
+
+会影响到字体、文本布局等。而`NETworkManager/App.xaml.cs`中的`Application_Startup`方法对字符串资源进行选择：
+
+```c#
+// Initialize localization
+var localizationManager = LocalizationManager.GetInstance(SettingsManager.Current.Localization_CultureCode);
+
+Strings.Culture = localizationManager.Culture;
+```
+
+字符串资源可在xaml文件中使用。
+
+![图6 使用字符串资源](/images/202607/15/6.png '图6 使用字符串资源')
+
 
 ## 7. 软件如何实现自动更新？
 
@@ -463,10 +575,52 @@ private void CheckForUpdates()
 
 ## 番外
 
-### 1. `.editorconfig`是什么？
+### `.editorconfig`是什么？
 
 `.editorconfig`是[EditorConfig](https://editorconfig.org/)的配置文件，能够让不同编辑器保持编辑风格一致。比如：用四个空格缩进、用utf-8编码等等。
 
+### `[CallerMemberName]`是什么？
+
+`NETworkManager.Utilities/PropertyChangedBase.cs`的`OnPropertyChanged`方法使用了`[CallerMemberName]`，这是什么？
+
+```c#
+public abstract class PropertyChangedBase : INotifyPropertyChanged
+{
+    public event PropertyChangedEventHandler PropertyChanged;
+
+    protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
+    {
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    }
+}
+```
+
+`[CallerMemberName]`是C#中的一个调用方信息属性(Caller Information Attribute)，它可以让方法自动获取**调用者的成员名称(方法名、属性名、构造函数名等)**，而不需要手动传递字符串。它位于：
+
+```c#
+using System.Runtime.CompilerServices;
+```
+
+例如：
+
+```c#
+    public static void Log(string message, [CallerMemberName]string memberName = "")
+    {
+        Console.WriteLine($"{memberName}: {message}");
+    }
+    static void Main(string[] args)
+    {
+        Log("Hello World");
+    }
+```
+
+输出：
+
+```
+Main: Hello World
+```
+
+最经典的用途就是像`PropertyChangedBase`一样，实现属性通知。
 
 ---
 

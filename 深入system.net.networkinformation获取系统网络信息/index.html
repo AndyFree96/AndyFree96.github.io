@@ -4,12 +4,12 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
     <meta name="robots" content="noodp" />
-    <title>C#编程实践(一)：深入System.Net.NetworkInformation获取系统网络信息 - 东尼的博客</title><meta name="author" content="AndyFree96">
+    <title>深入System.Net.NetworkInformation获取系统网络信息 - 东尼的博客</title><meta name="author" content="AndyFree96">
 <meta name="description" content="在工业软件、设备控制系统、网络诊断工具开发中，经常需要获取当前计算机的网络状态，例如：
 当前有哪些网卡？ 网卡是否连接？ IP地址是多少？ MAC地址是多少？ 网络连接速度是多少？ DNS、网关、DHCP信息是什么？ .NET提供了一个非常方便的命名空间System.Net.NetworkInformation，其中核心类：
 类作用NetworkInterface获取网卡信息IPInterfaceProperties获取 IP 配置IPAddressInformation获取 IP 地址状态PhysicalAddress获取 MAC 地址NetworkChange监听网络变化本文将系统介绍如何使用这些API构建一个网络信息采集工具。
 "><meta name="keywords" content='C#, .NET, IPv4, MAC, DNS'>
-	<meta itemprop="name" content="C#编程实践(一)：深入System.Net.NetworkInformation获取系统网络信息">
+	<meta itemprop="name" content="深入System.Net.NetworkInformation获取系统网络信息">
 	<meta itemprop="description" content="在工业软件、设备控制系统、网络诊断工具开发中，经常需要获取当前计算机的网络状态，例如：
 当前有哪些网卡？ 网卡是否连接？ IP地址是多少？ MAC地址是多少？ 网络连接速度是多少？ DNS、网关、DHCP信息是什么？ .NET提供了一个非常方便的命名空间System.Net.NetworkInformation，其中核心类：
 类作用NetworkInterface获取网卡信息IPInterfaceProperties获取 IP 配置IPAddressInformation获取 IP 地址状态PhysicalAddress获取 MAC 地址NetworkChange监听网络变化本文将系统介绍如何使用这些API构建一个网络信息采集工具。">
@@ -18,7 +18,7 @@
 	<meta itemprop="wordCount" content="2475">
 	<meta itemprop="keywords" content="C#,.NET,IPv4,MAC,DNS"><meta property="og:url" content="http://localhost:1313/%E6%B7%B1%E5%85%A5system.net.networkinformation%E8%8E%B7%E5%8F%96%E7%B3%BB%E7%BB%9F%E7%BD%91%E7%BB%9C%E4%BF%A1%E6%81%AF/">
 	<meta property="og:site_name" content="东尼的博客">
-	<meta property="og:title" content="C#编程实践(一)：深入System.Net.NetworkInformation获取系统网络信息">
+	<meta property="og:title" content="深入System.Net.NetworkInformation获取系统网络信息">
 	<meta property="og:description" content="在工业软件、设备控制系统、网络诊断工具开发中，经常需要获取当前计算机的网络状态，例如：
 当前有哪些网卡？ 网卡是否连接？ IP地址是多少？ MAC地址是多少？ 网络连接速度是多少？ DNS、网关、DHCP信息是什么？ .NET提供了一个非常方便的命名空间System.Net.NetworkInformation，其中核心类：
 类作用NetworkInterface获取网卡信息IPInterfaceProperties获取 IP 配置IPAddressInformation获取 IP 地址状态PhysicalAddress获取 MAC 地址NetworkChange监听网络变化本文将系统介绍如何使用这些API构建一个网络信息采集工具。">
@@ -34,19 +34,19 @@
 		<meta property="article:tag" content="DNS">
 
   <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="C#编程实践(一)：深入System.Net.NetworkInformation获取系统网络信息">
+  <meta name="twitter:title" content="深入System.Net.NetworkInformation获取系统网络信息">
   <meta name="twitter:description" content="在工业软件、设备控制系统、网络诊断工具开发中，经常需要获取当前计算机的网络状态，例如：
 当前有哪些网卡？ 网卡是否连接？ IP地址是多少？ MAC地址是多少？ 网络连接速度是多少？ DNS、网关、DHCP信息是什么？ .NET提供了一个非常方便的命名空间System.Net.NetworkInformation，其中核心类：
 类作用NetworkInterface获取网卡信息IPInterfaceProperties获取 IP 配置IPAddressInformation获取 IP 地址状态PhysicalAddress获取 MAC 地址NetworkChange监听网络变化本文将系统介绍如何使用这些API构建一个网络信息采集工具。"><meta name="twitter:creator" content="@IRONAnthony96"><meta name="application-name" content="FixIt">
 <meta name="apple-mobile-web-app-title" content="FixIt"><meta name="theme-color" data-light="#f6f8fa" data-dark="#151b23" content="#f6f8fa"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" type="text/html" href="http://localhost:1313/%E6%B7%B1%E5%85%A5system.net.networkinformation%E8%8E%B7%E5%8F%96%E7%B3%BB%E7%BB%9F%E7%BD%91%E7%BB%9C%E4%BF%A1%E6%81%AF/" title="C#编程实践(一)：深入System.Net.NetworkInformation获取系统网络信息 - 东尼的博客" /><link rel="prev" type="text/html" href="http://localhost:1313/%E4%BB%A3%E7%A0%81%E6%95%B4%E6%B4%81%E4%B9%8B%E9%81%93/" title="代码整洁之道 (Robert C. Martin)" /><link rel="next" type="text/html" href="http://localhost:1313/%E4%BF%AE%E6%94%B9%E4%BB%A3%E7%A0%81%E7%9A%84%E8%89%BA%E6%9C%AF/" title="修改代码的艺术 (Michael C. Feathers)" /><link rel="alternate" type="text/markdown" href="http://localhost:1313/%E6%B7%B1%E5%85%A5system.net.networkinformation%E8%8E%B7%E5%8F%96%E7%B3%BB%E7%BB%9F%E7%BD%91%E7%BB%9C%E4%BF%A1%E6%81%AF/index.md" title="C#编程实践(一)：深入System.Net.NetworkInformation获取系统网络信息 - 东尼的博客"><link rel="stylesheet" href="/css/config.css"><link rel="stylesheet" href="/css/main.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" type="text/html" href="http://localhost:1313/%E6%B7%B1%E5%85%A5system.net.networkinformation%E8%8E%B7%E5%8F%96%E7%B3%BB%E7%BB%9F%E7%BD%91%E7%BB%9C%E4%BF%A1%E6%81%AF/" title="深入System.Net.NetworkInformation获取系统网络信息 - 东尼的博客" /><link rel="prev" type="text/html" href="http://localhost:1313/%E4%BB%A3%E7%A0%81%E6%95%B4%E6%B4%81%E4%B9%8B%E9%81%93/" title="代码整洁之道 (Robert C. Martin)" /><link rel="next" type="text/html" href="http://localhost:1313/%E4%BF%AE%E6%94%B9%E4%BB%A3%E7%A0%81%E7%9A%84%E8%89%BA%E6%9C%AF/" title="修改代码的艺术 (Michael C. Feathers)" /><link rel="alternate" type="text/markdown" href="http://localhost:1313/%E6%B7%B1%E5%85%A5system.net.networkinformation%E8%8E%B7%E5%8F%96%E7%B3%BB%E7%BB%9F%E7%BD%91%E7%BB%9C%E4%BF%A1%E6%81%AF/index.md" title="深入System.Net.NetworkInformation获取系统网络信息 - 东尼的博客"><link rel="stylesheet" href="/css/config.css"><link rel="stylesheet" href="/css/main.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><link rel="preload" href="/js/main.js" as="script"><script type="application/ld+json">
   {
     "@context": "http://schema.org",
     "@type": "BlogPosting",
-    "headline": "C#编程实践(一)：深入System.Net.NetworkInformation获取系统网络信息",
+    "headline": "深入System.Net.NetworkInformation获取系统网络信息",
     "inLanguage": "zh-CN",
     "mainEntityOfPage": {
       "@type": "WebPage",
@@ -142,9 +142,9 @@
     </div></aside>
 
   <article class="page single">
-    <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span title="转载" class="icon-repost"><i class="fa-solid fa-share" aria-hidden="true"></i></span><span>C#编程实践(一)：深入System.Net.NetworkInformation获取系统网络信息</span>
+    <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span title="转载" class="icon-repost"><i class="fa-solid fa-share" aria-hidden="true"></i></span><span>深入System.Net.NetworkInformation获取系统网络信息</span>
       </h1></div><div class="post-meta">
-      <div class="post-meta-line"><span class="post-author"><a href="https://andyfree96.github.io/" title="作者" target="_blank" rel="author external nofollow noopener noreferrer" class="author"><img class="avatar" src='/avatar/1.jpg' alt="AndyFree96" height="16" width="16">&nbsp;AndyFree96</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/" class="post-category" title="分类 - 工程实践"><i class="fa-regular fa-folder" aria-hidden="true"></i> 工程实践</a></span></div><div class="post-meta-line"><span title="发布于 2026-07-15 13:49:16"><i class="fa-solid fa-calendar-days me-1" aria-hidden="true"></i><time datetime="2026-07-15">2026-07-15</time></span>&nbsp;<span title="2475 字"><i class="fa-solid fa-pencil-alt me-1" aria-hidden="true"></i>约 2500 字</span>&nbsp;<span><i class="fa-regular fa-clock me-1" aria-hidden="true"></i>预计阅读 5 分钟</span>&nbsp;</div>
+      <div class="post-meta-line"><span class="post-author"><a href="https://andyfree96.github.io/" title="作者" target="_blank" rel="author external nofollow noopener noreferrer" class="author"><img class="avatar" src='/avatar/1.jpg' alt="AndyFree96" height="16" width="16">&nbsp;AndyFree96</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E5%B7%A5%E4%B8%9A%E8%87%AA%E5%8A%A8%E5%8C%96/" class="post-category" title="分类 - 工业自动化"><i class="fa-regular fa-folder" aria-hidden="true"></i> 工业自动化</a></span></div><div class="post-meta-line"><span title="发布于 2026-07-15 13:49:16"><i class="fa-solid fa-calendar-days me-1" aria-hidden="true"></i><time datetime="2026-07-15">2026-07-15</time></span>&nbsp;<span title="2475 字"><i class="fa-solid fa-pencil-alt me-1" aria-hidden="true"></i>约 2500 字</span>&nbsp;<span><i class="fa-regular fa-clock me-1" aria-hidden="true"></i>预计阅读 5 分钟</span>&nbsp;</div>
     </div><div class="featured-image"><img loading="eager" src='/images/202607/18/paul-lichtblau-oUsElFLrE_s-unsplash.jpg' sizes="(max-width: 680px) 100vw, (max-width: 960px) 80vw, (max-width: 1440px) 56vw, 800px" alt="/images/202607/18/paul-lichtblau-oUsElFLrE_s-unsplash.jpg"></div><div class="details toc" id="toc-static" data-kept="false">
         <div class="details-summary toc-title">
           <span>目录</span>
@@ -892,9 +892,9 @@
       </div></div><div class="post-info-line">
         <div class="post-info-md"><span><a href="vscode://file/D:\hugo-blog\andyfree96\content\posts\深入System.Net.NetworkInformation获取系统网络信息.md" title="在编辑器中打开" class="link-to-vscode">在编辑器中打开</a></span></div>
         <div class="post-info-share">
-          <span><a href="javascript:void(0);" title="分享到 X" data-sharer="twitter" data-url="http://localhost:1313/%E6%B7%B1%E5%85%A5system.net.networkinformation%E8%8E%B7%E5%8F%96%E7%B3%BB%E7%BB%9F%E7%BD%91%E7%BB%9C%E4%BF%A1%E6%81%AF/" data-title="C#编程实践(一)：深入System.Net.NetworkInformation获取系统网络信息" data-via="IRONAnthony96" data-hashtags="C#,.NET,IPv4,MAC,DNS"><i class="fa-brands fa-x-twitter" aria-hidden="true"></i></a>
+          <span><a href="javascript:void(0);" title="分享到 X" data-sharer="twitter" data-url="http://localhost:1313/%E6%B7%B1%E5%85%A5system.net.networkinformation%E8%8E%B7%E5%8F%96%E7%B3%BB%E7%BB%9F%E7%BD%91%E7%BB%9C%E4%BF%A1%E6%81%AF/" data-title="深入System.Net.NetworkInformation获取系统网络信息" data-via="IRONAnthony96" data-hashtags="C#,.NET,IPv4,MAC,DNS"><i class="fa-brands fa-x-twitter" aria-hidden="true"></i></a>
   <a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="http://localhost:1313/%E6%B7%B1%E5%85%A5system.net.networkinformation%E8%8E%B7%E5%8F%96%E7%B3%BB%E7%BB%9F%E7%BD%91%E7%BB%9C%E4%BF%A1%E6%81%AF/" data-hashtag="C#"><i class="fa-brands fa-facebook-square" aria-hidden="true"></i></a>
-  <a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="http://localhost:1313/%E6%B7%B1%E5%85%A5system.net.networkinformation%E8%8E%B7%E5%8F%96%E7%B3%BB%E7%BB%9F%E7%BD%91%E7%BB%9C%E4%BF%A1%E6%81%AF/" data-title="C#编程实践(一)：深入System.Net.NetworkInformation获取系统网络信息" data-image="/images/202607/18/paul-lichtblau-oUsElFLrE_s-unsplash.jpg"><i class="fa-brands fa-weibo" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="http://localhost:1313/%E6%B7%B1%E5%85%A5system.net.networkinformation%E8%8E%B7%E5%8F%96%E7%B3%BB%E7%BB%9F%E7%BD%91%E7%BB%9C%E4%BF%A1%E6%81%AF/" data-title="深入System.Net.NetworkInformation获取系统网络信息" data-image="/images/202607/18/paul-lichtblau-oUsElFLrE_s-unsplash.jpg"><i class="fa-brands fa-weibo" aria-hidden="true"></i></a>
   </span>
         </div>
       </div></div>

@@ -4,16 +4,16 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
     <meta name="robots" content="noodp" />
-    <title>LevelDB源码剖析：如何设计一个高性能嵌入式数据库 - 东尼的博客</title><meta name="author" content="AndyFree96">
+    <title>LevelDB源码剖析：从零实现MiniLevelDB理解LSM-Tree存储引擎设计 - 东尼的博客</title><meta name="author" content="AndyFree96">
 <meta name="description" content="安东尼的博客，分享生活中的一些有意思的事儿！"><meta name="keywords" content='LevelDB, 架构设计, 系统架构, C&#43;&#43;, 工程实践, KV数据库, 存储系统, 源码剖析'>
-	<meta itemprop="name" content="LevelDB源码剖析：如何设计一个高性能嵌入式数据库">
+	<meta itemprop="name" content="LevelDB源码剖析：从零实现MiniLevelDB理解LSM-Tree存储引擎设计">
 	<meta itemprop="description" content="安东尼的博客，分享生活中的一些有意思的事儿！">
 	<meta itemprop="datePublished" content="2026-06-25T12:59:10+08:00">
 	<meta itemprop="dateModified" content="2026-06-25T12:59:10+08:00">
-	<meta itemprop="wordCount" content="624">
+	<meta itemprop="wordCount" content="7913">
 	<meta itemprop="keywords" content="LevelDB,架构设计,系统架构,C&#43;&#43;,工程实践,KV数据库,存储系统,源码剖析"><meta property="og:url" content="http://localhost:1313/leveldb%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/">
 	<meta property="og:site_name" content="东尼的博客">
-	<meta property="og:title" content="LevelDB源码剖析：如何设计一个高性能嵌入式数据库">
+	<meta property="og:title" content="LevelDB源码剖析：从零实现MiniLevelDB理解LSM-Tree存储引擎设计">
 	<meta property="og:description" content="安东尼的博客，分享生活中的一些有意思的事儿！">
 	<meta property="og:locale" content="zh_CN">
 	<meta property="og:type" content="article">
@@ -28,22 +28,22 @@
 		<meta property="article:tag" content="KV数据库">
 
   <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="LevelDB源码剖析：如何设计一个高性能嵌入式数据库">
+  <meta name="twitter:title" content="LevelDB源码剖析：从零实现MiniLevelDB理解LSM-Tree存储引擎设计">
   <meta name="twitter:description" content="安东尼的博客，分享生活中的一些有意思的事儿！"><meta name="twitter:creator" content="@IRONAnthony96"><meta name="application-name" content="FixIt">
 <meta name="apple-mobile-web-app-title" content="FixIt"><meta name="theme-color" data-light="#f6f8fa" data-dark="#151b23" content="#f6f8fa"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" type="text/html" href="http://localhost:1313/leveldb%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="LevelDB源码剖析：如何设计一个高性能嵌入式数据库 - 东尼的博客" /><link rel="prev" type="text/html" href="http://localhost:1313/%E4%BB%8E%E9%9B%B6%E6%90%AD%E5%BB%BAtypescript%E5%B7%A5%E7%A8%8B/" title="从零搭建TypeScript工程" /><link rel="next" type="text/html" href="http://localhost:1313/redis%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="Redis源码剖析：一个高性能服务器的设计哲学" /><link rel="alternate" type="text/markdown" href="http://localhost:1313/leveldb%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/index.md" title="LevelDB源码剖析：如何设计一个高性能嵌入式数据库 - 东尼的博客"><link rel="stylesheet" href="/css/config.css"><link rel="stylesheet" href="/css/main.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" type="text/html" href="http://localhost:1313/leveldb%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="LevelDB源码剖析：从零实现MiniLevelDB理解LSM-Tree存储引擎设计 - 东尼的博客" /><link rel="prev" type="text/html" href="http://localhost:1313/%E4%BB%8E%E9%9B%B6%E6%90%AD%E5%BB%BAtypescript%E5%B7%A5%E7%A8%8B/" title="从零搭建TypeScript工程" /><link rel="next" type="text/html" href="http://localhost:1313/redis%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="Redis源码剖析：一个高性能服务器的设计哲学" /><link rel="alternate" type="text/markdown" href="http://localhost:1313/leveldb%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/index.md" title="LevelDB源码剖析：从零实现MiniLevelDB理解LSM-Tree存储引擎设计 - 东尼的博客"><link rel="stylesheet" href="/css/config.css"><link rel="stylesheet" href="/css/main.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><link rel="preload" href="/js/main.js" as="script"><script type="application/ld+json">
   {
     "@context": "http://schema.org",
     "@type": "BlogPosting",
-    "headline": "LevelDB源码剖析：如何设计一个高性能嵌入式数据库",
+    "headline": "LevelDB源码剖析：从零实现MiniLevelDB理解LSM-Tree存储引擎设计",
     "inLanguage": "zh-CN",
     "mainEntityOfPage": {
       "@type": "WebPage",
       "@id": "http:\/\/localhost:1313\/leveldb%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90\/"
-    },"genre": "posts","keywords": "LevelDB, 架构设计, 系统架构, C\u002b\u002b, 工程实践, KV数据库, 存储系统, 源码剖析","wordcount":  624 ,
+    },"genre": "posts","keywords": "LevelDB, 架构设计, 系统架构, C\u002b\u002b, 工程实践, KV数据库, 存储系统, 源码剖析","wordcount":  7913 ,
     "url": "http:\/\/localhost:1313\/leveldb%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90\/","datePublished": "2026-06-25T12:59:10+08:00","dateModified": "2026-06-25T12:59:10+08:00","publisher": {
       "@type": "Organization",
       "name": ""},"author": {
@@ -137,9 +137,9 @@
     </div></aside>
 
   <article class="page single">
-    <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span title="转载" class="icon-repost"><i class="fa-solid fa-share" aria-hidden="true"></i></span><span>LevelDB源码剖析：如何设计一个高性能嵌入式数据库</span>
+    <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span title="转载" class="icon-repost"><i class="fa-solid fa-share" aria-hidden="true"></i></span><span>LevelDB源码剖析：从零实现MiniLevelDB理解LSM-Tree存储引擎设计</span>
       </h1></div><div class="post-meta">
-      <div class="post-meta-line"><span class="post-author"><a href="https://andyfree96.github.io/" title="作者" target="_blank" rel="author external nofollow noopener noreferrer" class="author"><img class="avatar" src='/avatar/1.jpg' alt="AndyFree96" height="16" width="16">&nbsp;AndyFree96</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" class="post-category" title="分类 - 源码剖析"><i class="fa-regular fa-folder" aria-hidden="true"></i> 源码剖析</a></span></div><div class="post-meta-line"><span title="发布于 2026-06-25 12:59:10"><i class="fa-solid fa-calendar-days me-1" aria-hidden="true"></i><time datetime="2026-06-25">2026-06-25</time></span>&nbsp;<span title="624 字"><i class="fa-solid fa-pencil-alt me-1" aria-hidden="true"></i>约 700 字</span>&nbsp;<span><i class="fa-regular fa-clock me-1" aria-hidden="true"></i>预计阅读 2 分钟</span>&nbsp;</div>
+      <div class="post-meta-line"><span class="post-author"><a href="https://andyfree96.github.io/" title="作者" target="_blank" rel="author external nofollow noopener noreferrer" class="author"><img class="avatar" src='/avatar/1.jpg' alt="AndyFree96" height="16" width="16">&nbsp;AndyFree96</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" class="post-category" title="分类 - 源码剖析"><i class="fa-regular fa-folder" aria-hidden="true"></i> 源码剖析</a></span></div><div class="post-meta-line"><span title="发布于 2026-06-25 12:59:10"><i class="fa-solid fa-calendar-days me-1" aria-hidden="true"></i><time datetime="2026-06-25">2026-06-25</time></span>&nbsp;<span title="7913 字"><i class="fa-solid fa-pencil-alt me-1" aria-hidden="true"></i>约 8000 字</span>&nbsp;<span><i class="fa-regular fa-clock me-1" aria-hidden="true"></i>预计阅读 16 分钟</span>&nbsp;</div>
     </div><div class="featured-image"><img loading="eager" src='/images/202606/12/yuheng-ouyang-gsylhBigagM-unsplash.jpg' sizes="(max-width: 680px) 100vw, (max-width: 960px) 80vw, (max-width: 1440px) 56vw, 800px" alt="/images/202606/12/yuheng-ouyang-gsylhBigagM-unsplash.jpg"></div><div class="details toc" id="toc-static" data-kept="false">
         <div class="details-summary toc-title">
           <span>目录</span>
@@ -147,31 +147,873 @@
         </div>
         <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
   <ul>
-    <li><a href="#0-准备工作">0. 准备工作</a></li>
-    <li><a href="#1-整体架构一张图看懂leveldb">1. 整体架构——一张图看懂LevelDB</a></li>
-    <li><a href="#2-数据写入流程一次put到底发生了什么">2. 数据写入流程——一次Put()到底发生了什么？</a></li>
-    <li><a href="#3-memtable内存中的有序表是如何实现的">3. MemTable——内存中的有序表是如何实现的？</a></li>
-    <li><a href="#4-skiplist为什么不用红黑树">4. SkipList——为什么不用红黑树？</a></li>
-    <li><a href="#5-wal崩溃恢复的第一道防线">5. WAL——崩溃恢复的第一道防线</a></li>
-    <li><a href="#6-sstable磁盘数据是如何组织的">6. SSTable——磁盘数据是如何组织的？</a></li>
-    <li><a href="#7-blockrestart-point的设计思想">7. Block——Restart Point的设计思想</a></li>
-    <li><a href="#8-bloom-filter如何避免无效磁盘访问">8. Bloom Filter——如何避免无效磁盘访问？</a></li>
-    <li><a href="#9-versionset与manifest元数据如何管理">9. VersionSet与Manifest——元数据如何管理？</a></li>
-    <li><a href="#10-compactionlsm-tree的核心机制">10. Compaction——LSM Tree的核心机制</a></li>
-    <li><a href="#11-iterator多路归并遍历的实现">11. Iterator——多路归并遍历的实现</a></li>
-    <li><a href="#12-读取流程一次get都经历了什么">12. 读取流程——一次Get()都经历了什么？</a></li>
-    <li><a href="#13-lrucache缓存是如何设计的">13. LRUCache——缓存是如何设计的？</a></li>
-    <li><a href="#14-恢复流程数据库重启时发生了什么">14. 恢复流程——数据库重启时发生了什么？</a></li>
-    <li><a href="#15-总结">15. 总结</a></li>
+    <li><a href="#为什么不直接阅读leveldb源码">为什么不直接阅读LevelDB源码？</a>
+      <ul>
+        <li><a href="#直接阅读源码的问题">直接阅读源码的问题</a>
+          <ul>
+            <li><a href="#1-缺少问题背景">1. 缺少问题背景</a></li>
+            <li><a href="#2-看到了设计结果却不知道设计过程">2. 看到了设计结果，却不知道设计过程</a></li>
+            <li><a href="#3-容易陷入细节失去整体结构">3. 容易陷入细节，失去整体结构</a></li>
+          </ul>
+        </li>
+        <li><a href="#为什么选择从零实现minileveldb">为什么选择从零实现MiniLevelDB？</a></li>
+        <li><a href="#学习复杂系统的另一种方式">学习复杂系统的另一种方式</a></li>
+      </ul>
+    </li>
+    <li><a href="#从hashmap开始实现key-value存储引擎">从HashMap开始实现Key-Value存储引擎</a>
+      <ul>
+        <li><a href="#为什么选择hashmap">为什么选择HashMap？</a></li>
+        <li><a href="#第一个工程问题">第一个工程问题</a></li>
+      </ul>
+    </li>
+    <li><a href="#数据持久化解决程序重启数据丢失">数据持久化：解决程序重启数据丢失</a>
+      <ul>
+        <li><a href="#最直接的方案写入文件">最直接的方案：写入文件</a></li>
+        <li><a href="#新问题">新问题</a></li>
+        <li><a href="#更好的办法">更好的办法</a></li>
+      </ul>
+    </li>
+    <li><a href="#wal数据库如何保证写入可靠性">WAL：数据库如何保证写入可靠性</a>
+      <ul>
+        <li><a href="#新的问题出现">新的问题出现</a></li>
+      </ul>
+    </li>
+    <li><a href="#memtable的演进为什么hashmap最终被skiplist替代">MemTable的演进：为什么HashMap最终被SkipList替代？</a></li>
+    <li><a href="#sstable如何将内存数据保存到磁盘">SSTable：如何将内存数据保存到磁盘</a>
+      <ul>
+        <li><a href="#新的问题">新的问题</a></li>
+      </ul>
+    </li>
+    <li><a href="#compaction如何控制磁盘文件增长">Compaction：如何控制磁盘文件增长</a>
+      <ul>
+        <li><a href="#合并多个sstable">合并多个SSTable</a></li>
+        <li><a href="#删除旧版本的数据">删除旧版本的数据</a></li>
+        <li><a href="#清理已删除的数据">清理已删除的数据</a></li>
+        <li><a href="#新的问题-1">新的问题</a></li>
+      </ul>
+    </li>
+    <li><a href="#bloom-filter减少无效查询">Bloom Filter：减少无效查询</a></li>
+    <li><a href="#对比leveldb源码工业实现解决了哪些问题">对比LevelDB源码：工业实现解决了哪些问题</a></li>
+    <li><a href="#番外">番外</a>
+      <ul>
+        <li><a href="#如何调试leveldb">如何调试LevelDB？</a></li>
+      </ul>
+    </li>
     <li><a href="#推荐">推荐</a></li>
     <li><a href="#参考">参考</a></li>
   </ul>
 </nav></div>
-      </div><div class="content" id="content"><h2 class="heading-element" id="0-准备工作"><span>0. 准备工作</span>
-  <a href="#0-%e5%87%86%e5%a4%87%e5%b7%a5%e4%bd%9c" class="heading-mark">
+      </div><div class="content" id="content"><h2 class="heading-element" id="为什么不直接阅读leveldb源码"><span>为什么不直接阅读LevelDB源码？</span>
+  <a href="#%e4%b8%ba%e4%bb%80%e4%b9%88%e4%b8%8d%e7%9b%b4%e6%8e%a5%e9%98%85%e8%af%bbleveldb%e6%ba%90%e7%a0%81" class="heading-mark">
     <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
   </a>
-</h2><p>执行以下命令将LevelDB项目克隆到本地：</p>
+</h2><p>学习一个优秀的开源项目时，很多人的第一反应是直接阅读源码。然而，对于LevelDB这样的工业级存储引擎，这种方式往往会遇到很大的困难。并不是因为LevelDB的代码质量不好，相反，LevelDB的代码非常优秀，结构清晰，模块职责明确。但优秀的工程代码通常是在大量真实需求和历史演进中形成的，它隐藏了许多设计背景：</p>
+<ul>
+<li>为什么需要这个模块？</li>
+<li>为什么选择这种数据结构？</li>
+<li>为什么这里要增加一层抽象？</li>
+<li>如果没有这个设计，会遇到什么问题？</li>
+</ul>
+<p>如果不了解这些问题，阅读源码很容易变成：</p>
+<blockquote>
+<p>看到大量代码，却不知道这些代码正在解决什么问题。</p>
+</blockquote>
+<p><strong>LevelDB到底解决了什么问题？</strong></p>
+<p>在阅读LevelDB源码之前，首先需要了解它存在的背景。最简单的Key-Value存储其实非常简单，使用<code>unordered_map&lt;string, string&gt;</code>即可，数据存放在内存(HashMap)中。这样看起来已经可以工作。但是，当需求不断增加：</p>
+<ul>
+<li>程序关闭后数据不能丢失怎么办？</li>
+<li>数据越来越大，内存放不下怎么办？</li>
+<li>写入频繁，随机磁盘写性能太差怎么办？</li>
+<li>如何支持范围查询？</li>
+<li>如何避免大量磁盘查找？</li>
+<li>如何清理越来越多的数据文件？</li>
+</ul>
+<p>一个简单的HashMap会逐渐无法满足需求。于是系统开始演进：</p>
+<div class="code-tabs diagram-tabs" data-diagram="mermaid">
+    <div class="tabs-header">
+      <div class="tabs-items">
+        <span class="tab-item active" data-tab="diagram" title="图表">图表</span>
+        <span class="tab-item" data-tab="code" title="代码">代码</span>
+      </div>
+      <div class="tabs-actions">
+        <button type="button" class="action-btn diagram-zoom-out-btn" aria-label="缩小" title="缩小"><i class="fa-solid fa-magnifying-glass-minus" aria-hidden="true"></i></button>
+        <button type="button" class="action-btn diagram-zoom-in-btn" aria-label="放大" title="放大"><i class="fa-solid fa-magnifying-glass-plus" aria-hidden="true"></i></button>
+        <button type="button" class="action-btn diagram-reset-btn" aria-label="重置" title="重置"><i class="fa-solid fa-arrows-rotate" aria-hidden="true"></i></button>
+        <button type="button" class="action-btn diagram-download-btn" aria-label="下载 SVG" title="下载 SVG"><i class="fa-solid fa-download" aria-hidden="true"></i></button>
+      </div>
+    </div>
+    <div class="tabs-content">
+      <div class="code-block diagram-view active" data-filename="mermaid.mmd">
+        <div class="diagram-container">
+          <pre class="mermaid">flowchart TD
+    A[HashMap] --> B[文件存储]
+    B --> C[WAL日志]
+    C --> D[MemTable SkipList]
+    D --> E[SSTable]
+    E --> F[Compaction]
+    F --> G[LevelDB]</pre>
+          <pre class="mermaid-dark">flowchart TD
+    A[HashMap] --> B[文件存储]
+    B --> C[WAL日志]
+    C --> D[MemTable SkipList]
+    D --> E[SSTable]
+    E --> F[Compaction]
+    F --> G[LevelDB]</pre>
+          <pre class="mermaid-neutral">flowchart TD
+    A[HashMap] --> B[文件存储]
+    B --> C[WAL日志]
+    C --> D[MemTable SkipList]
+    D --> E[SSTable]
+    E --> F[Compaction]
+    F --> G[LevelDB]</pre>
+        </div>
+      </div><div class="code-block highlight diagram-code" data-mode="classic" data-copyable="true" copyable="true" fullscreen="true" filename="mermaid.mmd"><div class="chroma">
+<div class="code-header language-text"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">flowchart TD
+</span></span><span class="line"><span class="cl">    A[HashMap] --&gt; B[文件存储]
+</span></span><span class="line"><span class="cl">    B --&gt; C[WAL日志]
+</span></span><span class="line"><span class="cl">    C --&gt; D[MemTable SkipList]
+</span></span><span class="line"><span class="cl">    D --&gt; E[SSTable]
+</span></span><span class="line"><span class="cl">    E --&gt; F[Compaction]
+</span></span><span class="line"><span class="cl">    F --&gt; G[LevelDB]</span></span></code></pre></td></tr></table></div>
+</div>
+</div></div>
+  </div><p>LevelDB并不是一开始就设计成今天这个样子，而是在不断解决问题的过程中演化出来的。</p>
+<h3 class="heading-element" id="直接阅读源码的问题"><span>直接阅读源码的问题</span>
+  <a href="#%e7%9b%b4%e6%8e%a5%e9%98%85%e8%af%bb%e6%ba%90%e7%a0%81%e7%9a%84%e9%97%ae%e9%a2%98" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><h4 class="heading-element" id="1-缺少问题背景"><span>1. 缺少问题背景</span>
+  <a href="#1-%e7%bc%ba%e5%b0%91%e9%97%ae%e9%a2%98%e8%83%8c%e6%99%af" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h4><p>当第一次看到：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-cpp"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">MemTable</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">void</span> <span class="n">Add</span><span class="p">(</span><span class="n">SequenceNumber</span> <span class="n">seq</span><span class="p">,</span> <span class="n">ValueType</span> <span class="n">type</span><span class="p">,</span> <span class="k">const</span> <span class="n">Slice</span><span class="o">&amp;</span> <span class="n">key</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">           <span class="k">const</span> <span class="n">Slice</span><span class="o">&amp;</span> <span class="n">value</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>难免会疑惑：为什么数据库需要一个<code>MemTable</code>？为什么不直接写磁盘？为什么里面保存<code>SequenceNumber</code>？为什么需要<code>ValueTyupe</code>？</p>
+<p>这些问题如果直接看代码，很难回答。但如果我们自己实现过：<code>Put(key, value)</code>直接写磁盘。就会发现每次写磁盘太慢、多个修改同一个Key浪费空间、需要保证恢复能力。很自然会想到先写内存，再写入磁盘。这时<code>MemTable</code>的存在就变得非常自然。</p>
+<h4 class="heading-element" id="2-看到了设计结果却不知道设计过程"><span>2. 看到了设计结果，却不知道设计过程</span>
+  <a href="#2-%e7%9c%8b%e5%88%b0%e4%ba%86%e8%ae%be%e8%ae%a1%e7%bb%93%e6%9e%9c%e5%8d%b4%e4%b8%8d%e7%9f%a5%e9%81%93%e8%ae%be%e8%ae%a1%e8%bf%87%e7%a8%8b" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h4><p>LevelDB有大量优秀设计，比如：SkipList、WAL、SSTable、Bloom Filter、Iterator、VersionSet、Compaction等等。直接看源码看到的是<em>最终答案</em>。但是学习真正重要的是：</p>
+<div class="code-tabs diagram-tabs" data-diagram="mermaid">
+    <div class="tabs-header">
+      <div class="tabs-items">
+        <span class="tab-item active" data-tab="diagram" title="图表">图表</span>
+        <span class="tab-item" data-tab="code" title="代码">代码</span>
+      </div>
+      <div class="tabs-actions">
+        <button type="button" class="action-btn diagram-zoom-out-btn" aria-label="缩小" title="缩小"><i class="fa-solid fa-magnifying-glass-minus" aria-hidden="true"></i></button>
+        <button type="button" class="action-btn diagram-zoom-in-btn" aria-label="放大" title="放大"><i class="fa-solid fa-magnifying-glass-plus" aria-hidden="true"></i></button>
+        <button type="button" class="action-btn diagram-reset-btn" aria-label="重置" title="重置"><i class="fa-solid fa-arrows-rotate" aria-hidden="true"></i></button>
+        <button type="button" class="action-btn diagram-download-btn" aria-label="下载 SVG" title="下载 SVG"><i class="fa-solid fa-download" aria-hidden="true"></i></button>
+      </div>
+    </div>
+    <div class="tabs-content">
+      <div class="code-block diagram-view active" data-filename="mermaid.mmd">
+        <div class="diagram-container">
+          <pre class="mermaid">flowchart TD
+    A[问题] --> B[尝试解决]
+    B --> C[发现新问题]
+    C --> D[继续优化]
+    D --> E[最终设计]</pre>
+          <pre class="mermaid-dark">flowchart TD
+    A[问题] --> B[尝试解决]
+    B --> C[发现新问题]
+    C --> D[继续优化]
+    D --> E[最终设计]</pre>
+          <pre class="mermaid-neutral">flowchart TD
+    A[问题] --> B[尝试解决]
+    B --> C[发现新问题]
+    C --> D[继续优化]
+    D --> E[最终设计]</pre>
+        </div>
+      </div><div class="code-block highlight diagram-code" data-mode="classic" data-copyable="true" copyable="true" fullscreen="true" filename="mermaid.mmd"><div class="chroma">
+<div class="code-header language-text"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">flowchart TD
+</span></span><span class="line"><span class="cl">    A[问题] --&gt; B[尝试解决]
+</span></span><span class="line"><span class="cl">    B --&gt; C[发现新问题]
+</span></span><span class="line"><span class="cl">    C --&gt; D[继续优化]
+</span></span><span class="line"><span class="cl">    D --&gt; E[最终设计]</span></span></code></pre></td></tr></table></div>
+</div>
+</div></div>
+  </div><p>比如，为什么不用HashMap，而使用SkipList？直接看代码我们会知道LevelDB使用了SkipList，但是自己实现过程中：</p>
+<div class="code-tabs diagram-tabs" data-diagram="mermaid">
+    <div class="tabs-header">
+      <div class="tabs-items">
+        <span class="tab-item active" data-tab="diagram" title="图表">图表</span>
+        <span class="tab-item" data-tab="code" title="代码">代码</span>
+      </div>
+      <div class="tabs-actions">
+        <button type="button" class="action-btn diagram-zoom-out-btn" aria-label="缩小" title="缩小"><i class="fa-solid fa-magnifying-glass-minus" aria-hidden="true"></i></button>
+        <button type="button" class="action-btn diagram-zoom-in-btn" aria-label="放大" title="放大"><i class="fa-solid fa-magnifying-glass-plus" aria-hidden="true"></i></button>
+        <button type="button" class="action-btn diagram-reset-btn" aria-label="重置" title="重置"><i class="fa-solid fa-arrows-rotate" aria-hidden="true"></i></button>
+        <button type="button" class="action-btn diagram-download-btn" aria-label="下载 SVG" title="下载 SVG"><i class="fa-solid fa-download" aria-hidden="true"></i></button>
+      </div>
+    </div>
+    <div class="tabs-content">
+      <div class="code-block diagram-view active" data-filename="mermaid.mmd">
+        <div class="diagram-container">
+          <pre class="mermaid">flowchart TD
+    A[HashMap] --> B[无法范围查找]
+    B --> C[需要有序结构]
+    C --> D[平衡树复杂]
+    D --> E[SkipList出现]</pre>
+          <pre class="mermaid-dark">flowchart TD
+    A[HashMap] --> B[无法范围查找]
+    B --> C[需要有序结构]
+    C --> D[平衡树复杂]
+    D --> E[SkipList出现]</pre>
+          <pre class="mermaid-neutral">flowchart TD
+    A[HashMap] --> B[无法范围查找]
+    B --> C[需要有序结构]
+    C --> D[平衡树复杂]
+    D --> E[SkipList出现]</pre>
+        </div>
+      </div><div class="code-block highlight diagram-code" data-mode="classic" data-copyable="true" copyable="true" fullscreen="true" filename="mermaid.mmd"><div class="chroma">
+<div class="code-header language-text"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">flowchart TD
+</span></span><span class="line"><span class="cl">    A[HashMap] --&gt; B[无法范围查找]
+</span></span><span class="line"><span class="cl">    B --&gt; C[需要有序结构]
+</span></span><span class="line"><span class="cl">    C --&gt; D[平衡树复杂]
+</span></span><span class="line"><span class="cl">    D --&gt; E[SkipList出现]</span></span></code></pre></td></tr></table></div>
+</div>
+</div></div>
+  </div><p>我们会真正理解：</p>
+<blockquote>
+<p>SkipList不是为了炫技，而是在工程复杂度和性能之间的选择。</p>
+</blockquote>
+<h4 class="heading-element" id="3-容易陷入细节失去整体结构"><span>3. 容易陷入细节，失去整体结构</span>
+  <a href="#3-%e5%ae%b9%e6%98%93%e9%99%b7%e5%85%a5%e7%bb%86%e8%8a%82%e5%a4%b1%e5%8e%bb%e6%95%b4%e4%bd%93%e7%bb%93%e6%9e%84" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h4><p>LevelDB源码中有大量细节，例如<code>Slice</code>字符串封装、<code>Arena</code>内存管理、<code>Reference</code>计数、<code>Mutex</code>同步等等，这些代码单独看都很重要。但是如果不知道整体架构，很容易陷入：看到一个类-&gt;研究几个小时-&gt;忘记它为什么存在。学习大型项目更合理的方式可能是先建立系统地图，再深入城市道路，而不是一开始研究每一块砖。</p>
+<h3 class="heading-element" id="为什么选择从零实现minileveldb"><span>为什么选择从零实现MiniLevelDB？</span>
+  <a href="#%e4%b8%ba%e4%bb%80%e4%b9%88%e9%80%89%e6%8b%a9%e4%bb%8e%e9%9b%b6%e5%ae%9e%e7%8e%b0minileveldb" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p>实现一个MiniLevelDB的目的，并不是为了替代LevelDB。真正的目标是：</p>
+<blockquote>
+<p>通过经历一次存储引擎的演进过程，理解LevelDB每一个设计背后的原因。</p>
+</blockquote>
+<p>当然，如果你有其他更好的方式，欢迎留言评论😁。我们的实现路线：</p>
+<div class="code-tabs diagram-tabs" data-diagram="mermaid">
+    <div class="tabs-header">
+      <div class="tabs-items">
+        <span class="tab-item active" data-tab="diagram" title="图表">图表</span>
+        <span class="tab-item" data-tab="code" title="代码">代码</span>
+      </div>
+      <div class="tabs-actions">
+        <button type="button" class="action-btn diagram-zoom-out-btn" aria-label="缩小" title="缩小"><i class="fa-solid fa-magnifying-glass-minus" aria-hidden="true"></i></button>
+        <button type="button" class="action-btn diagram-zoom-in-btn" aria-label="放大" title="放大"><i class="fa-solid fa-magnifying-glass-plus" aria-hidden="true"></i></button>
+        <button type="button" class="action-btn diagram-reset-btn" aria-label="重置" title="重置"><i class="fa-solid fa-arrows-rotate" aria-hidden="true"></i></button>
+        <button type="button" class="action-btn diagram-download-btn" aria-label="下载 SVG" title="下载 SVG"><i class="fa-solid fa-download" aria-hidden="true"></i></button>
+      </div>
+    </div>
+    <div class="tabs-content">
+      <div class="code-block diagram-view active" data-filename="mermaid.mmd">
+        <div class="diagram-container">
+          <pre class="mermaid">flowchart TD
+    A[最简单的KV] --> B[解决数据丢失]
+    B --> C[加入持久化]
+    C --> D[加入WAL]
+    D --> E[设计MemTable]
+    E --> F[生成SSTable]
+    F --> G[实现Compaction]
+    G --> H[优化查询]
+    H --> I[对比LevelDB源码]</pre>
+          <pre class="mermaid-dark">flowchart TD
+    A[最简单的KV] --> B[解决数据丢失]
+    B --> C[加入持久化]
+    C --> D[加入WAL]
+    D --> E[设计MemTable]
+    E --> F[生成SSTable]
+    F --> G[实现Compaction]
+    G --> H[优化查询]
+    H --> I[对比LevelDB源码]</pre>
+          <pre class="mermaid-neutral">flowchart TD
+    A[最简单的KV] --> B[解决数据丢失]
+    B --> C[加入持久化]
+    C --> D[加入WAL]
+    D --> E[设计MemTable]
+    E --> F[生成SSTable]
+    F --> G[实现Compaction]
+    G --> H[优化查询]
+    H --> I[对比LevelDB源码]</pre>
+        </div>
+      </div><div class="code-block highlight diagram-code" data-mode="classic" data-copyable="true" copyable="true" fullscreen="true" filename="mermaid.mmd"><div class="chroma">
+<div class="code-header language-text"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">flowchart TD
+</span></span><span class="line"><span class="cl">    A[最简单的KV] --&gt; B[解决数据丢失]
+</span></span><span class="line"><span class="cl">    B --&gt; C[加入持久化]
+</span></span><span class="line"><span class="cl">    C --&gt; D[加入WAL]
+</span></span><span class="line"><span class="cl">    D --&gt; E[设计MemTable]
+</span></span><span class="line"><span class="cl">    E --&gt; F[生成SSTable]
+</span></span><span class="line"><span class="cl">    F --&gt; G[实现Compaction]
+</span></span><span class="line"><span class="cl">    G --&gt; H[优化查询]
+</span></span><span class="line"><span class="cl">    H --&gt; I[对比LevelDB源码]</span></span></code></pre></td></tr></table></div>
+</div>
+</div></div>
+  </div><p>每一步都会产生新的问题：</p>
+<div class="table-wrapper">
+  <table>
+    <thead>
+        <tr>
+            <th style="text-align: left">遇到的问题</th>
+            <th style="text-align: left">LevelDB中的解决方案</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td style="text-align: left">数据重启丢失</td>
+            <td style="text-align: left">WAL</td>
+        </tr>
+        <tr>
+            <td style="text-align: left">内存无限增长</td>
+            <td style="text-align: left">SSTable</td>
+        </tr>
+        <tr>
+            <td style="text-align: left">查询效率下降</td>
+            <td style="text-align: left">Bloom Filter</td>
+        </tr>
+        <tr>
+            <td style="text-align: left">文件越来越多</td>
+            <td style="text-align: left">Compaction</td>
+        </tr>
+        <tr>
+            <td style="text-align: left">数据版本混乱</td>
+            <td style="text-align: left">VersionSet</td>
+        </tr>
+        <tr>
+            <td style="text-align: left">多种数据来源访问方式不同</td>
+            <td style="text-align: left">Iterator</td>
+        </tr>
+    </tbody>
+  </table>
+</div><p>当我们最后打开LevelDB源码，就不再是一堆陌生类名和术语，因为我们已经经历过它们为什么出现。</p>
+<h3 class="heading-element" id="学习复杂系统的另一种方式"><span>学习复杂系统的另一种方式</span>
+  <a href="#%e5%ad%a6%e4%b9%a0%e5%a4%8d%e6%9d%82%e7%b3%bb%e7%bb%9f%e7%9a%84%e5%8f%a6%e4%b8%80%e7%a7%8d%e6%96%b9%e5%bc%8f" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p>对于大型系统，阅读代码更适合作为验证设计，而不是寻找设计。通过实现MiniLevelDB，我们先建立问题意识、架构认知、核心机制理解，然后在阅读LevelDB，源码中的每一个设计都会变成：</p>
+<blockquote>
+<p>原来它是在解决这个问题。</p>
+</blockquote>
+<p>这也是本文选择<strong>从零实现 MiniLevelDB</strong>，而不是直接阅读 LevelDB 源码的原因。</p>
+<h2 class="heading-element" id="从hashmap开始实现key-value存储引擎"><span>从HashMap开始实现Key-Value存储引擎</span>
+  <a href="#%e4%bb%8ehashmap%e5%bc%80%e5%a7%8b%e5%ae%9e%e7%8e%b0key-value%e5%ad%98%e5%82%a8%e5%bc%95%e6%93%8e" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>在理解LevelDB的设计之前，我们先暂时忘掉所有复杂的概念。假设现在只有一个最简单的需求：</p>
+<blockquote>
+<p>设计一个能够存储Key-Value数据的系统。</p>
+</blockquote>
+<p>例如：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-cpp"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="n">Put</span><span class="p">(</span><span class="s">&#34;name&#34;</span><span class="p">,</span> <span class="s">&#34;Anthony&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="n">Put</span><span class="p">(</span><span class="s">&#34;age&#34;</span><span class="p">,</span> <span class="s">&#34;22&#34;</span><span class="p">);</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>随后可以查询：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-cpp"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="n">Get</span><span class="p">(</span><span class="s">&#34;name&#34;</span><span class="p">);</span> <span class="c1">// &#34;Anthony&#34;
+</span></span></span><span class="line"><span class="cl"><span class="n">Get</span><span class="p">(</span><span class="s">&#34;age&#34;</span><span class="p">);</span> <span class="c1">// &#34;22&#34;
+</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>也可以删除数据：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-cpp"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="n">Delete</span><span class="p">(</span><span class="s">&#34;age&#34;</span><span class="p">);</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>如果只是实现这些最基础的功能，我们不需要设计任何复杂的数据结构。C++标准库已经提供了最合适的选择——<code>std::unordered_map</code>。</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-cpp"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="2" style="--fi-max-shown-lines:400;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">MiniDB</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">  <span class="kt">void</span> <span class="n">Put</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">key</span><span class="p">,</span> <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">value</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">data_</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="kt">bool</span> <span class="nf">Get</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">key</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">value</span><span class="p">)</span> <span class="k">const</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">auto</span> <span class="n">it</span> <span class="o">=</span> <span class="n">data_</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">key</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">it</span> <span class="o">==</span> <span class="n">data_</span><span class="p">.</span><span class="n">end</span><span class="p">())</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="n">value</span> <span class="o">=</span> <span class="n">it</span><span class="o">-&gt;</span><span class="n">second</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="kt">void</span> <span class="nf">Delete</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">key</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">data_</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">key</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">private</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">  <span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span> <span class="n">data_</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p><code>MiniDB</code>只有一个成员<code>data_</code>，所有数据都保存在内存中。整个系统非常简单：</p>
+<ul>
+<li><code>Put()</code>：向HashMap插入或更新数据</li>
+<li><code>Get()</code>：根据Key查找数据</li>
+<li><code>Delete()</code>：删除指定Key</li>
+</ul>
+<p>几十行代码就完成了Key-Value存储。</p>
+<h3 class="heading-element" id="为什么选择hashmap"><span>为什么选择HashMap？</span>
+  <a href="#%e4%b8%ba%e4%bb%80%e4%b9%88%e9%80%89%e6%8b%a9hashmap" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p>因为它满足了我们当前所有需求，并且HashMap的查找、插入、删除平均时间复杂度都是<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>O</mi><mrow><mo fence="true">(</mo><mn>1</mn><mo fence="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">O\left(1\right)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="minner"><span class="mopen delimcenter" style="top:0em;">(</span><span class="mord">1</span><span class="mclose delimcenter" style="top:0em;">)</span></span></span></span></span>。对于一个简单的Key-Value系统来说，没有比HashMap更适合的数据结构了。</p>
+<h3 class="heading-element" id="第一个工程问题"><span>第一个工程问题</span>
+  <a href="#%e7%ac%ac%e4%b8%80%e4%b8%aa%e5%b7%a5%e7%a8%8b%e9%97%ae%e9%a2%98" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p>但是，如果它真的作为数据库投入使用，很快就会暴露出一个严重问题。</p>
+<p>例如：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-cpp"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="n">Put</span><span class="p">(</span><span class="s">&#34;name&#34;</span><span class="p">,</span> <span class="s">&#34;Anthony&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="n">Put</span><span class="p">(</span><span class="s">&#34;age&#34;</span><span class="p">,</span> <span class="mi">22</span><span class="p">);</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>当程序退出后，再次启动程序<code>Get(&quot;name&quot;)</code>找不到值了。原因很简单：所有数据都保存在内存中，而内存是易失性的。程序一旦退出，整个HashMap就会被释放，所有数据随之丢失。这意味着：它只是一个内存缓存，而不是一个真正意义上的数据库。</p>
+<p>至此，我们第一次遇到了真实数据库需要解决的问题：</p>
+<blockquote>
+<p>如何让数据在程序退出后依然存在？</p>
+</blockquote>
+<p>我们需要让数据脱离内存，保存到磁盘中。于是，我们的MiniLevelDB将迎来第一次架构演进，为MiniLevelDB增加持久化功能力，让它朝真正数据库迈进一步。</p>
+<h2 class="heading-element" id="数据持久化解决程序重启数据丢失"><span>数据持久化：解决程序重启数据丢失</span>
+  <a href="#%e6%95%b0%e6%8d%ae%e6%8c%81%e4%b9%85%e5%8c%96%e8%a7%a3%e5%86%b3%e7%a8%8b%e5%ba%8f%e9%87%8d%e5%90%af%e6%95%b0%e6%8d%ae%e4%b8%a2%e5%a4%b1" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>数据库最基本的能力之一，就是数据持久化。即使程序关闭、服务器重启，数据依然能够恢复。</p>
+<h3 class="heading-element" id="最直接的方案写入文件"><span>最直接的方案：写入文件</span>
+  <a href="#%e6%9c%80%e7%9b%b4%e6%8e%a5%e7%9a%84%e6%96%b9%e6%a1%88%e5%86%99%e5%85%a5%e6%96%87%e4%bb%b6" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p>如果让我们自己设计，第一个想到的方案非常简单：把HashMap保存到磁盘。</p>
+<p>例如：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-text"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">name=Anthony
+</span></span><span class="line"><span class="cl">age=22</span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>程序启动时：读取文件-&gt;解析内容-&gt;恢复HashMap。程序退出时：HashMap-&gt;写入文件。这样，我们数据就不会因为程序退出而消失。可以实现两个方法：<code>Load()</code>和<code>Save()</code>。</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-cpp"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="2" style="--fi-max-shown-lines:400;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">MiniDB</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="kt">void</span> <span class="n">Load</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">ifstream</span> <span class="n">ifs</span><span class="p">(</span><span class="s">&#34;database.txt&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">ifs</span><span class="p">.</span><span class="n">is_open</span><span class="p">())</span> <span class="k">return</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">line</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">data_</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">while</span> <span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">getline</span><span class="p">(</span><span class="n">ifs</span><span class="p">,</span> <span class="n">line</span><span class="p">))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="k">auto</span> <span class="n">pos</span> <span class="o">=</span> <span class="n">line</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="sc">&#39;=&#39;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">      <span class="k">if</span> <span class="p">(</span><span class="n">pos</span> <span class="o">==</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">::</span><span class="n">npos</span><span class="p">)</span> <span class="k">continue</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">      <span class="n">key</span> <span class="o">=</span> <span class="n">line</span><span class="p">.</span><span class="n">substr</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">pos</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">      <span class="n">value</span> <span class="o">=</span> <span class="n">line</span><span class="p">.</span><span class="n">substr</span><span class="p">(</span><span class="n">pos</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">      <span class="n">data_</span><span class="p">.</span><span class="n">emplace</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">key</span><span class="p">),</span> <span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">value</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="kt">void</span> <span class="nf">Save</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">ofstream</span> <span class="n">ofs</span><span class="p">(</span><span class="s">&#34;database.txt&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="p">[</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">]</span> <span class="o">:</span> <span class="n">data_</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="n">ofs</span> <span class="o">&lt;&lt;</span> <span class="n">key</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;=&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">value</span> <span class="o">&lt;&lt;</span> <span class="sc">&#39;\n&#39;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>程序启动<code>db.Load()</code>，程序退出<code>db.Save()</code>。整个数据库已经有了真正的数据持久化能力。</p>
+<h3 class="heading-element" id="新问题"><span>新问题</span>
+  <a href="#%e6%96%b0%e9%97%ae%e9%a2%98" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p>这种方案真的可以吗？假设数据库里有100000条数据，现在执行<code>db.Put(&quot;age&quot;, 20)</code>。只有一条数据发生变化，我们目前的方案也会重新遍历整个HashMap，重新生成整个<code>database.txt</code>覆盖原来的文件。也就是说，修改一个Key将会导致写入100000条数据。如果数据库存储的数据越来越多，1000万条-&gt;1亿条。那么每次写入：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-cpp"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="n">MiniDB</span> <span class="n">db</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">db</span><span class="p">.</span><span class="n">Load</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">  <span class="n">db</span><span class="p">.</span><span class="n">Put</span><span class="p">(</span><span class="s">&#34;city&#34;</span><span class="p">,</span> <span class="s">&#34;New York&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="n">db</span><span class="p">.</span><span class="n">Save</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">  <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>都需要读取内存中的HashMap，重新生成整个数据库文件,然后覆盖。这样的效率显然无法接受。磁盘访问速度远远低于内存，尤其是随机写(Random Write)。CPU很快，HashMap很快，真正慢的是磁盘I/O。现在数据库的性能问题，本质上是如何减少磁盘读写。</p>
+<h3 class="heading-element" id="更好的办法"><span>更好的办法</span>
+  <a href="#%e6%9b%b4%e5%a5%bd%e7%9a%84%e5%8a%9e%e6%b3%95" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p>仔细观察会发现，每一次<code>Put</code>，比如：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-cpp"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="n">db</span><span class="p">.</span><span class="n">Put</span><span class="p">(</span><span class="s">&#34;age&#34;</span><span class="p">,</span> <span class="mi">19</span><span class="p">);</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>真正发生变化的只有<code>age</code>-&gt;19。为什么我们要重新写整个数据库？可以只追加这次操作。下次<code>db.Delete(&quot;age&quot;)</code>，继续追加。所有操作都只是追加，而不是将整个文件覆盖。整个文件变成：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-text"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">PUT age 18
+</span></span><span class="line"><span class="cl">DELETE age</span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>这种设计不仅写入速度快，还能够记录所有修改历史。事实上，这正是现代数据库广泛采用的一种思想——<strong>Write-Ahead Log(WAL，预写日志)</strong>。</p>
+<h2 class="heading-element" id="wal数据库如何保证写入可靠性"><span>WAL：数据库如何保证写入可靠性</span>
+  <a href="#wal%e6%95%b0%e6%8d%ae%e5%ba%93%e5%a6%82%e4%bd%95%e4%bf%9d%e8%af%81%e5%86%99%e5%85%a5%e5%8f%af%e9%9d%a0%e6%80%a7" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>Write-Ahead Log(WAL，预写日志)记录的不是数据库当前长什么样，而是数据库经历了哪些操作。例如：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true" title="wal.log"><div class="chroma">
+<div class="code-header language-text"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i><span class="title-inner">wal.log</span></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">PUT name Anthony
+</span></span><span class="line"><span class="cl">PUT age 18
+</span></span><span class="line"><span class="cl">PUT age 19
+</span></span><span class="line"><span class="cl">DELETE name</span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>每一次修改数据库，第一件事不是修改数据库文件，而是写日志。整个写入流程变成：</p>
+<div class="code-tabs diagram-tabs" data-diagram="mermaid">
+    <div class="tabs-header">
+      <div class="tabs-items">
+        <span class="tab-item active" data-tab="diagram" title="图表">图表</span>
+        <span class="tab-item" data-tab="code" title="代码">代码</span>
+      </div>
+      <div class="tabs-actions">
+        <button type="button" class="action-btn diagram-zoom-out-btn" aria-label="缩小" title="缩小"><i class="fa-solid fa-magnifying-glass-minus" aria-hidden="true"></i></button>
+        <button type="button" class="action-btn diagram-zoom-in-btn" aria-label="放大" title="放大"><i class="fa-solid fa-magnifying-glass-plus" aria-hidden="true"></i></button>
+        <button type="button" class="action-btn diagram-reset-btn" aria-label="重置" title="重置"><i class="fa-solid fa-arrows-rotate" aria-hidden="true"></i></button>
+        <button type="button" class="action-btn diagram-download-btn" aria-label="下载 SVG" title="下载 SVG"><i class="fa-solid fa-download" aria-hidden="true"></i></button>
+      </div>
+    </div>
+    <div class="tabs-content">
+      <div class="code-block diagram-view active" data-filename="mermaid.mmd">
+        <div class="diagram-container">
+          <pre class="mermaid">flowchart TD
+    A[Put] --> B[WAL Log]
+    B --> C[HashMap]</pre>
+          <pre class="mermaid-dark">flowchart TD
+    A[Put] --> B[WAL Log]
+    B --> C[HashMap]</pre>
+          <pre class="mermaid-neutral">flowchart TD
+    A[Put] --> B[WAL Log]
+    B --> C[HashMap]</pre>
+        </div>
+      </div><div class="code-block highlight diagram-code" data-mode="classic" data-copyable="true" copyable="true" fullscreen="true" filename="mermaid.mmd"><div class="chroma">
+<div class="code-header language-text"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">flowchart TD
+</span></span><span class="line"><span class="cl">    A[Put] --&gt; B[WAL Log]
+</span></span><span class="line"><span class="cl">    B --&gt; C[HashMap]</span></span></code></pre></td></tr></table></div>
+</div>
+</div></div>
+  </div><p>注意这个顺序：先写日志，再更新内存。这也是Write-<strong>Ahead</strong> Log名称的由来。</p>
+<p>为什么要先写日志，在更新内存？而不是更新内存后再写日志。</p>
+<p>举一个断电的例子，<code>Put()</code>-&gt;更新HashMap-&gt;突然断电-&gt;日志没写，修改丢失。而<code>Put()</code>-&gt;日志写成功-&gt;断电，启动时可以根据日志恢复。</p>
+<p>由于WAL是Append(顺序写)，而不是Rewrite(随机写)，写入速度会更快。这是数据库经典的一种优化思想：</p>
+<blockquote>
+<p>把随机转换成顺序写</p>
+</blockquote>
+<h3 class="heading-element" id="新的问题出现"><span>新的问题出现</span>
+  <a href="#%e6%96%b0%e7%9a%84%e9%97%ae%e9%a2%98%e5%87%ba%e7%8e%b0" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p>数据库运行了大半年，<code>wal.log</code>文件已经300G了。启动时恢复HashMap耗费了很多时间，这显然不能接受。</p>
+<p><ins>WAL可以一直增长吗？</ins></p>
+<p>显然是不行。那什么时候可以删除呢？只有当这些数据已经安全保存到另一个地方的时候。</p>
+<h2 class="heading-element" id="memtable的演进为什么hashmap最终被skiplist替代"><span>MemTable的演进：为什么HashMap最终被SkipList替代？</span>
+  <a href="#memtable%e7%9a%84%e6%bc%94%e8%bf%9b%e4%b8%ba%e4%bb%80%e4%b9%88hashmap%e6%9c%80%e7%bb%88%e8%a2%abskiplist%e6%9b%bf%e4%bb%a3" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>经过前面的改进，我们的MiniLevelDB已经具备数据库最基本的能力。每次吸入都会先记录到WAL，再更新内存中的数据。其中，内存中的HashMap就承担了<strong>MemTable</strong>的角色。所谓的MemTable，并不是一种特殊的数据结构，而是<strong>当前可写的内存表</strong>。在我们的实现中，它由<code>std::unordered_map</code>实现。而在LevelDB中，它采用了SkipList。那么，一个新问题来了：</p>
+<blockquote>
+<p>HashMap查询速度已经很快了，为什么还要把它换成SkipList？</p>
+</blockquote>
+<p>HashMap的最大有点就是查询快，底层根据Key计算哈希值，就能够快速定位数据。如果数据库只要支持<code>Get(key)</code>，那么HashMap是很好的选择。遗憾的是，数据库除了查询单个Key，还经常需要按<strong>Key的大小顺序</strong>访问数据。这类操作通常称为范围查询或有序遍历。</p>
+<p>HashMap的内部组织方式决定了<strong>它只关心哈希值，而不关心Key大小顺序</strong>。</p>
+<p>我们需要一种“有序”的数据结构，既然HashMap不适合范围查询，那么MemTable至少需要满足两个条件：</p>
+<ul>
+<li>写入速度够快</li>
+<li>数据能够保持有序</li>
+</ul>
+<p>有哪些选择？例如：AVL树、红黑树(<code>std::map</code>)、B+树、SkipList都能按照Key排序。为什么LevelDB选择了SkipList？这是因为其他几种数据结构，维护成本较高，也不利于后续的并发优化。相比之下，SkipList的实现要简单得多。对于MemTable而言，它最重要的特点是：</p>
+<blockquote>
+<p>写入频繁、读取频繁，而且数据始终保持有序</p>
+</blockquote>
+<p>SkipList正好满足这些需求：</p>
+<ul>
+<li>查询效率高</li>
+<li>插入效率高</li>
+<li>天然保持Key有序</li>
+<li>实现简单，代码量远少于平衡树</li>
+</ul>
+<p><figure><img loading="lazy" src='/images/202606/12/08c145a98403c705daa38ade5db191ff_MD5.jpeg' alt="图1 SkipList示例"><figcaption class="image-caption">图1 SkipList示例</figcaption>
+  </figure></p>
+<p>因此，LevelDB从一开始就选择SkipList作为MemTable的底层实现。我们将MiniLevelDB也进行升级，将<code>std::unordered_map&lt;string, string&gt;</code>升级为MemTable(SkipList)。虽然单次查询从平均 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>O</mi><mrow><mo fence="true">(</mo><mn>1</mn><mo fence="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">O\left(1\right)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="minner"><span class="mopen delimcenter" style="top:0em;">(</span><span class="mord">1</span><span class="mclose delimcenter" style="top:0em;">)</span></span></span></span></span> 变成了 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>O</mi><mrow><mo fence="true">(</mo><mi>l</mi><mi>o</mi><mi>g</mi><mi>N</mi><mo fence="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">O\left(logN\right)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="minner"><span class="mopen delimcenter" style="top:0em;">(</span><span class="mord mathnormal" style="margin-right:0.01968em;">l</span><span class="mord mathnormal">o</span><span class="mord mathnormal" style="margin-right:0.03588em;">g</span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="mclose delimcenter" style="top:0em;">)</span></span></span></span></span>,但数据始终保持有序。</p>
+<h2 class="heading-element" id="sstable如何将内存数据保存到磁盘"><span>SSTable：如何将内存数据保存到磁盘</span>
+  <a href="#sstable%e5%a6%82%e4%bd%95%e5%b0%86%e5%86%85%e5%ad%98%e6%95%b0%e6%8d%ae%e4%bf%9d%e5%ad%98%e5%88%b0%e7%a3%81%e7%9b%98" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>现在我们将MemTable从HashMap升级为了SkipList，一个数据库已经初具雏形。但一个问题很快就出现了。MemTable可以一直增长吗？显然不能。MemTable本质上是一块内存，如果我们程序一直<code>Put</code>，MemTable会不断增长，最终内存耗尽，程序崩溃。所以，MemTable不能无限增长。必须在合适的时候，把内存中的数据转移到磁盘中。</p>
+<p>一个很自然的想法是：MemTable-&gt;保存成一个文件-&gt;清理MemTable-&gt;继续接收新的写入。这样内存始终保持在一个可控范围内。注意：<strong>一旦MemTable保存成了文件，我们就不会再对该文件进行操作了</strong>。如果有新的写入，我们保存为新的文件。为什么不能追加到文件中？这种方案会带来很多问题。</p>
+<p>假如文件中已经有：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-text"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">user001
+</span></span><span class="line"><span class="cl">user009
+</span></span><span class="line"><span class="cl">user015
+</span></span><span class="line"><span class="cl">......
+</span></span><span class="line"><span class="cl">user980</span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>现在插入<code>user003</code>，为了保持整个文件有序，我们需要修改文件中间数据。磁盘文件不像内存，可以方便地插入元素。为了插入一条记录，可能需要移动大量数据，导致效率很低。既然修改文件代价这么高，那么<strong>为什么不修改？</strong></p>
+<p>数据库可以采用一种新方案，当MemTable达到一定大小时，一次性写入磁盘，生成新文件，以后不再修改该文件。例如：第一次Flush <code>001.sst</code>，第二次Flush <code>002.sst</code>，第三次Flush <code>003.sst</code>……。每一个文件生成以后都不会再发生变化。由于MemTable(SkipList)中的数据天然有序，Flush时只需要遍历MemTable，顺序写入磁盘即可，整个过程不需要排序。这也是LevelDB选择SkipList另一个重要原因。</p>
+<p>查询怎么办？比如查询<code>db.Get(&quot;user100&quot;)</code>，流程变成：</p>
+<p><figure><img loading="lazy" src='/images/202606/12/2.png' alt="图2 查找流程示例"><figcaption class="image-caption">图2 查找流程示例</figcaption>
+  </figure></p>
+<p>为什么要倒着查？因为最新的数据永远在最新生成的文件中，因此必须优先访问最新的数据。</p>
+<h3 class="heading-element" id="新的问题"><span>新的问题</span>
+  <a href="#%e6%96%b0%e7%9a%84%e9%97%ae%e9%a2%98" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p>随着数据库的不断运行,sst文件越来越多，每次查询需要检查的文件越来越多。写入快，而读取慢。有什么办法把这些sst文件合并起来？这就是LevelDB最核心的机制之一：Compaction(压缩合并)。</p>
+<h2 class="heading-element" id="compaction如何控制磁盘文件增长"><span>Compaction：如何控制磁盘文件增长</span>
+  <a href="#compaction%e5%a6%82%e4%bd%95%e6%8e%a7%e5%88%b6%e7%a3%81%e7%9b%98%e6%96%87%e4%bb%b6%e5%a2%9e%e9%95%bf" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>Compaction的工作可以概括为3件事。</p>
+<h3 class="heading-element" id="合并多个sstable"><span>合并多个SSTable</span>
+  <a href="#%e5%90%88%e5%b9%b6%e5%a4%9a%e4%b8%aasstable" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p>比如将001.sst、002.sst、003.sst合并为010.sst。SSTable文件经过多次Compaction大大减少了数量，查询访问的文件数量也大幅减少。</p>
+<h3 class="heading-element" id="删除旧版本的数据"><span>删除旧版本的数据</span>
+  <a href="#%e5%88%a0%e9%99%a4%e6%97%a7%e7%89%88%e6%9c%ac%e7%9a%84%e6%95%b0%e6%8d%ae" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p>例如：</p>
+<div class="code-tabs diagram-tabs" data-diagram="mermaid">
+    <div class="tabs-header">
+      <div class="tabs-items">
+        <span class="tab-item active" data-tab="diagram" title="图表">图表</span>
+        <span class="tab-item" data-tab="code" title="代码">代码</span>
+      </div>
+      <div class="tabs-actions">
+        <button type="button" class="action-btn diagram-zoom-out-btn" aria-label="缩小" title="缩小"><i class="fa-solid fa-magnifying-glass-minus" aria-hidden="true"></i></button>
+        <button type="button" class="action-btn diagram-zoom-in-btn" aria-label="放大" title="放大"><i class="fa-solid fa-magnifying-glass-plus" aria-hidden="true"></i></button>
+        <button type="button" class="action-btn diagram-reset-btn" aria-label="重置" title="重置"><i class="fa-solid fa-arrows-rotate" aria-hidden="true"></i></button>
+        <button type="button" class="action-btn diagram-download-btn" aria-label="下载 SVG" title="下载 SVG"><i class="fa-solid fa-download" aria-hidden="true"></i></button>
+      </div>
+    </div>
+    <div class="tabs-content">
+      <div class="code-block diagram-view active" data-filename="mermaid.mmd">
+        <div class="diagram-container">
+          <pre class="mermaid">flowchart TD
+    A[age = 18] --> B[age = 19]
+    B --> C[age = 20]</pre>
+          <pre class="mermaid-dark">flowchart TD
+    A[age = 18] --> B[age = 19]
+    B --> C[age = 20]</pre>
+          <pre class="mermaid-neutral">flowchart TD
+    A[age = 18] --> B[age = 19]
+    B --> C[age = 20]</pre>
+        </div>
+      </div><div class="code-block highlight diagram-code" data-mode="classic" data-copyable="true" copyable="true" fullscreen="true" filename="mermaid.mmd"><div class="chroma">
+<div class="code-header language-text"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">flowchart TD
+</span></span><span class="line"><span class="cl">    A[age = 18] --&gt; B[age = 19]
+</span></span><span class="line"><span class="cl">    B --&gt; C[age = 20]</span></span></code></pre></td></tr></table></div>
+</div>
+</div></div>
+  </div><p>最终只保留<code>age = 20</code>。</p>
+<h3 class="heading-element" id="清理已删除的数据"><span>清理已删除的数据</span>
+  <a href="#%e6%b8%85%e7%90%86%e5%b7%b2%e5%88%a0%e9%99%a4%e7%9a%84%e6%95%b0%e6%8d%ae" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p>数据库删除一个Key，实际上并没有立即从SSTable中删除。通常只是给个删除标记，Compaction时如果确定就数据不再需要，再彻底删除。</p>
+<p>通过Compaction，数据库中的冗余数据越来越少，查找效率也越来越高。</p>
+<h3 class="heading-element" id="新的问题-1"><span>新的问题</span>
+  <a href="#%e6%96%b0%e7%9a%84%e9%97%ae%e9%a2%98-1" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p>Compaction虽然减少了SSTable的数量，但是查询一个不存在的Key。仍然可能需要访问很多文件，最后才发现不存在。大量的磁盘访问都浪费了，有没有一种方法能够在真正读取SSTable之前，就知道这个Key一定不存在。我们可以使用<a href="https://en.wikipedia.org/w/index.php?title=Bloom_filter&oldformat=true" target="_blank" rel="external nofollow noopener noreferrer">Bloom Filter<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>。</p>
+<h2 class="heading-element" id="bloom-filter减少无效查询"><span>Bloom Filter：减少无效查询</span>
+  <a href="#bloom-filter%e5%87%8f%e5%b0%91%e6%97%a0%e6%95%88%e6%9f%a5%e8%af%a2" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>如果能做到这个Key一定不存在，那么可以直接结束。后面的的SSTable就根本不用访问，大量磁盘I/O都可以避免。Bloom Filter可以巧妙地实现实现这点。它不保存完整的Key，而是保存Key的“痕迹”。每一个Key经过几个哈希函数，对应的位置标记为1。整个Bloom Filter看起来就像一张位图：<code>0 0 1 0 1 0 0 1 1 0 0 1 ......</code>。随着越来越多的Key加入，越来越多的位置会变成1。但是真正保存的数据量却非常小，通常每个Key只需要几比特的空间。</p>
+<p><figure><img loading="lazy" src='/images/202606/12/1217bb68-9c1f-4d7d-a961-d1393df35c46_908x771.png' alt="图3 Bloom Filter示例"><figcaption class="image-caption">图3 Bloom Filter示例</figcaption>
+  </figure></p>
+<p>在LevelDB中，Bloom Filter并不是整个数据库共享一个。而是每一个SSTable都有自己的Bloom Filter。如果所有SSTable的Bloom Filter都判断不存在，数据库可以直接返回“未找到”。整个过程中，我们不必读取SSTable的真实数据。因此，大量不存在的数据查询都会被Bloom Filter提前拦截，无需真正访问磁盘。</p>
+<h2 class="heading-element" id="对比leveldb源码工业实现解决了哪些问题"><span>对比LevelDB源码：工业实现解决了哪些问题</span>
+  <a href="#%e5%af%b9%e6%af%94leveldb%e6%ba%90%e7%a0%81%e5%b7%a5%e4%b8%9a%e5%ae%9e%e7%8e%b0%e8%a7%a3%e5%86%b3%e4%ba%86%e5%93%aa%e4%ba%9b%e9%97%ae%e9%a2%98" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><h2 class="heading-element" id="番外"><span>番外</span>
+  <a href="#%e7%95%aa%e5%a4%96" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><h3 class="heading-element" id="如何调试leveldb"><span>如何调试LevelDB？</span>
+  <a href="#%e5%a6%82%e4%bd%95%e8%b0%83%e8%af%95leveldb" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p>执行以下命令将LevelDB项目克隆到本地：</p>
 <div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
 <div class="code-header language-bash"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -215,6 +1057,7 @@
 </span><span class="lnt">31
 </span><span class="lnt">32
 </span><span class="lnt">33
+</span><span class="lnt">34
 </span></code></pre></td>
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp">
@@ -248,77 +1091,20 @@
 </span></span><span class="line"><span class="cl">    <span class="n">cerr</span> <span class="o">&lt;&lt;</span> <span class="n">status</span><span class="p">.</span><span class="n">ToString</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">  <span class="p">}</span>
 </span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="k">delete</span> <span class="n">db</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">  <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div>
 </div>
 </div><p>并在<code>CMakeLists.txt</code>中增加下图所示内容：</p>
 <p><figure><img loading="lazy" src='/images/202606/12/1.jpeg' alt="图1 CMakeLists.txt文件"><figcaption class="image-caption">图1 CMakeLists.txt文件</figcaption>
   </figure></p>
-<h2 class="heading-element" id="1-整体架构一张图看懂leveldb"><span>1. 整体架构——一张图看懂LevelDB</span>
-  <a href="#1-%e6%95%b4%e4%bd%93%e6%9e%b6%e6%9e%84%e4%b8%80%e5%bc%a0%e5%9b%be%e7%9c%8b%e6%87%82leveldb" class="heading-mark">
-    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
-  </a>
-</h2><h2 class="heading-element" id="2-数据写入流程一次put到底发生了什么"><span>2. 数据写入流程——一次Put()到底发生了什么？</span>
-  <a href="#2-%e6%95%b0%e6%8d%ae%e5%86%99%e5%85%a5%e6%b5%81%e7%a8%8b%e4%b8%80%e6%ac%a1put%e5%88%b0%e5%ba%95%e5%8f%91%e7%94%9f%e4%ba%86%e4%bb%80%e4%b9%88" class="heading-mark">
-    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
-  </a>
-</h2><h2 class="heading-element" id="3-memtable内存中的有序表是如何实现的"><span>3. MemTable——内存中的有序表是如何实现的？</span>
-  <a href="#3-memtable%e5%86%85%e5%ad%98%e4%b8%ad%e7%9a%84%e6%9c%89%e5%ba%8f%e8%a1%a8%e6%98%af%e5%a6%82%e4%bd%95%e5%ae%9e%e7%8e%b0%e7%9a%84" class="heading-mark">
-    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
-  </a>
-</h2><h2 class="heading-element" id="4-skiplist为什么不用红黑树"><span>4. SkipList——为什么不用红黑树？</span>
-  <a href="#4-skiplist%e4%b8%ba%e4%bb%80%e4%b9%88%e4%b8%8d%e7%94%a8%e7%ba%a2%e9%bb%91%e6%a0%91" class="heading-mark">
-    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
-  </a>
-</h2><h2 class="heading-element" id="5-wal崩溃恢复的第一道防线"><span>5. WAL——崩溃恢复的第一道防线</span>
-  <a href="#5-wal%e5%b4%a9%e6%ba%83%e6%81%a2%e5%a4%8d%e7%9a%84%e7%ac%ac%e4%b8%80%e9%81%93%e9%98%b2%e7%ba%bf" class="heading-mark">
-    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
-  </a>
-</h2><h2 class="heading-element" id="6-sstable磁盘数据是如何组织的"><span>6. SSTable——磁盘数据是如何组织的？</span>
-  <a href="#6-sstable%e7%a3%81%e7%9b%98%e6%95%b0%e6%8d%ae%e6%98%af%e5%a6%82%e4%bd%95%e7%bb%84%e7%bb%87%e7%9a%84" class="heading-mark">
-    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
-  </a>
-</h2><h2 class="heading-element" id="7-blockrestart-point的设计思想"><span>7. Block——Restart Point的设计思想</span>
-  <a href="#7-blockrestart-point%e7%9a%84%e8%ae%be%e8%ae%a1%e6%80%9d%e6%83%b3" class="heading-mark">
-    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
-  </a>
-</h2><h2 class="heading-element" id="8-bloom-filter如何避免无效磁盘访问"><span>8. Bloom Filter——如何避免无效磁盘访问？</span>
-  <a href="#8-bloom-filter%e5%a6%82%e4%bd%95%e9%81%bf%e5%85%8d%e6%97%a0%e6%95%88%e7%a3%81%e7%9b%98%e8%ae%bf%e9%97%ae" class="heading-mark">
-    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
-  </a>
-</h2><h2 class="heading-element" id="9-versionset与manifest元数据如何管理"><span>9. VersionSet与Manifest——元数据如何管理？</span>
-  <a href="#9-versionset%e4%b8%8emanifest%e5%85%83%e6%95%b0%e6%8d%ae%e5%a6%82%e4%bd%95%e7%ae%a1%e7%90%86" class="heading-mark">
-    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
-  </a>
-</h2><h2 class="heading-element" id="10-compactionlsm-tree的核心机制"><span>10. Compaction——LSM Tree的核心机制</span>
-  <a href="#10-compactionlsm-tree%e7%9a%84%e6%a0%b8%e5%bf%83%e6%9c%ba%e5%88%b6" class="heading-mark">
-    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
-  </a>
-</h2><h2 class="heading-element" id="11-iterator多路归并遍历的实现"><span>11. Iterator——多路归并遍历的实现</span>
-  <a href="#11-iterator%e5%a4%9a%e8%b7%af%e5%bd%92%e5%b9%b6%e9%81%8d%e5%8e%86%e7%9a%84%e5%ae%9e%e7%8e%b0" class="heading-mark">
-    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
-  </a>
-</h2><h2 class="heading-element" id="12-读取流程一次get都经历了什么"><span>12. 读取流程——一次Get()都经历了什么？</span>
-  <a href="#12-%e8%af%bb%e5%8f%96%e6%b5%81%e7%a8%8b%e4%b8%80%e6%ac%a1get%e9%83%bd%e7%bb%8f%e5%8e%86%e4%ba%86%e4%bb%80%e4%b9%88" class="heading-mark">
-    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
-  </a>
-</h2><h2 class="heading-element" id="13-lrucache缓存是如何设计的"><span>13. LRUCache——缓存是如何设计的？</span>
-  <a href="#13-lrucache%e7%bc%93%e5%ad%98%e6%98%af%e5%a6%82%e4%bd%95%e8%ae%be%e8%ae%a1%e7%9a%84" class="heading-mark">
-    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
-  </a>
-</h2><h2 class="heading-element" id="14-恢复流程数据库重启时发生了什么"><span>14. 恢复流程——数据库重启时发生了什么？</span>
-  <a href="#14-%e6%81%a2%e5%a4%8d%e6%b5%81%e7%a8%8b%e6%95%b0%e6%8d%ae%e5%ba%93%e9%87%8d%e5%90%af%e6%97%b6%e5%8f%91%e7%94%9f%e4%ba%86%e4%bb%80%e4%b9%88" class="heading-mark">
-    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
-  </a>
-</h2><h2 class="heading-element" id="15-总结"><span>15. 总结</span>
-  <a href="#15-%e6%80%bb%e7%bb%93" class="heading-mark">
-    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
-  </a>
-</h2><h2 class="heading-element" id="推荐"><span>推荐</span>
+<h2 class="heading-element" id="推荐"><span>推荐</span>
   <a href="#%e6%8e%a8%e8%8d%90" class="heading-mark">
     <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
   </a>
 </h2><p><a href="https://github.com/google/leveldb/tree/main/doc" target="_blank" rel="external nofollow noopener noreferrer">leveldb doc<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></p>
+<p><a href="https://blog.reachsumit.com/posts/2020/07/skip-list/" target="_blank" rel="external nofollow noopener noreferrer">Skip List Data Structure - Explained!<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></p>
+<p><a href="https://help.aliyun.com/zh/polardb/polardb-for-mysql/implement-an-one-primary-and-multi-read-architecture-based-on-lsm-trees" target="_blank" rel="external nofollow noopener noreferrer">如何基于LSM-tree架构实现一写多读<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></p>
 <h2 class="heading-element" id="参考"><span>参考</span>
   <a href="#%e5%8f%82%e8%80%83" class="heading-mark">
     <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
@@ -326,7 +1112,9 @@
 </h2><p><a href="https://selfboot.cn/archives/" target="_blank" rel="external nofollow noopener noreferrer">Just For Fun<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></p>
 <p><a href="https://izualzhy.cn/archive.html?tag=leveldb" target="_blank" rel="external nofollow noopener noreferrer">Ying<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></p>
 <p><a href="https://leveldb-handbook.readthedocs.io/zh/latest/index.html" target="_blank" rel="external nofollow noopener noreferrer">leveldb-handbook<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></p>
-<p><a href="https://github.com/SmartKeyerror/reading-source-code-of-leveldb-1.23" target="_blank" rel="external nofollow noopener noreferrer">reading-source-code-of-leveldb-1.23<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></p></div><hr class="awesome-hr" />
+<p><a href="https://github.com/SmartKeyerror/reading-source-code-of-leveldb-1.23" target="_blank" rel="external nofollow noopener noreferrer">reading-source-code-of-leveldb-1.23<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></p>
+<p><a href="https://youjiali1995.github.io/storage/leveldb-architecture/" target="_blank" rel="external nofollow noopener noreferrer">leveldb 源码分析(二) – Architecture<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></p>
+<p><a href="https://rowjee.com/blog/skiplists" target="_blank" rel="external nofollow noopener noreferrer">Understanding and Implementing Skiplists<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a></p></div><hr class="awesome-hr" />
     <h2 id="see-also">相关内容</h2>
     <ul><li>
           <a href="/csv2%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="csv2 源码剖析：轻量级 CSV 处理的高效之道">csv2 源码剖析：轻量级 CSV 处理的高效之道</a></li><li>
@@ -343,9 +1131,9 @@
       </div></div><div class="post-info-line">
         <div class="post-info-md"><span><a href="vscode://file/D:\hugo-blog\andyfree96\content\posts\LevelDB源码剖析.md" title="在编辑器中打开" class="link-to-vscode">在编辑器中打开</a></span></div>
         <div class="post-info-share">
-          <span><a href="javascript:void(0);" title="分享到 X" data-sharer="twitter" data-url="http://localhost:1313/leveldb%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="LevelDB源码剖析：如何设计一个高性能嵌入式数据库" data-via="IRONAnthony96" data-hashtags="LevelDB,架构设计,系统架构,C&#43;&#43;,工程实践,KV数据库,存储系统,源码剖析"><i class="fa-brands fa-x-twitter" aria-hidden="true"></i></a>
+          <span><a href="javascript:void(0);" title="分享到 X" data-sharer="twitter" data-url="http://localhost:1313/leveldb%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="LevelDB源码剖析：从零实现MiniLevelDB理解LSM-Tree存储引擎设计" data-via="IRONAnthony96" data-hashtags="LevelDB,架构设计,系统架构,C&#43;&#43;,工程实践,KV数据库,存储系统,源码剖析"><i class="fa-brands fa-x-twitter" aria-hidden="true"></i></a>
   <a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="http://localhost:1313/leveldb%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-hashtag="LevelDB"><i class="fa-brands fa-facebook-square" aria-hidden="true"></i></a>
-  <a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="http://localhost:1313/leveldb%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="LevelDB源码剖析：如何设计一个高性能嵌入式数据库" data-image="/images/202606/12/yuheng-ouyang-gsylhBigagM-unsplash.jpg"><i class="fa-brands fa-weibo" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="http://localhost:1313/leveldb%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" data-title="LevelDB源码剖析：从零实现MiniLevelDB理解LSM-Tree存储引擎设计" data-image="/images/202606/12/yuheng-ouyang-gsylhBigagM-unsplash.jpg"><i class="fa-brands fa-weibo" aria-hidden="true"></i></a>
   </span>
         </div>
       </div></div>
@@ -372,22 +1160,58 @@
         <h2 class="toc-title" id="toc-dialog-title">目录</h2>
         <div class="toc-content" id="toc-content-drawer"><nav >
   <ul>
-    <li><a href="#0-准备工作">0. 准备工作</a></li>
-    <li><a href="#1-整体架构一张图看懂leveldb">1. 整体架构——一张图看懂LevelDB</a></li>
-    <li><a href="#2-数据写入流程一次put到底发生了什么">2. 数据写入流程——一次Put()到底发生了什么？</a></li>
-    <li><a href="#3-memtable内存中的有序表是如何实现的">3. MemTable——内存中的有序表是如何实现的？</a></li>
-    <li><a href="#4-skiplist为什么不用红黑树">4. SkipList——为什么不用红黑树？</a></li>
-    <li><a href="#5-wal崩溃恢复的第一道防线">5. WAL——崩溃恢复的第一道防线</a></li>
-    <li><a href="#6-sstable磁盘数据是如何组织的">6. SSTable——磁盘数据是如何组织的？</a></li>
-    <li><a href="#7-blockrestart-point的设计思想">7. Block——Restart Point的设计思想</a></li>
-    <li><a href="#8-bloom-filter如何避免无效磁盘访问">8. Bloom Filter——如何避免无效磁盘访问？</a></li>
-    <li><a href="#9-versionset与manifest元数据如何管理">9. VersionSet与Manifest——元数据如何管理？</a></li>
-    <li><a href="#10-compactionlsm-tree的核心机制">10. Compaction——LSM Tree的核心机制</a></li>
-    <li><a href="#11-iterator多路归并遍历的实现">11. Iterator——多路归并遍历的实现</a></li>
-    <li><a href="#12-读取流程一次get都经历了什么">12. 读取流程——一次Get()都经历了什么？</a></li>
-    <li><a href="#13-lrucache缓存是如何设计的">13. LRUCache——缓存是如何设计的？</a></li>
-    <li><a href="#14-恢复流程数据库重启时发生了什么">14. 恢复流程——数据库重启时发生了什么？</a></li>
-    <li><a href="#15-总结">15. 总结</a></li>
+    <li><a href="#为什么不直接阅读leveldb源码">为什么不直接阅读LevelDB源码？</a>
+      <ul>
+        <li><a href="#直接阅读源码的问题">直接阅读源码的问题</a>
+          <ul>
+            <li><a href="#1-缺少问题背景">1. 缺少问题背景</a></li>
+            <li><a href="#2-看到了设计结果却不知道设计过程">2. 看到了设计结果，却不知道设计过程</a></li>
+            <li><a href="#3-容易陷入细节失去整体结构">3. 容易陷入细节，失去整体结构</a></li>
+          </ul>
+        </li>
+        <li><a href="#为什么选择从零实现minileveldb">为什么选择从零实现MiniLevelDB？</a></li>
+        <li><a href="#学习复杂系统的另一种方式">学习复杂系统的另一种方式</a></li>
+      </ul>
+    </li>
+    <li><a href="#从hashmap开始实现key-value存储引擎">从HashMap开始实现Key-Value存储引擎</a>
+      <ul>
+        <li><a href="#为什么选择hashmap">为什么选择HashMap？</a></li>
+        <li><a href="#第一个工程问题">第一个工程问题</a></li>
+      </ul>
+    </li>
+    <li><a href="#数据持久化解决程序重启数据丢失">数据持久化：解决程序重启数据丢失</a>
+      <ul>
+        <li><a href="#最直接的方案写入文件">最直接的方案：写入文件</a></li>
+        <li><a href="#新问题">新问题</a></li>
+        <li><a href="#更好的办法">更好的办法</a></li>
+      </ul>
+    </li>
+    <li><a href="#wal数据库如何保证写入可靠性">WAL：数据库如何保证写入可靠性</a>
+      <ul>
+        <li><a href="#新的问题出现">新的问题出现</a></li>
+      </ul>
+    </li>
+    <li><a href="#memtable的演进为什么hashmap最终被skiplist替代">MemTable的演进：为什么HashMap最终被SkipList替代？</a></li>
+    <li><a href="#sstable如何将内存数据保存到磁盘">SSTable：如何将内存数据保存到磁盘</a>
+      <ul>
+        <li><a href="#新的问题">新的问题</a></li>
+      </ul>
+    </li>
+    <li><a href="#compaction如何控制磁盘文件增长">Compaction：如何控制磁盘文件增长</a>
+      <ul>
+        <li><a href="#合并多个sstable">合并多个SSTable</a></li>
+        <li><a href="#删除旧版本的数据">删除旧版本的数据</a></li>
+        <li><a href="#清理已删除的数据">清理已删除的数据</a></li>
+        <li><a href="#新的问题-1">新的问题</a></li>
+      </ul>
+    </li>
+    <li><a href="#bloom-filter减少无效查询">Bloom Filter：减少无效查询</a></li>
+    <li><a href="#对比leveldb源码工业实现解决了哪些问题">对比LevelDB源码：工业实现解决了哪些问题</a></li>
+    <li><a href="#番外">番外</a>
+      <ul>
+        <li><a href="#如何调试leveldb">如何调试LevelDB？</a></li>
+      </ul>
+    </li>
     <li><a href="#推荐">推荐</a></li>
     <li><a href="#参考">参考</a></li>
   </ul>
@@ -401,5 +1225,5 @@
   </footer></div><div class="widgets"><div class="fixed-buttons"><button type="button" class="fixed-button back-to-top animate__faster d-none" aria-label="回到顶部"><i class="fa-solid fa-arrow-up" aria-hidden="true"></i></button><button type="button" id="toc-drawer-button" class="fixed-button toc-drawer-button d-none" aria-label="目录" aria-controls="toc-dialog" aria-expanded="false"><i class="fa-solid fa-bars" aria-hidden="true"></i></button></div><div id="mask"></div><div class="reading-progress-bar" style="left: 0;top: 0;"></div><noscript>
     <div class="noscript-warning">该网站在启用 JavaScript 的情况下效果最佳。</div>
   </noscript>
-</div><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script src="/lib/autocomplete/autocomplete.min.js" defer></script><script src="/lib/algoliasearch/browser.umd.js" defer></script><script src="/lib/sharer/sharer.min.js" async defer></script><script src="/lib/cookieconsent/cookieconsent.min.js" defer></script><script src="/js/lib/cookieconsent.js" defer></script><script src="/lib/cell-tooltip/cell-tooltip.umd.js" defer></script><script src="/js/config/1f535dd6fe3ada5fbca49598be95ef70.js" defer></script><script src="/js/lib/file-tree.js" defer></script><script src="/js/main.js" defer></script></body>
+</div><link rel="stylesheet" href="/lib/katex/katex.min.css"><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script src="/lib/autocomplete/autocomplete.min.js" defer></script><script src="/lib/algoliasearch/browser.umd.js" defer></script><script src="/lib/sharer/sharer.min.js" async defer></script><script src="/lib/katex/copy-tex.min.js" defer></script><script src="/lib/cookieconsent/cookieconsent.min.js" defer></script><script src="/js/lib/cookieconsent.js" defer></script><script src="/lib/cell-tooltip/cell-tooltip.umd.js" defer></script><script src="/js/config/1f535dd6fe3ada5fbca49598be95ef70.js" defer></script><script src="/js/lib/file-tree.js" defer></script><script src="/lib/panzoom/panzoom.min.js" defer></script><script src="/js/lib/mermaid-bootstrap.js" defer type="module"></script><script src="/js/main.js" defer></script></body>
 </html>

@@ -11,7 +11,7 @@
 	<meta itemprop="description" content="在 GitHub 闲逛时，我偶然发现了NETworkManager这个开源项目。作为一款网络管理和故障排查工具，它已经积累了超过 8.5k Star，足以说明社区对它的认可。更让我感兴趣的是，这个项目采用 C# &#43; WPF 进行开发，与我当前正在深入学习和实践的技术栈高度契合。因此，我产生了一个想法：通过深入分析 NETworkManager 的源码，探索一个成熟的 WPF 桌面应用是如何进行架构设计、模块划分以及工程实践的。接下来，我将以 NETworkManager 为切入点，逐步拆解它在 WPF UI 设计、MVVM 架构、依赖注入、配置管理、网络通信、异步编程以及工程化实践 等方面的实现，希望能够从优秀的开源项目中学习桌面应用开发的最佳实践。">
 	<meta itemprop="datePublished" content="2026-07-14T08:47:15+08:00">
 	<meta itemprop="dateModified" content="2026-07-14T08:47:15+08:00">
-	<meta itemprop="wordCount" content="4569">
+	<meta itemprop="wordCount" content="5604">
 	<meta itemprop="keywords" content="C#,WPF,MVVM,网络管理,源码剖析"><meta property="og:url" content="http://localhost:1313/networkmanager%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/">
 	<meta property="og:site_name" content="东尼的博客">
 	<meta property="og:title" content="NETworkManager源码剖析：一个网络管理工具的实现细节">
@@ -43,7 +43,7 @@
     "mainEntityOfPage": {
       "@type": "WebPage",
       "@id": "http:\/\/localhost:1313\/networkmanager%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90\/"
-    },"genre": "posts","keywords": "C#, WPF, MVVM, 网络管理, 源码剖析","wordcount":  4569 ,
+    },"genre": "posts","keywords": "C#, WPF, MVVM, 网络管理, 源码剖析","wordcount":  5604 ,
     "url": "http:\/\/localhost:1313\/networkmanager%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90\/","datePublished": "2026-07-14T08:47:15+08:00","dateModified": "2026-07-14T08:47:15+08:00","publisher": {
       "@type": "Organization",
       "name": ""},"author": {
@@ -130,7 +130,7 @@
               <a href="/requests%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="Requests源码剖析：优雅发送HTTP请求实现原理">Requests源码剖析：优雅发送HTTP请求实现原理</a></li><li class="related-item">
               <a href="/hugo%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="Hugo源码剖析：世界最快静态站点生成器的实现原理">Hugo源码剖析：世界最快静态站点生成器的实现原理</a></li><li class="related-item">
               <a href="/redis%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="Redis源码剖析：一个高性能服务器的设计哲学">Redis源码剖析：一个高性能服务器的设计哲学</a></li><li class="related-item">
-              <a href="/leveldb%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="LevelDB源码剖析：如何设计一个高性能嵌入式数据库">LevelDB源码剖析：如何设计一个高性能嵌入式数据库</a></li><li class="related-item">
+              <a href="/leveldb%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="LevelDB源码剖析：从零实现MiniLevelDB理解LSM-Tree存储引擎设计">LevelDB源码剖析：从零实现MiniLevelDB理解LSM-Tree存储引擎设计</a></li><li class="related-item">
               <a href="/c%23%E9%AB%98%E6%95%88%E7%BC%96%E7%A8%8B/" title="C#高效编程 改进C#代码的50个行之有效的办法 第2版 (Bill Wagner)">C#高效编程 改进C#代码的50个行之有效的办法 第2版 (Bill Wagner)</a></li><li class="related-item">
               <a href="/shadowsocks%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="Shadowsocks源码剖析：一个轻量级代理工具背后的网络编程设计">Shadowsocks源码剖析：一个轻量级代理工具背后的网络编程设计</a></li><li class="related-item">
               <a href="/node.js%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="Node.js 源码剖析：非阻塞世界的引擎密码">Node.js 源码剖析：非阻塞世界的引擎密码</a></li><li class="related-item">
@@ -145,7 +145,7 @@
   <article class="page single">
     <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span title="转载" class="icon-repost"><i class="fa-solid fa-share" aria-hidden="true"></i></span><span>NETworkManager源码剖析：一个网络管理工具的实现细节</span>
       </h1></div><div class="post-meta">
-      <div class="post-meta-line"><span class="post-author"><a href="https://andyfree96.github.io/" title="作者" target="_blank" rel="author external nofollow noopener noreferrer" class="author"><img class="avatar" src='/avatar/1.jpg' alt="AndyFree96" height="16" width="16">&nbsp;AndyFree96</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" class="post-category" title="分类 - 源码剖析"><i class="fa-regular fa-folder" aria-hidden="true"></i> 源码剖析</a></span></div><div class="post-meta-line"><span title="发布于 2026-07-14 08:47:15"><i class="fa-solid fa-calendar-days me-1" aria-hidden="true"></i><time datetime="2026-07-14">2026-07-14</time></span>&nbsp;<span title="4569 字"><i class="fa-solid fa-pencil-alt me-1" aria-hidden="true"></i>约 4600 字</span>&nbsp;<span><i class="fa-regular fa-clock me-1" aria-hidden="true"></i>预计阅读 10 分钟</span>&nbsp;</div>
+      <div class="post-meta-line"><span class="post-author"><a href="https://andyfree96.github.io/" title="作者" target="_blank" rel="author external nofollow noopener noreferrer" class="author"><img class="avatar" src='/avatar/1.jpg' alt="AndyFree96" height="16" width="16">&nbsp;AndyFree96</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" class="post-category" title="分类 - 源码剖析"><i class="fa-regular fa-folder" aria-hidden="true"></i> 源码剖析</a></span></div><div class="post-meta-line"><span title="发布于 2026-07-14 08:47:15"><i class="fa-solid fa-calendar-days me-1" aria-hidden="true"></i><time datetime="2026-07-14">2026-07-14</time></span>&nbsp;<span title="5604 字"><i class="fa-solid fa-pencil-alt me-1" aria-hidden="true"></i>约 5700 字</span>&nbsp;<span><i class="fa-regular fa-clock me-1" aria-hidden="true"></i>预计阅读 12 分钟</span>&nbsp;</div>
     </div><div class="featured-image"><img loading="eager" src='/images/202607/15/maverick-frame-GswoB8XDnBc-unsplash.jpg' sizes="(max-width: 680px) 100vw, (max-width: 960px) 80vw, (max-width: 1440px) 56vw, 800px" alt="/images/202607/15/maverick-frame-GswoB8XDnBc-unsplash.jpg"></div><div class="details toc" id="toc-static" data-kept="false">
         <div class="details-summary toc-title">
           <span>目录</span>
@@ -169,7 +169,8 @@
     <li><a href="#7-软件如何实现自动更新">7. 软件如何实现自动更新？</a></li>
     <li><a href="#番外">番外</a>
       <ul>
-        <li><a href="#1-editorconfig是什么">1. <code>.editorconfig</code>是什么？</a></li>
+        <li><a href="#editorconfig是什么"><code>.editorconfig</code>是什么？</a></li>
+        <li><a href="#callermembername是什么"><code>[CallerMemberName]</code>是什么？</a></li>
       </ul>
     </li>
   </ul>
@@ -952,11 +953,204 @@
   <a href="#5-networkmanager%e6%98%af%e5%a6%82%e4%bd%95%e7%ae%a1%e7%90%86%e4%bc%97%e5%a4%9a%e5%8a%9f%e8%83%bd%e9%a1%b5%e9%9d%a2%e7%9a%84" class="heading-mark">
     <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
   </a>
-</h2><h2 class="heading-element" id="6-语言切换如何做到不用修改代码"><span>6. 语言切换,如何做到不用修改代码？</span>
+</h2><p>程序左侧的菜单使用了<code>ListView</code>组件：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true" title="NETworkManager/MainWindow.xaml"><div class="chroma">
+<div class="code-header language-xml"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i><span class="title-inner">NETworkManager/MainWindow.xaml</span></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-xml" data-lang="xml"><span class="line"><span class="cl"><span class="nt">&lt;ListView</span> <span class="na">x:Name=</span><span class="s">&#34;ListViewApplication&#34;</span> <span class="na">ItemsSource=</span><span class="s">&#34;{Binding Applications}&#34;</span>
+</span></span><span class="line"><span class="cl">          <span class="na">SelectedItem=</span><span class="s">&#34;{Binding SelectedApplication, Mode=TwoWay}&#34;</span>
+</span></span><span class="line"><span class="cl">          <span class="na">SelectionMode=</span><span class="s">&#34;Single&#34;</span>
+</span></span><span class="line"><span class="cl">          <span class="na">BorderThickness=</span><span class="s">&#34;0&#34;</span>
+</span></span><span class="line"><span class="cl">          <span class="na">dd:DragDrop.IsDragSource=</span><span class="s">&#34;True&#34;</span>
+</span></span><span class="line"><span class="cl">          <span class="na">dd:DragDrop.IsDropTarget=</span><span class="s">&#34;True&#34;</span><span class="nt">&gt;</span> 
+</span></span><span class="line"><span class="cl">          ...... 
+</span></span><span class="line"><span class="cl"><span class="nt">&lt;/ListView&gt;</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>该组件绑定了<code>SelectedApplication</code>，其定义如下：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-c#"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="2" style="--fi-max-shown-lines:400;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c#" data-lang="c#"><span class="line"><span class="cl">   <span class="kd">public</span> <span class="n">ApplicationInfo</span> <span class="n">SelectedApplication</span>
+</span></span><span class="line"><span class="cl">   <span class="p">{</span>
+</span></span><span class="line"><span class="cl">       <span class="k">get</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">       <span class="k">set</span>
+</span></span><span class="line"><span class="cl">       <span class="p">{</span>
+</span></span><span class="line"><span class="cl">           <span class="c1">// Do not change the application view if the application view is loading</span>
+</span></span><span class="line"><span class="cl">           <span class="k">if</span> <span class="p">(</span><span class="n">_isApplicationViewLoading</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">               <span class="k">return</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">           <span class="c1">// Should only be null if we try to re-set the selected application via search</span>
+</span></span><span class="line"><span class="cl">           <span class="k">if</span> <span class="p">(</span><span class="k">value</span> <span class="p">==</span> <span class="kc">null</span> <span class="p">&amp;&amp;</span> <span class="p">!</span><span class="n">_applicationViewIsEmpty</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">               <span class="k">return</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">           <span class="c1">// Don&#39;t update the application view if the application is the same</span>
+</span></span><span class="line"><span class="cl">           <span class="k">if</span> <span class="p">(</span><span class="n">Equals</span><span class="p">(</span><span class="k">value</span><span class="p">,</span> <span class="n">field</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">               <span class="k">return</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">           <span class="k">if</span> <span class="p">(</span><span class="k">value</span> <span class="p">!=</span> <span class="kc">null</span> <span class="p">&amp;&amp;</span> <span class="p">!</span><span class="n">_applicationViewIsEmpty</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">           <span class="p">{</span>
+</span></span><span class="line"><span class="cl">               <span class="c1">// Hide the old application view</span>
+</span></span><span class="line"><span class="cl">               <span class="k">if</span> <span class="p">(</span><span class="n">field</span> <span class="p">!=</span> <span class="kc">null</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">                   <span class="n">OnApplicationViewHide</span><span class="p">(</span><span class="n">field</span><span class="p">.</span><span class="n">Name</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">               <span class="c1">// Show the new application view</span>
+</span></span><span class="line"><span class="cl">               <span class="n">OnApplicationViewVisible</span><span class="p">(</span><span class="k">value</span><span class="p">.</span><span class="n">Name</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">               <span class="c1">// Store the last selected application name</span>
+</span></span><span class="line"><span class="cl">               <span class="n">ConfigurationManager</span><span class="p">.</span><span class="n">Current</span><span class="p">.</span><span class="n">CurrentApplication</span> <span class="p">=</span> <span class="k">value</span><span class="p">.</span><span class="n">Name</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">           <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">           <span class="n">field</span> <span class="p">=</span> <span class="k">value</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">           <span class="n">OnPropertyChanged</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">       <span class="p">}</span>
+</span></span><span class="line"><span class="cl">   <span class="p">}</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>页面的显示由<code>OnApplicationViewVisible(value.Name)</code>决定，<code>OnApplicationViewVisible</code>会根据点击菜单的不同，将<code>ContentControlApplication.Content</code>的值设置为对应的页面。</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-c#"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="2" style="--fi-max-shown-lines:400;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c#" data-lang="c#"><span class="line"><span class="cl">  <span class="kd">private</span> <span class="k">void</span> <span class="n">OnApplicationViewVisible</span><span class="p">(</span><span class="n">ApplicationName</span> <span class="n">name</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="k">switch</span> <span class="p">(</span><span class="n">name</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">      <span class="p">{</span>
+</span></span><span class="line"><span class="cl">          <span class="k">case</span> <span class="n">ApplicationName</span><span class="p">.</span><span class="n">Dashboard</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">              <span class="k">if</span> <span class="p">(</span><span class="n">_dashboardView</span> <span class="p">==</span> <span class="kc">null</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">                  <span class="n">_dashboardView</span> <span class="p">=</span> <span class="k">new</span> <span class="n">DashboardView</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">              <span class="k">else</span>
+</span></span><span class="line"><span class="cl">                  <span class="n">_dashboardView</span><span class="p">.</span><span class="n">OnViewVisible</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">              <span class="n">ContentControlApplication</span><span class="p">.</span><span class="n">Content</span> <span class="p">=</span> <span class="n">_dashboardView</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">              <span class="k">break</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">          <span class="k">case</span> <span class="n">ApplicationName</span><span class="p">.</span><span class="n">NetworkInterface</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">              <span class="k">if</span> <span class="p">(</span><span class="n">_networkInterfaceView</span> <span class="p">==</span> <span class="kc">null</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">                  <span class="n">_networkInterfaceView</span> <span class="p">=</span> <span class="k">new</span> <span class="n">NetworkInterfaceView</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">              <span class="k">else</span>
+</span></span><span class="line"><span class="cl">                  <span class="n">_networkInterfaceView</span><span class="p">.</span><span class="n">OnViewVisible</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">              <span class="n">ContentControlApplication</span><span class="p">.</span><span class="n">Content</span> <span class="p">=</span> <span class="n">_networkInterfaceView</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">              <span class="k">break</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">          <span class="c1">// ......</span>
+</span></span><span class="line"><span class="cl">      <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>而<code>ContentControlApplication</code>是<code>NETworkManager/MainWindow.xaml</code>中定义的一个<code>ContentControl</code>内容容器控件而已(常用于页面切换)：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true" title="NETworkManager/MainWindow.xaml"><div class="chroma">
+<div class="code-header language-xml"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i><span class="title-inner">NETworkManager/MainWindow.xaml</span></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-xml" data-lang="xml"><span class="line"><span class="cl"><span class="nt">&lt;asf:AirspacePanel</span> <span class="na">Grid.Column=</span><span class="s">&#34;1&#34;</span> <span class="na">Grid.Row=</span><span class="s">&#34;0&#34;</span>
+</span></span><span class="line"><span class="cl">                    <span class="na">FixAirspace=</span><span class="s">&#34;{Binding Source={x:Static settings:ConfigurationManager.Current}, Path=FixAirspace}&#34;</span><span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;ContentControl</span> <span class="na">x:Name=</span><span class="s">&#34;ContentControlApplication&#34;</span> <span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="nt">&lt;/asf:AirspacePanel&gt;</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><h2 class="heading-element" id="6-语言切换如何做到不用修改代码"><span>6. 语言切换,如何做到不用修改代码？</span>
   <a href="#6-%e8%af%ad%e8%a8%80%e5%88%87%e6%8d%a2%e5%a6%82%e4%bd%95%e5%81%9a%e5%88%b0%e4%b8%8d%e7%94%a8%e4%bf%ae%e6%94%b9%e4%bb%a3%e7%a0%81" class="heading-mark">
     <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
   </a>
-</h2><h2 class="heading-element" id="7-软件如何实现自动更新"><span>7. 软件如何实现自动更新？</span>
+</h2><p><code>NETworkManager/MainWindow.xaml.cs</code>的<code>MainWindow</code>构造函数对WPF 控件的语言环境进行了设置：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-c#"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c#" data-lang="c#"><span class="line"><span class="cl"><span class="c1">// Language metadata</span>
+</span></span><span class="line"><span class="cl"><span class="n">LanguageProperty</span><span class="p">.</span><span class="n">OverrideMetadata</span><span class="p">(</span><span class="k">typeof</span><span class="p">(</span><span class="n">FrameworkElement</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">    <span class="k">new</span> <span class="n">FrameworkPropertyMetadata</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">        <span class="n">XmlLanguage</span><span class="p">.</span><span class="n">GetLanguage</span><span class="p">(</span><span class="n">LocalizationManager</span><span class="p">.</span><span class="n">GetInstance</span><span class="p">().</span><span class="n">Culture</span><span class="p">.</span><span class="n">IetfLanguageTag</span><span class="p">)));</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>会影响到字体、文本布局等。而<code>NETworkManager/App.xaml.cs</code>中的<code>Application_Startup</code>方法对字符串资源进行选择：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-c#"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c#" data-lang="c#"><span class="line"><span class="cl"><span class="c1">// Initialize localization</span>
+</span></span><span class="line"><span class="cl"><span class="kt">var</span> <span class="n">localizationManager</span> <span class="p">=</span> <span class="n">LocalizationManager</span><span class="p">.</span><span class="n">GetInstance</span><span class="p">(</span><span class="n">SettingsManager</span><span class="p">.</span><span class="n">Current</span><span class="p">.</span><span class="n">Localization_CultureCode</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">Strings</span><span class="p">.</span><span class="n">Culture</span> <span class="p">=</span> <span class="n">localizationManager</span><span class="p">.</span><span class="n">Culture</span><span class="p">;</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>字符串资源可在xaml文件中使用。</p>
+<p><figure><img loading="lazy" src='/images/202607/15/6.png' alt="图6 使用字符串资源"><figcaption class="image-caption">图6 使用字符串资源</figcaption>
+  </figure></p>
+<h2 class="heading-element" id="7-软件如何实现自动更新"><span>7. 软件如何实现自动更新？</span>
   <a href="#7-%e8%bd%af%e4%bb%b6%e5%a6%82%e4%bd%95%e5%ae%9e%e7%8e%b0%e8%87%aa%e5%8a%a8%e6%9b%b4%e6%96%b0" class="heading-mark">
     <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
   </a>
@@ -1067,11 +1261,78 @@
   <a href="#%e7%95%aa%e5%a4%96" class="heading-mark">
     <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
   </a>
-</h2><h3 class="heading-element" id="1-editorconfig是什么"><span>1. <code>.editorconfig</code>是什么？</span>
-  <a href="#1-editorconfig%e6%98%af%e4%bb%80%e4%b9%88" class="heading-mark">
+</h2><h3 class="heading-element" id="editorconfig是什么"><span><code>.editorconfig</code>是什么？</span>
+  <a href="#editorconfig%e6%98%af%e4%bb%80%e4%b9%88" class="heading-mark">
     <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
   </a>
-</h3><p><code>.editorconfig</code>是<a href="https://editorconfig.org/" target="_blank" rel="external nofollow noopener noreferrer">EditorConfig<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>的配置文件，能够让不同编辑器保持编辑风格一致。比如：用四个空格缩进、用utf-8编码等等。</p></div><hr class="awesome-hr" />
+</h3><p><code>.editorconfig</code>是<a href="https://editorconfig.org/" target="_blank" rel="external nofollow noopener noreferrer">EditorConfig<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>的配置文件，能够让不同编辑器保持编辑风格一致。比如：用四个空格缩进、用utf-8编码等等。</p>
+<h3 class="heading-element" id="callermembername是什么"><span><code>[CallerMemberName]</code>是什么？</span>
+  <a href="#callermembername%e6%98%af%e4%bb%80%e4%b9%88" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p><code>NETworkManager.Utilities/PropertyChangedBase.cs</code>的<code>OnPropertyChanged</code>方法使用了<code>[CallerMemberName]</code>，这是什么？</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-c#"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c#" data-lang="c#"><span class="line"><span class="cl"><span class="kd">public</span> <span class="kd">abstract</span> <span class="k">class</span> <span class="nc">PropertyChangedBase</span> <span class="p">:</span> <span class="n">INotifyPropertyChanged</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">public</span> <span class="k">event</span> <span class="n">PropertyChangedEventHandler</span> <span class="n">PropertyChanged</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="kd">protected</span> <span class="k">void</span> <span class="n">OnPropertyChanged</span><span class="p">([</span><span class="n">CallerMemberName</span><span class="p">]</span> <span class="kt">string</span> <span class="n">propertyName</span> <span class="p">=</span> <span class="kc">null</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">PropertyChanged</span><span class="p">?.</span><span class="n">Invoke</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="k">new</span> <span class="n">PropertyChangedEventArgs</span><span class="p">(</span><span class="n">propertyName</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p><code>[CallerMemberName]</code>是C#中的一个调用方信息属性(Caller Information Attribute)，它可以让方法自动获取<strong>调用者的成员名称(方法名、属性名、构造函数名等)</strong>，而不需要手动传递字符串。它位于：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-c#"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c#" data-lang="c#"><span class="line"><span class="cl"><span class="k">using</span> <span class="nn">System.Runtime.CompilerServices</span><span class="p">;</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>例如：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-c#"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c#" data-lang="c#"><span class="line"><span class="cl">    <span class="kd">public</span> <span class="kd">static</span> <span class="k">void</span> <span class="n">Log</span><span class="p">(</span><span class="kt">string</span> <span class="n">message</span><span class="p">,</span> <span class="p">[</span><span class="n">CallerMemberName</span><span class="p">]</span><span class="kt">string</span> <span class="n">memberName</span> <span class="p">=</span> <span class="s">&#34;&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$&#34;{memberName}: {message}&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">static</span> <span class="k">void</span> <span class="n">Main</span><span class="p">(</span><span class="kt">string</span><span class="p">[]</span> <span class="n">args</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">Log</span><span class="p">(</span><span class="s">&#34;Hello World&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>输出：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-fallback"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">Main: Hello World</span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>最经典的用途就是像<code>PropertyChangedBase</code>一样，实现属性通知。</p></div><hr class="awesome-hr" />
     <h2 id="see-also">相关内容</h2>
     <ul><li>
           <a href="/downloader%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="Downloader源码剖析：一个下载器的实现原理">Downloader源码剖析：一个下载器的实现原理</a></li><li>
@@ -1079,7 +1340,7 @@
           <a href="/requests%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="Requests源码剖析：优雅发送HTTP请求实现原理">Requests源码剖析：优雅发送HTTP请求实现原理</a></li><li>
           <a href="/hugo%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="Hugo源码剖析：世界最快静态站点生成器的实现原理">Hugo源码剖析：世界最快静态站点生成器的实现原理</a></li><li>
           <a href="/redis%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="Redis源码剖析：一个高性能服务器的设计哲学">Redis源码剖析：一个高性能服务器的设计哲学</a></li><li>
-          <a href="/leveldb%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="LevelDB源码剖析：如何设计一个高性能嵌入式数据库">LevelDB源码剖析：如何设计一个高性能嵌入式数据库</a></li><li>
+          <a href="/leveldb%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="LevelDB源码剖析：从零实现MiniLevelDB理解LSM-Tree存储引擎设计">LevelDB源码剖析：从零实现MiniLevelDB理解LSM-Tree存储引擎设计</a></li><li>
           <a href="/c%23%E9%AB%98%E6%95%88%E7%BC%96%E7%A8%8B/" title="C#高效编程 改进C#代码的50个行之有效的办法 第2版 (Bill Wagner)">C#高效编程 改进C#代码的50个行之有效的办法 第2版 (Bill Wagner)</a></li><li>
           <a href="/shadowsocks%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="Shadowsocks源码剖析：一个轻量级代理工具背后的网络编程设计">Shadowsocks源码剖析：一个轻量级代理工具背后的网络编程设计</a></li><li>
           <a href="/node.js%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="Node.js 源码剖析：非阻塞世界的引擎密码">Node.js 源码剖析：非阻塞世界的引擎密码</a></li><li>
@@ -1139,7 +1400,8 @@
     <li><a href="#7-软件如何实现自动更新">7. 软件如何实现自动更新？</a></li>
     <li><a href="#番外">番外</a>
       <ul>
-        <li><a href="#1-editorconfig是什么">1. <code>.editorconfig</code>是什么？</a></li>
+        <li><a href="#editorconfig是什么"><code>.editorconfig</code>是什么？</a></li>
+        <li><a href="#callermembername是什么"><code>[CallerMemberName]</code>是什么？</a></li>
       </ul>
     </li>
   </ul>
