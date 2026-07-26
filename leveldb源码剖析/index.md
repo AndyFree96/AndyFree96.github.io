@@ -362,6 +362,430 @@ SkipList正好满足这些需求：
 
 因此，LevelDB从一开始就选择SkipList作为MemTable的底层实现。我们将MiniLevelDB也进行升级，将`std::unordered_map<string, string>`升级为MemTable(SkipList)。虽然单次查询从平均 $O\left(1\right)$ 变成了 $O\left(logN\right)$,但数据始终保持有序。
 
+{{< tabs placement="bottom" defaultTab=1  type="segment"  >}}
+{{% tab title="skiplist.h" %}}
+
+```cpp
+#ifndef MINILEVELDB_SKIPLIST_H
+#define MINILEVELDB_SKIPLIST_H
+#include <random>
+#include <string>
+#include <vector>
+#include <optional>
+
+// Reference:
+// Understanding and Implementing Skiplists: https://rowjee.com/blog/skiplists
+class SkipListNode {
+public:
+  SkipListNode(int currentLevel, std::string key, std::string value)
+    :currentLevel(currentLevel), key(std::move(key)), value(std::move(value))
+  {
+    links = std::vector<SkipListNode *>(currentLevel);
+    for (int i = currentLevel - 1; i >= 0; i--) {
+      links[i] = nullptr;
+    }
+  }
+
+  std::string ToString() const;
+
+public:
+  std::vector<SkipListNode *> links;
+  int currentLevel;
+  std::string key;
+  std::string value;
+};
+
+class SkipListError {
+public:
+  enum ErrorVariant {
+    BAD_ACCESS,
+    ALLOC_FAILED,
+    KEY_NOT_FOUND,
+    NO_ERROR
+  };
+
+  ErrorVariant e = ErrorVariant::NO_ERROR;
+  std::string message;
+
+  SkipListError(ErrorVariant e, std::string message = "")
+  : e(e), message(message) {}
+
+  operator bool() {
+    return e != ErrorVariant::NO_ERROR;
+  }
+};
+
+class SkipList {
+public:
+  SkipList(int max_level);
+
+  ~SkipList();
+
+  std::optional<std::string> search(std::string key);
+
+  std::pair<std::string, SkipListError> insert(const std::string &key,
+                                               const std::string &value);
+
+  std::pair<std::string, SkipListError> remove(std::string key);
+
+  SkipListError clear();
+
+  std::pair<std::vector<std::pair<std::string, std::string>>, SkipListError> scan();
+
+  std::pair<std::pair<SkipListNode *, std::vector<SkipListNode *>>, SkipListError>
+  identifyPredecessorNode(std::string key);
+
+  int getRandomLevel();
+
+  std::string ToString() const;
+public:
+  SkipListNode* START;
+  SkipListNode* END;
+  int max_level;
+  int current_max_level;
+  float p;
+  std::mt19937 rng;
+  std::uniform_real_distribution<double> dist;
+};
+
+#endif // MINILEVELDB_SKIPLIST_H
+
+```
+
+{{% /tab %}}
+{{% tab title="skiplist.cpp" %}}
+
+```cpp
+#include <sstream>
+#include <format>
+#include <fmt/core.h>
+#include <fmt/format.h>
+#include <iostream>
+
+#include "skiplist.h"
+
+
+std::string SkipListNode::ToString() const {
+  std::ostringstream oss;
+  oss << fmt::format("SkipListNode[{}] [{}:{}] at {}\n",
+    currentLevel, key, value, fmt::ptr(this));
+  for (int i = currentLevel - 1; i >= 0; i--) {
+    oss << fmt::format("\tNode at level {} pointing to {}\n", i,
+      fmt::ptr(links[i]));
+  }
+  return oss.str();
+}
+
+SkipList::SkipList(int max_level) : max_level(max_level) {
+  p = 0.5;
+  rng = std::mt19937(std::time(nullptr));
+  dist = std::uniform_real_distribution<double>(0.0, 1);
+
+  START = new SkipListNode(max_level, "START_KEY", "START_VALUE");
+  END = new SkipListNode(max_level, "END_KEY", "END_VALUE");
+
+  for (int i = 0; i < max_level; i++) {
+    START->links[i] = END;
+  }
+}
+
+
+std::pair<std::pair<SkipListNode *, std::vector<SkipListNode *>>, SkipListError>
+ SkipList::identifyPredecessorNode(std::string key) {
+
+  auto update = std::vector<SkipListNode*>(max_level, nullptr);
+
+  auto current_node = START;
+  auto next_node = START;
+
+  auto max_search_level = max_level - 1;
+  for (int i = max_search_level; i >= 0; i--) {
+    next_node = current_node->links[i];
+    while (next_node->key < key && next_node != END) {
+      current_node = next_node;
+      next_node = current_node->links[i];
+    }
+
+    update[i] = current_node;
+  }
+
+  current_node = current_node->links[0];
+
+  return std::make_pair(std::make_pair(current_node, update),
+    SkipListError(SkipListError::ErrorVariant::NO_ERROR));
+}
+
+std::pair<std::string, SkipListError> SkipList::insert(const std::string &key,
+                                             const std::string &value) {
+  auto [meta, error] = identifyPredecessorNode(key);
+  if (error.e != SkipListError::NO_ERROR) {
+    return std::make_pair("", error);
+  }
+  auto [current_node, update] = meta;
+
+  if (current_node->key == key) {
+    auto oldVal = current_node->value;
+    current_node->value = value;
+    return std::make_pair(value, SkipListError::NO_ERROR);
+  }
+  int level = getRandomLevel();
+
+  auto new_node = new SkipListNode(level, key, value);
+  for (int i = 0; i < level; i++) {
+    new_node->links[i] = update[i]->links[i];
+    update[i]->links[i] = new_node;
+  }
+
+  return std::make_pair(value, SkipListError::NO_ERROR);
+}
+
+int SkipList::getRandomLevel() {
+  int level = 1;
+  while (dist(rng) < p && level < max_level) {
+    level += 1;
+  }
+
+  return level;
+}
+
+std::string SkipList::ToString() const {
+  std::ostringstream oss;
+  oss << fmt::format("=== Printing SkipList\n");
+
+  auto iter_pointer = START;
+  while (iter_pointer != nullptr)
+  {
+    oss << iter_pointer->ToString();
+    iter_pointer = iter_pointer->links[0];
+  }
+
+  oss << fmt::format("=== END Printing SkipList\n");
+
+  return oss.str();
+}
+
+std::optional<std::string> SkipList::search(std::string key)
+{
+  auto current = START;
+  auto max_search_level = max_level - 1;
+  for (int i = max_search_level; i >= 0; i--)
+  {
+    while (current->links[i]->key < key && current->links[i] != END)
+    {
+      current = current->links[i];
+    }
+  }
+
+  current = current->links[0];
+  if (current->key == key)
+  {
+    return std::optional<std::string>{current->value};
+  }
+  return std::nullopt;
+}
+
+
+std::pair<std::string, SkipListError> SkipList::remove(std::string key)
+{
+  std::string oldVal;
+
+  auto [meta, error] = identifyPredecessorNode(key);
+  if (error.e != SkipListError::NO_ERROR)
+  {
+    return std::make_pair("", error);
+  }
+
+  auto [nodePtr, update] = meta;
+  if (nodePtr->key == key)
+  {
+    for (int i = 0; i < max_level; i++)
+    {
+      if (update[i]->links[i] != nodePtr)
+      {
+        break;
+      }
+      update[i]->links[i] = nodePtr->links[i];
+    }
+
+    oldVal = nodePtr->value;
+    delete nodePtr;
+
+    return std::make_pair("", SkipListError::NO_ERROR);
+  }
+  return std::make_pair("", SkipListError::KEY_NOT_FOUND);
+}
+
+std::pair<std::vector<std::pair<std::string, std::string>>, SkipListError> SkipList::scan()
+{
+  std::vector<std::pair<std::string, std::string>> answer = {};
+  auto current_node = START->links[0];
+
+  while (current_node != END)
+  {
+    answer.push_back(std::make_pair(current_node->key, current_node->value));
+    current_node = current_node->links[0];
+  }
+
+  return std::make_pair(answer, SkipListError::NO_ERROR);
+}
+
+SkipListError SkipList::clear()
+{
+  auto [res, err] = scan();
+  if (err.e != SkipListError::NO_ERROR) {
+    return err;
+  }
+  for (auto [k, _] : res) {
+    auto [res1, err1] = remove(k);
+    if (err1.e != SkipListError::NO_ERROR) {
+      return err;
+    }
+  }
+
+  return SkipListError::NO_ERROR;
+}
+
+SkipList::~SkipList() {
+  clear();
+}
+
+```
+
+{{% /tab %}}
+
+{{% tab title="db.h" %}}
+
+```cpp
+#ifndef MINILEVELDB_DB_H
+#define MINILEVELDB_DB_H
+
+#include <iostream>
+#include <fstream>
+#include <unordered_map>
+#include <string>
+#include <sstream>
+#include <vector>
+
+#include "skiplist.h"
+
+class MiniDB {
+public:
+  MiniDB(): MiniDB(7)
+  {
+  }
+
+  MiniDB(int max_level)
+  {
+    data_ = new SkipList(max_level);
+  }
+
+  void Put(const std::string& key, const std::string& value) {
+    AppendWAL("PUT " + key + " " + value);
+    data_->insert(key, value);
+  }
+  bool Get(const std::string& key, std::string& value) const {
+    auto result = data_->search(key);
+    if (result.has_value())
+    {
+      value = result.value();
+      return true;
+    }
+    return false;
+  }
+
+  void Delete(const std::string& key) {
+    AppendWAL("DELETE " + key);
+    data_->remove(key);
+  }
+
+  void Load() {
+    LoadSnapshot();
+    ReplayWAL();
+  }
+
+  void Save() {
+    SaveSnapshot();
+    CleanWAL();
+  }
+
+private:
+  void AppendWAL(const std::string& record) {
+    std::ofstream ofs("wal.log", std::ios::app);
+    ofs << record << '\n';
+    ofs.flush();
+    ofs.close();
+  }
+
+  void CleanWAL() {
+    std::ofstream("wal.log", std::ios::trunc);
+  }
+
+  void SaveSnapshot() {
+    std::ofstream ofs("database.txt");
+    auto [res, err] = data_->scan();
+    if (err.e != SkipListError::NO_ERROR)
+    {
+      return;
+    }
+
+    for (auto& [key, value] : res) {
+      ofs << key << "=" << value << '\n';
+    }
+
+    ofs.close();
+  }
+
+  void LoadSnapshot() {
+    std::ifstream ifs("database.txt");
+    if (!ifs.is_open()) return;
+    std::string line, key, value;
+
+    data_->clear();
+
+    while (std::getline(ifs, line)) {
+      auto pos = line.find('=');
+      if (pos == std::string::npos) continue;
+      key = line.substr(0, pos);
+      value = line.substr(pos + 1);
+      data_->insert(key, value);
+    }
+
+    ifs.close();
+  }
+
+  void ReplayWAL() {
+    std::ifstream ifs("wal.log");
+
+    if (!ifs.is_open()) return;
+
+    std::string op;
+
+    while (ifs >> op) {
+      if (op == "PUT") {
+        std::string key, value;
+        ifs >> key >> value;
+        data_->insert(key, value);
+      } else if (op == "DELETE") {
+        std::string key;
+        ifs >> key;
+        data_->remove(key);
+      }
+    }
+
+    ifs.close();
+  }
+
+private:
+  SkipList* data_;
+};
+
+#endif // MINILEVELDB_DB_H
+
+```
+
+{{% /tab %}}
+{{< /tabs >}}
+
 ## SSTable：如何将内存数据保存到磁盘
 
 现在我们将MemTable从HashMap升级为了SkipList，一个数据库已经初具雏形。但一个问题很快就出现了。MemTable可以一直增长吗？显然不能。MemTable本质上是一块内存，如果我们程序一直`Put`，MemTable会不断增长，最终内存耗尽，程序崩溃。所以，MemTable不能无限增长。必须在合适的时候，把内存中的数据转移到磁盘中。
