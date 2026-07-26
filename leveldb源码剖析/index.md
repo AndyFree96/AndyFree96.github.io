@@ -362,7 +362,7 @@ SkipList正好满足这些需求：
 
 因此，LevelDB从一开始就选择SkipList作为MemTable的底层实现。我们将MiniLevelDB也进行升级，将`std::unordered_map<string, string>`升级为MemTable(SkipList)。虽然单次查询从平均 $O\left(1\right)$ 变成了 $O\left(logN\right)$,但数据始终保持有序。
 
-{{< tabs placement="bottom" defaultTab=1  type="segment"  >}}
+{{< tabs placement="bottom" defaultTab=0  type="segment"  >}}
 {{% tab title="skiplist.h" %}}
 
 ```cpp
@@ -917,6 +917,8 @@ int main() {
 [Skip List Data Structure - Explained!](https://blog.reachsumit.com/posts/2020/07/skip-list/)
 
 [如何基于LSM-tree架构实现一写多读](https://help.aliyun.com/zh/polardb/polardb-for-mysql/implement-an-one-primary-and-multi-read-architecture-based-on-lsm-trees)
+
+[Vcpkg 完整教程：从零开始管理 C++](https://www.arong-xu.com/tooling/cpp-package-management-vcpkg-from-zero-to-hero/)
 
 ## 参考
 
