@@ -727,6 +727,7 @@ Stanford Algorithm [Part 1](https://www.youtube.com/playlist?list=PLXFMmlk03Dt7Q
 - [LogRocket](https://blog.logrocket.com/)
 - [AppSignal Blog](https://blog.appsignal.com/)
 - [Jenuel Dev Blogs](https://blog.jenuel.dev/)
+- [SYNTACTIC SUGAR DADDY](https://www.syntacticsugardaddy.com/blog): 众多C#的好文
 
 ## 播客
 

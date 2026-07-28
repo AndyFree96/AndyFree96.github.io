@@ -8,8 +8,16 @@
     <language>zh-CN</language>
     <managingEditor>anthonyfree96@gmail.com (AndyFree96)</managingEditor>
     <webMaster>anthonyfree96@gmail.com (AndyFree96)</webMaster>
-    <lastBuildDate>Wed, 22 Jul 2026 09:52:37 +0800</lastBuildDate>
+    <lastBuildDate>Tue, 28 Jul 2026 08:16:07 +0800</lastBuildDate>
     <atom:link href="http://localhost:1313/tags/c%23/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Microsoft.Extensions.Hosting使用指南：构建现代 .NET 应用的通用宿主架构</title>
+      <link>http://localhost:1313/microsoft.extensions.hosting%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/</link>
+      <pubDate>Tue, 28 Jul 2026 08:16:07 +0800</pubDate><author>anthonyfree96@gmail.com (AndyFree96)</author>
+      <guid>http://localhost:1313/microsoft.extensions.hosting%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/</guid>
+      <category domain="http://localhost:1313/categories/%E6%8A%80%E6%9C%AF%E7%A7%AF%E6%9C%A8/">技术积木</category>
+      <description>&lt;p&gt;在传统.NET应用中，程序入口通常承担大量职责：&lt;/p&gt;&#xA;&lt;pre&gt;&lt;code&gt;static void Main(string[] args) {&#xD;&#xA;  var plc = new PlcService();&#xD;&#xA;  plc.Connect();&#xD;&#xA;&#xD;&#xA;  var camera = new CameraService();&#xD;&#xA;  camera.Open();&#xD;&#xA;&#xD;&#xA;  while (true) {&#xD;&#xA;    plc.Read();&#xD;&#xA;  }&#xD;&#xA;}&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;随着应用规模增长，&lt;code&gt;Main&lt;/code&gt;方法会逐渐演变成创建各种对象、管理对象生命周期、初始化资源、启动后台线程、处理配置、初始化日志等等，最终形成一个巨大的入口文件。对于工业软件、桌面软件、后台服务等长期运行程序，这种方式存在明显问题：&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;模块之间高度耦合&lt;/li&gt;&#xA;&lt;li&gt;生命周期管理困难&lt;/li&gt;&#xA;&lt;li&gt;难以测试&lt;/li&gt;&#xA;&lt;li&gt;服务无法复用&lt;/li&gt;&#xA;&lt;li&gt;资源释放容易遗漏&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;p&gt;因此，现代.NET引入了通用宿主(Generic Host)。它的核心思想：&lt;/p&gt;&#xA;&lt;blockquote&gt;&#xA;&lt;p&gt;将应用程序中的各种模块注册到Host中，由Host统一负责创建、启动、运行和关闭。&lt;/p&gt;&#xA;&lt;/blockquote&gt;</description>
+    </item>
     <item>
       <title>C# LINQ学习之旅：从集合操作到声明式编程</title>
       <link>http://localhost:1313/c%23-linq%E5%AD%A6%E4%B9%A0%E4%B9%8B%E6%97%85/</link>
