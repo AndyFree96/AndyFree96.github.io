@@ -854,6 +854,53 @@ Compaction虽然减少了SSTable的数量，但是查询一个不存在的Key。
 
 在LevelDB中，Bloom Filter并不是整个数据库共享一个。而是每一个SSTable都有自己的Bloom Filter。如果所有SSTable的Bloom Filter都判断不存在，数据库可以直接返回“未找到”。整个过程中，我们不必读取SSTable的真实数据。因此，大量不存在的数据查询都会被Bloom Filter提前拦截，无需真正访问磁盘。
 
+让我们简单实现一个Bloom Filter：
+
+```cpp
+class BloomFilter
+{
+public:
+    BloomFilter(size_t size, size_t hashCount): bits(size), hashCount(hashCount)
+    {
+    }
+
+    void add(const std::string& value)
+    {
+        for (size_t i = 0; i < hashCount; i++)
+        {
+            auto index = hash(value, i);
+            bits[index] = true;
+        }
+    }
+
+    bool contains(const std::string& value)
+    {
+        for (size_t i = 0; i < hashCount; i++)
+        {
+            auto index = hash(value, i);
+            if (!bits[index]) return false;
+        }
+
+        return true;
+    }
+
+private:
+    std::vector<bool> bits;
+    size_t hashCount;
+
+    size_t hash(const std::string& value, size_t seed)
+    {
+        std::hash<std::string> hasher;
+
+        auto h = hasher(value);
+
+        h ^= seed + 0x9e3779b9 + (seed << 6) + (seed >> 2);
+
+        return h % bits.size();
+    }
+};
+```
+
 ## 对比LevelDB源码：工业实现解决了哪些问题
 
 ## 番外

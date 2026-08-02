@@ -1098,6 +1098,519 @@ Console.WriteLine(person);
 - To make builder fluent, return this
 - Different facets of an object can be built with different builders working in tandem via a base class
 
+## Factories 工厂
+
+包含了两种设计模式：工厂方法(Factory Method)和抽象工厂(Abstract Factory)。
+
+++Motivation++
+
+- Object creation logic becomes too convoluted
+- Constructor it not descriptive
+  - Name mendated by name of containing type
+  - Cannot overload with same sets of arguments with different names
+  - Can turn into 'optional parameter hell'
+- Object creation (non-piecewise, unlike Builder) can be outsourced to
+  - A separate function (Factory Method)
+  - That may exist in a separate class (Factory)
+  - Can create hierarchy of factories with Abstract Factory
+
+工厂就是一个简单组件，其职责就是创建完整对象。
+
+### Point Example 示例
+
+工厂存在的原因之一就是构造函数有时候并不是那么好用。假设我们有一个`Point`类：
+
+```c#
+public class Point
+{
+    private double x;
+    private double y;
+
+    public Point(double x, double y)
+    {
+        this.x = x;
+        this.y = y;
+    }
+}
+```
+
+现在想让其支持极坐标系，我们需要改造一下：
+
+```c#
+public enum CoordinateSystem
+{
+    Cartesian,
+    Polar
+}
+
+public class Point
+{
+    private double x;
+    private double y;
+
+    public Point(double a, double b, CoordinateSystem coordinateSystem = CoordinateSystem.Cartesian)
+    {
+        switch (coordinateSystem)
+        {
+            case CoordinateSystem.Cartesian:
+                x = a;
+                y = b;
+                break;
+            case CoordinateSystem.Polar:
+                x = a * Math.Cos(b);
+                y = a * Math.Sin(b);
+                break;
+            default:
+                throw new ArgumentOutOfRangeException(nameof(coordinateSystem), coordinateSystem, null);
+        }
+    }
+}
+```
+
+构造函数的参数`a`和`b`没有任何命名价值，同时为了让两种坐标系区分，不得不加`coordinateSystem`参数。
+
+### Factory Method 工厂方法
+
+工厂方法可以改善这种情况：
+
+```c#
+public class Point
+{
+    private double x;
+    private double y;
+
+    public override string ToString()
+    {
+        return $"({x}, {y})";
+    }
+
+    public static Point NewPolarPoint(double rho, double theta)
+    {
+        return new Point(Math.Cos(theta) * rho, Math.Sin(theta) * rho);
+    }
+
+    public static Point NewCartesianPoint(double x, double y)
+    {
+        return new Point(x, y);
+    }
+
+    private Point(double x, double y)
+    {
+        this.x = x;
+        this.y = y;
+    }
+}
+
+```
+
+### Asynchronous Factory Method 异步工厂方法
+
+异步调用可以在方法中发生，但不能在构造函数中发生，这就成了一个问题，有时我们想要进行异步初始化。如何实现这点？可以通过工厂方法限制用户用异步方式初始化。
+
+```c#
+public class Foo
+{
+
+    private Foo()
+    {
+    }
+
+    private async Task<Foo> InitAsync()
+    {
+        await Task.Delay(500);
+        return this;
+    }
+
+    public static Task<Foo> CreateAsync()
+    {
+        var result = new Foo();
+        return result.InitAsync();
+    }
+}
+```
+
+### Factory 工厂
+
+我们也可以创建一个工厂类用于创建对象。
+
+```c#
+public static class PointFactory
+{
+    public static Point NewPolarPoint(double rho, double theta)
+    {
+        return new Point(Math.Cos(theta) * rho, Math.Sin(theta) * rho);
+    }
+
+    public static Point NewCartesianPoint(double x, double y)
+    {
+        return new Point(x, y);
+    }
+}
+
+public class Point
+{
+    private double x;
+    private double y;
+
+    public override string ToString()
+    {
+        return $"({x}, {y})";
+    }
+
+
+    public Point(double x, double y)
+    {
+        this.x = x;
+        this.y = y;
+    }
+}
+```
+
+为了让`PointFactory`能够使用`Point`的构造函数，将其设定为了`public`，后面会解决这个问题。
+
+### Object Tracking and Bulk Replacement 对象跟踪和批量替换
+
+我们还可以对工厂进行扩展，使工厂不仅负责创建对象，还负责管理已经创建的对象生命周期，并支持批量更新/替换对象内部引用。
+
+一般工厂：
+
+```c#
+public interface ITheme
+{
+    public string TextColor => "black";
+    public string BackgroundColor => "white";
+}
+
+public class DarkTheme : ITheme
+{
+    public string TextColor => "white";
+
+    public string BackgroundColor => "dark gray";
+}
+
+public class LightTheme : ITheme
+{
+    public string TextColor => "black";
+    public string BackgroundColor => "white";
+}
+
+public class ThemeFactory
+{
+    public ITheme CreateTheme(bool isDark)
+    {
+        return isDark
+            ? new DarkTheme()
+            : new LightTheme();
+    }
+}
+```
+
+`ThemeFactory`创建完对象后不知道自己创建过哪些对象，例如：
+
+```c#
+var factory = new ThemeFactory();
+var theme1 = factory.CreateTheme(true);
+var theme2 = factory.CreateTheme(false);
+var theme3 = factory.CreateTheme(false);
+```
+
+之后如果想`factory.ChangeAllThemesToDark()`是不可能实现的，因为工厂没有保存对象引用。我们可以在工厂类中保存对象引用用于追踪创建了哪些对象：
+
+```c#
+public class TrackingThemeFactory
+{
+    private readonly List<WeakReference<ITheme>> themes = [];
+
+    public ITheme CreateTheme(bool isDark)
+    {
+        ITheme theme = isDark ? new DarkTheme() : new LightTheme();
+        themes.Add(new WeakReference<ITheme>(theme));
+        return theme;
+    }
+
+    public string Info
+    {
+        get
+        {
+            var sb = new StringBuilder();
+            foreach (var theme in themes)
+            {
+                if (!theme.TryGetTarget(out var target)) continue;
+                var isDark = target is DarkTheme;
+                sb.Append(isDark ? "Dark" : "Light").AppendLine(" theme");
+            }
+            return sb.ToString();
+        }
+    }
+}
+```
+
+实现创建出来的Theme可以被统一替换：
+
+```c#
+public class Ref<T> where T : class
+{
+    public T Value;
+    public Ref(T value)
+    {
+        Value = value;
+    }
+}
+
+public class ReplaceableThemeFactory
+{
+    private readonly List<WeakReference<Ref<ITheme>>> themes = [];
+
+    private ITheme CreateThemeImpl(bool dark)
+    {
+        return dark ? new DarkTheme() : new LightTheme();
+    }
+
+    public Ref<ITheme> CreateTheme(bool isDark)
+    {
+        var r = new Ref<ITheme>(CreateThemeImpl(isDark));
+        themes.Add(new WeakReference<Ref<ITheme>>(r));
+        return r;
+    }
+
+    public void ReplaceTheme(bool dark)
+    {
+        foreach (var theme in themes)
+        {
+            if (!theme.TryGetTarget(out var target)) continue;
+            target.Value = CreateThemeImpl(dark);
+        }
+    }
+}
+```
+
+### Inner Factory 内部工厂
+
+为了解决[Factory 工厂](#factory-method-工厂方法)中`Point`构造函数为`public`的问题，我们可以将工厂类作为`Point`的内部类：
+
+```c#
+public class Point
+{
+    private double x;
+    private double y;
+
+    public override string ToString()
+    {
+        return $"({x}, {y})";
+    }
+
+
+    private Point(double x, double y)
+    {
+        this.x = x;
+        this.y = y;
+    }
+
+    public static class Factory
+    {
+        public static Point NewPolarPoint(double rho, double theta)
+        {
+            return new Point(Math.Cos(theta) * rho, Math.Sin(theta) * rho);
+        }
+
+        public static Point NewCartesianPoint(double x, double y)
+        {
+            return new Point(x, y);
+        }
+    }
+}
+```
+
+### Abstract Factory 抽象工厂
+
+抽象工厂提供抽象对象，而不是具体对象。假设我们有一个支持Coffee和Tea的热饮机，最简单写法：
+
+```c#
+public class HotDrinkMachine
+{
+    public IHotDrink MakeDrink(string type, int amount)
+    {
+        if(type == "Tea")
+        {
+            return new Tea();
+        }
+        else if(type == "Coffee")
+        {
+            return new Coffee();
+        }
+
+        throw new Exception();
+    }
+}
+```
+
+看起来很简单。但是增加Juice、MilkTea、HotChocolate怎么办？继续修改：
+
+```c#
+if(type == "Tea")
+{
+}
+else if(type == "Coffee")
+{
+}
+else if (type == "HotChocolate")
+{
+}
+```
+
+违反了[开闭原则](#open-closed-principle-开闭原则)，一旦要增加新饮料，就需要修改`HotDrinkMachine`类的`MakeDrink`方法。可通常抽离出接口解决这个问题：
+
+```c#
+
+public interface IHotDrink
+{
+    void Consume();
+}
+
+internal class Tea : IHotDrink
+{
+    public void Consume()
+    {
+        Console.WriteLine("This tea is nice but I'd prefer it with milk.");
+    }
+}
+
+internal class Coffee : IHotDrink
+{
+    public void Consume()
+    {
+        Console.WriteLine("This coffee is sensational!");
+    }
+}
+
+public interface IHotDrinkFactory
+{
+    IHotDrink Prepare(int amount);
+}
+
+internal class TeaFactory : IHotDrinkFactory
+{
+    public IHotDrink Prepare(int amount)
+    {
+        Console.WriteLine($"Put in a tea bag, boil water, pour {amount} ml, add lemon, enjoy!");
+        return new Tea();
+    }
+}
+
+internal class CoffeeFactory : IHotDrinkFactory
+{
+    public IHotDrink Prepare(int amount)
+    {
+        Console.WriteLine($"Grind some beans, boil water, pour {amount}ml, add cream and sugar");
+        return new Coffee();
+    }
+}
+
+public class HotDrinkMachine
+{
+    public enum AvailableDrink
+    {
+        Coffee,
+        Tea,
+    }
+
+    private Dictionary<AvailableDrink, IHotDrinkFactory> factories = [];
+
+    public HotDrinkMachine()
+    {
+        foreach (AvailableDrink drink in Enum.GetValues(typeof(AvailableDrink)))
+        {
+            var className = "Factories." + Enum.GetName(typeof(AvailableDrink), drink) + "Factory";
+            var factory = (IHotDrinkFactory)Activator.CreateInstance(Type.GetType(className));
+            factories.Add(drink, factory);
+        }
+    }
+
+    public IHotDrink MakeDrink(AvailableDrink drink, int amount)
+    {
+        return factories[drink].Prepare(amount);
+    }
+}
+
+```
+
+Abstract Factory通过创建“产品族”的抽象层，把具体实现隔离出去，使系统能够通过增加新的 Factory 来扩展，而无需修改客户端代码。
+
+### Abstract Factory and OCP 抽象工厂和开闭原则
+
+`HotDrinkMachine`中的`AvailableDrink`也违反了开闭原则，可以优化一下：
+
+```c#
+public class HotDrinkMachine
+{
+    private List<Tuple<string, IHotDrinkFactory>> _drinkFactories = [];
+    public HotDrinkMachine()
+    {
+        foreach (var t in typeof(HotDrinkMachine).Assembly.GetTypes())
+        {
+            if (typeof(IHotDrinkFactory).IsAssignableFrom(t) && !t.IsInterface)
+            {
+                _drinkFactories.Add(Tuple.Create(t.Name.Replace("Factory", string.Empty),
+                    Activator.CreateInstance(t) as IHotDrinkFactory
+                    ));
+            }
+        }
+    }
+
+    public IHotDrink MakeDrink()
+    {
+        Console.WriteLine($"Available drinks:");
+        for (int index = 0; index < _drinkFactories.Count; index++)
+        {
+            var tuple = _drinkFactories[index];
+            Console.WriteLine($"{index}: {tuple.Item1}");
+        }
+
+        while (true)
+        {
+            string s;
+            if ((s = Console.ReadLine()) != null
+                && int.TryParse(s, out int i)
+                && i >= 0 && i < _drinkFactories.Count)
+            {
+                Console.WriteLine($"Specify amount: ");
+                s = Console.ReadLine();
+                if (s != null
+                    && int.TryParse(s, out int amount)
+                    && amount > 0)
+                {
+                    return _drinkFactories[i].Item2.Prepare(amount);
+                }
+            }
+
+            Console.WriteLine("Incorrect input, try again!");
+        }
+    }
+}
+```
+
+通过反射(Reflection)自动发现Factory，实现真正的开闭原则。
+
+### Summary 总结
+
+- A factory method is a static method that creates objects
+- A factory can take care of object creation
+- A factory can be external or reside inside the object as an inner class
+- Hierarchies of factories can be used to create releated objects
+
+## Prototype 原型
+
+When it's easier to copy an existing object to fully initialize a new one. A partically or fully initialized object that you copy (clone) and make use of.
+
+++Motivation++
+
+- Complicated objects (e.g., cars)
+  - They reinterate existing designs
+- An existing (partially or fulll constructed) design is a Prototype
+- We make a copy (clone) the prototype and customize it
+  - Requires 'deep copy' support
+- We make the cloning convenient (e.g., via a Factory)
+
 
 ---
 

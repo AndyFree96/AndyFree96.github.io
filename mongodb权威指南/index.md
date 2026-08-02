@@ -319,6 +319,154 @@ MongoDB设计理念是：
 
 ### 第10章 创建副本集
 
+#### 10.1 复制简介
+
+复制是将数据的相同副本保留在多台服务器上的一种方法，建议将其用于所有生产部署中。即使一台或多台服务器停止运行，使用复制功能也可以确保应用程序正常运行和数据安全。
+
+在MongoDB中，创建副本集(replica set)后就可以使用复制功能了。副本集是一组服务器，其中一个是用于处理写操作的主节点(primary)，还有多个用于保存主节点的数据副本的从节点(secondary)。如果主节点崩溃了，则从节点会从其中选出一个新的主节点。
+
+#### 10.2 建立副本集(一)
+
+对于Windows系统：
+
+```pwsh
+.\mongod.exe --replSet rs0 --dbpath E:\MongoDBData\Data1 --port 27017 --logpath E:\MongoDBData\Log\data1.log
+.\mongod.exe --replSet rs0 --dbpath E:\MongoDBData\Data2 --port 27018 --logpath E:\MongoDBData\Log\data2.log
+.\mongod.exe --replSet rs0 --dbpath E:\MongoDBData\Data3 --port 27019 --logpath E:\MongoDBData\Log\data3.log
+```
+
+一旦启动，就应该有3个独立的mongod进程在运行。`--replSet rs0`表示3个MongoDB属于同一个副本集，通过`--replSet`指定副本集名称。
+
+打开另一个PowerShell，连接节点1：
+
+```pwsh
+mongosh --port 27017
+```
+
+执行：
+
+```js
+rs.initiate(
+{
+   _id:"rs0",
+   members:[
+      {
+        _id:0,
+        host:"localhost:27017"
+      },
+      {
+        _id:1,
+        host:"localhost:27018"
+      },
+      {
+        _id:2,
+        host:"localhost:27019"
+      }
+   ]
+})
+```
+
+出现`MongoServerError[NoReplicationEnabled]: This node was not started with replication enabled.`错误。意思是当前连接的MongoDB实例没有开启副本集功能，所以不能执行`rs.initiate()`、`rs.status()`等副本集命令。我们可使用`db.serverCmdLineOpts()`命令查看是否开启了副本集：
+
+![图10-1 db.serverCmdLineOpts()输出结果](/images/202607/24/10-1.png "图10-1 db.serverCmdLineOpts()输出结果" )
+
+没有类似`replication: { replSetName: 'rs0' }`内容，说明没有开启。我们可以修改配置文件`D:\\Program Files\\MongoDB\\Server\\8.0\\bin\\mongod.cfg`，增加：
+
+```yaml
+replication:
+  replSetName: rs0
+```
+
+完整示例如下：
+
+```yaml
+# mongod.conf
+
+# for documentation of all options, see:
+#   http://docs.mongodb.org/manual/reference/configuration-options/
+
+# Where and how to store data.
+storage:
+  dbPath: D:\Program Files\MongoDB\Server\8.0\data
+
+# where to write logging data.
+systemLog:
+  destination: file
+  logAppend: true
+  path:  D:\Program Files\MongoDB\Server\8.0\log\mongod.log
+
+# network interfaces
+net:
+  port: 27017
+  bindIp: 127.0.0.1
+
+replication:
+  replSetName: rs0
+
+#processManagement:
+
+#security:
+
+#operationProfiling:
+
+#sharding:
+
+## Enterprise-Only Options:
+
+#auditLog:
+```
+
+重启服务：
+
+```bash
+net stop MongoDB
+net start MongoDB
+```
+
+之后重新启动3个mongodb进程，连接节点1，执行：
+
+```js
+rs.initiate(
+{
+   _id:"rs0",
+   members:[
+      {
+        _id:0,
+        host:"localhost:27017"
+      },
+      {
+        _id:1,
+        host:"localhost:27018"
+      },
+      {
+        _id:2,
+        host:"localhost:27019"
+      }
+   ]
+})
+```
+
+![图10-2 rs.initiate()输出结果](/images/202607/24/10-2.png "图10-2 rs.initiate()输出结果")
+
+使用`rs.status()`命令查看副本集状态：
+
+![图10-3 rs.status()输出结果](/images/202607/24/10-3.png "图10-3 rs.status()输出结果")
+
+此时，我们往数据库插入数据会自动复制同步。
+
+#### 10.3 网络注意事项
+
+mongod默认情况绑定到localhost(127.0.0.1)，为了使得副本集中每个成员都可以与其他成员通信，还必须绑定到其他成员可以访问的IP地址。
+
+```pwsh
+.\mongod.exe --replSet mdbDefGuide --dbpath E:\MongoDBData\Data1 --port 27017 --oplogSize 200 --bind_ip localhost,192.168.1.100
+```
+
+其中:
+
+- `localhost`本机访问
+- `192.168.1.100`局域网其他机器访问
+
 ### 第11章 副本集的组成
 
 ### 第12章 从应用程序连接副本集
@@ -358,6 +506,7 @@ MongoDB设计理念是：
 ## 推荐
 
 [MongoDB Docs](https://www.mongodb.com/docs/)
+
 
 
 ---

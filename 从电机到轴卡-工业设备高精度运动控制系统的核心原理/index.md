@@ -152,6 +152,26 @@ MoveAxis(100);
 
 在运动控制领域，脉冲当量(Pulse Equivalent)是一个非常核心的参数。一句话理解：脉冲当量 = 发送一个脉冲，机械实际移动的距离。
 
+## 番外
+
+### 雷赛EtherCAT数字I/O模块状态指示灯说明
+
+![图6 雷赛EtherCAT数字I/O模块状态指示灯](/images/202607/34/1.png "图6 雷赛EtherCAT数字I/O模块状态指示灯")
+
+|指示灯标识|全程/含义|状态说明
+| :--- | :-- | :-- |
+|ALM|Alarm 报警|红色：驱动器或控制卡发生严重错误(如过流、过压、编码器故障) 熄灭：正常|
+|ELP|Enable Posotive 正向使能|绿色：电机驱动已正向使能(准备好接收正向运动指令)|
+|ELN|Enable Negative 负向使能|绿色：电机驱动已负向使能(准备好接收负向运动指令)。注：ELP和ELN常亮绿灯通常表示伺服处于“Servo On”状态|
+|EMG|Emergency Stop 急停|绿色：未触发急停(系统正常)。红色：急停按钮被按下或急停回路断开，驱动器进入安全停止状态|
+|ORG|Origin 原点|红色：已检测到原点信号(限位/回零开关触发)。熄灭：未检测到原点信号(在回零过程中，此灯亮起表示找到了原点开关)|
+|SLP|Servo Lock Positive 正向锁定|绿色：通常配合伺服抱闸或限位锁定状态|
+|SLN|Servo Lock Negative 负向锁定|红色：已触发负向限位或软件限位(限位开关动作), 如果此灯亮起，电机将停止并向反方向回退|
+|INP|In Position 到位|红色：轴已到达目标位置(定位完成)。熄灭：轴正在运动中，未到达目标位置|
+|RDY|Ready 准备好|绿色：控制卡或驱动器已完成初始化，处于就绪状态|
+|DSTP|Drive Stop 驱动停止|绿色：驱动器处于停止状态(非急停原因停止)
+|SEVON|Servo On 伺服开启|	绿色：伺服电机已上电并使能(电机已励磁，可接收运动指令)|
+
 ## 推荐
 
 [CONTEC 运动控制的基础知识](https://www.contec.com/cn/support/basic-knowledge/daq-control/motion-control/)
@@ -165,6 +185,12 @@ MoveAxis(100);
 {{< bilibili BV13oSJYgEAn >}}
 
 {{< bilibili BV14q4y147PU >}}
+
+[驱控系统的控制协议及方式](https://blog.csdn.net/qq_40598340/article/details/128503385)
+
+[CiA 402（DS402）伺服驱动器协议详解](https://blog.csdn.net/2501_94586448/article/details/161724605)
+
+[雷赛（Leadshine）EtherCAT 数字 I/O 模块（如 EMC-E5064-8）的状态指示灯（I/O 状态）说明](https://blog.csdn.net/cjh16606260986/article/details/161870263)
 
 ## 参考
 
