@@ -1,0 +1,910 @@
+<!DOCTYPE html>
+<html itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+    <meta name="robots" content="noodp" />
+    <title>Polly使用指南：.NET应用程序可靠性设计 - 东尼的博客</title><meta name="author" content="AndyFree96">
+<meta name="description" content="在现代软件系统中，应用程序越来越依赖外部资源HTTP API、微服务、数据库、消息队列、第三方服务。然而，分布式系统中失败是不可避免的。比如：网络短暂不可用、服务响应变慢、请求量突然增加、第三方API限流。如果应用程序没有任何保护机制，一个简单的异常都可能导致整个系统不可用。因此，在高可靠系统设计中，需要引入弹性(Resilience)设计模式。.NET生态中，最流行的弹性处理库就是——Polly。
+"><meta name="keywords" content='C#, .NET, Polly'>
+	<meta itemprop="name" content="Polly使用指南：.NET应用程序可靠性设计">
+	<meta itemprop="description" content="在现代软件系统中，应用程序越来越依赖外部资源HTTP API、微服务、数据库、消息队列、第三方服务。然而，分布式系统中失败是不可避免的。比如：网络短暂不可用、服务响应变慢、请求量突然增加、第三方API限流。如果应用程序没有任何保护机制，一个简单的异常都可能导致整个系统不可用。因此，在高可靠系统设计中，需要引入弹性(Resilience)设计模式。.NET生态中，最流行的弹性处理库就是——Polly。">
+	<meta itemprop="datePublished" content="2026-08-03T18:05:08+08:00">
+	<meta itemprop="dateModified" content="2026-08-03T18:05:08+08:00">
+	<meta itemprop="wordCount" content="2374">
+	<meta itemprop="keywords" content="C#,.NET,Polly"><meta property="og:url" content="http://localhost:1313/polly%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/">
+	<meta property="og:site_name" content="东尼的博客">
+	<meta property="og:title" content="Polly使用指南：.NET应用程序可靠性设计">
+	<meta property="og:description" content="在现代软件系统中，应用程序越来越依赖外部资源HTTP API、微服务、数据库、消息队列、第三方服务。然而，分布式系统中失败是不可避免的。比如：网络短暂不可用、服务响应变慢、请求量突然增加、第三方API限流。如果应用程序没有任何保护机制，一个简单的异常都可能导致整个系统不可用。因此，在高可靠系统设计中，需要引入弹性(Resilience)设计模式。.NET生态中，最流行的弹性处理库就是——Polly。">
+	<meta property="og:locale" content="zh_CN">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="posts">
+		<meta property="article:published_time" content="2026-08-03T18:05:08+08:00">
+		<meta property="article:modified_time" content="2026-08-03T18:05:08+08:00">
+		<meta property="article:tag" content="C#">
+		<meta property="article:tag" content=".NET">
+		<meta property="article:tag" content="Polly">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Polly使用指南：.NET应用程序可靠性设计">
+  <meta name="twitter:description" content="在现代软件系统中，应用程序越来越依赖外部资源HTTP API、微服务、数据库、消息队列、第三方服务。然而，分布式系统中失败是不可避免的。比如：网络短暂不可用、服务响应变慢、请求量突然增加、第三方API限流。如果应用程序没有任何保护机制，一个简单的异常都可能导致整个系统不可用。因此，在高可靠系统设计中，需要引入弹性(Resilience)设计模式。.NET生态中，最流行的弹性处理库就是——Polly。"><meta name="twitter:creator" content="@IRONAnthony96"><meta name="application-name" content="FixIt">
+<meta name="apple-mobile-web-app-title" content="FixIt"><meta name="theme-color" data-light="#f6f8fa" data-dark="#151b23" content="#f6f8fa"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" type="text/html" href="http://localhost:1313/polly%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/" title="Polly使用指南：.NET应用程序可靠性设计 - 东尼的博客" /><link rel="prev" type="text/html" href="http://localhost:1313/wpf-ui/" title="WPF UI：让WPF应用具有Fluent Design风格" /><link rel="next" type="text/html" href="http://localhost:1313/chokidar%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="chokidar源码剖析：一个跨平台文件监听库的设计与实现" /><link rel="alternate" type="text/markdown" href="http://localhost:1313/polly%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/index.md" title="Polly使用指南：.NET应用程序可靠性设计 - 东尼的博客"><link rel="stylesheet" href="/css/config.css"><link rel="stylesheet" href="/css/main.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><link rel="preload" href="/js/main.js" as="script"><script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "BlogPosting",
+    "headline": "Polly使用指南：.NET应用程序可靠性设计",
+    "inLanguage": "zh-CN",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "http:\/\/localhost:1313\/polly%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97\/"
+    },"genre": "posts","keywords": "C#, .NET, Polly","wordcount":  2374 ,
+    "url": "http:\/\/localhost:1313\/polly%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97\/","datePublished": "2026-08-03T18:05:08+08:00","dateModified": "2026-08-03T18:05:08+08:00","publisher": {
+      "@type": "Organization",
+      "name": ""},"author": {
+        "@type": "Person",
+        "name": "AndyFree96"
+      },"description": ""
+  }
+  </script><script src="/js/head/color-scheme.js"></script></head>
+  <body data-instant-intensity="viewport" data-header-desktop="sticky" data-header-mobile="auto"><div class="wrapper" data-page-style="normal"><header class="desktop animate__faster" id="header-desktop">
+  <div class="header-wrapper">
+    <div class="header-title">
+      <a href="/" title="东尼的博客" class="header-title-link"><span class="header-title-text">东尼的博客</span></a><span class="header-subtitle"></span></div>
+    <nav>
+      <ul class="menu"><li class="menu-item">
+              <a class="menu-link" href="/posts/">📕 文章</a></li><li class="menu-item">
+              <a class="menu-link" href="/categories/">🧰 分类</a></li><li class="menu-item">
+              <a class="menu-link" href="/tags/">🔖 标签</a></li><li class="menu-item">
+              <a class="menu-link" href="/book">📚 书单</a></li><li class="menu-item">
+              <a class="menu-link" href="/paper">📝 论文</a></li><li class="menu-item">
+              <a class="menu-link" href="/opencourse">👨🏻‍💻 公开课</a></li><li class="menu-item">
+              <a class="menu-link" href="/filmtv">🎞️ 影视</a></li><li class="menu-item">
+              <a class="menu-link" href="/resource">⚡️ 资源库</a></li><li class="menu-item">
+              <a class="menu-link" href="/projects">⭐ 开源</a></li><li class="menu-item">
+              <a class="menu-link" href="/about">🙋🏻‍♂️ 关于</a></li><li class="menu-item delimiter"></li><li class="menu-item search" id="search-desktop">
+            <input type="text" placeholder="搜索文章标题或内容……" id="search-input-desktop" tabindex="-1">
+            <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索" aria-controls="search-dropdown-desktop" aria-expanded="false">
+              <i class="fa-solid fa-search" aria-hidden="true"></i>
+            </a>
+            <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+              <i class="fa-solid fa-times-circle" aria-hidden="true"></i>
+            </a>
+            <span class="search-button search-loading" id="search-loading-desktop">
+              <i class="fa-solid fa-spinner fa-spin" aria-hidden="true"></i>
+            </span>
+          </li><li class="menu-item theme-switch-item">
+          <button type="button" class="theme-switch" aria-label="切换主题" title="切换主题"><i class="fa-solid fa-adjust" aria-hidden="true"></i></button>
+        </li></ul>
+    </nav>
+  </div>
+</header><header class="mobile animate__faster" id="header-mobile">
+  <div class="header-container">
+    <div class="header-wrapper">
+      <div class="header-title">
+        <a href="/" title="东尼的博客" class="header-title-link"><span class="header-title-text">东尼的博客</span></a><span class="header-subtitle"></span></div>
+      <button type="button" class="theme-switch" aria-label="切换主题"><i class="fa-solid fa-adjust" aria-hidden="true"></i></button>
+      <button type="button" class="menu-toggle" id="menu-toggle-mobile" aria-controls="menu-mobile" aria-expanded="false" aria-labelledby="menu-mobile">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <nav>
+      <ul class="menu" id="menu-mobile"><li class="search-wrapper">
+            <div class="search mobile" id="search-mobile">
+              <input type="text" placeholder="搜索文章标题或内容……" id="search-input-mobile">
+              <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索" aria-controls="search-dropdown-mobile" aria-expanded="false">
+                <i class="fa-solid fa-search" aria-hidden="true"></i>
+              </a>
+              <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                <i class="fa-solid fa-times-circle" aria-hidden="true"></i>
+              </a>
+              <span class="search-button search-loading" id="search-loading-mobile">
+                <i class="fa-solid fa-spinner fa-spin" aria-hidden="true"></i>
+              </span>
+            </div>
+            <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+              取消
+            </a>
+          </li><li class="menu-item"><a class="menu-link" href="/posts/">📕 文章</a></li><li class="menu-item"><a class="menu-link" href="/categories/">🧰 分类</a></li><li class="menu-item"><a class="menu-link" href="/tags/">🔖 标签</a></li><li class="menu-item"><a class="menu-link" href="/book">📚 书单</a></li><li class="menu-item"><a class="menu-link" href="/paper">📝 论文</a></li><li class="menu-item"><a class="menu-link" href="/opencourse">👨🏻‍💻 公开课</a></li><li class="menu-item"><a class="menu-link" href="/filmtv">🎞️ 影视</a></li><li class="menu-item"><a class="menu-link" href="/resource">⚡️ 资源库</a></li><li class="menu-item"><a class="menu-link" href="/projects">⭐ 开源</a></li><li class="menu-item"><a class="menu-link" href="/about">🙋🏻‍♂️ 关于</a></li><li class="menu-item menu-system"></li>
+      </ul>
+    </nav>
+  </div>
+</header><div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+  </div>
+  <div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+  </div><main class="fi-container"><aside class="aside-collection animate__animated animate__fadeIn animate__faster" aria-label="合集"><div class="details related-details open">
+      <div class="details-summary related-summary">
+        <i class="fa-solid fa-fire fa-fade text-danger" aria-hidden="true"></i>
+        <span class="related-title">相关内容</span><i class="details-icon fa-solid fa-angle-right" aria-hidden="true"></i></div>
+      <div class="details-content related-content">
+        <ul class="related-list"><li class="related-item">
+              <a href="/wpf-ui/" title="WPF UI：让WPF应用具有Fluent Design风格">WPF UI：让WPF应用具有Fluent Design风格</a></li><li class="related-item">
+              <a href="/dotnet%E8%AE%BE%E8%AE%A1%E8%A7%84%E8%8C%83/" title=".NET设计规范 约定、惯用法与模式 第2版 (Krzysztof Cwalina / Brad Abrams)">.NET设计规范 约定、惯用法与模式 第2版 (Krzysztof Cwalina / Brad Abrams)</a></li><li class="related-item">
+              <a href="/clr-via-csharp/" title="CLR via C# 第4版 (Jeffrey Richter)">CLR via C# 第4版 (Jeffrey Richter)</a></li><li class="related-item">
+              <a href="/microsoft.extensions.hosting%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/" title="Microsoft.Extensions.Hosting使用指南：构建现代 .NET 应用的通用宿主架构">Microsoft.Extensions.Hosting使用指南：构建现代 .NET 应用的通用宿主架构</a></li><li class="related-item">
+              <a href="/c%23-linq%E5%AD%A6%E4%B9%A0%E4%B9%8B%E6%97%85/" title="C# LINQ学习之旅：从集合操作到声明式编程">C# LINQ学习之旅：从集合操作到声明式编程</a></li><li class="related-item">
+              <a href="/design-patterns-in-csharp-and-dotnet/" title="Design Patterns in C# and .NET (Dmitri Nesteruk)">Design Patterns in C# and .NET (Dmitri Nesteruk)</a></li><li class="related-item">
+              <a href="/%E6%B7%B1%E5%85%A5system.net.networkinformation%E8%8E%B7%E5%8F%96%E7%B3%BB%E7%BB%9F%E7%BD%91%E7%BB%9C%E4%BF%A1%E6%81%AF/" title="深入System.Net.NetworkInformation获取系统网络信息">深入System.Net.NetworkInformation获取系统网络信息</a></li><li class="related-item">
+              <a href="/dotnetty%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="DotNetty源码剖析：高性能网络框架的秘密">DotNetty源码剖析：高性能网络框架的秘密</a></li><li class="related-item">
+              <a href="/wpf%E7%BC%96%E7%A8%8B%E5%AE%9D%E5%85%B8/" title="WPF编程宝典 第4版 (Matthew MacDonald)">WPF编程宝典 第4版 (Matthew MacDonald)</a></li><li class="related-item">
+              <a href="/modbus%E5%8D%8F%E8%AE%AE%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E5%AE%9E%E6%88%98/" title="Modbus协议从入门到实战">Modbus协议从入门到实战</a></li><li class="related-item">
+              <a href="/%E4%BB%8Eserialport%E5%88%B0%E5%B7%A5%E4%B8%9A%E7%BA%A7%E9%80%9A%E4%BF%A1%E6%A1%86%E6%9E%B6%E8%AE%BE%E8%AE%A1/" title="从SerialPort到工业级通信框架设计">从SerialPort到工业级通信框架设计</a></li><li class="related-item">
+              <a href="/shadowsocks-windows%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="shadowsocks-windows源码剖析：一个C#网络代理客户端是如何工作的？">shadowsocks-windows源码剖析：一个C#网络代理客户端是如何工作的？</a></li><li class="related-item">
+              <a href="/networkmanager%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="NETworkManager源码剖析：一个网络管理工具的实现细节">NETworkManager源码剖析：一个网络管理工具的实现细节</a></li><li class="related-item">
+              <a href="/c%23%E9%AB%98%E6%95%88%E7%BC%96%E7%A8%8B/" title="C#高效编程 改进C#代码的50个行之有效的办法 第2版 (Bill Wagner)">C#高效编程 改进C#代码的50个行之有效的办法 第2版 (Bill Wagner)</a></li><li class="related-item">
+              <a href="/downloader%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="Downloader源码剖析：一个下载器的实现原理">Downloader源码剖析：一个下载器的实现原理</a></li><li class="related-item">
+              <a href="/c%23%E4%B8%AD%E7%9A%84nameof%E8%BF%90%E7%AE%97%E7%AC%A6/" title="C#中的nameof运算符">C#中的nameof运算符</a></li></ul>
+      </div>
+    </div></aside>
+
+  <article class="page single">
+    <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span title="转载" class="icon-repost"><i class="fa-solid fa-share" aria-hidden="true"></i></span><span>Polly使用指南：.NET应用程序可靠性设计</span>
+      </h1></div><div class="post-meta">
+      <div class="post-meta-line"><span class="post-author"><a href="https://andyfree96.github.io/" title="作者" target="_blank" rel="author external nofollow noopener noreferrer" class="author"><img class="avatar" src='/avatar/1.jpg' alt="AndyFree96" height="16" width="16">&nbsp;AndyFree96</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E6%8A%80%E6%9C%AF%E7%A7%AF%E6%9C%A8/" class="post-category" title="分类 - 技术积木"><i class="fa-regular fa-folder" aria-hidden="true"></i> 技术积木</a></span></div><div class="post-meta-line"><span title="发布于 2026-08-03 18:05:08"><i class="fa-solid fa-calendar-days me-1" aria-hidden="true"></i><time datetime="2026-08-03">2026-08-03</time></span>&nbsp;<span title="2374 字"><i class="fa-solid fa-pencil-alt me-1" aria-hidden="true"></i>约 2400 字</span>&nbsp;<span><i class="fa-regular fa-clock me-1" aria-hidden="true"></i>预计阅读 5 分钟</span>&nbsp;</div>
+    </div><div class="featured-image"><img loading="eager" src='/images/202608/4/jiri-kaloc-SA1INSI9VFU-unsplash.jpg' sizes="(max-width: 680px) 100vw, (max-width: 960px) 80vw, (max-width: 1440px) 56vw, 800px" alt="/images/202608/4/jiri-kaloc-SA1INSI9VFU-unsplash.jpg"></div><div class="details toc" id="toc-static" data-kept="false">
+        <div class="details-summary toc-title">
+          <span>目录</span>
+          <span><i class="details-icon fa-solid fa-angle-right" aria-hidden="true"></i></span>
+        </div>
+        <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#什么是polly">什么是Polly？</a></li>
+    <li><a href="#retry-重试">Retry 重试</a></li>
+    <li><a href="#circuit-breaker-熔断">Circuit Breaker 熔断</a></li>
+    <li><a href="#hedging-请求对冲">Hedging 请求对冲</a></li>
+    <li><a href="#timeout-超时">Timeout 超时</a></li>
+    <li><a href="#rate-limiter-限流">Rate Limiter 限流</a></li>
+    <li><a href="#fallback-降级">Fallback 降级</a></li>
+    <li><a href="#六大策略对比">六大策略对比</a></li>
+    <li><a href="#总结">总结</a></li>
+  </ul>
+</nav></div>
+      </div><div class="content" id="content"><p>在现代软件系统中，应用程序越来越依赖外部资源HTTP API、微服务、数据库、消息队列、第三方服务。然而，分布式系统中失败是不可避免的。比如：网络短暂不可用、服务响应变慢、请求量突然增加、第三方API限流。如果应用程序没有任何保护机制，一个简单的异常都可能导致整个系统不可用。因此，在高可靠系统设计中，需要引入弹性(Resilience)设计模式。.NET生态中，最流行的弹性处理库就是——<a href="https://www.pollydocs.org/" target="_blank" rel="external nofollow noopener noreferrer">Polly<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>。</p>
+<h2 class="heading-element" id="什么是polly"><span>什么是Polly？</span>
+  <a href="#%e4%bb%80%e4%b9%88%e6%98%afpolly" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>Polly是一个用于.NET的弹性与瞬态故障处理库。它帮助开发者为应用程序添加各种可靠性策略：</p>
+<ul>
+<li>Retry(重试)</li>
+<li>Circuit Breaker(熔断)</li>
+<li>Hedging(请求对冲)</li>
+<li>Timeout(超时)</li>
+<li>Rate Limiter(限流)</li>
+<li>Fallback(降级)</li>
+</ul>
+<p>简单理解：Polly就是在业务代码和外部资源之间增加一层可靠性保护。</p>
+<p>结构如下：</p>
+<p><figure><img loading="lazy" src='/images/202608/4/1.png' alt="图1 整体结构"><figcaption class="image-caption">图1 整体结构</figcaption>
+  </figure></p>
+<p>使用以下命令添加<code>Polly</code>包：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-pwsh"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-pwsh" data-lang="pwsh"><span class="line"><span class="cl"><span class="n">dotnet</span> <span class="n">add</span> <span class="n">package</span> <span class="n">Polly</span>
+</span></span><span class="line"><span class="cl"><span class="n">dotnet</span> <span class="n">add</span> <span class="n">package</span> <span class="n">Polly</span><span class="p">.</span><span class="py">RateLimiting</span>
+</span></span><span class="line"><span class="cl"><span class="n">dotnet</span> <span class="n">add</span> <span class="n">package</span> <span class="n">System</span><span class="p">.</span><span class="py">Threading</span><span class="p">.</span><span class="n">RateLimiting</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><h2 class="heading-element" id="retry-重试"><span>Retry 重试</span>
+  <a href="#retry-%e9%87%8d%e8%af%95" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>Retry的核心思想是当一次操作失败时，不立即认为系统不可用，而是尝试重新执行。</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-c#"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="2" style="--fi-max-shown-lines:400;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c#" data-lang="c#"><span class="line"><span class="cl"><span class="k">using</span> <span class="nn">Polly</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Program</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">static</span> <span class="kd">async</span> <span class="n">Task</span> <span class="n">Main</span><span class="p">(</span><span class="kt">string</span><span class="p">[]</span> <span class="n">args</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">count</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="kt">var</span> <span class="n">retryPipeline</span> <span class="p">=</span> <span class="k">new</span> <span class="n">ResiliencePipelineBuilder</span><span class="p">().</span><span class="n">AddRetry</span><span class="p">(</span><span class="k">new</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">MaxRetryAttempts</span> <span class="p">=</span> <span class="m">3</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="n">Delay</span> <span class="p">=</span> <span class="n">TimeSpan</span><span class="p">.</span><span class="n">FromSeconds</span><span class="p">(</span><span class="m">1</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">            <span class="n">OnRetry</span> <span class="p">=</span> <span class="n">retry</span> <span class="p">=&gt;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$&#34;第{retry.AttemptNumber + 1}次失败，准备重试&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                <span class="k">return</span> <span class="n">ValueTask</span><span class="p">.</span><span class="n">CompletedTask</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}).</span><span class="n">Build</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="k">await</span> <span class="n">retryPipeline</span><span class="p">.</span><span class="n">ExecuteAsync</span><span class="p">(</span><span class="kd">async</span> <span class="n">token</span> <span class="p">=&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">count</span><span class="p">++;</span>
+</span></span><span class="line"><span class="cl">            
+</span></span><span class="line"><span class="cl">            <span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$&#34;执行第{count}次请求&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="n">count</span> <span class="p">&lt;</span> <span class="m">3</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="k">throw</span> <span class="k">new</span> <span class="n">Exception</span><span class="p">(</span><span class="s">&#34;服务器异常&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            
+</span></span><span class="line"><span class="cl">            <span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">&#34;请求成功&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="p">});</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><h2 class="heading-element" id="circuit-breaker-熔断"><span>Circuit Breaker 熔断</span>
+  <a href="#circuit-breaker-%e7%86%94%e6%96%ad" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>Circuit Breaker类似电路保险丝。当发现服务持续失败，暂停访问，让系统恢复。</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-c#"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="2" style="--fi-max-shown-lines:400;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c#" data-lang="c#"><span class="line"><span class="cl"><span class="k">using</span> <span class="nn">Polly</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Program</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">static</span> <span class="kd">async</span> <span class="n">Task</span> <span class="n">Main</span><span class="p">(</span><span class="kt">string</span><span class="p">[]</span> <span class="n">args</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">requestCount</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="kt">var</span> <span class="n">pipeline</span> <span class="p">=</span> <span class="k">new</span> <span class="n">ResiliencePipelineBuilder</span><span class="p">().</span><span class="n">AddCircuitBreaker</span><span class="p">(</span><span class="k">new</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">FailureRatio</span> <span class="p">=</span> <span class="m">1.0</span><span class="p">,</span> <span class="c1">// 失败比例</span>
+</span></span><span class="line"><span class="cl">            <span class="n">MinimumThroughput</span> <span class="p">=</span> <span class="m">3</span><span class="p">,</span> <span class="c1">// 最少请求数量</span>
+</span></span><span class="line"><span class="cl">            <span class="n">SamplingDuration</span> <span class="p">=</span> <span class="n">TimeSpan</span><span class="p">.</span><span class="n">FromSeconds</span><span class="p">(</span><span class="m">10</span><span class="p">),</span> <span class="c1">// 统计窗口</span>
+</span></span><span class="line"><span class="cl">            <span class="n">BreakDuration</span> <span class="p">=</span> <span class="n">TimeSpan</span><span class="p">.</span><span class="n">FromSeconds</span><span class="p">(</span><span class="m">5</span><span class="p">),</span> <span class="c1">// 熔断持续时间</span>
+</span></span><span class="line"><span class="cl">            <span class="n">OnOpened</span> <span class="p">=</span> <span class="n">openedArgs</span> <span class="p">=&gt;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">&#34;&gt;&gt;&gt; Circuit Open熔断开始&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                <span class="k">return</span> <span class="n">ValueTask</span><span class="p">.</span><span class="n">CompletedTask</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">},</span>
+</span></span><span class="line"><span class="cl">            <span class="n">OnClosed</span> <span class="p">=</span> <span class="n">closedArgs</span> <span class="p">=&gt;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">&#34;&gt;&gt;&gt; Circuit Closed恢复正常&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                <span class="k">return</span> <span class="n">ValueTask</span><span class="p">.</span><span class="n">CompletedTask</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">},</span>
+</span></span><span class="line"><span class="cl">            <span class="n">OnHalfOpened</span> <span class="p">=</span> <span class="n">halfOpenedArgs</span> <span class="p">=&gt;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">&#34;&gt;&gt;&gt; Circuit Half Open尝试恢复&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                <span class="k">return</span> <span class="n">ValueTask</span><span class="p">.</span><span class="n">CompletedTask</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}).</span><span class="n">Build</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="p">&lt;</span> <span class="m">10</span><span class="p">;</span> <span class="n">i</span><span class="p">++)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">try</span>
+</span></span><span class="line"><span class="cl">            <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="k">await</span> <span class="n">pipeline</span><span class="p">.</span><span class="n">ExecuteAsync</span><span class="p">(</span><span class="n">token</span> <span class="p">=&gt;</span>
+</span></span><span class="line"><span class="cl">                <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                    <span class="n">requestCount</span><span class="p">++;</span>
+</span></span><span class="line"><span class="cl">                    
+</span></span><span class="line"><span class="cl">                    <span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$&#34;请求 {requestCount}&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">                    <span class="k">if</span> <span class="p">(</span><span class="n">requestCount</span> <span class="p">&lt;=</span> <span class="m">3</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">                    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                        <span class="k">throw</span> <span class="k">new</span> <span class="n">Exception</span><span class="p">(</span><span class="s">&#34;服务异常&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">                    
+</span></span><span class="line"><span class="cl">                    <span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">&#34;服务返回成功&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                    <span class="k">return</span> <span class="n">ValueTask</span><span class="p">.</span><span class="n">CompletedTask</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">                <span class="p">});</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="k">catch</span> <span class="p">(</span><span class="n">Exception</span> <span class="n">ex</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$&#34;异常: {ex.Message}&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="k">await</span> <span class="n">Task</span><span class="p">.</span><span class="n">Delay</span><span class="p">(</span><span class="m">1000</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p><figure><img loading="lazy" src='/images/202608/4/2.png' alt="图2 Circuit Breaker执行结果"><figcaption class="image-caption">图2 Circuit Breaker执行结果</figcaption>
+  </figure></p>
+<div class="table-wrapper">
+  <table>
+    <thead>
+        <tr>
+            <th style="text-align: left">参数</th>
+            <th style="text-align: left">决定什么</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td style="text-align: left">FailureRatio</td>
+            <td style="text-align: left">失败多少比例触发熔断</td>
+        </tr>
+        <tr>
+            <td style="text-align: left">MinimumThroughput</td>
+            <td style="text-align: left">至少多少请求才开始判断</td>
+        </tr>
+        <tr>
+            <td style="text-align: left">SamplingDuration</td>
+            <td style="text-align: left">统计失败率的时间窗口</td>
+        </tr>
+        <tr>
+            <td style="text-align: left">BreakDuration</td>
+            <td style="text-align: left">熔断后多久尝试恢复</td>
+        </tr>
+    </tbody>
+  </table>
+</div><p>四个参数共同决定了Circuit Breaker的灵敏度。</p>
+<h2 class="heading-element" id="hedging-请求对冲"><span>Hedging 请求对冲</span>
+  <a href="#hedging-%e8%af%b7%e6%b1%82%e5%af%b9%e5%86%b2" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>Hedging同一个请求发送多个副本，使用最快返回的结果。</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-c#"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="2" style="--fi-max-shown-lines:400;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span><span class="lnt">60
+</span><span class="lnt">61
+</span><span class="lnt">62
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c#" data-lang="c#"><span class="line"><span class="cl"><span class="k">using</span> <span class="nn">System.Threading.RateLimiting</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">using</span> <span class="nn">Polly</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">using</span> <span class="nn">Polly.Hedging</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">using</span> <span class="nn">Polly.RateLimiting</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Program</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">static</span> <span class="kd">async</span> <span class="n">Task</span> <span class="n">Main</span><span class="p">(</span><span class="kt">string</span><span class="p">[]</span> <span class="n">args</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span> 
+</span></span><span class="line"><span class="cl">        <span class="kt">var</span> <span class="n">serverIndex</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        
+</span></span><span class="line"><span class="cl">       <span class="kt">var</span> <span class="n">pipeline</span> <span class="p">=</span> <span class="k">new</span> <span class="n">ResiliencePipelineBuilder</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">&gt;().</span><span class="n">AddHedging</span><span class="p">(</span><span class="k">new</span> <span class="n">HedgingStrategyOptions</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">&gt;()</span>
+</span></span><span class="line"><span class="cl">       <span class="p">{</span>
+</span></span><span class="line"><span class="cl">           <span class="n">MaxHedgedAttempts</span> <span class="p">=</span> <span class="m">1</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">           <span class="n">Delay</span> <span class="p">=</span> <span class="n">TimeSpan</span><span class="p">.</span><span class="n">FromMilliseconds</span><span class="p">(</span><span class="m">500</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">           <span class="n">OnHedging</span> <span class="p">=</span> <span class="n">hegingArgs</span> <span class="p">=&gt;</span>
+</span></span><span class="line"><span class="cl">           <span class="p">{</span>
+</span></span><span class="line"><span class="cl">               <span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$&#34;发起备用请求&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">               <span class="k">return</span> <span class="k">default</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">           <span class="p">}</span>
+</span></span><span class="line"><span class="cl">       <span class="p">}).</span><span class="n">Build</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">       <span class="kt">var</span> <span class="n">result</span> <span class="p">=</span> <span class="k">await</span> <span class="n">pipeline</span><span class="p">.</span><span class="n">ExecuteAsync</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">&gt;(</span><span class="kd">async</span> <span class="n">token</span> <span class="p">=&gt;</span>
+</span></span><span class="line"><span class="cl">       <span class="p">{</span>
+</span></span><span class="line"><span class="cl">           <span class="n">serverIndex</span><span class="p">++;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">           <span class="k">if</span> <span class="p">(</span><span class="n">serverIndex</span> <span class="p">==</span> <span class="m">1</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">           <span class="p">{</span>
+</span></span><span class="line"><span class="cl">               <span class="k">return</span> <span class="k">await</span> <span class="n">ServerA</span><span class="p">(</span><span class="n">token</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">           <span class="p">}</span>
+</span></span><span class="line"><span class="cl">           <span class="k">else</span>
+</span></span><span class="line"><span class="cl">           <span class="p">{</span>
+</span></span><span class="line"><span class="cl">               <span class="k">return</span> <span class="k">await</span> <span class="n">ServerB</span><span class="p">(</span><span class="n">token</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">           <span class="p">}</span>
+</span></span><span class="line"><span class="cl">           
+</span></span><span class="line"><span class="cl">       <span class="p">});</span>
+</span></span><span class="line"><span class="cl">       
+</span></span><span class="line"><span class="cl">       <span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$&#34;最终结果: {result}&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="kd">static</span> <span class="kd">async</span> <span class="n">Task</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">&gt;</span> <span class="n">ServerA</span><span class="p">(</span><span class="n">CancellationToken</span> <span class="n">token</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">&#34;Server A开始&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        
+</span></span><span class="line"><span class="cl">        <span class="k">await</span> <span class="n">Task</span><span class="p">.</span><span class="n">Delay</span><span class="p">(</span><span class="m">3000</span><span class="p">,</span> <span class="n">token</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        
+</span></span><span class="line"><span class="cl">        <span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">&#34;Server A完成&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="s">&#34;Server A&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="kd">static</span> <span class="kd">async</span> <span class="n">Task</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">&gt;</span> <span class="n">ServerB</span><span class="p">(</span><span class="n">CancellationToken</span> <span class="n">token</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">&#34;Server B开始&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        
+</span></span><span class="line"><span class="cl">        <span class="k">await</span> <span class="n">Task</span><span class="p">.</span><span class="n">Delay</span><span class="p">(</span><span class="m">500</span><span class="p">,</span> <span class="n">token</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        
+</span></span><span class="line"><span class="cl">        <span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">&#34;Server B完成&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="s">&#34;Server B&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p><figure><img loading="lazy" src='/images/202608/4/4.png' alt="图3 Hedging执行结果"><figcaption class="image-caption">图3 Hedging执行结果</figcaption>
+  </figure></p>
+<h2 class="heading-element" id="timeout-超时"><span>Timeout 超时</span>
+  <a href="#timeout-%e8%b6%85%e6%97%b6" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>Timeout限制一个操作最多执行多久。例如，HTTP请求最多等待3秒，超时则取消。</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-c#"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="2" style="--fi-max-shown-lines:400;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c#" data-lang="c#"><span class="line"><span class="cl"><span class="k">using</span> <span class="nn">Polly</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Program</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">static</span> <span class="kd">async</span> <span class="n">Task</span> <span class="n">Main</span><span class="p">(</span><span class="kt">string</span><span class="p">[]</span> <span class="n">args</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">var</span> <span class="n">timeout</span> <span class="p">=</span> <span class="k">new</span> <span class="n">ResiliencePipelineBuilder</span><span class="p">().</span><span class="n">AddTimeout</span><span class="p">(</span><span class="n">TimeSpan</span><span class="p">.</span><span class="n">FromSeconds</span><span class="p">(</span><span class="m">2</span><span class="p">)).</span><span class="n">Build</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="k">try</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">await</span> <span class="n">timeout</span><span class="p">.</span><span class="n">ExecuteAsync</span><span class="p">(</span><span class="kd">async</span> <span class="n">token</span> <span class="p">=&gt;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">&#34;开始请求&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">                <span class="k">await</span> <span class="n">Task</span><span class="p">.</span><span class="n">Delay</span><span class="p">(</span><span class="m">5000</span><span class="p">,</span> <span class="n">token</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">                <span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">&#34;请求完成&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="p">});</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="p">}</span> <span class="k">catch</span><span class="p">(</span><span class="n">Exception</span> <span class="n">ex</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$&#34;发生异常: {ex.Message}&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><h2 class="heading-element" id="rate-limiter-限流"><span>Rate Limiter 限流</span>
+  <a href="#rate-limiter-%e9%99%90%e6%b5%81" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>Rate Limiter控制单位时间内允许执行的请求数量。例如，每秒最多100个请求，超过则拒绝请求。</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-c#"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="2" style="--fi-max-shown-lines:400;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c#" data-lang="c#"><span class="line"><span class="cl"><span class="k">using</span> <span class="nn">System.Threading.RateLimiting</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">using</span> <span class="nn">Polly</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">using</span> <span class="nn">Polly.RateLimiting</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">namespace</span> <span class="nn">PollyDemo2</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Program</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">static</span> <span class="kd">async</span> <span class="n">Task</span> <span class="n">Main</span><span class="p">(</span><span class="kt">string</span><span class="p">[]</span> <span class="n">args</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">var</span> <span class="n">pipeline</span> <span class="p">=</span> <span class="k">new</span> <span class="n">ResiliencePipelineBuilder</span><span class="p">().</span><span class="n">AddRateLimiter</span><span class="p">(</span><span class="k">new</span> <span class="n">RateLimiterStrategyOptions</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">DefaultRateLimiterOptions</span> <span class="p">=</span> <span class="k">new</span> <span class="n">ConcurrencyLimiterOptions</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">            <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">PermitLimit</span> <span class="p">=</span> <span class="m">1</span>
+</span></span><span class="line"><span class="cl">            <span class="p">},</span>
+</span></span><span class="line"><span class="cl">            <span class="n">OnRejected</span> <span class="p">=</span> <span class="n">rejectedArgs</span> <span class="p">=&gt;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">{</span>
+</span></span><span class="line"><span class="cl">              <span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">&#34;限流中&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">              <span class="k">return</span> <span class="k">default</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}).</span><span class="n">Build</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="kt">var</span> <span class="n">tasks</span> <span class="p">=</span> <span class="n">Enumerable</span><span class="p">.</span><span class="n">Range</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="m">10</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="p">.</span><span class="n">Select</span><span class="p">(</span><span class="n">i</span> <span class="p">=&gt;</span>
+</span></span><span class="line"><span class="cl">                <span class="n">pipeline</span><span class="p">.</span><span class="n">ExecuteAsync</span><span class="p">(</span><span class="kd">async</span> <span class="n">token</span> <span class="p">=&gt;</span>
+</span></span><span class="line"><span class="cl">                <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                    <span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$&#34;请求{i}开始&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">                    <span class="k">await</span> <span class="n">Task</span><span class="p">.</span><span class="n">Delay</span><span class="p">(</span><span class="m">1000</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">                    <span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">$&#34;请求{i}完成&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">                <span class="p">}).</span><span class="n">AsTask</span><span class="p">())</span>
+</span></span><span class="line"><span class="cl">            <span class="p">.</span><span class="n">ToArray</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="k">await</span> <span class="n">Task</span><span class="p">.</span><span class="n">WhenAll</span><span class="p">(</span><span class="n">tasks</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><h2 class="heading-element" id="fallback-降级"><span>Fallback 降级</span>
+  <a href="#fallback-%e9%99%8d%e7%ba%a7" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>Fallback主方案失败后，使用备用方案。例如，调用天气API，返回天气。如果天气API异常，返回默认天气。</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-c#"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="2" style="--fi-max-shown-lines:400;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c#" data-lang="c#"><span class="line"><span class="cl"><span class="k">using</span> <span class="nn">Polly</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">using</span> <span class="nn">Polly.Fallback</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Program</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">static</span> <span class="kd">async</span> <span class="n">Task</span> <span class="n">Main</span><span class="p">(</span><span class="kt">string</span><span class="p">[]</span> <span class="n">args</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">var</span> <span class="n">pipeline</span> <span class="p">=</span> <span class="k">new</span> <span class="n">ResiliencePipelineBuilder</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">&gt;().</span><span class="n">AddFallback</span><span class="p">(</span><span class="k">new</span> <span class="n">FallbackStrategyOptions</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">&gt;()</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">ShouldHandle</span> <span class="p">=</span> <span class="k">new</span> <span class="n">PredicateBuilder</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">&gt;().</span><span class="n">Handle</span><span class="p">&lt;</span><span class="n">Exception</span><span class="p">&gt;(),</span>
+</span></span><span class="line"><span class="cl">            <span class="n">FallbackAction</span> <span class="p">=</span> <span class="n">fallbackArgs</span> <span class="p">=&gt;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">&#34;服务失败，执行降级&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">                <span class="k">return</span> <span class="n">Outcome</span><span class="p">.</span><span class="n">FromResultAsValueTask</span><span class="p">(</span><span class="s">&#34;默认天气：晴天&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}).</span><span class="n">Build</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="kt">var</span> <span class="n">result</span> <span class="p">=</span> <span class="k">await</span> <span class="n">pipeline</span><span class="p">.</span><span class="n">ExecuteAsync</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">&gt;(</span><span class="n">token</span> <span class="p">=&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">&#34;调用天气API&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="k">throw</span> <span class="k">new</span> <span class="n">Exception</span><span class="p">(</span><span class="s">&#34;天气服务异常&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="p">});</span>
+</span></span><span class="line"><span class="cl">        
+</span></span><span class="line"><span class="cl">        <span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="n">result</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p><figure><img loading="lazy" src='/images/202608/4/3.png' alt="图4 Fallback执行结果"><figcaption class="image-caption">图4 Fallback执行结果</figcaption>
+  </figure></p>
+<h2 class="heading-element" id="六大策略对比"><span>六大策略对比</span>
+  <a href="#%e5%85%ad%e5%a4%a7%e7%ad%96%e7%95%a5%e5%af%b9%e6%af%94" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><div class="table-wrapper">
+  <table>
+    <thead>
+        <tr>
+            <th style="text-align: left">策略</th>
+            <th style="text-align: left">作用</th>
+            <th style="text-align: left">解决问题</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td style="text-align: left">Retry</td>
+            <td style="text-align: left">失败重新尝试</td>
+            <td style="text-align: left">瞬态故障</td>
+        </tr>
+        <tr>
+            <td style="text-align: left">Circuit Breaker</td>
+            <td style="text-align: left">暂停访问异常服务</td>
+            <td style="text-align: left">防止雪崩</td>
+        </tr>
+        <tr>
+            <td style="text-align: left">Timeout</td>
+            <td style="text-align: left">限制执行时间</td>
+            <td style="text-align: left">防止无限等待</td>
+        </tr>
+        <tr>
+            <td style="text-align: left">Rate Limiter</td>
+            <td style="text-align: left">限制请求数量</td>
+            <td style="text-align: left">防止过载</td>
+        </tr>
+        <tr>
+            <td style="text-align: left">Fallback</td>
+            <td style="text-align: left">提供备用方案</td>
+            <td style="text-align: left">保证功能可用</td>
+        </tr>
+        <tr>
+            <td style="text-align: left">Hedging</td>
+            <td style="text-align: left">多个请求竞争</td>
+            <td style="text-align: left">降低延迟</td>
+        </tr>
+    </tbody>
+  </table>
+</div><h2 class="heading-element" id="总结"><span>总结</span>
+  <a href="#%e6%80%bb%e7%bb%93" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>可靠的软件不是避免失败，而是在失败发生时优雅地恢复。</p></div><hr class="awesome-hr" />
+    <h2 id="see-also">相关内容</h2>
+    <ul><li>
+          <a href="/wpf-ui/" title="WPF UI：让WPF应用具有Fluent Design风格">WPF UI：让WPF应用具有Fluent Design风格</a></li><li>
+          <a href="/dotnet%E8%AE%BE%E8%AE%A1%E8%A7%84%E8%8C%83/" title=".NET设计规范 约定、惯用法与模式 第2版 (Krzysztof Cwalina / Brad Abrams)">.NET设计规范 约定、惯用法与模式 第2版 (Krzysztof Cwalina / Brad Abrams)</a></li><li>
+          <a href="/clr-via-csharp/" title="CLR via C# 第4版 (Jeffrey Richter)">CLR via C# 第4版 (Jeffrey Richter)</a></li><li>
+          <a href="/microsoft.extensions.hosting%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/" title="Microsoft.Extensions.Hosting使用指南：构建现代 .NET 应用的通用宿主架构">Microsoft.Extensions.Hosting使用指南：构建现代 .NET 应用的通用宿主架构</a></li><li>
+          <a href="/c%23-linq%E5%AD%A6%E4%B9%A0%E4%B9%8B%E6%97%85/" title="C# LINQ学习之旅：从集合操作到声明式编程">C# LINQ学习之旅：从集合操作到声明式编程</a></li><li>
+          <a href="/design-patterns-in-csharp-and-dotnet/" title="Design Patterns in C# and .NET (Dmitri Nesteruk)">Design Patterns in C# and .NET (Dmitri Nesteruk)</a></li><li>
+          <a href="/%E6%B7%B1%E5%85%A5system.net.networkinformation%E8%8E%B7%E5%8F%96%E7%B3%BB%E7%BB%9F%E7%BD%91%E7%BB%9C%E4%BF%A1%E6%81%AF/" title="深入System.Net.NetworkInformation获取系统网络信息">深入System.Net.NetworkInformation获取系统网络信息</a></li><li>
+          <a href="/dotnetty%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="DotNetty源码剖析：高性能网络框架的秘密">DotNetty源码剖析：高性能网络框架的秘密</a></li><li>
+          <a href="/wpf%E7%BC%96%E7%A8%8B%E5%AE%9D%E5%85%B8/" title="WPF编程宝典 第4版 (Matthew MacDonald)">WPF编程宝典 第4版 (Matthew MacDonald)</a></li><li>
+          <a href="/modbus%E5%8D%8F%E8%AE%AE%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E5%AE%9E%E6%88%98/" title="Modbus协议从入门到实战">Modbus协议从入门到实战</a></li><li>
+          <a href="/%E4%BB%8Eserialport%E5%88%B0%E5%B7%A5%E4%B8%9A%E7%BA%A7%E9%80%9A%E4%BF%A1%E6%A1%86%E6%9E%B6%E8%AE%BE%E8%AE%A1/" title="从SerialPort到工业级通信框架设计">从SerialPort到工业级通信框架设计</a></li><li>
+          <a href="/shadowsocks-windows%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="shadowsocks-windows源码剖析：一个C#网络代理客户端是如何工作的？">shadowsocks-windows源码剖析：一个C#网络代理客户端是如何工作的？</a></li><li>
+          <a href="/networkmanager%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="NETworkManager源码剖析：一个网络管理工具的实现细节">NETworkManager源码剖析：一个网络管理工具的实现细节</a></li><li>
+          <a href="/c%23%E9%AB%98%E6%95%88%E7%BC%96%E7%A8%8B/" title="C#高效编程 改进C#代码的50个行之有效的办法 第2版 (Bill Wagner)">C#高效编程 改进C#代码的50个行之有效的办法 第2版 (Bill Wagner)</a></li><li>
+          <a href="/downloader%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="Downloader源码剖析：一个下载器的实现原理">Downloader源码剖析：一个下载器的实现原理</a></li><li>
+          <a href="/c%23%E4%B8%AD%E7%9A%84nameof%E8%BF%90%E7%AE%97%E7%AC%A6/" title="C#中的nameof运算符">C#中的nameof运算符</a></li></ul><div class="post-footer" id="post-footer">
+  <div class="post-info">
+    <div class="post-info-line">
+      <div class="post-info-mod"><span title="更新于 2026-08-03 18:05:08">更新于 2026-08-03&nbsp;</span>
+      </div></div><div class="post-info-line">
+        <div class="post-info-md"><span><a href="vscode://file/D:\hugo-blog\andyfree96\content\posts\Polly使用指南.md" title="在编辑器中打开" class="link-to-vscode">在编辑器中打开</a></span></div>
+        <div class="post-info-share">
+          <span><a href="javascript:void(0);" title="分享到 X" data-sharer="twitter" data-url="http://localhost:1313/polly%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/" data-title="Polly使用指南：.NET应用程序可靠性设计" data-via="IRONAnthony96" data-hashtags="C#,.NET,Polly"><i class="fa-brands fa-x-twitter" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="http://localhost:1313/polly%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/" data-hashtag="C#"><i class="fa-brands fa-facebook-square" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="http://localhost:1313/polly%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/" data-title="Polly使用指南：.NET应用程序可靠性设计" data-image="/images/202608/4/jiri-kaloc-SA1INSI9VFU-unsplash.jpg"><i class="fa-brands fa-weibo" aria-hidden="true"></i></a>
+  </span>
+        </div>
+      </div></div>
+
+  <div class="post-info-more">
+    <section class="post-tags"><i class="fa-solid fa-tags me-1" aria-hidden="true"></i><a href="/tags/c%23/" class="post-tag" title="标签 - C#">C#</a><a href="/tags/.net/" class="post-tag" title="标签 - .NET">.NET</a><a href="/tags/polly/" class="post-tag" title="标签 - Polly">Polly</a></section>
+    <section><span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+    </section>
+  </div><div class="post-nav"><a href="/wpf-ui/" class="post-nav-item" rel="prev" title="WPF UI：让WPF应用具有Fluent Design风格"><i class="fa-solid fa-angle-left" aria-hidden="true"></i>WPF UI：让WPF应用具有Fluent Design风格</a><a href="/chokidar%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" class="post-nav-item" rel="next" title="chokidar源码剖析：一个跨平台文件监听库的设计与实现">chokidar源码剖析：一个跨平台文件监听库的设计与实现<i class="fa-solid fa-angle-right" aria-hidden="true"></i></a></div>
+</div>
+<div class="post-reward">
+    <div class="comment">请作者喝杯咖啡!</div>
+    <input type="checkbox" class="reward-input" name="reward" id="fi-reward" hidden />
+    <label class="reward-button" for="fi-reward"><i class="fa-solid fa-qrcode" aria-hidden="true"></i>赞赏</label>
+    <div class="reward-ways" data-mode="static"><div><img src='/reward/alipay.png' alt="AndyFree96 支付宝"><span data-animation>支付宝</span>
+          </div><div><img src='/reward/wechatpay.png' alt="AndyFree96 微信"><span data-animation>微信</span>
+          </div></div>
+  </div></article>
+
+  <aside class="toc" id="toc-auto" aria-label="目录"><h2 class="toc-title">目录&nbsp;<i class="toc-icon fa-solid fa-angle-down" aria-hidden="true"></i></h2>
+      <div class="toc-content" id="toc-content-auto"></div></aside><dialog id="toc-dialog" aria-labelledby="toc-dialog-title" role="dialog" closedby="any">
+      <button type="button" class="toc-close-btn" aria-label="Close Table of Contents"><i class="fa-solid fa-xmark fa-lg" aria-hidden="true"></i></button>
+      <div class="toc">
+        <h2 class="toc-title" id="toc-dialog-title">目录</h2>
+        <div class="toc-content" id="toc-content-drawer"><nav >
+  <ul>
+    <li><a href="#什么是polly">什么是Polly？</a></li>
+    <li><a href="#retry-重试">Retry 重试</a></li>
+    <li><a href="#circuit-breaker-熔断">Circuit Breaker 熔断</a></li>
+    <li><a href="#hedging-请求对冲">Hedging 请求对冲</a></li>
+    <li><a href="#timeout-超时">Timeout 超时</a></li>
+    <li><a href="#rate-limiter-限流">Rate Limiter 限流</a></li>
+    <li><a href="#fallback-降级">Fallback 降级</a></li>
+    <li><a href="#六大策略对比">六大策略对比</a></li>
+    <li><a href="#总结">总结</a></li>
+  </ul>
+</nav></div>
+      </div>
+    </dialog></main><footer class="footer">
+    <div class="footer-container"><div class="footer-line powered">由 <a href="https://gohugo.io/" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.163.1">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/hugo-fixit/FixIt" target="_blank" rel="external" title="FixIt v1.0.0-mq99hlzg">FixIt</a>
+        </div><div class="footer-line copyright" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright" aria-hidden="true"></i>
+            <span itemprop="copyrightYear">2019 - 2026</span><span class="author" itemprop="copyrightHolder">
+              <a href="https://andyfree96.github.io/" target="_blank" rel="external nofollow noopener noreferrer">AndyFree96</a></span></div></div>
+  </footer></div><div class="widgets"><div class="fixed-buttons"><button type="button" class="fixed-button back-to-top animate__faster d-none" aria-label="回到顶部"><i class="fa-solid fa-arrow-up" aria-hidden="true"></i></button><button type="button" id="toc-drawer-button" class="fixed-button toc-drawer-button d-none" aria-label="目录" aria-controls="toc-dialog" aria-expanded="false"><i class="fa-solid fa-bars" aria-hidden="true"></i></button></div><div id="mask"></div><div class="reading-progress-bar" style="left: 0;top: 0;"></div><noscript>
+    <div class="noscript-warning">该网站在启用 JavaScript 的情况下效果最佳。</div>
+  </noscript>
+</div><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script src="/lib/autocomplete/autocomplete.min.js" defer></script><script src="/lib/algoliasearch/browser.umd.js" defer></script><script src="/lib/sharer/sharer.min.js" async defer></script><script src="/lib/cookieconsent/cookieconsent.min.js" defer></script><script src="/js/lib/cookieconsent.js" defer></script><script src="/lib/cell-tooltip/cell-tooltip.umd.js" defer></script><script src="/js/config/c53744cabea0cb8a84e204aafd6b54e9.js" defer></script><script src="/js/lib/file-tree.js" defer></script><script src="/js/main.js" defer></script></body>
+</html>

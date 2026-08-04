@@ -50,6 +50,161 @@ npm tsc --init
 }
 ```
 
+`tsconfig.json`是TypeScript项目的核心配置文件，它决定了TypeScript编译器(tsc)如何解析代码、如何进行类型检查、如何生成JavaScript，以及项目的模块化、目标环境等。
+
+#### 1.3.1 整体结构
+
+| 配置节点              | 作用                  | 示例                  |
+| :----------------- | :------------------- | :------------------- |
+| `compilerOptions` | TypeScript 编译选项（核心） | `{"strict":true}`   |
+| `include`         | 指定需要编译的文件           | `["src/**/*"]`      |
+| `exclude`         | 指定排除的文件             | `["node_modules"]`  |
+| `extends`         | 继承其他配置文件            | `"./base.json"`     |
+| `files`           | 明确指定编译文件列表          | `["src/main.ts"]`   |
+| `references`      | 项目引用，用于大型项目拆分       | `[{path:"./core"}]` |
+
+#### 1.3.2 compilerOptions核心配置
+
+##### 1.3.2.1 JavaScript输出相关
+
+| 配置                 | 作用                 | 常用值                                  | 推荐                             |
+| :------------------ | :------------------ | :------------------------------------ | :------------------------------ |
+| `target`           | 指定生成 JavaScript 版本 | `ES5`、`ES2015`、`ES2020`、`ES2022`     | Node.js：`ES2022`；Web：`ES2017+` |
+| `module`           | 指定模块系统             | `CommonJS`、`ESNext`、`NodeNext`       | 前端：`ESNext`；Node：`NodeNext`    |
+| `moduleResolution` | 模块解析策略             | `node`、`node16`、`nodenext`、`bundler` | Vite：`bundler`；Node：`NodeNext` |
+| `lib`              | 指定运行环境 API 类型      | `DOM`、`ES2022`                       | 根据环境配置                         |
+| `jsx`              | JSX 转换方式           | `react`、`react-jsx`、`preserve`       | React18：`react-jsx`            |
+| `jsxFactory`       | JSX 工厂函数           | `React.createElement`                | React旧项目                       |
+| `jsxImportSource`  | 自动 JSX 导入源         | `react`                              | React生态                        |
+
+
+##### 1.3.2.2 类型检查相关
+
+| 配置                             | 作用                  | 示例     | 推荐       |
+| :------------------------------ | :------------------- | :------ | :-------- |
+| `strict`                       | 开启所有严格检查            | `true` | 必开 |
+| `strictNullChecks`             | 严格检查 null/undefined | `true` | 开启       |
+| `strictFunctionTypes`          | 严格函数参数检查            | `true` | 开启       |
+| `strictPropertyInitialization` | 检查类属性初始化            | `true` | 开启       |
+| `noImplicitAny`                | 禁止隐式 any            | `true` | 开启       |
+| `noImplicitThis`               | 禁止隐式 this           | `true` | 开启       |
+| `alwaysStrict`                 | 输出 `"use strict"`   | `true` | 推荐       |
+| `useUnknownInCatchVariables`   | catch变量默认为unknown   | `true` | 推荐       |
+
+##### 1.3.2.3 代码质量检查
+
+| 配置                           | 作用           | 示例      |
+| :---------------------------- | :------------ | :------- |
+| `noUnusedLocals`             | 禁止未使用变量      | `true`  |
+| `noUnusedParameters`         | 禁止未使用参数      | `true`  |
+| `noImplicitReturns`          | 要求函数所有路径返回   | `true`  |
+| `noFallthroughCasesInSwitch` | 禁止 switch 穿透 | `true`  |
+| `allowUnreachableCode`       | 是否允许不可达代码    | `false` |
+| `exactOptionalPropertyTypes` | 严格可选属性类型     | `true`  |
+
+##### 1.3.2.4 输出文件相关
+
+| 配置                | 作用            | 示例          | 用途       |
+| :----------------- | :------------- | :----------- | :-------- |
+| `outDir`          | 输出目录          | `"./dist"`  | 生产构建     |
+| `rootDir`         | 源码根目录         | `"./src"`   | 控制目录结构   |
+| `sourceMap`       | 生成 sourcemap  | `true`      | 调试       |
+| `inlineSourceMap` | 内联 sourcemap  | `true`      | 调试       |
+| `declaration`     | 生成 `.d.ts` 文件 | `true`      | 开发 npm 包 |
+| `declarationMap`  | 生成声明文件 map    | `true`      | 库调试      |
+| `removeComments`  | 删除注释          | `true`      | 生产优化     |
+| `newLine`         | 输出换行符         | `LF`/`CRLF` | 跨平台      |
+
+##### 1.3.2.5 模块导入相关
+
+| 配置                             | 作用                       | 示例     | 使用场景              |
+| :------------------------------ | :------------------------ | :------ | :----------------- |
+| `esModuleInterop`              | 增强 ES Module/CommonJS 兼容 | `true` | Node项目常用          |
+| `allowSyntheticDefaultImports` | 允许默认导入                   | `true` | 配合esModuleInterop |
+| `resolveJsonModule`            | 允许导入 JSON                | `true` | 配置文件读取            |
+| `allowImportingTsExtensions`   | 允许 ts 后缀导入               | `true` | 特殊场景              |
+| `verbatimModuleSyntax`         | 保持 import/export 原样      | `true` | 现代项目推荐            |
+
+
+##### 1.3.2.6 路径配置
+
+| 配置          | 作用       | 示例                    |
+| :----------- | :-------- | :--------------------- |
+| `baseUrl`   | 模块搜索根目录  | `"./"`                |
+| `paths`     | 路径别名     | `"@/*":["src/*"]`     |
+| `rootDirs`  | 多个虚拟根目录  | `["src","generated"]` |
+| `typeRoots` | 指定类型声明目录 | `["./types"]`         |
+| `types`     | 指定加载类型包  | `["node"]`            |
+
+示例：
+
+```json
+{
+ "compilerOptions":{
+   "baseUrl":"src",
+   "paths":{
+     "@/*":[
+       "*"
+     ]
+   }
+ }
+}
+```
+
+使用：
+
+```ts
+import User from "@/models/User"
+```
+
+##### 1.3.2.7 性能优化相关
+
+| 配置                                        | 作用               | 效果             |
+| :----------------------------------------- | :---------------- | :-------------- |
+| `skipLibCheck`                            | 跳过第三方 `.d.ts` 检查 | 提高编译速度         |
+| `incremental`                             | 增量编译             | 大型项目加速         |
+| `tsBuildInfoFile`                         | 指定增量缓存文件         | 配合 incremental |
+| `composite`                               | 支持项目引用           | 大型 Monorepo    |
+| `disableSourceOfProjectReferenceRedirect` | 禁用引用跳转           | 大型项目           |
+
+#### 1.3.3 include配置
+
+| 配置             | 作用           |
+| :-------------- | :------------ |
+| `src/**/*`     | 包含 src 下所有文件 |
+| `src/**/*.ts`  | 只包含 ts 文件    |
+| `src/**/*.tsx` | 只包含 tsx 文件     |
+
+示例：
+
+```json
+{
+ "include":[
+   "src/**/*"
+ ]
+}
+```
+
+#### 1.3.4 exclude配置
+
+| 目录           | 作用    |
+| :------------ | :----- |
+| node_modules | 第三方代码 |
+| dist         | 编译产物  |
+| build        | 构建目录  |
+| coverage     | 测试覆盖率 |
+
+示例：
+
+```json
+{
+ "exclude":[
+   "node_modules",
+   "dist"
+ ]
+}
+```
+
 ## 2. 标准项目结构
 
 一个可维护的TypeScript项目，一定要从结构开始规范：
@@ -346,7 +501,7 @@ console.log(process.env.API_KEY);
 
 ## 9. Git工程规范
 
-Husky (Git hooks)
+Husky(Git hooks)
 
 ```bash
 npm install husky -D
@@ -567,6 +722,10 @@ pnpm add turbo -D
   }
 }
 ```
+
+## 推荐
+
+[How To Create An NPM Package](https://www.totaltypescript.com/how-to-create-an-npm-package)
 
 ## 参考
 

@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+    <meta name="robots" content="noodp" />
+    <title>WPF UI：让WPF应用具有Fluent Design风格 - 东尼的博客</title><meta name="author" content="AndyFree96">
+<meta name="description" content="WPF(Windows Presentation Foundation)自.NET Framework 3.0发布以来，一直是Windows桌面应用开发的重要技术栈。凭借XAML、数据绑定、模板化控件以及MVVM架构，WPF在企业软件、工业软件、自动化设备控制软件领域拥有大量应用。随着Windows 10、Windows 11 Fluent Design设计语言的发展，传统WPF控件逐渐显得“跟不上时代”。对于很多新项目，技术上想使用WPF的成熟生态，但是视觉体验上又希望接近Windows 11原生应用。这就是WPF UI诞生的原因之一。WPF UI是一个基于WPF的现代UI框架，它为传统WPF应用提供Fluent Design风格的控件、主题以及现代化交互体检。
+"><meta name="keywords" content='WPF, WPF UI, Fluent UI, .NET, C#'>
+	<meta itemprop="name" content="WPF UI：让WPF应用具有Fluent Design风格">
+	<meta itemprop="description" content="WPF(Windows Presentation Foundation)自.NET Framework 3.0发布以来，一直是Windows桌面应用开发的重要技术栈。凭借XAML、数据绑定、模板化控件以及MVVM架构，WPF在企业软件、工业软件、自动化设备控制软件领域拥有大量应用。随着Windows 10、Windows 11 Fluent Design设计语言的发展，传统WPF控件逐渐显得“跟不上时代”。对于很多新项目，技术上想使用WPF的成熟生态，但是视觉体验上又希望接近Windows 11原生应用。这就是WPF UI诞生的原因之一。WPF UI是一个基于WPF的现代UI框架，它为传统WPF应用提供Fluent Design风格的控件、主题以及现代化交互体检。">
+	<meta itemprop="datePublished" content="2026-08-03T15:31:57+08:00">
+	<meta itemprop="dateModified" content="2026-08-03T15:31:57+08:00">
+	<meta itemprop="wordCount" content="585">
+	<meta itemprop="keywords" content="WPF,WPF UI,Fluent UI,.NET,C#"><meta property="og:url" content="http://localhost:1313/wpf-ui/">
+	<meta property="og:site_name" content="东尼的博客">
+	<meta property="og:title" content="WPF UI：让WPF应用具有Fluent Design风格">
+	<meta property="og:description" content="WPF(Windows Presentation Foundation)自.NET Framework 3.0发布以来，一直是Windows桌面应用开发的重要技术栈。凭借XAML、数据绑定、模板化控件以及MVVM架构，WPF在企业软件、工业软件、自动化设备控制软件领域拥有大量应用。随着Windows 10、Windows 11 Fluent Design设计语言的发展，传统WPF控件逐渐显得“跟不上时代”。对于很多新项目，技术上想使用WPF的成熟生态，但是视觉体验上又希望接近Windows 11原生应用。这就是WPF UI诞生的原因之一。WPF UI是一个基于WPF的现代UI框架，它为传统WPF应用提供Fluent Design风格的控件、主题以及现代化交互体检。">
+	<meta property="og:locale" content="zh_CN">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="posts">
+		<meta property="article:published_time" content="2026-08-03T15:31:57+08:00">
+		<meta property="article:modified_time" content="2026-08-03T15:31:57+08:00">
+		<meta property="article:tag" content="WPF">
+		<meta property="article:tag" content="WPF UI">
+		<meta property="article:tag" content="Fluent UI">
+		<meta property="article:tag" content=".NET">
+		<meta property="article:tag" content="C#">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="WPF UI：让WPF应用具有Fluent Design风格">
+  <meta name="twitter:description" content="WPF(Windows Presentation Foundation)自.NET Framework 3.0发布以来，一直是Windows桌面应用开发的重要技术栈。凭借XAML、数据绑定、模板化控件以及MVVM架构，WPF在企业软件、工业软件、自动化设备控制软件领域拥有大量应用。随着Windows 10、Windows 11 Fluent Design设计语言的发展，传统WPF控件逐渐显得“跟不上时代”。对于很多新项目，技术上想使用WPF的成熟生态，但是视觉体验上又希望接近Windows 11原生应用。这就是WPF UI诞生的原因之一。WPF UI是一个基于WPF的现代UI框架，它为传统WPF应用提供Fluent Design风格的控件、主题以及现代化交互体检。"><meta name="twitter:creator" content="@IRONAnthony96"><meta name="application-name" content="FixIt">
+<meta name="apple-mobile-web-app-title" content="FixIt"><meta name="theme-color" data-light="#f6f8fa" data-dark="#151b23" content="#f6f8fa"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" type="text/html" href="http://localhost:1313/wpf-ui/" title="WPF UI：让WPF应用具有Fluent Design风格 - 东尼的博客" /><link rel="prev" type="text/html" href="http://localhost:1313/dotnet%E8%AE%BE%E8%AE%A1%E8%A7%84%E8%8C%83/" title=".NET设计规范 约定、惯用法与模式 第2版 (Krzysztof Cwalina / Brad Abrams)" /><link rel="next" type="text/html" href="http://localhost:1313/polly%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/" title="Polly使用指南：.NET应用程序可靠性设计" /><link rel="alternate" type="text/markdown" href="http://localhost:1313/wpf-ui/index.md" title="WPF UI：让WPF应用具有Fluent Design风格 - 东尼的博客"><link rel="stylesheet" href="/css/config.css"><link rel="stylesheet" href="/css/main.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><link rel="preload" href="/js/main.js" as="script"><script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "BlogPosting",
+    "headline": "WPF UI：让WPF应用具有Fluent Design风格",
+    "inLanguage": "zh-CN",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "http:\/\/localhost:1313\/wpf-ui\/"
+    },"genre": "posts","keywords": "WPF, WPF UI, Fluent UI, .NET, C#","wordcount":  585 ,
+    "url": "http:\/\/localhost:1313\/wpf-ui\/","datePublished": "2026-08-03T15:31:57+08:00","dateModified": "2026-08-03T15:31:57+08:00","publisher": {
+      "@type": "Organization",
+      "name": ""},"author": {
+        "@type": "Person",
+        "name": "AndyFree96"
+      },"description": ""
+  }
+  </script><script src="/js/head/color-scheme.js"></script></head>
+  <body data-instant-intensity="viewport" data-header-desktop="sticky" data-header-mobile="auto"><div class="wrapper" data-page-style="normal"><header class="desktop animate__faster" id="header-desktop">
+  <div class="header-wrapper">
+    <div class="header-title">
+      <a href="/" title="东尼的博客" class="header-title-link"><span class="header-title-text">东尼的博客</span></a><span class="header-subtitle"></span></div>
+    <nav>
+      <ul class="menu"><li class="menu-item">
+              <a class="menu-link" href="/posts/">📕 文章</a></li><li class="menu-item">
+              <a class="menu-link" href="/categories/">🧰 分类</a></li><li class="menu-item">
+              <a class="menu-link" href="/tags/">🔖 标签</a></li><li class="menu-item">
+              <a class="menu-link" href="/book">📚 书单</a></li><li class="menu-item">
+              <a class="menu-link" href="/paper">📝 论文</a></li><li class="menu-item">
+              <a class="menu-link" href="/opencourse">👨🏻‍💻 公开课</a></li><li class="menu-item">
+              <a class="menu-link" href="/filmtv">🎞️ 影视</a></li><li class="menu-item">
+              <a class="menu-link" href="/resource">⚡️ 资源库</a></li><li class="menu-item">
+              <a class="menu-link" href="/projects">⭐ 开源</a></li><li class="menu-item">
+              <a class="menu-link" href="/about">🙋🏻‍♂️ 关于</a></li><li class="menu-item delimiter"></li><li class="menu-item search" id="search-desktop">
+            <input type="text" placeholder="搜索文章标题或内容……" id="search-input-desktop" tabindex="-1">
+            <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索" aria-controls="search-dropdown-desktop" aria-expanded="false">
+              <i class="fa-solid fa-search" aria-hidden="true"></i>
+            </a>
+            <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+              <i class="fa-solid fa-times-circle" aria-hidden="true"></i>
+            </a>
+            <span class="search-button search-loading" id="search-loading-desktop">
+              <i class="fa-solid fa-spinner fa-spin" aria-hidden="true"></i>
+            </span>
+          </li><li class="menu-item theme-switch-item">
+          <button type="button" class="theme-switch" aria-label="切换主题" title="切换主题"><i class="fa-solid fa-adjust" aria-hidden="true"></i></button>
+        </li></ul>
+    </nav>
+  </div>
+</header><header class="mobile animate__faster" id="header-mobile">
+  <div class="header-container">
+    <div class="header-wrapper">
+      <div class="header-title">
+        <a href="/" title="东尼的博客" class="header-title-link"><span class="header-title-text">东尼的博客</span></a><span class="header-subtitle"></span></div>
+      <button type="button" class="theme-switch" aria-label="切换主题"><i class="fa-solid fa-adjust" aria-hidden="true"></i></button>
+      <button type="button" class="menu-toggle" id="menu-toggle-mobile" aria-controls="menu-mobile" aria-expanded="false" aria-labelledby="menu-mobile">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <nav>
+      <ul class="menu" id="menu-mobile"><li class="search-wrapper">
+            <div class="search mobile" id="search-mobile">
+              <input type="text" placeholder="搜索文章标题或内容……" id="search-input-mobile">
+              <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索" aria-controls="search-dropdown-mobile" aria-expanded="false">
+                <i class="fa-solid fa-search" aria-hidden="true"></i>
+              </a>
+              <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                <i class="fa-solid fa-times-circle" aria-hidden="true"></i>
+              </a>
+              <span class="search-button search-loading" id="search-loading-mobile">
+                <i class="fa-solid fa-spinner fa-spin" aria-hidden="true"></i>
+              </span>
+            </div>
+            <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+              取消
+            </a>
+          </li><li class="menu-item"><a class="menu-link" href="/posts/">📕 文章</a></li><li class="menu-item"><a class="menu-link" href="/categories/">🧰 分类</a></li><li class="menu-item"><a class="menu-link" href="/tags/">🔖 标签</a></li><li class="menu-item"><a class="menu-link" href="/book">📚 书单</a></li><li class="menu-item"><a class="menu-link" href="/paper">📝 论文</a></li><li class="menu-item"><a class="menu-link" href="/opencourse">👨🏻‍💻 公开课</a></li><li class="menu-item"><a class="menu-link" href="/filmtv">🎞️ 影视</a></li><li class="menu-item"><a class="menu-link" href="/resource">⚡️ 资源库</a></li><li class="menu-item"><a class="menu-link" href="/projects">⭐ 开源</a></li><li class="menu-item"><a class="menu-link" href="/about">🙋🏻‍♂️ 关于</a></li><li class="menu-item menu-system"></li>
+      </ul>
+    </nav>
+  </div>
+</header><div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+  </div>
+  <div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+  </div><main class="fi-container"><aside class="aside-collection animate__animated animate__fadeIn animate__faster" aria-label="合集"><div class="details related-details open">
+      <div class="details-summary related-summary">
+        <i class="fa-solid fa-fire fa-fade text-danger" aria-hidden="true"></i>
+        <span class="related-title">相关内容</span><i class="details-icon fa-solid fa-angle-right" aria-hidden="true"></i></div>
+      <div class="details-content related-content">
+        <ul class="related-list"><li class="related-item">
+              <a href="/dotnet%E8%AE%BE%E8%AE%A1%E8%A7%84%E8%8C%83/" title=".NET设计规范 约定、惯用法与模式 第2版 (Krzysztof Cwalina / Brad Abrams)">.NET设计规范 约定、惯用法与模式 第2版 (Krzysztof Cwalina / Brad Abrams)</a></li><li class="related-item">
+              <a href="/clr-via-csharp/" title="CLR via C# 第4版 (Jeffrey Richter)">CLR via C# 第4版 (Jeffrey Richter)</a></li><li class="related-item">
+              <a href="/microsoft.extensions.hosting%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/" title="Microsoft.Extensions.Hosting使用指南：构建现代 .NET 应用的通用宿主架构">Microsoft.Extensions.Hosting使用指南：构建现代 .NET 应用的通用宿主架构</a></li><li class="related-item">
+              <a href="/wpf%E7%BC%96%E7%A8%8B%E5%AE%9D%E5%85%B8/" title="WPF编程宝典 第4版 (Matthew MacDonald)">WPF编程宝典 第4版 (Matthew MacDonald)</a></li><li class="related-item">
+              <a href="/c%23-linq%E5%AD%A6%E4%B9%A0%E4%B9%8B%E6%97%85/" title="C# LINQ学习之旅：从集合操作到声明式编程">C# LINQ学习之旅：从集合操作到声明式编程</a></li><li class="related-item">
+              <a href="/design-patterns-in-csharp-and-dotnet/" title="Design Patterns in C# and .NET (Dmitri Nesteruk)">Design Patterns in C# and .NET (Dmitri Nesteruk)</a></li><li class="related-item">
+              <a href="/%E6%B7%B1%E5%85%A5system.net.networkinformation%E8%8E%B7%E5%8F%96%E7%B3%BB%E7%BB%9F%E7%BD%91%E7%BB%9C%E4%BF%A1%E6%81%AF/" title="深入System.Net.NetworkInformation获取系统网络信息">深入System.Net.NetworkInformation获取系统网络信息</a></li><li class="related-item">
+              <a href="/networkmanager%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="NETworkManager源码剖析：一个网络管理工具的实现细节">NETworkManager源码剖析：一个网络管理工具的实现细节</a></li><li class="related-item">
+              <a href="/dotnetty%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="DotNetty源码剖析：高性能网络框架的秘密">DotNetty源码剖析：高性能网络框架的秘密</a></li><li class="related-item">
+              <a href="/modbus%E5%8D%8F%E8%AE%AE%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E5%AE%9E%E6%88%98/" title="Modbus协议从入门到实战">Modbus协议从入门到实战</a></li><li class="related-item">
+              <a href="/%E4%BB%8Eserialport%E5%88%B0%E5%B7%A5%E4%B8%9A%E7%BA%A7%E9%80%9A%E4%BF%A1%E6%A1%86%E6%9E%B6%E8%AE%BE%E8%AE%A1/" title="从SerialPort到工业级通信框架设计">从SerialPort到工业级通信框架设计</a></li><li class="related-item">
+              <a href="/shadowsocks-windows%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="shadowsocks-windows源码剖析：一个C#网络代理客户端是如何工作的？">shadowsocks-windows源码剖析：一个C#网络代理客户端是如何工作的？</a></li><li class="related-item">
+              <a href="/c%23%E9%AB%98%E6%95%88%E7%BC%96%E7%A8%8B/" title="C#高效编程 改进C#代码的50个行之有效的办法 第2版 (Bill Wagner)">C#高效编程 改进C#代码的50个行之有效的办法 第2版 (Bill Wagner)</a></li><li class="related-item">
+              <a href="/downloader%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="Downloader源码剖析：一个下载器的实现原理">Downloader源码剖析：一个下载器的实现原理</a></li><li class="related-item">
+              <a href="/c%23%E4%B8%AD%E7%9A%84nameof%E8%BF%90%E7%AE%97%E7%AC%A6/" title="C#中的nameof运算符">C#中的nameof运算符</a></li></ul>
+      </div>
+    </div></aside>
+
+  <article class="page single">
+    <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span title="转载" class="icon-repost"><i class="fa-solid fa-share" aria-hidden="true"></i></span><span>WPF UI：让WPF应用具有Fluent Design风格</span>
+      </h1></div><div class="post-meta">
+      <div class="post-meta-line"><span class="post-author"><a href="https://andyfree96.github.io/" title="作者" target="_blank" rel="author external nofollow noopener noreferrer" class="author"><img class="avatar" src='/avatar/1.jpg' alt="AndyFree96" height="16" width="16">&nbsp;AndyFree96</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E6%8A%80%E6%9C%AF%E7%A7%AF%E6%9C%A8/" class="post-category" title="分类 - 技术积木"><i class="fa-regular fa-folder" aria-hidden="true"></i> 技术积木</a></span></div><div class="post-meta-line"><span title="发布于 2026-08-03 15:31:57"><i class="fa-solid fa-calendar-days me-1" aria-hidden="true"></i><time datetime="2026-08-03">2026-08-03</time></span>&nbsp;<span title="585 字"><i class="fa-solid fa-pencil-alt me-1" aria-hidden="true"></i>约 600 字</span>&nbsp;<span><i class="fa-regular fa-clock me-1" aria-hidden="true"></i>预计阅读 2 分钟</span>&nbsp;</div>
+    </div><div class="featured-image"><img loading="eager" src='/images/202608/3/pawel-czerwinski-viyJmIh7x1o-unsplash.jpg' sizes="(max-width: 680px) 100vw, (max-width: 960px) 80vw, (max-width: 1440px) 56vw, 800px" alt="/images/202608/3/pawel-czerwinski-viyJmIh7x1o-unsplash.jpg"></div><div class="details toc" id="toc-static" data-kept="false">
+        <div class="details-summary toc-title">
+          <span>目录</span>
+          <span><i class="details-icon fa-solid fa-angle-right" aria-hidden="true"></i></span>
+        </div>
+        <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#开始使用">开始使用</a></li>
+  </ul>
+</nav></div>
+      </div><div class="content" id="content"><p>WPF(Windows Presentation Foundation)自.NET Framework 3.0发布以来，一直是Windows桌面应用开发的重要技术栈。凭借XAML、数据绑定、模板化控件以及MVVM架构，WPF在企业软件、工业软件、自动化设备控制软件领域拥有大量应用。随着Windows 10、Windows 11 Fluent Design设计语言的发展，传统WPF控件逐渐显得“跟不上时代”。对于很多新项目，技术上想使用WPF的成熟生态，但是视觉体验上又希望接近Windows 11原生应用。这就是WPF UI诞生的原因之一。<a href="https://wpfui.lepo.co/index.html" target="_blank" rel="external nofollow noopener noreferrer">WPF UI<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>是一个基于WPF的现代UI框架，它为传统WPF应用提供<a href="https://en.wikipedia.org/wiki/Fluent_Design_System" target="_blank" rel="external nofollow noopener noreferrer">Fluent Design<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>风格的控件、主题以及现代化交互体检。</p>
+<h2 class="heading-element" id="开始使用"><span>开始使用</span>
+  <a href="#%e5%bc%80%e5%a7%8b%e4%bd%bf%e7%94%a8" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>为了使用<a href="https://wpfui.lepo.co/index.html" target="_blank" rel="external nofollow noopener noreferrer">WPF UI<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>，我们需要在WPF项目中安装WPF UI NuGet包。</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-pwsh"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-pwsh" data-lang="pwsh"><span class="line"><span class="cl"><span class="n">dotnet</span> <span class="n">add</span> <span class="n">package</span> <span class="nb">WPF-UI</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>接着修改<code>App.xaml</code>文件配置主题：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-xml"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="2" style="--fi-max-shown-lines:400;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-xml" data-lang="xml"><span class="line"><span class="cl"><span class="nt">&lt;Application</span> <span class="na">x:Class=</span><span class="s">&#34;LepoDemo.App&#34;</span>
+</span></span><span class="line"><span class="cl">             <span class="na">xmlns=</span><span class="s">&#34;http://schemas.microsoft.com/winfx/2006/xaml/presentation&#34;</span>
+</span></span><span class="line"><span class="cl">             <span class="na">xmlns:x=</span><span class="s">&#34;http://schemas.microsoft.com/winfx/2006/xaml&#34;</span>
+</span></span><span class="line"><span class="cl">             <span class="na">xmlns:ui=</span><span class="s">&#34;http://schemas.lepo.co/wpfui/2022/xaml&#34;</span>
+</span></span><span class="line"><span class="cl">             <span class="na">xmlns:local=</span><span class="s">&#34;clr-namespace:LepoDemo&#34;</span>
+</span></span><span class="line"><span class="cl">             <span class="na">StartupUri=</span><span class="s">&#34;MainWindow.xaml&#34;</span><span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;Application.Resources&gt;</span>
+</span></span><span class="line"><span class="cl">         <span class="nt">&lt;ResourceDictionary&gt;</span>
+</span></span><span class="line"><span class="cl">             <span class="nt">&lt;ResourceDictionary.MergedDictionaries&gt;</span>
+</span></span><span class="line"><span class="cl">                 <span class="nt">&lt;ui:ThemesDictionary</span> <span class="na">Theme=</span><span class="s">&#34;Dark&#34;</span><span class="nt">&gt;&lt;/ui:ThemesDictionary&gt;</span>
+</span></span><span class="line"><span class="cl">                 <span class="nt">&lt;ui:ControlsDictionary</span> <span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">             <span class="nt">&lt;/ResourceDictionary.MergedDictionaries&gt;</span>
+</span></span><span class="line"><span class="cl">         <span class="nt">&lt;/ResourceDictionary&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;/Application.Resources&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="nt">&lt;/Application&gt;</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>将<code>MainWindow.xaml</code>中<code>Window</code>替换为<code>ui:FluentWindow</code>:</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-xml"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="2" style="--fi-max-shown-lines:400;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-xml" data-lang="xml"><span class="line"><span class="cl"><span class="nt">&lt;ui:FluentWindow</span> <span class="na">x:Class=</span><span class="s">&#34;LepoDemo.MainWindow&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="na">xmlns=</span><span class="s">&#34;http://schemas.microsoft.com/winfx/2006/xaml/presentation&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="na">xmlns:x=</span><span class="s">&#34;http://schemas.microsoft.com/winfx/2006/xaml&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="na">xmlns:d=</span><span class="s">&#34;http://schemas.microsoft.com/expression/blend/2008&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="na">xmlns:ui=</span><span class="s">&#34;http://schemas.lepo.co/wpfui/2022/xaml&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="na">xmlns:mc=</span><span class="s">&#34;http://schemas.openxmlformats.org/markup-compatibility/2006&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="na">xmlns:local=</span><span class="s">&#34;clr-namespace:LepoDemo&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="na">mc:Ignorable=</span><span class="s">&#34;d&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="na">Width=</span><span class="s">&#34;1450&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="na">Height=</span><span class="s">&#34;802&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="na">MinWidth=</span><span class="s">&#34;900&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="na">Title=</span><span class="s">&#34;MainWindow&#34;</span> <span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;Grid&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;ui:TitleBar</span>
+</span></span><span class="line"><span class="cl">            <span class="na">x:Name=</span><span class="s">&#34;TitleBar&#34;</span>
+</span></span><span class="line"><span class="cl">            <span class="na">Title=</span><span class="s">&#34;Vision System&#34;</span>
+</span></span><span class="line"><span class="cl">            <span class="na">CloseWindowByDoubleClickOnIcon=</span><span class="s">&#34;True&#34;</span><span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;/ui:TitleBar&gt;</span>
+</span></span><span class="line"><span class="cl">        
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;ui:Button</span>
+</span></span><span class="line"><span class="cl">            <span class="na">Content=</span><span class="s">&#34;Start&#34;</span>
+</span></span><span class="line"><span class="cl">            <span class="na">Appearance=</span><span class="s">&#34;Primary&#34;</span>
+</span></span><span class="line"><span class="cl">            <span class="na">Icon=</span><span class="s">&#34;{ui:SymbolIcon Play24}&#34;</span> <span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;/Grid&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="nt">&lt;/ui:FluentWindow&gt;</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p><code>MainWindow.xaml.cs</code>后台代码继承<code>FluentWindow</code>：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-c#"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c#" data-lang="c#"><span class="line"><span class="cl"><span class="kd">public</span> <span class="kd">partial</span> <span class="k">class</span> <span class="nc">MainWindow</span> <span class="p">:</span> <span class="n">FluentWindow</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">public</span> <span class="n">MainWindow</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">InitializeComponent</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>运行后，可看到一个Fluent Design风格的窗口。</p>
+<p><figure><img loading="lazy" src='/images/202608/3/1.png' alt="图1 带有Fluent Design风格的窗口"><figcaption class="image-caption">图1 带有Fluent Design风格的窗口</figcaption>
+  </figure></p></div><hr class="awesome-hr" />
+    <h2 id="see-also">相关内容</h2>
+    <ul><li>
+          <a href="/dotnet%E8%AE%BE%E8%AE%A1%E8%A7%84%E8%8C%83/" title=".NET设计规范 约定、惯用法与模式 第2版 (Krzysztof Cwalina / Brad Abrams)">.NET设计规范 约定、惯用法与模式 第2版 (Krzysztof Cwalina / Brad Abrams)</a></li><li>
+          <a href="/clr-via-csharp/" title="CLR via C# 第4版 (Jeffrey Richter)">CLR via C# 第4版 (Jeffrey Richter)</a></li><li>
+          <a href="/microsoft.extensions.hosting%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/" title="Microsoft.Extensions.Hosting使用指南：构建现代 .NET 应用的通用宿主架构">Microsoft.Extensions.Hosting使用指南：构建现代 .NET 应用的通用宿主架构</a></li><li>
+          <a href="/wpf%E7%BC%96%E7%A8%8B%E5%AE%9D%E5%85%B8/" title="WPF编程宝典 第4版 (Matthew MacDonald)">WPF编程宝典 第4版 (Matthew MacDonald)</a></li><li>
+          <a href="/c%23-linq%E5%AD%A6%E4%B9%A0%E4%B9%8B%E6%97%85/" title="C# LINQ学习之旅：从集合操作到声明式编程">C# LINQ学习之旅：从集合操作到声明式编程</a></li><li>
+          <a href="/design-patterns-in-csharp-and-dotnet/" title="Design Patterns in C# and .NET (Dmitri Nesteruk)">Design Patterns in C# and .NET (Dmitri Nesteruk)</a></li><li>
+          <a href="/%E6%B7%B1%E5%85%A5system.net.networkinformation%E8%8E%B7%E5%8F%96%E7%B3%BB%E7%BB%9F%E7%BD%91%E7%BB%9C%E4%BF%A1%E6%81%AF/" title="深入System.Net.NetworkInformation获取系统网络信息">深入System.Net.NetworkInformation获取系统网络信息</a></li><li>
+          <a href="/networkmanager%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="NETworkManager源码剖析：一个网络管理工具的实现细节">NETworkManager源码剖析：一个网络管理工具的实现细节</a></li><li>
+          <a href="/dotnetty%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="DotNetty源码剖析：高性能网络框架的秘密">DotNetty源码剖析：高性能网络框架的秘密</a></li><li>
+          <a href="/modbus%E5%8D%8F%E8%AE%AE%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E5%AE%9E%E6%88%98/" title="Modbus协议从入门到实战">Modbus协议从入门到实战</a></li><li>
+          <a href="/%E4%BB%8Eserialport%E5%88%B0%E5%B7%A5%E4%B8%9A%E7%BA%A7%E9%80%9A%E4%BF%A1%E6%A1%86%E6%9E%B6%E8%AE%BE%E8%AE%A1/" title="从SerialPort到工业级通信框架设计">从SerialPort到工业级通信框架设计</a></li><li>
+          <a href="/shadowsocks-windows%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="shadowsocks-windows源码剖析：一个C#网络代理客户端是如何工作的？">shadowsocks-windows源码剖析：一个C#网络代理客户端是如何工作的？</a></li><li>
+          <a href="/c%23%E9%AB%98%E6%95%88%E7%BC%96%E7%A8%8B/" title="C#高效编程 改进C#代码的50个行之有效的办法 第2版 (Bill Wagner)">C#高效编程 改进C#代码的50个行之有效的办法 第2版 (Bill Wagner)</a></li><li>
+          <a href="/downloader%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="Downloader源码剖析：一个下载器的实现原理">Downloader源码剖析：一个下载器的实现原理</a></li><li>
+          <a href="/c%23%E4%B8%AD%E7%9A%84nameof%E8%BF%90%E7%AE%97%E7%AC%A6/" title="C#中的nameof运算符">C#中的nameof运算符</a></li></ul><div class="post-footer" id="post-footer">
+  <div class="post-info">
+    <div class="post-info-line">
+      <div class="post-info-mod"><span title="更新于 2026-08-03 15:31:57">更新于 2026-08-03&nbsp;</span>
+      </div></div><div class="post-info-line">
+        <div class="post-info-md"><span><a href="vscode://file/D:\hugo-blog\andyfree96\content\posts\WPF-UI.md" title="在编辑器中打开" class="link-to-vscode">在编辑器中打开</a></span></div>
+        <div class="post-info-share">
+          <span><a href="javascript:void(0);" title="分享到 X" data-sharer="twitter" data-url="http://localhost:1313/wpf-ui/" data-title="WPF UI：让WPF应用具有Fluent Design风格" data-via="IRONAnthony96" data-hashtags="WPF,WPF UI,Fluent UI,.NET,C#"><i class="fa-brands fa-x-twitter" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="http://localhost:1313/wpf-ui/" data-hashtag="WPF"><i class="fa-brands fa-facebook-square" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="http://localhost:1313/wpf-ui/" data-title="WPF UI：让WPF应用具有Fluent Design风格" data-image="/images/202608/3/pawel-czerwinski-viyJmIh7x1o-unsplash.jpg"><i class="fa-brands fa-weibo" aria-hidden="true"></i></a>
+  </span>
+        </div>
+      </div></div>
+
+  <div class="post-info-more">
+    <section class="post-tags"><i class="fa-solid fa-tags me-1" aria-hidden="true"></i><a href="/tags/wpf/" class="post-tag" title="标签 - WPF">WPF</a><a href="/tags/wpf-ui/" class="post-tag" title="标签 - WPF UI">WPF UI</a><a href="/tags/fluent-ui/" class="post-tag" title="标签 - Fluent UI">Fluent UI</a><a href="/tags/.net/" class="post-tag" title="标签 - .NET">.NET</a><a href="/tags/c%23/" class="post-tag" title="标签 - C#">C#</a></section>
+    <section><span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+    </section>
+  </div><div class="post-nav"><a href="/dotnet%E8%AE%BE%E8%AE%A1%E8%A7%84%E8%8C%83/" class="post-nav-item" rel="prev" title=".NET设计规范 约定、惯用法与模式 第2版 (Krzysztof Cwalina / Brad Abrams)"><i class="fa-solid fa-angle-left" aria-hidden="true"></i>.NET设计规范 约定、惯用法与模式 第2版 (Krzysztof Cwalina / Brad Abrams)</a><a href="/polly%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/" class="post-nav-item" rel="next" title="Polly使用指南：.NET应用程序可靠性设计">Polly使用指南：.NET应用程序可靠性设计<i class="fa-solid fa-angle-right" aria-hidden="true"></i></a></div>
+</div>
+<div class="post-reward">
+    <div class="comment">请作者喝杯咖啡!</div>
+    <input type="checkbox" class="reward-input" name="reward" id="fi-reward" hidden />
+    <label class="reward-button" for="fi-reward"><i class="fa-solid fa-qrcode" aria-hidden="true"></i>赞赏</label>
+    <div class="reward-ways" data-mode="static"><div><img src='/reward/alipay.png' alt="AndyFree96 支付宝"><span data-animation>支付宝</span>
+          </div><div><img src='/reward/wechatpay.png' alt="AndyFree96 微信"><span data-animation>微信</span>
+          </div></div>
+  </div></article>
+
+  <aside class="toc" id="toc-auto" aria-label="目录"><h2 class="toc-title">目录&nbsp;<i class="toc-icon fa-solid fa-angle-down" aria-hidden="true"></i></h2>
+      <div class="toc-content" id="toc-content-auto"></div></aside><dialog id="toc-dialog" aria-labelledby="toc-dialog-title" role="dialog" closedby="any">
+      <button type="button" class="toc-close-btn" aria-label="Close Table of Contents"><i class="fa-solid fa-xmark fa-lg" aria-hidden="true"></i></button>
+      <div class="toc">
+        <h2 class="toc-title" id="toc-dialog-title">目录</h2>
+        <div class="toc-content" id="toc-content-drawer"><nav >
+  <ul>
+    <li><a href="#开始使用">开始使用</a></li>
+  </ul>
+</nav></div>
+      </div>
+    </dialog></main><footer class="footer">
+    <div class="footer-container"><div class="footer-line powered">由 <a href="https://gohugo.io/" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.163.1">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/hugo-fixit/FixIt" target="_blank" rel="external" title="FixIt v1.0.0-mq99hlzg">FixIt</a>
+        </div><div class="footer-line copyright" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright" aria-hidden="true"></i>
+            <span itemprop="copyrightYear">2019 - 2026</span><span class="author" itemprop="copyrightHolder">
+              <a href="https://andyfree96.github.io/" target="_blank" rel="external nofollow noopener noreferrer">AndyFree96</a></span></div></div>
+  </footer></div><div class="widgets"><div class="fixed-buttons"><button type="button" class="fixed-button back-to-top animate__faster d-none" aria-label="回到顶部"><i class="fa-solid fa-arrow-up" aria-hidden="true"></i></button><button type="button" id="toc-drawer-button" class="fixed-button toc-drawer-button d-none" aria-label="目录" aria-controls="toc-dialog" aria-expanded="false"><i class="fa-solid fa-bars" aria-hidden="true"></i></button></div><div id="mask"></div><div class="reading-progress-bar" style="left: 0;top: 0;"></div><noscript>
+    <div class="noscript-warning">该网站在启用 JavaScript 的情况下效果最佳。</div>
+  </noscript>
+</div><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script src="/lib/autocomplete/autocomplete.min.js" defer></script><script src="/lib/algoliasearch/browser.umd.js" defer></script><script src="/lib/sharer/sharer.min.js" async defer></script><script src="/lib/cookieconsent/cookieconsent.min.js" defer></script><script src="/js/lib/cookieconsent.js" defer></script><script src="/lib/cell-tooltip/cell-tooltip.umd.js" defer></script><script src="/js/config/96ce72d28d628c4fb12093e8df022d4f.js" defer></script><script src="/js/lib/file-tree.js" defer></script><script src="/js/main.js" defer></script></body>
+</html>

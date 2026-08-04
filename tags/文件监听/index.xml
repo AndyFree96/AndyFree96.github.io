@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>文件监听 - 标签 - 东尼的博客</title>
+    <link>http://localhost:1313/tags/%E6%96%87%E4%BB%B6%E7%9B%91%E5%90%AC/</link>
+    <description>安东尼的博客，分享生活中的一些有意思的事儿！</description>
+    <generator>Hugo 0.163.1 &amp; FixIt v1.0.0-mq99hlzg</generator>
+    <language>zh-CN</language>
+    <managingEditor>anthonyfree96@gmail.com (AndyFree96)</managingEditor>
+    <webMaster>anthonyfree96@gmail.com (AndyFree96)</webMaster>
+    <lastBuildDate>Tue, 04 Aug 2026 16:59:55 +0800</lastBuildDate>
+    <atom:link href="http://localhost:1313/tags/%E6%96%87%E4%BB%B6%E7%9B%91%E5%90%AC/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>chokidar源码剖析：一个跨平台文件监听库的设计与实现</title>
+      <link>http://localhost:1313/chokidar%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/</link>
+      <pubDate>Tue, 04 Aug 2026 16:59:55 +0800</pubDate><author>anthonyfree96@gmail.com (AndyFree96)</author>
+      <guid>http://localhost:1313/chokidar%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/</guid>
+      <category domain="http://localhost:1313/categories/%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/">源码剖析</category>
+      <description>&lt;p&gt;在现代前端工程和Node.js应用开发中，文件监听是一项非常基础但又机器重要的能力。无论是：&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;Vite的热更新(HMR)&lt;/li&gt;&#xA;&lt;li&gt;TypeScript的增量编译&lt;/li&gt;&#xA;&lt;li&gt;ESLint、Prettier等工具的自动检查&lt;/li&gt;&#xA;&lt;li&gt;IDE对文件变化的实时响应&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;p&gt;这些功能的背后都离不开一个核心能力：**如何可靠地感知文件系统的变化？**Node.js原生提供了&lt;code&gt;fs.watch&lt;/code&gt;和&lt;code&gt;fs.watchFile&lt;/code&gt;用于监听文件变化，但它们在实际工程环境中存在大量问题：&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;不同操作系统行为不一致&lt;/li&gt;&#xA;&lt;li&gt;高频文件变化容易产生大量重复事件&lt;/li&gt;&#xA;&lt;li&gt;大规模目录监听存在性能压力&lt;/li&gt;&#xA;&lt;li&gt;文件新增、删除、重命名事件处理复杂&lt;/li&gt;&#xA;&lt;li&gt;Linux、MacOS、Windows文件事件模型完全不同&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;p&gt;因此，工程实践中需要一个更加稳定、统一的抽象层。&lt;a href=&#34;https://github.com/paulmillr/chokidar&#34; target=&#34;_blank&#34; rel=&#34;external nofollow noopener noreferrer&#34;&gt;chokidar&lt;i class=&#34;fa-solid fa-external-link-alt fa-xs ms-1 text-secondary&#34; aria-hidden=&#34;true&#34;&gt;&lt;/i&gt;&lt;/a&gt;正是这样的背景下诞生的。它基于Node.js原生文件监听能力，并针对不同平台进行了大量优化，为开发者提供了一套简单统一的API。本文将通过源码剖析的方式，逐步拆解chokidar的实现原理。&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

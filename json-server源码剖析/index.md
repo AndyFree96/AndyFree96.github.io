@@ -143,9 +143,12 @@ app.listen(PORT);
 [json-server](https://github.com/typicode/json-server)是如何做到的？查看`package.json`文件，可以看到这段配置：
 
 ```json
-  "bin": {
-    "json-server": "lib/bin.js"
-  }
+{
+  "bin": {
+    "json-server": "lib/bin.js"
+  }
+}
+
 ```
 
 这段配置的意思是：当用户安装[json-server](https://github.com/typicode/json-server)时（例如`npm install -g json-server`）,npm 会自动在系统的`PATH`中注册一个名为`json-server`的可执行命令，并将其映射到项目目录下的`lib/bin.js`脚本。
@@ -153,9 +156,11 @@ app.listen(PORT);
 然而，Clone 下来的源码中并没有`lib/bin.js`文件。查看`package.json`文件，可以看到这段配置：
 
 ```json
-  "scripts": {
-    "build": "rm -rf lib && tsc",
-  }
+{
+  "scripts": {
+    "build": "rm -rf lib && tsc"
+  }
+}
 ```
 
 当运行`npm run build`时，npm 会执行对应的脚本命令：

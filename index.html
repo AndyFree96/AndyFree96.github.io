@@ -10,8 +10,8 @@
 <meta name="description" content="安东尼的博客，分享生活中的一些有意思的事儿！">
 	<meta itemprop="name" content="东尼的博客">
 	<meta itemprop="description" content="安东尼的博客，分享生活中的一些有意思的事儿！">
-	<meta itemprop="datePublished" content="2026-07-29T10:27:06+08:00">
-	<meta itemprop="dateModified" content="2026-07-29T10:27:06+08:00"><meta property="og:url" content="http://localhost:1313/">
+	<meta itemprop="datePublished" content="2026-08-04T16:59:55+08:00">
+	<meta itemprop="dateModified" content="2026-08-04T16:59:55+08:00"><meta property="og:url" content="http://localhost:1313/">
 	<meta property="og:site_name" content="东尼的博客">
 	<meta property="og:title" content="东尼的博客">
 	<meta property="og:description" content="安东尼的博客，分享生活中的一些有意思的事儿！">
@@ -110,6 +110,46 @@
   </a><a href="/index.xml" title="RSS" target="_blank" rel="me"><i class="fa-solid fa-rss" aria-hidden="true"></i>
   </a></div></div>
 <article class="single summary" itemscope itemtype="http://schema.org/Article"><div class="featured-image-preview">
+        <a href="/chokidar%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" aria-label="chokidar源码剖析：一个跨平台文件监听库的设计与实现"><img loading="eager" src='/images/202608/5/europeana-hajFDVALdhA-unsplash.jpg' sizes="(max-width: 680px) 100vw, (max-width: 960px) 80vw, (max-width: 1440px) 56vw, 800px" alt="Featured image for chokidar源码剖析：一个跨平台文件监听库的设计与实现" height="336" width="800"></a>
+      </div><h2 class="single-title" itemprop="name headline"><span title="转载" class="icon-repost"><i class="fa-solid fa-share" aria-hidden="true"></i></span><a href="/chokidar%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/">chokidar源码剖析：一个跨平台文件监听库的设计与实现</a>
+  </h2><div class="post-meta"><span class="post-author"><a href="https://andyfree96.github.io/" title="作者" target="_blank" rel="author external nofollow noopener noreferrer" class="author"><img class="avatar" src='/avatar/1.jpg' alt="AndyFree96" height="16" width="16">&nbsp;AndyFree96</a></span>&nbsp;<span class="post-publish" title='2026-08-04 16:59:55'>发布于 <time datetime="2026-08-04">2026-08-04</time></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" class="post-category" title="分类 - 源码剖析"><i class="fa-regular fa-folder" aria-hidden="true"></i> 源码剖析</a></span></div><div class="content"><p>在现代前端工程和Node.js应用开发中，文件监听是一项非常基础但又机器重要的能力。无论是：</p>
+<ul>
+<li>Vite的热更新(HMR)</li>
+<li>TypeScript的增量编译</li>
+<li>ESLint、Prettier等工具的自动检查</li>
+<li>IDE对文件变化的实时响应</li>
+</ul>
+<p>这些功能的背后都离不开一个核心能力：**如何可靠地感知文件系统的变化？**Node.js原生提供了<code>fs.watch</code>和<code>fs.watchFile</code>用于监听文件变化，但它们在实际工程环境中存在大量问题：</p>
+<ul>
+<li>不同操作系统行为不一致</li>
+<li>高频文件变化容易产生大量重复事件</li>
+<li>大规模目录监听存在性能压力</li>
+<li>文件新增、删除、重命名事件处理复杂</li>
+<li>Linux、MacOS、Windows文件事件模型完全不同</li>
+</ul>
+<p>因此，工程实践中需要一个更加稳定、统一的抽象层。<a href="https://github.com/paulmillr/chokidar" target="_blank" rel="external nofollow noopener noreferrer">chokidar<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>正是这样的背景下诞生的。它基于Node.js原生文件监听能力，并针对不同平台进行了大量优化，为开发者提供了一套简单统一的API。本文将通过源码剖析的方式，逐步拆解chokidar的实现原理。</p></div><div class="post-footer">
+    <a href="/chokidar%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/">阅读全文</a><div class="post-tags"><i class="fa-solid fa-tags me-1" aria-hidden="true"></i><a href='/tags/node.js/' class="post-tag">Node.js</a><a href='/tags/typescript/' class="post-tag">TypeScript</a><a href='/tags/%E6%96%87%E4%BB%B6%E7%9B%91%E5%90%AC/' class="post-tag">文件监听</a><a href='/tags/%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/' class="post-tag">文件系统</a><a href='/tags/%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B/' class="post-tag">异步编程</a><a href='/tags/%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/' class="post-tag">源码剖析</a></div></div>
+</article><article class="single summary" itemscope itemtype="http://schema.org/Article"><div class="featured-image-preview">
+        <a href="/polly%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/" aria-label="Polly使用指南：.NET应用程序可靠性设计"><img loading="eager" src='/images/202608/4/jiri-kaloc-SA1INSI9VFU-unsplash.jpg' sizes="(max-width: 680px) 100vw, (max-width: 960px) 80vw, (max-width: 1440px) 56vw, 800px" alt="Featured image for Polly使用指南：.NET应用程序可靠性设计" height="336" width="800"></a>
+      </div><h2 class="single-title" itemprop="name headline"><span title="转载" class="icon-repost"><i class="fa-solid fa-share" aria-hidden="true"></i></span><a href="/polly%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/">Polly使用指南：.NET应用程序可靠性设计</a>
+  </h2><div class="post-meta"><span class="post-author"><a href="https://andyfree96.github.io/" title="作者" target="_blank" rel="author external nofollow noopener noreferrer" class="author"><img class="avatar" src='/avatar/1.jpg' alt="AndyFree96" height="16" width="16">&nbsp;AndyFree96</a></span>&nbsp;<span class="post-publish" title='2026-08-03 18:05:08'>发布于 <time datetime="2026-08-03">2026-08-03</time></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E6%8A%80%E6%9C%AF%E7%A7%AF%E6%9C%A8/" class="post-category" title="分类 - 技术积木"><i class="fa-regular fa-folder" aria-hidden="true"></i> 技术积木</a></span></div><div class="content"><p>在现代软件系统中，应用程序越来越依赖外部资源HTTP API、微服务、数据库、消息队列、第三方服务。然而，分布式系统中失败是不可避免的。比如：网络短暂不可用、服务响应变慢、请求量突然增加、第三方API限流。如果应用程序没有任何保护机制，一个简单的异常都可能导致整个系统不可用。因此，在高可靠系统设计中，需要引入弹性(Resilience)设计模式。.NET生态中，最流行的弹性处理库就是——<a href="https://www.pollydocs.org/" target="_blank" rel="external nofollow noopener noreferrer">Polly<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>。</p></div><div class="post-footer">
+    <a href="/polly%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/">阅读全文</a><div class="post-tags"><i class="fa-solid fa-tags me-1" aria-hidden="true"></i><a href='/tags/c%23/' class="post-tag">C#</a><a href='/tags/.net/' class="post-tag">.NET</a><a href='/tags/polly/' class="post-tag">Polly</a></div></div>
+</article><article class="single summary" itemscope itemtype="http://schema.org/Article"><div class="featured-image-preview">
+        <a href="/wpf-ui/" aria-label="WPF UI：让WPF应用具有Fluent Design风格"><img loading="eager" src='/images/202608/3/pawel-czerwinski-viyJmIh7x1o-unsplash.jpg' sizes="(max-width: 680px) 100vw, (max-width: 960px) 80vw, (max-width: 1440px) 56vw, 800px" alt="Featured image for WPF UI：让WPF应用具有Fluent Design风格" height="336" width="800"></a>
+      </div><h2 class="single-title" itemprop="name headline"><span title="转载" class="icon-repost"><i class="fa-solid fa-share" aria-hidden="true"></i></span><a href="/wpf-ui/">WPF UI：让WPF应用具有Fluent Design风格</a>
+  </h2><div class="post-meta"><span class="post-author"><a href="https://andyfree96.github.io/" title="作者" target="_blank" rel="author external nofollow noopener noreferrer" class="author"><img class="avatar" src='/avatar/1.jpg' alt="AndyFree96" height="16" width="16">&nbsp;AndyFree96</a></span>&nbsp;<span class="post-publish" title='2026-08-03 15:31:57'>发布于 <time datetime="2026-08-03">2026-08-03</time></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E6%8A%80%E6%9C%AF%E7%A7%AF%E6%9C%A8/" class="post-category" title="分类 - 技术积木"><i class="fa-regular fa-folder" aria-hidden="true"></i> 技术积木</a></span></div><div class="content"><p>WPF(Windows Presentation Foundation)自.NET Framework 3.0发布以来，一直是Windows桌面应用开发的重要技术栈。凭借XAML、数据绑定、模板化控件以及MVVM架构，WPF在企业软件、工业软件、自动化设备控制软件领域拥有大量应用。随着Windows 10、Windows 11 Fluent Design设计语言的发展，传统WPF控件逐渐显得“跟不上时代”。对于很多新项目，技术上想使用WPF的成熟生态，但是视觉体验上又希望接近Windows 11原生应用。这就是WPF UI诞生的原因之一。<a href="https://wpfui.lepo.co/index.html" target="_blank" rel="external nofollow noopener noreferrer">WPF UI<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>是一个基于WPF的现代UI框架，它为传统WPF应用提供<a href="https://en.wikipedia.org/wiki/Fluent_Design_System" target="_blank" rel="external nofollow noopener noreferrer">Fluent Design<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>风格的控件、主题以及现代化交互体检。</p></div><div class="post-footer">
+    <a href="/wpf-ui/">阅读全文</a><div class="post-tags"><i class="fa-solid fa-tags me-1" aria-hidden="true"></i><a href='/tags/wpf/' class="post-tag">WPF</a><a href='/tags/wpf-ui/' class="post-tag">WPF UI</a><a href='/tags/fluent-ui/' class="post-tag">Fluent UI</a><a href='/tags/.net/' class="post-tag">.NET</a><a href='/tags/c%23/' class="post-tag">C#</a></div></div>
+</article><article class="single summary" itemscope itemtype="http://schema.org/Article"><div class="featured-image-preview">
+        <a href="/dotnet%E8%AE%BE%E8%AE%A1%E8%A7%84%E8%8C%83/" aria-label=".NET设计规范 约定、惯用法与模式 第2版 (Krzysztof Cwalina / Brad Abrams)"><img loading="eager" src='/images/202608/2/marek-piwnicki-q7BizVv2jXg-unsplash.jpg' sizes="(max-width: 680px) 100vw, (max-width: 960px) 80vw, (max-width: 1440px) 56vw, 800px" alt="Featured image for .NET设计规范 约定、惯用法与模式 第2版 (Krzysztof Cwalina / Brad Abrams)" height="336" width="800"></a>
+      </div><h2 class="single-title" itemprop="name headline"><span title="转载" class="icon-repost"><i class="fa-solid fa-share" aria-hidden="true"></i></span><a href="/dotnet%E8%AE%BE%E8%AE%A1%E8%A7%84%E8%8C%83/">.NET设计规范 约定、惯用法与模式 第2版 (Krzysztof Cwalina / Brad Abrams)</a>
+  </h2><div class="post-meta"><span class="post-author"><a href="https://andyfree96.github.io/" title="作者" target="_blank" rel="author external nofollow noopener noreferrer" class="author"><img class="avatar" src='/avatar/1.jpg' alt="AndyFree96" height="16" width="16">&nbsp;AndyFree96</a></span>&nbsp;<span class="post-publish" title='2026-08-02 16:42:41'>发布于 <time datetime="2026-08-02">2026-08-02</time></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E4%B9%A6%E7%B1%8D%E7%A0%94%E8%AF%BB/" class="post-category" title="分类 - 书籍研读"><i class="fa-regular fa-folder" aria-hidden="true"></i> 书籍研读</a></span></div><div class="content"></div><div class="post-footer">
+    <a href="/dotnet%E8%AE%BE%E8%AE%A1%E8%A7%84%E8%8C%83/">阅读全文</a><div class="post-tags"><i class="fa-solid fa-tags me-1" aria-hidden="true"></i><a href='/tags/.net/' class="post-tag">.NET</a><a href='/tags/c%23/' class="post-tag">C#</a><a href='/tags/%E8%AE%BE%E8%AE%A1%E8%A7%84%E8%8C%83/' class="post-tag">设计规范</a><a href='/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/' class="post-tag">读书笔记</a><a href='/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA/' class="post-tag">计算机</a></div></div>
+</article><article class="single summary" itemscope itemtype="http://schema.org/Article"><div class="featured-image-preview">
+        <a href="/clr-via-csharp/" aria-label="CLR via C# 第4版 (Jeffrey Richter)"><img loading="eager" src='/images/202608/1/kristaps-ungurs-hY05yBvFTS8-unsplash.jpg' sizes="(max-width: 680px) 100vw, (max-width: 960px) 80vw, (max-width: 1440px) 56vw, 800px" alt="Featured image for CLR via C# 第4版 (Jeffrey Richter)" height="336" width="800"></a>
+      </div><h2 class="single-title" itemprop="name headline"><span title="转载" class="icon-repost"><i class="fa-solid fa-share" aria-hidden="true"></i></span><a href="/clr-via-csharp/">CLR via C# 第4版 (Jeffrey Richter)</a>
+  </h2><div class="post-meta"><span class="post-author"><a href="https://andyfree96.github.io/" title="作者" target="_blank" rel="author external nofollow noopener noreferrer" class="author"><img class="avatar" src='/avatar/1.jpg' alt="AndyFree96" height="16" width="16">&nbsp;AndyFree96</a></span>&nbsp;<span class="post-publish" title='2026-08-01 11:55:56'>发布于 <time datetime="2026-08-01">2026-08-01</time></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E4%B9%A6%E7%B1%8D%E7%A0%94%E8%AF%BB/" class="post-category" title="分类 - 书籍研读"><i class="fa-regular fa-folder" aria-hidden="true"></i> 书籍研读</a></span></div><div class="content"></div><div class="post-footer">
+    <a href="/clr-via-csharp/">阅读全文</a><div class="post-tags"><i class="fa-solid fa-tags me-1" aria-hidden="true"></i><a href='/tags/clr/' class="post-tag">CLR</a><a href='/tags/c%23/' class="post-tag">C#</a><a href='/tags/.net/' class="post-tag">.NET</a></div></div>
+</article><article class="single summary" itemscope itemtype="http://schema.org/Article"><div class="featured-image-preview">
         <a href="/%E7%94%A8go%E8%AF%AD%E8%A8%80%E8%87%AA%E5%88%B6%E8%A7%A3%E9%87%8A%E5%99%A8/" aria-label="用Go语言自制解释器 (Thorsten Ball)"><img loading="eager" src='/images/202607/37/sandisk-OOJJoY1vwzQ-unsplash.jpg' sizes="(max-width: 680px) 100vw, (max-width: 960px) 80vw, (max-width: 1440px) 56vw, 800px" alt="Featured image for 用Go语言自制解释器 (Thorsten Ball)" height="336" width="800"></a>
       </div><h2 class="single-title" itemprop="name headline"><span title="转载" class="icon-repost"><i class="fa-solid fa-share" aria-hidden="true"></i></span><a href="/%E7%94%A8go%E8%AF%AD%E8%A8%80%E8%87%AA%E5%88%B6%E8%A7%A3%E9%87%8A%E5%99%A8/">用Go语言自制解释器 (Thorsten Ball)</a>
   </h2><div class="post-meta"><span class="post-author"><a href="https://andyfree96.github.io/" title="作者" target="_blank" rel="author external nofollow noopener noreferrer" class="author"><img class="avatar" src='/avatar/1.jpg' alt="AndyFree96" height="16" width="16">&nbsp;AndyFree96</a></span>&nbsp;<span class="post-publish" title='2026-07-29 10:27:06'>发布于 <time datetime="2026-07-29">2026-07-29</time></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E4%B9%A6%E7%B1%8D%E7%A0%94%E8%AF%BB/" class="post-category" title="分类 - 书籍研读"><i class="fa-regular fa-folder" aria-hidden="true"></i> 书籍研读</a></span></div><div class="content"><p>在过去的学习过程中，我接触过C#、C++、Python、JavaScript等多种编程语言，也阅读和分析过一些优秀开源项目的源码。但对于Go语言，只停留在“接触过”的阶段，并没有进行过系统学习。相比于从语法、标准库、工程实践开始学习一门新语言，我更希望通过一个完整、有意思的项目进入Go的世界。因此，我选择了<a href="https://book.douban.com/subject/35909085/" target="_blank" rel="external nofollow noopener noreferrer">《用Go语言自制解释器》<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>这本书作为Go语言学习的切入点。该书并不是一本单纯介绍Go语法的教程，而是通过实现一个完整的解释器。对于我来说，这样的学习方式非常适合。一方面，通过实现解释器，可以深入理解编程语言背后的工作机制。另一方面，在这个过程中，也可以接触Go语言的核心特性。相比单独学习Go语言，通过一个真实项目驱动学习，可以更加深刻地理解“为什么Go会这样设计”，以及这些语言特性在实际工程中的价值。因此，本文并不是<a href="https://book.douban.com/subject/35909085/" target="_blank" rel="external nofollow noopener noreferrer">《用Go语言自制解释器》<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>的简单读书笔记，而是一次通过实现解释器深入学习Go的过程。</p></div><div class="post-footer">
@@ -319,103 +359,6 @@
       </div><h2 class="single-title" itemprop="name headline"><span title="转载" class="icon-repost"><i class="fa-solid fa-share" aria-hidden="true"></i></span><a href="/%E6%8C%91%E6%88%98%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%AB%9E%E8%B5%9B/">挑战程序设计竞赛 第2版 (秋叶拓哉 / 岩田阳一 / 北川宜稔)</a>
   </h2><div class="post-meta"><span class="post-author"><a href="https://andyfree96.github.io/" title="作者" target="_blank" rel="author external nofollow noopener noreferrer" class="author"><img class="avatar" src='/avatar/1.jpg' alt="AndyFree96" height="16" width="16">&nbsp;AndyFree96</a></span>&nbsp;<span class="post-publish" title='2026-07-17 08:03:37'>发布于 <time datetime="2026-07-17">2026-07-17</time></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E4%B9%A6%E7%B1%8D%E7%A0%94%E8%AF%BB/" class="post-category" title="分类 - 书籍研读"><i class="fa-regular fa-folder" aria-hidden="true"></i> 书籍研读</a></span></div><div class="content"></div><div class="post-footer">
     <a href="/%E6%8C%91%E6%88%98%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E7%AB%9E%E8%B5%9B/">阅读全文</a><div class="post-tags"><i class="fa-solid fa-tags me-1" aria-hidden="true"></i><a href='/tags/%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1/' class="post-tag">程序设计</a><a href='/tags/%E7%AE%97%E6%B3%95/' class="post-tag">算法</a><a href='/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/' class="post-tag">数据结构</a><a href='/tags/%E8%AE%A1%E7%AE%97%E5%87%A0%E4%BD%95/' class="post-tag">计算几何</a><a href='/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/' class="post-tag">动态规划</a><a href='/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/' class="post-tag">读书笔记</a><a href='/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA/' class="post-tag">计算机</a></div></div>
-</article><article class="single summary" itemscope itemtype="http://schema.org/Article"><div class="featured-image-preview">
-        <a href="/modbus%E5%8D%8F%E8%AE%AE%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E5%AE%9E%E6%88%98/" aria-label="Modbus协议从入门到实战"><img loading="eager" src='/images/202607/22/tim-mossholder-O4sLv36-k1w-unsplash.jpg' sizes="(max-width: 680px) 100vw, (max-width: 960px) 80vw, (max-width: 1440px) 56vw, 800px" alt="Featured image for Modbus协议从入门到实战" height="336" width="800"></a>
-      </div><h2 class="single-title" itemprop="name headline"><span title="转载" class="icon-repost"><i class="fa-solid fa-share" aria-hidden="true"></i></span><a href="/modbus%E5%8D%8F%E8%AE%AE%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E5%AE%9E%E6%88%98/">Modbus协议从入门到实战</a>
-  </h2><div class="post-meta"><span class="post-author"><a href="https://andyfree96.github.io/" title="作者" target="_blank" rel="author external nofollow noopener noreferrer" class="author"><img class="avatar" src='/avatar/1.jpg' alt="AndyFree96" height="16" width="16">&nbsp;AndyFree96</a></span>&nbsp;<span class="post-publish" title='2026-07-17 06:24:08'>发布于 <time datetime="2026-07-17">2026-07-17</time></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E5%B7%A5%E4%B8%9A%E8%87%AA%E5%8A%A8%E5%8C%96/" class="post-category" title="分类 - 工业自动化"><i class="fa-regular fa-folder" aria-hidden="true"></i> 工业自动化</a></span></div><div class="content"><p>在工业自动化领域，无论是 PLC、HMI、变频器、伺服驱动器、仪器仪表，还是机器视觉设备，你经常会看到Modbus的身影。例如：PLC与上位机通信、PLC与上位机通信、PLC与IO模块通信等等。几乎所有的工业设备都会支持Modbus。在初次接触Modbus后，产生了很多疑问：</p>
-<ul>
-<li>什么是Modbus？</li>
-<li>RTU和TCP有什么区别？</li>
-<li>主站和从站是什么意思？</li>
-</ul>
-<p>本文将采用问题驱动的方式，带你一步步理解Modbus。</p></div><div class="post-footer">
-    <a href="/modbus%E5%8D%8F%E8%AE%AE%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E5%AE%9E%E6%88%98/">阅读全文</a><div class="post-tags"><i class="fa-solid fa-tags me-1" aria-hidden="true"></i><a href='/tags/c%23/' class="post-tag">C#</a><a href='/tags/modbus/' class="post-tag">Modbus</a><a href='/tags/%E5%B7%A5%E4%B8%9A%E9%80%9A%E4%BF%A1/' class="post-tag">工业通信</a><a href='/tags/tcp/ip/' class="post-tag">TCP/IP</a><a href='/tags/%E5%B7%A5%E4%B8%9A%E8%87%AA%E5%8A%A8%E5%8C%96/' class="post-tag">工业自动化</a><a href='/tags/%E9%80%9A%E4%BF%A1%E5%8D%8F%E8%AE%AE/' class="post-tag">通信协议</a><a href='/tags/plc/' class="post-tag">PLC</a></div></div>
-</article><article class="single summary" itemscope itemtype="http://schema.org/Article"><div class="featured-image-preview">
-        <a href="/%E4%BB%8Eserialport%E5%88%B0%E5%B7%A5%E4%B8%9A%E7%BA%A7%E9%80%9A%E4%BF%A1%E6%A1%86%E6%9E%B6%E8%AE%BE%E8%AE%A1/" aria-label="从SerialPort到工业级通信框架设计"><img loading="eager" src='/images/202607/21/fujiphilm-HVUSherHy74-unsplash.jpg' sizes="(max-width: 680px) 100vw, (max-width: 960px) 80vw, (max-width: 1440px) 56vw, 800px" alt="Featured image for 从SerialPort到工业级通信框架设计" height="336" width="800"></a>
-      </div><h2 class="single-title" itemprop="name headline"><span title="转载" class="icon-repost"><i class="fa-solid fa-share" aria-hidden="true"></i></span><a href="/%E4%BB%8Eserialport%E5%88%B0%E5%B7%A5%E4%B8%9A%E7%BA%A7%E9%80%9A%E4%BF%A1%E6%A1%86%E6%9E%B6%E8%AE%BE%E8%AE%A1/">从SerialPort到工业级通信框架设计</a>
-  </h2><div class="post-meta"><span class="post-author"><a href="https://andyfree96.github.io/" title="作者" target="_blank" rel="author external nofollow noopener noreferrer" class="author"><img class="avatar" src='/avatar/1.jpg' alt="AndyFree96" height="16" width="16">&nbsp;AndyFree96</a></span>&nbsp;<span class="post-publish" title='2026-07-16 10:11:13'>发布于 <time datetime="2026-07-16">2026-07-16</time></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E5%B7%A5%E4%B8%9A%E8%87%AA%E5%8A%A8%E5%8C%96/" class="post-category" title="分类 - 工业自动化"><i class="fa-regular fa-folder" aria-hidden="true"></i> 工业自动化</a></span></div><div class="content"><p>在现代工业化设备中，串口通信大量存在。例如：PLC通信、伺服驱动器、扫码枪、光源控制器、温控器等等。虽然现在Ethernet、TCP/IP越来越普及，但串口因为成本低、稳定、硬件简单等原因，仍然是工业现场最常见的通信方式之一。很多开发者初次接触串口通信，会觉得非常简单：</p>
-<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
-<div class="code-header language-c#"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
-<pre tabindex="0" class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span><span class="lnt">6
-</span><span class="lnt">7
-</span><span class="lnt">8
-</span></code></pre></td>
-<td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-c#" data-lang="c#"><span class="line"><span class="cl"><span class="n">SerialPort</span> <span class="n">serialPort</span> <span class="p">=</span> <span class="k">new</span><span class="p">();</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="n">serialPort</span><span class="p">.</span><span class="n">PortName</span> <span class="p">=</span> <span class="s">&#34;COM3&#34;</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl"><span class="n">serialPort</span><span class="p">.</span><span class="n">BaudRate</span> <span class="p">=</span> <span class="m">9600</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="n">serialPort</span><span class="p">.</span><span class="n">Open</span><span class="p">();</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="n">serialPort</span><span class="p">.</span><span class="n">Write</span><span class="p">(</span><span class="s">&#34;Hello&#34;</span><span class="p">);</span></span></span></code></pre></td></tr></table></div>
-</div>
-</div><p>但是在实际工业项目中，很快会遇到为什么收到的数据经常不完整？为什么一次Read读不到完整协议？如何设计一个可扩展通信系统？真正困难的不是打开串口，而是：</p>
-<blockquote>
-<p>如何设计一个可靠的串口通信系统。</p>
-</blockquote></div><div class="post-footer">
-    <a href="/%E4%BB%8Eserialport%E5%88%B0%E5%B7%A5%E4%B8%9A%E7%BA%A7%E9%80%9A%E4%BF%A1%E6%A1%86%E6%9E%B6%E8%AE%BE%E8%AE%A1/">阅读全文</a><div class="post-tags"><i class="fa-solid fa-tags me-1" aria-hidden="true"></i><a href='/tags/c%23/' class="post-tag">C#</a><a href='/tags/serialport/' class="post-tag">SerialPort</a><a href='/tags/%E4%B8%B2%E5%8F%A3%E9%80%9A%E4%BF%A1/' class="post-tag">串口通信</a><a href='/tags/rs232/' class="post-tag">RS232</a><a href='/tags/rs485/' class="post-tag">RS485</a><a href='/tags/%E5%B7%A5%E4%B8%9A%E8%87%AA%E5%8A%A8%E5%8C%96/' class="post-tag">工业自动化</a><a href='/tags/%E9%80%9A%E4%BF%A1%E5%8D%8F%E8%AE%AE/' class="post-tag">通信协议</a></div></div>
-</article><article class="single summary" itemscope itemtype="http://schema.org/Article"><div class="featured-image-preview">
-        <a href="/shadowsocks-windows%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" aria-label="shadowsocks-windows源码剖析：一个C#网络代理客户端是如何工作的？"><img loading="eager" src='/images/202607/20/paul-lichtblau-oUsElFLrE_s-unsplash.jpg' sizes="(max-width: 680px) 100vw, (max-width: 960px) 80vw, (max-width: 1440px) 56vw, 800px" alt="Featured image for shadowsocks-windows源码剖析：一个C#网络代理客户端是如何工作的？" height="336" width="800"></a>
-      </div><h2 class="single-title" itemprop="name headline"><span title="转载" class="icon-repost"><i class="fa-solid fa-share" aria-hidden="true"></i></span><a href="/shadowsocks-windows%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/">shadowsocks-windows源码剖析：一个C#网络代理客户端是如何工作的？</a>
-  </h2><div class="post-meta"><span class="post-author"><a href="https://andyfree96.github.io/" title="作者" target="_blank" rel="author external nofollow noopener noreferrer" class="author"><img class="avatar" src='/avatar/1.jpg' alt="AndyFree96" height="16" width="16">&nbsp;AndyFree96</a></span>&nbsp;<span class="post-publish" title='2026-07-16 09:23:45'>发布于 <time datetime="2026-07-16">2026-07-16</time></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" class="post-category" title="分类 - 源码剖析"><i class="fa-regular fa-folder" aria-hidden="true"></i> 源码剖析</a></span></div><div class="content"><p><a href="https://github.com/shadowsocks/shadowsocks-windows" target="_blank" rel="external nofollow noopener noreferrer">shadowsocks-windows<i class="fa-solid fa-external-link-alt fa-xs ms-1 text-secondary" aria-hidden="true"></i></a>是一个经典的C#网络代理客户端项目，它将SOCKS5代理、TCP/UDP Relay、加密通信、系统代理管理以及Windows桌面应用结合在一起。本文通过问题驱动的方式阅读源码，深入分析其架构设计、网络通信模型以及C#工程实践，探索一个成熟的开源项目是如何实现高性能、稳定的网络代理能力。</p></div><div class="post-footer">
-    <a href="/shadowsocks-windows%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/">阅读全文</a><div class="post-tags"><i class="fa-solid fa-tags me-1" aria-hidden="true"></i><a href='/tags/c%23/' class="post-tag">C#</a><a href='/tags/socket/' class="post-tag">Socket</a><a href='/tags/tcp/ip/' class="post-tag">TCP/IP</a><a href='/tags/socks5/' class="post-tag">SOCKS5</a><a href='/tags/%E6%B5%81%E9%87%8F%E8%BD%AC%E5%8F%91/' class="post-tag">流量转发</a><a href='/tags/%E5%BC%82%E6%AD%A5io/' class="post-tag">异步IO</a><a href='/tags/%E7%BD%91%E7%BB%9C%E9%80%9A%E4%BF%A1/' class="post-tag">网络通信</a><a href='/tags/%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/' class="post-tag">源码剖析</a></div></div>
-</article><article class="single summary" itemscope itemtype="http://schema.org/Article"><div class="featured-image-preview">
-        <a href="/%E4%BF%AE%E6%94%B9%E4%BB%A3%E7%A0%81%E7%9A%84%E8%89%BA%E6%9C%AF/" aria-label="修改代码的艺术 (Michael C. Feathers)"><img loading="eager" src='/images/202607/19/asia-dh-B1kwvnhCos0-unsplash.jpg' sizes="(max-width: 680px) 100vw, (max-width: 960px) 80vw, (max-width: 1440px) 56vw, 800px" alt="Featured image for 修改代码的艺术 (Michael C. Feathers)" height="336" width="800"></a>
-      </div><h2 class="single-title" itemprop="name headline"><span title="转载" class="icon-repost"><i class="fa-solid fa-share" aria-hidden="true"></i></span><a href="/%E4%BF%AE%E6%94%B9%E4%BB%A3%E7%A0%81%E7%9A%84%E8%89%BA%E6%9C%AF/">修改代码的艺术 (Michael C. Feathers)</a>
-  </h2><div class="post-meta"><span class="post-author"><a href="https://andyfree96.github.io/" title="作者" target="_blank" rel="author external nofollow noopener noreferrer" class="author"><img class="avatar" src='/avatar/1.jpg' alt="AndyFree96" height="16" width="16">&nbsp;AndyFree96</a></span>&nbsp;<span class="post-publish" title='2026-07-16 08:12:42'>发布于 <time datetime="2026-07-16">2026-07-16</time></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E4%B9%A6%E7%B1%8D%E7%A0%94%E8%AF%BB/" class="post-category" title="分类 - 书籍研读"><i class="fa-regular fa-folder" aria-hidden="true"></i> 书籍研读</a></span></div><div class="content"></div><div class="post-footer">
-    <a href="/%E4%BF%AE%E6%94%B9%E4%BB%A3%E7%A0%81%E7%9A%84%E8%89%BA%E6%9C%AF/">阅读全文</a><div class="post-tags"><i class="fa-solid fa-tags me-1" aria-hidden="true"></i><a href='/tags/legacy-code/' class="post-tag">Legacy Code</a><a href='/tags/%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95/' class="post-tag">单元测试</a><a href='/tags/%E4%BF%AE%E6%94%B9%E4%BB%A3%E7%A0%81/' class="post-tag">修改代码</a><a href='/tags/%E8%A7%A3%E4%BE%9D%E8%B5%96/' class="post-tag">解依赖</a><a href='/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/' class="post-tag">读书笔记</a><a href='/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA/' class="post-tag">计算机</a></div></div>
-</article><article class="single summary" itemscope itemtype="http://schema.org/Article"><div class="featured-image-preview">
-        <a href="/%E6%B7%B1%E5%85%A5system.net.networkinformation%E8%8E%B7%E5%8F%96%E7%B3%BB%E7%BB%9F%E7%BD%91%E7%BB%9C%E4%BF%A1%E6%81%AF/" aria-label="深入System.Net.NetworkInformation获取系统网络信息"><img loading="eager" src='/images/202607/18/paul-lichtblau-oUsElFLrE_s-unsplash.jpg' sizes="(max-width: 680px) 100vw, (max-width: 960px) 80vw, (max-width: 1440px) 56vw, 800px" alt="Featured image for 深入System.Net.NetworkInformation获取系统网络信息" height="336" width="800"></a>
-      </div><h2 class="single-title" itemprop="name headline"><span title="转载" class="icon-repost"><i class="fa-solid fa-share" aria-hidden="true"></i></span><a href="/%E6%B7%B1%E5%85%A5system.net.networkinformation%E8%8E%B7%E5%8F%96%E7%B3%BB%E7%BB%9F%E7%BD%91%E7%BB%9C%E4%BF%A1%E6%81%AF/">深入System.Net.NetworkInformation获取系统网络信息</a>
-  </h2><div class="post-meta"><span class="post-author"><a href="https://andyfree96.github.io/" title="作者" target="_blank" rel="author external nofollow noopener noreferrer" class="author"><img class="avatar" src='/avatar/1.jpg' alt="AndyFree96" height="16" width="16">&nbsp;AndyFree96</a></span>&nbsp;<span class="post-publish" title='2026-07-15 13:49:16'>发布于 <time datetime="2026-07-15">2026-07-15</time></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E5%B7%A5%E4%B8%9A%E8%87%AA%E5%8A%A8%E5%8C%96/" class="post-category" title="分类 - 工业自动化"><i class="fa-regular fa-folder" aria-hidden="true"></i> 工业自动化</a></span></div><div class="content"><p>在工业软件、设备控制系统、网络诊断工具开发中，经常需要获取当前计算机的网络状态，例如：</p>
-<ul>
-<li>当前有哪些网卡？</li>
-<li>网卡是否连接？</li>
-<li>IP地址是多少？</li>
-<li>MAC地址是多少？</li>
-<li>网络连接速度是多少？</li>
-<li>DNS、网关、DHCP信息是什么？</li>
-</ul>
-<p>.NET提供了一个非常方便的命名空间<code>System.Net.NetworkInformation</code>，其中核心类：</p>
-<div class="table-wrapper">
-  <table>
-    <thead>
-        <tr>
-            <th style="text-align: left">类</th>
-            <th style="text-align: left">作用</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td style="text-align: left">NetworkInterface</td>
-            <td style="text-align: left">获取网卡信息</td>
-        </tr>
-        <tr>
-            <td style="text-align: left">IPInterfaceProperties</td>
-            <td style="text-align: left">获取 IP 配置</td>
-        </tr>
-        <tr>
-            <td style="text-align: left">IPAddressInformation</td>
-            <td style="text-align: left">获取 IP 地址状态</td>
-        </tr>
-        <tr>
-            <td style="text-align: left">PhysicalAddress</td>
-            <td style="text-align: left">获取 MAC 地址</td>
-        </tr>
-        <tr>
-            <td style="text-align: left">NetworkChange</td>
-            <td style="text-align: left">监听网络变化</td>
-        </tr>
-    </tbody>
-  </table>
-</div><p>本文将系统介绍如何使用这些API构建一个网络信息采集工具。</p></div><div class="post-footer">
-    <a href="/%E6%B7%B1%E5%85%A5system.net.networkinformation%E8%8E%B7%E5%8F%96%E7%B3%BB%E7%BB%9F%E7%BD%91%E7%BB%9C%E4%BF%A1%E6%81%AF/">阅读全文</a><div class="post-tags"><i class="fa-solid fa-tags me-1" aria-hidden="true"></i><a href='/tags/c%23/' class="post-tag">C#</a><a href='/tags/.net/' class="post-tag">.NET</a><a href='/tags/ipv4/' class="post-tag">IPv4</a><a href='/tags/mac/' class="post-tag">MAC</a><a href='/tags/dns/' class="post-tag">DNS</a></div></div>
 </article><ul class="pagination"><li class="page-item active">
           <span class="page-link">
             <a href="/">1</a>
