@@ -6,21 +6,21 @@
     <meta name="robots" content="noodp" />
     <title>chokidar源码剖析：一个跨平台文件监听库的设计与实现 - 东尼的博客</title><meta name="author" content="AndyFree96">
 <meta name="description" content="在现代前端工程和Node.js应用开发中，文件监听是一项非常基础但又机器重要的能力。无论是：
-Vite的热更新(HMR) TypeScript的增量编译 ESLint、Prettier等工具的自动检查 IDE对文件变化的实时响应 这些功能的背后都离不开一个核心能力：**如何可靠地感知文件系统的变化？**Node.js原生提供了fs.watch和fs.watchFile用于监听文件变化，但它们在实际工程环境中存在大量问题：
+Vite的热更新(HMR) TypeScript的增量编译 ESLint、Prettier等工具的自动检查 IDE对文件变化的实时响应 这些功能的背后都离不开一个核心能力：如何可靠地感知文件系统的变化？ Node.js原生提供了fs.watch和fs.watchFile用于监听文件变化，但它们在实际工程环境中存在大量问题：
 不同操作系统行为不一致 高频文件变化容易产生大量重复事件 大规模目录监听存在性能压力 文件新增、删除、重命名事件处理复杂 Linux、MacOS、Windows文件事件模型完全不同 因此，工程实践中需要一个更加稳定、统一的抽象层。chokidar正是这样的背景下诞生的。它基于Node.js原生文件监听能力，并针对不同平台进行了大量优化，为开发者提供了一套简单统一的API。本文将通过源码剖析的方式，逐步拆解chokidar的实现原理。
 "><meta name="keywords" content='Node.js, TypeScript, 文件监听, 文件系统, 异步编程, 源码剖析'>
 	<meta itemprop="name" content="chokidar源码剖析：一个跨平台文件监听库的设计与实现">
 	<meta itemprop="description" content="在现代前端工程和Node.js应用开发中，文件监听是一项非常基础但又机器重要的能力。无论是：
-Vite的热更新(HMR) TypeScript的增量编译 ESLint、Prettier等工具的自动检查 IDE对文件变化的实时响应 这些功能的背后都离不开一个核心能力：**如何可靠地感知文件系统的变化？**Node.js原生提供了fs.watch和fs.watchFile用于监听文件变化，但它们在实际工程环境中存在大量问题：
+Vite的热更新(HMR) TypeScript的增量编译 ESLint、Prettier等工具的自动检查 IDE对文件变化的实时响应 这些功能的背后都离不开一个核心能力：如何可靠地感知文件系统的变化？ Node.js原生提供了fs.watch和fs.watchFile用于监听文件变化，但它们在实际工程环境中存在大量问题：
 不同操作系统行为不一致 高频文件变化容易产生大量重复事件 大规模目录监听存在性能压力 文件新增、删除、重命名事件处理复杂 Linux、MacOS、Windows文件事件模型完全不同 因此，工程实践中需要一个更加稳定、统一的抽象层。chokidar正是这样的背景下诞生的。它基于Node.js原生文件监听能力，并针对不同平台进行了大量优化，为开发者提供了一套简单统一的API。本文将通过源码剖析的方式，逐步拆解chokidar的实现原理。">
 	<meta itemprop="datePublished" content="2026-08-04T16:59:55+08:00">
 	<meta itemprop="dateModified" content="2026-08-04T16:59:55+08:00">
-	<meta itemprop="wordCount" content="440">
+	<meta itemprop="wordCount" content="436">
 	<meta itemprop="keywords" content="Node.js,TypeScript,文件监听,文件系统,异步编程,源码剖析"><meta property="og:url" content="http://localhost:1313/chokidar%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/">
 	<meta property="og:site_name" content="东尼的博客">
 	<meta property="og:title" content="chokidar源码剖析：一个跨平台文件监听库的设计与实现">
 	<meta property="og:description" content="在现代前端工程和Node.js应用开发中，文件监听是一项非常基础但又机器重要的能力。无论是：
-Vite的热更新(HMR) TypeScript的增量编译 ESLint、Prettier等工具的自动检查 IDE对文件变化的实时响应 这些功能的背后都离不开一个核心能力：**如何可靠地感知文件系统的变化？**Node.js原生提供了fs.watch和fs.watchFile用于监听文件变化，但它们在实际工程环境中存在大量问题：
+Vite的热更新(HMR) TypeScript的增量编译 ESLint、Prettier等工具的自动检查 IDE对文件变化的实时响应 这些功能的背后都离不开一个核心能力：如何可靠地感知文件系统的变化？ Node.js原生提供了fs.watch和fs.watchFile用于监听文件变化，但它们在实际工程环境中存在大量问题：
 不同操作系统行为不一致 高频文件变化容易产生大量重复事件 大规模目录监听存在性能压力 文件新增、删除、重命名事件处理复杂 Linux、MacOS、Windows文件事件模型完全不同 因此，工程实践中需要一个更加稳定、统一的抽象层。chokidar正是这样的背景下诞生的。它基于Node.js原生文件监听能力，并针对不同平台进行了大量优化，为开发者提供了一套简单统一的API。本文将通过源码剖析的方式，逐步拆解chokidar的实现原理。">
 	<meta property="og:locale" content="zh_CN">
 	<meta property="og:type" content="article">
@@ -37,11 +37,11 @@ Vite的热更新(HMR) TypeScript的增量编译 ESLint、Prettier等工具的自
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="chokidar源码剖析：一个跨平台文件监听库的设计与实现">
   <meta name="twitter:description" content="在现代前端工程和Node.js应用开发中，文件监听是一项非常基础但又机器重要的能力。无论是：
-Vite的热更新(HMR) TypeScript的增量编译 ESLint、Prettier等工具的自动检查 IDE对文件变化的实时响应 这些功能的背后都离不开一个核心能力：**如何可靠地感知文件系统的变化？**Node.js原生提供了fs.watch和fs.watchFile用于监听文件变化，但它们在实际工程环境中存在大量问题：
+Vite的热更新(HMR) TypeScript的增量编译 ESLint、Prettier等工具的自动检查 IDE对文件变化的实时响应 这些功能的背后都离不开一个核心能力：如何可靠地感知文件系统的变化？ Node.js原生提供了fs.watch和fs.watchFile用于监听文件变化，但它们在实际工程环境中存在大量问题：
 不同操作系统行为不一致 高频文件变化容易产生大量重复事件 大规模目录监听存在性能压力 文件新增、删除、重命名事件处理复杂 Linux、MacOS、Windows文件事件模型完全不同 因此，工程实践中需要一个更加稳定、统一的抽象层。chokidar正是这样的背景下诞生的。它基于Node.js原生文件监听能力，并针对不同平台进行了大量优化，为开发者提供了一套简单统一的API。本文将通过源码剖析的方式，逐步拆解chokidar的实现原理。"><meta name="twitter:creator" content="@IRONAnthony96"><meta name="application-name" content="FixIt">
 <meta name="apple-mobile-web-app-title" content="FixIt"><meta name="theme-color" data-light="#f6f8fa" data-dark="#151b23" content="#f6f8fa"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" type="text/html" href="http://localhost:1313/chokidar%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="chokidar源码剖析：一个跨平台文件监听库的设计与实现 - 东尼的博客" /><link rel="prev" type="text/html" href="http://localhost:1313/polly%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/" title="Polly使用指南：.NET应用程序可靠性设计" /><link rel="alternate" type="text/markdown" href="http://localhost:1313/chokidar%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/index.md" title="chokidar源码剖析：一个跨平台文件监听库的设计与实现 - 东尼的博客"><link rel="stylesheet" href="/css/config.css"><link rel="stylesheet" href="/css/main.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" type="text/html" href="http://localhost:1313/chokidar%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="chokidar源码剖析：一个跨平台文件监听库的设计与实现 - 东尼的博客" /><link rel="prev" type="text/html" href="http://localhost:1313/polly%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/" title="Polly使用指南：.NET应用程序可靠性设计" /><link rel="next" type="text/html" href="http://localhost:1313/csharp-with%E8%A1%A8%E8%BE%BE%E5%BC%8F/" title="C# with表达式：优雅地创建对象副本" /><link rel="alternate" type="text/markdown" href="http://localhost:1313/chokidar%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/index.md" title="chokidar源码剖析：一个跨平台文件监听库的设计与实现 - 东尼的博客"><link rel="stylesheet" href="/css/config.css"><link rel="stylesheet" href="/css/main.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><link rel="preload" href="/js/main.js" as="script"><script type="application/ld+json">
   {
@@ -52,7 +52,7 @@ Vite的热更新(HMR) TypeScript的增量编译 ESLint、Prettier等工具的自
     "mainEntityOfPage": {
       "@type": "WebPage",
       "@id": "http:\/\/localhost:1313\/chokidar%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90\/"
-    },"genre": "posts","keywords": "Node.js, TypeScript, 文件监听, 文件系统, 异步编程, 源码剖析","wordcount":  440 ,
+    },"genre": "posts","keywords": "Node.js, TypeScript, 文件监听, 文件系统, 异步编程, 源码剖析","wordcount":  436 ,
     "url": "http:\/\/localhost:1313\/chokidar%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90\/","datePublished": "2026-08-04T16:59:55+08:00","dateModified": "2026-08-04T16:59:55+08:00","publisher": {
       "@type": "Organization",
       "name": ""},"author": {
@@ -160,7 +160,7 @@ Vite的热更新(HMR) TypeScript的增量编译 ESLint、Prettier等工具的自
   <article class="page single">
     <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span title="转载" class="icon-repost"><i class="fa-solid fa-share" aria-hidden="true"></i></span><span>chokidar源码剖析：一个跨平台文件监听库的设计与实现</span>
       </h1></div><div class="post-meta">
-      <div class="post-meta-line"><span class="post-author"><a href="https://andyfree96.github.io/" title="作者" target="_blank" rel="author external nofollow noopener noreferrer" class="author"><img class="avatar" src='/avatar/1.jpg' alt="AndyFree96" height="16" width="16">&nbsp;AndyFree96</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" class="post-category" title="分类 - 源码剖析"><i class="fa-regular fa-folder" aria-hidden="true"></i> 源码剖析</a></span></div><div class="post-meta-line"><span title="发布于 2026-08-04 16:59:55"><i class="fa-solid fa-calendar-days me-1" aria-hidden="true"></i><time datetime="2026-08-04">2026-08-04</time></span>&nbsp;<span title="440 字"><i class="fa-solid fa-pencil-alt me-1" aria-hidden="true"></i>约 500 字</span>&nbsp;<span><i class="fa-regular fa-clock me-1" aria-hidden="true"></i>预计阅读 1 分钟</span>&nbsp;</div>
+      <div class="post-meta-line"><span class="post-author"><a href="https://andyfree96.github.io/" title="作者" target="_blank" rel="author external nofollow noopener noreferrer" class="author"><img class="avatar" src='/avatar/1.jpg' alt="AndyFree96" height="16" width="16">&nbsp;AndyFree96</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" class="post-category" title="分类 - 源码剖析"><i class="fa-regular fa-folder" aria-hidden="true"></i> 源码剖析</a></span></div><div class="post-meta-line"><span title="发布于 2026-08-04 16:59:55"><i class="fa-solid fa-calendar-days me-1" aria-hidden="true"></i><time datetime="2026-08-04">2026-08-04</time></span>&nbsp;<span title="436 字"><i class="fa-solid fa-pencil-alt me-1" aria-hidden="true"></i>约 500 字</span>&nbsp;<span><i class="fa-regular fa-clock me-1" aria-hidden="true"></i>预计阅读 1 分钟</span>&nbsp;</div>
     </div><div class="featured-image"><img loading="eager" src='/images/202608/5/europeana-hajFDVALdhA-unsplash.jpg' sizes="(max-width: 680px) 100vw, (max-width: 960px) 80vw, (max-width: 1440px) 56vw, 800px" alt="/images/202608/5/europeana-hajFDVALdhA-unsplash.jpg"></div><div class="details toc" id="toc-static" data-kept="false">
         <div class="details-summary toc-title">
           <span>目录</span>
@@ -181,7 +181,7 @@ Vite的热更新(HMR) TypeScript的增量编译 ESLint、Prettier等工具的自
 <li>ESLint、Prettier等工具的自动检查</li>
 <li>IDE对文件变化的实时响应</li>
 </ul>
-<p>这些功能的背后都离不开一个核心能力：**如何可靠地感知文件系统的变化？**Node.js原生提供了<code>fs.watch</code>和<code>fs.watchFile</code>用于监听文件变化，但它们在实际工程环境中存在大量问题：</p>
+<p>这些功能的背后都离不开一个核心能力：<strong>如何可靠地感知文件系统的变化？</strong> Node.js原生提供了<code>fs.watch</code>和<code>fs.watchFile</code>用于监听文件变化，但它们在实际工程环境中存在大量问题：</p>
 <ul>
 <li>不同操作系统行为不一致</li>
 <li>高频文件变化容易产生大量重复事件</li>
@@ -246,7 +246,7 @@ Vite的热更新(HMR) TypeScript的增量编译 ESLint、Prettier等工具的自
     <section class="post-tags"><i class="fa-solid fa-tags me-1" aria-hidden="true"></i><a href="/tags/node.js/" class="post-tag" title="标签 - Node.js">Node.js</a><a href="/tags/typescript/" class="post-tag" title="标签 - TypeScript">TypeScript</a><a href="/tags/%E6%96%87%E4%BB%B6%E7%9B%91%E5%90%AC/" class="post-tag" title="标签 - 文件监听">文件监听</a><a href="/tags/%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/" class="post-tag" title="标签 - 文件系统">文件系统</a><a href="/tags/%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B/" class="post-tag" title="标签 - 异步编程">异步编程</a><a href="/tags/%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" class="post-tag" title="标签 - 源码剖析">源码剖析</a></section>
     <section><span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
     </section>
-  </div><div class="post-nav"><a href="/polly%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/" class="post-nav-item" rel="prev" title="Polly使用指南：.NET应用程序可靠性设计"><i class="fa-solid fa-angle-left" aria-hidden="true"></i>Polly使用指南：.NET应用程序可靠性设计</a></div>
+  </div><div class="post-nav"><a href="/polly%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/" class="post-nav-item" rel="prev" title="Polly使用指南：.NET应用程序可靠性设计"><i class="fa-solid fa-angle-left" aria-hidden="true"></i>Polly使用指南：.NET应用程序可靠性设计</a><a href="/csharp-with%E8%A1%A8%E8%BE%BE%E5%BC%8F/" class="post-nav-item" rel="next" title="C# with表达式：优雅地创建对象副本">C# with表达式：优雅地创建对象副本<i class="fa-solid fa-angle-right" aria-hidden="true"></i></a></div>
 </div>
 <div class="post-reward">
     <div class="comment">请作者喝杯咖啡!</div>
