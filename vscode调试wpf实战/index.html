@@ -1,0 +1,1055 @@
+<!DOCTYPE html>
+<html itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+    <meta name="robots" content="noodp" />
+    <title>VS Code调试WPF实战：从dotnet build到F5断点调试 - 东尼的博客</title><meta name="author" content="AndyFree96">
+<meta name="description" content="最近，在开发设备软件时，我遇到了一个比较实际的问题：设备工控机的开发环境比较受限，安装的 Visual Studio 还是 2019 版本，无法直接满足当前项目对 .NET 9（net9.0-windows）的开发需求(现场不具备网络环境)。与此同时，在这台工控机上使用 Rider 进行调试时，整个系统也会变得比较卡顿。为了继续推进开发，我尝试使用 VS Code 修改项目，并通过 dotnet run 启动 WPF 应用。这种方式可以正常运行程序，却带来了一个新的问题：如何在 VS Code 中像使用传统 IDE 一样设置断点、单步执行、查看变量和调用堆栈？
+经过一番摸索，我逐渐梳理出了使用 VS Code 开发和调试 WPF 应用的完整方案。本文记录这次实践，并进一步解释背后的工作机制。
+"><meta name="keywords" content='.NET, VSCode, WPF, 调试, 开发工具'>
+	<meta itemprop="name" content="VS Code调试WPF实战：从dotnet build到F5断点调试">
+	<meta itemprop="description" content="最近，在开发设备软件时，我遇到了一个比较实际的问题：设备工控机的开发环境比较受限，安装的 Visual Studio 还是 2019 版本，无法直接满足当前项目对 .NET 9（net9.0-windows）的开发需求(现场不具备网络环境)。与此同时，在这台工控机上使用 Rider 进行调试时，整个系统也会变得比较卡顿。为了继续推进开发，我尝试使用 VS Code 修改项目，并通过 dotnet run 启动 WPF 应用。这种方式可以正常运行程序，却带来了一个新的问题：如何在 VS Code 中像使用传统 IDE 一样设置断点、单步执行、查看变量和调用堆栈？
+经过一番摸索，我逐渐梳理出了使用 VS Code 开发和调试 WPF 应用的完整方案。本文记录这次实践，并进一步解释背后的工作机制。">
+	<meta itemprop="datePublished" content="2026-10-12T06:33:02+08:00">
+	<meta itemprop="dateModified" content="2026-10-12T06:33:02+08:00">
+	<meta itemprop="wordCount" content="7633">
+	<meta itemprop="keywords" content=".NET,VSCode,WPF,调试,开发工具"><meta property="og:url" content="http://localhost:1313/vscode%E8%B0%83%E8%AF%95wpf%E5%AE%9E%E6%88%98/">
+	<meta property="og:site_name" content="东尼的博客">
+	<meta property="og:title" content="VS Code调试WPF实战：从dotnet build到F5断点调试">
+	<meta property="og:description" content="最近，在开发设备软件时，我遇到了一个比较实际的问题：设备工控机的开发环境比较受限，安装的 Visual Studio 还是 2019 版本，无法直接满足当前项目对 .NET 9（net9.0-windows）的开发需求(现场不具备网络环境)。与此同时，在这台工控机上使用 Rider 进行调试时，整个系统也会变得比较卡顿。为了继续推进开发，我尝试使用 VS Code 修改项目，并通过 dotnet run 启动 WPF 应用。这种方式可以正常运行程序，却带来了一个新的问题：如何在 VS Code 中像使用传统 IDE 一样设置断点、单步执行、查看变量和调用堆栈？
+经过一番摸索，我逐渐梳理出了使用 VS Code 开发和调试 WPF 应用的完整方案。本文记录这次实践，并进一步解释背后的工作机制。">
+	<meta property="og:locale" content="zh_CN">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="posts">
+		<meta property="article:published_time" content="2026-10-12T06:33:02+08:00">
+		<meta property="article:modified_time" content="2026-10-12T06:33:02+08:00">
+		<meta property="article:tag" content=".NET">
+		<meta property="article:tag" content="VSCode">
+		<meta property="article:tag" content="WPF">
+		<meta property="article:tag" content="调试">
+		<meta property="article:tag" content="开发工具">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="VS Code调试WPF实战：从dotnet build到F5断点调试">
+  <meta name="twitter:description" content="最近，在开发设备软件时，我遇到了一个比较实际的问题：设备工控机的开发环境比较受限，安装的 Visual Studio 还是 2019 版本，无法直接满足当前项目对 .NET 9（net9.0-windows）的开发需求(现场不具备网络环境)。与此同时，在这台工控机上使用 Rider 进行调试时，整个系统也会变得比较卡顿。为了继续推进开发，我尝试使用 VS Code 修改项目，并通过 dotnet run 启动 WPF 应用。这种方式可以正常运行程序，却带来了一个新的问题：如何在 VS Code 中像使用传统 IDE 一样设置断点、单步执行、查看变量和调用堆栈？
+经过一番摸索，我逐渐梳理出了使用 VS Code 开发和调试 WPF 应用的完整方案。本文记录这次实践，并进一步解释背后的工作机制。"><meta name="twitter:creator" content="@IRONAnthony96"><meta name="application-name" content="FixIt">
+<meta name="apple-mobile-web-app-title" content="FixIt"><meta name="theme-color" data-light="#f6f8fa" data-dark="#151b23" content="#f6f8fa"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="canonical" type="text/html" href="http://localhost:1313/vscode%E8%B0%83%E8%AF%95wpf%E5%AE%9E%E6%88%98/" title="VS Code调试WPF实战：从dotnet build到F5断点调试 - 东尼的博客" /><link rel="prev" type="text/html" href="http://localhost:1313/csharp-with%E8%A1%A8%E8%BE%BE%E5%BC%8F/" title="C# with表达式：优雅地创建对象副本" /><link rel="alternate" type="text/markdown" href="http://localhost:1313/vscode%E8%B0%83%E8%AF%95wpf%E5%AE%9E%E6%88%98/index.md" title="VS Code调试WPF实战：从dotnet build到F5断点调试 - 东尼的博客"><link rel="stylesheet" href="/css/config.css"><link rel="stylesheet" href="/css/main.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.removeAttribute('onload');this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><link rel="preload" href="/js/main.js" as="script"><script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "BlogPosting",
+    "headline": "VS Code调试WPF实战：从dotnet build到F5断点调试",
+    "inLanguage": "zh-CN",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "http:\/\/localhost:1313\/vscode%E8%B0%83%E8%AF%95wpf%E5%AE%9E%E6%88%98\/"
+    },"genre": "posts","keywords": ".NET, VSCode, WPF, 调试, 开发工具","wordcount":  7633 ,
+    "url": "http:\/\/localhost:1313\/vscode%E8%B0%83%E8%AF%95wpf%E5%AE%9E%E6%88%98\/","datePublished": "2026-10-12T06:33:02+08:00","dateModified": "2026-10-12T06:33:02+08:00","publisher": {
+      "@type": "Organization",
+      "name": ""},"author": {
+        "@type": "Person",
+        "name": "AndyFree96"
+      },"description": ""
+  }
+  </script><script src="/js/head/color-scheme.js"></script></head>
+  <body data-instant-intensity="viewport" data-header-desktop="sticky" data-header-mobile="auto"><div class="wrapper" data-page-style="normal"><header class="desktop animate__faster" id="header-desktop">
+  <div class="header-wrapper">
+    <div class="header-title">
+      <a href="/" title="东尼的博客" class="header-title-link"><span class="header-title-text">东尼的博客</span></a><span class="header-subtitle"></span></div>
+    <nav>
+      <ul class="menu"><li class="menu-item">
+              <a class="menu-link" href="/posts/">📕 文章</a></li><li class="menu-item">
+              <a class="menu-link" href="/categories/">🧰 分类</a></li><li class="menu-item">
+              <a class="menu-link" href="/tags/">🔖 标签</a></li><li class="menu-item">
+              <a class="menu-link" href="/book">📚 书单</a></li><li class="menu-item">
+              <a class="menu-link" href="/paper">📝 论文</a></li><li class="menu-item">
+              <a class="menu-link" href="/opencourse">👨🏻‍💻 公开课</a></li><li class="menu-item">
+              <a class="menu-link" href="/filmtv">🎞️ 影视</a></li><li class="menu-item">
+              <a class="menu-link" href="/resource">⚡️ 资源库</a></li><li class="menu-item">
+              <a class="menu-link" href="/projects">⭐ 开源</a></li><li class="menu-item">
+              <a class="menu-link" href="/about">🙋🏻‍♂️ 关于</a></li><li class="menu-item delimiter"></li><li class="menu-item search" id="search-desktop">
+            <input type="text" placeholder="搜索文章标题或内容……" id="search-input-desktop" tabindex="-1">
+            <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索" aria-controls="search-dropdown-desktop" aria-expanded="false">
+              <i class="fa-solid fa-search" aria-hidden="true"></i>
+            </a>
+            <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+              <i class="fa-solid fa-times-circle" aria-hidden="true"></i>
+            </a>
+            <span class="search-button search-loading" id="search-loading-desktop">
+              <i class="fa-solid fa-spinner fa-spin" aria-hidden="true"></i>
+            </span>
+          </li><li class="menu-item theme-switch-item">
+          <button type="button" class="theme-switch" aria-label="切换主题" title="切换主题"><i class="fa-solid fa-adjust" aria-hidden="true"></i></button>
+        </li></ul>
+    </nav>
+  </div>
+</header><header class="mobile animate__faster" id="header-mobile">
+  <div class="header-container">
+    <div class="header-wrapper">
+      <div class="header-title">
+        <a href="/" title="东尼的博客" class="header-title-link"><span class="header-title-text">东尼的博客</span></a><span class="header-subtitle"></span></div>
+      <button type="button" class="theme-switch" aria-label="切换主题"><i class="fa-solid fa-adjust" aria-hidden="true"></i></button>
+      <button type="button" class="menu-toggle" id="menu-toggle-mobile" aria-controls="menu-mobile" aria-expanded="false" aria-labelledby="menu-mobile">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <nav>
+      <ul class="menu" id="menu-mobile"><li class="search-wrapper">
+            <div class="search mobile" id="search-mobile">
+              <input type="text" placeholder="搜索文章标题或内容……" id="search-input-mobile">
+              <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索" aria-controls="search-dropdown-mobile" aria-expanded="false">
+                <i class="fa-solid fa-search" aria-hidden="true"></i>
+              </a>
+              <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                <i class="fa-solid fa-times-circle" aria-hidden="true"></i>
+              </a>
+              <span class="search-button search-loading" id="search-loading-mobile">
+                <i class="fa-solid fa-spinner fa-spin" aria-hidden="true"></i>
+              </span>
+            </div>
+            <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+              取消
+            </a>
+          </li><li class="menu-item"><a class="menu-link" href="/posts/">📕 文章</a></li><li class="menu-item"><a class="menu-link" href="/categories/">🧰 分类</a></li><li class="menu-item"><a class="menu-link" href="/tags/">🔖 标签</a></li><li class="menu-item"><a class="menu-link" href="/book">📚 书单</a></li><li class="menu-item"><a class="menu-link" href="/paper">📝 论文</a></li><li class="menu-item"><a class="menu-link" href="/opencourse">👨🏻‍💻 公开课</a></li><li class="menu-item"><a class="menu-link" href="/filmtv">🎞️ 影视</a></li><li class="menu-item"><a class="menu-link" href="/resource">⚡️ 资源库</a></li><li class="menu-item"><a class="menu-link" href="/projects">⭐ 开源</a></li><li class="menu-item"><a class="menu-link" href="/about">🙋🏻‍♂️ 关于</a></li><li class="menu-item menu-system"></li>
+      </ul>
+    </nav>
+  </div>
+</header><div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+  </div>
+  <div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+  </div><main class="fi-container"><aside class="aside-collection animate__animated animate__fadeIn animate__faster" aria-label="合集"><div class="details related-details open">
+      <div class="details-summary related-summary">
+        <i class="fa-solid fa-fire fa-fade text-danger" aria-hidden="true"></i>
+        <span class="related-title">相关内容</span><i class="details-icon fa-solid fa-angle-right" aria-hidden="true"></i></div>
+      <div class="details-content related-content">
+        <ul class="related-list"><li class="related-item">
+              <a href="/wpf-ui/" title="WPF UI：让WPF应用具有Fluent Design风格">WPF UI：让WPF应用具有Fluent Design风格</a></li><li class="related-item">
+              <a href="/vscode%E5%AE%8C%E5%85%A8%E6%8C%87%E5%8D%97/" title="Visual Studio Code完全指南">Visual Studio Code完全指南</a></li><li class="related-item">
+              <a href="/polly%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/" title="Polly使用指南：.NET应用程序可靠性设计">Polly使用指南：.NET应用程序可靠性设计</a></li><li class="related-item">
+              <a href="/dotnet%E8%AE%BE%E8%AE%A1%E8%A7%84%E8%8C%83/" title=".NET设计规范 约定、惯用法与模式 第2版 (Krzysztof Cwalina / Brad Abrams)">.NET设计规范 约定、惯用法与模式 第2版 (Krzysztof Cwalina / Brad Abrams)</a></li><li class="related-item">
+              <a href="/clr-via-csharp/" title="CLR via C# 第4版 (Jeffrey Richter)">CLR via C# 第4版 (Jeffrey Richter)</a></li><li class="related-item">
+              <a href="/microsoft.extensions.hosting%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/" title="Microsoft.Extensions.Hosting使用指南：构建现代 .NET 应用的通用宿主架构">Microsoft.Extensions.Hosting使用指南：构建现代 .NET 应用的通用宿主架构</a></li><li class="related-item">
+              <a href="/wpf%E7%BC%96%E7%A8%8B%E5%AE%9D%E5%85%B8/" title="WPF编程宝典 第4版 (Matthew MacDonald)">WPF编程宝典 第4版 (Matthew MacDonald)</a></li><li class="related-item">
+              <a href="/c%23-linq%E5%AD%A6%E4%B9%A0%E4%B9%8B%E6%97%85/" title="C# LINQ学习之旅：从集合操作到声明式编程">C# LINQ学习之旅：从集合操作到声明式编程</a></li><li class="related-item">
+              <a href="/design-patterns-in-csharp-and-dotnet/" title="Design Patterns in C# and .NET (Dmitri Nesteruk)">Design Patterns in C# and .NET (Dmitri Nesteruk)</a></li><li class="related-item">
+              <a href="/%E6%B7%B1%E5%85%A5system.net.networkinformation%E8%8E%B7%E5%8F%96%E7%B3%BB%E7%BB%9F%E7%BD%91%E7%BB%9C%E4%BF%A1%E6%81%AF/" title="深入System.Net.NetworkInformation获取系统网络信息">深入System.Net.NetworkInformation获取系统网络信息</a></li><li class="related-item">
+              <a href="/networkmanager%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="NETworkManager源码剖析：一个网络管理工具的实现细节">NETworkManager源码剖析：一个网络管理工具的实现细节</a></li><li class="related-item">
+              <a href="/dotnetty%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="DotNetty源码剖析：高性能网络框架的秘密">DotNetty源码剖析：高性能网络框架的秘密</a></li><li class="related-item">
+              <a href="/%E5%A6%82%E4%BD%95%E8%B0%83%E8%AF%95vue%E9%A1%B9%E7%9B%AE/" title="如何调试Vue项目">如何调试Vue项目</a></li><li class="related-item">
+              <a href="/git%E7%AE%80%E6%98%8E%E6%95%99%E7%A8%8B/" title="Git简明教程">Git简明教程</a></li></ul>
+      </div>
+    </div></aside>
+
+  <article class="page single">
+    <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span title="转载" class="icon-repost"><i class="fa-solid fa-share" aria-hidden="true"></i></span><span>VS Code调试WPF实战：从dotnet build到F5断点调试</span>
+      </h1></div><div class="post-meta">
+      <div class="post-meta-line"><span class="post-author"><a href="https://andyfree96.github.io/" title="作者" target="_blank" rel="author external nofollow noopener noreferrer" class="author"><img class="avatar" src='/avatar/1.jpg' alt="AndyFree96" height="16" width="16">&nbsp;AndyFree96</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/" class="post-category" title="分类 - 工具使用"><i class="fa-regular fa-folder" aria-hidden="true"></i> 工具使用</a></span></div><div class="post-meta-line"><span title="发布于 2026-10-12 06:33:02"><i class="fa-solid fa-calendar-days me-1" aria-hidden="true"></i><time datetime="2026-10-12">2026-10-12</time></span>&nbsp;<span title="7633 字"><i class="fa-solid fa-pencil-alt me-1" aria-hidden="true"></i>约 7700 字</span>&nbsp;<span><i class="fa-regular fa-clock me-1" aria-hidden="true"></i>预计阅读 16 分钟</span>&nbsp;</div>
+    </div><div class="featured-image"><img loading="eager" src='/images/202610/1/enfocus-collective-ilwfkHpE-JU-unsplash.jpg' sizes="(max-width: 680px) 100vw, (max-width: 960px) 80vw, (max-width: 1440px) 56vw, 800px" alt="/images/202610/1/enfocus-collective-ilwfkHpE-JU-unsplash.jpg"></div><div class="details toc" id="toc-static" data-kept="false">
+        <div class="details-summary toc-title">
+          <span>目录</span>
+          <span><i class="details-icon fa-solid fa-angle-right" aria-hidden="true"></i></span>
+        </div>
+        <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-为什么选择vs-code开发wpf">1. 为什么选择VS Code开发WPF？</a></li>
+    <li><a href="#2-准备开发环境">2. 准备开发环境</a>
+      <ul>
+        <li><a href="#21-安装必要的-vs-code-扩展">2.1 安装必要的 VS Code 扩展</a></li>
+        <li><a href="#22-检查-net-sdk-环境">2.2 检查 .NET SDK 环境</a></li>
+      </ul>
+    </li>
+    <li><a href="#3-先让项目脱离-ide-完成构建">3. 先让项目脱离 IDE 完成构建</a>
+      <ul>
+        <li><a href="#31-理解-dotnet-restoredotnet-build-和---no-restore">3.1 理解 <code>dotnet restore</code>、<code>dotnet build</code> 和 <code>--no-restore</code></a></li>
+      </ul>
+    </li>
+    <li><a href="#4-配置-vs-code三个核心文件">4. 配置 VS Code：三个核心文件</a>
+      <ul>
+        <li><a href="#41-settingsjson减少编辑器的额外开销">4.1 <code>settings.json</code>：减少编辑器的额外开销</a></li>
+        <li><a href="#42-tasksjson将构建过程变成可重复执行的任务">4.2 <code>tasks.json</code>：将构建过程变成可重复执行的任务</a></li>
+        <li><a href="#43-launchjson让-vs-code-真正具备调试能力">4.3 <code>launch.json</code>：让 VS Code 真正具备调试能力</a>
+          <ul>
+            <li><a href="#方式一直接启动-wpf-应用">方式一：直接启动 WPF 应用</a></li>
+            <li><a href="#方式二附加到已经运行的程序">方式二：附加到已经运行的程序</a></li>
+          </ul>
+        </li>
+        <li><a href="#44-按-f5-后究竟发生了什么">4.4 按 F5 后，究竟发生了什么？</a></li>
+      </ul>
+    </li>
+    <li><a href="#5-多版本-net-sdk使用-globaljson-固定开发环境">5. 多版本 .NET SDK：使用 <code>global.json</code> 固定开发环境</a>
+      <ul>
+        <li><a href="#51-globaljson-的作用是什么">5.1 <code>global.json</code> 的作用是什么？</a></li>
+        <li><a href="#52-rollforward-应该如何选择">5.2 <code>rollForward</code> 应该如何选择？</a></li>
+        <li><a href="#53-如何确认-globaljson-真正生效">5.3 如何确认 <code>global.json</code> 真正生效？</a></li>
+      </ul>
+    </li>
+    <li><a href="#6-其他值得配置的项目文件">6. 其他值得配置的项目文件</a>
+      <ul>
+        <li><a href="#61-editorconfig统一团队代码风格">6.1 <code>.editorconfig</code>：统一团队代码风格</a></li>
+        <li><a href="#62-extensionsjson向团队推荐必要扩展">6.2 <code>extensions.json</code>：向团队推荐必要扩展</a></li>
+        <li><a href="#63-几个配置文件的职责总结">6.3 几个配置文件的职责总结</a></li>
+      </ul>
+    </li>
+    <li><a href="#7-常见问题排查">7. 常见问题排查</a>
+      <ul>
+        <li><a href="#71-找不到-obj-目录中的-nuget-文件">7.1 找不到 <code>obj</code> 目录中的 NuGet 文件</a></li>
+        <li><a href="#72-按-f5-时找不到程序">7.2 按 F5 时找不到程序</a></li>
+        <li><a href="#73-断点显示未绑定">7.3 断点显示未绑定</a></li>
+        <li><a href="#74-程序能够运行却无法正常显示-wpf-界面">7.4 程序能够运行，却无法正常显示 WPF 界面</a></li>
+        <li><a href="#75-vs-code-仍然很卡">7.5 VS Code 仍然很卡</a></li>
+      </ul>
+    </li>
+    <li><a href="#8-从一次调试配置理解现代-net-工程化">8. 从一次调试配置，理解现代 .NET 工程化</a>
+      <ul>
+        <li><a href="#81-ide-不应该成为构建系统的唯一入口">8.1 IDE 不应该成为构建系统的唯一入口</a></li>
+        <li><a href="#82-调试器与程序构建是两个不同的环节">8.2 调试器与程序构建是两个不同的环节</a></li>
+        <li><a href="#83-开发环境也应该可复现">8.3 开发环境也应该可复现</a></li>
+      </ul>
+    </li>
+    <li><a href="#9-总结">9. 总结</a></li>
+  </ul>
+</nav></div>
+      </div><div class="content" id="content"><p>最近，在开发设备软件时，我遇到了一个比较实际的问题：设备工控机的开发环境比较受限，安装的 Visual Studio 还是 2019 版本，无法直接满足当前项目对 .NET 9（net9.0-windows）的开发需求(现场不具备网络环境)。与此同时，在这台工控机上使用 Rider 进行调试时，整个系统也会变得比较卡顿。为了继续推进开发，我尝试使用 VS Code 修改项目，并通过 dotnet run 启动 WPF 应用。这种方式可以正常运行程序，却带来了一个新的问题：<strong>如何在 VS Code 中像使用传统 IDE 一样设置断点、单步执行、查看变量和调用堆栈？</strong></p>
+<p>经过一番摸索，我逐渐梳理出了使用 VS Code 开发和调试 WPF 应用的完整方案。本文记录这次实践，并进一步解释背后的工作机制。</p>
+<h2 class="heading-element" id="1-为什么选择vs-code开发wpf"><span>1. 为什么选择VS Code开发WPF？</span>
+  <a href="#1-%e4%b8%ba%e4%bb%80%e4%b9%88%e9%80%89%e6%8b%a9vs-code%e5%bc%80%e5%8f%91wpf" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>传统的 WPF 开发通常使用 Visual Studio 或 Rider。这些 IDE 提供了比较完整的项目管理、XAML 编辑、代码补全、调试和可视化设计能力。</p>
+<p>但在实际项目中，我们可能会遇到一些特殊情况：</p>
+<ul>
+<li>开发机或工控机硬件资源有限，大型 IDE 运行时比较卡顿。</li>
+<li>项目使用较新的 .NET SDK，而现有 IDE 版本较旧。</li>
+<li>希望直接使用命令行构建项目，减少对特定 IDE 的依赖。</li>
+<li>希望在远程设备、轻量级开发环境中修改和调试程序。</li>
+<li>希望将构建、测试和发布流程逐步自动化。</li>
+</ul>
+<p>VS Code 的优势在于轻量、可扩展，并且能够直接调用 .NET CLI 完成构建任务。</p>
+<p>需要明确的是，<strong>VS Code 并不是 WPF 专用 IDE 的完整替代品</strong>。它可以通过 C# 扩展和调试器支持 WPF 程序的代码级调试，但不具备与 Visual Studio 相同的原生 WPF XAML 可视化设计体验。</p>
+<p>对于以 C# 业务逻辑、设备通信、状态机、服务层和视觉算法开发为主的项目，VS Code 是一个值得尝试的选择。</p>
+<h2 class="heading-element" id="2-准备开发环境"><span>2. 准备开发环境</span>
+  <a href="#2-%e5%87%86%e5%a4%87%e5%bc%80%e5%8f%91%e7%8e%af%e5%a2%83" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><h3 class="heading-element" id="21-安装必要的-vs-code-扩展"><span>2.1 安装必要的 VS Code 扩展</span>
+  <a href="#21-%e5%ae%89%e8%a3%85%e5%bf%85%e8%a6%81%e7%9a%84-vs-code-%e6%89%a9%e5%b1%95" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p>首先安装以下两款扩展：</p>
+<ul>
+<li><strong>C# Dev Kit</strong>：提供 C# 项目和解决方案管理、代码导航等开发能力。</li>
+<li><strong>C#</strong>：提供 C# 语言支持以及基于 .NET 调试器的调试能力。</li>
+</ul>
+<p><figure><img loading="lazy" src='/images/202610/1/1.jpeg' alt="图1 C# Dev Kit和C#扩展"><figcaption class="image-caption">图1 图1 C# Dev Kit和C#扩展</figcaption>
+  </figure></p>
+<p>C# Dev Kit 依赖 C# 扩展，两者配合使用可以获得比较完整的 C# 开发体验。</p>
+<p>扩展可以在 VS Code 左侧的扩展面板中搜索安装，也可以在命令行中安装：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-powershell"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="line"><span class="cl"><span class="n">code</span> <span class="p">-</span><span class="n">-install-extension</span> <span class="nb">ms-dotnettools</span><span class="p">.</span><span class="py">csharp</span>
+</span></span><span class="line"><span class="cl"><span class="n">code</span> <span class="p">-</span><span class="n">-install-extension</span> <span class="nb">ms-dotnettools</span><span class="p">.</span><span class="n">csdevkit</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>注意：安装扩展不等于安装 .NET SDK。即使编辑器可以识别 C# 代码，本机仍然需要安装能够构建目标项目的 SDK。</p>
+<h3 class="heading-element" id="22-检查-net-sdk-环境"><span>2.2 检查 .NET SDK 环境</span>
+  <a href="#22-%e6%a3%80%e6%9f%a5-net-sdk-%e7%8e%af%e5%a2%83" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p>在终端执行：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-powershell"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="line"><span class="cl"><span class="n">dotnet</span> <span class="p">-</span><span class="n">-info</span>
+</span></span><span class="line"><span class="cl"><span class="n">dotnet</span> <span class="p">-</span><span class="n">-list-sdks</span>
+</span></span><span class="line"><span class="cl"><span class="n">dotnet</span> <span class="p">-</span><span class="n">-list-runtimes</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p><figure><img loading="lazy" src='/images/202610/1/2.png' alt="图2 dotnet –info执行结果"><figcaption class="image-caption">图2 dotnet --info执行结果</figcaption>
+  </figure></p>
+<p>这三个命令分别用于查看当前 .NET 环境、已安装的 SDK 和已安装的运行时。</p>
+<p>其中：</p>
+<ul>
+<li>SDK 负责项目还原、编译、发布等工作。</li>
+<li>Runtime 负责运行已经编译的应用程序。</li>
+<li>对于目标框架为 <code>net9.0-windows</code> 的 WPF 应用，开发环境需要能够构建对应目标框架的项目，运行环境也需要满足其运行时要求。</li>
+</ul>
+<p>例如，项目使用：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-xml"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-xml" data-lang="xml"><span class="line"><span class="cl"><span class="nt">&lt;PropertyGroup&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;TargetFramework&gt;</span>net9.0-windows<span class="nt">&lt;/TargetFramework&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;UseWPF&gt;</span>true<span class="nt">&lt;/UseWPF&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="nt">&lt;/PropertyGroup&gt;</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>那么就需要确保当前选择的 SDK 支持 .NET 9。</p>
+<p>另外，WPF 依赖 Windows 桌面框架，不能因为安装了 .NET SDK 就认为它可以在任意操作系统上运行。</p>
+<h2 class="heading-element" id="3-先让项目脱离-ide-完成构建"><span>3. 先让项目脱离 IDE 完成构建</span>
+  <a href="#3-%e5%85%88%e8%ae%a9%e9%a1%b9%e7%9b%ae%e8%84%b1%e7%a6%bb-ide-%e5%ae%8c%e6%88%90%e6%9e%84%e5%bb%ba" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>在配置调试器之前，我建议先不要急着编写 <code>launch.json</code>，而是先确保项目可以独立构建。</p>
+<p>假设项目结构如下：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-text"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">Sirius/
+</span></span><span class="line"><span class="cl">├── Sirius.sln
+</span></span><span class="line"><span class="cl">├── Sirius.UI/
+</span></span><span class="line"><span class="cl">│   ├── Sirius.UI.csproj
+</span></span><span class="line"><span class="cl">│   ├── App.xaml
+</span></span><span class="line"><span class="cl">│   ├── MainWindow.xaml
+</span></span><span class="line"><span class="cl">│   └── ...
+</span></span><span class="line"><span class="cl">└── .vscode/</span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>在解决方案根目录打开终端，执行：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-powershell"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="line"><span class="cl"><span class="n">dotnet</span> <span class="n">restore</span> <span class="n">Sirius</span><span class="p">.</span><span class="n">UI</span><span class="p">/</span><span class="n">Sirius</span><span class="p">.</span><span class="py">UI</span><span class="p">.</span><span class="py">csproj</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">dotnet</span> <span class="n">build</span> <span class="n">Sirius</span><span class="p">.</span><span class="n">UI</span><span class="p">/</span><span class="n">Sirius</span><span class="p">.</span><span class="py">UI</span><span class="p">.</span><span class="py">csproj</span> <span class="p">-</span><span class="n">-configuration</span> <span class="n">Debug</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>如果项目可以正常编译，我们就可以继续配置 VS Code。</p>
+<p>如果这里已经失败，那么应该先解决项目构建问题，而不是直接怀疑调试器。</p>
+<p>常见原因包括：</p>
+<ul>
+<li>当前使用的 SDK 版本不正确。</li>
+<li>NuGet 包还原失败。</li>
+<li>项目引用的其他类库无法构建。</li>
+<li>某些依赖包不兼容当前目标框架。</li>
+<li>XAML 编译或 C# 编译报错。</li>
+<li>项目中的生成文件或中间构建状态异常。</li>
+</ul>
+<p>这一步的核心思想是：<strong>先把构建与调试分开验证，再通过 VS Code 将两者连接起来。</strong></p>
+<h3 class="heading-element" id="31-理解-dotnet-restoredotnet-build-和---no-restore"><span>3.1 理解 <code>dotnet restore</code>、<code>dotnet build</code> 和 <code>--no-restore</code></span>
+  <a href="#31-%e7%90%86%e8%a7%a3-dotnet-restoredotnet-build-%e5%92%8c---no-restore" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p>.NET CLI 的几个常用命令如下：</p>
+<div class="table-wrapper">
+  <table>
+    <thead>
+        <tr>
+            <th>命令</th>
+            <th>作用</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><code>dotnet restore</code></td>
+            <td>还原项目依赖，生成 NuGet 资产文件</td>
+        </tr>
+        <tr>
+            <td><code>dotnet build</code></td>
+            <td>构建项目，默认会先执行还原</td>
+        </tr>
+        <tr>
+            <td><code>dotnet build --no-restore</code></td>
+            <td>跳过还原，直接进入构建流程</td>
+        </tr>
+        <tr>
+            <td><code>dotnet run</code></td>
+            <td>构建并运行项目，除非通过参数改变默认行为</td>
+        </tr>
+        <tr>
+            <td><code>dotnet clean</code></td>
+            <td>清理项目的构建输出</td>
+        </tr>
+    </tbody>
+  </table>
+</div><p>这里有一个容易混淆的地方。</p>
+<p><code>--no-restore</code> 并不是跳过编译，而是跳过 NuGet 还原。编译器仍然会根据项目和文件的变化执行必要的编译工作，正常的增量构建也仍然有效。</p>
+<p>但如果修改了依赖、目标框架或相关项目配置，就可能需要重新执行 <code>dotnet restore</code>。</p>
+<p>此外，<code>dotnet build --no-restore</code> 依赖已有且有效的还原结果。如果提示找不到 <code>obj</code> 目录下的 <code>*.nuget.dgspec.json</code> 或其他 NuGet 资产文件，应该优先检查是否执行过还原，以及当前项目是否使用了正确的 SDK 和构建配置。</p>
+<h2 class="heading-element" id="4-配置-vs-code三个核心文件"><span>4. 配置 VS Code：三个核心文件</span>
+  <a href="#4-%e9%85%8d%e7%bd%ae-vs-code%e4%b8%89%e4%b8%aa%e6%a0%b8%e5%bf%83%e6%96%87%e4%bb%b6" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>VS Code 的工作区配置通常放在项目根目录的 <code>.vscode</code> 文件夹中。</p>
+<p>对于 C# 项目，最值得理解的三个文件是：</p>
+<ul>
+<li><code>settings.json</code>：控制编辑器和工作区行为。</li>
+<li><code>tasks.json</code>：定义可重复执行的任务。</li>
+<li><code>launch.json</code>：定义程序如何启动或附加调试。</li>
+</ul>
+<p>另外，<code>.editorconfig</code> 用于统一代码风格，<code>extensions.json</code> 用于向团队成员推荐扩展，<code>global.json</code> 则用于控制 .NET SDK 的选择。</p>
+<p>这些文件各自负责不同的事情，不应该混为一谈。</p>
+<h3 class="heading-element" id="41-settingsjson减少编辑器的额外开销"><span>4.1 <code>settings.json</code>：减少编辑器的额外开销</span>
+  <a href="#41-settingsjson%e5%87%8f%e5%b0%91%e7%bc%96%e8%be%91%e5%99%a8%e7%9a%84%e9%a2%9d%e5%a4%96%e5%bc%80%e9%94%80" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p>对于包含大量构建文件、图像、日志和采集数据的工业软件项目，可以适当调整 VS Code 的工作区设置。</p>
+<p>创建 <code>.vscode/settings.json</code>：</p>
+<json-viewer value="&#34;{\r\n  \&#34;editor.minimap.enabled\&#34;: false,\r\n  \&#34;editor.codeLens\&#34;: false,\r\n  \&#34;editor.inlayHints.enabled\&#34;: \&#34;off\&#34;,\r\n  \&#34;editor.suggest.preview\&#34;: false,\r\n  \&#34;workbench.startupEditor\&#34;: \&#34;none\&#34;,\r\n  \&#34;workbench.editor.enablePreview\&#34;: true,\r\n  \&#34;explorer.compactFolders\&#34;: true,\r\n\r\n  \&#34;files.watcherExclude\&#34;: {\r\n    \&#34;**/bin/**\&#34;: true,\r\n    \&#34;**/obj/**\&#34;: true,\r\n    \&#34;**/Logs/**\&#34;: true,\r\n    \&#34;**/Capture/**\&#34;: true\r\n  },\r\n\r\n  \&#34;search.exclude\&#34;: {\r\n    \&#34;**/bin/**\&#34;: true,\r\n    \&#34;**/obj/**\&#34;: true,\r\n    \&#34;**/Logs/**\&#34;: true,\r\n    \&#34;**/Capture/**\&#34;: true\r\n  },\r\n\r\n  \&#34;git.autofetch\&#34;: false,\r\n  \&#34;extensions.autoCheckUpdates\&#34;: false\r\n}&#34;" expand-depth="6" boxed copyable="{&#34;copiedText&#34;:&#34;已复制&#34;,&#34;copyText&#34;:&#34;复制&#34;}"></json-viewer><p>这些设置分别用于关闭代码缩略图、减少部分编辑器装饰、排除不需要搜索的文件，以及减少 Git 自动获取和扩展自动更新带来的后台活动。</p>
+<p>需要注意几个细节。</p>
+<p><strong>第一，<code>settings.json</code> 不是 C# 调试配置。</strong> 它主要影响编辑器和工作区行为，并不会直接决定 WPF 程序能否编译或启动。</p>
+<p><strong>第二，文件监视排除规则需要谨慎设置。</strong> <code>bin</code> 和 <code>obj</code> 通常适合排除；但 <code>Images</code> 目录可能存放程序真正需要的图像资源。如果需要搜索这些资源、监控其变化或依赖文件变化触发工具行为，就不应盲目排除。</p>
+<p><strong>第三，这些优化不一定能显著改善所有项目的性能。</strong> C# 语言服务、扩展、项目规模、后台构建、图像处理和程序自身的资源消耗，都可能影响整体体验。我在实际项目中尝试过这套设置，但没有最终依赖它来解决性能问题。</p>
+<h3 class="heading-element" id="42-tasksjson将构建过程变成可重复执行的任务"><span>4.2 <code>tasks.json</code>：将构建过程变成可重复执行的任务</span>
+  <a href="#42-tasksjson%e5%b0%86%e6%9e%84%e5%bb%ba%e8%bf%87%e7%a8%8b%e5%8f%98%e6%88%90%e5%8f%af%e9%87%8d%e5%a4%8d%e6%89%a7%e8%a1%8c%e7%9a%84%e4%bb%bb%e5%8a%a1" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p>创建 <code>.vscode/tasks.json</code>：</p>
+<json-viewer value="&#34;{\r\n  \&#34;version\&#34;: \&#34;2.0.0\&#34;,\r\n  \&#34;tasks\&#34;: [\r\n    {\r\n      \&#34;label\&#34;: \&#34;build\&#34;,\r\n      \&#34;type\&#34;: \&#34;process\&#34;,\r\n      \&#34;command\&#34;: \&#34;dotnet\&#34;,\r\n      \&#34;args\&#34;: [\r\n        \&#34;build\&#34;,\r\n        \&#34;${workspaceFolder}/Sirius.UI/Sirius.UI.csproj\&#34;,\r\n        \&#34;--configuration\&#34;,\r\n        \&#34;Debug\&#34;,\r\n        \&#34;--verbosity\&#34;,\r\n        \&#34;minimal\&#34;\r\n      ],\r\n      \&#34;options\&#34;: {\r\n        \&#34;cwd\&#34;: \&#34;${workspaceFolder}\&#34;\r\n      },\r\n      \&#34;problemMatcher\&#34;: \&#34;$msCompile\&#34;,\r\n      \&#34;group\&#34;: {\r\n        \&#34;kind\&#34;: \&#34;build\&#34;,\r\n        \&#34;isDefault\&#34;: true\r\n      }\r\n    }\r\n  ]\r\n}&#34;" expand-depth="6" boxed copyable="{&#34;copiedText&#34;:&#34;已复制&#34;,&#34;copyText&#34;:&#34;复制&#34;}"></json-viewer><p>这里最关键的是几个配置项。</p>
+<p><strong><code>label</code>：任务名称</strong></p>
+<json-viewer value="&#34;\&#34;label\&#34;: \&#34;build\&#34;&#34;" expand-depth="6" boxed copyable="{&#34;copiedText&#34;:&#34;已复制&#34;,&#34;copyText&#34;:&#34;复制&#34;}"></json-viewer><p>这个名称不仅用于在 VS Code 的任务列表中识别任务，还可以被 <code>launch.json</code> 中的 <code>preLaunchTask</code> 引用。</p>
+<p><strong><code>type</code>：任务执行方式</strong></p>
+<json-viewer value="&#34;\&#34;type\&#34;: \&#34;process\&#34;&#34;" expand-depth="6" boxed copyable="{&#34;copiedText&#34;:&#34;已复制&#34;,&#34;copyText&#34;:&#34;复制&#34;}"></json-viewer><p><code>process</code> 表示直接启动指定的可执行程序，并将 <code>args</code> 中的每个元素作为独立参数传递。</p>
+<p>相比把整条命令写成 shell 字符串，这种方式更适合构建命令，也能减少路径中存在空格时的引号问题。</p>
+<p><strong><code>command</code> 和 <code>args</code>：构建命令</strong></p>
+<json-viewer value="&#34;\&#34;command\&#34;: \&#34;dotnet\&#34;,\r\n\&#34;args\&#34;: [\r\n  \&#34;build\&#34;,\r\n  \&#34;${workspaceFolder}/Sirius.UI/Sirius.UI.csproj\&#34;,\r\n  \&#34;--configuration\&#34;,\r\n  \&#34;Debug\&#34;,\r\n  \&#34;--verbosity\&#34;,\r\n  \&#34;minimal\&#34;\r\n]&#34;" expand-depth="6" boxed copyable="{&#34;copiedText&#34;:&#34;已复制&#34;,&#34;copyText&#34;:&#34;复制&#34;}"></json-viewer><p>这里相当于执行：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-powershell"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="line"><span class="cl"><span class="n">dotnet</span> <span class="n">build</span> <span class="n">Sirius</span><span class="p">.</span><span class="n">UI</span><span class="p">/</span><span class="n">Sirius</span><span class="p">.</span><span class="py">UI</span><span class="p">.</span><span class="py">csproj</span> <span class="p">`</span>
+</span></span><span class="line"><span class="cl">    <span class="p">-</span><span class="n">-configuration</span> <span class="n">Debug</span> <span class="p">`</span>
+</span></span><span class="line"><span class="cl">    <span class="p">-</span><span class="n">-verbosity</span> <span class="n">minimal</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p><code>${workspaceFolder}</code> 表示当前打开的工作区文件夹。</p>
+<p><strong><code>options.cwd</code>：工作目录</strong></p>
+<json-viewer value="&#34;\&#34;options\&#34;: {\r\n  \&#34;cwd\&#34;: \&#34;${workspaceFolder}\&#34;\r\n}&#34;" expand-depth="6" boxed copyable="{&#34;copiedText&#34;:&#34;已复制&#34;,&#34;copyText&#34;:&#34;复制&#34;}"></json-viewer><p>它决定构建命令从哪个目录开始执行。对于包含多个项目的解决方案，明确指定工作目录有助于避免相对路径混乱。</p>
+<p><strong><code>problemMatcher</code>：识别编译错误</strong></p>
+<json-viewer value="&#34;\&#34;problemMatcher\&#34;: \&#34;$msCompile\&#34;&#34;" expand-depth="6" boxed copyable="{&#34;copiedText&#34;:&#34;已复制&#34;,&#34;copyText&#34;:&#34;复制&#34;}"></json-viewer><p>它帮助 VS Code 从构建输出中识别编译错误和警告，并将其展示在 Problems 面板中。</p>
+<p><strong><code>group</code>：设置默认构建任务</strong></p>
+<json-viewer value="&#34;\&#34;group\&#34;: {\r\n  \&#34;kind\&#34;: \&#34;build\&#34;,\r\n  \&#34;isDefault\&#34;: true\r\n}&#34;" expand-depth="6" boxed copyable="{&#34;copiedText&#34;:&#34;已复制&#34;,&#34;copyText&#34;:&#34;复制&#34;}"></json-viewer><p>配置完成后，可以使用 VS Code 的“运行生成任务”命令执行构建；默认构建任务也可以通过相应的构建快捷键触发。</p>
+<p>与 <code>settings.json</code> 不同，<code>tasks.json</code> 已经进入实际开发流程：它可以执行构建、测试、清理、发布等命令，也可以被调试配置自动调用。</p>
+<h3 class="heading-element" id="43-launchjson让-vs-code-真正具备调试能力"><span>4.3 <code>launch.json</code>：让 VS Code 真正具备调试能力</span>
+  <a href="#43-launchjson%e8%ae%a9-vs-code-%e7%9c%9f%e6%ad%a3%e5%85%b7%e5%a4%87%e8%b0%83%e8%af%95%e8%83%bd%e5%8a%9b" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p>构建能够成功，不代表已经具备调试能力。</p>
+<p>要使用断点、单步执行、变量查看和调用堆栈，还需要配置调试器。</p>
+<p>创建 <code>.vscode/launch.json</code>：</p>
+<json-viewer value="&#34;{\r\n  \&#34;version\&#34;: \&#34;0.2.0\&#34;,\r\n  \&#34;configurations\&#34;: [\r\n    {\r\n      \&#34;name\&#34;: \&#34;Debug WPF\&#34;,\r\n      \&#34;type\&#34;: \&#34;coreclr\&#34;,\r\n      \&#34;request\&#34;: \&#34;launch\&#34;,\r\n      \&#34;preLaunchTask\&#34;: \&#34;build\&#34;,\r\n      \&#34;program\&#34;: \&#34;${workspaceFolder}/Sirius.UI/bin/Debug/net9.0-windows/Sirius.UI.dll\&#34;,\r\n      \&#34;cwd\&#34;: \&#34;${workspaceFolder}/Sirius.UI/bin/Debug/net9.0-windows\&#34;,\r\n      \&#34;args\&#34;: [],\r\n      \&#34;stopAtEntry\&#34;: false,\r\n      \&#34;console\&#34;: \&#34;internalConsole\&#34;,\r\n      \&#34;justMyCode\&#34;: true\r\n    },\r\n    {\r\n      \&#34;name\&#34;: \&#34;Attach to WPF\&#34;,\r\n      \&#34;type\&#34;: \&#34;coreclr\&#34;,\r\n      \&#34;request\&#34;: \&#34;attach\&#34;,\r\n      \&#34;processId\&#34;: \&#34;${command:pickProcess}\&#34;,\r\n      \&#34;justMyCode\&#34;: true\r\n    }\r\n  ]\r\n}&#34;" expand-depth="6" boxed copyable="{&#34;copiedText&#34;:&#34;已复制&#34;,&#34;copyText&#34;:&#34;复制&#34;}"></json-viewer><p>这份配置提供了两种调试方式。</p>
+<h4 class="heading-element" id="方式一直接启动-wpf-应用"><span>方式一：直接启动 WPF 应用</span>
+  <a href="#%e6%96%b9%e5%bc%8f%e4%b8%80%e7%9b%b4%e6%8e%a5%e5%90%af%e5%8a%a8-wpf-%e5%ba%94%e7%94%a8" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h4><json-viewer value="&#34;{\r\n  \&#34;name\&#34;: \&#34;Debug WPF\&#34;,\r\n  \&#34;type\&#34;: \&#34;coreclr\&#34;,\r\n  \&#34;request\&#34;: \&#34;launch\&#34;,\r\n  \&#34;preLaunchTask\&#34;: \&#34;build\&#34;,\r\n  \&#34;program\&#34;: \&#34;${workspaceFolder}/Sirius.UI/bin/Debug/net9.0-windows/Sirius.UI.dll\&#34;,\r\n  \&#34;cwd\&#34;: \&#34;${workspaceFolder}/Sirius.UI/bin/Debug/net9.0-windows\&#34;\r\n}&#34;" expand-depth="6" boxed copyable="{&#34;copiedText&#34;:&#34;已复制&#34;,&#34;copyText&#34;:&#34;复制&#34;}"></json-viewer><p>其中：</p>
+<ul>
+<li><code>type: coreclr</code> 表示使用 .NET 调试器。</li>
+<li><code>request: launch</code> 表示启动一个新的调试目标。</li>
+<li><code>preLaunchTask</code> 表示启动调试之前，先执行指定的构建任务。</li>
+<li><code>program</code> 指定编译后要启动的程序入口。</li>
+<li><code>cwd</code> 指定程序的工作目录。</li>
+</ul>
+<p>这里使用 DLL 路径，是因为现代 .NET 项目通常通过生成的程序集启动。对于框架依赖部署的 WPF 应用，调试器能够通过 .NET 启动机制启动程序集。</p>
+<p>不过，路径必须与项目的真实输出目录一致。如果修改了 <code>TargetFramework</code>、配置名称或输出目录，就需要同步修改这里的路径。</p>
+<p>如果项目输出目录中包含 <code>Sirius.UI.exe</code>，也可以根据实际调试器支持情况选择启动该可执行文件。</p>
+<h4 class="heading-element" id="方式二附加到已经运行的程序"><span>方式二：附加到已经运行的程序</span>
+  <a href="#%e6%96%b9%e5%bc%8f%e4%ba%8c%e9%99%84%e5%8a%a0%e5%88%b0%e5%b7%b2%e7%bb%8f%e8%bf%90%e8%a1%8c%e7%9a%84%e7%a8%8b%e5%ba%8f" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h4><json-viewer value="&#34;{\r\n  \&#34;name\&#34;: \&#34;Attach to WPF\&#34;,\r\n  \&#34;type\&#34;: \&#34;coreclr\&#34;,\r\n  \&#34;request\&#34;: \&#34;attach\&#34;,\r\n  \&#34;processId\&#34;: \&#34;${command:pickProcess}\&#34;,\r\n  \&#34;justMyCode\&#34;: true\r\n}&#34;" expand-depth="6" boxed copyable="{&#34;copiedText&#34;:&#34;已复制&#34;,&#34;copyText&#34;:&#34;复制&#34;}"></json-viewer><p>这种方式不会重新启动程序，而是让 VS Code 调试器附加到一个已经运行的 .NET 进程。</p>
+<p>例如，可以先在终端中运行：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-powershell"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="line"><span class="cl"><span class="n">dotnet</span> <span class="n">run</span> <span class="p">-</span><span class="n">-project</span> <span class="n">Sirius</span><span class="p">.</span><span class="n">UI</span><span class="p">/</span><span class="n">Sirius</span><span class="p">.</span><span class="py">UI</span><span class="p">.</span><span class="n">csproj</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>然后在 VS Code 中选择 <code>Attach to WPF</code>，从进程列表中选择对应的 WPF 应用进程。</p>
+<p>这对于某些需要先完成设备初始化、或者希望保留当前运行状态的调试场景比较有用。</p>
+<p>但附加调试并不保证一定能够成功。如果程序运行在不同的权限级别、不同的用户会话中，或者调试器与目标运行时不兼容，都可能导致附加失败。</p>
+<p>另外，<code>dotnet run</code> 并不会自动获得 VS Code 的断点调试能力。需要通过 <code>launch.json</code> 启动程序，或者显式附加调试器。</p>
+<h3 class="heading-element" id="44-按-f5-后究竟发生了什么"><span>4.4 按 F5 后，究竟发生了什么？</span>
+  <a href="#44-%e6%8c%89-f5-%e5%90%8e%e7%a9%b6%e7%ab%9f%e5%8f%91%e7%94%9f%e4%ba%86%e4%bb%80%e4%b9%88" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p>理解配置文件之间的关系，比单纯复制配置更重要。</p>
+<div class="code-tabs diagram-tabs" data-diagram="mermaid">
+    <div class="tabs-header">
+      <div class="tabs-items">
+        <span class="tab-item active" data-tab="diagram" title="图表">图表</span>
+        <span class="tab-item" data-tab="code" title="代码">代码</span>
+      </div>
+      <div class="tabs-actions">
+        <button type="button" class="action-btn diagram-zoom-out-btn" aria-label="缩小" title="缩小"><i class="fa-solid fa-magnifying-glass-minus" aria-hidden="true"></i></button>
+        <button type="button" class="action-btn diagram-zoom-in-btn" aria-label="放大" title="放大"><i class="fa-solid fa-magnifying-glass-plus" aria-hidden="true"></i></button>
+        <button type="button" class="action-btn diagram-reset-btn" aria-label="重置" title="重置"><i class="fa-solid fa-arrows-rotate" aria-hidden="true"></i></button>
+        <button type="button" class="action-btn diagram-download-btn" aria-label="下载 SVG" title="下载 SVG"><i class="fa-solid fa-download" aria-hidden="true"></i></button>
+      </div>
+    </div>
+    <div class="tabs-content">
+      <div class="code-block diagram-view active" data-filename="mermaid.mmd">
+        <div class="diagram-container">
+          <pre class="mermaid">flowchart TD
+    A["按下 F5"] --> B["读取 launch.json"]
+    B --> C["检查 preLaunchTask"]
+    C --> D["执行 tasks.json 中的 build"]
+    D --> E{"构建成功？"}
+    E -->|否| F["显示编译错误"]
+    E -->|是| G["启动 WPF 程序"]
+    G --> H["附加 .NET 调试器"]
+    H --> I["断点、变量、调用堆栈"]
+    J["global.json"] -.-> D
+    K["settings.json"] -.-> L["影响编辑器行为"]</pre>
+          <pre class="mermaid-dark">flowchart TD
+    A["按下 F5"] --> B["读取 launch.json"]
+    B --> C["检查 preLaunchTask"]
+    C --> D["执行 tasks.json 中的 build"]
+    D --> E{"构建成功？"}
+    E -->|否| F["显示编译错误"]
+    E -->|是| G["启动 WPF 程序"]
+    G --> H["附加 .NET 调试器"]
+    H --> I["断点、变量、调用堆栈"]
+    J["global.json"] -.-> D
+    K["settings.json"] -.-> L["影响编辑器行为"]</pre>
+          <pre class="mermaid-neutral">flowchart TD
+    A["按下 F5"] --> B["读取 launch.json"]
+    B --> C["检查 preLaunchTask"]
+    C --> D["执行 tasks.json 中的 build"]
+    D --> E{"构建成功？"}
+    E -->|否| F["显示编译错误"]
+    E -->|是| G["启动 WPF 程序"]
+    G --> H["附加 .NET 调试器"]
+    H --> I["断点、变量、调用堆栈"]
+    J["global.json"] -.-> D
+    K["settings.json"] -.-> L["影响编辑器行为"]</pre>
+        </div>
+      </div><div class="code-block highlight diagram-code" data-mode="classic" data-copyable="true" copyable="true" fullscreen="true" filename="mermaid.mmd"><div class="chroma">
+<div class="code-header language-text"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="2" style="--fi-max-shown-lines:400;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">flowchart TD
+</span></span><span class="line"><span class="cl">    A[&#34;按下 F5&#34;] --&gt; B[&#34;读取 launch.json&#34;]
+</span></span><span class="line"><span class="cl">    B --&gt; C[&#34;检查 preLaunchTask&#34;]
+</span></span><span class="line"><span class="cl">    C --&gt; D[&#34;执行 tasks.json 中的 build&#34;]
+</span></span><span class="line"><span class="cl">    D --&gt; E{&#34;构建成功？&#34;}
+</span></span><span class="line"><span class="cl">    E --&gt;|否| F[&#34;显示编译错误&#34;]
+</span></span><span class="line"><span class="cl">    E --&gt;|是| G[&#34;启动 WPF 程序&#34;]
+</span></span><span class="line"><span class="cl">    G --&gt; H[&#34;附加 .NET 调试器&#34;]
+</span></span><span class="line"><span class="cl">    H --&gt; I[&#34;断点、变量、调用堆栈&#34;]
+</span></span><span class="line"><span class="cl">    J[&#34;global.json&#34;] -.-&gt; D
+</span></span><span class="line"><span class="cl">    K[&#34;settings.json&#34;] -.-&gt; L[&#34;影响编辑器行为&#34;]</span></span></code></pre></td></tr></table></div>
+</div>
+</div></div>
+  </div><p>这个过程可以理解为：</p>
+<ol>
+<li><code>launch.json</code> 决定要如何启动或附加程序。</li>
+<li>如果指定了 <code>preLaunchTask</code>，VS Code 会先执行对应的任务。</li>
+<li><code>tasks.json</code> 调用 <code>dotnet build</code>，完成项目构建。</li>
+<li>构建成功后，调试器启动目标程序。</li>
+<li>调试器开始接管目标进程，提供断点、单步执行和变量检查等能力。</li>
+</ol>
+<p><code>global.json</code> 则可能影响构建阶段实际选用的 SDK。<code>settings.json</code> 主要影响编辑器行为，并不直接参与上述调试流程。</p>
+<p>这也是为什么一个 WPF 项目即使能够通过终端运行，也仍然需要单独配置 <code>launch.json</code>。</p>
+<h2 class="heading-element" id="5-多版本-net-sdk使用-globaljson-固定开发环境"><span>5. 多版本 .NET SDK：使用 <code>global.json</code> 固定开发环境</span>
+  <a href="#5-%e5%a4%9a%e7%89%88%e6%9c%ac-net-sdk%e4%bd%bf%e7%94%a8-globaljson-%e5%9b%ba%e5%ae%9a%e5%bc%80%e5%8f%91%e7%8e%af%e5%a2%83" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>在我的开发环境中，本机安装了多个版本的 <code>dotnet</code> SDK。</p>
+<p>这种情况在维护多个项目时很常见：旧项目可能依赖较早的 SDK，新项目则需要 .NET 9。如果只依赖当前环境自动选择 SDK，就可能遇到不同终端、不同工作目录下构建结果不一致的问题。</p>
+<p>解决这个问题的一种方式，是在解决方案根目录创建 <code>global.json</code>。</p>
+<p>例如：</p>
+<json-viewer value="&#34;{\r\n  \&#34;sdk\&#34;: {\r\n    \&#34;version\&#34;: \&#34;9.0.312\&#34;,\r\n    \&#34;rollForward\&#34;: \&#34;latestPatch\&#34;,\r\n    \&#34;allowPrerelease\&#34;: false\r\n  }\r\n}&#34;" expand-depth="6" boxed copyable="{&#34;copiedText&#34;:&#34;已复制&#34;,&#34;copyText&#34;:&#34;复制&#34;}"></json-viewer><p>这里假设本机确实安装了 <code>9.0.312</code> SDK。</p>
+<h3 class="heading-element" id="51-globaljson-的作用是什么"><span>5.1 <code>global.json</code> 的作用是什么？</span>
+  <a href="#51-globaljson-%e7%9a%84%e4%bd%9c%e7%94%a8%e6%98%af%e4%bb%80%e4%b9%88" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p><code>global.json</code> 用于控制 .NET SDK 的选择，不是用于指定项目目标框架，也不是用于选择运行时。</p>
+<p>这三个概念需要区分：</p>
+<div class="table-wrapper">
+  <table>
+    <thead>
+        <tr>
+            <th>配置</th>
+            <th>主要作用</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><code>global.json</code> 中的 <code>sdk.version</code></td>
+            <td>约束构建工具选择哪个 .NET SDK</td>
+        </tr>
+        <tr>
+            <td><code>.csproj</code> 中的 <code>TargetFramework</code></td>
+            <td>指定项目面向哪个目标框架</td>
+        </tr>
+        <tr>
+            <td>运行时配置与部署方式</td>
+            <td>决定应用运行时如何满足依赖</td>
+        </tr>
+    </tbody>
+  </table>
+</div><p>例如：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-xml"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-xml" data-lang="xml"><span class="line"><span class="cl"><span class="nt">&lt;TargetFramework&gt;</span>net9.0-windows<span class="nt">&lt;/TargetFramework&gt;</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>表示项目面向 .NET 9 Windows。</p>
+<p>而 <code>global.json</code> 中的：</p>
+<json-viewer value="&#34;\&#34;version\&#34;: \&#34;9.0.312\&#34;&#34;" expand-depth="6" boxed copyable="{&#34;copiedText&#34;:&#34;已复制&#34;,&#34;copyText&#34;:&#34;复制&#34;}"></json-viewer><p>表示 SDK 选择策略以这个版本为基准。</p>
+<p>两者有关联，但不能互相替代。</p>
+<h3 class="heading-element" id="52-rollforward-应该如何选择"><span>5.2 <code>rollForward</code> 应该如何选择？</span>
+  <a href="#52-rollforward-%e5%ba%94%e8%af%a5%e5%a6%82%e4%bd%95%e9%80%89%e6%8b%a9" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p><code>rollForward</code> 决定在指定 SDK 不可用时，是否允许使用其他 SDK 版本。</p>
+<p>例如：</p>
+<json-viewer value="&#34;\&#34;rollForward\&#34;: \&#34;latestPatch\&#34;&#34;" expand-depth="6" boxed copyable="{&#34;copiedText&#34;:&#34;已复制&#34;,&#34;copyText&#34;:&#34;复制&#34;}"></json-viewer><p>它允许在符合相应版本规则的情况下，选择指定 SDK 特性版本范围内更新的补丁版本。</p>
+<p>如果希望开发环境更加可控，应先确认团队和构建机器安装了哪些 SDK，再选择合适的策略。</p>
+<p>可以使用：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-powershell"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="line"><span class="cl"><span class="n">dotnet</span> <span class="p">-</span><span class="n">-list-sdks</span>
+</span></span><span class="line"><span class="cl"><span class="n">dotnet</span> <span class="p">-</span><span class="n">-version</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>检查结果。</p>
+<p>其中，<code>dotnet --version</code> 显示的是当前目录及其 SDK 选择规则下实际选中的 SDK 版本，而不一定是系统中最新安装的版本。</p>
+<h3 class="heading-element" id="53-如何确认-globaljson-真正生效"><span>5.3 如何确认 <code>global.json</code> 真正生效？</span>
+  <a href="#53-%e5%a6%82%e4%bd%95%e7%a1%ae%e8%ae%a4-globaljson-%e7%9c%9f%e6%ad%a3%e7%94%9f%e6%95%88" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p>仅仅创建文件并不能证明 SDK 选择正确。</p>
+<p>建议执行以下检查：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-powershell"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="line"><span class="cl"><span class="n">dotnet</span> <span class="p">-</span><span class="n">-version</span>
+</span></span><span class="line"><span class="cl"><span class="n">dotnet</span> <span class="p">-</span><span class="n">-info</span>
+</span></span><span class="line"><span class="cl"><span class="n">dotnet</span> <span class="n">build</span> <span class="n">Sirius</span><span class="p">.</span><span class="n">UI</span><span class="p">/</span><span class="n">Sirius</span><span class="p">.</span><span class="py">UI</span><span class="p">.</span><span class="n">csproj</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>重点确认：</p>
+<ol>
+<li><code>dotnet --version</code> 返回的版本是否符合预期。</li>
+<li><code>dotnet --info</code> 显示的 SDK 路径是否正确。</li>
+<li>在 VS Code 中执行构建任务时，是否也使用了预期的 SDK。</li>
+</ol>
+<p>SDK 选择通常会受到当前工作目录、<code>global.json</code> 所在位置以及 SDK 查找规则的影响。因此，最好从解决方案根目录执行检查。</p>
+<p>还需要注意：<code>tasks.json</code> 中写 <code>command: &quot;dotnet&quot;</code> 并不会自动固定 SDK 版本。它只是调用当前环境能够找到的 <code>dotnet</code> 命令；具体使用哪个 SDK，仍由 .NET 的 SDK 选择机制决定。</p>
+<p>如果使用的是特定版本的 <code>dotnet.exe</code> 绝对路径，也要区分“指定了可执行文件路径”和“指定了 SDK 版本”这两件事。最终仍应通过 <code>dotnet --version</code> 验证。</p>
+<h2 class="heading-element" id="6-其他值得配置的项目文件"><span>6. 其他值得配置的项目文件</span>
+  <a href="#6-%e5%85%b6%e4%bb%96%e5%80%bc%e5%be%97%e9%85%8d%e7%bd%ae%e7%9a%84%e9%a1%b9%e7%9b%ae%e6%96%87%e4%bb%b6" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>除了 VS Code 专属的配置文件，<code>.editorconfig</code> 和 <code>extensions.json</code> 也值得加入项目。</p>
+<h3 class="heading-element" id="61-editorconfig统一团队代码风格"><span>6.1 <code>.editorconfig</code>：统一团队代码风格</span>
+  <a href="#61-editorconfig%e7%bb%9f%e4%b8%80%e5%9b%a2%e9%98%9f%e4%bb%a3%e7%a0%81%e9%a3%8e%e6%a0%bc" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p>对于多人协作项目，代码风格不应该只依赖个人 IDE 设置。</p>
+<p>可以在解决方案根目录创建 <code>.editorconfig</code>：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-ini"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="2" style="--fi-max-shown-lines:400;--fi-line-digit:2;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-ini" data-lang="ini"><span class="line"><span class="cl"><span class="na">root</span> <span class="o">=</span> <span class="s">true</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">[*.cs]</span>
+</span></span><span class="line"><span class="cl"><span class="na">charset</span> <span class="o">=</span> <span class="s">utf-8</span>
+</span></span><span class="line"><span class="cl"><span class="na">indent_style</span> <span class="o">=</span> <span class="s">space</span>
+</span></span><span class="line"><span class="cl"><span class="na">indent_size</span> <span class="o">=</span> <span class="s">4</span>
+</span></span><span class="line"><span class="cl"><span class="na">end_of_line</span> <span class="o">=</span> <span class="s">crlf</span>
+</span></span><span class="line"><span class="cl"><span class="na">insert_final_newline</span> <span class="o">=</span> <span class="s">true</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="na">dotnet_sort_system_directives_first</span> <span class="o">=</span> <span class="s">true</span>
+</span></span><span class="line"><span class="cl"><span class="na">dotnet_separate_import_directive_groups</span> <span class="o">=</span> <span class="s">false</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">[*.xaml]</span>
+</span></span><span class="line"><span class="cl"><span class="na">indent_style</span> <span class="o">=</span> <span class="s">space</span>
+</span></span><span class="line"><span class="cl"><span class="na">indent_size</span> <span class="o">=</span> <span class="s">4</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">[*.json]</span>
+</span></span><span class="line"><span class="cl"><span class="na">indent_style</span> <span class="o">=</span> <span class="s">space</span>
+</span></span><span class="line"><span class="cl"><span class="na">indent_size</span> <span class="o">=</span> <span class="s">2</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>它可以统一缩进、字符编码、换行符以及部分 C# 代码风格。</p>
+<p>与 <code>.vscode/settings.json</code> 不同，<code>.editorconfig</code> 是跨编辑器的配置标准。VS Code、Rider 和 Visual Studio 都能够识别其中相当一部分规则，具体支持范围取决于编辑器、扩展和相关分析器。</p>
+<p>因此，代码风格规则应该尽量放在 <code>.editorconfig</code> 中，而不是只写进某个开发者自己的 VS Code 配置。</p>
+<p>需要注意，<code>.editorconfig</code> 中的部分规则属于格式或代码分析规则，不意味着所有编辑器都会自动修复所有违规内容。对于更严格的团队约束，还可以结合 Roslyn 分析器和构建时检查。</p>
+<h3 class="heading-element" id="62-extensionsjson向团队推荐必要扩展"><span>6.2 <code>extensions.json</code>：向团队推荐必要扩展</span>
+  <a href="#62-extensionsjson%e5%90%91%e5%9b%a2%e9%98%9f%e6%8e%a8%e8%8d%90%e5%bf%85%e8%a6%81%e6%89%a9%e5%b1%95" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p>创建 <code>.vscode/extensions.json</code>：</p>
+<json-viewer value="&#34;{\r\n  \&#34;recommendations\&#34;: [\&#34;ms-dotnettools.csharp\&#34;, \&#34;ms-dotnettools.csdevkit\&#34;]\r\n}&#34;" expand-depth="6" boxed copyable="{&#34;copiedText&#34;:&#34;已复制&#34;,&#34;copyText&#34;:&#34;复制&#34;}"></json-viewer><p>这样，其他开发者打开项目时，就能看到项目推荐的扩展。</p>
+<p>但它只是推荐机制，并不会强制安装扩展，也不能保证所有团队成员的开发环境完全一致。</p>
+<h3 class="heading-element" id="63-几个配置文件的职责总结"><span>6.3 几个配置文件的职责总结</span>
+  <a href="#63-%e5%87%a0%e4%b8%aa%e9%85%8d%e7%bd%ae%e6%96%87%e4%bb%b6%e7%9a%84%e8%81%8c%e8%b4%a3%e6%80%bb%e7%bb%93" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><div class="table-wrapper">
+  <table>
+    <thead>
+        <tr>
+            <th>文件</th>
+            <th>职责</th>
+            <th>是否直接决定调试流程</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><code>.vscode/launch.json</code></td>
+            <td>启动程序、附加进程、配置调试参数</td>
+            <td>是</td>
+        </tr>
+        <tr>
+            <td><code>.vscode/tasks.json</code></td>
+            <td>构建、测试、清理、发布等任务</td>
+            <td>间接影响</td>
+        </tr>
+        <tr>
+            <td><code>.vscode/settings.json</code></td>
+            <td>编辑器和工作区行为</td>
+            <td>否</td>
+        </tr>
+        <tr>
+            <td><code>.vscode/extensions.json</code></td>
+            <td>推荐开发扩展</td>
+            <td>否</td>
+        </tr>
+        <tr>
+            <td><code>.editorconfig</code></td>
+            <td>统一代码风格</td>
+            <td>否</td>
+        </tr>
+        <tr>
+            <td><code>global.json</code></td>
+            <td>选择 .NET SDK</td>
+            <td>间接影响</td>
+        </tr>
+        <tr>
+            <td><code>.csproj</code></td>
+            <td>项目框架、依赖、编译与构建配置</td>
+            <td>是，影响构建产物</td>
+        </tr>
+    </tbody>
+  </table>
+</div><p>将这些文件的职责划分清楚，后续遇到问题时就更容易定位。</p>
+<h2 class="heading-element" id="7-常见问题排查"><span>7. 常见问题排查</span>
+  <a href="#7-%e5%b8%b8%e8%a7%81%e9%97%ae%e9%a2%98%e6%8e%92%e6%9f%a5" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>实际开发中，配置完成并不意味着所有项目都能一次成功运行。下面整理几个值得优先检查的问题。</p>
+<h3 class="heading-element" id="71-找不到-obj-目录中的-nuget-文件"><span>7.1 找不到 <code>obj</code> 目录中的 NuGet 文件</span>
+  <a href="#71-%e6%89%be%e4%b8%8d%e5%88%b0-obj-%e7%9b%ae%e5%bd%95%e4%b8%ad%e7%9a%84-nuget-%e6%96%87%e4%bb%b6" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p>例如：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-text"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">无法复制文件
+</span></span><span class="line"><span class="cl">Sirius.UI\obj\Sirius.UI.csproj.nuget.dgspec.json
+</span></span><span class="line"><span class="cl">原因是找不到该文件。</span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>这类错误可能与 NuGet 还原结果缺失、并发构建、路径配置或者生成文件状态异常有关。</p>
+<p>建议依次执行：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-powershell"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="line"><span class="cl"><span class="n">dotnet</span> <span class="p">-</span><span class="n">-version</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">dotnet</span> <span class="n">restore</span> <span class="n">Sirius</span><span class="p">.</span><span class="n">UI</span><span class="p">/</span><span class="n">Sirius</span><span class="p">.</span><span class="py">UI</span><span class="p">.</span><span class="py">csproj</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">dotnet</span> <span class="n">build</span> <span class="n">Sirius</span><span class="p">.</span><span class="n">UI</span><span class="p">/</span><span class="n">Sirius</span><span class="p">.</span><span class="py">UI</span><span class="p">.</span><span class="n">csproj</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>如果仍然失败，可以在确认没有构建进程正在使用相关文件后，清理对应项目的中间输出，再重新还原和构建。</p>
+<p>不要一遇到 <code>obj</code> 文件缺失就直接删除整个解决方案的所有构建产物。应该先确认是哪个项目、哪一个构建步骤发生了问题。</p>
+<h3 class="heading-element" id="72-按-f5-时找不到程序"><span>7.2 按 F5 时找不到程序</span>
+  <a href="#72-%e6%8c%89-f5-%e6%97%b6%e6%89%be%e4%b8%8d%e5%88%b0%e7%a8%8b%e5%ba%8f" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p>首先检查：</p>
+<json-viewer value="&#34;\&#34;program\&#34;: \&#34;${workspaceFolder}/Sirius.UI/bin/Debug/net9.0-windows/Sirius.UI.dll\&#34;&#34;" expand-depth="6" boxed copyable="{&#34;copiedText&#34;:&#34;已复制&#34;,&#34;copyText&#34;:&#34;复制&#34;}"></json-viewer><p>是否与真实构建输出一致。</p>
+<p>如果项目使用了自定义输出目录、不同的目标框架，或者当前选择的是 Release 配置，这个路径就可能不正确。</p>
+<p>可以先查看项目的 <code>bin</code> 目录，并通过终端确认构建产物是否存在。</p>
+<h3 class="heading-element" id="73-断点显示未绑定"><span>7.3 断点显示未绑定</span>
+  <a href="#73-%e6%96%ad%e7%82%b9%e6%98%be%e7%a4%ba%e6%9c%aa%e7%bb%91%e5%ae%9a" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p>断点无法绑定时，优先检查以下内容：</p>
+<ul>
+<li>当前构建是否成功。</li>
+<li>调试器启动的程序集是否是最新版本。</li>
+<li>当前源码是否与生成程序集对应。</li>
+<li>PDB 符号文件是否存在并能正确加载。</li>
+<li>是否使用了正确的 Debug 配置。</li>
+<li>是否因为条件编译、优化或代码未执行等原因导致断点无法命中。</li>
+</ul>
+<p>如果调试配置中使用：</p>
+<json-viewer value="&#34;\&#34;justMyCode\&#34;: true&#34;" expand-depth="6" boxed copyable="{&#34;copiedText&#34;:&#34;已复制&#34;,&#34;copyText&#34;:&#34;复制&#34;}"></json-viewer><p>调试器会优先关注用户代码。排查框架代码或第三方库问题时，可以考虑临时调整该选项。</p>
+<h3 class="heading-element" id="74-程序能够运行却无法正常显示-wpf-界面"><span>7.4 程序能够运行，却无法正常显示 WPF 界面</span>
+  <a href="#74-%e7%a8%8b%e5%ba%8f%e8%83%bd%e5%a4%9f%e8%bf%90%e8%a1%8c%e5%8d%b4%e6%97%a0%e6%b3%95%e6%ad%a3%e5%b8%b8%e6%98%be%e7%a4%ba-wpf-%e7%95%8c%e9%9d%a2" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p>WPF 是桌面 GUI 应用程序，不是普通的控制台程序。</p>
+<p>如果启动失败或界面没有出现，应检查目标程序是否真的启动、工作目录是否正确、配置文件和资源文件能否找到，以及应用程序是否在启动阶段发生异常。</p>
+<p>对于依赖相对路径加载配置文件、图像、模型或其他资源的工业软件，<code>cwd</code> 尤其值得检查。</p>
+<h3 class="heading-element" id="75-vs-code-仍然很卡"><span>7.5 VS Code 仍然很卡</span>
+  <a href="#75-vs-code-%e4%bb%8d%e7%84%b6%e5%be%88%e5%8d%a1" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p>轻量级编辑器并不意味着所有项目都一定运行得很流畅。</p>
+<p>工业软件项目可能包含大量图像文件、生成文件、日志、HALCON 相关代码、多个类库和复杂的 C# 项目依赖。语言服务在加载和分析这些内容时，同样可能消耗资源。</p>
+<p>可以优先检查：</p>
+<ul>
+<li>是否误将数据目录作为源码目录纳入搜索。</li>
+<li><code>bin</code>、<code>obj</code> 等生成目录是否需要排除。</li>
+<li>是否存在大量后台扩展活动。</li>
+<li>是否频繁执行完整构建或 NuGet 还原。</li>
+<li>是否有程序本身在占用大量 CPU、内存或磁盘资源。</li>
+</ul>
+<p>如果问题出在项目加载或语言服务上，仅仅修改 <code>tasks.json</code> 通常不会解决问题。</p>
+<h2 class="heading-element" id="8-从一次调试配置理解现代-net-工程化"><span>8. 从一次调试配置，理解现代 .NET 工程化</span>
+  <a href="#8-%e4%bb%8e%e4%b8%80%e6%ac%a1%e8%b0%83%e8%af%95%e9%85%8d%e7%bd%ae%e7%90%86%e8%a7%a3%e7%8e%b0%e4%bb%a3-net-%e5%b7%a5%e7%a8%8b%e5%8c%96" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>回顾这次实践，我认为最值得记录的并不是几个 JSON 文件，而是背后的工程化思想。</p>
+<h3 class="heading-element" id="81-ide-不应该成为构建系统的唯一入口"><span>8.1 IDE 不应该成为构建系统的唯一入口</span>
+  <a href="#81-ide-%e4%b8%8d%e5%ba%94%e8%af%a5%e6%88%90%e4%b8%ba%e6%9e%84%e5%bb%ba%e7%b3%bb%e7%bb%9f%e7%9a%84%e5%94%af%e4%b8%80%e5%85%a5%e5%8f%a3" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p>当我们使用：</p>
+<div class="code-block highlight" data-mode="classic" data-copyable="true"><div class="chroma">
+<div class="code-header language-powershell"><span class="code-title"><i class="arrow fa-solid fa-chevron-down" aria-hidden="true"></i></span><button type="button" class="ellipses-btn" aria-label="Show more options"><i class="fa-solid fa-ellipsis-h" aria-hidden="true"></i></button><button type="button" class="action-btn line-nos-btn" aria-label="切换行号" title="切换行号"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button><button type="button" class="action-btn line-wrap-btn" aria-label="切换自动换行" title="切换自动换行"><i class="fa-solid fa-right-left" aria-hidden="true"></i></button><button type="button" class="action-btn copy-btn" aria-label="复制到剪贴板" title="复制到剪贴板" data-copied-text="已复制"><i class="fa-regular fa-clone" aria-hidden="true"></i></button><button type="button" class="action-btn fullscreen-btn" aria-label="全屏" title="全屏" data-exit-title="退出全屏"><i class="fa-solid fa-expand" aria-hidden="true"></i></button></div><div class="code-wrapper" data-max="400" data-line-digit="1" style="--fi-max-shown-lines:400;--fi-line-digit:1;--fi-line-start:1;"><table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="line"><span class="cl"><span class="n">dotnet</span> <span class="n">build</span></span></span></code></pre></td></tr></table></div>
+</div>
+</div><p>就能完成项目构建时，项目的构建能力已经不再完全依赖某个 IDE。</p>
+<p>这为后续的自动化测试、持续集成、命令行发布和构建服务器部署提供了基础。</p>
+<p>VS Code 的 <code>tasks.json</code> 只是将已有命令集成到编辑器中，并没有创造一套新的构建机制。</p>
+<h3 class="heading-element" id="82-调试器与程序构建是两个不同的环节"><span>8.2 调试器与程序构建是两个不同的环节</span>
+  <a href="#82-%e8%b0%83%e8%af%95%e5%99%a8%e4%b8%8e%e7%a8%8b%e5%ba%8f%e6%9e%84%e5%bb%ba%e6%98%af%e4%b8%a4%e4%b8%aa%e4%b8%8d%e5%90%8c%e7%9a%84%e7%8e%af%e8%8a%82" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p>一个程序可以成功编译，却无法正常启动；也可以正常启动，却无法正确命中断点。</p>
+<p>这是因为构建系统负责生成程序及其相关文件，而调试器负责与运行中的程序交互。</p>
+<p>将两者拆开理解，能够帮助我们更快地区分问题究竟出在 SDK、构建配置、运行环境还是调试配置。</p>
+<h3 class="heading-element" id="83-开发环境也应该可复现"><span>8.3 开发环境也应该可复现</span>
+  <a href="#83-%e5%bc%80%e5%8f%91%e7%8e%af%e5%a2%83%e4%b9%9f%e5%ba%94%e8%af%a5%e5%8f%af%e5%a4%8d%e7%8e%b0" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h3><p><code>global.json</code>、<code>.editorconfig</code>、<code>tasks.json</code> 和 <code>launch.json</code> 组合起来，可以将一部分开发约定保存在版本控制中。</p>
+<p>当其他开发者拉取项目时，就可以更容易地复现构建与调试流程，而不必完全依赖某个人的本地 IDE 设置。</p>
+<p>不过，真正完整的可复现环境还需要考虑 NuGet 源、依赖版本、Windows 桌面运行环境、第三方 SDK、原生 DLL、设备驱动以及硬件条件等因素。</p>
+<p>对于工业自动化项目，这一点尤其重要。即使软件代码完全相同，不同机器上的相机 SDK、运动控制卡驱动或 HALCON 运行环境也可能存在差异。</p>
+<p>因此，开发环境配置只是工程化的一部分，而不是全部。</p>
+<h2 class="heading-element" id="9-总结"><span>9. 总结</span>
+  <a href="#9-%e6%80%bb%e7%bb%93" class="heading-mark">
+    <svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg>
+  </a>
+</h2><p>这次项目实践，让我重新梳理了 VS Code 开发 WPF 应用的基本流程。</p>
+<p>如果你也希望在不依赖 Visual Studio 的情况下开发和调试 WPF，可以按照以下顺序进行：</p>
+<ol>
+<li>安装 C# 和 C# Dev Kit 扩展。</li>
+<li>确认本机安装了正确的 .NET SDK。</li>
+<li>使用 <code>dotnet restore</code> 和 <code>dotnet build</code> 验证项目可以独立构建。</li>
+<li>通过 <code>tasks.json</code> 配置可重复执行的构建任务。</li>
+<li>通过 <code>launch.json</code> 配置 WPF 应用的启动调试或进程附加。</li>
+<li>如果本机安装了多个 SDK，再使用 <code>global.json</code> 管理 SDK 选择。</li>
+<li>使用 <code>.editorconfig</code> 和 <code>extensions.json</code> 进一步规范团队开发环境。</li>
+</ol>
+<p>需要强调的是，VS Code 并不是在所有场景下都优于 Visual Studio 或 Rider。对于需要频繁设计复杂 XAML 界面、依赖专用设计器或深度分析 WPF UI 的工作，传统 IDE 仍然有明显优势。</p>
+<p>但对于设备软件开发中大量的 C# 业务逻辑、设备通信、状态管理、算法调用和服务层开发，VS Code 加上 .NET CLI 是一种值得掌握的开发方式。</p>
+<p><strong>工具可以更换，但构建、调试和环境管理的基本原理不会因此改变。理解这些原理，才是这次实践真正带来的收获。</strong></p></div><hr class="awesome-hr" />
+    <h2 id="see-also">相关内容</h2>
+    <ul><li>
+          <a href="/wpf-ui/" title="WPF UI：让WPF应用具有Fluent Design风格">WPF UI：让WPF应用具有Fluent Design风格</a></li><li>
+          <a href="/vscode%E5%AE%8C%E5%85%A8%E6%8C%87%E5%8D%97/" title="Visual Studio Code完全指南">Visual Studio Code完全指南</a></li><li>
+          <a href="/polly%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/" title="Polly使用指南：.NET应用程序可靠性设计">Polly使用指南：.NET应用程序可靠性设计</a></li><li>
+          <a href="/dotnet%E8%AE%BE%E8%AE%A1%E8%A7%84%E8%8C%83/" title=".NET设计规范 约定、惯用法与模式 第2版 (Krzysztof Cwalina / Brad Abrams)">.NET设计规范 约定、惯用法与模式 第2版 (Krzysztof Cwalina / Brad Abrams)</a></li><li>
+          <a href="/clr-via-csharp/" title="CLR via C# 第4版 (Jeffrey Richter)">CLR via C# 第4版 (Jeffrey Richter)</a></li><li>
+          <a href="/microsoft.extensions.hosting%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/" title="Microsoft.Extensions.Hosting使用指南：构建现代 .NET 应用的通用宿主架构">Microsoft.Extensions.Hosting使用指南：构建现代 .NET 应用的通用宿主架构</a></li><li>
+          <a href="/wpf%E7%BC%96%E7%A8%8B%E5%AE%9D%E5%85%B8/" title="WPF编程宝典 第4版 (Matthew MacDonald)">WPF编程宝典 第4版 (Matthew MacDonald)</a></li><li>
+          <a href="/c%23-linq%E5%AD%A6%E4%B9%A0%E4%B9%8B%E6%97%85/" title="C# LINQ学习之旅：从集合操作到声明式编程">C# LINQ学习之旅：从集合操作到声明式编程</a></li><li>
+          <a href="/design-patterns-in-csharp-and-dotnet/" title="Design Patterns in C# and .NET (Dmitri Nesteruk)">Design Patterns in C# and .NET (Dmitri Nesteruk)</a></li><li>
+          <a href="/%E6%B7%B1%E5%85%A5system.net.networkinformation%E8%8E%B7%E5%8F%96%E7%B3%BB%E7%BB%9F%E7%BD%91%E7%BB%9C%E4%BF%A1%E6%81%AF/" title="深入System.Net.NetworkInformation获取系统网络信息">深入System.Net.NetworkInformation获取系统网络信息</a></li><li>
+          <a href="/networkmanager%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="NETworkManager源码剖析：一个网络管理工具的实现细节">NETworkManager源码剖析：一个网络管理工具的实现细节</a></li><li>
+          <a href="/dotnetty%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90/" title="DotNetty源码剖析：高性能网络框架的秘密">DotNetty源码剖析：高性能网络框架的秘密</a></li><li>
+          <a href="/%E5%A6%82%E4%BD%95%E8%B0%83%E8%AF%95vue%E9%A1%B9%E7%9B%AE/" title="如何调试Vue项目">如何调试Vue项目</a></li><li>
+          <a href="/git%E7%AE%80%E6%98%8E%E6%95%99%E7%A8%8B/" title="Git简明教程">Git简明教程</a></li></ul><div class="post-footer" id="post-footer">
+  <div class="post-info">
+    <div class="post-info-line">
+      <div class="post-info-mod"><span title="更新于 2026-10-12 06:33:02">更新于 2026-10-12&nbsp;</span>
+      </div></div><div class="post-info-line">
+        <div class="post-info-md"><span><a href="vscode://file/D:\hugo-blog\andyfree96\content\posts\VSCode调试WPF实战.md" title="在编辑器中打开" class="link-to-vscode">在编辑器中打开</a></span></div>
+        <div class="post-info-share">
+          <span><a href="javascript:void(0);" title="分享到 X" data-sharer="twitter" data-url="http://localhost:1313/vscode%E8%B0%83%E8%AF%95wpf%E5%AE%9E%E6%88%98/" data-title="VS Code调试WPF实战：从dotnet build到F5断点调试" data-via="IRONAnthony96" data-hashtags=".NET,VSCode,WPF,调试,开发工具"><i class="fa-brands fa-x-twitter" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 Facebook" data-sharer="facebook" data-url="http://localhost:1313/vscode%E8%B0%83%E8%AF%95wpf%E5%AE%9E%E6%88%98/" data-hashtag=".NET"><i class="fa-brands fa-facebook-square" aria-hidden="true"></i></a>
+  <a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="http://localhost:1313/vscode%E8%B0%83%E8%AF%95wpf%E5%AE%9E%E6%88%98/" data-title="VS Code调试WPF实战：从dotnet build到F5断点调试" data-image="/images/202610/1/enfocus-collective-ilwfkHpE-JU-unsplash.jpg"><i class="fa-brands fa-weibo" aria-hidden="true"></i></a>
+  </span>
+        </div>
+      </div></div>
+
+  <div class="post-info-more">
+    <section class="post-tags"><i class="fa-solid fa-tags me-1" aria-hidden="true"></i><a href="/tags/.net/" class="post-tag" title="标签 - .NET">.NET</a><a href="/tags/vscode/" class="post-tag" title="标签 - VSCode">VSCode</a><a href="/tags/wpf/" class="post-tag" title="标签 - WPF">WPF</a><a href="/tags/%E8%B0%83%E8%AF%95/" class="post-tag" title="标签 - 调试">调试</a><a href="/tags/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/" class="post-tag" title="标签 - 开发工具">开发工具</a></section>
+    <section><span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+    </section>
+  </div><div class="post-nav"><a href="/csharp-with%E8%A1%A8%E8%BE%BE%E5%BC%8F/" class="post-nav-item" rel="prev" title="C# with表达式：优雅地创建对象副本"><i class="fa-solid fa-angle-left" aria-hidden="true"></i>C# with表达式：优雅地创建对象副本</a></div>
+</div>
+<div class="post-reward">
+    <div class="comment">请作者喝杯咖啡!</div>
+    <input type="checkbox" class="reward-input" name="reward" id="fi-reward" hidden />
+    <label class="reward-button" for="fi-reward"><i class="fa-solid fa-qrcode" aria-hidden="true"></i>赞赏</label>
+    <div class="reward-ways" data-mode="static"><div><img src='/reward/alipay.png' alt="AndyFree96 支付宝"><span data-animation>支付宝</span>
+          </div><div><img src='/reward/wechatpay.png' alt="AndyFree96 微信"><span data-animation>微信</span>
+          </div></div>
+  </div></article>
+
+  <aside class="toc" id="toc-auto" aria-label="目录"><h2 class="toc-title">目录&nbsp;<i class="toc-icon fa-solid fa-angle-down" aria-hidden="true"></i></h2>
+      <div class="toc-content" id="toc-content-auto"></div></aside><dialog id="toc-dialog" aria-labelledby="toc-dialog-title" role="dialog" closedby="any">
+      <button type="button" class="toc-close-btn" aria-label="Close Table of Contents"><i class="fa-solid fa-xmark fa-lg" aria-hidden="true"></i></button>
+      <div class="toc">
+        <h2 class="toc-title" id="toc-dialog-title">目录</h2>
+        <div class="toc-content" id="toc-content-drawer"><nav >
+  <ul>
+    <li><a href="#1-为什么选择vs-code开发wpf">1. 为什么选择VS Code开发WPF？</a></li>
+    <li><a href="#2-准备开发环境">2. 准备开发环境</a>
+      <ul>
+        <li><a href="#21-安装必要的-vs-code-扩展">2.1 安装必要的 VS Code 扩展</a></li>
+        <li><a href="#22-检查-net-sdk-环境">2.2 检查 .NET SDK 环境</a></li>
+      </ul>
+    </li>
+    <li><a href="#3-先让项目脱离-ide-完成构建">3. 先让项目脱离 IDE 完成构建</a>
+      <ul>
+        <li><a href="#31-理解-dotnet-restoredotnet-build-和---no-restore">3.1 理解 <code>dotnet restore</code>、<code>dotnet build</code> 和 <code>--no-restore</code></a></li>
+      </ul>
+    </li>
+    <li><a href="#4-配置-vs-code三个核心文件">4. 配置 VS Code：三个核心文件</a>
+      <ul>
+        <li><a href="#41-settingsjson减少编辑器的额外开销">4.1 <code>settings.json</code>：减少编辑器的额外开销</a></li>
+        <li><a href="#42-tasksjson将构建过程变成可重复执行的任务">4.2 <code>tasks.json</code>：将构建过程变成可重复执行的任务</a></li>
+        <li><a href="#43-launchjson让-vs-code-真正具备调试能力">4.3 <code>launch.json</code>：让 VS Code 真正具备调试能力</a>
+          <ul>
+            <li><a href="#方式一直接启动-wpf-应用">方式一：直接启动 WPF 应用</a></li>
+            <li><a href="#方式二附加到已经运行的程序">方式二：附加到已经运行的程序</a></li>
+          </ul>
+        </li>
+        <li><a href="#44-按-f5-后究竟发生了什么">4.4 按 F5 后，究竟发生了什么？</a></li>
+      </ul>
+    </li>
+    <li><a href="#5-多版本-net-sdk使用-globaljson-固定开发环境">5. 多版本 .NET SDK：使用 <code>global.json</code> 固定开发环境</a>
+      <ul>
+        <li><a href="#51-globaljson-的作用是什么">5.1 <code>global.json</code> 的作用是什么？</a></li>
+        <li><a href="#52-rollforward-应该如何选择">5.2 <code>rollForward</code> 应该如何选择？</a></li>
+        <li><a href="#53-如何确认-globaljson-真正生效">5.3 如何确认 <code>global.json</code> 真正生效？</a></li>
+      </ul>
+    </li>
+    <li><a href="#6-其他值得配置的项目文件">6. 其他值得配置的项目文件</a>
+      <ul>
+        <li><a href="#61-editorconfig统一团队代码风格">6.1 <code>.editorconfig</code>：统一团队代码风格</a></li>
+        <li><a href="#62-extensionsjson向团队推荐必要扩展">6.2 <code>extensions.json</code>：向团队推荐必要扩展</a></li>
+        <li><a href="#63-几个配置文件的职责总结">6.3 几个配置文件的职责总结</a></li>
+      </ul>
+    </li>
+    <li><a href="#7-常见问题排查">7. 常见问题排查</a>
+      <ul>
+        <li><a href="#71-找不到-obj-目录中的-nuget-文件">7.1 找不到 <code>obj</code> 目录中的 NuGet 文件</a></li>
+        <li><a href="#72-按-f5-时找不到程序">7.2 按 F5 时找不到程序</a></li>
+        <li><a href="#73-断点显示未绑定">7.3 断点显示未绑定</a></li>
+        <li><a href="#74-程序能够运行却无法正常显示-wpf-界面">7.4 程序能够运行，却无法正常显示 WPF 界面</a></li>
+        <li><a href="#75-vs-code-仍然很卡">7.5 VS Code 仍然很卡</a></li>
+      </ul>
+    </li>
+    <li><a href="#8-从一次调试配置理解现代-net-工程化">8. 从一次调试配置，理解现代 .NET 工程化</a>
+      <ul>
+        <li><a href="#81-ide-不应该成为构建系统的唯一入口">8.1 IDE 不应该成为构建系统的唯一入口</a></li>
+        <li><a href="#82-调试器与程序构建是两个不同的环节">8.2 调试器与程序构建是两个不同的环节</a></li>
+        <li><a href="#83-开发环境也应该可复现">8.3 开发环境也应该可复现</a></li>
+      </ul>
+    </li>
+    <li><a href="#9-总结">9. 总结</a></li>
+  </ul>
+</nav></div>
+      </div>
+    </dialog></main><footer class="footer">
+    <div class="footer-container"><div class="footer-line powered">由 <a href="https://gohugo.io/" target="_blank" rel="external nofollow noopener noreferrer" title="Hugo 0.163.1">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/hugo-fixit/FixIt" target="_blank" rel="external" title="FixIt v1.0.0-mq99hlzg">FixIt</a>
+        </div><div class="footer-line copyright" itemscope itemtype="http://schema.org/CreativeWork"><i class="fa-regular fa-copyright" aria-hidden="true"></i>
+            <span itemprop="copyrightYear">2019 - 2026</span><span class="author" itemprop="copyrightHolder">
+              <a href="https://andyfree96.github.io/" target="_blank" rel="external nofollow noopener noreferrer">AndyFree96</a></span></div></div>
+  </footer></div><div class="widgets"><div class="fixed-buttons"><button type="button" class="fixed-button back-to-top animate__faster d-none" aria-label="回到顶部"><i class="fa-solid fa-arrow-up" aria-hidden="true"></i></button><button type="button" id="toc-drawer-button" class="fixed-button toc-drawer-button d-none" aria-label="目录" aria-controls="toc-dialog" aria-expanded="false"><i class="fa-solid fa-bars" aria-hidden="true"></i></button></div><div id="mask"></div><div class="reading-progress-bar" style="left: 0;top: 0;"></div><noscript>
+    <div class="noscript-warning">该网站在启用 JavaScript 的情况下效果最佳。</div>
+  </noscript>
+</div><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script src="/lib/autocomplete/autocomplete.min.js" defer></script><script src="/lib/algoliasearch/browser.umd.js" defer></script><script src="/lib/json-viewer-element/json-viewer-element.umd.js" defer></script><script src="/js/lib/json-viewer.js" defer></script><script src="/lib/sharer/sharer.min.js" async defer></script><script src="/lib/cookieconsent/cookieconsent.min.js" defer></script><script src="/js/lib/cookieconsent.js" defer></script><script src="/lib/cell-tooltip/cell-tooltip.umd.js" defer></script><script src="/js/config/5287c9dafb489ddbbd6eb93032be730a.js" defer></script><script src="/js/lib/file-tree.js" defer></script><script src="/lib/panzoom/panzoom.min.js" defer></script><script src="/js/lib/mermaid-bootstrap.js" defer type="module"></script><script src="/js/main.js" defer></script></body>
+</html>
