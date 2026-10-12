@@ -13,7 +13,7 @@
 经过一番摸索，我逐渐梳理出了使用 VS Code 开发和调试 WPF 应用的完整方案。本文记录这次实践，并进一步解释背后的工作机制。">
 	<meta itemprop="datePublished" content="2026-10-12T06:33:02+08:00">
 	<meta itemprop="dateModified" content="2026-10-12T06:33:02+08:00">
-	<meta itemprop="wordCount" content="7633">
+	<meta itemprop="wordCount" content="7631">
 	<meta itemprop="keywords" content=".NET,VSCode,WPF,调试,开发工具"><meta property="og:url" content="http://localhost:1313/vscode%E8%B0%83%E8%AF%95wpf%E5%AE%9E%E6%88%98/">
 	<meta property="og:site_name" content="东尼的博客">
 	<meta property="og:title" content="VS Code调试WPF实战：从dotnet build到F5断点调试">
@@ -47,7 +47,7 @@
     "mainEntityOfPage": {
       "@type": "WebPage",
       "@id": "http:\/\/localhost:1313\/vscode%E8%B0%83%E8%AF%95wpf%E5%AE%9E%E6%88%98\/"
-    },"genre": "posts","keywords": ".NET, VSCode, WPF, 调试, 开发工具","wordcount":  7633 ,
+    },"genre": "posts","keywords": ".NET, VSCode, WPF, 调试, 开发工具","wordcount":  7631 ,
     "url": "http:\/\/localhost:1313\/vscode%E8%B0%83%E8%AF%95wpf%E5%AE%9E%E6%88%98\/","datePublished": "2026-10-12T06:33:02+08:00","dateModified": "2026-10-12T06:33:02+08:00","publisher": {
       "@type": "Organization",
       "name": ""},"author": {
@@ -149,7 +149,7 @@
   <article class="page single">
     <div class="header"><h1 class="single-title animate__animated animate__flipInX"><span title="转载" class="icon-repost"><i class="fa-solid fa-share" aria-hidden="true"></i></span><span>VS Code调试WPF实战：从dotnet build到F5断点调试</span>
       </h1></div><div class="post-meta">
-      <div class="post-meta-line"><span class="post-author"><a href="https://andyfree96.github.io/" title="作者" target="_blank" rel="author external nofollow noopener noreferrer" class="author"><img class="avatar" src='/avatar/1.jpg' alt="AndyFree96" height="16" width="16">&nbsp;AndyFree96</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/" class="post-category" title="分类 - 工具使用"><i class="fa-regular fa-folder" aria-hidden="true"></i> 工具使用</a></span></div><div class="post-meta-line"><span title="发布于 2026-10-12 06:33:02"><i class="fa-solid fa-calendar-days me-1" aria-hidden="true"></i><time datetime="2026-10-12">2026-10-12</time></span>&nbsp;<span title="7633 字"><i class="fa-solid fa-pencil-alt me-1" aria-hidden="true"></i>约 7700 字</span>&nbsp;<span><i class="fa-regular fa-clock me-1" aria-hidden="true"></i>预计阅读 16 分钟</span>&nbsp;</div>
+      <div class="post-meta-line"><span class="post-author"><a href="https://andyfree96.github.io/" title="作者" target="_blank" rel="author external nofollow noopener noreferrer" class="author"><img class="avatar" src='/avatar/1.jpg' alt="AndyFree96" height="16" width="16">&nbsp;AndyFree96</a></span><span class="post-included-in">&nbsp;收录于 <a href="/categories/%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/" class="post-category" title="分类 - 工具使用"><i class="fa-regular fa-folder" aria-hidden="true"></i> 工具使用</a></span></div><div class="post-meta-line"><span title="发布于 2026-10-12 06:33:02"><i class="fa-solid fa-calendar-days me-1" aria-hidden="true"></i><time datetime="2026-10-12">2026-10-12</time></span>&nbsp;<span title="7631 字"><i class="fa-solid fa-pencil-alt me-1" aria-hidden="true"></i>约 7700 字</span>&nbsp;<span><i class="fa-regular fa-clock me-1" aria-hidden="true"></i>预计阅读 16 分钟</span>&nbsp;</div>
     </div><div class="featured-image"><img loading="eager" src='/images/202610/1/enfocus-collective-ilwfkHpE-JU-unsplash.jpg' sizes="(max-width: 680px) 100vw, (max-width: 960px) 80vw, (max-width: 1440px) 56vw, 800px" alt="/images/202610/1/enfocus-collective-ilwfkHpE-JU-unsplash.jpg"></div><div class="details toc" id="toc-static" data-kept="false">
         <div class="details-summary toc-title">
           <span>目录</span>
@@ -246,7 +246,7 @@
 <li><strong>C# Dev Kit</strong>：提供 C# 项目和解决方案管理、代码导航等开发能力。</li>
 <li><strong>C#</strong>：提供 C# 语言支持以及基于 .NET 调试器的调试能力。</li>
 </ul>
-<p><figure><img loading="lazy" src='/images/202610/1/1.jpeg' alt="图1 C# Dev Kit和C#扩展"><figcaption class="image-caption">图1 图1 C# Dev Kit和C#扩展</figcaption>
+<p><figure><img loading="lazy" src='/images/202610/1/1.jpeg' alt="图1 C# Dev Kit和C#扩展"><figcaption class="image-caption">图1 C# Dev Kit和C#扩展</figcaption>
   </figure></p>
 <p>C# Dev Kit 依赖 C# 扩展，两者配合使用可以获得比较完整的 C# 开发体验。</p>
 <p>扩展可以在 VS Code 左侧的扩展面板中搜索安装，也可以在命令行中安装：</p>

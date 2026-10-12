@@ -34,7 +34,7 @@ VS Code 的优势在于轻量、可扩展，并且能够直接调用 .NET CLI �
 - **C# Dev Kit**：提供 C# 项目和解决方案管理、代码导航等开发能力。
 - **C#**：提供 C# 语言支持以及基于 .NET 调试器的调试能力。
 
-![图1 C# Dev Kit和C#扩展](/images/202610/1/1.jpeg '图1 图1 C# Dev Kit和C#扩展')
+![图1 C# Dev Kit和C#扩展](/images/202610/1/1.jpeg '图1 C# Dev Kit和C#扩展')
 
 C# Dev Kit 依赖 C# 扩展，两者配合使用可以获得比较完整的 C# 开发体验。
 
